@@ -47,11 +47,25 @@ $env:SDL2_DIR = "C:\SDKs\SDL2-2.30.12"
 
 This builds and installs Xash3D FWGS into `out/xash3d`, then builds HLSDK and installs `hl.dll` and `client.dll` into `out/xash3d/valve`.
 
+## Quick Windows batch files
+
+From the repository root:
+
+```bat
+build_xash.bat
+build_game.bat
+```
+
+`build_xash.bat` builds the PC Xash3D FWGS engine and installs it into `out\xash3d`.
+
+`build_game.bat` builds the writable `src\cof` game code and installs client/server libraries into `out\xash3d\cof`.
+
 ## Build parts separately
 
 ```powershell
 .\scripts\build-xash3d.ps1 -Sdl2Path "C:\SDKs\SDL2-2.30.12"
 .\scripts\build-hlsdk.ps1 -Install
+.\scripts\build-game.ps1
 ```
 
 Useful options:
@@ -59,10 +73,10 @@ Useful options:
 - `-X64` builds 64-bit engine or SDK.
 - `-Jobs 8` limits parallel build jobs.
 - `-Configuration Debug` builds Debug HLSDK.
-- `-GameDir cof` installs HLSDK libraries into `out/xash3d/cof`.
+- `-GameDir cof` installs game libraries into `out/xash3d/cof`.
 
 ## Notes for future Cry of Fear work
 
-Keep upstream code in `external/` clean. Put recovered or rewritten Cry of Fear code in `src/`, then wire it into a separate mod build once the target layout is known.
+Keep upstream code in `external/` clean. Put recovered or rewritten Cry of Fear code in `src/cof`, then wire it into a fuller mod build once the target layout is known.
 
 Do not commit Half-Life or Cry of Fear game assets. Runtime assets should be copied locally into `out/xash3d/<gamedir>` when needed.

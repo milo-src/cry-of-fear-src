@@ -11,6 +11,8 @@ param(
 
     [int]$Jobs = [Environment]::ProcessorCount,
 
+    [string]$SourceDir = "",
+
     [string]$BuildDir = "",
 
     [string]$InstallPrefix = "",
@@ -27,7 +29,14 @@ $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\_common.ps1"
 
 $repoRoot = Get-RepoRoot
-$sdkDir = Join-Path $repoRoot "external\hlsdk-portable"
+$defaultSdkDir = Join-Path $repoRoot "external\hlsdk-portable"
+
+if ($SourceDir) {
+    $sdkDir = Convert-ToFullPath $SourceDir
+}
+else {
+    $sdkDir = $defaultSdkDir
+}
 
 if (-not $BuildDir) {
     $BuildDir = Join-Path $repoRoot "build\hlsdk-portable"
@@ -45,7 +54,13 @@ if (-not (Get-Command "cmake" -ErrorAction SilentlyContinue)) {
     throw "CMake is required to build hlsdk-portable."
 }
 
-Initialize-RepoSubmodules -Paths @("external/hlsdk-portable")
+if (-not (Test-Path (Join-Path $sdkDir "CMakeLists.txt"))) {
+    throw "Cannot find CMakeLists.txt in HLSDK source directory: $sdkDir"
+}
+
+if ($sdkDir -eq (Convert-ToFullPath $defaultSdkDir)) {
+    Initialize-RepoSubmodules -Paths @("external/hlsdk-portable")
+}
 
 $configureArgs = @(
     "-S", $sdkDir,
