@@ -2113,6 +2113,8 @@ public:
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	void EXPORT FollowTarget( void );
 	void Move( void );
+	BOOL IsActiveFor( CBasePlayer *pPlayer );
+	void Deactivate( BOOL fireTargets );
 
 	virtual int Save( CSave &save );
 	virtual int Restore( CRestore &restore );
@@ -2290,14 +2292,7 @@ void CTriggerCamera::FollowTarget()
 
 	if( m_hTarget == 0 || m_flReturnTime < gpGlobals->time )
 	{
-		if( m_hPlayer->IsAlive() )
-		{
-			SET_VIEW( m_hPlayer->edict(), m_hPlayer->edict() );
-			( (CBasePlayer *)( (CBaseEntity *)m_hPlayer ) )->EnableControl( TRUE );
-		}
-		SUB_UseTargets( this, USE_TOGGLE, 0 );
-		pev->avelocity = Vector( 0, 0, 0 );
-		m_state = 0;
+		Deactivate( TRUE );
 		return;
 	}
 
@@ -2385,4 +2380,110 @@ void CTriggerCamera::Move()
 
 	float fraction = 2 * gpGlobals->frametime;
 	pev->velocity = ( ( pev->movedir * pev->speed ) * fraction ) + ( pev->velocity * ( 1 - fraction ) );
+}
+
+BOOL CTriggerCamera::IsActiveFor( CBasePlayer *pPlayer )
+{
+	return m_state != 0 && (CBaseEntity *)m_hPlayer == pPlayer;
+}
+
+void CTriggerCamera::Deactivate( BOOL fireTargets )
+{
+	CBasePlayer *pPlayer = (CBasePlayer *)(CBaseEntity *)m_hPlayer;
+
+	if( pPlayer && pPlayer->IsAlive() )
+	{
+		SET_VIEW( pPlayer->edict(), pPlayer->edict() );
+		pPlayer->EnableControl( TRUE );
+	}
+
+	if( fireTargets )
+		SUB_UseTargets( this, USE_TOGGLE, 0 );
+
+	pev->avelocity = g_vecZero;
+	pev->velocity = g_vecZero;
+	pev->nextthink = 0;
+	SetThink( NULL );
+
+	m_state = 0;
+	m_hPlayer = NULL;
+	m_hTarget = NULL;
+	m_pentPath = NULL;
+}
+
+static int COF_FastForwardActiveManagers( CBasePlayer *pPlayer )
+{
+	int firedTargets = 0;
+
+	for( int pass = 0; pass < 8; pass++ )
+	{
+		BOOL advanced = FALSE;
+		CBaseEntity *pEntity = NULL;
+
+		while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "multi_manager" ) ) != NULL )
+		{
+			CMultiManager *pManager = (CMultiManager *)pEntity;
+
+			if( pManager->m_index >= pManager->m_cTargets || pManager->pev->nextthink <= 0 )
+				continue;
+
+			if( (CBaseEntity *)pManager->m_hActivator != pPlayer )
+				continue;
+
+			while( pManager->m_index < pManager->m_cTargets )
+			{
+				FireTargets( STRING( pManager->m_iTargetName[pManager->m_index] ), pPlayer, pManager, USE_TOGGLE, 0 );
+				pManager->m_index++;
+				firedTargets++;
+				advanced = TRUE;
+			}
+
+			pManager->SetThink( NULL );
+			pManager->pev->nextthink = 0;
+
+			if( !( pManager->pev->spawnflags & SF_MULTIMAN_CLONE ) )
+				pManager->SetUse( &CMultiManager::ManagerUse );
+		}
+
+		if( !advanced )
+			break;
+	}
+
+	return firedTargets;
+}
+
+BOOL COF_TrySkipActiveCutscene( CBasePlayer *pPlayer )
+{
+	if( !pPlayer )
+		return FALSE;
+
+	BOOL hasActiveCamera = FALSE;
+	CBaseEntity *pEntity = NULL;
+
+	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "trigger_camera" ) ) != NULL )
+	{
+		CTriggerCamera *pCamera = (CTriggerCamera *)pEntity;
+
+		if( pCamera->IsActiveFor( pPlayer ) )
+		{
+			hasActiveCamera = TRUE;
+			break;
+		}
+	}
+
+	if( !hasActiveCamera )
+		return FALSE;
+
+	COF_FastForwardActiveManagers( pPlayer );
+
+	pEntity = NULL;
+	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "trigger_camera" ) ) != NULL )
+	{
+		CTriggerCamera *pCamera = (CTriggerCamera *)pEntity;
+
+		if( pCamera->IsActiveFor( pPlayer ) )
+			pCamera->Deactivate( FALSE );
+	}
+
+	return TRUE;
 }

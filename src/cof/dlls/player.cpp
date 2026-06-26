@@ -51,6 +51,7 @@ extern void CopyToBodyQue( entvars_t *pev);
 extern void respawn( entvars_t *pev, BOOL fCopyCorpse );
 extern Vector VecBModelOrigin( entvars_t *pevBModel );
 extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+extern BOOL COF_TrySkipActiveCutscene( CBasePlayer *pPlayer );
 
 // the world node graph
 extern CGraph WorldGraph;
@@ -1883,6 +1884,16 @@ void CBasePlayer::PreThink( void )
 	// UNDONE: Do we need auto-repeat?
 	m_afButtonPressed =  buttonsChanged & pev->button;		// The changed ones still down are "pressed"
 	m_afButtonReleased = buttonsChanged & ( ~pev->button );	// The ones not down are "released"
+
+	if( m_afButtonPressed & IN_JUMP )
+	{
+		if( COF_TrySkipActiveCutscene( this ) )
+		{
+			pev->button &= ~IN_JUMP;
+			m_afButtonPressed &= ~IN_JUMP;
+			m_afButtonReleased &= ~IN_JUMP;
+		}
+	}
 
 	g_pGameRules->PlayerThink( this );
 

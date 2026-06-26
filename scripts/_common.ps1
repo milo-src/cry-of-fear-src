@@ -283,6 +283,52 @@ function Set-CofConfigCvar {
     }
 }
 
+function Set-CofGameInfoKey {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$GameRoot,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Name,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Value
+    )
+
+    $liblistPath = Join-Path $GameRoot "liblist.gam"
+
+    if (-not (Test-Path -LiteralPath $liblistPath)) {
+        return
+    }
+
+    $bytes = [System.IO.File]::ReadAllBytes($liblistPath)
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+
+    try {
+        $text = $strictUtf8.GetString($bytes)
+    }
+    catch {
+        $text = [System.Text.Encoding]::GetEncoding(1251).GetString($bytes)
+    }
+
+    $line = "$Name `"$Value`""
+    $pattern = "(?m)^\s*" + [System.Text.RegularExpressions.Regex]::Escape($Name) + "\s+.*$"
+
+    if ([System.Text.RegularExpressions.Regex]::IsMatch($text, $pattern)) {
+        $updated = [System.Text.RegularExpressions.Regex]::Replace($text, $pattern, $line)
+    }
+    else {
+        $ending = if ($text.EndsWith("`r`n") -or $text.EndsWith("`n")) { "" } else { [Environment]::NewLine }
+        $updated = $text + $ending + $line + [Environment]::NewLine
+    }
+
+    if ($updated -ne $text) {
+        $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+        [System.IO.File]::WriteAllText($liblistPath, $updated, $utf8NoBom)
+        Write-Host "Set liblist key: $line"
+    }
+}
+
 function Remove-CofRuntimePath {
     param(
         [Parameter(Mandatory = $true)]
@@ -666,5 +712,6 @@ function Repair-CofLocalizationForXash {
     Set-CofConfigCvar -ConfigPath $configPath -Name "vgui_utf8" -Value "1"
     Set-CofConfigCvar -ConfigPath $configPath -Name "hud_utf8" -Value "1"
     Set-CofConfigCvar -ConfigPath $configPath -Name "ui_language" -Value "english"
+    Set-CofGameInfoKey -GameRoot $gameRoot -Name "startmap" -Value "c_start"
     Clear-CofFontCache -DeployRoot $DeployRoot -GameDir $GameDir
 }
