@@ -2411,11 +2411,153 @@ void CTriggerCamera::Deactivate( BOOL fireTargets )
 	m_pentPath = NULL;
 }
 
-static int COF_FastForwardActiveManagers( CBasePlayer *pPlayer )
+static BOOL COF_StringContainsI( const char *pszText, const char *pszNeedle )
+{
+	if( !pszText || !pszNeedle || !pszNeedle[0] )
+		return FALSE;
+
+	for( const char *p = pszText; *p; p++ )
+	{
+		const char *a = p;
+		const char *b = pszNeedle;
+
+		while( *a && *b && tolower( (unsigned char)*a ) == tolower( (unsigned char)*b ) )
+		{
+			a++;
+			b++;
+		}
+
+		if( !*b )
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static BOOL COF_NameHasCutsceneHint( const char *pszName )
+{
+	return COF_StringContainsI( pszName, "camera" ) ||
+		COF_StringContainsI( pszName, "kamera" ) ||
+		COF_StringContainsI( pszName, "scene" ) ||
+		COF_StringContainsI( pszName, "cut" ) ||
+		COF_StringContainsI( pszName, "intro" );
+}
+
+static BOOL COF_ClassIsCutsceneEntity( CBaseEntity *pEntity )
+{
+	if( !pEntity || FStringNull( pEntity->pev->classname ) )
+		return FALSE;
+
+	const char *pszClassname = STRING( pEntity->pev->classname );
+
+	return FStrEq( pszClassname, "trigger_camera" ) ||
+		FStrEq( pszClassname, "cof_mdlcutscene" ) ||
+		FStrEq( pszClassname, "cof_introduction" ) ||
+		FStrEq( pszClassname, "cof_credits" ) ||
+		FStrEq( pszClassname, "cof_ending" ) ||
+		FStrEq( pszClassname, "cof_telescope_camera" );
+}
+
+static BOOL COF_TargetResolvesToCutsceneEntity( string_t targetName )
+{
+	if( FStringNull( targetName ) )
+		return FALSE;
+
+	edict_t *pentTarget = NULL;
+
+	while( ( pentTarget = FIND_ENTITY_BY_TARGETNAME( pentTarget, STRING( targetName ) ) ) != NULL )
+	{
+		if( FNullEnt( pentTarget ) )
+			break;
+
+		CBaseEntity *pTarget = CBaseEntity::Instance( pentTarget );
+
+		if( COF_ClassIsCutsceneEntity( pTarget ) )
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static BOOL COF_IsManagerRunning( CMultiManager *pManager )
+{
+	if( !pManager || pManager->m_index >= pManager->m_cTargets )
+		return FALSE;
+
+	return pManager->pev->nextthink > 0 || pManager->m_pfnUse == NULL;
+}
+
+static BOOL COF_ManagerLooksLikeCutscene( CMultiManager *pManager )
+{
+	if( !pManager )
+		return FALSE;
+
+	if( !FStringNull( pManager->pev->targetname ) && COF_NameHasCutsceneHint( STRING( pManager->pev->targetname ) ) )
+		return TRUE;
+
+	for( int i = pManager->m_index; i < pManager->m_cTargets; i++ )
+	{
+		if( COF_NameHasCutsceneHint( STRING( pManager->m_iTargetName[i] ) ) )
+			return TRUE;
+
+		if( COF_TargetResolvesToCutsceneEntity( pManager->m_iTargetName[i] ) )
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static BOOL COF_HasActiveCutsceneManager( CBasePlayer *pPlayer )
+{
+	CBaseEntity *pEntity = NULL;
+
+	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "multi_manager" ) ) != NULL )
+	{
+		CMultiManager *pManager = (CMultiManager *)pEntity;
+
+		if( !COF_IsManagerRunning( pManager ) )
+			continue;
+
+		if( COF_ManagerLooksLikeCutscene( pManager ) )
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static BOOL COF_HasAnyActiveManager( void )
+{
+	CBaseEntity *pEntity = NULL;
+
+	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "multi_manager" ) ) != NULL )
+	{
+		if( COF_IsManagerRunning( (CMultiManager *)pEntity ) )
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static BOOL COF_HasActiveCamera( CBasePlayer *pPlayer )
+{
+	CBaseEntity *pEntity = NULL;
+
+	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "trigger_camera" ) ) != NULL )
+	{
+		CTriggerCamera *pCamera = (CTriggerCamera *)pEntity;
+
+		if( pCamera->IsActiveFor( pPlayer ) )
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static int COF_FastForwardActiveManagers( CBasePlayer *pPlayer, BOOL skipAllActiveManagers )
 {
 	int firedTargets = 0;
 
-	for( int pass = 0; pass < 8; pass++ )
+	for( int pass = 0; pass < 16; pass++ )
 	{
 		BOOL advanced = FALSE;
 		CBaseEntity *pEntity = NULL;
@@ -2424,10 +2566,10 @@ static int COF_FastForwardActiveManagers( CBasePlayer *pPlayer )
 		{
 			CMultiManager *pManager = (CMultiManager *)pEntity;
 
-			if( pManager->m_index >= pManager->m_cTargets || pManager->pev->nextthink <= 0 )
+			if( !COF_IsManagerRunning( pManager ) )
 				continue;
 
-			if( (CBaseEntity *)pManager->m_hActivator != pPlayer )
+			if( !skipAllActiveManagers && (CBaseEntity *)pManager->m_hActivator != pPlayer && !COF_ManagerLooksLikeCutscene( pManager ) )
 				continue;
 
 			while( pManager->m_index < pManager->m_cTargets )
@@ -2441,7 +2583,9 @@ static int COF_FastForwardActiveManagers( CBasePlayer *pPlayer )
 			pManager->SetThink( NULL );
 			pManager->pev->nextthink = 0;
 
-			if( !( pManager->pev->spawnflags & SF_MULTIMAN_CLONE ) )
+			if( pManager->pev->spawnflags & SF_MULTIMAN_CLONE )
+				UTIL_Remove( pManager );
+			else
 				pManager->SetUse( &CMultiManager::ManagerUse );
 		}
 
@@ -2457,7 +2601,27 @@ BOOL COF_TrySkipActiveCutscene( CBasePlayer *pPlayer )
 	if( !pPlayer )
 		return FALSE;
 
-	BOOL hasActiveCamera = FALSE;
+	static float flNextSkipTime[33];
+	const int playerIndex = pPlayer->entindex();
+	const BOOL hasActiveCamera = COF_HasActiveCamera( pPlayer );
+	const BOOL hasActiveCutsceneManager = COF_HasActiveCutsceneManager( pPlayer );
+
+	if( !hasActiveCamera && !hasActiveCutsceneManager )
+	{
+		if( !( pPlayer->pev->flags & FL_FROZEN ) || !COF_HasAnyActiveManager() )
+			return FALSE;
+	}
+
+	if( playerIndex > 0 && playerIndex < 33 )
+	{
+		if( gpGlobals->time < flNextSkipTime[playerIndex] )
+			return TRUE;
+
+		flNextSkipTime[playerIndex] = gpGlobals->time + 0.5f;
+	}
+
+	COF_FastForwardActiveManagers( pPlayer, TRUE );
+
 	CBaseEntity *pEntity = NULL;
 
 	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "trigger_camera" ) ) != NULL )
@@ -2465,25 +2629,13 @@ BOOL COF_TrySkipActiveCutscene( CBasePlayer *pPlayer )
 		CTriggerCamera *pCamera = (CTriggerCamera *)pEntity;
 
 		if( pCamera->IsActiveFor( pPlayer ) )
-		{
-			hasActiveCamera = TRUE;
-			break;
-		}
-	}
-
-	if( !hasActiveCamera )
-		return FALSE;
-
-	COF_FastForwardActiveManagers( pPlayer );
-
-	pEntity = NULL;
-	while( ( pEntity = UTIL_FindEntityByClassname( pEntity, "trigger_camera" ) ) != NULL )
-	{
-		CTriggerCamera *pCamera = (CTriggerCamera *)pEntity;
-
-		if( pCamera->IsActiveFor( pPlayer ) )
 			pCamera->Deactivate( FALSE );
 	}
+
+	SET_VIEW( pPlayer->edict(), pPlayer->edict() );
+	pPlayer->EnableControl( TRUE );
+	pPlayer->pev->velocity = g_vecZero;
+	pPlayer->pev->avelocity = g_vecZero;
 
 	return TRUE;
 }

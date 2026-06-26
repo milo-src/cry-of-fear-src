@@ -1885,13 +1885,13 @@ void CBasePlayer::PreThink( void )
 	m_afButtonPressed =  buttonsChanged & pev->button;		// The changed ones still down are "pressed"
 	m_afButtonReleased = buttonsChanged & ( ~pev->button );	// The ones not down are "released"
 
-	if( m_afButtonPressed & IN_JUMP )
+	if( ( m_afButtonPressed | pev->button ) & ( IN_JUMP | IN_USE ) )
 	{
 		if( COF_TrySkipActiveCutscene( this ) )
 		{
-			pev->button &= ~IN_JUMP;
-			m_afButtonPressed &= ~IN_JUMP;
-			m_afButtonReleased &= ~IN_JUMP;
+			pev->button &= ~( IN_JUMP | IN_USE );
+			m_afButtonPressed &= ~( IN_JUMP | IN_USE );
+			m_afButtonReleased &= ~( IN_JUMP | IN_USE );
 		}
 	}
 
