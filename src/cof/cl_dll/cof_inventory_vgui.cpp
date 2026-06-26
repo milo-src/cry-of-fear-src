@@ -19,10 +19,10 @@
 
 using namespace vgui;
 
-#define COF_INV_MAX_ITEMS 32
+#define COF_INV_MAX_ITEMS 6
 #define COF_INV_VISIBLE_SLOTS 6
 #define COF_INV_QUICK_SLOTS 3
-#define COF_INV_ACTION_BUTTONS 3
+#define COF_INV_ACTION_BUTTONS 7
 
 void IN_SetVisibleMouse( bool visible );
 void IgnoreNextMouseDelta( void );
@@ -49,23 +49,36 @@ static const COFInventoryRect g_COFQuickSlots[COF_INV_QUICK_SLOTS] =
 
 enum
 {
-	COF_INV_ACTION_USE = 0,
+	COF_INV_ACTION_NONE = -1,
+	COF_INV_ACTION_EQUIP = 0,
 	COF_INV_ACTION_COMBINE,
-	COF_INV_ACTION_DROP
+	COF_INV_ACTION_DROP,
+	COF_INV_ACTION_DUAL_WIELD,
+	COF_INV_ACTION_QUICK_1,
+	COF_INV_ACTION_QUICK_2,
+	COF_INV_ACTION_QUICK_3
 };
 
 static const COFInventoryRect g_COFActionButtons[COF_INV_ACTION_BUTTONS] =
 {
-	{ 42, 444, 96, 24 },
-	{ 150, 444, 96, 24 },
-	{ 258, 444, 96, 24 }
+	{ 250, 70, 100, 28 },
+	{ 250, 101, 100, 28 },
+	{ 250, 132, 100, 28 },
+	{ 250, 163, 100, 28 },
+	{ 250, 197, 31, 30 },
+	{ 284, 197, 31, 30 },
+	{ 318, 197, 31, 30 }
 };
 
 static const char *g_COFActionLabels[COF_INV_ACTION_BUTTONS] =
 {
-	"USE",
+	"EQUIP",
 	"COMBINE",
-	"DROP"
+	"DROP",
+	"DUAL WIELD",
+	"1",
+	"2",
+	"3"
 };
 
 static bool COF_RectContains( const COFInventoryRect &rect, int x, int y )
@@ -151,6 +164,7 @@ public:
 		m_pBackground = NULL;
 		m_iSelected = 0;
 		m_iCombineSource = -1;
+		m_iPendingAction = COF_INV_ACTION_NONE;
 		m_iHoverSlot = -1;
 		m_iHoverQuickSlot = -1;
 		m_iHoverAction = -1;
@@ -196,6 +210,7 @@ public:
 		else
 		{
 			m_iCombineSource = -1;
+			m_iPendingAction = COF_INV_ACTION_NONE;
 			m_iHoverSlot = -1;
 			m_iHoverQuickSlot = -1;
 			m_iHoverAction = -1;
@@ -219,8 +234,10 @@ public:
 	{
 		for( int i = 0; i < COF_INV_MAX_ITEMS; i++ )
 			ClearItem( i );
+		ClearQuickSlots();
 		m_iSelected = 0;
 		m_iCombineSource = -1;
+		m_iPendingAction = COF_INV_ACTION_NONE;
 	}
 
 	void ClearItem( int index )
@@ -276,10 +293,38 @@ public:
 		repaint();
 	}
 
+	void SetQuickSlotPath( int quickSlot, const char *pszPath )
+	{
+		if( quickSlot < 0 || quickSlot >= COF_INV_QUICK_SLOTS )
+			return;
+
+		strlcpy( m_szQuickSlots[quickSlot], pszPath ? pszPath : "", sizeof( m_szQuickSlots[quickSlot] ) );
+		repaint();
+	}
+
 	int KeyInput( int down, int keynum, const char *pszCurrentBinding )
 	{
 		if( !IsOpen() )
+		{
+			if( !down )
+				return 1;
+
+			const int quickSlot = QuickSlotForKey( keynum );
+			if( quickSlot >= 0 && m_szQuickSlots[quickSlot][0] )
+			{
+				SendQuickUseCommand( quickSlot );
+				return 0;
+			}
+
 			return 1;
+		}
+
+		if( keynum == K_TAB )
+		{
+			if( !down )
+				SetOpen( false );
+			return 0;
+		}
 
 		if( !down )
 			return 0;
@@ -287,7 +332,6 @@ public:
 		switch( keynum )
 		{
 		case K_ESCAPE:
-		case K_TAB:
 			SetOpen( false );
 			return 0;
 		case K_LEFTARROW:
@@ -310,7 +354,7 @@ public:
 		case K_KP_ENTER:
 		case K_SPACE:
 		case 'e':
-			SendIndexCommand( "cof_inv_use", m_iSelected );
+			RunAction( COF_INV_ACTION_EQUIP );
 			return 0;
 		case 'c':
 			CombineSelected();
@@ -394,6 +438,8 @@ protected:
 		if( slot >= 0 && m_Items[slot].valid )
 		{
 			m_iSelected = slot;
+			if( m_iPendingAction != COF_INV_ACTION_NONE )
+				ExecuteActionOnSlot( m_iPendingAction, slot );
 			repaint();
 			return;
 		}
@@ -484,20 +530,50 @@ private:
 
 	void RunAction( int action )
 	{
-		if( action == COF_INV_ACTION_USE )
+		if( action < 0 || action >= COF_INV_ACTION_BUTTONS || !m_Items[m_iSelected].valid )
+			return;
+
+		if( action == COF_INV_ACTION_EQUIP )
 		{
 			SendIndexCommand( "cof_inv_use", m_iSelected );
+			m_iPendingAction = COF_INV_ACTION_NONE;
+			m_iCombineSource = -1;
+			return;
+		}
+
+		if( action == COF_INV_ACTION_DROP )
+		{
+			SendIndexCommand( "cof_inv_drop", m_iSelected );
+			m_iPendingAction = COF_INV_ACTION_NONE;
+			m_iCombineSource = -1;
+			return;
+		}
+
+		if( action >= COF_INV_ACTION_QUICK_1 && action <= COF_INV_ACTION_QUICK_3 )
+		{
+			SetQuickSlot( action - COF_INV_ACTION_QUICK_1 );
+			m_iPendingAction = COF_INV_ACTION_NONE;
+			m_iCombineSource = -1;
 			return;
 		}
 
 		if( action == COF_INV_ACTION_COMBINE )
 		{
-			CombineSelected();
+			m_iPendingAction = COF_INV_ACTION_COMBINE;
+			m_iCombineSource = m_iSelected;
+			repaint();
 			return;
 		}
 
-		if( action == COF_INV_ACTION_DROP )
-			SendIndexCommand( "cof_inv_drop", m_iSelected );
+		if( action == COF_INV_ACTION_DUAL_WIELD )
+		{
+			m_iPendingAction = COF_INV_ACTION_DUAL_WIELD;
+			m_iCombineSource = m_iSelected;
+			repaint();
+			return;
+		}
+
+		repaint();
 	}
 
 	void SelectFirstValid()
@@ -547,13 +623,104 @@ private:
 		return false;
 	}
 
+	void ClearQuickSlots()
+	{
+		memset( m_szQuickSlots, 0, sizeof( m_szQuickSlots ) );
+	}
+
+	int QuickSlotForKey( int keynum ) const
+	{
+		switch( keynum )
+		{
+		case '1':
+			return 0;
+		case '2':
+			return 1;
+		case '3':
+			return 2;
+		default:
+			return -1;
+		}
+	}
+
 	void SetQuickSlot( int quickSlot )
 	{
 		if( quickSlot < 0 || quickSlot >= COF_INV_QUICK_SLOTS || !m_Items[m_iSelected].valid )
 			return;
 
 		strlcpy( m_szQuickSlots[quickSlot], m_Items[m_iSelected].path, sizeof( m_szQuickSlots[quickSlot] ) );
+		char szCmd[64];
+		snprintf( szCmd, sizeof( szCmd ), "cof_inv_quickset %d %d\n", quickSlot, m_iSelected );
+		gEngfuncs.pfnServerCmd( szCmd );
 		repaint();
+	}
+
+	void SendQuickUseCommand( int quickSlot )
+	{
+		if( quickSlot < 0 || quickSlot >= COF_INV_QUICK_SLOTS )
+			return;
+
+		char szCmd[64];
+		snprintf( szCmd, sizeof( szCmd ), "cof_inv_quickuse %d\n", quickSlot );
+		gEngfuncs.pfnServerCmd( szCmd );
+	}
+
+	void ExecuteActionOnSlot( int action, int slot )
+	{
+		if( slot < 0 || slot >= COF_INV_MAX_ITEMS || !m_Items[slot].valid )
+			return;
+
+		if( action == COF_INV_ACTION_EQUIP )
+		{
+			SendIndexCommand( "cof_inv_use", slot );
+			m_iPendingAction = COF_INV_ACTION_NONE;
+			return;
+		}
+
+		if( action == COF_INV_ACTION_DROP )
+		{
+			SendIndexCommand( "cof_inv_drop", slot );
+			m_iPendingAction = COF_INV_ACTION_NONE;
+			return;
+		}
+
+		if( action == COF_INV_ACTION_COMBINE )
+		{
+			if( m_iCombineSource < 0 )
+			{
+				m_iCombineSource = slot;
+				return;
+			}
+
+			if( m_iCombineSource != slot )
+			{
+				char szCmd[64];
+				snprintf( szCmd, sizeof( szCmd ), "cof_inv_combine %d %d\n", m_iCombineSource, slot );
+				gEngfuncs.pfnServerCmd( szCmd );
+			}
+
+			m_iCombineSource = -1;
+			m_iPendingAction = COF_INV_ACTION_NONE;
+		}
+
+		if( action == COF_INV_ACTION_DUAL_WIELD )
+		{
+			if( m_iCombineSource < 0 )
+			{
+				m_iCombineSource = slot;
+				return;
+			}
+
+			if( m_iCombineSource != slot )
+			{
+				char szCmd[64];
+				snprintf( szCmd, sizeof( szCmd ), "cof_inv_dualwield %d %d\n", m_iCombineSource, slot );
+				gEngfuncs.pfnServerCmd( szCmd );
+			}
+
+			m_iCombineSource = -1;
+			m_iPendingAction = COF_INV_ACTION_NONE;
+		}
 	}
 
 	void CombineSelected()
@@ -572,6 +739,7 @@ private:
 		snprintf( szCmd, sizeof( szCmd ), "cof_inv_combine %d %d\n", m_iCombineSource, m_iSelected );
 		gEngfuncs.pfnServerCmd( szCmd );
 		m_iCombineSource = -1;
+		m_iPendingAction = COF_INV_ACTION_NONE;
 	}
 
 	void SendIndexCommand( const char *pszCommand, int index )
@@ -677,10 +845,11 @@ private:
 			const COFInventoryRect &rect = g_COFActionButtons[i];
 			const bool enabled = m_iSelected >= 0 && m_iSelected < COF_INV_MAX_ITEMS && m_Items[m_iSelected].valid;
 			const bool hover = enabled && m_iHoverAction == i;
+			const bool pending = enabled && m_iPendingAction == i;
 
-			drawSetColor( hover ? 70 : 20, hover ? 70 : 20, hover ? 70 : 20, enabled ? 220 : 110 );
+			drawSetColor( pending ? 80 : ( hover ? 70 : 20 ), pending ? 60 : ( hover ? 70 : 20 ), pending ? 20 : ( hover ? 70 : 20 ), enabled ? 220 : 110 );
 			drawFilledRect( rect.x, rect.y, rect.x + rect.wide, rect.y + rect.tall );
-			drawSetColor( hover ? 255 : 170, hover ? 220 : 170, hover ? 90 : 170, enabled ? 255 : 120 );
+			drawSetColor( ( hover || pending ) ? 255 : 170, ( hover || pending ) ? 220 : 170, ( hover || pending ) ? 90 : 170, enabled ? 255 : 120 );
 			drawOutlinedRect( rect.x, rect.y, rect.x + rect.wide, rect.y + rect.tall );
 
 			drawSetTextColor( enabled ? 240 : 120, enabled ? 240 : 120, enabled ? 240 : 120, 255 );
@@ -711,7 +880,16 @@ private:
 		drawPrintText( pszName, strlen( pszName ) );
 
 		char szHelp[192];
-		snprintf( szHelp, sizeof( szHelp ), "Enter: use  C: combine  X: drop  1/2/3: quick slot" );
+		if( m_iPendingAction == COF_INV_ACTION_EQUIP )
+			snprintf( szHelp, sizeof( szHelp ), "EQUIP: select an item" );
+		else if( m_iPendingAction == COF_INV_ACTION_DROP )
+			snprintf( szHelp, sizeof( szHelp ), "DROP: select an item" );
+		else if( m_iPendingAction == COF_INV_ACTION_COMBINE && m_iCombineSource < 0 )
+			snprintf( szHelp, sizeof( szHelp ), "COMBINE: select the first item" );
+		else if( m_iPendingAction == COF_INV_ACTION_DUAL_WIELD && m_iCombineSource < 0 )
+			snprintf( szHelp, sizeof( szHelp ), "DUAL WIELD: select the first weapon" );
+		else
+			snprintf( szHelp, sizeof( szHelp ), "Equip, combine, drop, or choose quick slot 1/2/3" );
 		drawSetTextColor( 180, 180, 180, 255 );
 		drawSetTextPos( 42, 402 );
 		drawPrintText( szHelp, strlen( szHelp ) );
@@ -720,6 +898,10 @@ private:
 		{
 			drawSetTextColor( 150, 230, 150, 255 );
 			const char *pszCombine = "Select second item and press C";
+			if( m_iPendingAction == COF_INV_ACTION_COMBINE )
+				pszCombine = "COMBINE: select the second item";
+			else if( m_iPendingAction == COF_INV_ACTION_DUAL_WIELD )
+				pszCombine = "DUAL WIELD: select the second weapon";
 			drawSetTextPos( 42, 422 );
 			drawPrintText( pszCombine, strlen( pszCombine ) );
 		}
@@ -730,6 +912,7 @@ private:
 	BitmapTGA *m_pBackground;
 	int m_iSelected;
 	int m_iCombineSource;
+	int m_iPendingAction;
 	int m_iHoverSlot;
 	int m_iHoverQuickSlot;
 	int m_iHoverAction;
@@ -789,6 +972,18 @@ static int __MsgFunc_CofInvItem( const char *pszName, int iSize, void *pbuf )
 	return 1;
 }
 
+static int __MsgFunc_CofInvQuick( const char *pszName, int iSize, void *pbuf )
+{
+	BEGIN_READ( pbuf, iSize );
+	const int quickSlot = READ_BYTE();
+	const char *pszPath = READ_STRING();
+
+	if( g_pCofInventory )
+		g_pCofInventory->SetQuickSlotPath( quickSlot, pszPath );
+
+	return 1;
+}
+
 static void __CmdFunc_CofInventoryDown( void )
 {
 	COF_Inventory_SetOpen( true );
@@ -808,6 +1003,7 @@ void COF_Inventory_Init( void )
 {
 	gEngfuncs.pfnHookUserMsg( "CofInvClear", __MsgFunc_CofInvClear );
 	gEngfuncs.pfnHookUserMsg( "CofInvItem", __MsgFunc_CofInvItem );
+	gEngfuncs.pfnHookUserMsg( "CofInvQuick", __MsgFunc_CofInvQuick );
 	gEngfuncs.pfnAddCommand( "+inventory", __CmdFunc_CofInventoryDown );
 	gEngfuncs.pfnAddCommand( "-inventory", __CmdFunc_CofInventoryUp );
 	gEngfuncs.pfnAddCommand( "cof_inventory_toggle", __CmdFunc_CofInventoryToggle );

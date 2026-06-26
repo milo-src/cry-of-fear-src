@@ -523,6 +523,46 @@ void ClientCommand( edict_t *pEntity )
 	{
 		GetClassPtr( (CBasePlayer *)pev )->COF_CombineInventoryItems( atoi( CMD_ARGV( 1 ) ), atoi( CMD_ARGV( 2 ) ) );
 	}
+	else if( FStrEq( pcmd, "cof_inv_dualwield" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_DualWieldInventoryItems( atoi( CMD_ARGV( 1 ) ), atoi( CMD_ARGV( 2 ) ) );
+	}
+	else if( FStrEq( pcmd, "cof_inv_quickset" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_SetQuickSlot( atoi( CMD_ARGV( 1 ) ), atoi( CMD_ARGV( 2 ) ) );
+	}
+	else if( FStrEq( pcmd, "quickselset1" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_SetQuickSlot( 0, atoi( CMD_ARGV( 1 ) ) - 1 );
+	}
+	else if( FStrEq( pcmd, "quickselset2" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_SetQuickSlot( 1, atoi( CMD_ARGV( 1 ) ) - 1 );
+	}
+	else if( FStrEq( pcmd, "quickselset3" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_SetQuickSlot( 2, atoi( CMD_ARGV( 1 ) ) - 1 );
+	}
+	else if( FStrEq( pcmd, "cof_inv_quickuse" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_UseQuickSlot( atoi( CMD_ARGV( 1 ) ) );
+	}
+	else if( FStrEq( pcmd, "quicksel1" ) || FStrEq( pcmd, "quickselect1" ) || FStrEq( pcmd, "quickslot1" ) || FStrEq( pcmd, "cof_inv_quick1" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_UseQuickSlot( 0 );
+	}
+	else if( FStrEq( pcmd, "quicksel2" ) || FStrEq( pcmd, "quickselect2" ) || FStrEq( pcmd, "quickslot2" ) || FStrEq( pcmd, "cof_inv_quick2" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_UseQuickSlot( 1 );
+	}
+	else if( FStrEq( pcmd, "quicksel3" ) || FStrEq( pcmd, "quickselect3" ) || FStrEq( pcmd, "quickslot3" ) || FStrEq( pcmd, "cof_inv_quick3" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_UseQuickSlot( 2 );
+	}
+	else if( FStrEq( pcmd, "inventoryequip" ) || FStrEq( pcmd, "inventoryuse" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_UseInventoryItem( atoi( CMD_ARGV( 1 ) ) - 1 );
+	}
 	else if( FStrEq(pcmd, "give" ) )
 	{
 		if( g_enable_cheats->value != 0 )

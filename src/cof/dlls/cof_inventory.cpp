@@ -13,6 +13,7 @@
 extern int gmsgItemPickup;
 extern int gmsgCofInvClear;
 extern int gmsgCofInvItem;
+extern int gmsgCofInvQuick;
 
 struct COFInventoryDef
 {
@@ -212,6 +213,33 @@ static const char *COF_GetInventoryPath( const CBasePlayer *pPlayer, int iIndex 
 	return STRING( pPlayer->m_rgCOFInventory[iIndex] );
 }
 
+static int COF_FindInventoryPathIndex( const CBasePlayer *pPlayer, const char *pszPath )
+{
+	if( !pPlayer || !pszPath || !pszPath[0] )
+		return -1;
+
+	for( int i = 0; i < MAX_COF_INVENTORY; i++ )
+	{
+		const char *pszItemPath = COF_GetInventoryPath( pPlayer, i );
+		if( pszItemPath && !stricmp( pszItemPath, pszPath ) )
+			return i;
+	}
+
+	return -1;
+}
+
+static void COF_ClearQuickSlotsForPath( CBasePlayer *pPlayer, const char *pszPath )
+{
+	if( !pPlayer || !pszPath || !pszPath[0] )
+		return;
+
+	for( int i = 0; i < MAX_COF_QUICK_SLOTS; i++ )
+	{
+		if( !FStringNull( pPlayer->m_rgCOFQuickSlots[i] ) && !stricmp( STRING( pPlayer->m_rgCOFQuickSlots[i] ), pszPath ) )
+			pPlayer->m_rgCOFQuickSlots[i] = iStringNull;
+	}
+}
+
 static void COF_PrecacheOptionalSound( const char *pszSound )
 {
 	if( pszSound && pszSound[0] )
@@ -233,6 +261,26 @@ void CBasePlayer::COF_SendInventory( void )
 			MESSAGE_END();
 		}
 	}
+
+	COF_SendQuickSlots();
+}
+
+void CBasePlayer::COF_SendQuickSlot( int iQuickSlot )
+{
+	if( iQuickSlot < 0 || iQuickSlot >= MAX_COF_QUICK_SLOTS )
+		return;
+
+	const char *pszPath = FStringNull( m_rgCOFQuickSlots[iQuickSlot] ) ? "" : STRING( m_rgCOFQuickSlots[iQuickSlot] );
+	MESSAGE_BEGIN( MSG_ONE, gmsgCofInvQuick, NULL, pev );
+		WRITE_BYTE( iQuickSlot );
+		WRITE_STRING( pszPath );
+	MESSAGE_END();
+}
+
+void CBasePlayer::COF_SendQuickSlots( void )
+{
+	for( int i = 0; i < MAX_COF_QUICK_SLOTS; i++ )
+		COF_SendQuickSlot( i );
 }
 
 BOOL CBasePlayer::COF_HasInventoryItem( const char *pszName ) const
@@ -293,12 +341,43 @@ BOOL CBasePlayer::COF_RemoveInventoryItem( int iIndex )
 	if( iIndex < 0 || iIndex >= MAX_COF_INVENTORY || FStringNull( m_rgCOFInventory[iIndex] ) )
 		return FALSE;
 
+	char szRemovedPath[128];
+	strlcpy( szRemovedPath, STRING( m_rgCOFInventory[iIndex] ), sizeof( szRemovedPath ) );
+	COF_ClearQuickSlotsForPath( this, szRemovedPath );
+
 	for( int i = iIndex; i < MAX_COF_INVENTORY - 1; i++ )
 		m_rgCOFInventory[i] = m_rgCOFInventory[i + 1];
 
 	m_rgCOFInventory[MAX_COF_INVENTORY - 1] = iStringNull;
 	COF_SendInventory();
 	return TRUE;
+}
+
+void CBasePlayer::COF_SetQuickSlot( int iQuickSlot, int iInventoryIndex )
+{
+	if( iQuickSlot < 0 || iQuickSlot >= MAX_COF_QUICK_SLOTS )
+		return;
+
+	const char *pszPath = COF_GetInventoryPath( this, iInventoryIndex );
+	m_rgCOFQuickSlots[iQuickSlot] = pszPath ? ALLOC_STRING( pszPath ) : iStringNull;
+	COF_SendQuickSlot( iQuickSlot );
+}
+
+void CBasePlayer::COF_UseQuickSlot( int iQuickSlot )
+{
+	if( iQuickSlot < 0 || iQuickSlot >= MAX_COF_QUICK_SLOTS || FStringNull( m_rgCOFQuickSlots[iQuickSlot] ) )
+		return;
+
+	const char *pszPath = STRING( m_rgCOFQuickSlots[iQuickSlot] );
+	const int iInventoryIndex = COF_FindInventoryPathIndex( this, pszPath );
+	if( iInventoryIndex < 0 )
+	{
+		m_rgCOFQuickSlots[iQuickSlot] = iStringNull;
+		COF_SendQuickSlot( iQuickSlot );
+		return;
+	}
+
+	COF_UseInventoryItem( iInventoryIndex );
 }
 
 void CBasePlayer::COF_PrintInventory( void )
@@ -452,6 +531,31 @@ void CBasePlayer::COF_CombineInventoryItems( int iFirst, int iSecond )
 	}
 
 	ClientPrint( pev, HUD_PRINTCENTER, "Items combined" );
+}
+
+void CBasePlayer::COF_DualWieldInventoryItems( int iFirst, int iSecond )
+{
+	if( iFirst == iSecond )
+		return;
+
+	const char *pszFirst = COF_GetInventoryPath( this, iFirst );
+	const char *pszSecond = COF_GetInventoryPath( this, iSecond );
+	if( !pszFirst || !pszSecond )
+		return;
+
+	COFInventoryDef firstDef, secondDef;
+	if( !COF_LoadItemDef( pszFirst, &firstDef ) || !COF_LoadItemDef( pszSecond, &secondDef ) )
+		return;
+
+	if( strncmp( firstDef.className, "weapon_", 7 ) || strncmp( secondDef.className, "weapon_", 7 ) )
+	{
+		ClientPrint( pev, HUD_PRINTCENTER, "Only weapons can be dual wielded" );
+		return;
+	}
+
+	COF_SetQuickSlot( 0, iFirst );
+	COF_SetQuickSlot( 1, iSecond );
+	ClientPrint( pev, HUD_PRINTCENTER, "Dual wield pair assigned to slots 1 and 2" );
 }
 
 static CBasePlayer *COF_FindPlayer( CBaseEntity *pActivator, CBaseEntity *pCaller )

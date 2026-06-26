@@ -387,8 +387,11 @@ int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding
 		gEngfuncs.pfnServerCmd( "cof_skipcutscene\n" );
 
 #if USE_VGUI
-	if( COF_Inventory_IsVisible() )
-		return COF_Inventory_KeyInput( down, keynum, pszCurrentBinding );
+	{
+		const int inventoryResult = COF_Inventory_KeyInput( down, keynum, pszCurrentBinding );
+		if( !inventoryResult )
+			return 0;
+	}
 
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
