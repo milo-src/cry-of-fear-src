@@ -185,7 +185,7 @@ function Copy-CofGameRuntime {
         -Destination (Join-Path $targetClientDir "hl.dll")
 }
 
-function Convert-TextFileToWindows1251 {
+function Convert-TextFileToUtf8 {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Path
@@ -197,6 +197,9 @@ function Convert-TextFileToWindows1251 {
 
     $bytes = [System.IO.File]::ReadAllBytes($Path)
 
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    $writeFile = $true
+
     if ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) {
         $text = [System.Text.Encoding]::Unicode.GetString($bytes, 2, $bytes.Length - 2)
     }
@@ -207,12 +210,77 @@ function Convert-TextFileToWindows1251 {
         $text = [System.Text.Encoding]::UTF8.GetString($bytes, 3, $bytes.Length - 3)
     }
     else {
+        try {
+            $null = $strictUtf8.GetString($bytes)
+            $writeFile = $false
+        }
+        catch {
+            $text = [System.Text.Encoding]::GetEncoding(1251).GetString($bytes)
+        }
+    }
+
+    if ($writeFile) {
+        $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+        [System.IO.File]::WriteAllBytes($Path, $utf8NoBom.GetBytes($text))
+        Write-Host "Converted localization to UTF-8: $Path"
+    }
+}
+
+function Set-CofConfigCvar {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ConfigPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Name,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Value
+    )
+
+    $line = "$Name `"$Value`""
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+
+    if (-not (Test-Path -LiteralPath $ConfigPath)) {
+        [System.IO.File]::WriteAllText($ConfigPath, $line + [Environment]::NewLine, $utf8NoBom)
+        Write-Host "Created config cvar: $line"
         return
     }
 
-    $encoding = [System.Text.Encoding]::GetEncoding(1251)
-    [System.IO.File]::WriteAllBytes($Path, $encoding.GetBytes($text))
-    Write-Host "Converted localization to Windows-1251: $Path"
+    $bytes = [System.IO.File]::ReadAllBytes($ConfigPath)
+    if ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) {
+        $text = [System.Text.Encoding]::Unicode.GetString($bytes, 2, $bytes.Length - 2)
+    }
+    elseif ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFE -and $bytes[1] -eq 0xFF) {
+        $text = [System.Text.Encoding]::BigEndianUnicode.GetString($bytes, 2, $bytes.Length - 2)
+    }
+    elseif ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+        $text = [System.Text.Encoding]::UTF8.GetString($bytes, 3, $bytes.Length - 3)
+    }
+    else {
+        try {
+            $text = $strictUtf8.GetString($bytes)
+        }
+        catch {
+            $text = [System.Text.Encoding]::GetEncoding(1251).GetString($bytes)
+        }
+    }
+
+    $pattern = "(?m)^\s*" + [System.Text.RegularExpressions.Regex]::Escape($Name) + "\s+.*$"
+
+    if ([System.Text.RegularExpressions.Regex]::IsMatch($text, $pattern)) {
+        $updated = [System.Text.RegularExpressions.Regex]::Replace($text, $pattern, $line)
+    }
+    else {
+        $ending = if ($text.EndsWith("`r`n") -or $text.EndsWith("`n")) { "" } else { [Environment]::NewLine }
+        $updated = $text + $ending + $line + [Environment]::NewLine
+    }
+
+    if ($updated -ne $text) {
+        [System.IO.File]::WriteAllText($ConfigPath, $updated, $utf8NoBom)
+        Write-Host "Set config cvar: $line"
+    }
 }
 
 function Clear-CofFontCache {
@@ -250,7 +318,8 @@ function Repair-CofLocalizationForXash {
         [string]$GameDir = "cryoffear"
     )
 
-    $resourceDir = Join-Path (Join-Path (Convert-ToFullPath $DeployRoot) $GameDir) "resource"
+    $gameRoot = Join-Path (Convert-ToFullPath $DeployRoot) $GameDir
+    $resourceDir = Join-Path $gameRoot "resource"
     $localizationFiles = @(
         "gameui_english.txt",
         "valve_english.txt"
@@ -259,9 +328,13 @@ function Repair-CofLocalizationForXash {
     foreach ($file in $localizationFiles) {
         $path = Join-Path $resourceDir $file
         if (Test-Path -LiteralPath $path) {
-            Convert-TextFileToWindows1251 -Path $path
+            Convert-TextFileToUtf8 -Path $path
         }
     }
 
+    $configPath = Join-Path $gameRoot "config.cfg"
+    Set-CofConfigCvar -ConfigPath $configPath -Name "cl_charset" -Value "utf-8"
+    Set-CofConfigCvar -ConfigPath $configPath -Name "vgui_utf8" -Value "1"
+    Set-CofConfigCvar -ConfigPath $configPath -Name "hud_utf8" -Value "1"
     Clear-CofFontCache -DeployRoot $DeployRoot -GameDir $GameDir
 }
