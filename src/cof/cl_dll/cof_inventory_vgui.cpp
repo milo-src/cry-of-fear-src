@@ -169,6 +169,7 @@ public:
 		m_iHoverSlot = -1;
 		m_iHoverQuickSlot = -1;
 		m_iHoverAction = -1;
+		m_bIgnoreNextMouseRelease = false;
 		setVisible( false );
 		setPaintBackgroundEnabled( true );
 		setPaintEnabled( true );
@@ -433,15 +434,46 @@ protected:
 		if( code != MOUSE_LEFT )
 			return;
 
+		m_bIgnoreNextMouseRelease = HandlePrimaryClick( true );
+	}
+
+	virtual void mouseReleased( MouseCode code, Panel *panel )
+	{
+		if( code != MOUSE_LEFT )
+			return;
+
+		if( m_bIgnoreNextMouseRelease )
+		{
+			m_bIgnoreNextMouseRelease = false;
+			return;
+		}
+
+		HandlePrimaryClick( true );
+	}
+
+	virtual void mouseDoublePressed( MouseCode code, Panel *panel )
+	{
+		if( code != MOUSE_LEFT )
+			return;
+
+		HandlePrimaryClick( false );
+	}
+
+private:
+	bool HandlePrimaryClick( bool allowActions )
+	{
 		int x, y;
 		App::getInstance()->getCursorPos( x, y );
 		screenToLocal( x, y );
 
-		const int action = HitTestAction( x, y );
+		const int action = allowActions ? HitTestAction( x, y ) : -1;
 		if( action >= 0 )
 		{
+			if( m_iMenuSlot >= 0 && m_iMenuSlot < COF_INV_VISIBLE_SLOTS )
+				m_iSelected = m_iMenuSlot;
 			RunAction( action );
-			return;
+			repaint();
+			return true;
 		}
 
 		const int slot = HitTestSlot( x, y );
@@ -459,7 +491,7 @@ protected:
 				m_iCombineSource = -1;
 			}
 			repaint();
-			return;
+			return true;
 		}
 
 		const int quickSlot = HitTestQuickSlot( x, y );
@@ -467,34 +499,17 @@ protected:
 		{
 			if( m_Items[m_iSelected].valid )
 				SetQuickSlot( quickSlot );
-			return;
+			repaint();
+			return true;
 		}
 
 		m_iMenuSlot = -1;
 		if( m_iPendingAction != COF_INV_ACTION_COMBINE && m_iPendingAction != COF_INV_ACTION_DUAL_WIELD )
 			m_iPendingAction = COF_INV_ACTION_NONE;
 		repaint();
+		return true;
 	}
 
-	virtual void mouseDoublePressed( MouseCode code, Panel *panel )
-	{
-		if( code != MOUSE_LEFT )
-			return;
-
-		int x, y;
-		App::getInstance()->getCursorPos( x, y );
-		screenToLocal( x, y );
-
-		const int slot = HitTestSlot( x, y );
-		if( slot >= 0 && m_Items[slot].valid )
-		{
-			m_iSelected = slot;
-			m_iMenuSlot = -1;
-			SendIndexCommand( "cof_inv_use", m_iSelected );
-		}
-	}
-
-private:
 	void UpdateCursorState( bool open )
 	{
 		if( getSurfaceBase() )
@@ -977,6 +992,7 @@ private:
 	int m_iHoverSlot;
 	int m_iHoverQuickSlot;
 	int m_iHoverAction;
+	bool m_bIgnoreNextMouseRelease;
 };
 
 static CCofInventoryPanel *g_pCofInventory = NULL;

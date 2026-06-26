@@ -631,7 +631,11 @@ public:
 	void Spawn( void );
 	void Precache( void );
 	void KeyValue( KeyValueData *pkvd );
-	void Touch( CBaseEntity *pOther );
+	int ObjectCaps( void );
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+private:
+	bool Pickup( CBasePlayer *pPlayer );
 };
 
 LINK_ENTITY_TO_CLASS( item_key, CCofItemKey )
@@ -677,17 +681,30 @@ void CCofItemKey::Spawn( void )
 
 	UTIL_SetSize( pev, Vector( -16, -16, 0 ), Vector( 16, 16, 32 ) );
 	UTIL_SetOrigin( pev, pev->origin );
-	SetTouch( &CCofItemKey::Touch );
+	SetUse( &CCofItemKey::Use );
 }
 
-void CCofItemKey::Touch( CBaseEntity *pOther )
+int CCofItemKey::ObjectCaps( void )
 {
-	if( !pOther || !pOther->IsPlayer() || FStringNull( pev->message ) )
+	return ( CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION ) | FCAP_IMPULSE_USE;
+}
+
+void CCofItemKey::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	CBasePlayer *pPlayer = COF_FindPlayer( pActivator, pCaller );
+	if( !pPlayer )
 		return;
 
-	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
+	Pickup( pPlayer );
+}
+
+bool CCofItemKey::Pickup( CBasePlayer *pPlayer )
+{
+	if( !pPlayer || FStringNull( pev->message ) )
+		return false;
+
 	if( !COF_GiveTokenToPlayer( pPlayer, STRING( pev->message ) ) )
-		return;
+		return false;
 
 	COFInventoryDef def;
 	if( COF_LoadItemDef( STRING( pev->message ), &def ) && def.pickupSound[0] )
@@ -695,6 +712,7 @@ void CCofItemKey::Touch( CBaseEntity *pOther )
 	else
 		EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, "items/gunpickup2.wav", 1.0f, ATTN_NORM );
 
-	SUB_UseTargets( pOther, USE_TOGGLE, 0 );
+	SUB_UseTargets( pPlayer, USE_TOGGLE, 0 );
 	UTIL_Remove( this );
+	return true;
 }
