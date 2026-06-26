@@ -498,6 +498,14 @@ void ClientCommand( edict_t *pEntity )
 	{
 		COF_TrySkipActiveCutscene( GetClassPtr( (CBasePlayer *)pev ) );
 	}
+	else if( FStrEq( pcmd, "+inventory" ) || FStrEq( pcmd, "inventory" ) || FStrEq( pcmd, "cof_inventory" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_PrintInventory();
+	}
+	else if( FStrEq( pcmd, "-inventory" ) )
+	{
+		return;
+	}
 	else if( FStrEq(pcmd, "give" ) )
 	{
 		if( g_enable_cheats->value != 0 )

@@ -62,6 +62,7 @@ set (SVDLL_SOURCES
 	client.cpp
 	combat.cpp
 	controller.cpp
+	cof_inventory.cpp
 	crossbow.cpp
 	crowbar.cpp
 	defaultai.cpp
@@ -105,6 +106,7 @@ set (SVDLL_SOURCES
 	monsterstate.cpp
 	mortar.cpp
 	mp5.cpp
+	mobile.cpp
 	multiplay_gamerules.cpp
 	nihilanth.cpp
 	nodes.cpp

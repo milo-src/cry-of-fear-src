@@ -355,6 +355,9 @@ void W_Precache( void )
 	// hornetgun
 	UTIL_PrecacheOtherWeapon( "weapon_hornetgun" );
 
+	// Cry of Fear mobile phone
+	UTIL_PrecacheOtherWeapon( "weapon_mobile" );
+
 	if( g_pGameRules->IsDeathmatch() )
 	{
 		UTIL_PrecacheOther( "weaponbox" );// container for dropped deathmatch weapons

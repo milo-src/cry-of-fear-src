@@ -70,6 +70,7 @@ set (CLDLL_SOURCES
 	../dlls/handgrenade.cpp
 	../dlls/hornetgun.cpp
 	../dlls/mp5.cpp
+	../dlls/mobile.cpp
 	../dlls/python.cpp
 	../dlls/rpg.cpp
 	../dlls/satchel.cpp

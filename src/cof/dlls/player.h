@@ -73,6 +73,7 @@ typedef enum
 
 #define MAX_ID_RANGE 2048
 #define SBAR_STRING_SIZE 128
+#define MAX_COF_INVENTORY 32
 
 enum sbar_data
 {
@@ -122,6 +123,7 @@ public:
 	float				m_flFallVelocity;
 
 	int					m_rgItems[MAX_ITEMS];
+	string_t			m_rgCOFInventory[MAX_COF_INVENTORY];
 	int					m_fKnownItem;		// True when a new item needs to be added
 	int					m_fNewAmmo;			// True when a new item has been added
 
@@ -274,6 +276,9 @@ public:
 	void ItemPreFrame( void );
 	void ItemPostFrame( void );
 	void GiveNamedItem( const char *szName );
+	BOOL COF_AddInventoryItem( const char *pszName );
+	BOOL COF_HasInventoryItem( const char *pszName ) const;
+	void COF_PrintInventory( void );
 	void EnableControl(BOOL fControl);
 
 	int  GiveAmmo( int iAmount, const char *szName, int iMax );

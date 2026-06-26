@@ -79,6 +79,7 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD( CBasePlayer, m_afButtonReleased, FIELD_INTEGER ),
 
 	DEFINE_ARRAY( CBasePlayer, m_rgItems, FIELD_INTEGER, MAX_ITEMS ),
+	DEFINE_ARRAY( CBasePlayer, m_rgCOFInventory, FIELD_STRING, MAX_COF_INVENTORY ),
 	DEFINE_FIELD( CBasePlayer, m_afPhysicsFlags, FIELD_INTEGER ),
 
 	DEFINE_FIELD( CBasePlayer, m_flTimeStepSound, FIELD_TIME ),
@@ -856,9 +857,14 @@ void CBasePlayer::RemoveAllItems( BOOL removeSuit )
 	pev->weaponmodel = 0;
 
 	if( removeSuit )
+	{
 		pev->weapons = 0;
+		memset( m_rgCOFInventory, 0, sizeof( m_rgCOFInventory ) );
+	}
 	else
+	{
 		pev->weapons &= ~WEAPON_ALLWEAPONS;
+	}
 
 	// Turn off flashlight
 	if (removeSuit)
