@@ -53,6 +53,7 @@ extern cvar_t allow_spectators;
 extern cvar_t multibyte_only;
 
 extern int g_teamplay;
+extern BOOL COF_TrySkipActiveCutscene( CBasePlayer *pPlayer );
 
 void LinkUserMessages( void );
 
@@ -492,6 +493,10 @@ void ClientCommand( edict_t *pEntity )
 	else if( FStrEq( pcmd, "fullupdate" ) )
 	{
 		GetClassPtr( (CBasePlayer *)pev )->ForceClientDllUpdate(); 
+	}
+	else if( FStrEq( pcmd, "cof_skipcutscene" ) )
+	{
+		COF_TrySkipActiveCutscene( GetClassPtr( (CBasePlayer *)pev ) );
 	}
 	else if( FStrEq(pcmd, "give" ) )
 	{

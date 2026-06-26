@@ -24,6 +24,7 @@ extern "C"
 #include "const.h"
 #include "camera.h"
 #include "in_defs.h"
+#include "keydefs.h"
 //#include "view.h"
 #include <string.h>
 #include <ctype.h>
@@ -381,6 +382,9 @@ Return 1 to allow engine to process the key, otherwise, act on it as needed
 */
 int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
 {
+	if( down && ( keynum == K_ENTER || keynum == K_KP_ENTER || keynum == K_SPACE ) )
+		gEngfuncs.pfnServerCmd( "cof_skipcutscene\n" );
+
 #if USE_VGUI
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
