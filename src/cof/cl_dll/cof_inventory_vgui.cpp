@@ -61,13 +61,13 @@ enum
 
 static const COFInventoryRect g_COFActionButtons[COF_INV_ACTION_BUTTONS] =
 {
-	{ 250, 70, 100, 28 },
-	{ 250, 101, 100, 28 },
-	{ 250, 132, 100, 28 },
-	{ 250, 163, 100, 28 },
-	{ 250, 197, 31, 30 },
-	{ 284, 197, 31, 30 },
-	{ 318, 197, 31, 30 }
+	{ 0, 0, 100, 28 },
+	{ 0, 31, 100, 28 },
+	{ 0, 62, 100, 28 },
+	{ 0, 93, 100, 28 },
+	{ 0, 127, 31, 30 },
+	{ 34, 127, 31, 30 },
+	{ 68, 127, 31, 30 }
 };
 
 static const char *g_COFActionLabels[COF_INV_ACTION_BUTTONS] =
@@ -165,6 +165,7 @@ public:
 		m_iSelected = 0;
 		m_iCombineSource = -1;
 		m_iPendingAction = COF_INV_ACTION_NONE;
+		m_iMenuSlot = -1;
 		m_iHoverSlot = -1;
 		m_iHoverQuickSlot = -1;
 		m_iHoverAction = -1;
@@ -211,6 +212,7 @@ public:
 		{
 			m_iCombineSource = -1;
 			m_iPendingAction = COF_INV_ACTION_NONE;
+			m_iMenuSlot = -1;
 			m_iHoverSlot = -1;
 			m_iHoverQuickSlot = -1;
 			m_iHoverAction = -1;
@@ -238,6 +240,7 @@ public:
 		m_iSelected = 0;
 		m_iCombineSource = -1;
 		m_iPendingAction = COF_INV_ACTION_NONE;
+		m_iMenuSlot = -1;
 	}
 
 	void ClearItem( int index )
@@ -434,12 +437,27 @@ protected:
 		App::getInstance()->getCursorPos( x, y );
 		screenToLocal( x, y );
 
+		const int action = HitTestAction( x, y );
+		if( action >= 0 )
+		{
+			RunAction( action );
+			return;
+		}
+
 		const int slot = HitTestSlot( x, y );
 		if( slot >= 0 && m_Items[slot].valid )
 		{
 			m_iSelected = slot;
 			if( m_iPendingAction != COF_INV_ACTION_NONE )
+			{
 				ExecuteActionOnSlot( m_iPendingAction, slot );
+				m_iMenuSlot = -1;
+			}
+			else
+			{
+				m_iMenuSlot = slot;
+				m_iCombineSource = -1;
+			}
 			repaint();
 			return;
 		}
@@ -452,9 +470,10 @@ protected:
 			return;
 		}
 
-		const int action = HitTestAction( x, y );
-		if( action >= 0 )
-			RunAction( action );
+		m_iMenuSlot = -1;
+		if( m_iPendingAction != COF_INV_ACTION_COMBINE && m_iPendingAction != COF_INV_ACTION_DUAL_WIELD )
+			m_iPendingAction = COF_INV_ACTION_NONE;
+		repaint();
 	}
 
 	virtual void mouseDoublePressed( MouseCode code, Panel *panel )
@@ -470,6 +489,7 @@ protected:
 		if( slot >= 0 && m_Items[slot].valid )
 		{
 			m_iSelected = slot;
+			m_iMenuSlot = -1;
 			SendIndexCommand( "cof_inv_use", m_iSelected );
 		}
 	}
@@ -520,12 +540,35 @@ private:
 
 	int HitTestAction( int x, int y ) const
 	{
+		if( m_iMenuSlot < 0 || m_iMenuSlot >= COF_INV_VISIBLE_SLOTS || !m_Items[m_iMenuSlot].valid )
+			return -1;
+
 		for( int i = 0; i < COF_INV_ACTION_BUTTONS; i++ )
 		{
-			if( COF_RectContains( g_COFActionButtons[i], x, y ) )
+			COFInventoryRect rect;
+			GetActionButtonRect( i, rect );
+			if( COF_RectContains( rect, x, y ) )
 				return i;
 		}
 		return -1;
+	}
+
+	void GetActionMenuOrigin( int &x, int &y ) const
+	{
+		x = 250;
+		y = 64;
+
+		if( m_iMenuSlot >= 3 )
+			y = 222;
+	}
+
+	void GetActionButtonRect( int action, COFInventoryRect &rect ) const
+	{
+		int x, y;
+		GetActionMenuOrigin( x, y );
+		rect = g_COFActionButtons[action];
+		rect.x += x;
+		rect.y += y;
 	}
 
 	void RunAction( int action )
@@ -538,6 +581,7 @@ private:
 			SendIndexCommand( "cof_inv_use", m_iSelected );
 			m_iPendingAction = COF_INV_ACTION_NONE;
 			m_iCombineSource = -1;
+			m_iMenuSlot = -1;
 			return;
 		}
 
@@ -546,6 +590,7 @@ private:
 			SendIndexCommand( "cof_inv_drop", m_iSelected );
 			m_iPendingAction = COF_INV_ACTION_NONE;
 			m_iCombineSource = -1;
+			m_iMenuSlot = -1;
 			return;
 		}
 
@@ -554,6 +599,7 @@ private:
 			SetQuickSlot( action - COF_INV_ACTION_QUICK_1 );
 			m_iPendingAction = COF_INV_ACTION_NONE;
 			m_iCombineSource = -1;
+			m_iMenuSlot = -1;
 			return;
 		}
 
@@ -561,6 +607,7 @@ private:
 		{
 			m_iPendingAction = COF_INV_ACTION_COMBINE;
 			m_iCombineSource = m_iSelected;
+			m_iMenuSlot = -1;
 			repaint();
 			return;
 		}
@@ -569,6 +616,7 @@ private:
 		{
 			m_iPendingAction = COF_INV_ACTION_DUAL_WIELD;
 			m_iCombineSource = m_iSelected;
+			m_iMenuSlot = -1;
 			repaint();
 			return;
 		}
@@ -827,6 +875,14 @@ private:
 			drawOutlinedRect( x - 3, y - 3, x + 102, y + 102 );
 		}
 
+		if( m_iMenuSlot >= 0 && m_iMenuSlot < COF_INV_VISIBLE_SLOTS && m_Items[m_iMenuSlot].valid )
+		{
+			const int x = g_COFInventorySlots[m_iMenuSlot].x;
+			const int y = g_COFInventorySlots[m_iMenuSlot].y;
+			drawSetColor( 255, 255, 255, 220 );
+			drawOutlinedRect( x - 5, y - 5, x + 104, y + 104 );
+		}
+
 		if( m_iCombineSource >= 0 && m_iCombineSource < COF_INV_VISIBLE_SLOTS && m_Items[m_iCombineSource].valid )
 		{
 			const int x = g_COFInventorySlots[m_iCombineSource].x;
@@ -838,22 +894,26 @@ private:
 
 	void DrawActionButtons()
 	{
+		if( m_iMenuSlot < 0 || m_iMenuSlot >= COF_INV_VISIBLE_SLOTS || !m_Items[m_iMenuSlot].valid )
+			return;
+
 		drawSetTextFont( Scheme::sf_primary1 );
 
 		for( int i = 0; i < COF_INV_ACTION_BUTTONS; i++ )
 		{
-			const COFInventoryRect &rect = g_COFActionButtons[i];
+			COFInventoryRect rect;
+			GetActionButtonRect( i, rect );
 			const bool enabled = m_iSelected >= 0 && m_iSelected < COF_INV_MAX_ITEMS && m_Items[m_iSelected].valid;
 			const bool hover = enabled && m_iHoverAction == i;
 			const bool pending = enabled && m_iPendingAction == i;
 
-			drawSetColor( pending ? 80 : ( hover ? 70 : 20 ), pending ? 60 : ( hover ? 70 : 20 ), pending ? 20 : ( hover ? 70 : 20 ), enabled ? 220 : 110 );
+			drawSetColor( pending ? 95 : ( hover ? 80 : 35 ), pending ? 75 : ( hover ? 80 : 35 ), pending ? 30 : ( hover ? 80 : 35 ), enabled ? 230 : 130 );
 			drawFilledRect( rect.x, rect.y, rect.x + rect.wide, rect.y + rect.tall );
 			drawSetColor( ( hover || pending ) ? 255 : 170, ( hover || pending ) ? 220 : 170, ( hover || pending ) ? 90 : 170, enabled ? 255 : 120 );
 			drawOutlinedRect( rect.x, rect.y, rect.x + rect.wide, rect.y + rect.tall );
 
 			drawSetTextColor( enabled ? 240 : 120, enabled ? 240 : 120, enabled ? 240 : 120, 255 );
-			drawSetTextPos( rect.x + 12, rect.y + 5 );
+			drawSetTextPos( rect.x + ( i >= COF_INV_ACTION_QUICK_1 ? 11 : 12 ), rect.y + ( i >= COF_INV_ACTION_QUICK_1 ? 7 : 6 ) );
 			drawPrintText( g_COFActionLabels[i], strlen( g_COFActionLabels[i] ) );
 		}
 	}
@@ -913,6 +973,7 @@ private:
 	int m_iSelected;
 	int m_iCombineSource;
 	int m_iPendingAction;
+	int m_iMenuSlot;
 	int m_iHoverSlot;
 	int m_iHoverQuickSlot;
 	int m_iHoverAction;
