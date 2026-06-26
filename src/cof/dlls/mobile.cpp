@@ -15,6 +15,91 @@
 
 LINK_ENTITY_TO_CLASS( weapon_mobile, CMobile )
 
+#define MOBILE_PUNCH_RANGE 42.0f
+#define MOBILE_PUNCH_DAMAGE 10.0f
+#define MOBILE_ATTACK_DELAY 0.6f
+
+#ifndef CLIENT_DLL
+extern int gmsgFlashlight;
+extern void FindHullIntersection( const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity );
+
+static void COF_SetMobileFlashlight( CBasePlayer *pPlayer, BOOL enabled )
+{
+	if( !pPlayer )
+		return;
+
+	if( enabled && pPlayer->m_iFlashBattery <= 0 )
+		enabled = FALSE;
+
+	if( enabled )
+		SetBits( pPlayer->pev->effects, EF_DIMLIGHT );
+	else
+		ClearBits( pPlayer->pev->effects, EF_DIMLIGHT );
+
+	MESSAGE_BEGIN( MSG_ONE, gmsgFlashlight, NULL, pPlayer->pev );
+		WRITE_BYTE( enabled ? 1 : 0 );
+		WRITE_BYTE( pPlayer->m_iFlashBattery );
+	MESSAGE_END();
+
+	// Cry of Fear's phone is its own light source. Do not let the vanilla
+	// suit flashlight rules or recharge timer fight the phone mode.
+	pPlayer->m_flFlashLightTime = 0.0f;
+}
+
+static BOOL COF_MobilePunchTrace( CBasePlayer *pPlayer )
+{
+	TraceResult tr;
+
+	UTIL_MakeVectors( pPlayer->pev->v_angle );
+	Vector vecSrc = pPlayer->GetGunPosition();
+	Vector vecEnd = vecSrc + gpGlobals->v_forward * MOBILE_PUNCH_RANGE;
+
+	UTIL_TraceLine( vecSrc, vecEnd, dont_ignore_monsters, ENT( pPlayer->pev ), &tr );
+	if( tr.flFraction >= 1.0f )
+	{
+		UTIL_TraceHull( vecSrc, vecEnd, dont_ignore_monsters, head_hull, ENT( pPlayer->pev ), &tr );
+		if( tr.flFraction < 1.0f )
+		{
+			CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
+			if( !pHit || pHit->IsBSPModel() )
+				FindHullIntersection( vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, pPlayer->edict() );
+			vecEnd = tr.vecEndPos;
+		}
+	}
+
+	if( tr.flFraction >= 1.0f )
+	{
+		EMIT_SOUND_DYN( ENT( pPlayer->pev ), CHAN_ITEM, "weapons/mobile/punch_swing.wav", 0.85f, ATTN_NORM, 0, 96 + RANDOM_LONG( 0, 6 ) );
+		return FALSE;
+	}
+
+	CBaseEntity *pEntity = CBaseEntity::Instance( tr.pHit );
+	if( pEntity )
+	{
+		ClearMultiDamage();
+		pEntity->TraceAttack( pPlayer->pev, MOBILE_PUNCH_DAMAGE, gpGlobals->v_forward, &tr, DMG_CLUB );
+		ApplyMultiDamage( pPlayer->pev, pPlayer->pev );
+	}
+
+	BOOL hitFlesh = FALSE;
+	if( pEntity && pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE )
+		hitFlesh = TRUE;
+
+	if( hitFlesh )
+	{
+		EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, "weapons/mobile/punch_smack.wav", 1.0f, ATTN_NORM );
+	}
+	else
+	{
+		TEXTURETYPE_PlaySound( &tr, vecSrc, vecSrc + ( vecEnd - vecSrc ) * 2.0f, BULLET_PLAYER_CROWBAR );
+		EMIT_SOUND_DYN( ENT( pPlayer->pev ), CHAN_ITEM, "weapons/mobile/punch_smack.wav", 0.75f, ATTN_NORM, 0, 96 + RANDOM_LONG( 0, 6 ) );
+		DecalGunshot( &tr, BULLET_PLAYER_CROWBAR );
+	}
+
+	return TRUE;
+}
+#endif
+
 enum mobile_e
 {
 	MOBILE_IDLE_SMS = 0,
@@ -53,6 +138,8 @@ void CMobile::Precache( void )
 	PRECACHE_MODEL( "models/weapons/mobile/w_mobile.mdl" );
 	PRECACHE_SOUND( "weapons/mobile/mobile_switch.wav" );
 	PRECACHE_SOUND( "weapons/mobile/mobile_sms.wav" );
+	PRECACHE_SOUND( "weapons/mobile/punch_swing.wav" );
+	PRECACHE_SOUND( "weapons/mobile/punch_smack.wav" );
 }
 
 int CMobile::GetItemInfo( ItemInfo *p )
@@ -91,21 +178,34 @@ int CMobile::AddToPlayer( CBasePlayer *pPlayer )
 BOOL CMobile::Deploy( void )
 {
 	const int iDrawAnim = m_fFlashMode ? MOBILE_DRAW_FLASH : MOBILE_DRAW_SMS;
+#ifndef CLIENT_DLL
+	if( m_fFlashMode )
+		COF_SetMobileFlashlight( m_pPlayer, TRUE );
+#endif
 	return DefaultDeploy( "models/weapons/mobile/v_mobile.mdl", "", iDrawAnim, "onehanded" );
 }
 
 void CMobile::Holster( int skiplocal )
 {
+#ifndef CLIENT_DLL
+	if( m_fFlashMode )
+		COF_SetMobileFlashlight( m_pPlayer, FALSE );
+#endif
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5f;
 	SendWeaponAnim( m_fFlashMode ? MOBILE_HOLSTER_FLASH : MOBILE_HOLSTER_SMS );
 }
 
 void CMobile::PrimaryAttack( void )
 {
-	EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_WEAPON, "weapons/mobile/mobile_sms.wav", 0.8f, ATTN_NORM );
 	SendWeaponAnim( m_fFlashMode ? MOBILE_FLASH_PUNCH : MOBILE_SMS_PUNCH );
+	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+	m_pPlayer->pev->punchangle.x = RANDOM_FLOAT( 2.0f, 4.0f );
 
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.6f;
+#ifndef CLIENT_DLL
+	COF_MobilePunchTrace( m_pPlayer );
+#endif
+
+	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + MOBILE_ATTACK_DELAY;
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.4f;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
 }
@@ -116,9 +216,9 @@ void CMobile::SecondaryAttack( void )
 
 #ifndef CLIENT_DLL
 	if( m_fFlashMode )
-		m_pPlayer->FlashlightTurnOn();
+		COF_SetMobileFlashlight( m_pPlayer, TRUE );
 	else
-		m_pPlayer->FlashlightTurnOff();
+		COF_SetMobileFlashlight( m_pPlayer, FALSE );
 #endif
 
 	EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_WEAPON, "weapons/mobile/mobile_switch.wav", 0.8f, ATTN_NORM );

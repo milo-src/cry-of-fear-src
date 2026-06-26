@@ -7,10 +7,13 @@
 
 #include "vgui_TeamFortressViewport.h"
 #include "vgui_loadtga.h"
+#include "../game_shared/vgui_defaultinputsignal.h"
 
+#include <VGUI_App.h>
 #include <VGUI_Panel.h>
 #include <VGUI_Color.h>
 #include <VGUI_Scheme.h>
+#include <VGUI_SurfaceBase.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -19,6 +22,56 @@ using namespace vgui;
 #define COF_INV_MAX_ITEMS 32
 #define COF_INV_VISIBLE_SLOTS 6
 #define COF_INV_QUICK_SLOTS 3
+#define COF_INV_ACTION_BUTTONS 3
+
+void IN_SetVisibleMouse( bool visible );
+void IgnoreNextMouseDelta( void );
+void IN_ResetMouse( void );
+
+struct COFInventoryRect
+{
+	int x;
+	int y;
+	int wide;
+	int tall;
+};
+
+static const COFInventoryRect g_COFInventorySlots[COF_INV_VISIBLE_SLOTS] =
+{
+	{ 31, 64, 100, 100 }, { 133, 64, 100, 100 }, { 235, 64, 100, 100 },
+	{ 31, 222, 100, 100 }, { 133, 222, 100, 100 }, { 235, 222, 100, 100 }
+};
+
+static const COFInventoryRect g_COFQuickSlots[COF_INV_QUICK_SLOTS] =
+{
+	{ 398, 64, 100, 100 }, { 500, 64, 100, 100 }, { 602, 64, 100, 100 }
+};
+
+enum
+{
+	COF_INV_ACTION_USE = 0,
+	COF_INV_ACTION_COMBINE,
+	COF_INV_ACTION_DROP
+};
+
+static const COFInventoryRect g_COFActionButtons[COF_INV_ACTION_BUTTONS] =
+{
+	{ 42, 444, 96, 24 },
+	{ 150, 444, 96, 24 },
+	{ 258, 444, 96, 24 }
+};
+
+static const char *g_COFActionLabels[COF_INV_ACTION_BUTTONS] =
+{
+	"USE",
+	"COMBINE",
+	"DROP"
+};
+
+static bool COF_RectContains( const COFInventoryRect &rect, int x, int y )
+{
+	return x >= rect.x && y >= rect.y && x < rect.x + rect.wide && y < rect.y + rect.tall;
+}
 
 struct COFClientInventoryItem
 {
@@ -88,7 +141,7 @@ static BitmapTGA *COF_LoadTGAPath( const char *pszPath )
 	return vgui_LoadTGA( pszPath );
 }
 
-class CCofInventoryPanel : public Panel
+class CCofInventoryPanel : public Panel, public vgui::CDefaultInputSignal
 {
 public:
 	CCofInventoryPanel() : Panel( 0, 0, 748, 480 )
@@ -98,14 +151,20 @@ public:
 		m_pBackground = NULL;
 		m_iSelected = 0;
 		m_iCombineSource = -1;
+		m_iHoverSlot = -1;
+		m_iHoverQuickSlot = -1;
+		m_iHoverAction = -1;
 		setVisible( false );
 		setPaintBackgroundEnabled( true );
 		setPaintEnabled( true );
 		setBgColor( 0, 0, 0, 0 );
+		setCursor( Scheme::scu_arrow );
+		addInputSignal( this );
 	}
 
 	~CCofInventoryPanel()
 	{
+		removeInputSignal( this );
 		ClearItems();
 		if( m_pBackground )
 			delete m_pBackground;
@@ -137,9 +196,17 @@ public:
 		else
 		{
 			m_iCombineSource = -1;
+			m_iHoverSlot = -1;
+			m_iHoverQuickSlot = -1;
+			m_iHoverAction = -1;
 		}
 
 		setVisible( open );
+		setAsMouseCapture( open );
+		setAsMouseArena( open );
+		UpdateCursorState( open );
+		if( open )
+			requestFocus();
 		repaint();
 	}
 
@@ -289,9 +356,150 @@ protected:
 		DrawQuickSlots();
 		DrawSelection();
 		DrawDescription();
+		DrawActionButtons();
+	}
+
+	virtual void cursorMoved( int x, int y, Panel *panel )
+	{
+		const int oldSlot = m_iHoverSlot;
+		const int oldQuickSlot = m_iHoverQuickSlot;
+		const int oldAction = m_iHoverAction;
+
+		m_iHoverSlot = HitTestSlot( x, y );
+		m_iHoverQuickSlot = HitTestQuickSlot( x, y );
+		m_iHoverAction = HitTestAction( x, y );
+
+		if( oldSlot != m_iHoverSlot || oldQuickSlot != m_iHoverQuickSlot || oldAction != m_iHoverAction )
+			repaint();
+	}
+
+	virtual void cursorExited( Panel *panel )
+	{
+		m_iHoverSlot = -1;
+		m_iHoverQuickSlot = -1;
+		m_iHoverAction = -1;
+		repaint();
+	}
+
+	virtual void mousePressed( MouseCode code, Panel *panel )
+	{
+		if( code != MOUSE_LEFT )
+			return;
+
+		int x, y;
+		App::getInstance()->getCursorPos( x, y );
+		screenToLocal( x, y );
+
+		const int slot = HitTestSlot( x, y );
+		if( slot >= 0 && m_Items[slot].valid )
+		{
+			m_iSelected = slot;
+			repaint();
+			return;
+		}
+
+		const int quickSlot = HitTestQuickSlot( x, y );
+		if( quickSlot >= 0 )
+		{
+			if( m_Items[m_iSelected].valid )
+				SetQuickSlot( quickSlot );
+			return;
+		}
+
+		const int action = HitTestAction( x, y );
+		if( action >= 0 )
+			RunAction( action );
+	}
+
+	virtual void mouseDoublePressed( MouseCode code, Panel *panel )
+	{
+		if( code != MOUSE_LEFT )
+			return;
+
+		int x, y;
+		App::getInstance()->getCursorPos( x, y );
+		screenToLocal( x, y );
+
+		const int slot = HitTestSlot( x, y );
+		if( slot >= 0 && m_Items[slot].valid )
+		{
+			m_iSelected = slot;
+			SendIndexCommand( "cof_inv_use", m_iSelected );
+		}
 	}
 
 private:
+	void UpdateCursorState( bool open )
+	{
+		if( getSurfaceBase() )
+			getSurfaceBase()->setEmulatedCursorVisible( open );
+
+		if( open )
+		{
+			IN_SetVisibleMouse( true );
+			IgnoreNextMouseDelta();
+			App::getInstance()->setCursorOveride( App::getInstance()->getScheme()->getCursor( Scheme::scu_arrow ) );
+			return;
+		}
+
+		if( gViewPort )
+			gViewPort->UpdateCursorState();
+		else
+		{
+			App::getInstance()->setCursorOveride( App::getInstance()->getScheme()->getCursor( Scheme::scu_none ) );
+			IN_SetVisibleMouse( false );
+			IN_ResetMouse();
+		}
+	}
+
+	int HitTestSlot( int x, int y ) const
+	{
+		for( int i = 0; i < COF_INV_VISIBLE_SLOTS; i++ )
+		{
+			if( COF_RectContains( g_COFInventorySlots[i], x, y ) )
+				return i;
+		}
+		return -1;
+	}
+
+	int HitTestQuickSlot( int x, int y ) const
+	{
+		for( int i = 0; i < COF_INV_QUICK_SLOTS; i++ )
+		{
+			if( COF_RectContains( g_COFQuickSlots[i], x, y ) )
+				return i;
+		}
+		return -1;
+	}
+
+	int HitTestAction( int x, int y ) const
+	{
+		for( int i = 0; i < COF_INV_ACTION_BUTTONS; i++ )
+		{
+			if( COF_RectContains( g_COFActionButtons[i], x, y ) )
+				return i;
+		}
+		return -1;
+	}
+
+	void RunAction( int action )
+	{
+		if( action == COF_INV_ACTION_USE )
+		{
+			SendIndexCommand( "cof_inv_use", m_iSelected );
+			return;
+		}
+
+		if( action == COF_INV_ACTION_COMBINE )
+		{
+			CombineSelected();
+			return;
+		}
+
+		if( action == COF_INV_ACTION_DROP )
+			SendIndexCommand( "cof_inv_drop", m_iSelected );
+	}
+
 	void SelectFirstValid()
 	{
 		for( int i = 0; i < COF_INV_MAX_ITEMS; i++ )
@@ -397,16 +605,10 @@ private:
 
 	void DrawInventoryItems()
 	{
-		static const int slotPos[COF_INV_VISIBLE_SLOTS][2] =
-		{
-			{ 31, 64 }, { 133, 64 }, { 235, 64 },
-			{ 31, 222 }, { 133, 222 }, { 235, 222 }
-		};
-
 		for( int i = 0; i < COF_INV_VISIBLE_SLOTS; i++ )
 		{
 			if( m_Items[i].valid )
-				DrawItemIcon( m_Items[i], slotPos[i][0], slotPos[i][1], false );
+				DrawItemIcon( m_Items[i], g_COFInventorySlots[i].x, g_COFInventorySlots[i].y, false );
 		}
 	}
 
@@ -426,31 +628,32 @@ private:
 
 	void DrawQuickSlots()
 	{
-		static const int quickPos[COF_INV_QUICK_SLOTS][2] =
-		{
-			{ 398, 64 }, { 500, 64 }, { 602, 64 }
-		};
-
 		for( int i = 0; i < COF_INV_QUICK_SLOTS; i++ )
 		{
 			const int itemIndex = FindItemByPath( m_szQuickSlots[i] );
 			if( itemIndex >= 0 )
-				DrawItemIcon( m_Items[itemIndex], quickPos[i][0], quickPos[i][1], true );
+				DrawItemIcon( m_Items[itemIndex], g_COFQuickSlots[i].x, g_COFQuickSlots[i].y, true );
 		}
 	}
 
 	void DrawSelection()
 	{
-		static const int slotPos[COF_INV_VISIBLE_SLOTS][2] =
+		if( m_iHoverSlot >= 0 && m_iHoverSlot < COF_INV_VISIBLE_SLOTS )
 		{
-			{ 31, 64 }, { 133, 64 }, { 235, 64 },
-			{ 31, 222 }, { 133, 222 }, { 235, 222 }
-		};
-
+			const COFInventoryRect &rect = g_COFInventorySlots[m_iHoverSlot];
+			drawSetColor( 220, 220, 220, 150 );
+			drawOutlinedRect( rect.x - 2, rect.y - 2, rect.x + rect.wide + 1, rect.y + rect.tall + 1 );
+		}
+		if( m_iHoverQuickSlot >= 0 && m_iHoverQuickSlot < COF_INV_QUICK_SLOTS )
+		{
+			const COFInventoryRect &rect = g_COFQuickSlots[m_iHoverQuickSlot];
+			drawSetColor( 180, 210, 255, 150 );
+			drawOutlinedRect( rect.x - 2, rect.y - 2, rect.x + rect.wide + 1, rect.y + rect.tall + 1 );
+		}
 		if( m_iSelected >= 0 && m_iSelected < COF_INV_VISIBLE_SLOTS && m_Items[m_iSelected].valid )
 		{
-			const int x = slotPos[m_iSelected][0];
-			const int y = slotPos[m_iSelected][1];
+			const int x = g_COFInventorySlots[m_iSelected].x;
+			const int y = g_COFInventorySlots[m_iSelected].y;
 			drawSetColor( 255, 220, 90, 255 );
 			drawOutlinedRect( x - 2, y - 2, x + 101, y + 101 );
 			drawOutlinedRect( x - 3, y - 3, x + 102, y + 102 );
@@ -458,10 +661,31 @@ private:
 
 		if( m_iCombineSource >= 0 && m_iCombineSource < COF_INV_VISIBLE_SLOTS && m_Items[m_iCombineSource].valid )
 		{
-			const int x = slotPos[m_iCombineSource][0];
-			const int y = slotPos[m_iCombineSource][1];
+			const int x = g_COFInventorySlots[m_iCombineSource].x;
+			const int y = g_COFInventorySlots[m_iCombineSource].y;
 			drawSetColor( 120, 220, 120, 255 );
 			drawOutlinedRect( x - 5, y - 5, x + 104, y + 104 );
+		}
+	}
+
+	void DrawActionButtons()
+	{
+		drawSetTextFont( Scheme::sf_primary1 );
+
+		for( int i = 0; i < COF_INV_ACTION_BUTTONS; i++ )
+		{
+			const COFInventoryRect &rect = g_COFActionButtons[i];
+			const bool enabled = m_iSelected >= 0 && m_iSelected < COF_INV_MAX_ITEMS && m_Items[m_iSelected].valid;
+			const bool hover = enabled && m_iHoverAction == i;
+
+			drawSetColor( hover ? 70 : 20, hover ? 70 : 20, hover ? 70 : 20, enabled ? 220 : 110 );
+			drawFilledRect( rect.x, rect.y, rect.x + rect.wide, rect.y + rect.tall );
+			drawSetColor( hover ? 255 : 170, hover ? 220 : 170, hover ? 90 : 170, enabled ? 255 : 120 );
+			drawOutlinedRect( rect.x, rect.y, rect.x + rect.wide, rect.y + rect.tall );
+
+			drawSetTextColor( enabled ? 240 : 120, enabled ? 240 : 120, enabled ? 240 : 120, 255 );
+			drawSetTextPos( rect.x + 12, rect.y + 5 );
+			drawPrintText( g_COFActionLabels[i], strlen( g_COFActionLabels[i] ) );
 		}
 	}
 
@@ -506,6 +730,9 @@ private:
 	BitmapTGA *m_pBackground;
 	int m_iSelected;
 	int m_iCombineSource;
+	int m_iHoverSlot;
+	int m_iHoverQuickSlot;
+	int m_iHoverAction;
 };
 
 static CCofInventoryPanel *g_pCofInventory = NULL;
