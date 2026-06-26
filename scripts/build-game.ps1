@@ -87,6 +87,7 @@ if (-not $NoInstall) {
 
 if (-not $NoInstall -and $DeployDir) {
     Copy-CofGameRuntime -SourceRoot $InstallPrefix -DeployRoot $DeployDir -GameDir $GameDir
+    Repair-CofLocalizationForXash -DeployRoot $DeployDir -GameDir $GameDir
     Write-Host ""
     Write-Host "COF game DLLs deployed to $DeployDir\$GameDir\cl_dlls"
 }
