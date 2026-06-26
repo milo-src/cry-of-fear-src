@@ -94,6 +94,14 @@ if (-not $SkipInstall) {
 
     if ($DeployDir) {
         Copy-XashRuntime -SourceDir $InstallDir -DeployDir $DeployDir -Sdl2Path $Sdl2Path -X64:$X64
+
+        if ($GameDir) {
+            $deployedGameRoot = Join-Path (Convert-ToFullPath $DeployDir) $GameDir
+            if (Test-Path -LiteralPath $deployedGameRoot) {
+                Repair-CofLocalizationForXash -DeployRoot $DeployDir -GameDir $GameDir
+            }
+        }
+
         Write-Host ""
         Write-Host "Xash3D FWGS runtime deployed to $DeployDir"
     }
