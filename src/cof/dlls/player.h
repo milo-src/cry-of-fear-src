@@ -278,7 +278,12 @@ public:
 	void GiveNamedItem( const char *szName );
 	BOOL COF_AddInventoryItem( const char *pszName );
 	BOOL COF_HasInventoryItem( const char *pszName ) const;
+	BOOL COF_RemoveInventoryItem( int iIndex );
+	void COF_SendInventory( void );
 	void COF_PrintInventory( void );
+	void COF_UseInventoryItem( int iIndex );
+	void COF_DropInventoryItem( int iIndex );
+	void COF_CombineInventoryItems( int iFirst, int iSecond );
 	void EnableControl(BOOL fControl);
 
 	int  GiveAmmo( int iAmount, const char *szName, int iMax );

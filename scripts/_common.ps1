@@ -162,7 +162,9 @@ function Copy-CofGameRuntime {
         [Parameter(Mandatory = $true)]
         [string]$DeployRoot,
 
-        [string]$GameDir = "cryoffear"
+        [string]$GameDir = "cryoffear",
+
+        [string]$VguiDll = ""
     )
 
     $SourceRoot = Convert-ToFullPath $SourceRoot
@@ -183,6 +185,17 @@ function Copy-CofGameRuntime {
     Copy-RequiredFile `
         -Source $serverDll `
         -Destination (Join-Path $targetClientDir "hl.dll")
+
+    if (-not $VguiDll) {
+        $repoRoot = Get-RepoRoot
+        $VguiDll = Join-Path $repoRoot "src\cof\vgui_support\vgui-dev\lib\win32_vc6\vgui.dll"
+    }
+
+    if (Test-Path -LiteralPath $VguiDll) {
+        Copy-RequiredFile `
+            -Source $VguiDll `
+            -Destination (Join-Path $DeployRoot "vgui.dll")
+    }
 }
 
 function Convert-TextFileToUtf8 {

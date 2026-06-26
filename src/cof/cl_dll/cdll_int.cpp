@@ -26,6 +26,7 @@
 #if USE_VGUI
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
+#include "cof_inventory_vgui.h"
 #endif
 
 #if GOLDSOURCE_SUPPORT && (XASH_WIN32 || XASH_LINUX || XASH_APPLE) && XASH_X86
@@ -272,6 +273,7 @@ int DLLEXPORT HUD_VidInit( void )
 	}
 #elif USE_VGUI
 	VGui_Startup();
+	COF_Inventory_VidInit();
 #endif
 	return 1;
 }

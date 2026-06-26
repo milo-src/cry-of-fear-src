@@ -500,11 +500,28 @@ void ClientCommand( edict_t *pEntity )
 	}
 	else if( FStrEq( pcmd, "+inventory" ) || FStrEq( pcmd, "inventory" ) || FStrEq( pcmd, "cof_inventory" ) )
 	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_SendInventory();
 		GetClassPtr( (CBasePlayer *)pev )->COF_PrintInventory();
 	}
 	else if( FStrEq( pcmd, "-inventory" ) )
 	{
 		return;
+	}
+	else if( FStrEq( pcmd, "cof_inventory_sync" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_SendInventory();
+	}
+	else if( FStrEq( pcmd, "cof_inv_use" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_UseInventoryItem( atoi( CMD_ARGV( 1 ) ) );
+	}
+	else if( FStrEq( pcmd, "cof_inv_drop" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_DropInventoryItem( atoi( CMD_ARGV( 1 ) ) );
+	}
+	else if( FStrEq( pcmd, "cof_inv_combine" ) )
+	{
+		GetClassPtr( (CBasePlayer *)pev )->COF_CombineInventoryItems( atoi( CMD_ARGV( 1 ) ), atoi( CMD_ARGV( 2 ) ) );
 	}
 	else if( FStrEq(pcmd, "give" ) )
 	{

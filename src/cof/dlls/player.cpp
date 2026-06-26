@@ -175,6 +175,8 @@ int gmsgServerName = 0;
 int gmsgAmmoPickup = 0;
 int gmsgWeapPickup = 0;
 int gmsgItemPickup = 0;
+int gmsgCofInvClear = 0;
+int gmsgCofInvItem = 0;
 int gmsgHideWeapon = 0;
 int gmsgSetCurWeap = 0;
 int gmsgSayText = 0;
@@ -222,6 +224,8 @@ void LinkUserMessages( void )
 	gmsgAmmoPickup = REG_USER_MSG( "AmmoPickup", 2 );
 	gmsgWeapPickup = REG_USER_MSG( "WeapPickup", 1 );
 	gmsgItemPickup = REG_USER_MSG( "ItemPickup", -1 );
+	gmsgCofInvClear = REG_USER_MSG( "CofInvClear", 0 );
+	gmsgCofInvItem = REG_USER_MSG( "CofInvItem", -1 );
 	gmsgHideWeapon = REG_USER_MSG( "HideWeapon", 1 );
 	gmsgSetFOV = REG_USER_MSG( "SetFOV", 1 );
 	gmsgShowMenu = REG_USER_MSG( "ShowMenu", -1 );

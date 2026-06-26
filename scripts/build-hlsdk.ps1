@@ -25,6 +25,16 @@ param(
 
     [string]$Platform = "",
 
+    [switch]$UseVGUI,
+
+    [switch]$UseNoVGUIMOTD,
+
+    [switch]$UseNoVGUIScoreboard,
+
+    [string]$OpenVGUIRoot = "",
+
+    [string]$OpenVGUIBuildDir = "",
+
     [switch]$CleanFirst
 )
 
@@ -105,6 +115,26 @@ if ($ServerInstallDir) {
 
 if ($ClientInstallDir) {
     $configureArgs += "-DCLIENT_INSTALL_DIR=$ClientInstallDir"
+}
+
+if ($UseVGUI) {
+    $configureArgs += "-DUSE_VGUI=ON"
+}
+
+if ($UseNoVGUIMOTD) {
+    $configureArgs += "-DUSE_NOVGUI_MOTD=ON"
+}
+
+if ($UseNoVGUIScoreboard) {
+    $configureArgs += "-DUSE_NOVGUI_SCOREBOARD=ON"
+}
+
+if ($OpenVGUIRoot) {
+    $configureArgs += "-DOPENVGUI_ROOT=$OpenVGUIRoot"
+}
+
+if ($OpenVGUIBuildDir) {
+    $configureArgs += "-DOPENVGUI_BUILD_DIR=$OpenVGUIBuildDir"
 }
 
 Invoke-Checked -FilePath "cmake" -ArgumentList $configureArgs -WorkingDirectory $repoRoot

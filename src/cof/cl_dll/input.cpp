@@ -31,6 +31,7 @@ extern "C"
 
 #if USE_VGUI
 #include "vgui_TeamFortressViewport.h"
+#include "cof_inventory_vgui.h"
 #endif
 
 extern "C" 
@@ -386,6 +387,9 @@ int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding
 		gEngfuncs.pfnServerCmd( "cof_skipcutscene\n" );
 
 #if USE_VGUI
+	if( COF_Inventory_IsVisible() )
+		return COF_Inventory_KeyInput( down, keynum, pszCurrentBinding );
+
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
 #endif

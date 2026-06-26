@@ -11,35 +11,239 @@
 #include "weapons.h"
 
 extern int gmsgItemPickup;
+extern int gmsgCofInvClear;
+extern int gmsgCofInvItem;
 
-static const char *COF_ItemDisplayName( const char *pszName )
+struct COFInventoryDef
 {
-	if( !pszName )
-		return "";
+	char mapName[64];
+	char niceName[128];
+	char className[64];
+	char model[128];
+	char pickupSound[128];
+	char combinedWith[128];
+	char combinedResult[128];
+	char combinedSound[128];
+	BOOL droppable;
+};
+
+static void COF_ClearItemDef( COFInventoryDef *pDef )
+{
+	memset( pDef, 0, sizeof( *pDef ) );
+	pDef->droppable = FALSE;
+}
+
+static const char *COF_FileBaseName( const char *pszName, char *pszOut, size_t outSize )
+{
+	if( !pszName || !pszName[0] )
+	{
+		strlcpy( pszOut, "", outSize );
+		return pszOut;
+	}
 
 	const char *pszStart = strrchr( pszName, '/' );
 	if( !pszStart )
 		pszStart = strrchr( pszName, '\\' );
 	pszStart = pszStart ? pszStart + 1 : pszName;
 
-	static char szDisplay[64];
-	strlcpy( szDisplay, pszStart, sizeof( szDisplay ) );
-
-	char *pszExt = strrchr( szDisplay, '.' );
+	strlcpy( pszOut, pszStart, outSize );
+	char *pszExt = strrchr( pszOut, '.' );
 	if( pszExt )
 		*pszExt = '\0';
 
-	return szDisplay;
+	return pszOut;
 }
 
-BOOL CBasePlayer::COF_HasInventoryItem( const char *pszName ) const
+static const char *COF_ItemDisplayName( const char *pszName )
+{
+	static char szDisplay[64];
+	return COF_FileBaseName( pszName, szDisplay, sizeof( szDisplay ) );
+}
+
+static BOOL COF_StringEndsWith( const char *pszText, const char *pszSuffix )
+{
+	if( !pszText || !pszSuffix )
+		return FALSE;
+
+	const size_t textLen = strlen( pszText );
+	const size_t suffixLen = strlen( pszSuffix );
+	if( suffixLen > textLen )
+		return FALSE;
+
+	return !stricmp( pszText + textLen - suffixLen, pszSuffix );
+}
+
+static void COF_NormalizeSlashes( char *pszText )
+{
+	for( char *p = pszText; p && *p; p++ )
+	{
+		if( *p == '\\' )
+			*p = '/';
+	}
+}
+
+static BOOL COF_NormalizeInventoryPath( const char *pszToken, char *pszOut, size_t outSize )
+{
+	if( !pszToken || !pszToken[0] )
+		return FALSE;
+
+	if( !strnicmp( pszToken, "inventoryitems/", 15 ) || !strnicmp( pszToken, "inventoryitems\\", 15 ) )
+	{
+		strlcpy( pszOut, pszToken, outSize );
+		COF_NormalizeSlashes( pszOut );
+		return TRUE;
+	}
+
+	if( !strncmp( pszToken, "weapon_", 7 ) )
+	{
+		snprintf( pszOut, outSize, "inventoryitems/weapons/%s.txt", pszToken );
+		return TRUE;
+	}
+
+	if( strchr( pszToken, '/' ) || strchr( pszToken, '\\' ) )
+	{
+		strlcpy( pszOut, pszToken, outSize );
+		COF_NormalizeSlashes( pszOut );
+		return TRUE;
+	}
+
+	if( COF_StringEndsWith( pszToken, ".txt" ) )
+		snprintf( pszOut, outSize, "inventoryitems/%s", pszToken );
+	else
+		snprintf( pszOut, outSize, "inventoryitems/%s.txt", pszToken );
+
+	return TRUE;
+}
+
+static BOOL COF_FileExists( const char *pszPath )
+{
+	int length = 0;
+	byte *pFile = LOAD_FILE_FOR_ME( pszPath, &length );
+	if( !pFile )
+		return FALSE;
+
+	FREE_FILE( pFile );
+	return TRUE;
+}
+
+static BOOL COF_ParseQuotedValue( const char *pszFile, const char *pszKey, char *pszOut, size_t outSize )
+{
+	char szNeedle[96];
+	snprintf( szNeedle, sizeof( szNeedle ), "\"%s\"", pszKey );
+
+	const char *p = pszFile;
+	while( ( p = strstr( p, szNeedle ) ) != NULL )
+	{
+		const char *pszData = strstr( p + strlen( szNeedle ), "data" );
+		if( !pszData )
+			return FALSE;
+
+		const char *pszQuote = strchr( pszData, '"' );
+		if( !pszQuote )
+			return FALSE;
+		pszQuote++;
+
+		const char *pszEnd = strchr( pszQuote, '"' );
+		if( !pszEnd )
+			return FALSE;
+
+		const size_t len = Q_min( (size_t)( pszEnd - pszQuote ), outSize - 1 );
+		memcpy( pszOut, pszQuote, len );
+		pszOut[len] = '\0';
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static BOOL COF_LoadItemDef( const char *pszPath, COFInventoryDef *pDef )
+{
+	COF_ClearItemDef( pDef );
+
+	int length = 0;
+	byte *pFile = LOAD_FILE_FOR_ME( pszPath, &length );
+	if( !pFile || length <= 0 )
+		return FALSE;
+
+	char *pszText = new char[length + 1];
+	memcpy( pszText, pFile, length );
+	pszText[length] = '\0';
+	FREE_FILE( pFile );
+
+	COF_ParseQuotedValue( pszText, "map_name", pDef->mapName, sizeof( pDef->mapName ) );
+	COF_ParseQuotedValue( pszText, "nice_name", pDef->niceName, sizeof( pDef->niceName ) );
+	COF_ParseQuotedValue( pszText, "classname", pDef->className, sizeof( pDef->className ) );
+	COF_ParseQuotedValue( pszText, "3dmdl", pDef->model, sizeof( pDef->model ) );
+	COF_ParseQuotedValue( pszText, "pickup_sound", pDef->pickupSound, sizeof( pDef->pickupSound ) );
+	COF_ParseQuotedValue( pszText, "combined_with", pDef->combinedWith, sizeof( pDef->combinedWith ) );
+	COF_ParseQuotedValue( pszText, "combined_result", pDef->combinedResult, sizeof( pDef->combinedResult ) );
+	COF_ParseQuotedValue( pszText, "combined_sound", pDef->combinedSound, sizeof( pDef->combinedSound ) );
+
+	char szDroppable[16];
+	if( COF_ParseQuotedValue( pszText, "droppable", szDroppable, sizeof( szDroppable ) ) )
+		pDef->droppable = atoi( szDroppable ) != 0;
+
+	delete[] pszText;
+	return TRUE;
+}
+
+static BOOL COF_DefMatchesName( const COFInventoryDef &def, const char *pszName, const char *pszPath )
 {
 	if( !pszName || !pszName[0] )
 		return FALSE;
 
+	if( def.mapName[0] && !stricmp( def.mapName, pszName ) )
+		return TRUE;
+	if( def.niceName[0] && !stricmp( def.niceName, pszName ) )
+		return TRUE;
+	if( def.className[0] && !stricmp( def.className, pszName ) )
+		return TRUE;
+
+	char szBase[64];
+	COF_FileBaseName( pszPath, szBase, sizeof( szBase ) );
+	return !stricmp( szBase, pszName );
+}
+
+static const char *COF_GetInventoryPath( const CBasePlayer *pPlayer, int iIndex )
+{
+	if( !pPlayer || iIndex < 0 || iIndex >= MAX_COF_INVENTORY || FStringNull( pPlayer->m_rgCOFInventory[iIndex] ) )
+		return NULL;
+
+	return STRING( pPlayer->m_rgCOFInventory[iIndex] );
+}
+
+static void COF_PrecacheOptionalSound( const char *pszSound )
+{
+	if( pszSound && pszSound[0] )
+		PRECACHE_SOUND( pszSound );
+}
+
+void CBasePlayer::COF_SendInventory( void )
+{
+	MESSAGE_BEGIN( MSG_ONE, gmsgCofInvClear, NULL, pev );
+	MESSAGE_END();
+
 	for( int i = 0; i < MAX_COF_INVENTORY; i++ )
 	{
-		if( !FStringNull( m_rgCOFInventory[i] ) && FStrEq( STRING( m_rgCOFInventory[i] ), pszName ) )
+		if( !FStringNull( m_rgCOFInventory[i] ) )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgCofInvItem, NULL, pev );
+				WRITE_BYTE( i );
+				WRITE_STRING( STRING( m_rgCOFInventory[i] ) );
+			MESSAGE_END();
+		}
+	}
+}
+
+BOOL CBasePlayer::COF_HasInventoryItem( const char *pszName ) const
+{
+	char szPath[128];
+	if( !COF_NormalizeInventoryPath( pszName, szPath, sizeof( szPath ) ) )
+		return FALSE;
+
+	for( int i = 0; i < MAX_COF_INVENTORY; i++ )
+	{
+		if( !FStringNull( m_rgCOFInventory[i] ) && !stricmp( STRING( m_rgCOFInventory[i] ), szPath ) )
 			return TRUE;
 	}
 
@@ -48,32 +252,53 @@ BOOL CBasePlayer::COF_HasInventoryItem( const char *pszName ) const
 
 BOOL CBasePlayer::COF_AddInventoryItem( const char *pszName )
 {
-	if( !pszName || !pszName[0] )
+	char szPath[128];
+	if( !COF_NormalizeInventoryPath( pszName, szPath, sizeof( szPath ) ) )
 		return FALSE;
 
-	if( COF_HasInventoryItem( pszName ) )
-	{
-		ClientPrint( pev, HUD_PRINTCENTER, "Item already in inventory" );
+	if( COF_HasInventoryItem( szPath ) )
 		return FALSE;
-	}
 
 	for( int i = 0; i < MAX_COF_INVENTORY; i++ )
 	{
 		if( FStringNull( m_rgCOFInventory[i] ) )
 		{
-			m_rgCOFInventory[i] = ALLOC_STRING( pszName );
+			m_rgCOFInventory[i] = ALLOC_STRING( szPath );
 
-			MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, NULL, pev );
-				WRITE_STRING( COF_ItemDisplayName( pszName ) );
+			MESSAGE_BEGIN( MSG_ONE, gmsgCofInvItem, NULL, pev );
+				WRITE_BYTE( i );
+				WRITE_STRING( szPath );
 			MESSAGE_END();
 
-			ClientPrint( pev, HUD_PRINTCENTER, UTIL_VarArgs( "Picked up: %s", COF_ItemDisplayName( pszName ) ) );
+			COFInventoryDef def;
+			const char *pszDisplay = COF_ItemDisplayName( szPath );
+			if( COF_LoadItemDef( szPath, &def ) && def.niceName[0] )
+				pszDisplay = def.niceName;
+
+			MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, NULL, pev );
+				WRITE_STRING( COF_ItemDisplayName( szPath ) );
+			MESSAGE_END();
+
+			ClientPrint( pev, HUD_PRINTCENTER, UTIL_VarArgs( "Picked up: %s", pszDisplay ) );
 			return TRUE;
 		}
 	}
 
 	ClientPrint( pev, HUD_PRINTCENTER, "Inventory is full" );
 	return FALSE;
+}
+
+BOOL CBasePlayer::COF_RemoveInventoryItem( int iIndex )
+{
+	if( iIndex < 0 || iIndex >= MAX_COF_INVENTORY || FStringNull( m_rgCOFInventory[iIndex] ) )
+		return FALSE;
+
+	for( int i = iIndex; i < MAX_COF_INVENTORY - 1; i++ )
+		m_rgCOFInventory[i] = m_rgCOFInventory[i + 1];
+
+	m_rgCOFInventory[MAX_COF_INVENTORY - 1] = iStringNull;
+	COF_SendInventory();
+	return TRUE;
 }
 
 void CBasePlayer::COF_PrintInventory( void )
@@ -91,14 +316,142 @@ void CBasePlayer::COF_PrintInventory( void )
 	}
 
 	if( iCount == 0 )
-	{
-		ClientPrint( pev, HUD_PRINTCENTER, "Inventory is empty" );
 		ClientPrint( pev, HUD_PRINTCONSOLE, "  empty\n" );
+}
+
+void CBasePlayer::COF_UseInventoryItem( int iIndex )
+{
+	const char *pszPath = COF_GetInventoryPath( this, iIndex );
+	if( !pszPath )
+		return;
+
+	COFInventoryDef def;
+	if( !COF_LoadItemDef( pszPath, &def ) )
+	{
+		ClientPrint( pev, HUD_PRINTCENTER, "Cannot use this item" );
+		return;
+	}
+
+	if( !strncmp( def.className, "weapon_", 7 ) )
+	{
+		if( !HasNamedPlayerItem( def.className ) )
+			GiveNamedItem( def.className );
+		SelectItem( def.className );
+		return;
+	}
+
+	ClientPrint( pev, HUD_PRINTCENTER, UTIL_VarArgs( "%s cannot be used here", def.niceName[0] ? def.niceName : COF_ItemDisplayName( pszPath ) ) );
+}
+
+void CBasePlayer::COF_DropInventoryItem( int iIndex )
+{
+	const char *pszPath = COF_GetInventoryPath( this, iIndex );
+	if( !pszPath )
+		return;
+
+	char szPath[128];
+	strlcpy( szPath, pszPath, sizeof( szPath ) );
+
+	COFInventoryDef def;
+	if( !COF_LoadItemDef( szPath, &def ) || !def.droppable )
+	{
+		ClientPrint( pev, HUD_PRINTCENTER, "This item cannot be dropped" );
+		return;
+	}
+
+	UTIL_MakeVectors( pev->v_angle );
+
+	if( !strncmp( def.className, "weapon_", 7 ) )
+	{
+		DropPlayerItem( def.className );
+		COF_RemoveInventoryItem( iIndex );
+		return;
+	}
+
+	edict_t *pent = CREATE_NAMED_ENTITY( MAKE_STRING( "item_key" ) );
+	if( !FNullEnt( pent ) )
+	{
+		entvars_t *pevItem = VARS( pent );
+		pevItem->origin = pev->origin + pev->view_ofs + gpGlobals->v_forward * 48;
+		pevItem->angles = pev->angles;
+		pevItem->velocity = gpGlobals->v_forward * 120 + Vector( 0, 0, 90 );
+		pevItem->message = MAKE_STRING( szPath );
+		if( def.model[0] )
+			pevItem->model = MAKE_STRING( def.model );
+
+		DispatchSpawn( pent );
+	}
+
+	COF_RemoveInventoryItem( iIndex );
+}
+
+void CBasePlayer::COF_CombineInventoryItems( int iFirst, int iSecond )
+{
+	if( iFirst == iSecond )
+		return;
+
+	const char *pszFirst = COF_GetInventoryPath( this, iFirst );
+	const char *pszSecond = COF_GetInventoryPath( this, iSecond );
+	if( !pszFirst || !pszSecond )
+		return;
+
+	char szFirst[128], szSecond[128];
+	strlcpy( szFirst, pszFirst, sizeof( szFirst ) );
+	strlcpy( szSecond, pszSecond, sizeof( szSecond ) );
+
+	COFInventoryDef firstDef, secondDef;
+	if( !COF_LoadItemDef( szFirst, &firstDef ) || !COF_LoadItemDef( szSecond, &secondDef ) )
+		return;
+
+	const COFInventoryDef *pResultDef = NULL;
+	const char *pszResult = NULL;
+
+	if( firstDef.combinedWith[0] && COF_DefMatchesName( secondDef, firstDef.combinedWith, szSecond ) )
+	{
+		pResultDef = &firstDef;
+		pszResult = firstDef.combinedResult;
+	}
+	else if( secondDef.combinedWith[0] && COF_DefMatchesName( firstDef, secondDef.combinedWith, szFirst ) )
+	{
+		pResultDef = &secondDef;
+		pszResult = secondDef.combinedResult;
+	}
+
+	if( !pszResult || !pszResult[0] )
+	{
+		ClientPrint( pev, HUD_PRINTCENTER, "These items do not combine" );
+		return;
+	}
+
+	if( pResultDef && pResultDef->combinedSound[0] )
+	{
+		COF_PrecacheOptionalSound( pResultDef->combinedSound );
+		EMIT_SOUND( ENT( pev ), CHAN_ITEM, pResultDef->combinedSound, 1.0f, ATTN_NORM );
+	}
+
+	char szResultPath[128];
+	const BOOL hasResultPath = COF_NormalizeInventoryPath( pszResult, szResultPath, sizeof( szResultPath ) ) && COF_FileExists( szResultPath );
+
+	if( hasResultPath )
+	{
+		COF_RemoveInventoryItem( Q_max( iFirst, iSecond ) );
+		COF_RemoveInventoryItem( Q_min( iFirst, iSecond ) );
+		COF_AddInventoryItem( szResultPath );
 	}
 	else
 	{
-		ClientPrint( pev, HUD_PRINTCENTER, UTIL_VarArgs( "Inventory: %d item(s). See console.", iCount ) );
+		const BOOL firstWeapon = !strncmp( firstDef.className, "weapon_", 7 );
+		const BOOL secondWeapon = !strncmp( secondDef.className, "weapon_", 7 );
+
+		if( firstWeapon && !secondWeapon )
+			COF_RemoveInventoryItem( iSecond );
+		else if( secondWeapon && !firstWeapon )
+			COF_RemoveInventoryItem( iFirst );
+		else
+			COF_RemoveInventoryItem( iSecond );
 	}
+
+	ClientPrint( pev, HUD_PRINTCENTER, "Items combined" );
 }
 
 static CBasePlayer *COF_FindPlayer( CBaseEntity *pActivator, CBaseEntity *pCaller )
@@ -199,6 +552,13 @@ void CCofItemKey::Precache( void )
 
 	PRECACHE_SOUND( "items/gunpickup2.wav" );
 	PRECACHE_SOUND( "buttons/lighterpickup.wav" );
+
+	if( !FStringNull( pev->message ) )
+	{
+		COFInventoryDef def;
+		if( COF_LoadItemDef( STRING( pev->message ), &def ) )
+			COF_PrecacheOptionalSound( def.pickupSound );
+	}
 }
 
 void CCofItemKey::Spawn( void )
@@ -225,7 +585,12 @@ void CCofItemKey::Touch( CBaseEntity *pOther )
 	if( !COF_GiveTokenToPlayer( pPlayer, STRING( pev->message ) ) )
 		return;
 
-	EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, "items/gunpickup2.wav", 1.0f, ATTN_NORM );
+	COFInventoryDef def;
+	if( COF_LoadItemDef( STRING( pev->message ), &def ) && def.pickupSound[0] )
+		EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, def.pickupSound, 1.0f, ATTN_NORM );
+	else
+		EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, "items/gunpickup2.wav", 1.0f, ATTN_NORM );
+
 	SUB_UseTargets( pOther, USE_TOGGLE, 0 );
 	UTIL_Remove( this );
 }

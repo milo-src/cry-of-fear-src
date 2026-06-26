@@ -75,6 +75,10 @@ int CMobile::AddToPlayer( CBasePlayer *pPlayer )
 {
 	if( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
 	{
+#ifndef CLIENT_DLL
+		pPlayer->COF_AddInventoryItem( "inventoryitems/weapons/weapon_mobile.txt" );
+#endif
+
 		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev );
 			WRITE_BYTE( m_iId );
 		MESSAGE_END();
