@@ -7,6 +7,10 @@ param(
 
     [string]$GameDir = "valve",
 
+    [string]$ServerInstallDir = "",
+
+    [string]$ClientInstallDir = "",
+
     [switch]$X64,
 
     [int]$Jobs = [Environment]::ProcessorCount,
@@ -93,6 +97,14 @@ else {
 
 if ($X64) {
     $configureArgs += "-D64BIT=ON"
+}
+
+if ($ServerInstallDir) {
+    $configureArgs += "-DSERVER_INSTALL_DIR=$ServerInstallDir"
+}
+
+if ($ClientInstallDir) {
+    $configureArgs += "-DCLIENT_INSTALL_DIR=$ClientInstallDir"
 }
 
 Invoke-Checked -FilePath "cmake" -ArgumentList $configureArgs -WorkingDirectory $repoRoot

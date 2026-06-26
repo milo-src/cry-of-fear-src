@@ -19,11 +19,11 @@ build_xash.bat
 build_game.bat
 ```
 
-`build_xash.bat` installs the engine into `out\xash3d`.
+`build_xash.bat` installs the engine into `out\xash3d` and deploys the needed runtime files to `C:\Users\xModea\Desktop\cof_xash`.
 
-`build_game.bat` builds `src\cof` and installs:
+`build_game.bat` builds `src\cof` and deploys:
 
-- `out\xash3d\cof\cl_dlls\client.dll`
-- `out\xash3d\cof\dlls\hl.dll`
+- `C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls\client.dll`
+- `C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls\hl.dll`
 
 Game assets are not part of this repository. Copy legally owned Half-Life/Cry of Fear assets into a local runtime directory only when needed.

@@ -56,9 +56,9 @@ build_xash.bat
 build_game.bat
 ```
 
-`build_xash.bat` builds the PC Xash3D FWGS engine and installs it into `out\xash3d`.
+`build_xash.bat` builds the PC Xash3D FWGS engine, installs it into `out\xash3d`, then deploys only runtime files to `C:\Users\xModea\Desktop\cof_xash`.
 
-`build_game.bat` builds the writable `src\cof` game code and installs client/server libraries into `out\xash3d\cof`.
+`build_game.bat` builds the writable `src\cof` game code and copies `client.dll` plus `hl.dll` into `C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls`.
 
 ## Build parts separately
 
@@ -73,7 +73,7 @@ Useful options:
 - `-X64` builds 64-bit engine or SDK.
 - `-Jobs 8` limits parallel build jobs.
 - `-Configuration Debug` builds Debug HLSDK.
-- `-GameDir cof` installs game libraries into `out/xash3d/cof`.
+- `-GameDir cryoffear` installs game libraries into `out/xash3d/cryoffear`.
 
 ## Notes for future Cry of Fear work
 

@@ -7,6 +7,10 @@ param(
 
     [switch]$X64,
 
+    [string]$GameDir = "",
+
+    [string]$DeployDir = "",
+
     [switch]$SkipInstall,
 
     [int]$Jobs = [Environment]::ProcessorCount,
@@ -75,6 +79,10 @@ if ($X64) {
     $configureArgs += "-8"
 }
 
+if ($GameDir) {
+    $configureArgs += "--gamedir=$GameDir"
+}
+
 Invoke-Checked -FilePath $waf -ArgumentList $configureArgs -WorkingDirectory $engineDir
 Invoke-Checked -FilePath $waf -ArgumentList @("build", "-j$Jobs") -WorkingDirectory $engineDir
 
@@ -83,4 +91,10 @@ if (-not $SkipInstall) {
     Invoke-Checked -FilePath $waf -ArgumentList @("install", "--destdir=$InstallDir") -WorkingDirectory $engineDir
     Write-Host ""
     Write-Host "Xash3D FWGS installed to $InstallDir"
+
+    if ($DeployDir) {
+        Copy-XashRuntime -SourceDir $InstallDir -DeployDir $DeployDir -Sdl2Path $Sdl2Path -X64:$X64
+        Write-Host ""
+        Write-Host "Xash3D FWGS runtime deployed to $DeployDir"
+    }
 }

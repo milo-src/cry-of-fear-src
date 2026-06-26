@@ -3,7 +3,11 @@ param(
     [ValidateSet("Debug", "Release", "RelWithDebInfo", "MinSizeRel")]
     [string]$Configuration = "Release",
 
-    [string]$GameDir = "cof",
+    [string]$GameDir = "cryoffear",
+
+    [string]$ServerInstallDir = "cl_dlls",
+
+    [string]$ClientInstallDir = "cl_dlls",
 
     [switch]$X64,
 
@@ -14,6 +18,8 @@ param(
     [string]$BuildDir = "",
 
     [string]$InstallPrefix = "",
+
+    [string]$DeployDir = "",
 
     [string]$Generator = "",
 
@@ -53,6 +59,8 @@ $argsForHlsdk = @{
     SourceDir = $SourceDir
     BuildDir = $BuildDir
     InstallPrefix = $InstallPrefix
+    ServerInstallDir = $ServerInstallDir
+    ClientInstallDir = $ClientInstallDir
 }
 
 if ($X64) {
@@ -76,3 +84,9 @@ if (-not $NoInstall) {
 }
 
 & "$PSScriptRoot\build-hlsdk.ps1" @argsForHlsdk
+
+if (-not $NoInstall -and $DeployDir) {
+    Copy-CofGameRuntime -SourceRoot $InstallPrefix -DeployRoot $DeployDir -GameDir $GameDir
+    Write-Host ""
+    Write-Host "COF game DLLs deployed to $DeployDir\$GameDir\cl_dlls"
+}

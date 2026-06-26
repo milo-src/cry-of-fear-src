@@ -8,9 +8,9 @@ Build it from the repository root:
 build_game.bat
 ```
 
-The default output is installed to `out\xash3d\cof`:
+The default output is installed to `out\xash3d\cryoffear`:
 
 - `cl_dlls\client.dll`
-- `dlls\hl.dll`
+- `cl_dlls\hl.dll`
 
 Keep upstream reference code in `external/hlsdk-portable`; make game-specific changes here.
