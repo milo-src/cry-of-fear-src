@@ -107,6 +107,7 @@ set (SVDLL_SOURCES
 	mortar.cpp
 	mp5.cpp
 	mobile.cpp
+	mobile_switchblade.cpp
 	multiplay_gamerules.cpp
 	nihilanth.cpp
 	nodes.cpp

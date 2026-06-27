@@ -361,6 +361,9 @@ void W_Precache( void )
 	// Cry of Fear switchblade
 	UTIL_PrecacheOtherWeapon( "weapon_switchblade" );
 
+	// Cry of Fear mobile phone + switchblade dual wield
+	UTIL_PrecacheOtherWeapon( "weapon_mobile_switchblade" );
+
 	if( g_pGameRules->IsDeathmatch() )
 	{
 		UTIL_PrecacheOther( "weaponbox" );// container for dropped deathmatch weapons

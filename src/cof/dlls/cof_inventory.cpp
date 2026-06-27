@@ -205,6 +205,49 @@ static BOOL COF_DefMatchesName( const COFInventoryDef &def, const char *pszName,
 	return !stricmp( szBase, pszName );
 }
 
+static BOOL COF_DefIsWeaponClass( const COFInventoryDef &def, const char *pszPath, const char *pszClassName )
+{
+	if( !pszClassName || !pszClassName[0] )
+		return FALSE;
+
+	if( def.className[0] && !stricmp( def.className, pszClassName ) )
+		return TRUE;
+
+	char szBase[64];
+	COF_FileBaseName( pszPath, szBase, sizeof( szBase ) );
+	return !stricmp( szBase, pszClassName );
+}
+
+static BOOL COF_IsMobileSwitchbladePair( const COFInventoryDef &firstDef, const char *pszFirstPath, const COFInventoryDef &secondDef, const char *pszSecondPath )
+{
+	const BOOL firstMobile = COF_DefIsWeaponClass( firstDef, pszFirstPath, "weapon_mobile" );
+	const BOOL secondMobile = COF_DefIsWeaponClass( secondDef, pszSecondPath, "weapon_mobile" );
+	const BOOL firstSwitchblade = COF_DefIsWeaponClass( firstDef, pszFirstPath, "weapon_switchblade" );
+	const BOOL secondSwitchblade = COF_DefIsWeaponClass( secondDef, pszSecondPath, "weapon_switchblade" );
+
+	return ( firstMobile && secondSwitchblade ) || ( firstSwitchblade && secondMobile );
+}
+
+static void COF_EquipMobileSwitchblade( CBasePlayer *pPlayer )
+{
+	if( !pPlayer )
+		return;
+
+	if( !pPlayer->HasNamedPlayerItem( "weapon_mobile_switchblade" ) )
+		pPlayer->GiveNamedItem( "weapon_mobile_switchblade" );
+
+	if( pPlayer->HasNamedPlayerItem( "weapon_mobile_switchblade" ) )
+	{
+		pPlayer->SelectItem( "weapon_mobile_switchblade" );
+		EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, "weapons/mobile/mobile_switch.wav", 0.85f, ATTN_NORM );
+		ClientPrint( pPlayer->pev, HUD_PRINTCENTER, "Mobile phone + switchblade equipped" );
+	}
+	else
+	{
+		ClientPrint( pPlayer->pev, HUD_PRINTCENTER, "Cannot equip this dual wield pair" );
+	}
+}
+
 static const char *COF_GetInventoryPath( const CBasePlayer *pPlayer, int iIndex )
 {
 	if( !pPlayer || iIndex < 0 || iIndex >= MAX_COF_INVENTORY || FStringNull( pPlayer->m_rgCOFInventory[iIndex] ) )
@@ -495,6 +538,12 @@ void CBasePlayer::COF_CombineInventoryItems( int iFirst, int iSecond )
 	if( !COF_LoadItemDef( szFirst, &firstDef ) || !COF_LoadItemDef( szSecond, &secondDef ) )
 		return;
 
+	if( COF_IsMobileSwitchbladePair( firstDef, szFirst, secondDef, szSecond ) )
+	{
+		COF_EquipMobileSwitchblade( this );
+		return;
+	}
+
 	const COFInventoryDef *pResultDef = NULL;
 	const char *pszResult = NULL;
 
@@ -559,6 +608,12 @@ void CBasePlayer::COF_DualWieldInventoryItems( int iFirst, int iSecond )
 	COFInventoryDef firstDef, secondDef;
 	if( !COF_LoadItemDef( pszFirst, &firstDef ) || !COF_LoadItemDef( pszSecond, &secondDef ) )
 		return;
+
+	if( COF_IsMobileSwitchbladePair( firstDef, pszFirst, secondDef, pszSecond ) )
+	{
+		COF_EquipMobileSwitchblade( this );
+		return;
+	}
 
 	if( strncmp( firstDef.className, "weapon_", 7 ) || strncmp( secondDef.className, "weapon_", 7 ) )
 	{
