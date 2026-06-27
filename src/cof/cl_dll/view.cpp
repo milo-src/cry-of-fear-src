@@ -98,11 +98,13 @@ cvar_t	*scr_ofsz;
 cvar_t	*v_centermove;
 cvar_t	*v_centerspeed;
 
-cvar_t	*cl_bobcycle;
-cvar_t	*cl_bob;
-cvar_t	*cl_bobup;
 cvar_t	*cl_waterdist;
 cvar_t	*cl_chasedist;
+cvar_t	*cl_weapon_inertia;
+cvar_t	*cl_weapon_lag_scale;
+cvar_t	*cl_weapon_lag_speed;
+cvar_t	*cl_weapon_move_scale;
+cvar_t	*cl_weapon_move_speed;
 
 // These cvars are not registered (so users can't cheat), so set the ->value field directly
 // Register these cvars in V_Init() if needed for easy tweaking
@@ -116,6 +118,100 @@ cvar_t	v_ipitch_level		= {"v_ipitch_level", "0.3", 0, 0.3};
 float	v_idlescale;  // used by TFC for concussion grenade effect
 
 //=============================================================================
+static float V_ClampFloat( float value, float minValue, float maxValue )
+{
+	if( value < minValue )
+		return minValue;
+	if( value > maxValue )
+		return maxValue;
+	return value;
+}
+
+static float V_AngleDelta( float a, float b )
+{
+	float d = a - b;
+	if( d > 180.0f )
+		d -= 360.0f;
+	else if( d < -180.0f )
+		d += 360.0f;
+	return d;
+}
+
+static float V_ApproachExp( float current, float target, float speed, float frametime )
+{
+	if( frametime <= 0.0f )
+		return current;
+
+	const float t = 1.0f - exp( -speed * frametime );
+	return current + ( target - current ) * V_ClampFloat( t, 0.0f, 1.0f );
+}
+
+static float V_ApproachAngleExp( float current, float target, float speed, float frametime )
+{
+	return current + V_AngleDelta( target, current ) * V_ClampFloat( 1.0f - exp( -speed * frametime ), 0.0f, 1.0f );
+}
+
+void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
+{
+	static qboolean initialized = false;
+	static vec3_t lagAngles;
+	static vec3_t moveOffset;
+	vec3_t forward, right, up;
+	float angleLag[3];
+	float targetMove[3];
+	float frametime;
+
+	if( !view || !pparams )
+		return;
+
+	if( cl_weapon_inertia && cl_weapon_inertia->value <= 0.0f )
+	{
+		initialized = false;
+		return;
+	}
+
+	frametime = V_ClampFloat( pparams->frametime, 0.0f, 0.05f );
+	if( !initialized || pparams->paused || pparams->health <= 0 || pparams->intermission )
+	{
+		VectorCopy( pparams->viewangles, lagAngles );
+		VectorClear( moveOffset );
+		initialized = true;
+		return;
+	}
+
+	const float lagSpeed = cl_weapon_lag_speed ? Q_max( cl_weapon_lag_speed->value, 0.1f ) : 12.0f;
+	const float lagScale = cl_weapon_lag_scale ? cl_weapon_lag_scale->value : 1.0f;
+	const float moveSpeed = cl_weapon_move_speed ? Q_max( cl_weapon_move_speed->value, 0.1f ) : 10.0f;
+	const float moveScale = cl_weapon_move_scale ? cl_weapon_move_scale->value : 1.0f;
+
+	for( int i = 0; i < 3; i++ )
+		lagAngles[i] = V_ApproachAngleExp( lagAngles[i], pparams->viewangles[i], lagSpeed, frametime );
+
+	for( int i = 0; i < 3; i++ )
+		angleLag[i] = V_ClampFloat( V_AngleDelta( pparams->viewangles[i], lagAngles[i] ), -8.0f, 8.0f );
+
+	AngleVectors( pparams->viewangles, forward, right, up );
+
+	const float forwardSpeed = V_ClampFloat( DotProduct( pparams->simvel, forward ) / 280.0f, -1.0f, 1.0f );
+	const float sideSpeed = V_ClampFloat( DotProduct( pparams->simvel, right ) / 280.0f, -1.0f, 1.0f );
+	const float verticalSpeed = V_ClampFloat( pparams->simvel[2] / 240.0f, -1.0f, 1.0f );
+
+	targetMove[0] = -forwardSpeed * 0.28f * moveScale;
+	targetMove[1] = -sideSpeed * 0.45f * moveScale;
+	targetMove[2] = ( fabs( sideSpeed ) * -0.08f - fabs( forwardSpeed ) * 0.18f - verticalSpeed * 0.20f ) * moveScale;
+
+	for( int i = 0; i < 3; i++ )
+		moveOffset[i] = V_ApproachExp( moveOffset[i], targetMove[i], moveSpeed, frametime );
+
+	VectorMA( view->origin, moveOffset[0], forward, view->origin );
+	VectorMA( view->origin, moveOffset[1] - angleLag[YAW] * 0.035f * lagScale, right, view->origin );
+	VectorMA( view->origin, moveOffset[2] + angleLag[PITCH] * 0.030f * lagScale, up, view->origin );
+
+	view->angles[YAW] -= angleLag[YAW] * 0.32f * lagScale;
+	view->angles[PITCH] += angleLag[PITCH] * 0.26f * lagScale;
+	view->angles[ROLL] += angleLag[YAW] * 0.12f * lagScale - sideSpeed * 0.8f * moveScale;
+}
+
 /*
 void V_NormalizeAngles( float *angles )
 {
@@ -172,49 +268,6 @@ void V_InterpolateAngles( float *start, float *end, float *output, float frac )
 
 	V_NormalizeAngles( output );
 } */
-
-// Quakeworld bob code, this fixes jitters in the mutliplayer since the clock (pparams->time) isn't quite linear
-float V_CalcBob( struct ref_params_s *pparams )
-{
-	static double bobtime;
-	static float bob;
-	float cycle;
-	static float lasttime;
-	vec3_t	vel;
-
-	if( pparams->onground == -1 ||
-		 pparams->time == lasttime )
-	{
-		// just use old value
-		return bob;	
-	}
-
-	lasttime = pparams->time;
-
-	bobtime += pparams->frametime;
-	cycle = bobtime - (int)( bobtime / cl_bobcycle->value ) * cl_bobcycle->value;
-	cycle /= cl_bobcycle->value;
-
-	if( cycle < cl_bobup->value )
-	{
-		cycle = M_PI_F * cycle / cl_bobup->value;
-	}
-	else
-	{
-		cycle = M_PI_F + M_PI_F * ( cycle - cl_bobup->value )/( 1.0f - cl_bobup->value );
-	}
-
-	// bob is proportional to simulated velocity in the xy plane
-	// (don't count Z, or jumping messes it up)
-	VectorCopy( pparams->simvel, vel );
-	vel[2] = 0;
-
-	bob = sqrt( vel[0] * vel[0] + vel[1] * vel[1] ) * cl_bob->value;
-	bob = bob * 0.3f + bob * 0.7f * sin(cycle);
-	bob = Q_min( bob, 4.0f );
-	bob = Q_max( bob, -7.0f );
-	return bob;
-}
 
 /*
 ===============
@@ -413,7 +466,7 @@ void V_CalcNormalRefdef( struct ref_params_s *pparams )
 	cl_entity_t *ent, *view;
 	int i;
 	vec3_t angles;
-	float bob, waterOffset;
+	float waterOffset;
 	static viewinterp_t ViewInterp;
 
 	static float oldz = 0;
@@ -435,13 +488,8 @@ void V_CalcNormalRefdef( struct ref_params_s *pparams )
 	// view is the weapon model (only visible from inside body)
 	view = gEngfuncs.GetViewModel();
 
-	// transform the view offset by the model's matrix to get the offset from
-	// model origin for the view
-	bob = V_CalcBob( pparams );
-
 	// refresh position
 	VectorCopy( pparams->simorg, pparams->vieworg );
-	pparams->vieworg[2] += bob ;
 	VectorAdd( pparams->vieworg, pparams->viewheight, pparams->vieworg );
 
 	if( pparams->health <= 0 )
@@ -590,17 +638,6 @@ void V_CalcNormalRefdef( struct ref_params_s *pparams )
 	// Let the viewmodel shake at about 10% of the amplitude
 	gEngfuncs.V_ApplyShake( view->origin, view->angles, 0.9f );
 
-	for( i = 0; i < 3; i++ )
-	{
-		view->origin[i] += bob * 0.4f * pparams->forward[i];
-	}
-	view->origin[2] += bob;
-
-	// throw in a little tilt.
-	view->angles[YAW] -= bob * 0.5f;
-	view->angles[ROLL] -= bob * 1.0f;
-	view->angles[PITCH] -= bob * 0.3f;
-
 	// pushing the view origin down off of the same X/Z plane as the ent's origin will give the
 	// gun a very nice 'shifting' effect when the player looks up/down. If there is a problem
 	// with view model distortion, this may be a cause. (SJB). 
@@ -624,6 +661,8 @@ void V_CalcNormalRefdef( struct ref_params_s *pparams )
 	{
 		view->origin[2] += 0.5f;
 	}
+
+	V_ApplyWeaponInertia( pparams, view );
 
 	// Add in the punchangle, if any
 	VectorAdd( pparams->viewangles, pparams->punchangle, pparams->viewangles );
@@ -1252,8 +1291,7 @@ void V_GetInEyePos( int target, float *origin, float *angles )
 	else if( ent->curstate.usehull == 1 )
 		origin[2] += 12.0f; // VEC_DUCK_VIEW;
 	else
-		// exacty eye position can't be caluculated since it depends on
-		// client values like cl_bobcycle, this offset matches the default values
+		// Exact eye position is not available here, so use the standing view height.
 		origin[2] += 28.0f; // DEFAULT_VIEWHEIGHT
 }
 
@@ -1610,11 +1648,13 @@ void V_Init( void )
 	v_centermove = gEngfuncs.pfnRegisterVariable( "v_centermove", "0.15", 0 );
 	v_centerspeed = gEngfuncs.pfnRegisterVariable( "v_centerspeed","500", 0 );
 
-	cl_bobcycle = gEngfuncs.pfnRegisterVariable( "cl_bobcycle","0.8", 0 );// best default for my experimental gun wag (sjb)
-	cl_bob = gEngfuncs.pfnRegisterVariable( "cl_bob","0.01", FCVAR_ARCHIVE );// best default for my experimental gun wag (sjb)
-	cl_bobup = gEngfuncs.pfnRegisterVariable( "cl_bobup","0.5", 0 );
 	cl_waterdist = gEngfuncs.pfnRegisterVariable( "cl_waterdist","4", 0 );
 	cl_chasedist = gEngfuncs.pfnRegisterVariable( "cl_chasedist","112", 0 );
+	cl_weapon_inertia = gEngfuncs.pfnRegisterVariable( "cl_weapon_inertia", "1", FCVAR_ARCHIVE );
+	cl_weapon_lag_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_scale", "1", FCVAR_ARCHIVE );
+	cl_weapon_lag_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_speed", "12", FCVAR_ARCHIVE );
+	cl_weapon_move_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_scale", "1", FCVAR_ARCHIVE );
+	cl_weapon_move_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_speed", "10", FCVAR_ARCHIVE );
 }
 
 //#define TRACE_TEST	1
