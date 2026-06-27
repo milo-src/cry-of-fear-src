@@ -62,6 +62,7 @@ set (SVDLL_SOURCES
 	client.cpp
 	combat.cpp
 	controller.cpp
+	cof_entities.cpp
 	cof_inventory.cpp
 	crossbow.cpp
 	crowbar.cpp

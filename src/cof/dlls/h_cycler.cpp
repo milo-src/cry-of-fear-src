@@ -210,15 +210,19 @@ int CCycler::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float 
 }
 #endif
 
-class CCyclerSprite : public CBaseEntity
+class CCyclerSprite : public CBaseAnimating
 {
 public:
+	CCyclerSprite();
+
+	void KeyValue( KeyValueData *pkvd );
 	void Spawn( void );
 	void Think( void );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int ObjectCaps( void ) { return ( CBaseEntity :: ObjectCaps() | FCAP_DONT_SAVE | FCAP_IMPULSE_USE ); }
 	virtual int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
 	void Animate( float frames );
+	void PlayConfiguredSequence( BOOL state );
 
 	virtual int Save( CSave &save );
 	virtual int Restore( CRestore &restore );
@@ -232,6 +236,13 @@ public:
 	int m_animate;
 	float m_lastTime;
 	float m_maxFrame;
+	BOOL m_isStudioModel;
+	BOOL m_state;
+	int m_iActionOn;
+	int m_iActionOff;
+	int m_iCurrentAction;
+	string_t m_iszSequenceOn;
+	string_t m_iszSequenceOff;
 };
 
 LINK_ENTITY_TO_CLASS( cycler_sprite, CCyclerSprite )
@@ -242,9 +253,74 @@ TYPEDESCRIPTION	CCyclerSprite::m_SaveData[] =
 	DEFINE_FIELD( CCyclerSprite, m_animate, FIELD_INTEGER ),
 	DEFINE_FIELD( CCyclerSprite, m_lastTime, FIELD_TIME ),
 	DEFINE_FIELD( CCyclerSprite, m_maxFrame, FIELD_FLOAT ),
+	DEFINE_FIELD( CCyclerSprite, m_isStudioModel, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CCyclerSprite, m_state, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CCyclerSprite, m_iActionOn, FIELD_INTEGER ),
+	DEFINE_FIELD( CCyclerSprite, m_iActionOff, FIELD_INTEGER ),
+	DEFINE_FIELD( CCyclerSprite, m_iCurrentAction, FIELD_INTEGER ),
+	DEFINE_FIELD( CCyclerSprite, m_iszSequenceOn, FIELD_STRING ),
+	DEFINE_FIELD( CCyclerSprite, m_iszSequenceOff, FIELD_STRING ),
 };
 
-IMPLEMENT_SAVERESTORE( CCyclerSprite, CBaseEntity )
+IMPLEMENT_SAVERESTORE( CCyclerSprite, CBaseAnimating )
+
+CCyclerSprite::CCyclerSprite() :
+	m_animate( 1 ),
+	m_lastTime( 0.0f ),
+	m_maxFrame( 0.0f ),
+	m_isStudioModel( FALSE ),
+	m_state( FALSE ),
+	m_iActionOn( 1 ),
+	m_iActionOff( 1 ),
+	m_iCurrentAction( 1 ),
+	m_iszSequenceOn( iStringNull ),
+	m_iszSequenceOff( iStringNull )
+{
+}
+
+void CCyclerSprite::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "m_iszSequence_On" ) )
+	{
+		m_iszSequenceOn = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_iszSequence_Off" ) )
+	{
+		m_iszSequenceOff = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_iAction_On" ) )
+	{
+		m_iActionOn = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_iAction_Off" ) )
+	{
+		m_iActionOff = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_fFramerate" ) )
+	{
+		const float flFramerate = atof( pkvd->szValue );
+		if( flFramerate >= 0.0f )
+			pev->framerate = flFramerate;
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "movewith" ) ||
+		FStrEq( pkvd->szKeyName, "m_fTurnType" ) ||
+		FStrEq( pkvd->szKeyName, "m_fMoveTo" ) ||
+		FStrEq( pkvd->szKeyName, "m_fRepeatFrame" ) ||
+		FStrEq( pkvd->szKeyName, "m_iRepeats" ) ||
+		FStrEq( pkvd->szKeyName, "m_iFinishSchedule" ) ||
+		FStrEq( pkvd->szKeyName, "m_iPriority" ) ||
+		FStrEq( pkvd->szKeyName, "chestnums" ) )
+	{
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseAnimating::KeyValue( pkvd );
+}
 
 void CCyclerSprite::Spawn( void )
 {
@@ -257,16 +333,52 @@ void CCyclerSprite::Spawn( void )
 	pev->nextthink		= gpGlobals->time + 0.1f;
 	m_animate		= 1;
 	m_lastTime		= gpGlobals->time;
+	if( pev->framerate == 0.0f )
+		pev->framerate = 1.0f;
 
 	PRECACHE_MODEL( STRING( pev->model ) );
 	SET_MODEL( ENT( pev ), STRING( pev->model ) );
 
-	m_maxFrame = (float)MODEL_FRAMES( pev->modelindex ) - 1;
+	const char *pszModel = STRING( pev->model );
+	const char *pszExt = strrchr( pszModel, '.' );
+	m_isStudioModel = pszExt && !stricmp( pszExt, ".mdl" );
+
+	if( m_isStudioModel )
+	{
+		InitBoneControllers();
+		PlayConfiguredSequence( FALSE );
+	}
+	else
+		m_maxFrame = (float)MODEL_FRAMES( pev->modelindex ) - 1;
 }
 
 void CCyclerSprite::Think( void )
 {
-	if( ShouldAnimate() )
+	if( m_isStudioModel )
+	{
+		if( m_animate )
+			StudioFrameAdvance();
+
+		if( m_fSequenceFinished && !m_fSequenceLoops )
+		{
+			if( m_iCurrentAction == 2 )
+			{
+				m_state = !m_state;
+				PlayConfiguredSequence( m_state );
+			}
+			else if( m_iCurrentAction == 1 )
+			{
+				pev->frame = 0;
+				ResetSequenceInfo();
+			}
+			else
+			{
+				m_animate = 0;
+				pev->framerate = 0.0f;
+			}
+		}
+	}
+	else if( ShouldAnimate() )
 		Animate( pev->framerate * ( gpGlobals->time - m_lastTime ) );
 
 	pev->nextthink = gpGlobals->time + 0.1f;
@@ -275,17 +387,63 @@ void CCyclerSprite::Think( void )
 
 void CCyclerSprite::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
-	m_animate = !m_animate;
-	ALERT( at_console, "Sprite: %s\n", STRING( pev->model ) );
+	if( m_isStudioModel )
+	{
+		if( useType == USE_ON )
+			m_state = TRUE;
+		else if( useType == USE_OFF )
+			m_state = FALSE;
+		else
+			m_state = !m_state;
+
+		PlayConfiguredSequence( m_state );
+	}
+	else
+		m_animate = !m_animate;
 }
 
 int CCyclerSprite::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
-	if( m_maxFrame > 1.0f )
+	if( m_isStudioModel )
+	{
+		pev->sequence++;
+		ResetSequenceInfo();
+		if( m_flFrameRate == 0.0f )
+		{
+			pev->sequence = 0;
+			ResetSequenceInfo();
+		}
+		pev->frame = 0;
+	}
+	else if( m_maxFrame > 1.0f )
 	{
 		Animate( 1.0f );
 	}
 	return 1;
+}
+
+void CCyclerSprite::PlayConfiguredSequence( BOOL state )
+{
+	if( !m_isStudioModel )
+		return;
+
+	m_iCurrentAction = state ? m_iActionOn : m_iActionOff;
+	string_t iszSequence = state ? m_iszSequenceOn : m_iszSequenceOff;
+
+	if( FStringNull( iszSequence ) )
+		iszSequence = !FStringNull( m_iszSequenceOn ) ? m_iszSequenceOn : m_iszSequenceOff;
+
+	if( !FStringNull( iszSequence ) )
+	{
+		const int sequence = LookupSequence( STRING( iszSequence ) );
+		if( sequence >= 0 )
+			pev->sequence = sequence;
+	}
+
+	pev->frame = 0;
+	pev->framerate = 1.0f;
+	m_animate = 1;
+	ResetSequenceInfo();
 }
 
 void CCyclerSprite::Animate( float frames )
