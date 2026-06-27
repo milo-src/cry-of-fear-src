@@ -551,6 +551,9 @@ public:
 	}
 
 private:
+	void ToggleFlashlight( void );
+	void PunchAttack( void );
+
 	BOOL m_fFlashMode;
 };
 

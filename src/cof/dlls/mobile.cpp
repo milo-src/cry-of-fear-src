@@ -128,6 +128,7 @@ void CMobile::Spawn( void )
 	SET_MODEL( ENT( pev ), "models/weapons/mobile/w_mobile.mdl" );
 	m_iClip = WEAPON_NOCLIP;
 	m_fFlashMode = FALSE;
+	m_fireState = 0;
 
 	FallInit();
 }
@@ -177,6 +178,7 @@ int CMobile::AddToPlayer( CBasePlayer *pPlayer )
 
 BOOL CMobile::Deploy( void )
 {
+	m_fFlashMode = m_fireState != 0;
 	const int iDrawAnim = m_fFlashMode ? MOBILE_DRAW_FLASH : MOBILE_DRAW_SMS;
 #ifndef CLIENT_DLL
 	if( m_fFlashMode )
@@ -187,6 +189,7 @@ BOOL CMobile::Deploy( void )
 
 void CMobile::Holster( int skiplocal )
 {
+	m_fFlashMode = m_fireState != 0;
 #ifndef CLIENT_DLL
 	if( m_fFlashMode )
 		COF_SetMobileFlashlight( m_pPlayer, FALSE );
@@ -195,8 +198,26 @@ void CMobile::Holster( int skiplocal )
 	SendWeaponAnim( m_fFlashMode ? MOBILE_HOLSTER_FLASH : MOBILE_HOLSTER_SMS );
 }
 
-void CMobile::PrimaryAttack( void )
+void CMobile::ToggleFlashlight( void )
 {
+	m_fFlashMode = m_fireState != 0;
+	m_fFlashMode = !m_fFlashMode;
+	m_fireState = m_fFlashMode ? 1 : 0;
+
+#ifndef CLIENT_DLL
+	COF_SetMobileFlashlight( m_pPlayer, m_fFlashMode );
+#endif
+
+	SendWeaponAnim( m_fFlashMode ? MOBILE_SMS_TO_FLASH : MOBILE_FLASH_TO_SMS );
+
+	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7f;
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.7f;
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
+}
+
+void CMobile::PunchAttack( void )
+{
+	m_fFlashMode = m_fireState != 0;
 	SendWeaponAnim( m_fFlashMode ? MOBILE_FLASH_PUNCH : MOBILE_SMS_PUNCH );
 	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
 	m_pPlayer->pev->punchangle.x = RANDOM_FLOAT( 2.0f, 4.0f );
@@ -205,28 +226,19 @@ void CMobile::PrimaryAttack( void )
 	COF_MobilePunchTrace( m_pPlayer );
 #endif
 
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + MOBILE_ATTACK_DELAY;
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.4f;
+	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.4f;
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + MOBILE_ATTACK_DELAY;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
+}
+
+void CMobile::PrimaryAttack( void )
+{
+	ToggleFlashlight();
 }
 
 void CMobile::SecondaryAttack( void )
 {
-	m_fFlashMode = !m_fFlashMode;
-
-#ifndef CLIENT_DLL
-	if( m_fFlashMode )
-		COF_SetMobileFlashlight( m_pPlayer, TRUE );
-	else
-		COF_SetMobileFlashlight( m_pPlayer, FALSE );
-#endif
-
-	EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_WEAPON, "weapons/mobile/mobile_switch.wav", 0.8f, ATTN_NORM );
-	SendWeaponAnim( m_fFlashMode ? MOBILE_SMS_TO_FLASH : MOBILE_FLASH_TO_SMS );
-
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7f;
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.7f;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0f;
+	PunchAttack();
 }
 
 void CMobile::WeaponIdle( void )
@@ -234,6 +246,14 @@ void CMobile::WeaponIdle( void )
 	if( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
 		return;
 
+	m_fFlashMode = m_fireState != 0;
+	if( RANDOM_LONG( 0, 3 ) == 0 )
+	{
+		SendWeaponAnim( m_fFlashMode ? MOBILE_FLASH_LOOKSMS : MOBILE_LOOK_SMS );
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.6f;
+		return;
+	}
+
 	SendWeaponAnim( m_fFlashMode ? MOBILE_IDLE_FLASH : MOBILE_IDLE_SMS );
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT( 5.0f, 8.0f );
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT( 4.0f, 7.0f );
 }
