@@ -188,7 +188,7 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 		lagAngles[i] = V_ApproachAngleExp( lagAngles[i], pparams->viewangles[i], lagSpeed, frametime );
 
 	for( int i = 0; i < 3; i++ )
-		angleLag[i] = V_ClampFloat( V_AngleDelta( pparams->viewangles[i], lagAngles[i] ), -8.0f, 8.0f );
+		angleLag[i] = V_ClampFloat( V_AngleDelta( pparams->viewangles[i], lagAngles[i] ), -14.0f, 14.0f );
 
 	AngleVectors( pparams->viewangles, forward, right, up );
 
@@ -196,20 +196,20 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	const float sideSpeed = V_ClampFloat( DotProduct( pparams->simvel, right ) / 280.0f, -1.0f, 1.0f );
 	const float verticalSpeed = V_ClampFloat( pparams->simvel[2] / 240.0f, -1.0f, 1.0f );
 
-	targetMove[0] = -forwardSpeed * 0.28f * moveScale;
-	targetMove[1] = -sideSpeed * 0.45f * moveScale;
-	targetMove[2] = ( fabs( sideSpeed ) * -0.08f - fabs( forwardSpeed ) * 0.18f - verticalSpeed * 0.20f ) * moveScale;
+	targetMove[0] = -forwardSpeed * 0.36f * moveScale;
+	targetMove[1] = -sideSpeed * 0.58f * moveScale;
+	targetMove[2] = ( fabs( sideSpeed ) * -0.10f - fabs( forwardSpeed ) * 0.24f - verticalSpeed * 0.24f ) * moveScale;
 
 	for( int i = 0; i < 3; i++ )
 		moveOffset[i] = V_ApproachExp( moveOffset[i], targetMove[i], moveSpeed, frametime );
 
 	VectorMA( view->origin, moveOffset[0], forward, view->origin );
-	VectorMA( view->origin, moveOffset[1] - angleLag[YAW] * 0.035f * lagScale, right, view->origin );
-	VectorMA( view->origin, moveOffset[2] + angleLag[PITCH] * 0.030f * lagScale, up, view->origin );
+	VectorMA( view->origin, moveOffset[1] - angleLag[YAW] * 0.050f * lagScale, right, view->origin );
+	VectorMA( view->origin, moveOffset[2] + angleLag[PITCH] * 0.042f * lagScale, up, view->origin );
 
-	view->angles[YAW] -= angleLag[YAW] * 0.32f * lagScale;
-	view->angles[PITCH] += angleLag[PITCH] * 0.26f * lagScale;
-	view->angles[ROLL] += angleLag[YAW] * 0.12f * lagScale - sideSpeed * 0.8f * moveScale;
+	view->angles[YAW] -= angleLag[YAW] * 0.42f * lagScale;
+	view->angles[PITCH] += angleLag[PITCH] * 0.34f * lagScale;
+	view->angles[ROLL] += angleLag[YAW] * 0.16f * lagScale - sideSpeed * 1.0f * moveScale;
 }
 
 /*
@@ -1651,10 +1651,10 @@ void V_Init( void )
 	cl_waterdist = gEngfuncs.pfnRegisterVariable( "cl_waterdist","4", 0 );
 	cl_chasedist = gEngfuncs.pfnRegisterVariable( "cl_chasedist","112", 0 );
 	cl_weapon_inertia = gEngfuncs.pfnRegisterVariable( "cl_weapon_inertia", "1", FCVAR_ARCHIVE );
-	cl_weapon_lag_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_scale", "1", FCVAR_ARCHIVE );
-	cl_weapon_lag_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_speed", "12", FCVAR_ARCHIVE );
-	cl_weapon_move_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_scale", "1", FCVAR_ARCHIVE );
-	cl_weapon_move_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_speed", "10", FCVAR_ARCHIVE );
+	cl_weapon_lag_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_scale", "1.2", FCVAR_ARCHIVE );
+	cl_weapon_lag_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_speed", "7.5", FCVAR_ARCHIVE );
+	cl_weapon_move_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_scale", "1.15", FCVAR_ARCHIVE );
+	cl_weapon_move_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_speed", "8", FCVAR_ARCHIVE );
 }
 
 //#define TRACE_TEST	1
