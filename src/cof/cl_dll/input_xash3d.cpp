@@ -4,6 +4,7 @@
 #include "kbutton.h"
 #include "keydefs.h"
 #include "input_mouse.h"
+#include "cof_ui.h"
 extern cvar_t		*sensitivity;
 extern cvar_t		*in_joystick;
 
@@ -155,6 +156,9 @@ void FWGSInput::IN_ClientMoveEvent( float forwardmove, float sidemove )
 
 void FWGSInput::IN_ClientLookEvent( float relyaw, float relpitch )
 {
+	if( COF_UI_ConsumeMouseDelta( relyaw, relpitch ) )
+		return;
+
 	rel_yaw += relyaw;
 	rel_pitch += relpitch;
 }

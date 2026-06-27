@@ -26,7 +26,7 @@
 #if USE_VGUI
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
-#include "cof_inventory_vgui.h"
+#include "cof_inventory_client.h"
 #endif
 
 #if GOLDSOURCE_SUPPORT && (XASH_WIN32 || XASH_LINUX || XASH_APPLE) && XASH_X86
@@ -273,8 +273,8 @@ int DLLEXPORT HUD_VidInit( void )
 	}
 #elif USE_VGUI
 	VGui_Startup();
-	COF_Inventory_VidInit();
 #endif
+	COF_Inventory_VidInit();
 	return 1;
 }
 
@@ -309,6 +309,7 @@ redraw the HUD.
 int DLLEXPORT HUD_Redraw( float time, int intermission )
 {
 	gHUD.Redraw( time, intermission );
+	COF_Inventory_Draw( time );
 
 	return 1;
 }

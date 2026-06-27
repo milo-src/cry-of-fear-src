@@ -23,10 +23,10 @@
 #include <string.h>
 #include <stdio.h>
 #include "parsemsg.h"
+#include "cof_inventory_client.h"
 #if USE_VGUI
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
-#include "cof_inventory_vgui.h"
 #endif
 
 #include "demo.h"
@@ -367,9 +367,7 @@ void CHud::Init( void )
 
 	// VGUI Menus
 	HOOK_MESSAGE( VGUIMenu );
-#if USE_VGUI
 	COF_Inventory_Init();
-#endif
 
 	CVAR_CREATE( "hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );		// controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE( "hud_takesshots", "0", FCVAR_ARCHIVE );		// controls whether or not to automatically take screenshots at the end of a round

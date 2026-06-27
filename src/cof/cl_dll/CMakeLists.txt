@@ -125,12 +125,13 @@ set (CLDLL_SOURCES
 	tri.cpp
 	util.cpp
 	view.cpp
+	cof_ui.cpp
+	cof_inventory_client.cpp
 	../public/safe_snprintf.c
 )
 
 if (USE_VGUI)
 	list(APPEND CLDLL_SOURCES
-		cof_inventory_vgui.cpp
 		vgui_int.cpp
 		vgui_ClassMenu.cpp
 		vgui_ConsolePanel.cpp

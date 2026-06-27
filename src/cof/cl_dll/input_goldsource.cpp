@@ -22,6 +22,7 @@
 #include "in_defs.h"
 #include "keydefs.h"
 #include "view.h"
+#include "cof_ui.h"
 
 #if !XASH_WIN32
 #define ARRAYSIZE(p)		( sizeof(p) /sizeof(p[0]) )
@@ -854,6 +855,13 @@ void GoldSourceInput::IN_MouseMove ( float frametime, usercmd_t *cmd)
 	if ( !iMouseInUse && !gHUD.m_iIntermission && !iVisibleMouse )
 	{
 		IN_GetMouseDelta( &mx, &my );
+
+		if( COF_UI_ConsumeMouseDelta( (float)mx, (float)my ) )
+		{
+			old_mouse_x = 0;
+			old_mouse_y = 0;
+			return;
+		}
 
 		if (m_filter && m_filter->value)
 		{

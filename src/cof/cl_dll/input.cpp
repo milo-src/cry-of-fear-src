@@ -25,13 +25,14 @@ extern "C"
 #include "camera.h"
 #include "in_defs.h"
 #include "keydefs.h"
+#include "cof_inventory_client.h"
+#include "cof_ui.h"
 //#include "view.h"
 #include <string.h>
 #include <ctype.h>
 
 #if USE_VGUI
 #include "vgui_TeamFortressViewport.h"
-#include "cof_inventory_vgui.h"
 #endif
 
 extern "C" 
@@ -383,16 +384,16 @@ Return 1 to allow engine to process the key, otherwise, act on it as needed
 */
 int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
 {
-	if( down && ( keynum == K_ENTER || keynum == K_KP_ENTER || keynum == K_SPACE ) )
-		gEngfuncs.pfnServerCmd( "cof_skipcutscene\n" );
-
-#if USE_VGUI
 	{
 		const int inventoryResult = COF_Inventory_KeyInput( down, keynum, pszCurrentBinding );
 		if( !inventoryResult )
 			return 0;
 	}
 
+	if( down && ( keynum == K_ENTER || keynum == K_KP_ENTER || keynum == K_SPACE ) )
+		gEngfuncs.pfnServerCmd( "cof_skipcutscene\n" );
+
+#if USE_VGUI
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
 #endif
@@ -881,6 +882,14 @@ void DLLEXPORT CL_CreateMove( float frametime, struct usercmd_s *cmd, int active
 	// set button and flag bits
 	//
 	cmd->buttons = CL_ButtonBits( 1 );
+
+	if( COF_UI_IsActive() )
+	{
+		cmd->forwardmove = 0;
+		cmd->sidemove = 0;
+		cmd->upmove = 0;
+		cmd->buttons &= ~( IN_ATTACK | IN_ATTACK2 | IN_JUMP | IN_DUCK | IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT | IN_USE );
+	}
 
 #if USE_VGUI
 	// If they're in a modal dialog, ignore the attack button.
