@@ -18,11 +18,13 @@ LINK_ENTITY_TO_CLASS( weapon_switchblade, CSwitchblade )
 #define SWITCHBLADE_RANGE			38.0f
 #define SWITCHBLADE_SLASH_DAMAGE	6.0f
 #define SWITCHBLADE_STAB_DAMAGE		9.0f
-#define SWITCHBLADE_SLASH_DELAY		0.48f
-#define SWITCHBLADE_STAB_DELAY		0.72f
-#define SWITCHBLADE_SWITCH_TIME		0.45f
-#define SWITCHBLADE_DRAW_TIME		0.55f
-#define SWITCHBLADE_HOLSTER_TIME	0.45f
+#define SWITCHBLADE_SLASH_DELAY		0.97f
+#define SWITCHBLADE_STAB_DELAY		0.97f
+#define SWITCHBLADE_SWITCH_TIME		1.15f
+#define SWITCHBLADE_DRAW_TIME		1.00f
+#define SWITCHBLADE_HOLSTER_TIME	0.50f
+#define SWITCHBLADE_SPRINT_BLEND_TIME	0.30f
+#define SWITCHBLADE_SPRINT_IDLE_TIME	0.63f
 #define SWITCHBLADE_IDLE_TIME		3600.0f
 
 enum switchblade_e
@@ -31,16 +33,28 @@ enum switchblade_e
 	SWITCHBLADE_P1_DRAW,
 	SWITCHBLADE_P1_HOLSTER,
 	SWITCHBLADE_P1_ATTACK1,
+	SWITCHBLADE_P1_TO_P2,
 	SWITCHBLADE_P2_IDLE,
 	SWITCHBLADE_P2_DRAW,
 	SWITCHBLADE_P2_HOLSTER,
 	SWITCHBLADE_P2_ATTACK1,
+	SWITCHBLADE_P2_TO_P1,
+	SWITCHBLADE_P1_SPRINT_TO,
 	SWITCHBLADE_P1_SPRINT_IDLE,
+	SWITCHBLADE_P1_SPRINT_FROM,
+	SWITCHBLADE_P2_SPRINT_TO,
 	SWITCHBLADE_P2_SPRINT_IDLE,
+	SWITCHBLADE_P2_SPRINT_FROM,
 	SWITCHBLADE_P1_ATTACK2,
 	SWITCHBLADE_P1_ATTACK3,
 	SWITCHBLADE_P2_ATTACK2,
-	SWITCHBLADE_P2_ATTACK3
+	SWITCHBLADE_P2_ATTACK3,
+	SWITCHBLADE_P1_FIDGET1,
+	SWITCHBLADE_P1_FIDGET2,
+	SWITCHBLADE_P1_FIDGET3,
+	SWITCHBLADE_P2_FIDGET1,
+	SWITCHBLADE_P2_FIDGET2,
+	SWITCHBLADE_P2_FIDGET3
 };
 
 #ifndef CLIENT_DLL
@@ -119,6 +133,7 @@ void CSwitchblade::Spawn( void )
 	m_iClip = WEAPON_NOCLIP;
 	m_iSwing = 0;
 	m_fireState = 0;
+	m_fInAttack = 0;
 
 	FallInit();
 }
@@ -180,6 +195,7 @@ BOOL CSwitchblade::Deploy( void )
 	const BOOL result = DefaultDeploy( "models/weapons/switchblade/v_switchblade.mdl", "", drawAnim, "onehanded" );
 	if( result )
 	{
+		m_fInAttack = 0;
 #ifndef CLIENT_DLL
 		EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM, "weapons/switchblade/switchblade_deploy.wav", 0.9f, ATTN_NORM );
 #endif
@@ -191,6 +207,7 @@ BOOL CSwitchblade::Deploy( void )
 void CSwitchblade::Holster( int skiplocal )
 {
 	const BOOL stabMode = m_fireState != 0;
+	m_fInAttack = 0;
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + SWITCHBLADE_HOLSTER_TIME;
 	SendWeaponAnim( stabMode ? SWITCHBLADE_P2_HOLSTER : SWITCHBLADE_P1_HOLSTER );
 #ifndef CLIENT_DLL
@@ -202,6 +219,7 @@ void CSwitchblade::Holster( int skiplocal )
 
 void CSwitchblade::SwitchbladeAttack( BOOL stabMode )
 {
+	m_fInAttack = 0;
 	static const int slashAnims[] = { SWITCHBLADE_P1_ATTACK1, SWITCHBLADE_P1_ATTACK2, SWITCHBLADE_P1_ATTACK3 };
 	static const int stabAnims[] = { SWITCHBLADE_P2_ATTACK1, SWITCHBLADE_P2_ATTACK2, SWITCHBLADE_P2_ATTACK3 };
 	const int *pAnims = stabMode ? stabAnims : slashAnims;
@@ -230,9 +248,10 @@ void CSwitchblade::PrimaryAttack( void )
 void CSwitchblade::ToggleMode( void )
 {
 	m_fireState = m_fireState ? 0 : 1;
+	m_fInAttack = 0;
 	const BOOL stabMode = m_fireState != 0;
 
-	SendWeaponAnim( stabMode ? SWITCHBLADE_P2_DRAW : SWITCHBLADE_P1_DRAW );
+	SendWeaponAnim( stabMode ? SWITCHBLADE_P1_TO_P2 : SWITCHBLADE_P2_TO_P1 );
 #ifndef CLIENT_DLL
 	EMIT_SOUND( ENT( m_pPlayer->pev ), CHAN_ITEM,
 		stabMode ? "weapons/switchblade/switchblade_draw2.wav" : "weapons/switchblade/switchblade_draw.wav",
@@ -249,13 +268,64 @@ void CSwitchblade::SecondaryAttack( void )
 	ToggleMode();
 }
 
+BOOL CSwitchblade::IsSprinting( void ) const
+{
+	if( !m_pPlayer )
+		return FALSE;
+
+	if( !( m_pPlayer->pev->button & IN_RUN ) || !( m_pPlayer->pev->flags & FL_ONGROUND ) )
+		return FALSE;
+
+	const float speed2D = sqrt( m_pPlayer->pev->velocity.x * m_pPlayer->pev->velocity.x + m_pPlayer->pev->velocity.y * m_pPlayer->pev->velocity.y );
+	return speed2D > 120.0f;
+}
+
 void CSwitchblade::WeaponIdle( void )
 {
 	const BOOL stabMode = m_fireState != 0;
 	const int idleAnim = stabMode ? SWITCHBLADE_P2_IDLE : SWITCHBLADE_P1_IDLE;
+	const int sprintIdleAnim = stabMode ? SWITCHBLADE_P2_SPRINT_IDLE : SWITCHBLADE_P1_SPRINT_IDLE;
 	const int currentAnim = m_pPlayer ? m_pPlayer->pev->weaponanim : -1;
+	const BOOL sprinting = IsSprinting();
+	const BOOL currentAction =
+		currentAnim == SWITCHBLADE_P1_DRAW || currentAnim == SWITCHBLADE_P2_DRAW ||
+		currentAnim == SWITCHBLADE_P1_HOLSTER || currentAnim == SWITCHBLADE_P2_HOLSTER ||
+		currentAnim == SWITCHBLADE_P1_TO_P2 || currentAnim == SWITCHBLADE_P2_TO_P1 ||
+		currentAnim == SWITCHBLADE_P1_ATTACK1 || currentAnim == SWITCHBLADE_P1_ATTACK2 || currentAnim == SWITCHBLADE_P1_ATTACK3 ||
+		currentAnim == SWITCHBLADE_P2_ATTACK1 || currentAnim == SWITCHBLADE_P2_ATTACK2 || currentAnim == SWITCHBLADE_P2_ATTACK3 ||
+		currentAnim == SWITCHBLADE_P1_SPRINT_TO || currentAnim == SWITCHBLADE_P2_SPRINT_TO ||
+		currentAnim == SWITCHBLADE_P1_SPRINT_FROM || currentAnim == SWITCHBLADE_P2_SPRINT_FROM;
 
-	if( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
+	if( currentAction && m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
+		return;
+
+	if( sprinting )
+	{
+		if( !m_fInAttack )
+		{
+			m_fInAttack = 1;
+			SendWeaponAnim( stabMode ? SWITCHBLADE_P2_SPRINT_TO : SWITCHBLADE_P1_SPRINT_TO );
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + SWITCHBLADE_SPRINT_BLEND_TIME;
+			return;
+		}
+
+		if( currentAnim == sprintIdleAnim && m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
+			return;
+
+		SendWeaponAnim( sprintIdleAnim );
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + SWITCHBLADE_SPRINT_IDLE_TIME;
+		return;
+	}
+
+	if( m_fInAttack )
+	{
+		m_fInAttack = 0;
+		SendWeaponAnim( stabMode ? SWITCHBLADE_P2_SPRINT_FROM : SWITCHBLADE_P1_SPRINT_FROM );
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + SWITCHBLADE_SPRINT_BLEND_TIME;
+		return;
+	}
+
+	if( currentAnim == idleAnim && m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
 		return;
 
 	if( currentAnim != idleAnim )

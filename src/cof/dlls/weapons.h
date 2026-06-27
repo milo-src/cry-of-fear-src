@@ -586,6 +586,7 @@ public:
 private:
 	void SwitchbladeAttack( BOOL stabMode );
 	void ToggleMode( void );
+	BOOL IsSprinting( void ) const;
 
 	int m_iSwing;
 };
