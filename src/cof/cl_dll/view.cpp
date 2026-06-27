@@ -156,10 +156,12 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	static qboolean initialized = false;
 	static vec3_t lagAngles;
 	static vec3_t moveOffset;
+	static float yawVisualLag = 0.0f;
 	vec3_t forward, right, up;
 	float angleLag[3];
 	float targetMove[3];
 	float frametime;
+	float yawLag;
 
 	if( !view || !pparams )
 		return;
@@ -175,6 +177,7 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	{
 		VectorCopy( pparams->viewangles, lagAngles );
 		VectorClear( moveOffset );
+		yawVisualLag = 0.0f;
 		initialized = true;
 		return;
 	}
@@ -190,6 +193,9 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	for( int i = 0; i < 3; i++ )
 		angleLag[i] = V_ClampFloat( V_AngleDelta( pparams->viewangles[i], lagAngles[i] ), -14.0f, 14.0f );
 
+	yawVisualLag = V_ApproachExp( yawVisualLag, angleLag[YAW], lagSpeed * 0.45f, frametime );
+	yawLag = yawVisualLag;
+
 	AngleVectors( pparams->viewangles, forward, right, up );
 
 	const float forwardSpeed = V_ClampFloat( DotProduct( pparams->simvel, forward ) / 280.0f, -1.0f, 1.0f );
@@ -204,12 +210,12 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 		moveOffset[i] = V_ApproachExp( moveOffset[i], targetMove[i], moveSpeed, frametime );
 
 	VectorMA( view->origin, moveOffset[0], forward, view->origin );
-	VectorMA( view->origin, moveOffset[1] - angleLag[YAW] * 0.050f * lagScale, right, view->origin );
+	VectorMA( view->origin, moveOffset[1] - yawLag * 0.052f * lagScale, right, view->origin );
 	VectorMA( view->origin, moveOffset[2] + angleLag[PITCH] * 0.042f * lagScale, up, view->origin );
 
-	view->angles[YAW] -= angleLag[YAW] * 0.42f * lagScale;
+	view->angles[YAW] -= yawLag * 0.22f * lagScale;
 	view->angles[PITCH] += angleLag[PITCH] * 0.34f * lagScale;
-	view->angles[ROLL] += angleLag[YAW] * 0.16f * lagScale - sideSpeed * 1.0f * moveScale;
+	view->angles[ROLL] += yawLag * 0.24f * lagScale - sideSpeed * 1.0f * moveScale;
 }
 
 /*
