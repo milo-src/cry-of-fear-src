@@ -358,9 +358,9 @@ void V_ApplyCameraMotionInertia( struct ref_params_s *pparams )
 
 	targetOffset[0] = -forwardSpeed * ( walkAmount * 0.018f + runAmount * 0.52f ) * motionScale;
 	targetOffset[1] = ( -sideSpeed * runAmount * 0.76f + step * runAmount * 0.56f ) * motionScale;
-	targetOffset[2] = ( step2 * ( walkAmount * 0.016f + runAmount * 1.84f ) + step3 * runShake * 0.36f ) * motionScale;
+	targetOffset[2] = ( step2 * ( walkAmount * 0.42f + runAmount * 1.84f ) + step3 * runShake * 0.36f ) * motionScale;
 
-	targetAngles[PITCH] = ( -forwardSpeed * runAmount * 0.88f + step2Cos * runAmount * 1.24f + step3 * runShake * 0.36f ) * motionScale;
+	targetAngles[PITCH] = ( step2Cos * walkAmount * 0.32f - forwardSpeed * runAmount * 0.88f + step2Cos * runAmount * 1.24f + step3 * runShake * 0.36f ) * motionScale;
 	targetAngles[YAW] = ( -sideSpeed * runAmount * 0.64f + step3 * runShake * 0.12f ) * motionScale;
 	targetAngles[ROLL] = ( -sideSpeed * runAmount * 3.30f + step * runAmount * 1.10f + step3 * runShake * 0.32f ) * motionScale;
 
