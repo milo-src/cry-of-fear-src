@@ -507,6 +507,11 @@ void ClientCommand( edict_t *pEntity )
 	{
 		return;
 	}
+	else if( FStrEq( pcmd, "adlib" ) )
+	{
+		// Cry of Fear binds this for co-op ad-lib voice lines.
+		return;
+	}
 	else if( FStrEq( pcmd, "cof_inventory_sync" ) )
 	{
 		GetClassPtr( (CBasePlayer *)pev )->COF_SendInventory();

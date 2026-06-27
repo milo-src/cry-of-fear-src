@@ -2020,11 +2020,11 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 
 	void SetLockedBy( const char *pszLockedBy );
+	BOOL IsLocked( void );
 	void SetEnabled( BOOL enabled );
 	void SetExitTarget( const char *pszTarget );
 
 private:
-	BOOL IsLocked( void );
 	void ActivateDoor( CBasePlayer *pPlayer );
 	void PlayDoorSound( CBaseEntity *pPlayer, string_t iszSound, int channel );
 	void PlayMusic( CBasePlayer *pPlayer );
@@ -2215,7 +2215,16 @@ void CInterDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 
 	m_flNextUseTime = gpGlobals->time + 0.75f;
 
-	if( !m_fEnabled || IsLocked() || COF_IsEmptyDoorToken( pev->target ) )
+	BOOL fMasterTriggered = UTIL_IsMasterTriggered( m_sMaster, pPlayer );
+
+	if( fMasterTriggered && FStrEq( STRING( gpGlobals->mapname ), "c_start" ) &&
+		!COF_IsEmptyDoorToken( pev->targetname ) && FStrEq( STRING( pev->targetname ), "doorlockedss" ) &&
+		!COF_IsEmptyDoorToken( m_iszLockedBy ) && FStrEq( STRING( m_iszLockedBy ), "nasiss" ) )
+	{
+		SetLockedBy( NULL );
+	}
+
+	if( !m_fEnabled || !fMasterTriggered || IsLocked() || COF_IsEmptyDoorToken( pev->target ) )
 	{
 		PlayDoorSound( pPlayer, m_iszLockedSound, CHAN_ITEM );
 
@@ -2307,7 +2316,11 @@ void CCofInterDoorOnOff::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 		if( FClassnameIs( pEntity->pev, "inter_door" ) )
 		{
 			CInterDoor *pDoor = (CInterDoor *)pEntity;
-			pDoor->SetLockedBy( COF_IsEmptyDoorToken( m_iszNewLockedBy ) ? NULL : STRING( m_iszNewLockedBy ) );
+			if( pDoor->IsLocked() )
+				pDoor->SetLockedBy( NULL );
+			else if( !COF_IsEmptyDoorToken( m_iszNewLockedBy ) )
+				pDoor->SetLockedBy( STRING( m_iszNewLockedBy ) );
+
 			pDoor->SetEnabled( TRUE );
 		}
 	}

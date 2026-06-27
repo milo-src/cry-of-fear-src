@@ -1618,6 +1618,54 @@ void CBasePlayer::PlayerUse( void )
 	}
 	pObject = pClosest;
 
+	if( !pObject && ( m_afButtonPressed & IN_USE ) )
+	{
+		while( ( pObject = UTIL_FindEntityByClassname( pObject, "inter_door" ) ) != NULL )
+		{
+			Vector vecNearest;
+			Vector vecHalfSize;
+
+			if( !( pObject->ObjectCaps() & FCAP_IMPULSE_USE ) )
+				continue;
+
+			vecNearest = ( VecBModelOrigin( pObject->pev ) - ( pev->origin + pev->view_ofs ) );
+			vecHalfSize = pObject->pev->size * 0.5;
+
+			if( vecNearest.x > vecHalfSize.x )
+				vecNearest.x -= vecHalfSize.x;
+			else if( vecNearest.x < -vecHalfSize.x )
+				vecNearest.x += vecHalfSize.x;
+			else
+				vecNearest.x = 0;
+
+			if( vecNearest.y > vecHalfSize.y )
+				vecNearest.y -= vecHalfSize.y;
+			else if( vecNearest.y < -vecHalfSize.y )
+				vecNearest.y += vecHalfSize.y;
+			else
+				vecNearest.y = 0;
+
+			if( vecNearest.z > vecHalfSize.z )
+				vecNearest.z -= vecHalfSize.z;
+			else if( vecNearest.z < -vecHalfSize.z )
+				vecNearest.z += vecHalfSize.z;
+			else
+				vecNearest.z = 0;
+
+			if( vecNearest.Length() > 160.0f )
+				continue;
+
+			flDot = DotProduct( vecNearest.Normalize(), gpGlobals->v_forward );
+			if( flDot > flMaxDot )
+			{
+				pClosest = pObject;
+				flMaxDot = flDot;
+			}
+		}
+
+		pObject = pClosest;
+	}
+
 	// Found an object
 	if( pObject )
 	{
