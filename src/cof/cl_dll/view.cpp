@@ -356,13 +356,13 @@ void V_ApplyCameraMotionInertia( struct ref_params_s *pparams )
 	const float step3 = sin( motionPhase * 3.35f + 0.6f );
 	const float runShake = runAmount;
 
-	targetOffset[0] = -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.52f ) * motionScale;
-	targetOffset[1] = ( -sideSpeed * ( walkAmount * 0.050f + runAmount * 0.76f ) + step * ( walkAmount * 0.018f + runAmount * 0.56f ) ) * motionScale;
-	targetOffset[2] = ( step2 * ( walkAmount * 0.030f + runAmount * 1.84f ) + step3 * runShake * 0.36f ) * motionScale;
+	targetOffset[0] = -forwardSpeed * ( walkAmount * 0.018f + runAmount * 0.52f ) * motionScale;
+	targetOffset[1] = ( -sideSpeed * runAmount * 0.76f + step * runAmount * 0.56f ) * motionScale;
+	targetOffset[2] = ( step2 * ( walkAmount * 0.016f + runAmount * 1.84f ) + step3 * runShake * 0.36f ) * motionScale;
 
-	targetAngles[PITCH] = ( -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.88f ) + step2Cos * ( walkAmount * 0.018f + runAmount * 1.24f ) + step3 * runShake * 0.36f ) * motionScale;
-	targetAngles[YAW] = ( -sideSpeed * ( walkAmount * 0.025f + runAmount * 0.64f ) + step3 * runShake * 0.12f ) * motionScale;
-	targetAngles[ROLL] = ( -sideSpeed * ( walkAmount * 0.10f + runAmount * 3.30f ) + step * ( walkAmount * 0.025f + runAmount * 1.10f ) + step3 * runShake * 0.32f ) * motionScale;
+	targetAngles[PITCH] = ( -forwardSpeed * runAmount * 0.88f + step2Cos * runAmount * 1.24f + step3 * runShake * 0.36f ) * motionScale;
+	targetAngles[YAW] = ( -sideSpeed * runAmount * 0.64f + step3 * runShake * 0.12f ) * motionScale;
+	targetAngles[ROLL] = ( -sideSpeed * runAmount * 3.30f + step * runAmount * 1.10f + step3 * runShake * 0.32f ) * motionScale;
 
 	const float motionSpeed = 8.6f + runBlend * 2.6f;
 	const float motionStiffness = motionSpeed * motionSpeed;
