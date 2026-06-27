@@ -137,31 +137,35 @@ static float V_AngleDelta( float a, float b )
 	return d;
 }
 
-static float V_ApproachExp( float current, float target, float speed, float frametime )
+static float V_SpringFloat( float current, float &velocity, float target, float stiffness, float damping, float frametime )
 {
 	if( frametime <= 0.0f )
 		return current;
 
-	const float t = 1.0f - exp( -speed * frametime );
-	return current + ( target - current ) * V_ClampFloat( t, 0.0f, 1.0f );
+	velocity += ( ( target - current ) * stiffness - velocity * damping ) * frametime;
+	return current + velocity * frametime;
 }
 
-static float V_ApproachAngleExp( float current, float target, float speed, float frametime )
+static float V_ClampSpring( float value, float &velocity, float minValue, float maxValue )
 {
-	return current + V_AngleDelta( target, current ) * V_ClampFloat( 1.0f - exp( -speed * frametime ), 0.0f, 1.0f );
+	const float clamped = V_ClampFloat( value, minValue, maxValue );
+	if( clamped != value )
+		velocity *= 0.25f;
+	return clamped;
 }
 
 void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 {
 	static qboolean initialized = false;
-	static vec3_t lagAngles;
+	static vec3_t lastAngles;
+	static vec3_t angleOffset;
+	static vec3_t angleVelocity;
 	static vec3_t moveOffset;
-	static float yawVisualLag = 0.0f;
+	static vec3_t moveVelocity;
 	vec3_t forward, right, up;
-	float angleLag[3];
+	float angleTarget[3];
 	float targetMove[3];
 	float frametime;
-	float yawLag;
 
 	if( !view || !pparams )
 		return;
@@ -175,9 +179,11 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	frametime = V_ClampFloat( pparams->frametime, 0.0f, 0.05f );
 	if( !initialized || pparams->paused || pparams->health <= 0 || pparams->intermission )
 	{
-		VectorCopy( pparams->viewangles, lagAngles );
+		VectorCopy( pparams->viewangles, lastAngles );
+		VectorClear( angleOffset );
+		VectorClear( angleVelocity );
 		VectorClear( moveOffset );
-		yawVisualLag = 0.0f;
+		VectorClear( moveVelocity );
 		initialized = true;
 		return;
 	}
@@ -187,14 +193,21 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	const float moveSpeed = cl_weapon_move_speed ? Q_max( cl_weapon_move_speed->value, 0.1f ) : 10.0f;
 	const float moveScale = cl_weapon_move_scale ? cl_weapon_move_scale->value : 1.0f;
 
-	for( int i = 0; i < 3; i++ )
-		lagAngles[i] = V_ApproachAngleExp( lagAngles[i], pparams->viewangles[i], lagSpeed, frametime );
+	const float safeFrame = Q_max( frametime, 0.001f );
+	const float yawSpeed = V_ClampFloat( V_AngleDelta( pparams->viewangles[YAW], lastAngles[YAW] ) / safeFrame, -720.0f, 720.0f );
+	const float pitchSpeed = V_ClampFloat( V_AngleDelta( pparams->viewangles[PITCH], lastAngles[PITCH] ) / safeFrame, -560.0f, 560.0f );
 
-	for( int i = 0; i < 3; i++ )
-		angleLag[i] = V_ClampFloat( V_AngleDelta( pparams->viewangles[i], lagAngles[i] ), -14.0f, 14.0f );
+	angleTarget[PITCH] = V_ClampFloat( pitchSpeed * 0.030f * lagScale, -16.0f, 16.0f );
+	angleTarget[YAW] = V_ClampFloat( yawSpeed * 0.036f * lagScale, -22.0f, 22.0f );
+	angleTarget[ROLL] = 0.0f;
 
-	yawVisualLag = V_ApproachExp( yawVisualLag, angleLag[YAW], lagSpeed * 0.45f, frametime );
-	yawLag = yawVisualLag;
+	const float angleStiffness = lagSpeed * lagSpeed;
+	const float angleDamping = lagSpeed * 1.55f;
+	angleOffset[PITCH] = V_SpringFloat( angleOffset[PITCH], angleVelocity[PITCH], angleTarget[PITCH], angleStiffness, angleDamping, frametime );
+	angleOffset[YAW] = V_SpringFloat( angleOffset[YAW], angleVelocity[YAW], angleTarget[YAW], angleStiffness * 0.65f, angleDamping * 0.72f, frametime );
+
+	angleOffset[PITCH] = V_ClampSpring( angleOffset[PITCH], angleVelocity[PITCH], -18.0f, 18.0f );
+	angleOffset[YAW] = V_ClampSpring( angleOffset[YAW], angleVelocity[YAW], -24.0f, 24.0f );
 
 	AngleVectors( pparams->viewangles, forward, right, up );
 
@@ -203,19 +216,26 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	const float verticalSpeed = V_ClampFloat( pparams->simvel[2] / 240.0f, -1.0f, 1.0f );
 
 	targetMove[0] = -forwardSpeed * 0.36f * moveScale;
-	targetMove[1] = -sideSpeed * 0.58f * moveScale;
-	targetMove[2] = ( fabs( sideSpeed ) * -0.10f - fabs( forwardSpeed ) * 0.24f - verticalSpeed * 0.24f ) * moveScale;
+	targetMove[1] = ( -sideSpeed * 0.58f - angleOffset[YAW] * 0.060f ) * moveScale;
+	targetMove[2] = ( fabs( sideSpeed ) * -0.10f - fabs( forwardSpeed ) * 0.24f - verticalSpeed * 0.24f + angleOffset[PITCH] * 0.045f ) * moveScale;
 
+	const float moveStiffness = moveSpeed * moveSpeed;
+	const float moveDamping = moveSpeed * 1.80f;
 	for( int i = 0; i < 3; i++ )
-		moveOffset[i] = V_ApproachExp( moveOffset[i], targetMove[i], moveSpeed, frametime );
+	{
+		moveOffset[i] = V_SpringFloat( moveOffset[i], moveVelocity[i], targetMove[i], moveStiffness, moveDamping, frametime );
+		moveOffset[i] = V_ClampSpring( moveOffset[i], moveVelocity[i], -1.15f, 1.15f );
+	}
 
 	VectorMA( view->origin, moveOffset[0], forward, view->origin );
-	VectorMA( view->origin, moveOffset[1] - yawLag * 0.052f * lagScale, right, view->origin );
-	VectorMA( view->origin, moveOffset[2] + angleLag[PITCH] * 0.042f * lagScale, up, view->origin );
+	VectorMA( view->origin, moveOffset[1], right, view->origin );
+	VectorMA( view->origin, moveOffset[2], up, view->origin );
 
-	view->angles[YAW] -= yawLag * 0.22f * lagScale;
-	view->angles[PITCH] += angleLag[PITCH] * 0.34f * lagScale;
-	view->angles[ROLL] += yawLag * 0.24f * lagScale - sideSpeed * 1.0f * moveScale;
+	view->angles[YAW] -= angleOffset[YAW] * 0.14f;
+	view->angles[PITCH] += angleOffset[PITCH] * 0.30f;
+	view->angles[ROLL] += angleOffset[YAW] * 0.26f - sideSpeed * 1.0f * moveScale;
+
+	VectorCopy( pparams->viewangles, lastAngles );
 }
 
 /*
