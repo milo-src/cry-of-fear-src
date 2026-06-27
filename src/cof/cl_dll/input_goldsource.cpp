@@ -1416,11 +1416,7 @@ void GoldSourceInput::IN_JoyMove ( float frametime, usercmd_t *cmd )
 		return;
 	}
 
-	if (in_speed.state & 1)
-		speed = cl_movespeedkey->value;
-	else
-		speed = 1;
-
+	speed = 1;
 	aspeed = speed * frametime;
 
 	// loop through the axes

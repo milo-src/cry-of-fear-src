@@ -670,6 +670,9 @@
 #define IN_ALT1			(1<<14)
 #define IN_SCORE			(1<<15)   // Used by client.dll for when scoreboard is held down
 
+#define COF_PLAYER_WALK_SPEED		225.0f
+#define COF_PLAYER_RUN_SPEED		300.0f
+
 // Break Model Defines
 #define BREAK_TYPEMASK		0x4F
 #define BREAK_GLASS			0x01

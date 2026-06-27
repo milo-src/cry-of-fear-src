@@ -83,6 +83,21 @@ cvar_t	*cl_pitchspeed;
 cvar_t	*cl_anglespeedkey;
 cvar_t	*cl_vsmoothing;
 
+static void CL_ClampMoveSpeed( usercmd_t *cmd, float maxSpeed )
+{
+	if( maxSpeed <= 0.0f )
+		return;
+
+	const float speed = sqrt( ( cmd->forwardmove * cmd->forwardmove ) + ( cmd->sidemove * cmd->sidemove ) + ( cmd->upmove * cmd->upmove ) );
+	if( speed <= maxSpeed || speed == 0.0f )
+		return;
+
+	const float scale = maxSpeed / speed;
+	cmd->forwardmove *= scale;
+	cmd->sidemove *= scale;
+	cmd->upmove *= scale;
+}
+
 /*
 ===============================================================================
 
@@ -845,32 +860,20 @@ void DLLEXPORT CL_CreateMove( float frametime, struct usercmd_s *cmd, int active
 			cmd->forwardmove -= cl_backspeed->value * CL_KeyState( &in_back );
 		}
 
-		// adjust for speed key
-		if( in_speed.state & 1 )
+		// Allow mice and other controllers to add their inputs
+		IN_Move( frametime, cmd );
+
+		if( !gEngfuncs.IsNoClipping() )
 		{
-			cmd->forwardmove *= cl_movespeedkey->value;
-			cmd->sidemove *= cl_movespeedkey->value;
-			cmd->upmove *= cl_movespeedkey->value;
+			CL_ClampMoveSpeed( cmd, ( in_speed.state & 1 ) ? COF_PLAYER_RUN_SPEED : COF_PLAYER_WALK_SPEED );
 		}
 
 		// clip to maxspeed
 		spd = gEngfuncs.GetClientMaxspeed();
 		if( spd != 0.0f )
 		{
-			// scale the 3 speeds so that the total velocity is not > cl.maxspeed
-			float fmov = sqrt( ( cmd->forwardmove * cmd->forwardmove ) + ( cmd->sidemove * cmd->sidemove ) + ( cmd->upmove * cmd->upmove ) );
-
-			if( fmov > spd )
-			{
-				float fratio = spd / fmov;
-				cmd->forwardmove *= fratio;
-				cmd->sidemove *= fratio;
-				cmd->upmove *= fratio;
-			}
+			CL_ClampMoveSpeed( cmd, spd );
 		}
-
-		// Allow mice and other controllers to add their inputs
-		IN_Move( frametime, cmd );
 	}
 
 	cmd->impulse = in_impulse;
@@ -888,7 +891,7 @@ void DLLEXPORT CL_CreateMove( float frametime, struct usercmd_s *cmd, int active
 		cmd->forwardmove = 0;
 		cmd->sidemove = 0;
 		cmd->upmove = 0;
-		cmd->buttons &= ~( IN_ATTACK | IN_ATTACK2 | IN_JUMP | IN_DUCK | IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT | IN_USE );
+		cmd->buttons &= ~( IN_ATTACK | IN_ATTACK2 | IN_JUMP | IN_DUCK | IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT | IN_USE | IN_RUN );
 	}
 
 #if USE_VGUI
@@ -1014,6 +1017,11 @@ int CL_ButtonBits( int bResetState )
 		bits |= IN_ATTACK2;
 	}
 
+	if( in_speed.state & 3 )
+	{
+		bits |= IN_RUN;
+	}
+
 	if( in_reload.state & 3 )
 	{
 		bits |= IN_RELOAD;
@@ -1048,6 +1056,7 @@ int CL_ButtonBits( int bResetState )
 		in_moveleft.state &= ~2;
 		in_moveright.state &= ~2;
 		in_attack2.state &= ~2;
+		in_speed.state &= ~2;
 		in_reload.state &= ~2;
 		in_alt1.state &= ~2;
 		in_score.state &= ~2;
@@ -1113,6 +1122,8 @@ void InitInput( void )
 	gEngfuncs.pfnAddCommand( "-moveright", IN_MoverightUp );
 	gEngfuncs.pfnAddCommand( "+speed", IN_SpeedDown );
 	gEngfuncs.pfnAddCommand( "-speed", IN_SpeedUp );
+	gEngfuncs.pfnAddCommand( "+sprint", IN_SpeedDown );
+	gEngfuncs.pfnAddCommand( "-sprint", IN_SpeedUp );
 	gEngfuncs.pfnAddCommand( "+attack", IN_AttackDown );
 	gEngfuncs.pfnAddCommand( "-attack", IN_AttackUp );
 	gEngfuncs.pfnAddCommand( "+attack2", IN_Attack2Down );

@@ -2908,6 +2908,7 @@ void PM_CheckParamters( void )
 {
 	float spd;
 	float maxspeed;
+	float cofMaxSpeed;
 	vec3_t v_angle;
 
 	spd = ( pmove->cmd.forwardmove * pmove->cmd.forwardmove ) + ( pmove->cmd.sidemove * pmove->cmd.sidemove ) +
@@ -2918,6 +2919,12 @@ void PM_CheckParamters( void )
 	if( maxspeed != 0.0f )
 	{
 		pmove->maxspeed = min( maxspeed, pmove->maxspeed );
+	}
+
+	if( pmove->movetype != MOVETYPE_NOCLIP && !pmove->spectator && pmove->iuser1 <= 0 )
+	{
+		cofMaxSpeed = ( pmove->cmd.buttons & IN_RUN ) ? COF_PLAYER_RUN_SPEED : COF_PLAYER_WALK_SPEED;
+		pmove->maxspeed = min( cofMaxSpeed, pmove->maxspeed );
 	}
 
 	// Slow down, I'm pulling it! (a box maybe) but only when I'm standing on ground
