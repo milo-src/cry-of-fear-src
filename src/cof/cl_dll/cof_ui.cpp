@@ -45,15 +45,6 @@ void COF_UI_VidInit( void )
 	g_COFUIMouseY = COF_UI_ClampFloat( g_COFUIMouseY, 0.0f, (float)( ScreenHeight - 1 ) );
 }
 
-static void COF_UI_CenterMouse( void )
-{
-	g_COFUIMouseX = ScreenWidth * 0.5f;
-	g_COFUIMouseY = ScreenHeight * 0.5f;
-
-	if( gEngfuncs.pfnSetMousePos )
-		gEngfuncs.pfnSetMousePos( (int)g_COFUIMouseX, (int)g_COFUIMouseY );
-}
-
 void COF_UI_UpdateMousePosition( void )
 {
 	if( g_COFUIActive && gEngfuncs.GetMousePosition )
@@ -83,7 +74,7 @@ void COF_UI_SetActive( bool active )
 	{
 		if( gEngfuncs.pfnSetMouseEnable )
 			gEngfuncs.pfnSetMouseEnable( true );
-		COF_UI_CenterMouse();
+		COF_UI_UpdateMousePosition();
 	}
 	else if( gEngfuncs.pfnSetMouseEnable )
 	{
