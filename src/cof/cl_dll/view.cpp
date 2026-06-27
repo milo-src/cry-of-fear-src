@@ -169,6 +169,9 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	static float lastVerticalSpeed = 0.0f;
 	static float jumpDrop = 0.0f;
 	static float jumpDropVelocity = 0.0f;
+	static float weaponSwayPhase = 0.0f;
+	static float weaponSwayOffset = 0.0f;
+	static float weaponSwayVelocity = 0.0f;
 	vec3_t forward, right, up;
 	float angleTarget[3];
 	float targetMove[3];
@@ -195,6 +198,9 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 		lastVerticalSpeed = pparams->simvel[2];
 		jumpDrop = 0.0f;
 		jumpDropVelocity = 0.0f;
+		weaponSwayPhase = 0.0f;
+		weaponSwayOffset = 0.0f;
+		weaponSwayVelocity = 0.0f;
 		initialized = true;
 		return;
 	}
@@ -247,6 +253,15 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	targetMove[1] = ( -sideSpeed * 0.58f - angleOffset[YAW] * 0.060f ) * handMoveScale;
 	targetMove[2] = ( fabs( sideSpeed ) * -0.10f - fabs( forwardSpeed ) * 0.24f - verticalSpeed * 0.24f + angleOffset[PITCH] * 0.045f ) * handMoveScale;
 
+	const float moveAmount = onGround ? V_ClampFloat( horizontalSpeed / COF_PLAYER_RUN_SPEED, 0.0f, 1.0f ) : 0.0f;
+	if( moveAmount > 0.02f )
+		weaponSwayPhase += frametime * ( running ? 8.4f : 5.8f ) * Q_max( moveAmount, 0.35f );
+
+	const float weaponSwayAmount = moveAmount * ( running ? 0.95f : 0.45f ) * moveScale;
+	const float weaponSwayTarget = sin( weaponSwayPhase ) * weaponSwayAmount;
+	weaponSwayOffset = V_SpringFloat( weaponSwayOffset, weaponSwayVelocity, weaponSwayTarget, 96.0f, 18.0f, frametime );
+	weaponSwayOffset = V_ClampSpring( weaponSwayOffset, weaponSwayVelocity, -1.10f, 1.10f );
+
 	const float moveStiffness = moveSpeed * moveSpeed;
 	const float moveDamping = moveSpeed * 1.80f;
 	for( int i = 0; i < 3; i++ )
@@ -259,7 +274,7 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	jumpDrop = V_ClampSpring( jumpDrop, jumpDropVelocity, -2.2f, 0.6f );
 
 	VectorMA( view->origin, moveOffset[0], forward, view->origin );
-	VectorMA( view->origin, moveOffset[1], right, view->origin );
+	VectorMA( view->origin, moveOffset[1] + weaponSwayOffset, right, view->origin );
 	VectorMA( view->origin, moveOffset[2] + jumpDrop, up, view->origin );
 
 	view->angles[YAW] -= angleOffset[YAW] * 0.14f;
