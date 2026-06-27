@@ -278,6 +278,7 @@ public:
 	void ItemPreFrame( void );
 	void ItemPostFrame( void );
 	void GiveNamedItem( const char *szName );
+	BOOL COF_GiveInventoryItem( const char *pszName );
 	BOOL COF_AddInventoryItem( const char *pszName );
 	BOOL COF_HasInventoryItem( const char *pszName ) const;
 	BOOL COF_RemoveInventoryItem( int iIndex );

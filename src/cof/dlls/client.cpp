@@ -567,8 +567,18 @@ void ClientCommand( edict_t *pEntity )
 	{
 		if( g_enable_cheats->value != 0 )
 		{
-			int iszItem = ALLOC_STRING( CMD_ARGV( 1 ) );	// Make a copy of the classname
-			GetClassPtr( (CBasePlayer *)pev )->GiveNamedItem( STRING( iszItem ) );
+			const char *pszItem = CMD_ARGV( 1 );
+			CBasePlayer *pPlayer = GetClassPtr( (CBasePlayer *)pev );
+			const BOOL bTryInventoryItem =
+				strnicmp( pszItem, "inventoryitems/", 15 ) == 0 ||
+				strnicmp( pszItem, "inventoryitems\\", 15 ) == 0 ||
+				( strncmp( pszItem, "weapon_", 7 ) && strncmp( pszItem, "item_", 5 ) && strncmp( pszItem, "ammo_", 5 ) );
+
+			if( !bTryInventoryItem || !pPlayer->COF_GiveInventoryItem( pszItem ) )
+			{
+				int iszItem = ALLOC_STRING( pszItem );	// Make a copy of the classname
+				pPlayer->GiveNamedItem( STRING( iszItem ) );
+			}
 		}
 	}
 	else if( FStrEq( pcmd, "fire" ) )

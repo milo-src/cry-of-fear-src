@@ -336,6 +336,19 @@ BOOL CBasePlayer::COF_AddInventoryItem( const char *pszName )
 	return FALSE;
 }
 
+BOOL CBasePlayer::COF_GiveInventoryItem( const char *pszName )
+{
+	char szPath[128];
+	if( !COF_NormalizeInventoryPath( pszName, szPath, sizeof( szPath ) ) )
+		return FALSE;
+
+	COFInventoryDef def;
+	if( !COF_LoadItemDef( szPath, &def ) )
+		return FALSE;
+
+	return COF_AddInventoryItem( szPath );
+}
+
 BOOL CBasePlayer::COF_RemoveInventoryItem( int iIndex )
 {
 	if( iIndex < 0 || iIndex >= MAX_COF_INVENTORY || FStringNull( m_rgCOFInventory[iIndex] ) )
