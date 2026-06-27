@@ -11,6 +11,8 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "monsters.h"
+#include "schedule.h"
 #include "player.h"
 #include "weapons.h"
 #include "shake.h"
@@ -49,6 +51,41 @@ static void COF_EmitOptionalSound( edict_t *pEdict, string_t iszSound, int chann
 		EMIT_SOUND( pEdict, channel, STRING( iszSound ), 1.0f, ATTN_NORM );
 }
 
+static CBasePlayerItem *COF_FindPlayerItemByName( CBasePlayer *pPlayer, const char *pszClassname )
+{
+	if( !pPlayer || !pszClassname || !pszClassname[0] )
+		return NULL;
+
+	for( int i = 0; i < MAX_ITEM_TYPES; i++ )
+	{
+		CBasePlayerItem *pItem = pPlayer->m_rgpPlayerItems[i];
+		while( pItem )
+		{
+			if( !stricmp( pszClassname, STRING( pItem->pev->classname ) ) )
+				return pItem;
+			pItem = pItem->m_pNext;
+		}
+	}
+
+	return NULL;
+}
+
+static BOOL COF_RemovePlayerItemByName( CBasePlayer *pPlayer, const char *pszClassname )
+{
+	CBasePlayerItem *pItem = COF_FindPlayerItemByName( pPlayer, pszClassname );
+	if( !pItem )
+		return FALSE;
+
+	if( pItem->m_iId >= 0 && pItem->m_iId < 32 )
+		pPlayer->pev->weapons &= ~( 1 << pItem->m_iId );
+
+	if( !pPlayer->RemovePlayerItem( pItem, TRUE ) )
+		return FALSE;
+
+	UTIL_Remove( pItem );
+	return TRUE;
+}
+
 static BOOL COF_PlayerHasToken( CBasePlayer *pPlayer, string_t iszToken )
 {
 	if( !pPlayer || !COF_HasText( iszToken ) )
@@ -59,6 +96,82 @@ static BOOL COF_PlayerHasToken( CBasePlayer *pPlayer, string_t iszToken )
 		return TRUE;
 
 	return pPlayer->COF_HasInventoryItem( pszToken ) || pPlayer->HasNamedPlayerItem( pszToken );
+}
+
+#define COF_MAX_SUBTITLE_LINES 768
+#define COF_MAX_SUBTITLE_TEXT 192
+
+static BOOL g_fCOFSubtitlesLoaded = FALSE;
+static int g_iCOFSubtitleLines = 0;
+static char g_szCOFSubtitles[COF_MAX_SUBTITLE_LINES][COF_MAX_SUBTITLE_TEXT];
+
+static void COF_CleanSubtitleLine( char *pszLine )
+{
+	if( !pszLine )
+		return;
+
+	size_t len = strlen( pszLine );
+	while( len > 0 && ( pszLine[len - 1] == '\r' || pszLine[len - 1] == '\n' || pszLine[len - 1] == ' ' || pszLine[len - 1] == '\t' || pszLine[len - 1] == '*' ) )
+		pszLine[--len] = '\0';
+}
+
+static void COF_LoadSubtitles( void )
+{
+	if( g_fCOFSubtitlesLoaded )
+		return;
+
+	g_fCOFSubtitlesLoaded = TRUE;
+
+	int length = 0;
+	byte *pFile = LOAD_FILE_FOR_ME( "txtfiles/subtitles.txt", &length );
+	if( !pFile || length <= 0 )
+		return;
+
+	int line = 0;
+	int start = 0;
+	while( start <= length && line < COF_MAX_SUBTITLE_LINES )
+	{
+		int end = start;
+		while( end < length && pFile[end] != '\n' )
+			end++;
+
+		int copyLen = Q_min( end - start, COF_MAX_SUBTITLE_TEXT - 1 );
+		if( copyLen < 0 )
+			copyLen = 0;
+
+		memcpy( g_szCOFSubtitles[line], pFile + start, copyLen );
+		g_szCOFSubtitles[line][copyLen] = '\0';
+		COF_CleanSubtitleLine( g_szCOFSubtitles[line] );
+
+		line++;
+		start = end + 1;
+		if( end >= length )
+			break;
+	}
+
+	g_iCOFSubtitleLines = line;
+	FREE_FILE( pFile );
+}
+
+static const char *COF_GetSubtitleLine( int iLine )
+{
+	COF_LoadSubtitles();
+
+	if( iLine < 0 || iLine >= g_iCOFSubtitleLines )
+		return NULL;
+
+	return g_szCOFSubtitles[iLine];
+}
+
+static void COF_ShowSubtitleLine( CBaseEntity *pActivator, int iLine )
+{
+	const char *pszLine = COF_GetSubtitleLine( iLine );
+	if( !pszLine || !pszLine[0] )
+		return;
+
+	CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+	if( pPlayer )
+		ClientPrint( pPlayer->pev, HUD_PRINTCENTER, pszLine );
 }
 
 static void COF_SendMP3Command( const char *pszTrack )
@@ -193,6 +306,72 @@ LINK_ENTITY_TO_CLASS( cof_simpletext, CCOFSimpleText )
 LINK_ENTITY_TO_CLASS( cof_chapter, CCOFSimpleText )
 LINK_ENTITY_TO_CLASS( cof_blackandwhite, CCOFSimpleText )
 
+class CCOFSubtitleMain : public CBaseDelay
+{
+public:
+	CCOFSubtitleMain() : m_iLineNumber( -1 ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "linenumber" ) )
+		{
+			m_iLineNumber = atoi( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void )
+	{
+		pev->solid = SOLID_NOT;
+		SetUse( &CCOFSubtitleMain::Use );
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		COF_ShowSubtitleLine( pActivator, m_iLineNumber );
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	int m_iLineNumber;
+};
+
+class CCOFSubtitleLineChange : public CBaseDelay
+{
+public:
+	CCOFSubtitleLineChange() : m_iLineChange( -1 ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "linechange" ) )
+		{
+			m_iLineChange = atoi( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void )
+	{
+		pev->solid = SOLID_NOT;
+		SetUse( &CCOFSubtitleLineChange::Use );
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		COF_ShowSubtitleLine( pActivator, m_iLineChange );
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	int m_iLineChange;
+};
+
+LINK_ENTITY_TO_CLASS( subtitle_main, CCOFSubtitleMain )
+LINK_ENTITY_TO_CLASS( subtitle_linechange, CCOFSubtitleLineChange )
+LINK_ENTITY_TO_CLASS( subtitle_multiple, CCOFSubtitleMain )
+
 class CCOFObjective : public CBaseDelay
 {
 public:
@@ -232,8 +411,6 @@ public:
 
 LINK_ENTITY_TO_CLASS( cof_begingame, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_spawnpointonoff, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( cof_clothesmenu, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( trigger_cofmobile, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_keypad, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_playerbreathetoggle, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_phonedisable, CCOFPointUseTargets )
@@ -265,7 +442,6 @@ LINK_ENTITY_TO_CLASS( cof_stats, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_telescope_camera, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_updatekeypad, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_weapontrigger, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( door_prop_view, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( boat_exit, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_closeallvgui, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_cracker, CCOFPointUseTargets )
@@ -291,6 +467,119 @@ LINK_ENTITY_TO_CLASS( cof_telescope, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_unlockables, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_wheelchairmode, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( statue_puzzle_complete, CCOFPointUseTargets )
+
+class CCOFClothesMenu : public CBaseDelay
+{
+public:
+	CCOFClothesMenu() : m_iszSimonEnt( iStringNull ), m_iszCameraEnt( iStringNull ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "simonent" ) )
+		{
+			m_iszSimonEnt = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else if( FStrEq( pkvd->szKeyName, "cameraent" ) )
+		{
+			m_iszCameraEnt = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void )
+	{
+		pev->solid = SOLID_NOT;
+		SetUse( &CCOFClothesMenu::Use );
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		if( COF_HasText( m_iszSimonEnt ) )
+		{
+			CBaseEntity *pSimon = UTIL_FindEntityByTargetname( NULL, STRING( m_iszSimonEnt ) );
+			if( pSimon )
+			{
+				pSimon->pev->effects &= ~EF_NODRAW;
+				pSimon->Use( pActivator, this, USE_ON, 1 );
+			}
+		}
+
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer )
+			ClientPrint( pPlayer->pev, HUD_PRINTCENTER, "Clothes menu is not available yet" );
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	string_t m_iszSimonEnt;
+	string_t m_iszCameraEnt;
+};
+
+LINK_ENTITY_TO_CLASS( cof_clothesmenu, CCOFClothesMenu )
+
+class CCOFDoorPropView : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFDoorPropView::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( door_prop_view, CCOFDoorPropView )
+
+class CCOFMobileTrigger : public CBaseDelay
+{
+public:
+	CCOFMobileTrigger() : m_iBodyNumber( -1 ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "bodynumber" ) )
+		{
+			m_iBodyNumber = atoi( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Precache( void )
+	{
+		PRECACHE_SOUND( "weapons/mobile/mobile_sms.wav" );
+	}
+
+	void Spawn( void )
+	{
+		Precache();
+		pev->solid = SOLID_NOT;
+		SetUse( &CCOFMobileTrigger::Use );
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer )
+		{
+			CBasePlayerItem *pMobile = COF_FindPlayerItemByName( pPlayer, "weapon_mobile" );
+			if( pMobile && m_iBodyNumber >= 0 )
+				pMobile->pev->body = m_iBodyNumber;
+
+			EMIT_SOUND( ENT( pPlayer->pev ), CHAN_ITEM, "weapons/mobile/mobile_sms.wav", 0.9f, ATTN_NORM );
+			ClientPrint( pPlayer->pev, HUD_PRINTCENTER, "New SMS received" );
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	int m_iBodyNumber;
+};
+
+LINK_ENTITY_TO_CLASS( trigger_cofmobile, CCOFMobileTrigger )
 
 static const char *COF_DefaultStaticModelForClass( const char *pszClassname )
 {
@@ -781,6 +1070,9 @@ void CCOFClearItems::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 					strstr( STRING( pPlayer->m_rgCOFInventory[i] ), pszToken ) )
 					pPlayer->COF_RemoveInventoryItem( i );
 			}
+
+			if( !strncmp( pszToken, "weapon_", 7 ) )
+				COF_RemovePlayerItemByName( pPlayer, pszToken );
 		}
 		else
 		{
@@ -1703,6 +1995,280 @@ void CCOFMdlCutscene::AnimateThink( void )
 	pev->nextthink = gpGlobals->time + 0.05f;
 }
 
+class CCOFLadderManager : public CBaseDelay
+{
+public:
+	CCOFLadderManager() : m_iszTopEnt( iStringNull ), m_iszBottomEnt( iStringNull ) {}
+
+	void KeyValue( KeyValueData *pkvd );
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFLadderManager::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+	string_t m_iszTopEnt;
+	string_t m_iszBottomEnt;
+};
+
+LINK_ENTITY_TO_CLASS( cof_ladder_manager, CCOFLadderManager )
+
+void CCOFLadderManager::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "topent" ) )
+	{
+		m_iszTopEnt = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "bottoment" ) )
+	{
+		m_iszBottomEnt = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "animation1" ) ||
+		FStrEq( pkvd->szKeyName, "animation2" ) ||
+		FStrEq( pkvd->szKeyName, "animation3" ) ||
+		FStrEq( pkvd->szKeyName, "customond" ) ||
+		FStrEq( pkvd->szKeyName, "customoffd" ) ||
+		FStrEq( pkvd->szKeyName, "descendoffset" ) )
+	{
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseDelay::KeyValue( pkvd );
+}
+
+void CCOFLadderManager::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+	if( !pPlayer )
+		return;
+
+	const BOOL fromBottom = value < 0.5f;
+	string_t iszDestination = fromBottom ? m_iszTopEnt : m_iszBottomEnt;
+	if( !COF_HasText( iszDestination ) )
+		return;
+
+	CBaseEntity *pDest = UTIL_FindEntityByTargetname( NULL, STRING( iszDestination ) );
+	if( !pDest )
+		return;
+
+	pPlayer->pev->velocity = g_vecZero;
+	pPlayer->pev->basevelocity = g_vecZero;
+	UTIL_SetOrigin( pPlayer->pev, pDest->pev->origin );
+	pPlayer->pev->angles = pDest->pev->angles;
+	pPlayer->pev->v_angle = pDest->pev->angles;
+	pPlayer->pev->fixangle = TRUE;
+}
+
+class CCOFLadderUse : public CBaseDelay
+{
+public:
+	CCOFLadderUse() : m_flNextUse( 0.0f ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "iuser1" ) )
+		{
+			pev->iuser1 = atoi( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void )
+	{
+		COF_InitBrushTrigger( this );
+		SetUse( &CCOFLadderUse::Use );
+	}
+
+	int ObjectCaps( void ) { return ( CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION ) | FCAP_IMPULSE_USE; }
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		if( gpGlobals->time < m_flNextUse || !pActivator || !pActivator->IsPlayer() )
+			return;
+
+		m_flNextUse = gpGlobals->time + 0.5f;
+
+		if( COF_HasText( pev->target ) )
+		{
+			CBaseEntity *pManager = UTIL_FindEntityByTargetname( NULL, STRING( pev->target ) );
+			if( pManager )
+				pManager->Use( pActivator, this, USE_SET, (float)pev->iuser1 );
+		}
+	}
+
+	float m_flNextUse;
+};
+
+LINK_ENTITY_TO_CLASS( cof_ladder_manager_use, CCOFLadderUse )
+
+#define SLOWER_AE_ATTACK_RIGHT 1
+#define SLOWER_AE_ATTACK_LEFT 2
+#define SLOWER_AE_ATTACK_HEAVY 3
+
+class CCOFMonsterSlower : public CBaseMonster
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	void SetYawSpeed( void ) { pev->yaw_speed = 100; }
+	int Classify( void ) { return CLASS_ALIEN_MONSTER; }
+	void HandleAnimEvent( MonsterEvent_t *pEvent );
+	BOOL CheckRangeAttack1( float flDot, float flDist ) { return FALSE; }
+	BOOL CheckRangeAttack2( float flDot, float flDist ) { return FALSE; }
+	void Killed( entvars_t *pevAttacker, int iGib );
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	void PainSound( void );
+	void AlertSound( void );
+	void IdleSound( void );
+	void AttackSound( void );
+
+	static const char *pAttackSounds[];
+	static const char *pPainSounds[];
+	static const char *pAlertSounds[];
+	static const char *pHitSounds[];
+	static const char *pMissSounds[];
+};
+
+LINK_ENTITY_TO_CLASS( monster_slower, CCOFMonsterSlower )
+
+const char *CCOFMonsterSlower::pAttackSounds[] =
+{
+	"slower/slower_attack1.wav",
+	"slower/slower_attack2.wav",
+};
+
+const char *CCOFMonsterSlower::pPainSounds[] =
+{
+	"slower/slower_pain1.wav",
+	"slower/slower_pain2.wav",
+};
+
+const char *CCOFMonsterSlower::pAlertSounds[] =
+{
+	"slower/slower_alert10.wav",
+	"slower/slower_alert20.wav",
+	"slower/slower_alert30.wav",
+};
+
+const char *CCOFMonsterSlower::pHitSounds[] =
+{
+	"slower/hammer_strike1.wav",
+	"slower/hammer_strike2.wav",
+	"slower/hammer_strike3.wav",
+};
+
+const char *CCOFMonsterSlower::pMissSounds[] =
+{
+	"slower/hammer_miss1.wav",
+	"slower/hammer_miss2.wav",
+};
+
+void CCOFMonsterSlower::Precache( void )
+{
+	if( FStringNull( pev->model ) )
+		pev->model = MAKE_STRING( "models/slower.mdl" );
+
+	PRECACHE_MODEL( STRING( pev->model ) );
+	PRECACHE_SOUND_ARRAY( pAttackSounds );
+	PRECACHE_SOUND_ARRAY( pPainSounds );
+	PRECACHE_SOUND_ARRAY( pAlertSounds );
+	PRECACHE_SOUND_ARRAY( pHitSounds );
+	PRECACHE_SOUND_ARRAY( pMissSounds );
+}
+
+void CCOFMonsterSlower::Spawn( void )
+{
+	Precache();
+
+	SET_MODEL( ENT( pev ), STRING( pev->model ) );
+	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
+
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	pev->takedamage = DAMAGE_AIM;
+	pev->health = pev->health > 0 ? pev->health : 70;
+	pev->max_health = pev->health;
+	pev->view_ofs = VEC_VIEW;
+	m_bloodColor = BLOOD_COLOR_RED;
+	m_flFieldOfView = 0.5f;
+	m_MonsterState = MONSTERSTATE_NONE;
+	m_afCapability = bits_CAP_DOORS_GROUP | bits_CAP_MELEE_ATTACK1;
+
+	MonsterInit();
+}
+
+void CCOFMonsterSlower::HandleAnimEvent( MonsterEvent_t *pEvent )
+{
+	switch( pEvent->event )
+	{
+	case SLOWER_AE_ATTACK_RIGHT:
+	case SLOWER_AE_ATTACK_LEFT:
+	case SLOWER_AE_ATTACK_HEAVY:
+		{
+			CBaseEntity *pHurt = CheckTraceHullAttack( 74, pEvent->event == SLOWER_AE_ATTACK_HEAVY ? 25 : 15, DMG_CLUB );
+			if( pHurt )
+			{
+				if( pHurt->pev->flags & ( FL_MONSTER | FL_CLIENT ) )
+				{
+					pHurt->pev->punchangle.x = 5;
+					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * 120;
+				}
+
+				EMIT_SOUND_DYN( ENT( pev ), CHAN_WEAPON, RANDOM_SOUND_ARRAY( pHitSounds ), 1.0f, ATTN_NORM, 0, 100 + RANDOM_LONG( -5, 5 ) );
+			}
+			else
+				EMIT_SOUND_DYN( ENT( pev ), CHAN_WEAPON, RANDOM_SOUND_ARRAY( pMissSounds ), 1.0f, ATTN_NORM, 0, 100 + RANDOM_LONG( -5, 5 ) );
+
+			AttackSound();
+		}
+		break;
+	default:
+		CBaseMonster::HandleAnimEvent( pEvent );
+		break;
+	}
+}
+
+void CCOFMonsterSlower::Killed( entvars_t *pevAttacker, int iGib )
+{
+	if( m_iTriggerCondition == AITRIGGER_DEATH && COF_HasText( m_iszTriggerTarget ) )
+	{
+		FireTargets( STRING( m_iszTriggerTarget ), this, this, USE_TOGGLE, 0 );
+		m_iTriggerCondition = AITRIGGER_NONE;
+	}
+
+	CBaseMonster::Killed( pevAttacker, iGib );
+}
+
+int CCOFMonsterSlower::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+{
+	if( IsAlive() )
+		PainSound();
+
+	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+}
+
+void CCOFMonsterSlower::PainSound( void )
+{
+	EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pPainSounds ), 1.0f, ATTN_NORM, 0, 95 + RANDOM_LONG( 0, 9 ) );
+}
+
+void CCOFMonsterSlower::AlertSound( void )
+{
+	EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pAlertSounds ), 1.0f, ATTN_NORM, 0, 95 + RANDOM_LONG( 0, 9 ) );
+}
+
+void CCOFMonsterSlower::IdleSound( void )
+{
+	if( RANDOM_LONG( 0, 2 ) == 0 )
+		AlertSound();
+}
+
+void CCOFMonsterSlower::AttackSound( void )
+{
+	EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pAttackSounds ), 1.0f, ATTN_NORM, 0, 95 + RANDOM_LONG( 0, 9 ) );
+}
+
 LINK_ENTITY_TO_CLASS( info_simon_spawnpoint, CPointEntity )
 LINK_ENTITY_TO_CLASS( info_texlights, CPointEntity )
 LINK_ENTITY_TO_CLASS( envpos_sky, CPointEntity )
@@ -1713,12 +2279,7 @@ LINK_ENTITY_TO_CLASS( cof_coop_spawn3, CPointEntity )
 LINK_ENTITY_TO_CLASS( cof_coop_spawn4, CPointEntity )
 LINK_ENTITY_TO_CLASS( rain_settings, CPointEntity )
 LINK_ENTITY_TO_CLASS( rain_modify, CPointEntity )
-LINK_ENTITY_TO_CLASS( cof_ladder_manager, CPointEntity )
-LINK_ENTITY_TO_CLASS( cof_ladder_manager_use, CPointEntity )
 LINK_ENTITY_TO_CLASS( cof_developer_commentary, CPointEntity )
-LINK_ENTITY_TO_CLASS( subtitle_linechange, CCOFSimpleText )
-LINK_ENTITY_TO_CLASS( subtitle_main, CCOFSimpleText )
-LINK_ENTITY_TO_CLASS( subtitle_multiple, CCOFSimpleText )
 LINK_ENTITY_TO_CLASS( cof_billboard, CCOFScreenEffect )
 LINK_ENTITY_TO_CLASS( cof_bosshealthbar, CCOFScreenEffect )
 LINK_ENTITY_TO_CLASS( env_fog, CCOFScreenEffect )
