@@ -79,6 +79,7 @@ public:
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
 #define WEAPON_MOBILE			16
+#define WEAPON_SWITCHBLADE		17
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -102,6 +103,7 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 #define MOBILE_WEIGHT		1
+#define SWITCHBLADE_WEIGHT	2
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -555,6 +557,37 @@ private:
 	void PunchAttack( void );
 
 	BOOL m_fFlashMode;
+};
+
+class CSwitchblade : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 1; }
+	int GetItemInfo( ItemInfo *p );
+	int AddToPlayer( CBasePlayer *pPlayer );
+
+	BOOL Deploy( void );
+	void Holster( int skiplocal = 0 );
+	void PrimaryAttack( void );
+	void SecondaryAttack( void );
+	void WeaponIdle( void );
+
+	virtual BOOL UseDecrement( void )
+	{
+#if CLIENT_WEAPONS
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	void SwitchbladeAttack( BOOL stabMode );
+	void ToggleMode( void );
+
+	int m_iSwing;
 };
 
 class CPython : public CBasePlayerWeapon

@@ -68,6 +68,7 @@ CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
 CMobile g_Mobile;
+CSwitchblade g_Switchblade;
 
 /*
 ======================
@@ -622,6 +623,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Tripmine, &player );
 	HUD_PrepEntity( &g_Snark, &player );
 	HUD_PrepEntity( &g_Mobile, &player );
+	HUD_PrepEntity( &g_Switchblade, &player );
 }
 
 /*
@@ -729,6 +731,9 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			break;
 		case WEAPON_MOBILE:
 			pWeapon = &g_Mobile;
+			break;
+		case WEAPON_SWITCHBLADE:
+			pWeapon = &g_Switchblade;
 			break;
 	}
 
