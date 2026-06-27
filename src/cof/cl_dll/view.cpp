@@ -105,6 +105,9 @@ cvar_t	*cl_weapon_lag_scale;
 cvar_t	*cl_weapon_lag_speed;
 cvar_t	*cl_weapon_move_scale;
 cvar_t	*cl_weapon_move_speed;
+cvar_t	*cl_camera_inertia;
+cvar_t	*cl_camera_motion_scale;
+cvar_t	*cl_camera_jump_scale;
 
 // These cvars are not registered (so users can't cheat), so set the ->value field directly
 // Register these cvars in V_Init() if needed for easy tweaking
@@ -162,6 +165,10 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	static vec3_t angleVelocity;
 	static vec3_t moveOffset;
 	static vec3_t moveVelocity;
+	static qboolean wasOnGround = true;
+	static float lastVerticalSpeed = 0.0f;
+	static float jumpDrop = 0.0f;
+	static float jumpDropVelocity = 0.0f;
 	vec3_t forward, right, up;
 	float angleTarget[3];
 	float targetMove[3];
@@ -184,6 +191,10 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 		VectorClear( angleVelocity );
 		VectorClear( moveOffset );
 		VectorClear( moveVelocity );
+		wasOnGround = pparams->onground ? true : false;
+		lastVerticalSpeed = pparams->simvel[2];
+		jumpDrop = 0.0f;
+		jumpDropVelocity = 0.0f;
 		initialized = true;
 		return;
 	}
@@ -214,6 +225,18 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	const float forwardSpeed = V_ClampFloat( DotProduct( pparams->simvel, forward ) / 280.0f, -1.0f, 1.0f );
 	const float sideSpeed = V_ClampFloat( DotProduct( pparams->simvel, right ) / 280.0f, -1.0f, 1.0f );
 	const float verticalSpeed = V_ClampFloat( pparams->simvel[2] / 240.0f, -1.0f, 1.0f );
+	const qboolean onGround = pparams->onground ? true : false;
+
+	if( wasOnGround && !onGround )
+	{
+		const float jumpStrength = V_ClampFloat( pparams->simvel[2] / 280.0f, 0.35f, 1.0f );
+		jumpDropVelocity -= 24.0f * jumpStrength;
+	}
+	else if( !wasOnGround && onGround )
+	{
+		const float landStrength = V_ClampFloat( -lastVerticalSpeed / 420.0f, 0.25f, 1.25f );
+		jumpDropVelocity -= 36.0f * landStrength;
+	}
 
 	targetMove[0] = -forwardSpeed * 0.36f * moveScale;
 	targetMove[1] = ( -sideSpeed * 0.58f - angleOffset[YAW] * 0.060f ) * moveScale;
@@ -227,15 +250,159 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 		moveOffset[i] = V_ClampSpring( moveOffset[i], moveVelocity[i], -1.15f, 1.15f );
 	}
 
+	jumpDrop = V_SpringFloat( jumpDrop, jumpDropVelocity, 0.0f, 78.0f, 16.0f, frametime );
+	jumpDrop = V_ClampSpring( jumpDrop, jumpDropVelocity, -2.2f, 0.6f );
+
 	VectorMA( view->origin, moveOffset[0], forward, view->origin );
 	VectorMA( view->origin, moveOffset[1], right, view->origin );
-	VectorMA( view->origin, moveOffset[2], up, view->origin );
+	VectorMA( view->origin, moveOffset[2] + jumpDrop, up, view->origin );
 
 	view->angles[YAW] -= angleOffset[YAW] * 0.14f;
 	view->angles[PITCH] += angleOffset[PITCH] * 0.30f;
 	view->angles[ROLL] += angleOffset[YAW] * 0.26f - sideSpeed * 1.0f * moveScale;
 
+	wasOnGround = onGround;
+	lastVerticalSpeed = pparams->simvel[2];
 	VectorCopy( pparams->viewangles, lastAngles );
+}
+
+void V_ApplyCameraMotionInertia( struct ref_params_s *pparams )
+{
+	static qboolean initialized = false;
+	static qboolean wasOnGround = true;
+	static float lastVerticalSpeed = 0.0f;
+	static float motionPhase = 0.0f;
+	static float runBlend = 0.0f;
+	static float runBlendVelocity = 0.0f;
+	static float jumpOffset = 0.0f;
+	static float jumpVelocity = 0.0f;
+	static float jumpPitch = 0.0f;
+	static float jumpPitchVelocity = 0.0f;
+	static vec3_t motionOffset;
+	static vec3_t motionVelocity;
+	static vec3_t motionAngles;
+	static vec3_t motionAngleVelocity;
+	vec3_t forward, right, up;
+	vec3_t targetOffset;
+	vec3_t targetAngles;
+
+	if( !pparams )
+		return;
+
+	if( cl_camera_inertia && cl_camera_inertia->value <= 0.0f )
+	{
+		initialized = false;
+		return;
+	}
+
+	const float frametime = V_ClampFloat( pparams->frametime, 0.0f, 0.05f );
+	const qboolean reset = !initialized || pparams->paused || pparams->health <= 0 || pparams->intermission || pparams->spectator || CL_IsThirdPerson();
+	const qboolean onGround = pparams->onground ? true : false;
+
+	if( reset )
+	{
+		wasOnGround = onGround;
+		lastVerticalSpeed = pparams->simvel[2];
+		motionPhase = 0.0f;
+		runBlend = 0.0f;
+		runBlendVelocity = 0.0f;
+		jumpOffset = 0.0f;
+		jumpVelocity = 0.0f;
+		jumpPitch = 0.0f;
+		jumpPitchVelocity = 0.0f;
+		VectorClear( motionOffset );
+		VectorClear( motionVelocity );
+		VectorClear( motionAngles );
+		VectorClear( motionAngleVelocity );
+		initialized = true;
+		return;
+	}
+
+	const int buttons = pparams->cmd ? pparams->cmd->buttons : 0;
+	const float motionScale = cl_camera_motion_scale ? cl_camera_motion_scale->value : 1.0f;
+	const float jumpScale = cl_camera_jump_scale ? cl_camera_jump_scale->value : 1.0f;
+	const float horizontalSpeed = sqrt( pparams->simvel[0] * pparams->simvel[0] + pparams->simvel[1] * pparams->simvel[1] );
+	const float moveAmount = V_ClampFloat( horizontalSpeed / COF_PLAYER_RUN_SPEED, 0.0f, 1.0f );
+	const float runRange = Q_max( COF_PLAYER_RUN_SPEED - COF_PLAYER_WALK_SPEED, 1.0f );
+	float runTarget = V_ClampFloat( ( horizontalSpeed - COF_PLAYER_WALK_SPEED ) / runRange, 0.0f, 1.0f );
+
+	if( ( buttons & IN_RUN ) && horizontalSpeed > 90.0f )
+		runTarget = Q_max( runTarget, 0.75f );
+	if( !onGround )
+		runTarget = 0.0f;
+
+	runBlend = V_SpringFloat( runBlend, runBlendVelocity, runTarget, 72.0f, 15.0f, frametime );
+	runBlend = V_ClampSpring( runBlend, runBlendVelocity, 0.0f, 1.0f );
+
+	const float groundedMove = onGround ? moveAmount : 0.0f;
+	const float walkAmount = groundedMove * ( 1.0f - runBlend );
+	const float runAmount = groundedMove * runBlend;
+
+	if( groundedMove > 0.02f )
+		motionPhase += frametime * ( 5.4f + runBlend * 3.2f ) * Q_max( groundedMove, 0.28f );
+
+	AngleVectors( pparams->viewangles, forward, right, up );
+
+	const float forwardSpeed = V_ClampFloat( DotProduct( pparams->simvel, forward ) / COF_PLAYER_RUN_SPEED, -1.0f, 1.0f );
+	const float sideSpeed = V_ClampFloat( DotProduct( pparams->simvel, right ) / COF_PLAYER_RUN_SPEED, -1.0f, 1.0f );
+	const float step = sin( motionPhase );
+	const float step2 = sin( motionPhase * 2.0f );
+	const float step2Cos = cos( motionPhase * 2.0f );
+
+	targetOffset[0] = -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.16f ) * motionScale;
+	targetOffset[1] = ( -sideSpeed * ( walkAmount * 0.050f + runAmount * 0.24f ) + step * ( walkAmount * 0.018f + runAmount * 0.13f ) ) * motionScale;
+	targetOffset[2] = step2 * ( walkAmount * 0.030f + runAmount * 0.46f ) * motionScale;
+
+	targetAngles[PITCH] = ( -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.22f ) + step2Cos * ( walkAmount * 0.018f + runAmount * 0.30f ) ) * motionScale;
+	targetAngles[YAW] = -sideSpeed * ( walkAmount * 0.025f + runAmount * 0.18f ) * motionScale;
+	targetAngles[ROLL] = ( -sideSpeed * ( walkAmount * 0.10f + runAmount * 0.95f ) + step * ( walkAmount * 0.025f + runAmount * 0.26f ) ) * motionScale;
+
+	const float motionSpeed = 9.5f + runBlend * 2.5f;
+	const float motionStiffness = motionSpeed * motionSpeed;
+	const float motionDamping = motionSpeed * 1.85f;
+	for( int i = 0; i < 3; i++ )
+	{
+		motionOffset[i] = V_SpringFloat( motionOffset[i], motionVelocity[i], targetOffset[i], motionStiffness, motionDamping, frametime );
+		motionAngles[i] = V_SpringFloat( motionAngles[i], motionAngleVelocity[i], targetAngles[i], motionStiffness, motionDamping, frametime );
+	}
+
+	motionOffset[0] = V_ClampSpring( motionOffset[0], motionVelocity[0], -0.35f, 0.28f );
+	motionOffset[1] = V_ClampSpring( motionOffset[1], motionVelocity[1], -0.55f, 0.55f );
+	motionOffset[2] = V_ClampSpring( motionOffset[2], motionVelocity[2], -0.60f, 0.70f );
+	motionAngles[PITCH] = V_ClampSpring( motionAngles[PITCH], motionAngleVelocity[PITCH], -0.70f, 0.70f );
+	motionAngles[YAW] = V_ClampSpring( motionAngles[YAW], motionAngleVelocity[YAW], -0.45f, 0.45f );
+	motionAngles[ROLL] = V_ClampSpring( motionAngles[ROLL], motionAngleVelocity[ROLL], -1.25f, 1.25f );
+
+	if( wasOnGround && !onGround )
+	{
+		const float jumpStrength = V_ClampFloat( pparams->simvel[2] / 280.0f, 0.35f, 1.0f );
+		jumpVelocity -= 18.0f * jumpStrength * jumpScale;
+		jumpPitchVelocity += 7.0f * jumpStrength * jumpScale;
+	}
+	else if( !wasOnGround && onGround )
+	{
+		const float landStrength = V_ClampFloat( -lastVerticalSpeed / 430.0f, 0.25f, 1.25f );
+		jumpVelocity -= 34.0f * landStrength * jumpScale;
+		jumpPitchVelocity += 15.0f * landStrength * jumpScale;
+	}
+
+	jumpOffset = V_SpringFloat( jumpOffset, jumpVelocity, 0.0f, 82.0f, 16.0f, frametime );
+	jumpPitch = V_SpringFloat( jumpPitch, jumpPitchVelocity, 0.0f, 88.0f, 18.0f, frametime );
+	jumpOffset = V_ClampSpring( jumpOffset, jumpVelocity, -2.6f, 0.9f );
+	jumpPitch = V_ClampSpring( jumpPitch, jumpPitchVelocity, -1.6f, 1.8f );
+
+	VectorMA( pparams->vieworg, motionOffset[0], forward, pparams->vieworg );
+	VectorMA( pparams->vieworg, motionOffset[1], right, pparams->vieworg );
+	VectorMA( pparams->vieworg, motionOffset[2] + jumpOffset, up, pparams->vieworg );
+
+	pparams->viewangles[PITCH] += motionAngles[PITCH] + jumpPitch;
+	pparams->viewangles[YAW] += motionAngles[YAW];
+	pparams->viewangles[ROLL] += motionAngles[ROLL];
+
+	AngleVectors( pparams->viewangles, pparams->forward, pparams->right, pparams->up );
+
+	wasOnGround = onGround;
+	lastVerticalSpeed = pparams->simvel[2];
 }
 
 /*
@@ -622,6 +789,8 @@ void V_CalcNormalRefdef( struct ref_params_s *pparams )
 			pparams->vieworg[i] += scr_ofsx->value*pparams->forward[i] + scr_ofsy->value*pparams->right[i] + scr_ofsz->value*pparams->up[i];
 		}
 	}
+
+	V_ApplyCameraMotionInertia( pparams );
 
 	// Treating cam_ofs[2] as the distance
 	if( CL_IsThirdPerson() )
@@ -1681,6 +1850,9 @@ void V_Init( void )
 	cl_weapon_lag_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_lag_speed", "7.5", FCVAR_ARCHIVE );
 	cl_weapon_move_scale = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_scale", "1.15", FCVAR_ARCHIVE );
 	cl_weapon_move_speed = gEngfuncs.pfnRegisterVariable( "cl_weapon_move_speed", "8", FCVAR_ARCHIVE );
+	cl_camera_inertia = gEngfuncs.pfnRegisterVariable( "cl_camera_inertia", "1", FCVAR_ARCHIVE );
+	cl_camera_motion_scale = gEngfuncs.pfnRegisterVariable( "cl_camera_motion_scale", "1", FCVAR_ARCHIVE );
+	cl_camera_jump_scale = gEngfuncs.pfnRegisterVariable( "cl_camera_jump_scale", "1", FCVAR_ARCHIVE );
 }
 
 //#define TRACE_TEST	1
