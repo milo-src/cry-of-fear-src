@@ -13,8 +13,10 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include "shake.h"
 
 extern Vector VecBModelOrigin( entvars_t *pevBModel );
+extern int gmsgSetFOV;
 
 static BOOL COF_HasText( string_t iszText )
 {
@@ -85,6 +87,57 @@ static void COF_StopMP3( void )
 		if( pPlayer )
 			CLIENT_COMMAND( pPlayer->edict(), "mp3 stop\n" );
 	}
+}
+
+static void COF_InitBrushTrigger( CBaseEntity *pEntity )
+{
+	pEntity->pev->movetype = MOVETYPE_NONE;
+	pEntity->pev->solid = SOLID_TRIGGER;
+	SET_MODEL( ENT( pEntity->pev ), STRING( pEntity->pev->model ) );
+	SetBits( pEntity->pev->effects, EF_NODRAW );
+}
+
+static void COF_RunConsoleCommand( const char *pszCommand )
+{
+	if( !pszCommand || !pszCommand[0] )
+		return;
+
+	while( *pszCommand == ' ' || *pszCommand == '\t' )
+		pszCommand++;
+
+	if( !strnicmp( pszCommand, "map ", 4 ) || !strnicmp( pszCommand, "changelevel ", 12 ) )
+	{
+		const char *pszMap = strchr( pszCommand, ' ' );
+		if( pszMap )
+		{
+			while( *pszMap == ' ' || *pszMap == '\t' )
+				pszMap++;
+
+			char szMap[64];
+			int i = 0;
+			while( pszMap[i] && pszMap[i] != ' ' && pszMap[i] != '\t' && pszMap[i] != '\n' && i < (int)sizeof( szMap ) - 1 )
+			{
+				szMap[i] = pszMap[i];
+				i++;
+			}
+			szMap[i] = '\0';
+
+			if( szMap[0] )
+			{
+				CHANGE_LEVEL( szMap, NULL );
+				return;
+			}
+		}
+	}
+
+	char szCommand[256];
+	snprintf( szCommand, sizeof( szCommand ), "%s\n", pszCommand );
+	SERVER_COMMAND( szCommand );
+}
+
+static float COF_KeyFloat( KeyValueData *pkvd )
+{
+	return pkvd && pkvd->szValue ? atof( pkvd->szValue ) : 0.0f;
 }
 
 class CCOFFmodStream : public CBaseDelay
@@ -166,6 +219,476 @@ public:
 
 LINK_ENTITY_TO_CLASS( cof_blur, CCOFScreenEffect )
 LINK_ENTITY_TO_CLASS( cof_credits, CCOFScreenEffect )
+
+class CCOFPointUseTargets : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFPointUseTargets::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( cof_begingame, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_spawnpointonoff, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_clothesmenu, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( trigger_cofmobile, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_keypad, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_playerbreathetoggle, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_phonedisable, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_logo, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( info_roofboss_target, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_coop_stats, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_coopgameover, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_survivalmode, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_doctorweaponset, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_doctorweapontrigger, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_maxhealthchange, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_customiseplayer, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_ending, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_introduction, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_lookat, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_yesno, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_addcodenote, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_entityrestore, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_computer, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_randomtimedspawner, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_strangle, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( watcher, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( scripted_action, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( motion_manager, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( calc_position, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_lobby_start, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_startdoctormode, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_stats, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_telescope_camera, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_updatekeypad, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_weapontrigger, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( door_prop_view, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( boat_exit, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_closeallvgui, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_cracker, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_difficultysettings, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_entteleport, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_gamemenu, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_goodpoints, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_goodpointstrigger, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_keypad2, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_keypad3, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_keypad4, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_lensflare, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_loadgame, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_phonecheck, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_puzzlebar, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_puzzlebar2, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_puzzlebar3, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_puzzlebar4, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_puzzlebar5, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_stopwheelchair, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_telephone, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_telescope, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_unlockables, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_wheelchairmode, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( statue_puzzle_complete, CCOFPointUseTargets )
+
+static const char *COF_DefaultStaticModelForClass( const char *pszClassname )
+{
+	if( !pszClassname )
+		return NULL;
+
+	if( !stricmp( pszClassname, "statue_eagle" ) ) return "models/Props/UtomhusD/eagle.mdl";
+	if( !stricmp( pszClassname, "statue_horse" ) ) return "models/Props/UtomhusD/horse.mdl";
+	if( !stricmp( pszClassname, "statue_lion" ) ) return "models/Props/UtomhusD/lion.mdl";
+	if( !stricmp( pszClassname, "statue_owl" ) ) return "models/Props/UtomhusD/owl.mdl";
+	if( !stricmp( pszClassname, "boat" ) ) return "models/boat.mdl";
+	if( !stricmp( pszClassname, "cof_deadcat" ) ) return "models/Props/Blandat/dead_cat.mdl";
+
+	return NULL;
+}
+
+class CCOFStaticPropCompat : public CBaseAnimating
+{
+public:
+	void Spawn( void )
+	{
+		pev->solid = SOLID_NOT;
+		pev->movetype = MOVETYPE_NONE;
+
+		if( FStringNull( pev->model ) )
+		{
+			const char *pszModel = COF_DefaultStaticModelForClass( STRING( pev->classname ) );
+			if( pszModel )
+				pev->model = MAKE_STRING( pszModel );
+		}
+
+		if( COF_HasText( pev->model ) )
+		{
+			const char *pszModel = STRING( pev->model );
+			if( !strnicmp( pszModel, "cryoffear/", 10 ) )
+				pev->model = MAKE_STRING( pszModel + 10 );
+
+			PRECACHE_MODEL( STRING( pev->model ) );
+			SET_MODEL( ENT( pev ), STRING( pev->model ) );
+		}
+
+		InitBoneControllers();
+		ResetSequenceInfo();
+	}
+};
+
+LINK_ENTITY_TO_CLASS( statue_eagle, CCOFStaticPropCompat )
+LINK_ENTITY_TO_CLASS( statue_horse, CCOFStaticPropCompat )
+LINK_ENTITY_TO_CLASS( statue_lion, CCOFStaticPropCompat )
+LINK_ENTITY_TO_CLASS( statue_owl, CCOFStaticPropCompat )
+LINK_ENTITY_TO_CLASS( boat, CCOFStaticPropCompat )
+LINK_ENTITY_TO_CLASS( cof_deadcat, CCOFStaticPropCompat )
+LINK_ENTITY_TO_CLASS( prop, CCOFStaticPropCompat )
+
+class CCOFSpeedChange : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFSpeedChange::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		if( COF_HasText( pev->target ) )
+		{
+			CBaseEntity *pEntity = NULL;
+			while( ( pEntity = UTIL_FindEntityByTargetname( pEntity, STRING( pev->target ) ) ) != NULL )
+			{
+				if( pev->speed != 0 )
+					pEntity->pev->speed = pev->speed;
+			}
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( cof_speedchange, CCOFSpeedChange )
+
+class CCOFCameraZoom : public CBaseDelay
+{
+public:
+	CCOFCameraZoom() : m_iZoomFOV( 0 ), m_flReturnTime( 0.0f ) {}
+
+	void KeyValue( KeyValueData *pkvd );
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFCameraZoom::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT ReturnThink( void );
+
+	int m_iZoomFOV;
+	float m_flReturnTime;
+	EHANDLE m_hPlayer;
+};
+
+LINK_ENTITY_TO_CLASS( cof_camerazoom, CCOFCameraZoom )
+
+void CCOFCameraZoom::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "zoomfov" ) )
+	{
+		m_iZoomFOV = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "returntime" ) )
+	{
+		m_flReturnTime = COF_KeyFloat( pkvd );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "zoomtime" ) )
+	{
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseDelay::KeyValue( pkvd );
+}
+
+void CCOFCameraZoom::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+	if( !pPlayer )
+		return;
+
+	const int fov = Q_max( 0, Q_min( 120, m_iZoomFOV ) );
+	pPlayer->pev->fov = pPlayer->m_iFOV = fov;
+	pPlayer->m_iClientFOV = -1;
+
+	MESSAGE_BEGIN( MSG_ONE, gmsgSetFOV, NULL, pPlayer->pev );
+		WRITE_BYTE( fov );
+	MESSAGE_END();
+
+	m_hPlayer = pPlayer;
+	if( m_flReturnTime > 0.0f )
+	{
+		SetThink( &CCOFCameraZoom::ReturnThink );
+		pev->nextthink = gpGlobals->time + m_flReturnTime;
+	}
+}
+
+void CCOFCameraZoom::ReturnThink( void )
+{
+	CBasePlayer *pPlayer = (CBasePlayer *)( (CBaseEntity *)m_hPlayer );
+	if( pPlayer )
+	{
+		pPlayer->pev->fov = pPlayer->m_iFOV = 0;
+		pPlayer->m_iClientFOV = -1;
+		MESSAGE_BEGIN( MSG_ONE, gmsgSetFOV, NULL, pPlayer->pev );
+			WRITE_BYTE( 0 );
+		MESSAGE_END();
+	}
+
+	ResetThink();
+}
+
+class CCOFKillPlayer : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFKillPlayer::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer )
+			pPlayer->TakeDamage( pev, pev, 10000.0f, DMG_GENERIC );
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( cof_killplayer, CCOFKillPlayer )
+
+class CCOFPlayerFreeze : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFPlayerFreeze::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer )
+		{
+			if( useType == USE_ON )
+				pPlayer->EnableControl( FALSE );
+			else if( useType == USE_OFF )
+				pPlayer->EnableControl( TRUE );
+			else
+				pPlayer->EnableControl( FBitSet( pPlayer->pev->flags, FL_FROZEN ) );
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( player_freeze, CCOFPlayerFreeze )
+
+class CCOFCommand : public CBaseDelay
+{
+public:
+	CCOFCommand() : m_iszCommand( iStringNull ) {}
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "netname" ) )
+		{
+			m_iszCommand = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFCommand::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		COF_RunConsoleCommand( COF_HasText( m_iszCommand ) ? STRING( m_iszCommand ) : STRING( pev->netname ) );
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	string_t m_iszCommand;
+};
+
+LINK_ENTITY_TO_CLASS( trigger_command, CCOFCommand )
+
+class CCOFChangeValue : public CBaseDelay
+{
+public:
+	CCOFChangeValue() : m_iszKey( iStringNull ), m_iszValue( iStringNull ) {}
+	void KeyValue( KeyValueData *pkvd );
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFChangeValue::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+
+	string_t m_iszKey;
+	string_t m_iszValue;
+};
+
+LINK_ENTITY_TO_CLASS( trigger_changevalue, CCOFChangeValue )
+
+void CCOFChangeValue::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "netname" ) )
+	{
+		m_iszKey = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_iszNewValue" ) )
+	{
+		m_iszValue = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseDelay::KeyValue( pkvd );
+}
+
+void CCOFChangeValue::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	if( !COF_HasText( pev->target ) || !COF_HasText( m_iszKey ) || !COF_HasText( m_iszValue ) )
+		return;
+
+	const char *pszKey = STRING( m_iszKey );
+	const char *pszValue = STRING( m_iszValue );
+
+	CBaseEntity *pEntity = NULL;
+	while( ( pEntity = UTIL_FindEntityByTargetname( pEntity, STRING( pev->target ) ) ) != NULL )
+	{
+		if( FStrEq( pszKey, "body" ) )
+			pEntity->pev->body = atoi( pszValue );
+		else if( FStrEq( pszKey, "skin" ) )
+			pEntity->pev->skin = atoi( pszValue );
+		else if( FStrEq( pszKey, "frame" ) )
+			pEntity->pev->frame = atof( pszValue );
+		else if( FStrEq( pszKey, "framerate" ) )
+			pEntity->pev->framerate = atof( pszValue );
+		else
+		{
+			KeyValueData kvd;
+			kvd.szClassName = (char *)STRING( pEntity->pev->classname );
+			kvd.szKeyName = (char *)pszKey;
+			kvd.szValue = (char *)pszValue;
+			kvd.fHandled = FALSE;
+			DispatchKeyValue( pEntity->edict(), &kvd );
+		}
+	}
+
+	SUB_UseTargets( pActivator, useType, value );
+}
+
+class CCOFSimonspeak : public CBaseDelay
+{
+public:
+	CCOFSimonspeak() : m_iszSound( iStringNull ) {}
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "noise" ) )
+		{
+			m_iszSound = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else if( FStrEq( pkvd->szKeyName, "iuser1" ) || FStrEq( pkvd->szKeyName, "fuser1" ) )
+			pkvd->fHandled = TRUE;
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void )
+	{
+		pev->solid = SOLID_NOT;
+		if( COF_HasText( m_iszSound ) )
+			PRECACHE_SOUND( STRING( m_iszSound ) );
+		SetUse( &CCOFSimonspeak::Use );
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer && COF_HasText( m_iszSound ) )
+			EMIT_SOUND( ENT( pPlayer->pev ), CHAN_VOICE, STRING( m_iszSound ), 1.0f, ATTN_NORM );
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	string_t m_iszSound;
+};
+
+LINK_ENTITY_TO_CLASS( cof_simonspeak, CCOFSimonspeak )
+
+class CCOFPhoneCall : public CBaseDelay
+{
+public:
+	CCOFPhoneCall() : m_iszAudio( iStringNull ), m_flCallTime( 0.0f ) {}
+	void KeyValue( KeyValueData *pkvd );
+	void Spawn( void );
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void EXPORT FinishThink( void );
+
+	string_t m_iszAudio;
+	float m_flCallTime;
+	EHANDLE m_hActivator;
+};
+
+LINK_ENTITY_TO_CLASS( cof_phonecall, CCOFPhoneCall )
+
+void CCOFPhoneCall::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "audiofile" ) )
+	{
+		m_iszAudio = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( !strncmp( pkvd->szKeyName, "subtitletime", 12 ) )
+	{
+		m_flCallTime += COF_KeyFloat( pkvd );
+		pkvd->fHandled = TRUE;
+	}
+	else if( !strncmp( pkvd->szKeyName, "subtitlenumber", 14 ) || FStrEq( pkvd->szKeyName, "iuser1" ) )
+		pkvd->fHandled = TRUE;
+	else
+		CBaseDelay::KeyValue( pkvd );
+}
+
+void CCOFPhoneCall::Spawn( void )
+{
+	pev->solid = SOLID_NOT;
+	if( COF_HasText( m_iszAudio ) )
+		PRECACHE_SOUND( STRING( m_iszAudio ) );
+	SetUse( &CCOFPhoneCall::Use );
+}
+
+void CCOFPhoneCall::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+	if( pPlayer && COF_HasText( m_iszAudio ) )
+		EMIT_SOUND( ENT( pPlayer->pev ), CHAN_VOICE, STRING( m_iszAudio ), 1.0f, ATTN_NORM );
+
+	m_hActivator = pActivator;
+	if( m_flCallTime > 0.0f && COF_HasText( pev->target ) )
+	{
+		SetThink( &CCOFPhoneCall::FinishThink );
+		pev->nextthink = gpGlobals->time + Q_min( m_flCallTime, 60.0f );
+	}
+	else
+		SUB_UseTargets( pActivator, useType, value );
+}
+
+void CCOFPhoneCall::FinishThink( void )
+{
+	SUB_UseTargets( (CBaseEntity *)m_hActivator, USE_TOGGLE, 0 );
+	ResetThink();
+}
+
+class CCOFGreyFade : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFGreyFade::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		const float fadeTime = pev->iuser2 > 0 ? (float)pev->iuser2 : 1.0f;
+		const int flags = pev->iuser1 ? FFADE_IN : FFADE_OUT;
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer )
+			UTIL_ScreenFade( pPlayer, Vector( 96, 96, 96 ), fadeTime, 0.0f, 180, flags | FFADE_MODULATE );
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( cof_greyfade, CCOFGreyFade )
 
 class CCOFDocument : public CBaseDelay
 {
@@ -510,6 +1033,149 @@ void CCOFTriggerSound::Touch( CBaseEntity *pOther )
 	SUB_UseTargets( pOther, USE_TOGGLE, 0 );
 }
 
+class CCOFBrushTrigger : public CBaseDelay
+{
+public:
+	CCOFBrushTrigger() : m_flNextFire( 0.0f ) {}
+
+	void Spawn( void )
+	{
+		COF_InitBrushTrigger( this );
+		SetTouch( &CCOFBrushTrigger::Touch );
+		SetUse( &CCOFBrushTrigger::Use );
+	}
+
+	int ObjectCaps( void ) { return ( CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION ) | FCAP_IMPULSE_USE; }
+	void EXPORT Touch( CBaseEntity *pOther )
+	{
+		if( !pOther || !pOther->IsPlayer() || gpGlobals->time < m_flNextFire )
+			return;
+
+		m_flNextFire = gpGlobals->time + 0.25f;
+		SUB_UseTargets( pOther, USE_TOGGLE, 0 );
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	float m_flNextFire;
+};
+
+LINK_ENTITY_TO_CLASS( func_fogfield, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( trigger_statueuse, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( func_coopallplayersbutton, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( cof_doctorshoot, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( cof_barshoot, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( func_asylumlookat, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( cof_puzzlebarbutton, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( trigger_booksimon, CCOFBrushTrigger )
+LINK_ENTITY_TO_CLASS( func_shine, CCOFBrushTrigger )
+
+class CCOFSuicideTrigger : public CCOFBrushTrigger
+{
+public:
+	void Spawn( void )
+	{
+		COF_InitBrushTrigger( this );
+		SetTouch( &CCOFSuicideTrigger::Touch );
+		SetUse( &CCOFBrushTrigger::Use );
+	}
+
+	void EXPORT Touch( CBaseEntity *pOther )
+	{
+		if( !pOther || !pOther->IsPlayer() )
+			return;
+
+		pOther->TakeDamage( pev, pev, 10000.0f, DMG_GENERIC );
+		SUB_UseTargets( pOther, USE_TOGGLE, 0 );
+	}
+};
+
+LINK_ENTITY_TO_CLASS( trigger_suicide, CCOFSuicideTrigger )
+
+class CCOFSubwayWall : public CBaseDelay
+{
+public:
+	CCOFSubwayWall() :
+		m_iHitsRequired( 1 ),
+		m_iHits( 0 ),
+		m_iszHitSound( iStringNull ),
+		m_iszBreakSound( iStringNull )
+	{
+	}
+
+	void KeyValue( KeyValueData *pkvd );
+	void Precache( void );
+	void Spawn( void );
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	int ObjectCaps( void ) { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+
+	int m_iHitsRequired;
+	int m_iHits;
+	string_t m_iszHitSound;
+	string_t m_iszBreakSound;
+};
+
+LINK_ENTITY_TO_CLASS( trigger_subwaywall, CCOFSubwayWall )
+
+void CCOFSubwayWall::KeyValue( KeyValueData *pkvd )
+{
+	if( FStrEq( pkvd->szKeyName, "frags" ) )
+	{
+		m_iHitsRequired = Q_max( 1, atoi( pkvd->szValue ) );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "noise1" ) )
+	{
+		m_iszHitSound = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "noise2" ) )
+	{
+		m_iszBreakSound = ALLOC_STRING( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseDelay::KeyValue( pkvd );
+}
+
+void CCOFSubwayWall::Precache( void )
+{
+	if( COF_HasText( m_iszHitSound ) )
+		PRECACHE_SOUND( STRING( m_iszHitSound ) );
+	if( COF_HasText( m_iszBreakSound ) )
+		PRECACHE_SOUND( STRING( m_iszBreakSound ) );
+}
+
+void CCOFSubwayWall::Spawn( void )
+{
+	Precache();
+	pev->angles = g_vecZero;
+	pev->movetype = MOVETYPE_PUSH;
+	pev->solid = SOLID_BSP;
+	pev->takedamage = DAMAGE_YES;
+	SET_MODEL( ENT( pev ), STRING( pev->model ) );
+}
+
+int CCOFSubwayWall::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+{
+	m_iHits++;
+
+	if( m_iHits < m_iHitsRequired )
+	{
+		COF_EmitOptionalSound( edict(), m_iszHitSound, CHAN_BODY );
+		COF_ShowText( CBaseEntity::Instance( pevAttacker ), pev->message );
+		return 1;
+	}
+
+	COF_EmitOptionalSound( edict(), m_iszBreakSound, CHAN_BODY );
+	SUB_UseTargets( CBaseEntity::Instance( pevAttacker ), USE_TOGGLE, 0 );
+	UTIL_Remove( this );
+	return 1;
+}
+
 class CCOFDynLight : public CBaseDelay
 {
 public:
@@ -518,6 +1184,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( env_dynlight, CCOFDynLight )
+LINK_ENTITY_TO_CLASS( env_elight, CCOFDynLight )
 
 void CCOFDynLight::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
@@ -684,6 +1351,14 @@ static const char *COF_DefaultWorldModelForPickup( const char *pszClassname )
 	if( !stricmp( pszClassname, "ammo_g43" ) ) return "models/ammo/ammo_g43.mdl";
 	if( !stricmp( pszClassname, "ammo_rifle" ) ) return "models/ammo/ammo_rifle.mdl";
 
+	if( !stricmp( pszClassname, "aom_pills" ) ) return "models/items/w_pills.mdl";
+	if( !stricmp( pszClassname, "item_phonebattery" ) ) return "models/items/phone_battery.mdl";
+	if( !stricmp( pszClassname, "item_nightvision" ) ) return "models/items/w_nightvision.mdl";
+	if( !stricmp( pszClassname, "item_glocktaclight" ) ) return "models/weapons/glock/glock_taclight.mdl";
+	if( !stricmp( pszClassname, "item_padlock" ) ) return "models/items/padlock.mdl";
+	if( !stricmp( pszClassname, "cof_hoodie" ) ) return "models/costumes/hoodie.mdl";
+	if( !stricmp( pszClassname, "cof_passwordnote" ) ) return "models/items/generic_note.mdl";
+
 	return NULL;
 }
 
@@ -785,6 +1460,13 @@ LINK_ENTITY_TO_CLASS( ammo_m16, CCOFInventoryPickup )
 LINK_ENTITY_TO_CLASS( ammo_vp70, CCOFInventoryPickup )
 LINK_ENTITY_TO_CLASS( ammo_g43, CCOFInventoryPickup )
 LINK_ENTITY_TO_CLASS( ammo_rifle, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( aom_pills, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( item_phonebattery, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( item_nightvision, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( item_glocktaclight, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( item_padlock, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( cof_hoodie, CCOFInventoryPickup )
+LINK_ENTITY_TO_CLASS( cof_passwordnote, CCOFInventoryPickup )
 
 class CCOFCustomize : public CBaseDelay
 {
@@ -957,6 +1639,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( cof_mdlcutscene, CCOFMdlCutscene )
+LINK_ENTITY_TO_CLASS( cutscene_model, CCOFMdlCutscene )
 
 void CCOFMdlCutscene::KeyValue( KeyValueData *pkvd )
 {
