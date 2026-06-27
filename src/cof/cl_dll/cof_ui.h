@@ -12,6 +12,7 @@ void COF_UI_Init( void );
 void COF_UI_VidInit( void );
 void COF_UI_SetActive( bool active );
 bool COF_UI_IsActive( void );
+void COF_UI_UpdateMousePosition( void );
 bool COF_UI_ConsumeMouseDelta( float dx, float dy );
 int COF_UI_KeyInput( int down, int keynum );
 void COF_UI_EndFrame( void );

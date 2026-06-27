@@ -11,7 +11,6 @@ static float g_COFUIMouseY = 0.0f;
 static int g_COFUIMouseDown = 0;
 static int g_COFUIMousePressed = 0;
 static int g_COFUIMouseReleased = 0;
-static cvar_t *g_pCOFUIMouseScale = NULL;
 
 static int COF_UI_ButtonFromKey( int keynum )
 {
@@ -32,7 +31,6 @@ static float COF_UI_ClampFloat( float value, float low, float high )
 
 void COF_UI_Init( void )
 {
-	g_pCOFUIMouseScale = gEngfuncs.pfnRegisterVariable( "cof_ui_mouse_scale", "3.0", FCVAR_ARCHIVE );
 }
 
 void COF_UI_VidInit( void )
@@ -41,6 +39,30 @@ void COF_UI_VidInit( void )
 	{
 		g_COFUIMouseX = ScreenWidth * 0.5f;
 		g_COFUIMouseY = ScreenHeight * 0.5f;
+	}
+
+	g_COFUIMouseX = COF_UI_ClampFloat( g_COFUIMouseX, 0.0f, (float)( ScreenWidth - 1 ) );
+	g_COFUIMouseY = COF_UI_ClampFloat( g_COFUIMouseY, 0.0f, (float)( ScreenHeight - 1 ) );
+}
+
+static void COF_UI_CenterMouse( void )
+{
+	g_COFUIMouseX = ScreenWidth * 0.5f;
+	g_COFUIMouseY = ScreenHeight * 0.5f;
+
+	if( gEngfuncs.pfnSetMousePos )
+		gEngfuncs.pfnSetMousePos( (int)g_COFUIMouseX, (int)g_COFUIMouseY );
+}
+
+void COF_UI_UpdateMousePosition( void )
+{
+	if( g_COFUIActive && gEngfuncs.GetMousePosition )
+	{
+		int x = 0;
+		int y = 0;
+		gEngfuncs.GetMousePosition( &x, &y );
+		g_COFUIMouseX = (float)x;
+		g_COFUIMouseY = (float)y;
 	}
 
 	g_COFUIMouseX = COF_UI_ClampFloat( g_COFUIMouseX, 0.0f, (float)( ScreenWidth - 1 ) );
@@ -59,8 +81,13 @@ void COF_UI_SetActive( bool active )
 
 	if( active )
 	{
-		g_COFUIMouseX = ScreenWidth * 0.5f;
-		g_COFUIMouseY = ScreenHeight * 0.5f;
+		if( gEngfuncs.pfnSetMouseEnable )
+			gEngfuncs.pfnSetMouseEnable( true );
+		COF_UI_CenterMouse();
+	}
+	else if( gEngfuncs.pfnSetMouseEnable )
+	{
+		gEngfuncs.pfnSetMouseEnable( false );
 	}
 }
 
@@ -74,11 +101,7 @@ bool COF_UI_ConsumeMouseDelta( float dx, float dy )
 	if( !g_COFUIActive )
 		return false;
 
-	const float scale = g_pCOFUIMouseScale ? g_pCOFUIMouseScale->value : 3.0f;
-	g_COFUIMouseX += dx * scale;
-	g_COFUIMouseY += dy * scale;
-	g_COFUIMouseX = COF_UI_ClampFloat( g_COFUIMouseX, 0.0f, (float)( ScreenWidth - 1 ) );
-	g_COFUIMouseY = COF_UI_ClampFloat( g_COFUIMouseY, 0.0f, (float)( ScreenHeight - 1 ) );
+	COF_UI_UpdateMousePosition();
 	return true;
 }
 
@@ -116,11 +139,13 @@ void COF_UI_EndFrame( void )
 
 int COF_UI_MouseX( void )
 {
+	COF_UI_UpdateMousePosition();
 	return (int)g_COFUIMouseX;
 }
 
 int COF_UI_MouseY( void )
 {
+	COF_UI_UpdateMousePosition();
 	return (int)g_COFUIMouseY;
 }
 
@@ -178,13 +203,5 @@ void COF_UI_DrawTextCentered( const COFUIRect &rect, const char *pszText, int r,
 
 void COF_UI_DrawCursor( void )
 {
-	if( !g_COFUIActive )
-		return;
-
-	const int x = COF_UI_MouseX();
-	const int y = COF_UI_MouseY();
-	COF_UI_FillRect( x, y, 13, 2, 255, 235, 150, 255 );
-	COF_UI_FillRect( x, y, 2, 13, 255, 235, 150, 255 );
-	COF_UI_FillRect( x + 2, y + 2, 9, 1, 25, 25, 25, 210 );
-	COF_UI_FillRect( x + 2, y + 2, 1, 9, 25, 25, 25, 210 );
+	// Cursor is the normal OS cursor shown by the engine.
 }

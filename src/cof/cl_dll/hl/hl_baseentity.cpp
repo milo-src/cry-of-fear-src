@@ -332,6 +332,8 @@ void CBasePlayerItem::AttemptToMaterialize( void ) { }
 void CBasePlayerItem::CheckRespawn( void ) { }
 CBaseEntity *CBasePlayerItem::Respawn( void ) { return NULL; }
 void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther ) { }
+int CBasePlayerItem::ObjectCaps( void ) { return 0; }
+void CBasePlayerItem::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) { }
 void CBasePlayerItem::DestroyItem( void ) { }
 int CBasePlayerItem::AddToPlayer( CBasePlayer *pPlayer ) { return TRUE; }
 void CBasePlayerItem::Drop( void ) { }

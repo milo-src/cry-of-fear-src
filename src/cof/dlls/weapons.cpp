@@ -600,6 +600,23 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 	SUB_UseTargets( pOther, USE_TOGGLE, 0 ); // UNDONE: when should this happen?
 }
 
+int CBasePlayerItem::ObjectCaps( void )
+{
+	int caps = CBaseAnimating::ObjectCaps() & ~FCAP_ACROSS_TRANSITION;
+	if( !m_pPlayer && pev->solid != SOLID_NOT )
+		caps |= FCAP_IMPULSE_USE;
+
+	return caps;
+}
+
+void CBasePlayerItem::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	if( !pActivator || !pActivator->IsPlayer() || m_pPlayer )
+		return;
+
+	DefaultTouch( pActivator );
+}
+
 BOOL CanAttack( float attack_time, float curtime, BOOL isPredicted )
 {
 #if CLIENT_WEAPONS
@@ -1412,6 +1429,19 @@ void CWeaponBox::Touch( CBaseEntity *pOther )
 	EMIT_SOUND( pOther->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM );
 	SetTouch( NULL );
 	UTIL_Remove(this);
+}
+
+int CWeaponBox::ObjectCaps( void )
+{
+	return ( CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION ) | FCAP_IMPULSE_USE;
+}
+
+void CWeaponBox::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+{
+	if( !pActivator || !pActivator->IsPlayer() )
+		return;
+
+	Touch( pActivator );
 }
 
 //=========================================================

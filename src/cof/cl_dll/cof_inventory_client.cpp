@@ -718,6 +718,7 @@ void COF_Inventory_Draw( float flTime )
 
 	COFInventoryLayout layout;
 	COF_BuildLayout( layout );
+	COF_UI_UpdateMousePosition();
 	COF_UpdateMouseInput( layout );
 
 	COF_DrawInventoryFrame( layout );

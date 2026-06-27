@@ -221,6 +221,8 @@ public:
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
+	virtual int ObjectCaps( void );
+	virtual void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int AddToPlayer( CBasePlayer *pPlayer );	// return TRUE if the item you want the item added to the player inventory
 	virtual int AddDuplicate( CBasePlayerItem *pItem ) { return FALSE; }	// return TRUE if you want your duplicate removed from world
 	void EXPORT DestroyItem( void );
@@ -436,6 +438,8 @@ class CWeaponBox : public CBaseEntity
 
 public:
 	void EXPORT Kill ( void );
+	int ObjectCaps( void );
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	int		Save( CSave &save );
 	int		Restore( CRestore &restore );
 	static	TYPEDESCRIPTION m_SaveData[];
