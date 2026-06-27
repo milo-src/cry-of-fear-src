@@ -226,6 +226,11 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 	const float sideSpeed = V_ClampFloat( DotProduct( pparams->simvel, right ) / 280.0f, -1.0f, 1.0f );
 	const float verticalSpeed = V_ClampFloat( pparams->simvel[2] / 240.0f, -1.0f, 1.0f );
 	const qboolean onGround = pparams->onground ? true : false;
+	const int buttons = pparams->cmd ? pparams->cmd->buttons : 0;
+	const float horizontalSpeed = sqrt( pparams->simvel[0] * pparams->simvel[0] + pparams->simvel[1] * pparams->simvel[1] );
+	const qboolean running = ( buttons & IN_RUN ) && onGround && horizontalSpeed > COF_PLAYER_WALK_SPEED * 0.70f;
+	const float handMoveScale = moveScale * ( running ? 0.68f : 1.0f );
+	const float handAngleScale = running ? 0.82f : 1.0f;
 
 	if( wasOnGround && !onGround )
 	{
@@ -238,9 +243,9 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 		jumpDropVelocity -= 36.0f * landStrength;
 	}
 
-	targetMove[0] = -forwardSpeed * 0.36f * moveScale;
-	targetMove[1] = ( -sideSpeed * 0.58f - angleOffset[YAW] * 0.060f ) * moveScale;
-	targetMove[2] = ( fabs( sideSpeed ) * -0.10f - fabs( forwardSpeed ) * 0.24f - verticalSpeed * 0.24f + angleOffset[PITCH] * 0.045f ) * moveScale;
+	targetMove[0] = -forwardSpeed * 0.36f * handMoveScale;
+	targetMove[1] = ( -sideSpeed * 0.58f - angleOffset[YAW] * 0.060f ) * handMoveScale;
+	targetMove[2] = ( fabs( sideSpeed ) * -0.10f - fabs( forwardSpeed ) * 0.24f - verticalSpeed * 0.24f + angleOffset[PITCH] * 0.045f ) * handMoveScale;
 
 	const float moveStiffness = moveSpeed * moveSpeed;
 	const float moveDamping = moveSpeed * 1.80f;
@@ -259,7 +264,7 @@ void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
 
 	view->angles[YAW] -= angleOffset[YAW] * 0.14f;
 	view->angles[PITCH] += angleOffset[PITCH] * 0.30f;
-	view->angles[ROLL] += angleOffset[YAW] * 0.26f - sideSpeed * 1.0f * moveScale;
+	view->angles[ROLL] += angleOffset[YAW] * 0.26f * handAngleScale - sideSpeed * 1.0f * handMoveScale;
 
 	wasOnGround = onGround;
 	lastVerticalSpeed = pparams->simvel[2];
@@ -339,7 +344,7 @@ void V_ApplyCameraMotionInertia( struct ref_params_s *pparams )
 	const float runAmount = groundedMove * runBlend;
 
 	if( groundedMove > 0.02f )
-		motionPhase += frametime * ( 5.4f + runBlend * 3.2f ) * Q_max( groundedMove, 0.28f );
+		motionPhase += frametime * ( 5.4f + runBlend * 4.2f ) * Q_max( groundedMove, 0.28f );
 
 	AngleVectors( pparams->viewangles, forward, right, up );
 
@@ -348,16 +353,18 @@ void V_ApplyCameraMotionInertia( struct ref_params_s *pparams )
 	const float step = sin( motionPhase );
 	const float step2 = sin( motionPhase * 2.0f );
 	const float step2Cos = cos( motionPhase * 2.0f );
+	const float step3 = sin( motionPhase * 3.35f + 0.6f );
+	const float runShake = runAmount;
 
-	targetOffset[0] = -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.16f ) * motionScale;
-	targetOffset[1] = ( -sideSpeed * ( walkAmount * 0.050f + runAmount * 0.24f ) + step * ( walkAmount * 0.018f + runAmount * 0.13f ) ) * motionScale;
-	targetOffset[2] = step2 * ( walkAmount * 0.030f + runAmount * 0.46f ) * motionScale;
+	targetOffset[0] = -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.52f ) * motionScale;
+	targetOffset[1] = ( -sideSpeed * ( walkAmount * 0.050f + runAmount * 0.76f ) + step * ( walkAmount * 0.018f + runAmount * 0.56f ) ) * motionScale;
+	targetOffset[2] = ( step2 * ( walkAmount * 0.030f + runAmount * 1.84f ) + step3 * runShake * 0.36f ) * motionScale;
 
-	targetAngles[PITCH] = ( -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.22f ) + step2Cos * ( walkAmount * 0.018f + runAmount * 0.30f ) ) * motionScale;
-	targetAngles[YAW] = -sideSpeed * ( walkAmount * 0.025f + runAmount * 0.18f ) * motionScale;
-	targetAngles[ROLL] = ( -sideSpeed * ( walkAmount * 0.10f + runAmount * 0.95f ) + step * ( walkAmount * 0.025f + runAmount * 0.26f ) ) * motionScale;
+	targetAngles[PITCH] = ( -forwardSpeed * ( walkAmount * 0.035f + runAmount * 0.88f ) + step2Cos * ( walkAmount * 0.018f + runAmount * 1.24f ) + step3 * runShake * 0.36f ) * motionScale;
+	targetAngles[YAW] = ( -sideSpeed * ( walkAmount * 0.025f + runAmount * 0.64f ) + step3 * runShake * 0.12f ) * motionScale;
+	targetAngles[ROLL] = ( -sideSpeed * ( walkAmount * 0.10f + runAmount * 3.30f ) + step * ( walkAmount * 0.025f + runAmount * 1.10f ) + step3 * runShake * 0.32f ) * motionScale;
 
-	const float motionSpeed = 9.5f + runBlend * 2.5f;
+	const float motionSpeed = 8.6f + runBlend * 2.6f;
 	const float motionStiffness = motionSpeed * motionSpeed;
 	const float motionDamping = motionSpeed * 1.85f;
 	for( int i = 0; i < 3; i++ )
@@ -366,30 +373,33 @@ void V_ApplyCameraMotionInertia( struct ref_params_s *pparams )
 		motionAngles[i] = V_SpringFloat( motionAngles[i], motionAngleVelocity[i], targetAngles[i], motionStiffness, motionDamping, frametime );
 	}
 
-	motionOffset[0] = V_ClampSpring( motionOffset[0], motionVelocity[0], -0.35f, 0.28f );
-	motionOffset[1] = V_ClampSpring( motionOffset[1], motionVelocity[1], -0.55f, 0.55f );
-	motionOffset[2] = V_ClampSpring( motionOffset[2], motionVelocity[2], -0.60f, 0.70f );
-	motionAngles[PITCH] = V_ClampSpring( motionAngles[PITCH], motionAngleVelocity[PITCH], -0.70f, 0.70f );
-	motionAngles[YAW] = V_ClampSpring( motionAngles[YAW], motionAngleVelocity[YAW], -0.45f, 0.45f );
-	motionAngles[ROLL] = V_ClampSpring( motionAngles[ROLL], motionAngleVelocity[ROLL], -1.25f, 1.25f );
+	motionOffset[0] = V_ClampSpring( motionOffset[0], motionVelocity[0], -1.10f, 0.88f );
+	motionOffset[1] = V_ClampSpring( motionOffset[1], motionVelocity[1], -1.76f, 1.76f );
+	motionOffset[2] = V_ClampSpring( motionOffset[2], motionVelocity[2], -2.40f, 2.44f );
+	motionAngles[PITCH] = V_ClampSpring( motionAngles[PITCH], motionAngleVelocity[PITCH], -2.60f, 2.68f );
+	motionAngles[YAW] = V_ClampSpring( motionAngles[YAW], motionAngleVelocity[YAW], -1.56f, 1.56f );
+	motionAngles[ROLL] = V_ClampSpring( motionAngles[ROLL], motionAngleVelocity[ROLL], -4.30f, 4.30f );
 
 	if( wasOnGround && !onGround )
 	{
 		const float jumpStrength = V_ClampFloat( pparams->simvel[2] / 280.0f, 0.35f, 1.0f );
-		jumpVelocity -= 18.0f * jumpStrength * jumpScale;
-		jumpPitchVelocity += 7.0f * jumpStrength * jumpScale;
+		jumpVelocity -= 40.0f * jumpStrength * jumpScale;
+		jumpPitchVelocity += 17.0f * jumpStrength * jumpScale;
 	}
 	else if( !wasOnGround && onGround )
 	{
 		const float landStrength = V_ClampFloat( -lastVerticalSpeed / 430.0f, 0.25f, 1.25f );
-		jumpVelocity -= 34.0f * landStrength * jumpScale;
-		jumpPitchVelocity += 15.0f * landStrength * jumpScale;
+		jumpVelocity -= 72.0f * landStrength * jumpScale;
+		jumpPitchVelocity += 34.0f * landStrength * jumpScale;
 	}
 
-	jumpOffset = V_SpringFloat( jumpOffset, jumpVelocity, 0.0f, 82.0f, 16.0f, frametime );
-	jumpPitch = V_SpringFloat( jumpPitch, jumpPitchVelocity, 0.0f, 88.0f, 18.0f, frametime );
-	jumpOffset = V_ClampSpring( jumpOffset, jumpVelocity, -2.6f, 0.9f );
-	jumpPitch = V_ClampSpring( jumpPitch, jumpPitchVelocity, -1.6f, 1.8f );
+	const float fallAmount = ( !onGround && pparams->simvel[2] < -40.0f ) ? V_ClampFloat( -pparams->simvel[2] / 520.0f, 0.0f, 1.0f ) : 0.0f;
+	const float jumpOffsetTarget = -1.25f * fallAmount * jumpScale;
+	const float jumpPitchTarget = 0.75f * fallAmount * jumpScale;
+	jumpOffset = V_SpringFloat( jumpOffset, jumpVelocity, jumpOffsetTarget, 56.0f, 11.0f, frametime );
+	jumpPitch = V_SpringFloat( jumpPitch, jumpPitchVelocity, jumpPitchTarget, 64.0f, 12.0f, frametime );
+	jumpOffset = V_ClampSpring( jumpOffset, jumpVelocity, -4.8f, 1.5f );
+	jumpPitch = V_ClampSpring( jumpPitch, jumpPitchVelocity, -2.6f, 3.6f );
 
 	VectorMA( pparams->vieworg, motionOffset[0], forward, pparams->vieworg );
 	VectorMA( pparams->vieworg, motionOffset[1], right, pparams->vieworg );
