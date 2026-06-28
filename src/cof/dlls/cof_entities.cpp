@@ -409,8 +409,194 @@ public:
 	}
 };
 
+class CCOFSpawnPointOnOff : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFSpawnPointOnOff::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		if( COF_HasText( pev->message ) )
+		{
+			CBaseEntity *pEntity = NULL;
+			while( ( pEntity = UTIL_FindEntityByTargetname( pEntity, STRING( pev->message ) ) ) != NULL )
+			{
+				if( pev->iuser1 || useType == USE_OFF )
+					pEntity->pev->effects |= EF_NODRAW;
+				else
+					pEntity->pev->effects &= ~EF_NODRAW;
+			}
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+class CCOFWeaponTrigger : public CBaseDelay
+{
+public:
+	CCOFWeaponTrigger() : m_iszFailTarget( iStringNull ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "noise" ) )
+		{
+			m_iszFailTarget = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFWeaponTrigger::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( COF_HasText( pev->message ) && !COF_PlayerHasToken( pPlayer, pev->message ) )
+		{
+			if( COF_HasText( m_iszFailTarget ) )
+				FireTargets( STRING( m_iszFailTarget ), pActivator, this, USE_TOGGLE, 0 );
+			return;
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	string_t m_iszFailTarget;
+};
+
+class CCOFYesNo : public CBaseDelay
+{
+public:
+	CCOFYesNo() :
+		m_iszRequiredWeapon( iStringNull ),
+		m_iszNoTarget( iStringNull ),
+		m_iszNoItemMessage( iStringNull )
+	{
+	}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "weaponneed" ) )
+		{
+			m_iszRequiredWeapon = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else if( FStrEq( pkvd->szKeyName, "notrigger" ) )
+		{
+			m_iszNoTarget = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else if( FStrEq( pkvd->szKeyName, "noitemmsg" ) )
+		{
+			m_iszNoItemMessage = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFYesNo::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( COF_HasText( m_iszRequiredWeapon ) && !COF_PlayerHasToken( pPlayer, m_iszRequiredWeapon ) )
+		{
+			COF_ShowText( pActivator, m_iszNoItemMessage );
+			if( COF_HasText( m_iszNoTarget ) )
+				FireTargets( STRING( m_iszNoTarget ), pActivator, this, USE_TOGGLE, 0 );
+			return;
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+
+	string_t m_iszRequiredWeapon;
+	string_t m_iszNoTarget;
+	string_t m_iszNoItemMessage;
+};
+
+class CCOFMaxHealthChange : public CBaseDelay
+{
+public:
+	void Spawn( void ) { pev->solid = SOLID_NOT; SetUse( &CCOFMaxHealthChange::Use ); }
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		CBasePlayer *pPlayer = COF_PlayerFromEntity( pActivator );
+		if( pPlayer && pev->impulse > 0 )
+		{
+			float flMaxHealth = 100.0f;
+			if( pev->impulse == 1 )
+				flMaxHealth = 50.0f;
+			else if( pev->impulse == 2 )
+				flMaxHealth = 75.0f;
+
+			pPlayer->pev->max_health = flMaxHealth;
+			if( pPlayer->pev->health > flMaxHealth )
+				pPlayer->pev->health = flMaxHealth;
+		}
+
+		SUB_UseTargets( pActivator, useType, value );
+	}
+};
+
+class CCOFWatcher : public CBaseDelay
+{
+public:
+	CCOFWatcher() : m_iszWatch( iStringNull ), m_fSawTarget( FALSE ) {}
+
+	void KeyValue( KeyValueData *pkvd )
+	{
+		if( FStrEq( pkvd->szKeyName, "m_iszWatch" ) )
+		{
+			m_iszWatch = ALLOC_STRING( pkvd->szValue );
+			pkvd->fHandled = TRUE;
+		}
+		else
+			CBaseDelay::KeyValue( pkvd );
+	}
+
+	void Spawn( void )
+	{
+		pev->solid = SOLID_NOT;
+		SetUse( &CCOFWatcher::Use );
+		SetThink( &CCOFWatcher::WatchThink );
+		pev->nextthink = gpGlobals->time + 0.25f;
+	}
+
+	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+	{
+		WatchThink();
+	}
+
+	void EXPORT WatchThink( void )
+	{
+		pev->nextthink = gpGlobals->time + 0.25f;
+
+		if( !COF_HasText( m_iszWatch ) )
+			return;
+
+		CBaseEntity *pWatched = UTIL_FindEntityByTargetname( NULL, STRING( m_iszWatch ) );
+		if( pWatched )
+		{
+			m_fSawTarget = TRUE;
+			if( pWatched->pev->deadflag == DEAD_NO && pWatched->pev->solid != SOLID_NOT )
+				return;
+		}
+		else if( !m_fSawTarget )
+		{
+			return;
+		}
+
+		SUB_UseTargets( this, USE_TOGGLE, 0 );
+		UTIL_Remove( this );
+	}
+
+	string_t m_iszWatch;
+	BOOL m_fSawTarget;
+};
+
 LINK_ENTITY_TO_CLASS( cof_begingame, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( cof_spawnpointonoff, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_spawnpointonoff, CCOFSpawnPointOnOff )
 LINK_ENTITY_TO_CLASS( cof_keypad, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_playerbreathetoggle, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_phonedisable, CCOFPointUseTargets )
@@ -421,18 +607,18 @@ LINK_ENTITY_TO_CLASS( cof_coopgameover, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_survivalmode, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_doctorweaponset, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_doctorweapontrigger, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( cof_maxhealthchange, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_maxhealthchange, CCOFMaxHealthChange )
 LINK_ENTITY_TO_CLASS( cof_customiseplayer, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_ending, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_introduction, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_lookat, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( cof_yesno, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_yesno, CCOFYesNo )
 LINK_ENTITY_TO_CLASS( cof_addcodenote, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_entityrestore, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_computer, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_randomtimedspawner, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_strangle, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( watcher, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( watcher, CCOFWatcher )
 LINK_ENTITY_TO_CLASS( scripted_action, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( motion_manager, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( calc_position, CCOFPointUseTargets )
@@ -441,7 +627,7 @@ LINK_ENTITY_TO_CLASS( cof_startdoctormode, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_stats, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_telescope_camera, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_updatekeypad, CCOFPointUseTargets )
-LINK_ENTITY_TO_CLASS( cof_weapontrigger, CCOFPointUseTargets )
+LINK_ENTITY_TO_CLASS( cof_weapontrigger, CCOFWeaponTrigger )
 LINK_ENTITY_TO_CLASS( boat_exit, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_closeallvgui, CCOFPointUseTargets )
 LINK_ENTITY_TO_CLASS( cof_cracker, CCOFPointUseTargets )
@@ -2680,6 +2866,370 @@ void CCOFMonsterSlower::AttackSound( void )
 		EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pFastAttackSounds ), 1.0f, ATTN_NORM, 0, 95 + RANDOM_LONG( 0, 9 ) );
 	else
 		EMIT_SOUND_DYN( ENT( pev ), CHAN_VOICE, RANDOM_SOUND_ARRAY( pAttackSounds ), 1.0f, ATTN_NORM, 0, 95 + RANDOM_LONG( 0, 9 ) );
+}
+
+class CCOFMonsterCompat : public CBaseMonster
+{
+public:
+	CCOFMonsterCompat() :
+		m_flNextEnemySearch( 0.0f ),
+		m_flNextAttackTime( 0.0f )
+	{
+	}
+
+	void Spawn( void );
+	void Precache( void );
+	void StartMonster( void );
+	void MonsterThink( void );
+	void SetYawSpeed( void );
+	int Classify( void ) { return CLASS_ALIEN_MONSTER; }
+	int IRelationship( CBaseEntity *pTarget );
+	BOOL CheckMeleeAttack1( float flDot, float flDist );
+	BOOL CheckRangeAttack1( float flDot, float flDist ) { return FALSE; }
+	BOOL CheckRangeAttack2( float flDot, float flDist ) { return FALSE; }
+	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
+	void Killed( entvars_t *pevAttacker, int iGib );
+
+private:
+	const char *DefaultModel( void ) const;
+	float DefaultHealth( void ) const;
+	float MoveSpeed( void ) const;
+	float AttackDamage( void ) const;
+	float AttackDistance( void ) const;
+	CBaseEntity *FindEnemy( void );
+	void SetEnemy( CBaseEntity *pEnemy );
+	void CombatThink( float flInterval );
+	void MoveTowardEnemy( float flInterval, float flDist );
+	void MeleeAttack( void );
+
+	float m_flNextEnemySearch;
+	float m_flNextAttackTime;
+};
+
+LINK_ENTITY_TO_CLASS( monster_sewmo, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_rcrazy, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_faceless, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_facelessv, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_nerd, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_faster, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_child, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_spitter, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_stranger, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_taller, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_sawrunner, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_baby, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_suicider, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_krypande, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_twitcher, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_twitcher2, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_twitcher3, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_twitcher4, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_crab, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_watro, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_crazybitch, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_sawcrazy, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_ruben, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_booksimonsledgehammer, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_booksimon, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_bosschainsaw, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_sewerboss, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_doctorboss, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_roofboss, CCOFMonsterCompat )
+LINK_ENTITY_TO_CLASS( monster_custom, CCOFMonsterCompat )
+
+const char *CCOFMonsterCompat::DefaultModel( void ) const
+{
+	if( FClassnameIs( pev, "monster_sewmo" ) ) return "models/sewmo.mdl";
+	if( FClassnameIs( pev, "monster_rcrazy" ) ) return "models/runningcrazy.mdl";
+	if( FClassnameIs( pev, "monster_faceless" ) || FClassnameIs( pev, "monster_facelessv" ) ) return "models/Faceless.mdl";
+	if( FClassnameIs( pev, "monster_nerd" ) ) return "models/psycho.mdl";
+	if( FClassnameIs( pev, "monster_faster" ) ) return "models/faster.mdl";
+	if( FClassnameIs( pev, "monster_child" ) ) return "models/children.mdl";
+	if( FClassnameIs( pev, "monster_spitter" ) ) return "models/spitter.mdl";
+	if( FClassnameIs( pev, "monster_stranger" ) ) return "models/stranger.mdl";
+	if( FClassnameIs( pev, "monster_taller" ) ) return "models/taller.mdl";
+	if( FClassnameIs( pev, "monster_sawrunner" ) ) return "models/sawrunner.mdl";
+	if( FClassnameIs( pev, "monster_baby" ) ) return "models/baby.mdl";
+	if( FClassnameIs( pev, "monster_suicider" ) ) return "models/suicider.mdl";
+	if( FClassnameIs( pev, "monster_krypande" ) ) return "models/krypande.mdl";
+	if( FClassnameIs( pev, "monster_twitcher" ) || FClassnameIs( pev, "monster_twitcher2" ) ||
+		FClassnameIs( pev, "monster_twitcher3" ) || FClassnameIs( pev, "monster_twitcher4" ) ) return "models/twister.mdl";
+	if( FClassnameIs( pev, "monster_crab" ) ) return "models/Facehead.mdl";
+	if( FClassnameIs( pev, "monster_watro" ) ) return "models/watro.mdl";
+	if( FClassnameIs( pev, "monster_crazybitch" ) ) return "models/crazywoman.mdl";
+	if( FClassnameIs( pev, "monster_sawcrazy" ) ) return "models/sawcrazy.mdl";
+	if( FClassnameIs( pev, "monster_ruben" ) ) return "models/crazyrumpel.mdl";
+	if( FClassnameIs( pev, "monster_booksimonsledgehammer" ) ) return "models/booksimon_m.mdl";
+	if( FClassnameIs( pev, "monster_booksimon" ) ) return "models/booksimon.mdl";
+	if( FClassnameIs( pev, "monster_bosschainsaw" ) ) return "models/chainsawguy.mdl";
+	if( FClassnameIs( pev, "monster_sewerboss" ) ) return "models/sewer_boss.mdl";
+	if( FClassnameIs( pev, "monster_doctorboss" ) ) return "models/doctor_boss.mdl";
+	if( FClassnameIs( pev, "monster_roofboss" ) ) return "models/carcassboss.mdl";
+
+	return "models/slower.mdl";
+}
+
+float CCOFMonsterCompat::DefaultHealth( void ) const
+{
+	if( FClassnameIs( pev, "monster_sawrunner" ) || FClassnameIs( pev, "monster_bosschainsaw" ) )
+		return 400.0f;
+	if( FClassnameIs( pev, "monster_booksimon" ) || FClassnameIs( pev, "monster_booksimonsledgehammer" ) ||
+		FClassnameIs( pev, "monster_doctorboss" ) || FClassnameIs( pev, "monster_roofboss" ) ||
+		FClassnameIs( pev, "monster_sewerboss" ) )
+		return 700.0f;
+	if( FClassnameIs( pev, "monster_baby" ) || FClassnameIs( pev, "monster_crab" ) )
+		return 35.0f;
+
+	return 80.0f;
+}
+
+float CCOFMonsterCompat::MoveSpeed( void ) const
+{
+	if( FClassnameIs( pev, "monster_faster" ) || FClassnameIs( pev, "monster_rcrazy" ) ||
+		FClassnameIs( pev, "monster_sawrunner" ) )
+		return 250.0f;
+	if( FClassnameIs( pev, "monster_baby" ) || FClassnameIs( pev, "monster_crab" ) ||
+		FClassnameIs( pev, "monster_krypande" ) )
+		return 95.0f;
+
+	return 155.0f;
+}
+
+float CCOFMonsterCompat::AttackDamage( void ) const
+{
+	if( FClassnameIs( pev, "monster_sawrunner" ) || FClassnameIs( pev, "monster_bosschainsaw" ) )
+		return 35.0f;
+	if( FClassnameIs( pev, "monster_booksimon" ) || FClassnameIs( pev, "monster_booksimonsledgehammer" ) ||
+		FClassnameIs( pev, "monster_doctorboss" ) || FClassnameIs( pev, "monster_roofboss" ) ||
+		FClassnameIs( pev, "monster_sewerboss" ) )
+		return 25.0f;
+	if( FClassnameIs( pev, "monster_baby" ) || FClassnameIs( pev, "monster_crab" ) )
+		return 8.0f;
+
+	return 14.0f;
+}
+
+float CCOFMonsterCompat::AttackDistance( void ) const
+{
+	if( FClassnameIs( pev, "monster_baby" ) || FClassnameIs( pev, "monster_crab" ) ||
+		FClassnameIs( pev, "monster_krypande" ) )
+		return 58.0f;
+
+	return 82.0f;
+}
+
+void CCOFMonsterCompat::Precache( void )
+{
+	if( FStringNull( pev->model ) )
+		pev->model = MAKE_STRING( DefaultModel() );
+
+	PRECACHE_MODEL( STRING( pev->model ) );
+}
+
+void CCOFMonsterCompat::Spawn( void )
+{
+	Precache();
+
+	if( pev->body < 0 )
+		pev->body = 0;
+
+	SET_MODEL( ENT( pev ), STRING( pev->model ) );
+	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
+
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	pev->takedamage = DAMAGE_AIM;
+	pev->health = pev->health > 0 ? pev->health : DefaultHealth();
+	pev->max_health = pev->health;
+	pev->view_ofs = VEC_VIEW;
+	m_bloodColor = BLOOD_COLOR_RED;
+	m_flFieldOfView = 0.5f;
+	m_MonsterState = MONSTERSTATE_NONE;
+	m_afCapability = bits_CAP_DOORS_GROUP | bits_CAP_MELEE_ATTACK1;
+
+	MonsterInit();
+}
+
+void CCOFMonsterCompat::StartMonster( void )
+{
+	CBaseMonster::StartMonster();
+	m_flDistLook = 1800.0f;
+	m_flDistTooFar = 1200.0f;
+
+	if( !m_pCine && m_MonsterState != MONSTERSTATE_DEAD )
+		SetActivity( ACT_IDLE );
+}
+
+void CCOFMonsterCompat::SetYawSpeed( void )
+{
+	switch( m_Activity )
+	{
+	case ACT_MELEE_ATTACK1:
+		pev->yaw_speed = 170;
+		break;
+	case ACT_WALK:
+	case ACT_RUN:
+		pev->yaw_speed = 150;
+		break;
+	default:
+		pev->yaw_speed = 110;
+		break;
+	}
+}
+
+int CCOFMonsterCompat::IRelationship( CBaseEntity *pTarget )
+{
+	if( pTarget && pTarget->IsPlayer() )
+		return R_HT;
+
+	return CBaseMonster::IRelationship( pTarget );
+}
+
+BOOL CCOFMonsterCompat::CheckMeleeAttack1( float flDot, float flDist )
+{
+	return m_hEnemy != 0 && flDist <= AttackDistance() && flDot >= 0.62f;
+}
+
+CBaseEntity *CCOFMonsterCompat::FindEnemy( void )
+{
+	CBaseEntity *pPlayer = UTIL_PlayerByIndex( 1 );
+	if( !pPlayer || !pPlayer->IsAlive() || FBitSet( pPlayer->pev->flags, FL_NOTARGET ) )
+		return NULL;
+
+	const float flDist = ( pPlayer->pev->origin - pev->origin ).Length();
+	if( flDist > m_flDistLook )
+		return NULL;
+
+	if( flDist > 192.0f && !FInViewCone( pPlayer ) )
+		return NULL;
+
+	if( flDist > 256.0f && !FVisible( pPlayer ) )
+		return NULL;
+
+	return pPlayer;
+}
+
+void CCOFMonsterCompat::SetEnemy( CBaseEntity *pEnemy )
+{
+	if( !pEnemy )
+		return;
+
+	m_hEnemy = pEnemy;
+	m_vecEnemyLKP = pEnemy->pev->origin;
+	SetConditions( bits_COND_NEW_ENEMY | bits_COND_SEE_ENEMY | bits_COND_SEE_CLIENT | bits_COND_SEE_HATE );
+	m_IdealMonsterState = MONSTERSTATE_COMBAT;
+	m_MonsterState = MONSTERSTATE_COMBAT;
+}
+
+void CCOFMonsterCompat::MoveTowardEnemy( float flInterval, float flDist )
+{
+	if( m_hEnemy == 0 || flDist <= AttackDistance() * 0.82f )
+		return;
+
+	if( m_Activity != ACT_WALK )
+		SetActivity( ACT_WALK );
+
+	Vector vecDir = m_hEnemy->pev->origin - pev->origin;
+	vecDir.z = 0;
+	pev->ideal_yaw = UTIL_VecToYaw( vecDir );
+	ChangeYaw( pev->yaw_speed );
+
+	const float flStep = MoveSpeed() * flInterval;
+	if( !WALK_MOVE( ENT( pev ), pev->angles.y, flStep, WALKMOVE_NORMAL ) )
+	{
+		if( !WALK_MOVE( ENT( pev ), pev->angles.y + 35.0f, flStep * 0.65f, WALKMOVE_NORMAL ) )
+			WALK_MOVE( ENT( pev ), pev->angles.y - 35.0f, flStep * 0.65f, WALKMOVE_NORMAL );
+	}
+}
+
+void CCOFMonsterCompat::MeleeAttack( void )
+{
+	CBaseEntity *pHurt = CheckTraceHullAttack( AttackDistance(), (int)AttackDamage(), DMG_CLUB );
+	if( pHurt && pHurt->pev->flags & ( FL_MONSTER | FL_CLIENT ) )
+		pHurt->pev->punchangle.x = 5;
+}
+
+void CCOFMonsterCompat::CombatThink( float flInterval )
+{
+	if( gpGlobals->time >= m_flNextEnemySearch || m_hEnemy == 0 || !m_hEnemy->IsAlive() )
+	{
+		m_flNextEnemySearch = gpGlobals->time + 0.25f;
+		SetEnemy( FindEnemy() );
+	}
+
+	if( m_hEnemy == 0 || !m_hEnemy->IsAlive() )
+	{
+		if( m_Activity != ACT_IDLE )
+			SetActivity( ACT_IDLE );
+
+		m_MonsterState = MONSTERSTATE_IDLE;
+		return;
+	}
+
+	Vector vecToEnemy = m_hEnemy->pev->origin - pev->origin;
+	vecToEnemy.z = 0;
+	const float flDist = vecToEnemy.Length();
+
+	if( flDist > 0.1f )
+	{
+		pev->ideal_yaw = UTIL_VecToYaw( vecToEnemy );
+		ChangeYaw( pev->yaw_speed );
+	}
+
+	if( m_Activity == ACT_MELEE_ATTACK1 )
+	{
+		if( m_fSequenceFinished && gpGlobals->time >= m_flNextAttackTime - 0.2f )
+			SetActivity( flDist <= AttackDistance() ? ACT_IDLE : ACT_WALK );
+		return;
+	}
+
+	if( flDist <= AttackDistance() && gpGlobals->time >= m_flNextAttackTime )
+	{
+		SetActivity( ACT_MELEE_ATTACK1 );
+		MeleeAttack();
+		m_flNextAttackTime = gpGlobals->time + 0.9f;
+		return;
+	}
+
+	MoveTowardEnemy( flInterval, flDist );
+}
+
+void CCOFMonsterCompat::MonsterThink( void )
+{
+	if( m_pCine || m_MonsterState == MONSTERSTATE_SCRIPT || m_MonsterState == MONSTERSTATE_DEAD || pev->deadflag != DEAD_NO )
+	{
+		CBaseMonster::MonsterThink();
+		return;
+	}
+
+	pev->nextthink = gpGlobals->time + 0.05f;
+	float flInterval = StudioFrameAdvance();
+	DispatchAnimEvents( flInterval );
+	CombatThink( flInterval );
+	FCheckAITrigger();
+}
+
+int CCOFMonsterCompat::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+{
+	if( IsAlive() && pevAttacker )
+	{
+		CBaseEntity *pAttacker = CBaseEntity::Instance( ENT( pevAttacker ) );
+		if( pAttacker && pAttacker->IsPlayer() )
+			SetEnemy( pAttacker );
+	}
+
+	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+}
+
+void CCOFMonsterCompat::Killed( entvars_t *pevAttacker, int iGib )
+{
+	if( m_iTriggerCondition == AITRIGGER_DEATH && COF_HasText( m_iszTriggerTarget ) )
+	{
+		FireTargets( STRING( m_iszTriggerTarget ), this, this, USE_TOGGLE, 0 );
+		m_iTriggerCondition = AITRIGGER_NONE;
+	}
+
+	CBaseMonster::Killed( pevAttacker, iGib );
 }
 
 LINK_ENTITY_TO_CLASS( info_simon_spawnpoint, CPointEntity )

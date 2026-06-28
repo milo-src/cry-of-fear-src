@@ -2216,6 +2216,9 @@ void CInterDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	m_flNextUseTime = gpGlobals->time + 0.75f;
 
 	BOOL fMasterTriggered = UTIL_IsMasterTriggered( m_sMaster, pPlayer );
+	const BOOL fCoFScriptUnlockedStartDoor = FStrEq( STRING( gpGlobals->mapname ), "c_start" ) &&
+		!COF_IsEmptyDoorToken( pev->targetname ) && FStrEq( STRING( pev->targetname ), "doorlockedss" ) &&
+		!IsLocked();
 
 	if( fMasterTriggered && FStrEq( STRING( gpGlobals->mapname ), "c_start" ) &&
 		!COF_IsEmptyDoorToken( pev->targetname ) && FStrEq( STRING( pev->targetname ), "doorlockedss" ) &&
@@ -2224,7 +2227,7 @@ void CInterDoor::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 		SetLockedBy( NULL );
 	}
 
-	if( !m_fEnabled || !fMasterTriggered || IsLocked() || COF_IsEmptyDoorToken( pev->target ) )
+	if( !m_fEnabled || ( !fMasterTriggered && !fCoFScriptUnlockedStartDoor ) || IsLocked() || COF_IsEmptyDoorToken( pev->target ) )
 	{
 		PlayDoorSound( pPlayer, m_iszLockedSound, CHAN_ITEM );
 
@@ -2317,7 +2320,14 @@ void CCofInterDoorOnOff::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 		{
 			CInterDoor *pDoor = (CInterDoor *)pEntity;
 			if( pDoor->IsLocked() )
+			{
 				pDoor->SetLockedBy( NULL );
+				if( FStrEq( STRING( gpGlobals->mapname ), "c_start" ) &&
+					!COF_IsEmptyDoorToken( pDoor->pev->targetname ) && FStrEq( STRING( pDoor->pev->targetname ), "doorlockedss" ) )
+				{
+					pDoor->m_sMaster = iStringNull;
+				}
+			}
 			else if( !COF_IsEmptyDoorToken( m_iszNewLockedBy ) )
 				pDoor->SetLockedBy( STRING( m_iszNewLockedBy ) );
 
