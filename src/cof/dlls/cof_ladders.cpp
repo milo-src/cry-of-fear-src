@@ -29,6 +29,15 @@ int COF_ClampInt( int iValue, int iMin, int iMax )
 	return iValue;
 }
 
+float COF_ClampFloat( float flValue, float flMin, float flMax )
+{
+	if( flValue < flMin )
+		return flMin;
+	if( flValue > flMax )
+		return flMax;
+	return flValue;
+}
+
 float COF_AngleDelta( float a, float b )
 {
 	float d = a - b;
@@ -37,6 +46,17 @@ float COF_AngleDelta( float a, float b )
 	else if( d < -180.0f )
 		d += 360.0f;
 	return d;
+}
+
+float COF_LerpAngle( float flStart, float flEnd, float flFraction )
+{
+	return flStart + COF_AngleDelta( flEnd, flStart ) * flFraction;
+}
+
+float COF_SmoothStep( float flFraction )
+{
+	flFraction = COF_ClampFloat( flFraction, 0.0f, 1.0f );
+	return flFraction * flFraction * ( 3.0f - 2.0f * flFraction );
 }
 
 BOOL COF_IsPlayerOriginClear( CBasePlayer *pPlayer, const Vector &vecOrigin )
@@ -112,12 +132,16 @@ private:
 	EHANDLE m_hPlayer;
 	string_t m_iszSavedViewModel;
 	string_t m_iszSavedWeaponModel;
+	int m_iSavedMoveType;
+	int m_iSavedSolid;
 
 	Vector m_vecStartOrigin;
 	Vector m_vecEndOrigin;
 	Vector m_vecStartAngles;
 	Vector m_vecEndAngles;
 
+	float m_flClimbStartTime;
+	float m_flClimbEndTime;
 	float m_flStageEndTime;
 	int m_iLoopsLeft;
 	int m_iExitSide;
@@ -138,6 +162,10 @@ CCOFLadderManager::CCOFLadderManager() :
 	m_flDescendOffset( 0.0f ),
 	m_iszSavedViewModel( iStringNull ),
 	m_iszSavedWeaponModel( iStringNull ),
+	m_iSavedMoveType( MOVETYPE_WALK ),
+	m_iSavedSolid( SOLID_SLIDEBOX ),
+	m_flClimbStartTime( 0.0f ),
+	m_flClimbEndTime( 0.0f ),
 	m_flStageEndTime( 0.0f ),
 	m_iLoopsLeft( 0 ),
 	m_iExitSide( 0 ),
@@ -265,6 +293,8 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 	m_hPlayer = pPlayer;
 	m_iszSavedViewModel = pPlayer->pev->viewmodel;
 	m_iszSavedWeaponModel = pPlayer->pev->weaponmodel;
+	m_iSavedMoveType = pPlayer->pev->movetype;
+	m_iSavedSolid = pPlayer->pev->solid;
 
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->basevelocity = g_vecZero;
@@ -274,6 +304,8 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 	pPlayer->pev->fixangle = TRUE;
 	pPlayer->pev->viewmodel = pev->model;
 	pPlayer->pev->weaponmodel = 0;
+	pPlayer->pev->movetype = MOVETYPE_NONE;
+	pPlayer->pev->solid = SOLID_NOT;
 	pPlayer->m_fWeapon = FALSE;
 	pPlayer->UpdateClientData();
 	pPlayer->EnableControl( FALSE );
@@ -291,6 +323,8 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 		flTotal += PlaySequenceByName( pszLoop, FALSE ) * m_iLoopsLeft;
 	flTotal += PlaySequenceByName( pszEnd, FALSE );
 
+	m_flClimbStartTime = gpGlobals->time;
+	m_flClimbEndTime = gpGlobals->time + Q_max( flTotal, COF_LADDER_MIN_SEQUENCE_TIME );
 	pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + flTotal + 0.1f;
 
 	m_iStage = LADDER_START;
@@ -466,8 +500,24 @@ void CCOFLadderManager::UpdatePlayerPosition( void )
 	if( !pPlayer )
 		return;
 
+	const float flDuration = Q_max( m_flClimbEndTime - m_flClimbStartTime, COF_LADDER_MIN_SEQUENCE_TIME );
+	const float flRawFraction = COF_ClampFloat( ( gpGlobals->time - m_flClimbStartTime ) / flDuration, 0.0f, 1.0f );
+	const float flMoveFraction = COF_SmoothStep( flRawFraction );
+
+	Vector vecOrigin = m_vecStartOrigin + ( m_vecEndOrigin - m_vecStartOrigin ) * flMoveFraction;
+	Vector vecAngles;
+	vecAngles.x = COF_LerpAngle( m_vecStartAngles.x, m_vecEndAngles.x, flMoveFraction );
+	vecAngles.y = COF_LerpAngle( m_vecStartAngles.y, m_vecEndAngles.y, flMoveFraction );
+	vecAngles.z = COF_LerpAngle( m_vecStartAngles.z, m_vecEndAngles.z, flMoveFraction );
+
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->basevelocity = g_vecZero;
+	pPlayer->pev->movetype = MOVETYPE_NONE;
+	pPlayer->pev->solid = SOLID_NOT;
+	UTIL_SetOrigin( pPlayer->pev, vecOrigin );
+	pPlayer->pev->angles = vecAngles;
+	pPlayer->pev->v_angle = vecAngles;
+	pPlayer->pev->fixangle = TRUE;
 }
 
 void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
@@ -481,6 +531,8 @@ void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
 		pPlayer->pev->angles = m_vecEndAngles;
 		pPlayer->pev->v_angle = m_vecEndAngles;
 		pPlayer->pev->fixangle = TRUE;
+		pPlayer->pev->movetype = m_iSavedMoveType;
+		pPlayer->pev->solid = m_iSavedSolid;
 		RestorePlayerView( pPlayer );
 		SendLadderViewState( pPlayer, FALSE );
 		pPlayer->EnableControl( TRUE );
@@ -494,6 +546,8 @@ void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
 	m_iStage = LADDER_IDLE;
 	m_iLoopsLeft = 0;
 	m_iExitSide = 0;
+	m_flClimbStartTime = 0.0f;
+	m_flClimbEndTime = 0.0f;
 
 	if( fFireTargets )
 	{
