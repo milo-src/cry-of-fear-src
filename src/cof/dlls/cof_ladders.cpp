@@ -13,7 +13,7 @@
 
 namespace
 {
-const float COF_LADDER_THINK_RATE = 0.05f;
+const float COF_LADDER_THINK_RATE = 0.02f;
 const float COF_LADDER_MIN_SEQUENCE_TIME = 0.15f;
 const float COF_LADDER_LOOP_DISTANCE = 96.0f;
 const int COF_LADDER_MAX_LOOPS = 6;
@@ -54,6 +54,54 @@ Vector COF_LerpAngles( const Vector &vecStart, const Vector &vecEnd, float flFra
 	}
 
 	return vecStart + vecDelta * COF_ClampFloat( flFraction, 0.0f, 1.0f );
+}
+
+BOOL COF_IsPlayerOriginClear( CBasePlayer *pPlayer, const Vector &vecOrigin )
+{
+	if( !pPlayer )
+		return FALSE;
+
+	TraceResult tr;
+	UTIL_TraceHull( vecOrigin, vecOrigin, ignore_monsters, human_hull, pPlayer->edict(), &tr );
+	return !tr.fStartSolid && !tr.fAllSolid;
+}
+
+Vector COF_FindClearPlayerOrigin( CBasePlayer *pPlayer, const Vector &vecOrigin )
+{
+	if( COF_IsPlayerOriginClear( pPlayer, vecOrigin ) )
+		return vecOrigin;
+
+	for( float flOffset = 4.0f; flOffset <= 96.0f; flOffset += 4.0f )
+	{
+		const Vector vecTest = vecOrigin + Vector( 0.0f, 0.0f, flOffset );
+		if( COF_IsPlayerOriginClear( pPlayer, vecTest ) )
+			return vecTest;
+	}
+
+	return vecOrigin;
+}
+
+Vector COF_FindLadderExitOrigin( CBasePlayer *pPlayer, const Vector &vecOrigin )
+{
+	Vector vecClear = COF_FindClearPlayerOrigin( pPlayer, vecOrigin );
+
+	TraceResult tr;
+	UTIL_TraceHull(
+		vecClear + Vector( 0.0f, 0.0f, 16.0f ),
+		vecClear - Vector( 0.0f, 0.0f, 64.0f ),
+		ignore_monsters,
+		human_hull,
+		pPlayer ? pPlayer->edict() : NULL,
+		&tr );
+
+	if( !tr.fStartSolid && !tr.fAllSolid && tr.flFraction < 1.0f )
+	{
+		const Vector vecGrounded = tr.vecEndPos + Vector( 0.0f, 0.0f, 1.0f );
+		if( COF_IsPlayerOriginClear( pPlayer, vecGrounded ) )
+			return vecGrounded;
+	}
+
+	return vecClear;
 }
 }
 
@@ -111,6 +159,7 @@ private:
 	float m_flMoveEndTime;
 	float m_flStageEndTime;
 	int m_iLoopsLeft;
+	int m_iSavedMoveType;
 	BOOL m_fGoingUp;
 	LadderStage m_iStage;
 };
@@ -132,6 +181,7 @@ CCOFLadderManager::CCOFLadderManager() :
 	m_flMoveEndTime( 0.0f ),
 	m_flStageEndTime( 0.0f ),
 	m_iLoopsLeft( 0 ),
+	m_iSavedMoveType( MOVETYPE_WALK ),
 	m_fGoingUp( TRUE ),
 	m_iStage( LADDER_IDLE )
 {
@@ -245,8 +295,8 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 		return FALSE;
 
 	m_fGoingUp = fFromBottom;
-	m_vecStartOrigin = pStart->pev->origin;
-	m_vecEndOrigin = pEnd->pev->origin;
+	m_vecStartOrigin = COF_FindClearPlayerOrigin( pPlayer, pStart->pev->origin );
+	m_vecEndOrigin = COF_FindLadderExitOrigin( pPlayer, pEnd->pev->origin );
 	m_vecStartAngles = pStart->pev->angles;
 	m_vecEndAngles = pEnd->pev->angles;
 	m_iLoopsLeft = EstimateLoopCount( m_vecStartOrigin, m_vecEndOrigin );
@@ -254,15 +304,19 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 	m_hPlayer = pPlayer;
 	m_iszSavedViewModel = pPlayer->pev->viewmodel;
 	m_iszSavedWeaponModel = pPlayer->pev->weaponmodel;
+	m_iSavedMoveType = pPlayer->pev->movetype;
 
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->basevelocity = g_vecZero;
+	pPlayer->pev->movetype = MOVETYPE_NOCLIP;
 	UTIL_SetOrigin( pPlayer->pev, m_vecStartOrigin );
 	pPlayer->pev->angles = m_vecStartAngles;
 	pPlayer->pev->v_angle = m_vecStartAngles;
 	pPlayer->pev->fixangle = TRUE;
-	pPlayer->pev->viewmodel = iStringNull;
-	pPlayer->pev->weaponmodel = iStringNull;
+	pPlayer->pev->viewmodel = 0;
+	pPlayer->pev->weaponmodel = 0;
+	pPlayer->m_fWeapon = FALSE;
+	pPlayer->UpdateClientData();
 	pPlayer->EnableControl( FALSE );
 
 	ClearBits( pev->effects, EF_NODRAW );
@@ -417,14 +471,10 @@ void CCOFLadderManager::UpdatePlayerPosition( void )
 	const float flDuration = Q_max( m_flMoveEndTime - m_flMoveStartTime, COF_LADDER_MIN_SEQUENCE_TIME );
 	const float flFraction = ( gpGlobals->time - m_flMoveStartTime ) / flDuration;
 	const Vector vecOrigin = COF_LerpVector( m_vecStartOrigin, m_vecEndOrigin, flFraction );
-	const Vector vecAngles = COF_LerpAngles( m_vecStartAngles, m_vecEndAngles, flFraction );
 
 	pPlayer->pev->velocity = g_vecZero;
 	pPlayer->pev->basevelocity = g_vecZero;
 	UTIL_SetOrigin( pPlayer->pev, vecOrigin );
-	pPlayer->pev->angles = vecAngles;
-	pPlayer->pev->v_angle = vecAngles;
-	pPlayer->pev->fixangle = TRUE;
 }
 
 void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
@@ -434,7 +484,8 @@ void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
 	{
 		pPlayer->pev->velocity = g_vecZero;
 		pPlayer->pev->basevelocity = g_vecZero;
-		UTIL_SetOrigin( pPlayer->pev, m_vecEndOrigin );
+		pPlayer->pev->movetype = m_iSavedMoveType ? m_iSavedMoveType : MOVETYPE_WALK;
+		UTIL_SetOrigin( pPlayer->pev, COF_FindLadderExitOrigin( pPlayer, m_vecEndOrigin ) );
 		pPlayer->pev->angles = m_vecEndAngles;
 		pPlayer->pev->v_angle = m_vecEndAngles;
 		pPlayer->pev->fixangle = TRUE;
@@ -464,9 +515,12 @@ void CCOFLadderManager::RestorePlayerView( CBasePlayer *pPlayer )
 
 	pPlayer->pev->viewmodel = m_iszSavedViewModel;
 	pPlayer->pev->weaponmodel = m_iszSavedWeaponModel;
+	pPlayer->m_fWeapon = FALSE;
 
 	if( pPlayer->m_pActiveItem )
 		pPlayer->m_pActiveItem->UpdateItemInfo();
+
+	pPlayer->UpdateClientData();
 }
 
 int CCOFLadderManager::EstimateLoopCount( const Vector &vecStart, const Vector &vecEnd ) const
