@@ -9,30 +9,12 @@
 #include "cbase.h"
 #include "player.h"
 #include "weapons.h"
+#include "cof_inventory_defs.h"
 
 extern int gmsgItemPickup;
 extern int gmsgCofInvClear;
 extern int gmsgCofInvItem;
 extern int gmsgCofInvQuick;
-
-struct COFInventoryDef
-{
-	char mapName[64];
-	char niceName[128];
-	char className[64];
-	char model[128];
-	char pickupSound[128];
-	char combinedWith[128];
-	char combinedResult[128];
-	char combinedSound[128];
-	BOOL droppable;
-};
-
-static void COF_ClearItemDef( COFInventoryDef *pDef )
-{
-	memset( pDef, 0, sizeof( *pDef ) );
-	pDef->droppable = FALSE;
-}
 
 static const char *COF_FileBaseName( const char *pszName, char *pszOut, size_t outSize )
 {
