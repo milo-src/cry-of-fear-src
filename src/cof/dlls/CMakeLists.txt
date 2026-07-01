@@ -69,6 +69,7 @@ set (SVDLL_SOURCES
 	cof_monsters.cpp
 	cof_player_events.cpp
 	cof_pickups.cpp
+	cof_scene_actions.cpp
 	cof_scene_models.cpp
 	cof_script_points.cpp
 	cof_static_props.cpp

@@ -346,7 +346,11 @@ void CCyclerSprite::Spawn( void )
 	if( m_isStudioModel )
 	{
 		InitBoneControllers();
-		PlayConfiguredSequence( FALSE );
+
+		if( FClassnameIs( pev, "env_model" ) )
+			m_state = !FBitSet( pev->spawnflags, 1 );
+
+		PlayConfiguredSequence( m_state );
 	}
 	else
 		m_maxFrame = (float)MODEL_FRAMES( pev->modelindex ) - 1;

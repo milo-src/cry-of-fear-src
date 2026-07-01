@@ -2692,6 +2692,10 @@ public:
 	float m_initialSpeed;
 	float m_acceleration;
 	float m_deceleration;
+	float m_flRoll;
+	int m_iKeepNoHud;
+	int m_iKeepBlackBars;
+	int m_iAttachment;
 	int m_state;
 };
 
@@ -2712,6 +2716,10 @@ TYPEDESCRIPTION	CTriggerCamera::m_SaveData[] =
 	DEFINE_FIELD( CTriggerCamera, m_initialSpeed, FIELD_FLOAT ),
 	DEFINE_FIELD( CTriggerCamera, m_acceleration, FIELD_FLOAT ),
 	DEFINE_FIELD( CTriggerCamera, m_deceleration, FIELD_FLOAT ),
+	DEFINE_FIELD( CTriggerCamera, m_flRoll, FIELD_FLOAT ),
+	DEFINE_FIELD( CTriggerCamera, m_iKeepNoHud, FIELD_INTEGER ),
+	DEFINE_FIELD( CTriggerCamera, m_iKeepBlackBars, FIELD_INTEGER ),
+	DEFINE_FIELD( CTriggerCamera, m_iAttachment, FIELD_INTEGER ),
 	DEFINE_FIELD( CTriggerCamera, m_state, FIELD_INTEGER ),
 };
 
@@ -2753,6 +2761,26 @@ void CTriggerCamera::KeyValue( KeyValueData *pkvd )
 		m_deceleration = atof( pkvd->szValue );
 		pkvd->fHandled = TRUE;
 	}
+	else if( FStrEq( pkvd->szKeyName, "zangle" ) )
+	{
+		m_flRoll = atof( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "keepnohud" ) )
+	{
+		m_iKeepNoHud = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "keepblackbars" ) )
+	{
+		m_iKeepBlackBars = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_iAttachment" ) || FStrEq( pkvd->szKeyName, "iuser2" ) )
+	{
+		m_iAttachment = atoi( pkvd->szValue );
+		pkvd->fHandled = TRUE;
+	}
 	else
 		CBaseDelay::KeyValue( pkvd );
 }
@@ -2776,7 +2804,7 @@ void CTriggerCamera::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 
 	m_hPlayer = pActivator;
 
-	m_flReturnTime = gpGlobals->time + m_flWait;
+	m_flReturnTime = gpGlobals->time + ( m_flWait > 0.0f ? m_flWait : 999999.0f );
 	pev->speed = m_initialSpeed;
 	m_targetSpeed = m_initialSpeed;
 
@@ -2824,12 +2852,13 @@ void CTriggerCamera::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 		UTIL_SetOrigin( pev, pActivator->pev->origin + pActivator->pev->view_ofs );
 		pev->angles.x = -pActivator->pev->angles.x;
 		pev->angles.y = pActivator->pev->angles.y;
-		pev->angles.z = 0;
+		pev->angles.z = m_flRoll;
 		pev->velocity = pActivator->pev->velocity;
 	}
 	else
 	{
 		pev->velocity = Vector( 0, 0, 0 );
+		pev->angles.z = m_flRoll;
 	}
 
 	SET_VIEW( pActivator->edict(), edict() );
@@ -2857,6 +2886,7 @@ void CTriggerCamera::FollowTarget()
 
 	Vector vecGoal = UTIL_VecToAngles( m_hTarget->pev->origin - pev->origin );
 	vecGoal.x = -vecGoal.x;
+	vecGoal.z = m_flRoll;
 
 	if( pev->angles.y > 360 )
 		pev->angles.y -= 360;
@@ -2879,6 +2909,8 @@ void CTriggerCamera::FollowTarget()
 
 	pev->avelocity.x = dx * 40 * 0.01f;
 	pev->avelocity.y = dy * 40 * 0.01f;
+	pev->angles.z = m_flRoll;
+	pev->avelocity.z = 0;
 
 	if( !( FBitSet( pev->spawnflags, SF_CAMERA_PLAYER_TAKECONTROL ) ) )
 	{

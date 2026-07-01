@@ -103,6 +103,62 @@ inline float COF_KeyFloat( KeyValueData *pkvd )
 	return pkvd && pkvd->szValue ? atof( pkvd->szValue ) : 0.0f;
 }
 
+inline Vector COF_ParseVector( const char *pszValue, const Vector &vecDefault = g_vecZero )
+{
+	if( !pszValue || !pszValue[0] )
+		return vecDefault;
+
+	Vector vecOut = vecDefault;
+	float x, y, z;
+	if( sscanf( pszValue, "%f %f %f", &x, &y, &z ) == 3 )
+		vecOut = Vector( x, y, z );
+
+	return vecOut;
+}
+
+inline CBaseEntity *COF_FindEntityByNameOrClass( const char *pszName, CBaseEntity *pStart = NULL )
+{
+	if( !pszName || !pszName[0] )
+		return NULL;
+
+	CBaseEntity *pEntity = UTIL_FindEntityByTargetname( pStart, pszName );
+	if( pEntity )
+		return pEntity;
+
+	return UTIL_FindEntityByClassname( pStart, pszName );
+}
+
+inline BOOL COF_EntityCanAnimate( CBaseEntity *pEntity )
+{
+	if( !pEntity || FStringNull( pEntity->pev->model ) )
+		return FALSE;
+
+	if( pEntity->MyMonsterPointer() )
+		return TRUE;
+
+	return FClassnameIs( pEntity->pev, "env_model" ) ||
+		FClassnameIs( pEntity->pev, "cycler_sprite" ) ||
+		FClassnameIs( pEntity->pev, "cof_mdlcutscene" ) ||
+		FClassnameIs( pEntity->pev, "cutscene_model" );
+}
+
+inline BOOL COF_PlayNamedSequence( CBaseEntity *pEntity, const char *pszSequence, float flFramerate = 1.0f )
+{
+	if( !COF_EntityCanAnimate( pEntity ) || !pszSequence || !pszSequence[0] )
+		return FALSE;
+
+	CBaseAnimating *pAnimating = (CBaseAnimating *)pEntity;
+	const int iSequence = pAnimating->LookupSequence( pszSequence );
+	if( iSequence < 0 )
+		return FALSE;
+
+	pAnimating->pev->sequence = iSequence;
+	pAnimating->pev->frame = 0;
+	pAnimating->ResetSequenceInfo();
+	pAnimating->pev->framerate = flFramerate;
+	return TRUE;
+}
+
 inline void COF_RunConsoleCommand( const char *pszCommand )
 {
 	if( !pszCommand || !pszCommand[0] )

@@ -135,6 +135,18 @@ void CCOFCustomize::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 			const char *pszModel = STRING( pEntity->pev->model );
 			if( pszModel && pszModel[0] == '*' )
 				pEntity->pev->solid = SOLID_BSP;
+			else
+				pEntity->pev->solid = SOLID_SLIDEBOX;
+		}
+		else if( m_iSolid == 3 && pEntity->pev->model )
+		{
+			if( pEntity->pev->solid == SOLID_NOT )
+			{
+				const char *pszModel = STRING( pEntity->pev->model );
+				pEntity->pev->solid = ( pszModel && pszModel[0] == '*' ) ? SOLID_BSP : SOLID_SLIDEBOX;
+			}
+			else
+				pEntity->pev->solid = SOLID_NOT;
 		}
 
 		UTIL_SetOrigin( pEntity->pev, pEntity->pev->origin );
@@ -169,15 +181,21 @@ public:
 	{
 		memset( m_iszAnimations, 0, sizeof( m_iszAnimations ) );
 		m_hActivator.Set( NULL );
+		m_iNextAnimation = 0;
+		m_iCurrentAnimation = -1;
 	}
 
 	void KeyValue( KeyValueData *pkvd );
 	void Spawn( void );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	void EXPORT AnimateThink( void );
+	int ResolveAnimationSlot( USE_TYPE useType, float value );
+	int NextAnimationSlot( int startSlot );
 
 	string_t m_iszAnimations[8];
 	EHANDLE m_hActivator;
+	int m_iNextAnimation;
+	int m_iCurrentAnimation;
 };
 
 LINK_ENTITY_TO_CLASS( cof_mdlcutscene, CCOFMdlCutscene )
@@ -209,6 +227,8 @@ void CCOFMdlCutscene::Spawn( void )
 
 	InitBoneControllers();
 	ResetSequenceInfo();
+	if( pev->sequence > 0 && pev->sequence <= (int)ARRAYSIZE( m_iszAnimations ) )
+		m_iNextAnimation = pev->sequence - 1;
 	SetUse( &CCOFMdlCutscene::Use );
 }
 
@@ -216,18 +236,54 @@ void CCOFMdlCutscene::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 {
 	m_hActivator = pActivator;
 
-	if( COF_HasText( m_iszAnimations[0] ) )
+	const int slot = ResolveAnimationSlot( useType, value );
+	if( slot < 0 )
 	{
-		const int sequence = LookupSequence( STRING( m_iszAnimations[0] ) );
-		if( sequence >= 0 )
-			pev->sequence = sequence;
+		SUB_UseTargets( pActivator, useType, value );
+		return;
 	}
 
+	const int sequence = LookupSequence( STRING( m_iszAnimations[slot] ) );
+	if( sequence >= 0 )
+		pev->sequence = sequence;
+
+	m_iCurrentAnimation = slot;
+	m_iNextAnimation = NextAnimationSlot( slot + 1 );
 	pev->frame = 0;
-	pev->framerate = 1.0f;
 	ResetSequenceInfo();
+	pev->framerate = 1.0f;
 	SetThink( &CCOFMdlCutscene::AnimateThink );
 	pev->nextthink = gpGlobals->time + 0.05f;
+}
+
+int CCOFMdlCutscene::ResolveAnimationSlot( USE_TYPE useType, float value )
+{
+	int requestedSlot = -1;
+	if( value >= 1.0f && value <= (float)ARRAYSIZE( m_iszAnimations ) )
+		requestedSlot = (int)value - 1;
+	else if( useType == USE_SET && value >= 0.0f && value < (float)ARRAYSIZE( m_iszAnimations ) )
+		requestedSlot = (int)value;
+
+	if( requestedSlot >= 0 && COF_HasText( m_iszAnimations[requestedSlot] ) )
+		return requestedSlot;
+
+	if( m_iNextAnimation >= 0 && m_iNextAnimation < (int)ARRAYSIZE( m_iszAnimations ) &&
+		COF_HasText( m_iszAnimations[m_iNextAnimation] ) )
+		return m_iNextAnimation;
+
+	return NextAnimationSlot( 0 );
+}
+
+int CCOFMdlCutscene::NextAnimationSlot( int startSlot )
+{
+	for( int i = 0; i < (int)ARRAYSIZE( m_iszAnimations ); i++ )
+	{
+		const int slot = ( startSlot + i ) % (int)ARRAYSIZE( m_iszAnimations );
+		if( COF_HasText( m_iszAnimations[slot] ) )
+			return slot;
+	}
+
+	return -1;
 }
 
 void CCOFMdlCutscene::AnimateThink( void )
@@ -244,4 +300,3 @@ void CCOFMdlCutscene::AnimateThink( void )
 
 	pev->nextthink = gpGlobals->time + 0.05f;
 }
-
