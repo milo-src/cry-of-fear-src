@@ -79,7 +79,8 @@ private:
 	BOOL FindEndpoints( BOOL fFromBottom, CBaseEntity **ppStart, CBaseEntity **ppEnd );
 	const char *PickSequence( string_t iszSequence, const char *pszFallback = NULL );
 	const char *PickLoopSequence( BOOL fGoingUp );
-	float PlaySequenceByName( const char *pszSequence );
+	float PlaySequenceByName( const char *pszSequence, BOOL fSendToPlayer = TRUE );
+	void SendPlayerViewSequence( CBasePlayer *pPlayer, int iSequence );
 	void AdvanceStage( void );
 	void UpdatePlayerPosition( void );
 	void FinishClimb( BOOL fFireTargets );
@@ -254,7 +255,7 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 	pPlayer->pev->angles = m_vecStartAngles;
 	pPlayer->pev->v_angle = m_vecStartAngles;
 	pPlayer->pev->fixangle = TRUE;
-	pPlayer->pev->viewmodel = 0;
+	pPlayer->pev->viewmodel = pev->model;
 	pPlayer->pev->weaponmodel = 0;
 	pPlayer->m_fWeapon = FALSE;
 	pPlayer->UpdateClientData();
@@ -268,10 +269,10 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 	const char *pszEnd = m_fGoingUp ? PickSequence( m_iszEndUp, "climb_end_up" ) : PickSequence( m_iszEndDown, "climb_end_down" );
 
 	float flTotal = 0.0f;
-	flTotal += PlaySequenceByName( pszStart );
+	flTotal += PlaySequenceByName( pszStart, FALSE );
 	if( pszLoop )
-		flTotal += PlaySequenceByName( pszLoop ) * m_iLoopsLeft;
-	flTotal += PlaySequenceByName( pszEnd );
+		flTotal += PlaySequenceByName( pszLoop, FALSE ) * m_iLoopsLeft;
+	flTotal += PlaySequenceByName( pszEnd, FALSE );
 
 	pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + flTotal + 0.1f;
 
@@ -328,7 +329,7 @@ const char *CCOFLadderManager::PickLoopSequence( BOOL fGoingUp )
 	return PickSequence( m_iszLoopUp, "climb_loop_up" );
 }
 
-float CCOFLadderManager::PlaySequenceByName( const char *pszSequence )
+float CCOFLadderManager::PlaySequenceByName( const char *pszSequence, BOOL fSendToPlayer )
 {
 	if( !pszSequence || !pszSequence[0] )
 		return 0.0f;
@@ -341,7 +342,28 @@ float CCOFLadderManager::PlaySequenceByName( const char *pszSequence )
 	pev->frame = 0.0f;
 	pev->animtime = gpGlobals->time;
 	ResetSequenceInfo();
+
+	if( fSendToPlayer )
+		SendPlayerViewSequence( (CBasePlayer *)(CBaseEntity *)m_hPlayer, iSequence );
+
 	return Q_max( COF_LADDER_MIN_SEQUENCE_TIME, 256.0f / Q_max( fabs( m_flFrameRate ), 1.0f ) );
+}
+
+void CCOFLadderManager::SendPlayerViewSequence( CBasePlayer *pPlayer, int iSequence )
+{
+	if( !pPlayer || iSequence < 0 || !HasModel() )
+		return;
+
+	pPlayer->pev->viewmodel = pev->model;
+	pPlayer->pev->weaponmodel = 0;
+	pPlayer->pev->weaponanim = iSequence;
+	pPlayer->m_fWeapon = FALSE;
+	pPlayer->UpdateClientData();
+
+	MESSAGE_BEGIN( MSG_ONE, SVC_WEAPONANIM, NULL, pPlayer->pev );
+		WRITE_BYTE( iSequence );
+		WRITE_BYTE( 0 );
+	MESSAGE_END();
 }
 
 void CCOFLadderManager::LadderThink( void )
