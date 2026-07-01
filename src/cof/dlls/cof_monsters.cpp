@@ -306,6 +306,8 @@ BOOL CCOFMonsterSlower::ShouldUseBaseAI( void ) const
 	return m_pCine != NULL ||
 		m_MonsterState == MONSTERSTATE_SCRIPT ||
 		m_MonsterState == MONSTERSTATE_DEAD ||
+		m_IdealMonsterState == MONSTERSTATE_DEAD ||
+		COF_HasText( m_iszQueuedDeathTarget ) ||
 		pev->deadflag != DEAD_NO;
 }
 
@@ -950,7 +952,12 @@ void CCOFMonsterCompat::CombatThink( float flInterval )
 
 void CCOFMonsterCompat::MonsterThink( void )
 {
-	if( m_pCine || m_MonsterState == MONSTERSTATE_SCRIPT || m_MonsterState == MONSTERSTATE_DEAD || pev->deadflag != DEAD_NO )
+	if( m_pCine ||
+		m_MonsterState == MONSTERSTATE_SCRIPT ||
+		m_MonsterState == MONSTERSTATE_DEAD ||
+		m_IdealMonsterState == MONSTERSTATE_DEAD ||
+		COF_HasText( m_iszQueuedDeathTarget ) ||
+		pev->deadflag != DEAD_NO )
 	{
 		CBaseMonster::MonsterThink();
 		FireQueuedDeathTrigger();
