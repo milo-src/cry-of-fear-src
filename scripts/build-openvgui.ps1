@@ -86,13 +86,35 @@ if ($CleanFirst) {
 
 Invoke-Checked -FilePath "cmake" -ArgumentList $buildArgs -WorkingDirectory $repoRoot
 
-$runtimeDll = Join-Path (Join-Path $BuildDir $Configuration) "vgui.dll"
-if (-not (Test-Path -LiteralPath $runtimeDll)) {
-    $runtimeDll = Join-Path $BuildDir "vgui.dll"
+$runtimeNames = if ($isWindows) {
+    @("vgui.dll")
+}
+elseif ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform(
+    [System.Runtime.InteropServices.OSPlatform]::OSX
+)) {
+    @("libvgui.dylib")
+}
+else {
+    @("libvgui.so")
 }
 
-if (-not (Test-Path -LiteralPath $runtimeDll)) {
-    throw "openvgui built successfully, but vgui.dll was not found in $BuildDir"
+$runtimeDll = ""
+foreach ($runtimeName in $runtimeNames) {
+    foreach ($candidateRoot in @((Join-Path $BuildDir $Configuration), $BuildDir)) {
+        $candidate = Join-Path $candidateRoot $runtimeName
+        if (Test-Path -LiteralPath $candidate) {
+            $runtimeDll = $candidate
+            break
+        }
+    }
+
+    if ($runtimeDll) {
+        break
+    }
+}
+
+if (-not $runtimeDll) {
+    throw "openvgui built successfully, but its runtime library was not found in $BuildDir"
 }
 
 Write-Host ""
