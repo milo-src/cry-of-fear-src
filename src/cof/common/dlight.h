@@ -26,6 +26,12 @@ typedef struct dlight_s
 	float		minlight;	// don't add when contributing less
 	int		key;
 	qboolean		dark;	// subtracts light instead of adding
+	int		flags;
+	vec3_t		spotdir;	// normalized spotlight direction
+	float		spotdot;	// outer cone dot product
+	float		spotsoft;	// 0..1 softness multiplier
 } dlight_t;
+
+#define DLIGHT_SPOTLIGHT ( 1 << 0 )
 
 #endif//DLIGHT_H
