@@ -53,18 +53,6 @@ function Invoke-Checked {
     }
 }
 
-function Initialize-RepoSubmodules {
-    param(
-        [string[]]$Paths = @()
-    )
-
-    $repoRoot = Get-RepoRoot
-    $args = @("submodule", "update", "--init", "--recursive")
-    $args += $Paths
-
-    Invoke-Checked -FilePath "git" -ArgumentList $args -WorkingDirectory $repoRoot
-}
-
 function Find-LocalSdl2 {
     $repoRoot = Get-RepoRoot
     $depsDir = Join-Path $repoRoot "deps"

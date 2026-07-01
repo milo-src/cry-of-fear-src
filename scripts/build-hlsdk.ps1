@@ -72,10 +72,6 @@ if (-not (Test-Path (Join-Path $sdkDir "CMakeLists.txt"))) {
     throw "Cannot find CMakeLists.txt in HLSDK source directory: $sdkDir"
 }
 
-if ($sdkDir -eq (Convert-ToFullPath $defaultSdkDir)) {
-    Initialize-RepoSubmodules -Paths @("external/hlsdk-portable")
-}
-
 $configureArgs = @(
     "-S", $sdkDir,
     "-B", $BuildDir,

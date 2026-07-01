@@ -51,8 +51,6 @@ if ($isWindows -and [string]::IsNullOrWhiteSpace($Sdl2Path)) {
     throw "SDL2 is required on Windows. Run .\scripts\fetch-sdl2.ps1, set SDL2_DIR, or pass -Sdl2Path C:\Path\To\SDL2."
 }
 
-Initialize-RepoSubmodules -Paths @("external/xash3d-fwgs")
-
 if ($isWindows) {
     $waf = Join-Path $engineDir "waf.bat"
 }

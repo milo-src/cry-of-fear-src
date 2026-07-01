@@ -7,8 +7,18 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Get-RepoRoot
 
-Initialize-RepoSubmodules
+$requiredDirs = @(
+    "external\xash3d-fwgs",
+    "external\hlsdk-portable",
+    "external\openvgui"
+)
+
+foreach ($dir in $requiredDirs) {
+    $fullPath = Join-Path $repoRoot $dir
+    if (-not (Test-Path -LiteralPath $fullPath)) {
+        throw "Required vendored dependency is missing: $fullPath"
+    }
+}
 
 Write-Host ""
-Write-Host "Submodules ready:"
-Invoke-Checked -FilePath "git" -ArgumentList @("submodule", "status", "--recursive") -WorkingDirectory $repoRoot
+Write-Host "Vendored dependencies are present."

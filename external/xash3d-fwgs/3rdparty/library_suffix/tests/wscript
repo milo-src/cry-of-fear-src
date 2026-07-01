@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+from waflib.Tools import waf_unit_test
+
+VERSION = '0.0'
+APPNAME = 'library_suffix_tests'
+top = '.'
+
+def options(opt):
+	opt.add_option('--validate-target', action='store', dest='VALIDATE_TARGET', default=None,
+		help='make sure that autodetection returns valid target, but you have to supply it yourself (like win32-i386 on 32-bit windows)')
+
+	opt.load('compiler_c waf_unit_test')
+
+def configure(conf):
+	conf.load('compiler_c waf_unit_test')
+	conf.env.VALIDATE_TARGET = conf.options.VALIDATE_TARGET
+
+def build(bld):
+	bld.recurse('..')
+
+	if bld.env.VALIDATE_TARGET:
+		bld.program(features='test', source='test_validate_target.c', target='validate_target', use='library_suffix', defines='VALIDATE_TARGET="%s"' % bld.env.VALIDATE_TARGET)
+
+	bld.program(features='test', source='test_build.c', target='build', use='library_suffix')
+	bld.program(features='test', source='test_strip_intel.c', target='strip_intel', use='library_suffix')
+	bld.program(features='test', source='test_generate.c', target='generate', use='library_suffix')
+
+	bld.add_post_fun(waf_unit_test.summary)
+	bld.add_post_fun(waf_unit_test.set_exit_code)
+

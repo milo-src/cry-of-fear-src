@@ -41,10 +41,6 @@ if (-not (Get-Command "cmake" -ErrorAction SilentlyContinue)) {
     throw "CMake is required to build openvgui."
 }
 
-if ($SourceDir -eq (Convert-ToFullPath $defaultSourceDir)) {
-    Initialize-RepoSubmodules -Paths @("external/openvgui")
-}
-
 if (-not (Test-Path (Join-Path $SourceDir "CMakeLists.txt"))) {
     throw "Cannot find CMakeLists.txt in openvgui source directory: $SourceDir"
 }
