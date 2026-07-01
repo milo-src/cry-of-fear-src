@@ -65,7 +65,8 @@ set (SVDLL_SOURCES
 	cof_entities.cpp
 	cof_brush_triggers.cpp
 	cof_inventory.cpp
-	cof_ladders.cpp
+	cof_ladder_manager.cpp
+	cof_ladder_use.cpp
 	cof_monsters.cpp
 	cof_player_events.cpp
 	cof_pickups.cpp
