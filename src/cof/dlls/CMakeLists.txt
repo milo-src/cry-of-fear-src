@@ -63,7 +63,17 @@ set (SVDLL_SOURCES
 	combat.cpp
 	controller.cpp
 	cof_entities.cpp
+	cof_brush_triggers.cpp
 	cof_inventory.cpp
+	cof_ladders.cpp
+	cof_monsters.cpp
+	cof_player_events.cpp
+	cof_pickups.cpp
+	cof_scene_models.cpp
+	cof_script_points.cpp
+	cof_static_props.cpp
+	cof_text_audio.cpp
+	cof_world_effects.cpp
 	crossbow.cpp
 	crowbar.cpp
 	defaultai.cpp
