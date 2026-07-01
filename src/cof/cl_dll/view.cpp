@@ -164,6 +164,7 @@ struct cof_ladder_view_state_t
 	qboolean resetFrame;
 	char model[128];
 	int modelIndex;
+	struct model_s *modelPtr;
 	int sequence;
 	int stage;
 	int exitSide;
@@ -184,6 +185,7 @@ void COF_LadderView_Set( int active, const char *pszModel, int iSequence, int iD
 	if( !g_CofLadderView.active || stricmp( g_CofLadderView.model, pszModel ? pszModel : "" ) != 0 )
 	{
 		g_CofLadderView.modelIndex = 0;
+		g_CofLadderView.modelPtr = NULL;
 		strncpy( g_CofLadderView.model, pszModel ? pszModel : "", sizeof( g_CofLadderView.model ) - 1 );
 		g_CofLadderView.model[sizeof( g_CofLadderView.model ) - 1] = '\0';
 	}
@@ -204,14 +206,18 @@ static void COF_LadderView_Apply( struct ref_params_s *pparams, cl_entity_t *vie
 
 	if( g_CofLadderView.modelIndex <= 0 )
 	{
-		struct model_s *pModel = gEngfuncs.CL_LoadModel( g_CofLadderView.model, &g_CofLadderView.modelIndex );
-		if( !pModel || g_CofLadderView.modelIndex <= 0 )
+		g_CofLadderView.modelPtr = gEngfuncs.CL_LoadModel( g_CofLadderView.model, &g_CofLadderView.modelIndex );
+		if( !g_CofLadderView.modelPtr || g_CofLadderView.modelIndex <= 0 )
 			return;
 	}
 
-	view->model = IEngineStudio.GetModelByIndex( g_CofLadderView.modelIndex );
-	if( !view->model )
+	if( !g_CofLadderView.modelPtr )
+		g_CofLadderView.modelPtr = IEngineStudio.GetModelByIndex( g_CofLadderView.modelIndex );
+
+	if( !g_CofLadderView.modelPtr )
 		return;
+
+	view->model = g_CofLadderView.modelPtr;
 
 	if( g_CofLadderView.resetFrame || g_CofLadderView.startTime <= 0.0f )
 	{
@@ -231,6 +237,14 @@ static void COF_LadderView_Apply( struct ref_params_s *pparams, cl_entity_t *vie
 	view->curstate.animtime = pparams->time;
 	view->curstate.body = 0;
 	view->curstate.colormap = 0;
+	view->curstate.effects &= ~EF_NODRAW;
+	view->curstate.rendermode = kRenderNormal;
+	view->curstate.renderfx = kRenderFxNone;
+	view->curstate.renderamt = 255;
+	view->curstate.rendercolor.r = 255;
+	view->curstate.rendercolor.g = 255;
+	view->curstate.rendercolor.b = 255;
+	view->curstate.scale = 1.0f;
 
 	VectorCopy( view->origin, view->curstate.origin );
 	VectorCopy( view->angles, view->curstate.angles );
