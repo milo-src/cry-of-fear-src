@@ -61,6 +61,8 @@ private:
 	void SlowerCombatThink( float flInterval );
 	void MoveTowardEnemy( float flInterval, float flDist );
 	void HammerAttack( BOOL fHeavyAttack );
+	void QueueDeathTrigger( void );
+	void FireQueuedDeathTrigger( void );
 
 	static const char *pAttackSounds[];
 	static const char *pFastAttackSounds[];
@@ -76,6 +78,8 @@ private:
 	float m_flNextPainSound;
 	float m_flNextFlinch;
 	float m_flNextEnemySearch;
+	string_t m_iszQueuedDeathTarget;
+	float m_flQueuedDeathTargetTime;
 };
 
 LINK_ENTITY_TO_CLASS( monster_slower, CCOFMonsterSlower )
@@ -151,7 +155,9 @@ CCOFMonsterSlower::CCOFMonsterSlower() :
 	m_fFirstHitReacted( FALSE ),
 	m_flNextPainSound( 0.0f ),
 	m_flNextFlinch( 0.0f ),
-	m_flNextEnemySearch( 0.0f )
+	m_flNextEnemySearch( 0.0f ),
+	m_iszQueuedDeathTarget( iStringNull ),
+	m_flQueuedDeathTargetTime( 0.0f )
 {
 }
 
@@ -419,6 +425,7 @@ void CCOFMonsterSlower::MonsterThink( void )
 	if( ShouldUseBaseAI() )
 	{
 		CBaseMonster::MonsterThink();
+		FireQueuedDeathTrigger();
 		return;
 	}
 
@@ -508,13 +515,30 @@ void CCOFMonsterSlower::HandleAnimEvent( MonsterEvent_t *pEvent )
 
 void CCOFMonsterSlower::Killed( entvars_t *pevAttacker, int iGib )
 {
-	if( m_iTriggerCondition == AITRIGGER_DEATH && COF_HasText( m_iszTriggerTarget ) )
-	{
-		FireTargets( STRING( m_iszTriggerTarget ), this, this, USE_TOGGLE, 0 );
-		m_iTriggerCondition = AITRIGGER_NONE;
-	}
-
+	QueueDeathTrigger();
 	CBaseMonster::Killed( pevAttacker, iGib );
+}
+
+void CCOFMonsterSlower::QueueDeathTrigger( void )
+{
+	if( m_iTriggerCondition != AITRIGGER_DEATH || !COF_HasText( m_iszTriggerTarget ) )
+		return;
+
+	m_iszQueuedDeathTarget = m_iszTriggerTarget;
+	m_flQueuedDeathTargetTime = gpGlobals->time + 0.2f;
+	m_iTriggerCondition = AITRIGGER_NONE;
+}
+
+void CCOFMonsterSlower::FireQueuedDeathTrigger( void )
+{
+	if( !COF_HasText( m_iszQueuedDeathTarget ) || gpGlobals->time < m_flQueuedDeathTargetTime )
+		return;
+
+	if( m_IdealMonsterState != MONSTERSTATE_DEAD && m_MonsterState != MONSTERSTATE_DEAD && pev->deadflag == DEAD_NO )
+		return;
+
+	FireTargets( STRING( m_iszQueuedDeathTarget ), this, this, USE_TOGGLE, 0 );
+	m_iszQueuedDeathTarget = iStringNull;
 }
 
 int CCOFMonsterSlower::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
@@ -597,7 +621,9 @@ class CCOFMonsterCompat : public CBaseMonster
 public:
 	CCOFMonsterCompat() :
 		m_flNextEnemySearch( 0.0f ),
-		m_flNextAttackTime( 0.0f )
+		m_flNextAttackTime( 0.0f ),
+		m_iszQueuedDeathTarget( iStringNull ),
+		m_flQueuedDeathTargetTime( 0.0f )
 	{
 	}
 
@@ -625,9 +651,13 @@ private:
 	void CombatThink( float flInterval );
 	void MoveTowardEnemy( float flInterval, float flDist );
 	void MeleeAttack( void );
+	void QueueDeathTrigger( void );
+	void FireQueuedDeathTrigger( void );
 
 	float m_flNextEnemySearch;
 	float m_flNextAttackTime;
+	string_t m_iszQueuedDeathTarget;
+	float m_flQueuedDeathTargetTime;
 };
 
 LINK_ENTITY_TO_CLASS( monster_sewmo, CCOFMonsterCompat )
@@ -923,6 +953,7 @@ void CCOFMonsterCompat::MonsterThink( void )
 	if( m_pCine || m_MonsterState == MONSTERSTATE_SCRIPT || m_MonsterState == MONSTERSTATE_DEAD || pev->deadflag != DEAD_NO )
 	{
 		CBaseMonster::MonsterThink();
+		FireQueuedDeathTrigger();
 		return;
 	}
 
@@ -947,12 +978,28 @@ int CCOFMonsterCompat::TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttack
 
 void CCOFMonsterCompat::Killed( entvars_t *pevAttacker, int iGib )
 {
-	if( m_iTriggerCondition == AITRIGGER_DEATH && COF_HasText( m_iszTriggerTarget ) )
-	{
-		FireTargets( STRING( m_iszTriggerTarget ), this, this, USE_TOGGLE, 0 );
-		m_iTriggerCondition = AITRIGGER_NONE;
-	}
-
+	QueueDeathTrigger();
 	CBaseMonster::Killed( pevAttacker, iGib );
 }
 
+void CCOFMonsterCompat::QueueDeathTrigger( void )
+{
+	if( m_iTriggerCondition != AITRIGGER_DEATH || !COF_HasText( m_iszTriggerTarget ) )
+		return;
+
+	m_iszQueuedDeathTarget = m_iszTriggerTarget;
+	m_flQueuedDeathTargetTime = gpGlobals->time + 0.2f;
+	m_iTriggerCondition = AITRIGGER_NONE;
+}
+
+void CCOFMonsterCompat::FireQueuedDeathTrigger( void )
+{
+	if( !COF_HasText( m_iszQueuedDeathTarget ) || gpGlobals->time < m_flQueuedDeathTargetTime )
+		return;
+
+	if( m_IdealMonsterState != MONSTERSTATE_DEAD && m_MonsterState != MONSTERSTATE_DEAD && pev->deadflag == DEAD_NO )
+		return;
+
+	FireTargets( STRING( m_iszQueuedDeathTarget ), this, this, USE_TOGGLE, 0 );
+	m_iszQueuedDeathTarget = iStringNull;
+}

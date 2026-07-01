@@ -7,6 +7,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "monsters.h"
 #include "player.h"
 #include "weapons.h"
 #include "cof_utils.h"
@@ -190,7 +191,16 @@ public:
 		if( pWatched )
 		{
 			m_fSawTarget = TRUE;
-			if( pWatched->pev->deadflag == DEAD_NO && pWatched->pev->solid != SOLID_NOT )
+			CBaseMonster *pMonster = pWatched->MyMonsterPointer();
+			if( pMonster )
+			{
+				if( pWatched->pev->health > 0 &&
+					pMonster->m_IdealMonsterState != MONSTERSTATE_DEAD &&
+					pMonster->m_MonsterState != MONSTERSTATE_DEAD &&
+					pWatched->pev->deadflag == DEAD_NO )
+					return;
+			}
+			else if( pWatched->pev->deadflag == DEAD_NO && pWatched->pev->solid != SOLID_NOT )
 				return;
 		}
 		else if( !m_fSawTarget )
