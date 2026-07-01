@@ -3186,6 +3186,8 @@ int CBasePlayer::Restore( CRestore &restore )
 	}
 
 	RenewItems();
+	COF_ReconcileInventoryWeapons();
+	m_fInitHUD = TRUE;
 
 #if CLIENT_WEAPONS
 	// HACK:	This variable is saved/restored in CBaseMonster as a time variable, but we're using it
@@ -4109,6 +4111,7 @@ void CBasePlayer::UpdateClientData( void )
 		MESSAGE_END();
 
 		InitStatusBar();
+		COF_SendInventory();
 	}
 
 	if( m_iHideHUD != m_iClientHideHUD )

@@ -39,6 +39,39 @@ enum mobile_switchblade_e
 	MOBILE_SWITCHBLADE_FLASH_KNIFE
 };
 
+TYPEDESCRIPTION CMobileSwitchblade::m_SaveData[] =
+{
+	DEFINE_FIELD( CMobileSwitchblade, m_fFlashMode, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CMobileSwitchblade, m_fireState, FIELD_INTEGER ),
+	DEFINE_FIELD( CMobileSwitchblade, m_iSwing, FIELD_INTEGER ),
+};
+
+int CMobileSwitchblade::Save( CSave &save )
+{
+#ifdef CLIENT_DLL
+	return 1;
+#else
+	if( !CBasePlayerWeapon::Save( save ) )
+		return 0;
+
+	return save.WriteFields( "MOBILE_SWITCHBLADE", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
+#endif
+}
+
+int CMobileSwitchblade::Restore( CRestore &restore )
+{
+#ifdef CLIENT_DLL
+	return 1;
+#else
+	if( !CBasePlayerWeapon::Restore( restore ) )
+		return 0;
+
+	const int status = restore.ReadFields( "MOBILE_SWITCHBLADE", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
+	m_fFlashMode = m_fireState != 0;
+	return status;
+#endif
+}
+
 #ifndef CLIENT_DLL
 extern int gmsgFlashlight;
 extern void FindHullIntersection( const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity );

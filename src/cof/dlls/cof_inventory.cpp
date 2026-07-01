@@ -291,6 +291,8 @@ static void COF_PrecacheOptionalSound( const char *pszSound )
 
 void CBasePlayer::COF_SendInventory( void )
 {
+	COF_ReconcileInventoryWeapons();
+
 	MESSAGE_BEGIN( MSG_ONE, gmsgCofInvClear, NULL, pev );
 	MESSAGE_END();
 
@@ -306,6 +308,31 @@ void CBasePlayer::COF_SendInventory( void )
 	}
 
 	COF_SendQuickSlots();
+}
+
+void CBasePlayer::COF_ReconcileInventoryWeapons( void )
+{
+	for( int i = 0; i < MAX_COF_QUICK_SLOTS; i++ )
+	{
+		if( !FStringNull( m_rgCOFQuickSlots[i] ) && COF_FindInventoryPathIndex( this, STRING( m_rgCOFQuickSlots[i] ) ) < 0 )
+			m_rgCOFQuickSlots[i] = iStringNull;
+	}
+
+	for( int i = 0; i < MAX_COF_INVENTORY; i++ )
+	{
+		const char *pszPath = COF_GetInventoryPath( this, i );
+		if( !pszPath )
+			continue;
+
+		COFInventoryDef def;
+		if( !COF_LoadItemDef( pszPath, &def ) || strncmp( def.className, "weapon_", 7 ) )
+			continue;
+
+		if( HasNamedPlayerItem( def.className ) )
+			continue;
+
+		GiveNamedItem( def.className );
+	}
 }
 
 void CBasePlayer::COF_SendQuickSlot( int iQuickSlot )
@@ -421,6 +448,8 @@ void CBasePlayer::COF_SetQuickSlot( int iQuickSlot, int iInventoryIndex )
 
 void CBasePlayer::COF_UseQuickSlot( int iQuickSlot )
 {
+	COF_ReconcileInventoryWeapons();
+
 	if( iQuickSlot < 0 || iQuickSlot >= MAX_COF_QUICK_SLOTS || FStringNull( m_rgCOFQuickSlots[iQuickSlot] ) )
 		return;
 
@@ -456,6 +485,8 @@ void CBasePlayer::COF_PrintInventory( void )
 
 void CBasePlayer::COF_UseInventoryItem( int iIndex )
 {
+	COF_ReconcileInventoryWeapons();
+
 	const char *pszPath = COF_GetInventoryPath( this, iIndex );
 	if( !pszPath )
 		return;
@@ -480,6 +511,8 @@ void CBasePlayer::COF_UseInventoryItem( int iIndex )
 
 void CBasePlayer::COF_DropInventoryItem( int iIndex )
 {
+	COF_ReconcileInventoryWeapons();
+
 	const char *pszPath = COF_GetInventoryPath( this, iIndex );
 	if( !pszPath )
 		return;
@@ -522,6 +555,8 @@ void CBasePlayer::COF_DropInventoryItem( int iIndex )
 
 void CBasePlayer::COF_CombineInventoryItems( int iFirst, int iSecond )
 {
+	COF_ReconcileInventoryWeapons();
+
 	if( iFirst == iSecond )
 		return;
 
@@ -597,6 +632,8 @@ void CBasePlayer::COF_CombineInventoryItems( int iFirst, int iSecond )
 
 void CBasePlayer::COF_DualWieldInventoryItems( int iFirst, int iSecond )
 {
+	COF_ReconcileInventoryWeapons();
+
 	if( iFirst == iSecond )
 		return;
 

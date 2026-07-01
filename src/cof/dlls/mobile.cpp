@@ -126,6 +126,38 @@ enum mobile_e
 	MOBILE_LOWER_FLASH
 };
 
+TYPEDESCRIPTION CMobile::m_SaveData[] =
+{
+	DEFINE_FIELD( CMobile, m_fFlashMode, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CMobile, m_fireState, FIELD_INTEGER ),
+};
+
+int CMobile::Save( CSave &save )
+{
+#ifdef CLIENT_DLL
+	return 1;
+#else
+	if( !CBasePlayerWeapon::Save( save ) )
+		return 0;
+
+	return save.WriteFields( "MOBILE", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
+#endif
+}
+
+int CMobile::Restore( CRestore &restore )
+{
+#ifdef CLIENT_DLL
+	return 1;
+#else
+	if( !CBasePlayerWeapon::Restore( restore ) )
+		return 0;
+
+	const int status = restore.ReadFields( "MOBILE", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
+	m_fFlashMode = m_fireState != 0;
+	return status;
+#endif
+}
+
 void CMobile::Spawn( void )
 {
 	Precache();
@@ -169,12 +201,17 @@ int CMobile::AddToPlayer( CBasePlayer *pPlayer )
 	if( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
 	{
 #ifndef CLIENT_DLL
-		pPlayer->COF_AddInventoryItem( "inventoryitems/weapons/weapon_mobile.txt" );
+		const BOOL addedToInventory = pPlayer->COF_AddInventoryItem( "inventoryitems/weapons/weapon_mobile.txt" );
+#else
+		const BOOL addedToInventory = TRUE;
 #endif
 
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev );
-			WRITE_BYTE( m_iId );
-		MESSAGE_END();
+		if( addedToInventory )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev );
+				WRITE_BYTE( m_iId );
+			MESSAGE_END();
+		}
 		return TRUE;
 	}
 

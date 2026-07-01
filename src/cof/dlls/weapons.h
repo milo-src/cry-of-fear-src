@@ -533,6 +533,10 @@ private:
 class CMobile : public CBasePlayerWeapon
 {
 public:
+	int Save( CSave &save );
+	int Restore( CRestore &restore );
+	static TYPEDESCRIPTION m_SaveData[];
+
 	void Spawn( void );
 	void Precache( void );
 	int iItemSlot( void ) { return 5; }
@@ -564,6 +568,10 @@ private:
 class CSwitchblade : public CBasePlayerWeapon
 {
 public:
+	int Save( CSave &save );
+	int Restore( CRestore &restore );
+	static TYPEDESCRIPTION m_SaveData[];
+
 	void Spawn( void );
 	void Precache( void );
 	int iItemSlot( void ) { return 1; }
@@ -596,6 +604,10 @@ private:
 class CMobileSwitchblade : public CBasePlayerWeapon
 {
 public:
+	int Save( CSave &save );
+	int Restore( CRestore &restore );
+	static TYPEDESCRIPTION m_SaveData[];
+
 	void Spawn( void );
 	void Precache( void );
 	int iItemSlot( void ) { return 5; }

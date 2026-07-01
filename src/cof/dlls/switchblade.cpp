@@ -57,6 +57,38 @@ enum switchblade_e
 	SWITCHBLADE_P2_FIDGET3
 };
 
+TYPEDESCRIPTION CSwitchblade::m_SaveData[] =
+{
+	DEFINE_FIELD( CSwitchblade, m_iSwing, FIELD_INTEGER ),
+	DEFINE_FIELD( CSwitchblade, m_fireState, FIELD_INTEGER ),
+};
+
+int CSwitchblade::Save( CSave &save )
+{
+#ifdef CLIENT_DLL
+	return 1;
+#else
+	if( !CBasePlayerWeapon::Save( save ) )
+		return 0;
+
+	return save.WriteFields( "SWITCHBLADE", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
+#endif
+}
+
+int CSwitchblade::Restore( CRestore &restore )
+{
+#ifdef CLIENT_DLL
+	return 1;
+#else
+	if( !CBasePlayerWeapon::Restore( restore ) )
+		return 0;
+
+	const int status = restore.ReadFields( "SWITCHBLADE", this, m_SaveData, ARRAYSIZE( m_SaveData ) );
+	m_fInAttack = 0;
+	return status;
+#endif
+}
+
 #ifndef CLIENT_DLL
 extern void FindHullIntersection( const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity );
 
@@ -176,12 +208,17 @@ int CSwitchblade::AddToPlayer( CBasePlayer *pPlayer )
 	if( CBasePlayerWeapon::AddToPlayer( pPlayer ) )
 	{
 #ifndef CLIENT_DLL
-		pPlayer->COF_AddInventoryItem( "inventoryitems/weapons/weapon_switchblade.txt" );
+		const BOOL addedToInventory = pPlayer->COF_AddInventoryItem( "inventoryitems/weapons/weapon_switchblade.txt" );
+#else
+		const BOOL addedToInventory = TRUE;
 #endif
 
-		MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev );
-			WRITE_BYTE( m_iId );
-		MESSAGE_END();
+		if( addedToInventory )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev );
+				WRITE_BYTE( m_iId );
+			MESSAGE_END();
+		}
 		return TRUE;
 	}
 

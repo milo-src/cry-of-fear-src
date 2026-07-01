@@ -282,6 +282,7 @@ public:
 	BOOL COF_AddInventoryItem( const char *pszName );
 	BOOL COF_HasInventoryItem( const char *pszName ) const;
 	BOOL COF_RemoveInventoryItem( int iIndex );
+	void COF_ReconcileInventoryWeapons( void );
 	void COF_SendInventory( void );
 	void COF_PrintInventory( void );
 	void COF_UseInventoryItem( int iIndex );
