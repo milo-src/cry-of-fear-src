@@ -1,266 +1,231 @@
 # Cry of Fear Xash3D
 
-Это рабочий репозиторий xModea для воссоздания логики Cry of Fear на базе Xash3D FWGS и HLSDK.
+This repository is a development workspace for recreating Cry of Fear game code on top of Xash3D FWGS and HLSDK.
 
-xModea - это я, человек, который делает и ведет этот проект. Это не компания, не студия и не официальный релиз Cry of Fear.
+The goal is to have a project that is easy to build, easy to test, and easy to modify while rebuilding Cry of Fear style gameplay systems: weapons, inventory, monsters, scripted scenes, triggers, map compatibility, and engine fixes.
 
-Цель репозитория простая: иметь нормальное место, где можно править движок, game dll, оружие, инвентарь, монстров, триггеры, катсцены и совместимость оригинальных BSP-карт Cry of Fear.
+This is not an official Cry of Fear release and it does not include game assets.
 
-## Важно
+## Important
 
-В репозитории нет игровых ресурсов Cry of Fear и Half-Life.
+Do not commit original game assets.
 
-Сюда нельзя коммитить:
+Keep these out of Git:
 
-- оригинальные карты;
-- модели;
-- звуки;
-- спрайты;
-- текстуры;
-- Steam-файлы;
-- любые чужие игровые ассеты, которые нельзя свободно распространять.
+- maps
+- models
+- sounds
+- sprites
+- textures
+- Steam files
+- copied Cry of Fear or Half-Life game data
+- generated build output
 
-Для тестов нужна локальная папка с твоими легально полученными ресурсами игры.
+Use your own local game files for testing.
 
-Обычная тестовая папка на Windows:
-
-```text
-C:\Users\xModea\Desktop\cof_xash
-```
-
-Игра лежит внутри:
+The default local test folder on Windows is:
 
 ```text
-C:\Users\xModea\Desktop\cof_xash\cryoffear
+%USERPROFILE%\Desktop\cof_xash
 ```
 
-## Что лежит в репозитории
+The game directory inside it is:
 
 ```text
-build_xash.bat       Собрать движок Xash3D для PC
-build_game.bat       Собрать game dll/client dll и скопировать в папку игры
-copyfiles.bat        Скопировать уже собранные файлы в папку игры
-
-src/cof              Наш основной код Cry of Fear
-src/cof/dlls         Серверная часть игры: игрок, оружие, NPC, энтити, триггеры
-src/cof/cl_dll       Клиентская часть игры: HUD, UI, viewmodel, клиентский инвентарь
-src/cof/game_shared  Общий код клиента и сервера
-
-external/xash3d-fwgs      Локальная копия движка Xash3D FWGS
-external/hlsdk-portable   Локальная копия HLSDK-portable
-external/openvgui         Локальная копия openvgui
-
-scripts             PowerShell-скрипты сборки и копирования
-build               Временные файлы сборки
-out                 Установленный результат сборки
-deps                Скачанные зависимости, например SDL2
+%USERPROFILE%\Desktop\cof_xash\cryoffear
 ```
 
-Папка `external` - обычная часть репозитория. Это не submodule. Можно коммитить изменения обычным коммитом.
+## Repository Layout
 
-## Самый простой способ собрать на Windows
+```text
+build_xash.bat       Build the Xash3D FWGS PC engine
+build_game.bat       Build the game DLLs and copy them to the test folder
+copyfiles.bat        Copy already built files to the test folder
 
-Нужно установить:
+src/cof              Main Cry of Fear game code
+src/cof/dlls         Server/game DLL code: player, weapons, NPCs, entities
+src/cof/cl_dll       Client DLL code: HUD, UI, viewmodels, client messages
+src/cof/game_shared  Shared client/server code
 
-- Git;
-- Python;
-- CMake;
-- Visual Studio 2022 или Visual Studio Build Tools;
-- workload `Desktop development with C++`;
-- Windows 10/11 SDK;
-- PowerShell.
+external/xash3d-fwgs      Vendored Xash3D FWGS engine source
+external/hlsdk-portable   Vendored HLSDK-portable source
+external/openvgui         Vendored openvgui source
 
-Потом открыть терминал в корне репозитория:
-
-```bat
-cd /d C:\Users\xModea\Desktop\cry-of-fear-src
+scripts             Build and copy helper scripts
+build               Generated build files
+out                 Installed build output
+deps                Downloaded local dependencies, such as SDL2
 ```
 
-Собрать движок:
+The `external` folder is part of this repository. It is not a Git submodule.
+
+## Windows Quick Start
+
+Install:
+
+- Git
+- Python
+- CMake
+- Visual Studio 2022 or Visual Studio Build Tools
+- `Desktop development with C++`
+- Windows 10/11 SDK
+- PowerShell
+
+Open a terminal in the repository root.
+
+Build the engine:
 
 ```bat
 build_xash.bat
 ```
 
-Собрать игру:
+Build the game:
 
 ```bat
 build_game.bat
 ```
 
-После этого нужные файлы копируются сюда:
-
-```text
-C:\Users\xModea\Desktop\cof_xash
-```
-
-Запуск:
+Run the game:
 
 ```bat
-cd /d C:\Users\xModea\Desktop\cof_xash
+cd /d "%USERPROFILE%\Desktop\cof_xash"
 xash3d.exe -game cryoffear
 ```
 
-Запуск сразу с карты:
+Run a specific map:
 
 ```bat
 xash3d.exe -game cryoffear +map c_start
 ```
 
-## Что делает build_xash.bat
+## What The Build Scripts Do
 
-`build_xash.bat` собирает PC-движок Xash3D FWGS.
+### build_xash.bat
 
-Он:
+Builds the Xash3D FWGS engine.
 
-- проверяет SDL2;
-- если SDL2 нет, скачивает его в `deps`;
-- собирает `external/xash3d-fwgs`;
-- складывает результат в `out/xash3d`;
-- копирует runtime-файлы в `C:\Users\xModea\Desktop\cof_xash`.
+It will:
 
-Обычно этот файл нужен не каждый раз. Его надо запускать после изменений в движке или если папка `cof_xash` пустая.
+- download SDL2 into `deps` if needed;
+- build `external/xash3d-fwgs`;
+- install the engine into `out/xash3d`;
+- copy the engine runtime into `%USERPROFILE%\Desktop\cof_xash`.
 
-## Что делает build_game.bat
+Run this after engine changes or when the test folder is missing engine files.
 
-`build_game.bat` собирает саму игру.
+### build_game.bat
 
-Он:
+Builds the game code from `src/cof`.
 
-- собирает `external/openvgui`;
-- собирает `src/cof`;
-- создает `client.dll`;
-- создает `hl.dll`;
-- копирует `client.dll`, `hl.dll` и `vgui.dll` в тестовую папку игры;
-- чинит некоторые runtime-файлы для Xash, например меню, шрифты и конфиг.
+It will:
 
-Это главный скрипт для обычной разработки. После правок в `src/cof` чаще всего нужен именно он.
+- build `external/openvgui`;
+- build the client DLL;
+- build the server DLL;
+- install the DLLs into `out/xash3d/cryoffear`;
+- copy `client.dll`, `hl.dll`, and `vgui.dll` into the test folder;
+- apply small runtime fixes for Xash menu files, fonts, and config.
 
-## Что делает copyfiles.bat
+This is the script you will run most often while working on game code.
 
-`copyfiles.bat` ничего не собирает. Он только копирует уже собранные файлы в папку игры.
+### copyfiles.bat
 
-Обычный запуск:
+Copies already built files into the test folder.
+
+Default:
 
 ```bat
 copyfiles.bat
 ```
 
-С другой папкой игры:
+Custom target folder:
 
 ```bat
 copyfiles.bat D:\Games\cof_xash
 ```
 
-С Debug-сборкой:
+Debug build:
 
 ```bat
 copyfiles.bat D:\Games\cof_xash Debug
 ```
 
-Важно: перед копированием закрой игру. Если `xash3d.exe` открыт, Windows может держать старые DLL в памяти.
+Close the game before copying. Windows can keep old DLLs loaded while `xash3d.exe` is running.
 
-## Если изменения не появились в игре
+## Useful Build Options
 
-Проверь по порядку:
-
-1. Игра закрыта?
-2. Запускался именно `build_game.bat`, а не только компиляция без копирования?
-3. Ты запускаешь игру из `C:\Users\xModea\Desktop\cof_xash`?
-4. DLL реально лежат тут?
-
-```text
-C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls\client.dll
-C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls\hl.dll
-```
-
-5. Если сомневаешься, запусти:
-
-```bat
-build_game.bat
-copyfiles.bat
-```
-
-## Полезные параметры сборки
-
-Debug:
+Debug build:
 
 ```bat
 build_game.bat -Configuration Debug
 ```
 
-Чистая пересборка:
+Clean rebuild:
 
 ```bat
 build_game.bat -CleanFirst
 ```
 
-Собрать, но не копировать в игру:
+Compile without copying into the test folder:
 
 ```bat
 build_game.bat -NoInstall
 ```
 
-`-NoInstall` нужен только чтобы проверить компиляцию. Для теста в игре он не подходит, потому что DLL не заменяются в `cof_xash`.
+`-NoInstall` is only for checking compilation. Do not use it when you want to test changes in game.
 
-Собрать в другую папку:
+Deploy to another folder:
 
 ```bat
 build_xash.bat -DeployDir "D:\Games\cof_xash"
 build_game.bat -DeployDir "D:\Games\cof_xash"
 ```
 
-64-bit сборка:
+64-bit build:
 
 ```bat
 build_xash.bat -X64
 build_game.bat -X64
 ```
 
-Важно: движок и game dll должны быть одной архитектуры. Нельзя смешивать 32-bit движок и 64-bit DLL.
+The engine and game DLLs must use the same architecture. Do not mix a 32-bit engine with 64-bit DLLs.
 
-## Где результат сборки
+## Output Folders
 
-Временная сборка:
+Temporary build files:
 
 ```text
 build/
 ```
 
-Установленный результат:
+Installed output:
 
 ```text
 out/xash3d/
 ```
 
-Тестовая папка игры:
+Default Windows test folder:
 
 ```text
-C:\Users\xModea\Desktop\cof_xash/
+%USERPROFILE%\Desktop\cof_xash/
 ```
 
-Главные файлы после сборки:
+Important game DLLs:
 
 ```text
-out/xash3d/xash3d.exe
-out/xash3d/xash.dll
-out/xash3d/filesystem_stdio.dll
-out/xash3d/ref_gl.dll
-out/xash3d/menu.dll
-
 out/xash3d/cryoffear/cl_dlls/client.dll
 out/xash3d/cryoffear/cl_dlls/hl.dll
 
-C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls\client.dll
-C:\Users\xModea\Desktop\cof_xash\cryoffear\cl_dlls\hl.dll
+%USERPROFILE%\Desktop\cof_xash\cryoffear\cl_dlls\client.dll
+%USERPROFILE%\Desktop\cof_xash\cryoffear\cl_dlls\hl.dll
 ```
 
-## Как должна выглядеть папка игры
+## Expected Test Folder
 
-Пример:
+The runtime folder should look roughly like this:
 
 ```text
-C:\Users\xModea\Desktop\cof_xash
+cof_xash
 |-- xash3d.exe
 |-- xash.dll
 |-- filesystem_stdio.dll
@@ -282,56 +247,49 @@ C:\Users\xModea\Desktop\cof_xash
     `-- resource
 ```
 
-Папки `maps`, `models`, `sound`, `sprites`, `gfx`, `resource` должны быть из твоей локальной копии игры. В Git их не добавлять.
+The asset folders must come from your local game install. They are not part of this repository.
 
-## Главные места в коде
+## Main Code Areas
 
-Серверная часть:
+Server/game DLL:
 
 ```text
-src/cof/dlls/cof_inventory.cpp        Инвентарь на сервере
-src/cof/dlls/cof_pickups.cpp          Подбор предметов
-src/cof/dlls/cof_monsters.cpp         CoF-монстры и совместимость NPC
-src/cof/dlls/cof_brush_triggers.cpp   CoF brush-триггеры
-src/cof/dlls/cof_script_points.cpp    Точки и helper-энтити для карт
-src/cof/dlls/cof_scene_actions.cpp    Действия для сцен
-src/cof/dlls/cof_scene_models.cpp     Модели для сцен
-src/cof/dlls/cof_player_events.cpp    События, связанные с игроком
-src/cof/dlls/cof_ladder_manager.cpp   Логика лестниц
-src/cof/dlls/cof_ladder_use.cpp       Энтити использования лестниц
-src/cof/dlls/mobile.cpp               Телефон
-src/cof/dlls/switchblade.cpp          Switchblade
-src/cof/dlls/mobile_switchblade.cpp   Телефон + нож
+src/cof/dlls/cof_inventory.cpp        Server-side inventory logic
+src/cof/dlls/cof_pickups.cpp          Pickup entities
+src/cof/dlls/cof_monsters.cpp         Cry of Fear monster compatibility
+src/cof/dlls/cof_brush_triggers.cpp   Brush triggers
+src/cof/dlls/cof_script_points.cpp    Script/helper point entities
+src/cof/dlls/cof_scene_actions.cpp    Scene actions
+src/cof/dlls/cof_scene_models.cpp     Scene model helpers
+src/cof/dlls/cof_player_events.cpp    Player event helpers
+src/cof/dlls/cof_ladder_manager.cpp   Ladder movement logic
+src/cof/dlls/cof_ladder_use.cpp       Ladder use entity
+src/cof/dlls/mobile.cpp               Mobile phone weapon
+src/cof/dlls/switchblade.cpp          Switchblade weapon
+src/cof/dlls/mobile_switchblade.cpp   Mobile phone + switchblade weapon
 ```
 
-Клиентская часть:
+Client DLL:
 
 ```text
-src/cof/cl_dll/cof_ui.cpp                  Простой CoF UI
-src/cof/cl_dll/cof_inventory_client.cpp    Клиентский инвентарь
-src/cof/cl_dll/view.cpp                    Камера, viewmodel, визуальные эффекты рук
-src/cof/cl_dll/hud.cpp                     HUD и client messages
-```
-
-Общие файлы:
-
-```text
-src/cof/game_shared
-src/cof/dlls/cof_utils.h
+src/cof/cl_dll/cof_ui.cpp                  Basic custom UI drawing
+src/cof/cl_dll/cof_inventory_client.cpp    Client-side inventory UI/state
+src/cof/cl_dll/view.cpp                    Camera and viewmodel effects
+src/cof/cl_dll/hud.cpp                     HUD and client messages
 ```
 
 ## Linux
 
-Linux сейчас не основной путь, но собрать можно вручную.
+Linux is not the main development path yet, but the project can be built manually.
 
-Пример для Ubuntu/Debian:
+Install basic dependencies on Ubuntu/Debian:
 
 ```sh
 sudo apt update
 sudo apt install git python3 python-is-python3 cmake build-essential libsdl2-dev libfreetype6-dev
 ```
 
-Сборка движка:
+Build the engine:
 
 ```sh
 cd external/xash3d-fwgs
@@ -341,14 +299,14 @@ cd external/xash3d-fwgs
 cd ../..
 ```
 
-Сборка openvgui:
+Build openvgui:
 
 ```sh
 cmake -S external/openvgui -B build/openvgui-linux -DCMAKE_BUILD_TYPE=Release
 cmake --build build/openvgui-linux --parallel "$(nproc)"
 ```
 
-Сборка игры:
+Build the game:
 
 ```sh
 cmake -S src/cof -B build/cof-linux \
@@ -366,7 +324,7 @@ cmake -S src/cof -B build/cof-linux \
 cmake --build build/cof-linux --parallel "$(nproc)" --target install
 ```
 
-Запуск примерно такой:
+Run:
 
 ```sh
 mkdir -p "$HOME/cof_xash"
@@ -377,16 +335,16 @@ cd "$HOME/cof_xash"
 
 ## macOS
 
-macOS путь экспериментальный.
+macOS support is experimental.
 
-Зависимости:
+Install dependencies:
 
 ```sh
 xcode-select --install
 brew install git python cmake sdl2 freetype
 ```
 
-Движок:
+Build the engine:
 
 ```sh
 cd external/xash3d-fwgs
@@ -396,14 +354,14 @@ cd external/xash3d-fwgs
 cd ../..
 ```
 
-openvgui:
+Build openvgui:
 
 ```sh
 cmake -S external/openvgui -B build/openvgui-macos -DCMAKE_BUILD_TYPE=Release
 cmake --build build/openvgui-macos --parallel "$(sysctl -n hw.logicalcpu)"
 ```
 
-Игра:
+Build the game:
 
 ```sh
 cmake -S src/cof -B build/cof-macos \
@@ -424,105 +382,82 @@ cmake --build build/cof-macos --parallel "$(sysctl -n hw.logicalcpu)" --target i
 
 ## Android
 
-Android пока экспериментальный.
+Android support is experimental and comes from the HLSDK-portable Android project.
 
-Нужно:
-
-- Android Studio или Android command line tools;
-- JDK;
-- Android SDK;
-- Android NDK;
-- CMake;
-- Ninja.
-
-Сборка:
+Build:
 
 ```sh
 cd src/cof/android
 ./gradlew assembleRelease
 ```
 
-На Windows:
+On Windows:
 
 ```bat
 cd src\cof\android
 gradlew.bat assembleRelease
 ```
 
-Важно: Android-шаблон пришел из HLSDK-portable. Перед нормальным Android-релизом надо проверить package name, app id и gamedir, чтобы везде было `cryoffear`, а не `valve`.
+Before a real Android package is used, check that package names, app labels, and the game directory point to `cryoffear` and not the original HLSDK defaults.
 
-## Частые проблемы
+## Troubleshooting
 
-### Не собирается Xash3D на Windows
+### Changes do not appear in game
 
-Проверь:
+Most likely the DLLs were not copied or the game was still running.
 
-- установлен Python;
-- установлен CMake;
-- установлен Visual Studio Build Tools с C++;
-- есть Windows SDK;
-- SDL2 скачался в `deps/sdl2`.
-
-Можно вручную скачать SDL2:
-
-```powershell
-.\scripts\fetch-sdl2.ps1
-```
-
-### Игра запускается, но старый код все еще работает
-
-Скорее всего DLL не заменились.
-
-Закрой игру и запусти:
+Close the game and run:
 
 ```bat
 build_game.bat
 copyfiles.bat
 ```
 
-### DLL не грузится
+### The game DLL does not load
 
-Проверь архитектуру.
+Check that the engine and game DLLs use the same architecture.
 
-Если движок 32-bit, DLL тоже должны быть 32-bit.
+Also check that `liblist.gam` points to the expected server DLL path:
 
-Если движок 64-bit, DLL тоже должны быть 64-bit.
+```text
+gamedll "cl_dlls\hl.dll"
+```
 
-### Шрифты или меню сломались
+### SDL2 is missing on Windows
 
-Запусти:
+Run:
+
+```powershell
+.\scripts\fetch-sdl2.ps1
+```
+
+or set `SDL2_DIR` manually.
+
+### Fonts or menu files look broken
+
+Run:
 
 ```bat
 build_game.bat
 ```
 
-Скрипт заново применит runtime-fix для Xash-меню, шрифтов и конфига.
+The build script reapplies the local Xash runtime fixes.
 
-### Карта не стартует
+## Development Rules
 
-Пробуй явно:
+- Keep game assets out of Git.
+- Keep generated folders out of Git.
+- Put Cry of Fear game logic in `src/cof`.
+- Keep files readable and split large systems when it makes the code easier to work with.
+- Keep client and server inventory state in sync.
+- Run `build_game.bat` after game-code changes.
+- Run `build_xash.bat` after engine changes.
 
-```bat
-xash3d.exe -game cryoffear +map c_start
-```
+## Commit Message Examples
 
-## Правила разработки
+Use short English commit messages.
 
-- Не коммитить игровые ассеты.
-- Не коммитить `build`, `out`, `deps`.
-- Новую CoF-логику держать в `src/cof`.
-- Не превращать один файл в огромную свалку.
-- Если код можно разделить на понятные файлы, лучше разделить.
-- Сервер и клиент должны знать об инвентаре одинаково.
-- После правок game-кода запускать `build_game.bat`.
-- После правок движка запускать `build_xash.bat`.
-- README не трогать без прямой причины.
-
-## Как писать коммиты
-
-Лучше делать коротко и понятно на английском.
-
-Примеры:
+Examples:
 
 ```text
 fix(cof): repair c_start scene trigger flow
@@ -531,25 +466,23 @@ refactor(cof): split inventory client definitions
 fix(cof): keep inventory state across level changes
 ```
 
-Если коммит большой, в названии лучше писать главное, а детали оставить в описании.
+## Short Version
 
-## Коротко
-
-Для обычной работы на Windows почти всегда достаточно:
+For normal Windows work:
 
 ```bat
 build_xash.bat
 build_game.bat
 ```
 
-Потом запуск:
+Then run:
 
 ```bat
-cd /d C:\Users\xModea\Desktop\cof_xash
+cd /d "%USERPROFILE%\Desktop\cof_xash"
 xash3d.exe -game cryoffear +map c_start
 ```
 
-Если менял только `src/cof`, обычно хватит:
+If only `src/cof` changed, usually this is enough:
 
 ```bat
 build_game.bat
