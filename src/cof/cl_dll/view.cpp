@@ -26,6 +26,7 @@
 #include "shake.h"
 #include "hltv.h"
 #include "view.h"
+#include <string.h>
 
 // Spectator Mode
 extern "C" 
@@ -155,6 +156,103 @@ static float V_ClampSpring( float value, float &velocity, float minValue, float 
 	if( clamped != value )
 		velocity *= 0.25f;
 	return clamped;
+}
+
+struct cof_ladder_view_state_t
+{
+	qboolean active;
+	qboolean resetFrame;
+	char model[128];
+	int modelIndex;
+	int sequence;
+	int stage;
+	int exitSide;
+	float startTime;
+	float duration;
+};
+
+static cof_ladder_view_state_t g_CofLadderView;
+
+void COF_LadderView_Set( int active, const char *pszModel, int iSequence, int iDurationMs, int iStage, int iExitSide )
+{
+	if( !active )
+	{
+		memset( &g_CofLadderView, 0, sizeof( g_CofLadderView ) );
+		return;
+	}
+
+	if( !g_CofLadderView.active || stricmp( g_CofLadderView.model, pszModel ? pszModel : "" ) != 0 )
+	{
+		g_CofLadderView.modelIndex = 0;
+		strncpy( g_CofLadderView.model, pszModel ? pszModel : "", sizeof( g_CofLadderView.model ) - 1 );
+		g_CofLadderView.model[sizeof( g_CofLadderView.model ) - 1] = '\0';
+	}
+
+	g_CofLadderView.active = true;
+	g_CofLadderView.resetFrame = true;
+	g_CofLadderView.sequence = iSequence;
+	g_CofLadderView.stage = iStage;
+	g_CofLadderView.exitSide = iExitSide;
+	g_CofLadderView.startTime = 0.0f;
+	g_CofLadderView.duration = Q_max( (float)iDurationMs / 1000.0f, 0.05f );
+}
+
+static void COF_LadderView_Apply( struct ref_params_s *pparams, cl_entity_t *view )
+{
+	if( !pparams || !view || !g_CofLadderView.active || !g_CofLadderView.model[0] )
+		return;
+
+	if( g_CofLadderView.modelIndex <= 0 )
+	{
+		struct model_s *pModel = gEngfuncs.CL_LoadModel( g_CofLadderView.model, &g_CofLadderView.modelIndex );
+		if( !pModel || g_CofLadderView.modelIndex <= 0 )
+			return;
+	}
+
+	view->model = IEngineStudio.GetModelByIndex( g_CofLadderView.modelIndex );
+	if( !view->model )
+		return;
+
+	if( g_CofLadderView.resetFrame || g_CofLadderView.startTime <= 0.0f )
+	{
+		g_CofLadderView.startTime = pparams->time;
+		g_CofLadderView.resetFrame = false;
+		gEngfuncs.pfnWeaponAnim( g_CofLadderView.sequence, 0 );
+	}
+
+	const float flElapsed = Q_max( 0.0f, pparams->time - g_CofLadderView.startTime );
+	float flProgress = g_CofLadderView.duration > 0.0f ? ( flElapsed / g_CofLadderView.duration ) : 1.0f;
+	flProgress = V_ClampFloat( flProgress, 0.0f, 1.0f );
+
+	view->curstate.modelindex = g_CofLadderView.modelIndex;
+	view->curstate.sequence = g_CofLadderView.sequence;
+	view->curstate.frame = flProgress * 255.0f;
+	view->curstate.framerate = 0.0f;
+	view->curstate.animtime = pparams->time;
+	view->curstate.body = 0;
+	view->curstate.colormap = 0;
+
+	VectorCopy( view->origin, view->curstate.origin );
+	VectorCopy( view->angles, view->curstate.angles );
+	VectorCopy( view->origin, view->latched.prevorigin );
+	VectorCopy( view->angles, view->latched.prevangles );
+
+	if( g_CofLadderView.stage == 3 && g_CofLadderView.exitSide != 0 )
+	{
+		vec3_t forward, right, up;
+		const float flSideEase = sin( V_ClampFloat( flProgress, 0.0f, 1.0f ) * 3.14159265f );
+		const float flSide = (float)g_CofLadderView.exitSide;
+
+		AngleVectors( pparams->viewangles, forward, right, up );
+		VectorMA( view->origin, flSide * flSideEase * 1.1f, right, view->origin );
+		view->angles[YAW] += flSide * flSideEase * 6.0f;
+		view->angles[ROLL] -= flSide * flSideEase * 4.0f;
+
+		VectorCopy( view->origin, view->curstate.origin );
+		VectorCopy( view->angles, view->curstate.angles );
+		VectorCopy( view->origin, view->latched.prevorigin );
+		VectorCopy( view->angles, view->latched.prevangles );
+	}
 }
 
 void V_ApplyWeaponInertia( struct ref_params_s *pparams, cl_entity_t *view )
@@ -883,6 +981,7 @@ void V_CalcNormalRefdef( struct ref_params_s *pparams )
 	}
 
 	V_ApplyWeaponInertia( pparams, view );
+	COF_LadderView_Apply( pparams, view );
 
 	// Add in the punchangle, if any
 	VectorAdd( pparams->viewangles, pparams->punchangle, pparams->viewangles );

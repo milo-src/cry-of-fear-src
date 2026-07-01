@@ -100,6 +100,7 @@ cvar_t *cl_lw = NULL;
 cvar_t *cl_viewbob = NULL;
 
 void ShutdownInput( void );
+void COF_LadderView_Set( int active, const char *pszModel, int iSequence, int iDurationMs, int iStage, int iExitSide );
 
 //DECLARE_MESSAGE( m_Logo, Logo )
 int __MsgFunc_Logo( const char *pszName, int iSize, void *pbuf )
@@ -321,6 +322,27 @@ int __MsgFunc_AllowSpec( const char *pszName, int iSize, void *pbuf )
 #endif
 	return 0;
 }
+
+int __MsgFunc_CofLadder( const char *pszName, int iSize, void *pbuf )
+{
+	BEGIN_READ( pbuf, iSize );
+
+	const int iActive = READ_BYTE();
+	if( !iActive )
+	{
+		COF_LadderView_Set( 0, "", 0, 0, 0, 0 );
+		return 1;
+	}
+
+	const char *pszModel = READ_STRING();
+	const int iSequence = READ_BYTE();
+	const int iDurationMs = READ_SHORT();
+	const int iStage = READ_BYTE();
+	const int iExitSide = READ_CHAR();
+
+	COF_LadderView_Set( 1, pszModel, iSequence, iDurationMs, iStage, iExitSide );
+	return 1;
+}
  
 // This is called every time the DLL is loaded
 void CHud::Init( void )
@@ -367,6 +389,7 @@ void CHud::Init( void )
 
 	// VGUI Menus
 	HOOK_MESSAGE( VGUIMenu );
+	HOOK_MESSAGE( CofLadder );
 	COF_Inventory_Init();
 
 	CVAR_CREATE( "hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );		// controls whether or not to suicide immediately on TF class switch

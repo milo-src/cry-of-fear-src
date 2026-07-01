@@ -11,6 +11,8 @@
 #include "weapons.h"
 #include "cof_utils.h"
 
+extern int gmsgCofLadder;
+
 namespace
 {
 const float COF_LADDER_THINK_RATE = 0.02f;
@@ -25,6 +27,16 @@ int COF_ClampInt( int iValue, int iMin, int iMax )
 	if( iValue > iMax )
 		return iMax;
 	return iValue;
+}
+
+float COF_AngleDelta( float a, float b )
+{
+	float d = a - b;
+	if( d > 180.0f )
+		d -= 360.0f;
+	else if( d < -180.0f )
+		d += 360.0f;
+	return d;
 }
 
 BOOL COF_IsPlayerOriginClear( CBasePlayer *pPlayer, const Vector &vecOrigin )
@@ -80,7 +92,8 @@ private:
 	const char *PickSequence( string_t iszSequence, const char *pszFallback = NULL );
 	const char *PickLoopSequence( BOOL fGoingUp );
 	float PlaySequenceByName( const char *pszSequence, BOOL fSendToPlayer = TRUE );
-	void SendPlayerViewSequence( CBasePlayer *pPlayer, int iSequence );
+	void SendPlayerViewSequence( CBasePlayer *pPlayer, int iSequence, float flDuration );
+	void SendLadderViewState( CBasePlayer *pPlayer, BOOL fActive, int iSequence = 0, float flDuration = 0.0f );
 	void AdvanceStage( void );
 	void UpdatePlayerPosition( void );
 	void FinishClimb( BOOL fFireTargets );
@@ -107,6 +120,7 @@ private:
 
 	float m_flStageEndTime;
 	int m_iLoopsLeft;
+	int m_iExitSide;
 	BOOL m_fGoingUp;
 	LadderStage m_iStage;
 };
@@ -126,6 +140,7 @@ CCOFLadderManager::CCOFLadderManager() :
 	m_iszSavedWeaponModel( iStringNull ),
 	m_flStageEndTime( 0.0f ),
 	m_iLoopsLeft( 0 ),
+	m_iExitSide( 0 ),
 	m_fGoingUp( TRUE ),
 	m_iStage( LADDER_IDLE )
 {
@@ -244,6 +259,8 @@ BOOL CCOFLadderManager::BeginClimb( CBasePlayer *pPlayer, BOOL fFromBottom )
 	m_vecStartAngles = pStart->pev->angles;
 	m_vecEndAngles = pEnd->pev->angles;
 	m_iLoopsLeft = EstimateLoopCount( m_vecStartOrigin, m_vecEndOrigin );
+	const float flExitYaw = COF_AngleDelta( m_vecEndAngles.y, m_vecStartAngles.y );
+	m_iExitSide = flExitYaw > 35.0f ? 1 : ( flExitYaw < -35.0f ? -1 : 0 );
 
 	m_hPlayer = pPlayer;
 	m_iszSavedViewModel = pPlayer->pev->viewmodel;
@@ -344,12 +361,12 @@ float CCOFLadderManager::PlaySequenceByName( const char *pszSequence, BOOL fSend
 	ResetSequenceInfo();
 
 	if( fSendToPlayer )
-		SendPlayerViewSequence( (CBasePlayer *)(CBaseEntity *)m_hPlayer, iSequence );
+		SendPlayerViewSequence( (CBasePlayer *)(CBaseEntity *)m_hPlayer, iSequence, Q_max( COF_LADDER_MIN_SEQUENCE_TIME, 256.0f / Q_max( fabs( m_flFrameRate ), 1.0f ) ) );
 
 	return Q_max( COF_LADDER_MIN_SEQUENCE_TIME, 256.0f / Q_max( fabs( m_flFrameRate ), 1.0f ) );
 }
 
-void CCOFLadderManager::SendPlayerViewSequence( CBasePlayer *pPlayer, int iSequence )
+void CCOFLadderManager::SendPlayerViewSequence( CBasePlayer *pPlayer, int iSequence, float flDuration )
 {
 	if( !pPlayer || iSequence < 0 || !HasModel() )
 		return;
@@ -363,6 +380,26 @@ void CCOFLadderManager::SendPlayerViewSequence( CBasePlayer *pPlayer, int iSeque
 	MESSAGE_BEGIN( MSG_ONE, SVC_WEAPONANIM, NULL, pPlayer->pev );
 		WRITE_BYTE( iSequence );
 		WRITE_BYTE( 0 );
+	MESSAGE_END();
+
+	SendLadderViewState( pPlayer, TRUE, iSequence, flDuration );
+}
+
+void CCOFLadderManager::SendLadderViewState( CBasePlayer *pPlayer, BOOL fActive, int iSequence, float flDuration )
+{
+	if( !pPlayer || !gmsgCofLadder )
+		return;
+
+	MESSAGE_BEGIN( MSG_ONE, gmsgCofLadder, NULL, pPlayer->pev );
+		WRITE_BYTE( fActive ? 1 : 0 );
+		if( fActive )
+		{
+			WRITE_STRING( HasModel() ? STRING( pev->model ) : "" );
+			WRITE_BYTE( COF_ClampInt( iSequence, 0, 255 ) );
+			WRITE_SHORT( COF_ClampInt( (int)( flDuration * 1000.0f ), 1, 30000 ) );
+			WRITE_BYTE( (int)m_iStage );
+			WRITE_CHAR( m_iStage == LADDER_END ? m_iExitSide : 0 );
+		}
 	MESSAGE_END();
 }
 
@@ -445,6 +482,7 @@ void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
 		pPlayer->pev->v_angle = m_vecEndAngles;
 		pPlayer->pev->fixangle = TRUE;
 		RestorePlayerView( pPlayer );
+		SendLadderViewState( pPlayer, FALSE );
 		pPlayer->EnableControl( TRUE );
 		pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.1f;
 	}
@@ -455,6 +493,7 @@ void CCOFLadderManager::FinishClimb( BOOL fFireTargets )
 	m_hPlayer = NULL;
 	m_iStage = LADDER_IDLE;
 	m_iLoopsLeft = 0;
+	m_iExitSide = 0;
 
 	if( fFireTargets )
 	{

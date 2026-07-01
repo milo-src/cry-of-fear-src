@@ -179,6 +179,7 @@ int gmsgItemPickup = 0;
 int gmsgCofInvClear = 0;
 int gmsgCofInvItem = 0;
 int gmsgCofInvQuick = 0;
+int gmsgCofLadder = 0;
 int gmsgHideWeapon = 0;
 int gmsgSetCurWeap = 0;
 int gmsgSayText = 0;
@@ -229,6 +230,7 @@ void LinkUserMessages( void )
 	gmsgCofInvClear = REG_USER_MSG( "CofInvClear", 0 );
 	gmsgCofInvItem = REG_USER_MSG( "CofInvItem", -1 );
 	gmsgCofInvQuick = REG_USER_MSG( "CofInvQuick", -1 );
+	gmsgCofLadder = REG_USER_MSG( "CofLadder", -1 );
 	gmsgHideWeapon = REG_USER_MSG( "HideWeapon", 1 );
 	gmsgSetFOV = REG_USER_MSG( "SetFOV", 1 );
 	gmsgShowMenu = REG_USER_MSG( "ShowMenu", -1 );
