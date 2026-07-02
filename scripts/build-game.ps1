@@ -51,7 +51,7 @@ if (-not $InstallPrefix) {
     $InstallPrefix = Join-Path $repoRoot "out\xash3d"
 }
 
-if (-not (Test-Path (Join-Path $SourceDir "CMakeLists.txt"))) {
+if (-not (Test-Path (Join-Path $SourceDir "wscript"))) {
     throw "COF source directory is missing or incomplete: $SourceDir"
 }
 
@@ -119,7 +119,7 @@ if (-not $NoInstall) {
 & "$PSScriptRoot\build-hlsdk.ps1" @argsForHlsdk
 
 if (-not $NoInstall -and $DeployDir) {
-    $openVguiDll = Join-Path (Join-Path $openVguiBuildDir $Configuration) "vgui.dll"
+    $openVguiDll = Get-OpenVguiRuntimeLibrary -BuildDir $openVguiBuildDir -Configuration $Configuration
     Copy-CofGameRuntime -SourceRoot $InstallPrefix -DeployRoot $DeployDir -GameDir $GameDir -VguiDll $openVguiDll
     Repair-CofLocalizationForXash -DeployRoot $DeployDir -GameDir $GameDir
     Write-Host ""

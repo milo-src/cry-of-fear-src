@@ -16,6 +16,28 @@ $repoRoot = Get-RepoRoot
 $DeployDir = [System.IO.Path]::GetFullPath($DeployDir)
 $deployGameDir = Join-Path $DeployDir $GameDir
 
+function Find-BuiltFile {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$Candidates
+    )
+
+    foreach ($candidate in $Candidates) {
+        $path = if ([System.IO.Path]::IsPathRooted($candidate)) {
+            $candidate
+        }
+        else {
+            Join-Path $repoRoot $candidate
+        }
+
+        if (Test-Path -LiteralPath $path) {
+            return $path
+        }
+    }
+
+    return $Candidates[0]
+}
+
 $runningXash = Get-Process -Name "xash3d" -ErrorAction SilentlyContinue
 if ($runningXash) {
     Write-Warning "xash3d.exe is running. Close the game before copying DLLs, otherwise Windows may keep old DLLs loaded or block replacement."
@@ -30,19 +52,25 @@ Write-Host "Server DLL path from liblist.gam: $GameDir\$serverDllRelativePath"
 Write-Host ""
 
 Copy-CheckedFile `
-    -Source "build\cof\cl_dll\$Configuration\client.dll" `
+    -Source (Find-BuiltFile @(
+        "build\cof\cl_dll\client.dll",
+        "build\cof\cl_dll\$Configuration\client.dll"
+    )) `
     -Destination (Join-Path $deployGameDir "cl_dlls\client.dll") `
     -BaseDir $repoRoot `
     -Required
 
 Copy-CheckedFile `
-    -Source "build\cof\dlls\$Configuration\hl.dll" `
+    -Source (Find-BuiltFile @(
+        "build\cof\dlls\hl.dll",
+        "build\cof\dlls\$Configuration\hl.dll"
+    )) `
     -Destination $serverDllDestination `
     -BaseDir $repoRoot `
     -Required
 
 Copy-CheckedFile `
-    -Source "build\openvgui\$Configuration\vgui.dll" `
+    -Source (Get-OpenVguiRuntimeLibrary -BuildDir (Join-Path $repoRoot "build\openvgui") -Configuration $Configuration) `
     -Destination (Join-Path $DeployDir "vgui.dll") `
     -BaseDir $repoRoot `
     -Required

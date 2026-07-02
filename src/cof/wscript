@@ -60,6 +60,14 @@ def options(opt):
 		help = 'Enable VOICE MANAGER')
 	grp.add_option('--enable-android-apk', action = 'store_true', dest = 'ANDROID_APK', default = False,
 		help = 'Enable Android APK styled libraries deploy')
+	grp.add_option('--gamedir', action = 'store', dest = 'GAMEDIR_OVERRIDE', default = '',
+		help = 'override GAMEDIR from mod_options.txt')
+	grp.add_option('--server-install-dir', action = 'store', dest = 'SERVER_INSTALL_DIR_OVERRIDE', default = '',
+		help = 'override SERVER_INSTALL_DIR from mod_options.txt')
+	grp.add_option('--client-install-dir', action = 'store', dest = 'CLIENT_INSTALL_DIR_OVERRIDE', default = '',
+		help = 'override CLIENT_INSTALL_DIR from mod_options.txt')
+	grp.add_option('--server-library-name', action = 'store', dest = 'SERVER_LIBRARY_NAME_OVERRIDE', default = '',
+		help = 'override SERVER_LIBRARY_NAME from mod_options.txt')
 
 	# a1ba: hidden option for CI
 	grp.add_option('--enable-msvcdeps', action='store_true', dest='MSVCDEPS', default=False, help='')
@@ -282,6 +290,15 @@ def configure(conf):
 			conf.end_msg(p[1])
 	if conf.env.HLDEMO_BUILD and conf.env.OEM_BUILD:
 		conf.fatal('Don\'t mix Demo and OEM builds!')
+
+	if conf.options.GAMEDIR_OVERRIDE:
+		conf.env.GAMEDIR = conf.options.GAMEDIR_OVERRIDE
+	if conf.options.SERVER_INSTALL_DIR_OVERRIDE:
+		conf.env.SERVER_INSTALL_DIR = conf.options.SERVER_INSTALL_DIR_OVERRIDE
+	if conf.options.CLIENT_INSTALL_DIR_OVERRIDE:
+		conf.env.CLIENT_INSTALL_DIR = conf.options.CLIENT_INSTALL_DIR_OVERRIDE
+	if conf.options.SERVER_LIBRARY_NAME_OVERRIDE:
+		conf.env.SERVER_LIBRARY_NAME = conf.options.SERVER_LIBRARY_NAME_OVERRIDE
 
 	# strip lib from pattern
 	if conf.env.DEST_OS != 'android':

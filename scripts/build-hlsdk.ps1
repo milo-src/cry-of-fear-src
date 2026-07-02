@@ -62,96 +62,98 @@ if (-not $InstallPrefix) {
 
 $BuildDir = Convert-ToFullPath $BuildDir
 $InstallPrefix = Convert-ToFullPath $InstallPrefix
-$isWindows = Test-RunningOnWindows
+$wafBuildType = Convert-CmakeConfigurationToWafBuildType -Configuration $Configuration
+$supportsInstallOverrides = [bool](Select-String `
+    -Path (Join-Path $sdkDir "wscript") `
+    -Pattern "GAMEDIR_OVERRIDE" `
+    -Quiet `
+    -ErrorAction SilentlyContinue)
 
-if (-not (Get-Command "cmake" -ErrorAction SilentlyContinue)) {
-    throw "CMake is required to build hlsdk-portable."
+if (-not (Get-Command "python" -ErrorAction SilentlyContinue)) {
+    throw "Python is required by HLSDK waf build scripts."
 }
 
-if (-not (Test-Path (Join-Path $sdkDir "CMakeLists.txt"))) {
-    throw "Cannot find CMakeLists.txt in HLSDK source directory: $sdkDir"
+if ($Generator) {
+    Write-Warning "-Generator is ignored by waf builds."
+}
+
+if ($Platform) {
+    Write-Warning "-Platform is ignored by waf builds. Use -X64 for 64-bit waf builds."
+}
+
+$waf = Join-Path $sdkDir "waf.bat"
+if (-not (Test-Path -LiteralPath $waf)) {
+    $waf = Join-Path $sdkDir "waf"
+}
+
+if (-not (Test-Path -LiteralPath $waf)) {
+    throw "Cannot find HLSDK waf entrypoint in $sdkDir."
+}
+
+if (-not (Test-Path -LiteralPath (Join-Path $sdkDir "wscript"))) {
+    throw "Cannot find wscript in HLSDK source directory: $sdkDir"
 }
 
 $configureArgs = @(
-    "-S", $sdkDir,
-    "-B", $BuildDir,
-    "-DGAMEDIR=$GameDir",
-    "-DCMAKE_INSTALL_PREFIX=$InstallPrefix"
+    "configure",
+    "-T", $wafBuildType,
+    "-o", $BuildDir,
+    "--prefix=/",
+    "--disable-werror"
 )
 
-if ($Generator) {
-    $configureArgs += @("-G", $Generator)
-}
-
-if ($isWindows) {
-    if (-not $Platform -and -not ($Generator -match "Ninja|MinGW|Unix Makefiles")) {
-        if ($X64) {
-            $Platform = "x64"
-        }
-        else {
-            $Platform = "Win32"
-        }
-    }
-
-    if ($Platform) {
-        $configureArgs += @("-A", $Platform)
-    }
-}
-else {
-    $configureArgs += "-DCMAKE_BUILD_TYPE=$Configuration"
-}
-
 if ($X64) {
-    $configureArgs += "-D64BIT=ON"
+    $configureArgs += "-8"
 }
 
-if ($ServerInstallDir) {
-    $configureArgs += "-DSERVER_INSTALL_DIR=$ServerInstallDir"
+if ($supportsInstallOverrides -and $GameDir) {
+    $configureArgs += "--gamedir=$GameDir"
 }
 
-if ($ClientInstallDir) {
-    $configureArgs += "-DCLIENT_INSTALL_DIR=$ClientInstallDir"
+if ($supportsInstallOverrides -and $ServerInstallDir) {
+    $configureArgs += "--server-install-dir=$ServerInstallDir"
+}
+
+if ($supportsInstallOverrides -and $ClientInstallDir) {
+    $configureArgs += "--client-install-dir=$ClientInstallDir"
+}
+
+if (-not $supportsInstallOverrides -and ($ServerInstallDir -or $ClientInstallDir)) {
+    Write-Warning "This waf source tree does not support install-dir overrides; using mod_options.txt values."
 }
 
 if ($UseVGUI) {
-    $configureArgs += "-DUSE_VGUI=ON"
+    if (-not $OpenVGUIRoot -or -not $OpenVGUIBuildDir) {
+        throw "VGUI waf builds require -OpenVGUIRoot and -OpenVGUIBuildDir."
+    }
+
+    $vguiCompatDir = New-OpenVguiWafCompatDir `
+        -OpenVGUIRoot $OpenVGUIRoot `
+        -OpenVGUIBuildDir $OpenVGUIBuildDir `
+        -Configuration $Configuration
+
+    $configureArgs += "--enable-vgui"
+    $configureArgs += "--vgui=$vguiCompatDir"
 }
 
 if ($UseNoVGUIMOTD) {
-    $configureArgs += "-DUSE_NOVGUI_MOTD=ON"
+    $configureArgs += "--enable-novgui-motd"
 }
 
 if ($UseNoVGUIScoreboard) {
-    $configureArgs += "-DUSE_NOVGUI_SCOREBOARD=ON"
+    $configureArgs += "--enable-novgui-scoreboard"
 }
 
-if ($OpenVGUIRoot) {
-    $configureArgs += "-DOPENVGUI_ROOT=$OpenVGUIRoot"
-}
-
-if ($OpenVGUIBuildDir) {
-    $configureArgs += "-DOPENVGUI_BUILD_DIR=$OpenVGUIBuildDir"
-}
-
-Invoke-Checked -FilePath "cmake" -ArgumentList $configureArgs -WorkingDirectory $repoRoot
-
-$buildArgs = @(
-    "--build", $BuildDir,
-    "--config", $Configuration,
-    "--parallel", "$Jobs"
-)
+Invoke-Checked -FilePath $waf -ArgumentList $configureArgs -WorkingDirectory $sdkDir
 
 if ($CleanFirst) {
-    $buildArgs += "--clean-first"
+    Invoke-Checked -FilePath $waf -ArgumentList @("clean", "-o", $BuildDir) -WorkingDirectory $sdkDir
 }
 
-if ($Install) {
-    $buildArgs += @("--target", "install")
-}
-
-Invoke-Checked -FilePath "cmake" -ArgumentList $buildArgs -WorkingDirectory $repoRoot
+Invoke-Checked -FilePath $waf -ArgumentList @("build", "-o", $BuildDir, "-j$Jobs") -WorkingDirectory $sdkDir
 
 if ($Install) {
+    Invoke-Checked -FilePath $waf -ArgumentList @("install", "-o", $BuildDir, "--destdir=$InstallPrefix") -WorkingDirectory $sdkDir
     Write-Host ""
     Write-Host "HLSDK installed to $InstallPrefix\$GameDir"
 }

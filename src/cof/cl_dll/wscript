@@ -20,7 +20,11 @@ def options(opt):
 	opt.load('vgui')
 
 def configure(conf):
-	conf.options.VGUI_DEV = os.path.join('vgui_support', 'vgui-dev') # vgui is in submodule
+	default_vgui_tail = os.path.normpath(os.path.join('cl_dll', 'vgui-dev'))
+	current_vgui_path = os.path.normpath(str(conf.options.VGUI_DEV))
+	if current_vgui_path.endswith(default_vgui_tail):
+		conf.options.VGUI_DEV = os.path.join('vgui_support', 'vgui-dev')
+
 	conf.env.USE_VGUI = conf.options.USE_VGUI
 	conf.env.USE_NOVGUI_MOTD = conf.options.USE_NOVGUI_MOTD
 	conf.env.USE_NOVGUI_SCOREBOARD = conf.options.USE_NOVGUI_SCOREBOARD
@@ -87,11 +91,14 @@ def build(bld):
 		'dlls/handgrenade.cpp',
 		'dlls/hornetgun.cpp',
 		'dlls/mp5.cpp',
+		'dlls/mobile.cpp',
+		'dlls/mobile_switchblade.cpp',
 		'dlls/python.cpp',
 		'dlls/rpg.cpp',
 		'dlls/satchel.cpp',
 		'dlls/shotgun.cpp',
 		'dlls/squeakgrenade.cpp',
+		'dlls/switchblade.cpp',
 		'dlls/tripmine.cpp'
 	])
 
