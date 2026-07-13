@@ -382,23 +382,49 @@ cmake --build build/cof-macos --parallel "$(sysctl -n hw.logicalcpu)" --target i
 
 ## Android
 
-Android support is experimental and comes from the HLSDK-portable Android project.
+Android support is experimental. The root build wrapper generates an application
+from the vendored Xash3D FWGS Android project and packages the CoF client and
+server libraries with the engine. The APK does not contain copyrighted game
+assets.
 
-Build:
+Install Python 3, a JDK, and the Android SDK with an NDK. Set `ANDROID_HOME` or
+pass `--android-sdk` if the SDK is not in the default `~/Android/Sdk` location.
+The builder downloads the pinned SDL2 source into the ignored
+`external/xash3d-fwgs/3rdparty/SDL` directory when it is missing.
+
+Build an arm64 debug APK on Linux:
 
 ```sh
-cd src/cof/android
-./gradlew assembleRelease
+./build_android.sh --configuration Debug --abi arm64
 ```
 
-On Windows:
+The resulting APK is `out/android/xash3d-cof.apk`. Use `--abi armv7` for a
+32-bit build, `--abi arm` for both ARM variants, or repeat `--abi` to package
+multiple architectures.
 
-```bat
-cd src\cof\android
-gradlew.bat assembleRelease
+Copy your legally owned game data and install the APK. Replace `SERIAL` with the
+serial shown by `adb devices`; specifying it avoids ambiguity when the same
+phone is connected over both USB and wireless ADB.
+
+```sh
+adb -s SERIAL shell mkdir -p /sdcard/xash
+adb -s SERIAL push "/path/to/Cry of Fear/cryoffear" /sdcard/xash/
+adb -s SERIAL shell sed -i 's/^startmap .*/startmap "c_start"/' /sdcard/xash/cryoffear/liblist.gam
+adb -s SERIAL install -r out/android/xash3d-cof.apk
+adb -s SERIAL shell am start -n su.xash.cof/su.xash.engine.CofLauncherActivity
 ```
 
-Before a real Android package is used, check that package names, app labels, and the game directory point to `cryoffear` and not the original HLSDK defaults.
+On first launch, Android opens the per-app **All files access** screen. Enable
+**Allow access to manage all files**, then return to the app. Some Android OEMs
+block the equivalent ADB `appops` command even on a developer-enabled device.
+
+The final layout must contain
+`/sdcard/xash/cryoffear/liblist.gam`, maps, models, sounds, and the other Steam
+assets. Do not copy the outer Steam install directory and do not commit these
+files. The launcher selects `cryoffear` and loads the packaged `libhl.so` and
+`libclient.so` automatically. The copied `liblist.gam` repair matches the
+existing desktop runtime repair: the Steam file names the missing Half-Life
+`intro` map, while this port starts at CoF's `c_start` map.
 
 ## Troubleshooting
 
