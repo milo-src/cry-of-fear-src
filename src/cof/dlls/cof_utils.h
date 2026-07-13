@@ -14,7 +14,7 @@
 
 inline BOOL COF_HasText( string_t iszText )
 {
-	return !FStringNull( iszText ) && STRING( iszText )[0] != '\0';
+	return !FStringNull( iszText ) && STRING( iszText ) && STRING( iszText )[0] != 0;
 }
 
 inline CBasePlayer *COF_PlayerFromEntity( CBaseEntity *pEntity )
