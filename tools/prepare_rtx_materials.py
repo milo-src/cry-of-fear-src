@@ -27,11 +27,26 @@ def prepare(target):
     studio = studio.replace('ishologram ? alpha : 255', 'ishologram || rt_raster_blend ? alpha : 255')
     studio = studio.replace('ishologram ? RT_CVAR_TO_FLOAT( rt_emis_hologram ) : 0.0f',
         'rt_raster_blend && rt_raster_additive ? .35f : ishologram ? RT_CVAR_TO_FLOAT( rt_emis_hologram ) : 0.0f')
+    anchor = '\t\tTryBeginBatch_Finalize( curtype, &mesh, &prim );'
+    if studio.count(anchor) != 1: raise ValueError('RTX studio material hook changed')
+    studio = studio.replace(anchor, '''        RgEditorInfo studioSurface = {0};
+        if (!cof_rt_menu_scene && !rt_raster_blend && !hasinvis && !ishologram) {
+            studioSurface.pbrInfoExists = true;
+            studioSurface.pbrInfo.roughnessDefault = rt_alphatest ? .86f : .72f;
+            studioSurface.pbrInfo.metallicDefault = 0;
+            prim.pEditorInfo = &studioSurface;
+        }
+'''+anchor)
     text = text[:begin] + studio + text[end:]
     path.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_materials.inc', target/'ref/gl/rtx_materials.inc')
+    shutil.copy2(ROOT/'src/cof/render/rtx_surface_types.inc', target/'ref/gl/rtx_surface_types.inc')
     path = target / 'ref/gl/gl_rmain.c'
     text = path.read_text()
+    anchor = '\t\tRgDrawFrameTexturesParams texture_params = {'
+    if text.count(anchor) != 1: raise ValueError('RTX atmosphere hook changed')
+    text = text.replace(anchor, '#include "rtx_atmosphere.inc"\n'+anchor)
+    shutil.copy2(ROOT/'src/cof/render/rtx_atmosphere.inc', target/'ref/gl/rtx_atmosphere.inc')
     for old, new in (
         ('.waterWaveSpeed          = METRIC_TO_QUAKEUNIT( 0.4f )',
          '.waterWaveSpeed          = METRIC_TO_QUAKEUNIT( 0.12f )'),

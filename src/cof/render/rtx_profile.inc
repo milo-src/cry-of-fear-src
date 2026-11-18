@@ -31,6 +31,11 @@
             gEngfuncs.Cvar_SetValue("rt_volume_far", 900);
             gEngfuncs.Cvar_SetValue("rt_light_radius", .045f);
             gEngfuncs.Cvar_SetValue("rt_light_s", 1100);
+            // Hand-held beam: readable centre, feathered edge and slight parallax.
+            gEngfuncs.Cvar_SetValue("rt_flsh_angle", 26);
+            gEngfuncs.Cvar_SetValue("rt_flsh_radius", .025f);
+            gEngfuncs.Cvar_SetValue("rt_flsh_r", -.12f);
+            gEngfuncs.Cvar_SetValue("rt_flsh_u", -.12f);
             // Permit dark-adapted night exposure without flattening sunlit maps.
             gEngfuncs.Cvar_SetValue("rt_tnmp_ev100_min", .5f);
             gEngfuncs.Cvar_SetValue("rt_tnmp_ev100_max", 7.7f);

@@ -2,6 +2,8 @@
  * Explicit names avoid turning painted walls, window frames or wood into metal.
  * These are artistic RT adaptations, not recovered original shader constants. */
 extern void CofRTTexlightMaterial(RgMeshPrimitiveInfo*, RgEditorInfo*, const char*);
+extern qboolean cof_rt_menu_scene;
+#include "rtx_surface_types.inc"
 static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor)
 {
     static struct { const char *name; float roughness, metallic; qboolean reported; } materials[] = {
@@ -45,6 +47,8 @@ static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *edi
         return;
     }
     CofRTTexlightMaterial(primitive,editor,name);
+    if (!cof_rt_menu_scene && !(primitive->flags & (RG_MESH_PRIMITIVE_TRANSLUCENT|RG_MESH_PRIMITIVE_SKY_VISIBILITY)))
+        CofRTSurfaceResponse(editor,name);
     for (size_t i = 0; i < sizeof(materials)/sizeof(materials[0]); ++i) {
         if (Q_stricmp(name, materials[i].name)) continue;
         editor->pbrInfoExists = true;

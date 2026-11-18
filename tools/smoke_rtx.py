@@ -112,6 +112,7 @@ def main():
     parser.add_argument('--water-view',action='store_true',help='Inspect water reflections from a low camera angle')
     parser.add_argument('--motion',action='store_true',help='Walk past the water and capture settling light')
     parser.add_argument('--lighting',action='store_true',help='Hold a fixed camera with flashlight off on the selected map')
+    parser.add_argument('--flashlight',action='store_true',help='Enable the real player flashlight with --lighting')
     parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
     parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
     parser.add_argument('--cursor',action='store_true',help='Check RTX client-panel cursor, capture and focus transitions')
@@ -121,6 +122,7 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],default='0')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.flashlight and not args.lighting:parser.error('--flashlight requires --lighting')
     if args.label and not re.fullmatch('[a-zA-Z0-9_-]+',args.label):parser.error('Invalid label')
     for name,value in args.cvar:
         if not re.fullmatch('[a-zA-Z0-9_]+',name) or not re.fullmatch('[-+.0-9]+',value):parser.error('Invalid numeric cvar')
@@ -155,6 +157,8 @@ def main():
     env.pop('COF_MENU_SCENETEST',None)
     env.pop('COF_MENU_CYCLETEST',None)
     env.pop('COF_CURSORTEST',None)
+    env.pop('COF_RTX_FLASHLIGHTTEST',None)
+    if args.flashlight:env['COF_RTX_FLASHLIGHTTEST']='1'
     if args.cursor:env['COF_CURSORTEST']='1'
     if args.water_view:env['COF_RTX_WATER_VIEW']='1'
     if args.lighting:env['COF_RTX_LIGHTINGTEST']='1'

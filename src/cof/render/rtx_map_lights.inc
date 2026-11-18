@@ -8,6 +8,28 @@ float cof_rt_sky_origin[3], cof_rt_world_origin[3], cof_rt_sky_speed;
 float cof_rt_sky_energy = 1;
 qboolean cof_rt_has_sky;
 qboolean cof_rt_menu_scene;
+static qboolean cof_rt_open_sky;
+
+// Artistic RT fallback for outdoor maps without light_environment. A real
+// shadowed directional light keeps silhouettes readable; roofs still occlude
+// it. Never add it to the cinematic menu or maps that authored their own sun.
+static void CofRTNightFill(void)
+{
+    if (cof_rt_menu_scene || g_lights.sun_exists || !cof_rt_open_sky) return;
+    static cvar_t *setting;
+    if (!setting) setting=gEngfuncs.Cvar_Get("rt_night_fill","3",FCVAR_ARCHIVE,
+        "Outdoor RT night fill when no environment light exists; 0 disables");
+    float intensity=isfinite(setting->value) ? bound(0,setting->value,10) : 3;
+    if (intensity<=0) return;
+    RgDirectionalLightUploadInfo light={
+        .uniqueID=1, .isExportable=false,
+        .color=0, .intensity=intensity,
+        .direction={{-.350878f,.451129f,-.820940f}},
+        .angularDiameterDegrees=3,
+    };
+    light.color=rgUtilPackColorByte4D(156,183,220,255);
+    RG_CHECK(rgUploadDirectionalLight(rg_instance,&light));
+}
 
 static char *CofRTReadEntity(char *text, CofRTEntity *entity)
 {
@@ -123,13 +145,14 @@ static int CofRTBakedFill(void)
         const glpoly2_t *poly=surf->polys;
         for (int v=0;v<poly->numverts;++v) VectorAdd(position,poly->verts[v],position);
         VectorScale(position,1.0f/poly->numverts,position);
-        VectorMA(position,48,normal,position);
+        const float fillRadius=cof_rt_menu_scene ? 16 : 32;
+        VectorMA(position,cof_rt_menu_scene ? 48 : 80,normal,position);
         mleaf_t *leaf=gEngfuncs.Mod_PointInLeaf(position,WORLDMODEL->nodes,WORLDMODEL);
         if (!leaf || leaf->contents!=CONTENTS_EMPTY) continue;
         qboolean tooClose=false;
         // Keep the broad emitter out of nearby solid walls as well as the floor.
         for (int axis=0;axis<3;++axis) for (int sign=-1;sign<=1;sign+=2) {
-            vec3_t probe; VectorCopy(position,probe); probe[axis]+=sign*16;
+            vec3_t probe; VectorCopy(position,probe); probe[axis]+=sign*fillRadius;
             leaf=gEngfuncs.Mod_PointInLeaf(probe,WORLDMODEL->nodes,WORLDMODEL);
             if (!leaf || leaf->contents!=CONTENTS_EMPTY) tooClose=true;
         }
@@ -154,24 +177,31 @@ static int CofRTBakedFill(void)
         if (peak<2) continue;
         RgColor4DPacked32 color=rgUtilPackColorFloat4D(rgb[0]/peak,rgb[1]/peak,rgb[2]/peak,1);
         AddStaticLight(position,normal,color,strength*Q_min(peak/255.0f,.35f),0,false,0,0);
-        g_lights.static_lights[g_lights.static_lights_count-1].fill_radius=16;
+        g_lights.static_lights[g_lights.static_lights_count-1].fill_radius=fillRadius;
         ++added;
     }
     return added;
 }
 void RT_ParseStaticLightEntities(void)
 {
+    extern void CofRTLoadSurfaceTypes(void);
+    CofRTLoadSurfaceTypes();
     g_lights.static_lights_count=0;
     g_lights.potential_sun_count=0;
     g_lights.sun_exists=false;
     cof_texlight_count=0;
     cof_rt_has_sky=false;
     cof_rt_menu_scene=false;
+    cof_rt_open_sky=false;
     cof_rt_sky_speed=0;
     cof_rt_sky_energy=1;
     VectorClear(cof_rt_sky_origin);
     VectorClear(cof_rt_world_origin);
     if (!WORLDMODEL || !WORLDMODEL->entities) return;
+    for (int i=0;i<WORLDMODEL->nummodelsurfaces;++i)
+        if (WORLDMODEL->surfaces[WORLDMODEL->firstmodelsurface+i].flags & SURF_DRAWSKY) {
+            cof_rt_open_sky=true; break;
+        }
     CofRTEntity entity;
     char *text=WORLDMODEL->entities;
     int spots=0, points=0;
