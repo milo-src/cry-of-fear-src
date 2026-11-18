@@ -1,4 +1,6 @@
-"""Route solid UI fills through a white material in the Vulkan bridge."""
+"""Adapt solid UI fills and legacy menu blending in the Vulkan bridge."""
+from pathlib import Path
+import shutil
 
 def prepare(target):
     path = target / 'ref/gl/gl_context.c'
@@ -21,3 +23,27 @@ def prepare(target):
         '\tGL_SelectTexture( previousUnit );')
     text = text[:start] + part + text[end:]
     path.write_text(text)
+    # Only the ten main-menu buttons, including their hover images. The logo,
+    # fonts, HUD sprites, solid VGUI fills and scene textures retain their paths.
+    path=target/'ref/gl/gl_opengl.c'
+    text=path.read_text()
+    anchor='void pglTexImage2D( GLenum'
+    if text.count(anchor)!=1: raise ValueError('RTX UI texture hook changed')
+    text=text.replace(anchor,'#include "rtx_ui_blend.h"\n\n'+anchor)
+    anchor='\t\t\t\tRgResult r = rgProvideOriginalTexture( rg_instance, &info );'
+    if text.count(anchor)!=1: raise ValueError('RTX UI upload hook changed')
+    text=text.replace(anchor,'''                unsigned char *cofMenuPixels=NULL;
+                if (width>0 && height>0 && width<=4096 && height<=4096 &&
+                    CofRTIsMenuButton(info.pTextureName)) {
+                    const size_t count=(size_t)width*(size_t)height;
+                    cofMenuPixels=malloc(count*4);
+                    if (cofMenuPixels) {
+                        CofRTMenuBlendPixels(cofMenuPixels,pixels,count);
+                        info.pPixels=cofMenuPixels;
+                        gEngfuncs.Con_DPrintf("COF_RTX_MENU_BLEND %s %dx%d\\n",info.pTextureName,width,height);
+                    }
+                }
+'''+anchor+'\n                free(cofMenuPixels);')
+    path.write_text(text)
+    shutil.copy2(Path(__file__).resolve().parents[1]/'src/cof/render/rtx_ui_blend.h',
+                 target/'ref/gl/rtx_ui_blend.h')
