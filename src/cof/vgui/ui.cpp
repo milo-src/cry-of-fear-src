@@ -15,10 +15,19 @@ std::vector<Dialog*> windows;
 std::map<std::string,std::string> language;
 KeyValue scheme;
 bool resourcesLoaded;
-HFont normalFont, consoleFont;
+HFont normalFont, consoleFont, arrowFont;
 int pointerX, pointerY, pressed=-1, combo=-1;
 bool dragging, resizing;
 int dragX,dragY;
+bool scrollDragging;
+int scrollGrab;
+Rect paintClip={0,0,0,0};
+Rect Intersect(Rect a,Rect b){int right=std::min(a.x+a.w,b.x+b.w),bottom=std::min(a.y+a.h,b.y+b.h);a.x=std::max(a.x,b.x);a.y=std::max(a.y,b.y);a.w=std::max(0,right-a.x);a.h=std::max(0,bottom-a.y);return a;}
+struct ControlClip {
+    Rect saved;
+    ControlClip(const Control& c,int x,int y):saved(paintClip){paintClip=c.clip;if(paintClip.w>0){paintClip.x+=x;paintClip.y+=y;}}
+    ~ControlClip(){paintClip=saved;}
+};
 cof_ui_engine_t engine = {};
 std::string TokenKey(std::string value){for(char& c:value)c=char(std::tolower(static_cast<unsigned char>(c)));return value;}
 int Clamp(int v,int lo,int hi) { return v<lo?lo:(v>hi?hi:v); }
@@ -29,6 +38,9 @@ void Fonts() {
     if (!current || !current->IsEqualTo("Tahoma",16,0,0,FONT_COF_CONTROL))
         normalFont=CFontBuilder("Tahoma",16,0).SetFlags(FONT_COF_CONTROL).Create();
     consoleFont=normalFont;
+    current=g_FontMgr->GetIFontFromHandle(arrowFont);
+    if(!current||!current->IsEqualTo("Marlett",14,0,0,FONT_COF_CONTROL))
+        arrowFont=CFontBuilder("Marlett",14,0).SetFlags(FONT_COF_CONTROL).Create();
 }
 void Resources() {
     if(resourcesLoaded) return;
@@ -46,13 +58,28 @@ Rect Absolute(const Dialog& d,const Control& c) { Rect r=c.bounds; r.x+=d.bounds
 int Hit(Dialog& d,int x,int y) {
     for(int i=int(d.controls.size())-1;i>=0;--i) {
         const Control& c=d.controls[i];
-        if(c.visible&&c.enabled&&c.kind!=Kind::Label&&Absolute(d,c).Contains(x,y)) return i;
+        Rect hit=Absolute(d,c);if(c.clip.w>0){Rect clip=c.clip;clip.x+=d.bounds.x;clip.y+=d.bounds.y;hit=Intersect(hit,clip);}
+        if(c.visible&&c.enabled&&c.kind!=Kind::Label&&hit.Contains(x,y)) return i;
     }
     return -1;
 }
 void SliderAt(Dialog& d,Control& c,int x) {
     Rect r=Absolute(d,c);
     c.number=c.minimum+(c.maximum-c.minimum)*ClampF(float(x-r.x-4)/float(r.w>8?r.w-8:1),0,1);
+    d.Changed(c);
+}
+Rect ScrollTrack(Rect r){return {r.x,r.y+r.w,r.w,std::max(1,r.h-2*r.w+1)};}
+Rect ScrollThumb(const Control& c,Rect r){
+    Rect track=ScrollTrack(r);int range=std::max(0,int(c.maximum-c.minimum));
+    const int length=std::max(1,track.h-1);
+    int h=std::min(length,std::max(track.w,length*c.pageSize/std::max(1,range+c.pageSize)));
+    int y=range?int((length-h)*(c.number-c.minimum)/range):0;
+    return {track.x,track.y+y,track.w-1,h};
+}
+void ScrollAt(Dialog& d,Control& c,int y){
+    Rect r=Absolute(d,c),track=ScrollTrack(r),thumb=ScrollThumb(c,r);
+    int travel=track.h-1-thumb.h;
+    c.number=c.minimum+(travel>0?int(ClampF(float(y-track.y-scrollGrab)/travel,0,1)*(c.maximum-c.minimum)+.5f):0);
     d.Changed(c);
 }
 void Activate(Dialog& d,int index) {
@@ -90,6 +117,7 @@ public:
         }
     }
     bool MouseMove(int x,int y) override {
+        if(getenv("COF_POINTERTEST"))Con_Printf("COF_POINTER_MOVE %d %d drag=%d\n",x,y,dragging?1:0);
         pointerX=x;pointerY=y;
         if(windows.empty())return true;
         Dialog& d=*windows.back();
@@ -98,6 +126,8 @@ public:
         if(resizing) {d.bounds.w=Clamp(x-d.bounds.x+dragX,280,ViewWidth()-d.bounds.x);d.bounds.h=Clamp(y-d.bounds.y+dragY,180,ViewHeight()-d.bounds.y);}
         if(pressed>=0&&pressed<int(d.controls.size())&&d.controls[pressed].kind==Kind::Slider)
             SliderAt(d,d.controls[pressed],x);
+        if(scrollDragging&&pressed>=0&&pressed<int(d.controls.size())&&d.controls[pressed].kind==Kind::ScrollBar)
+            ScrollAt(d,d.controls[pressed],y);
         return true;
     }
     bool KeyDown(int key) override { return Input(key,true); }
@@ -107,13 +137,14 @@ protected:
     void _VidInit() override { SetCoord(0,0);SetSize(ViewWidth(),ViewHeight()); Fonts(); }
 private:
     bool Input(int key,bool down) {
+        if(getenv("COF_POINTERTEST")&&key==K_MOUSE1)Con_Printf("COF_POINTER_BUTTON %d at %d %d\n",down?1:0,pointerX,pointerY);
         if(windows.empty())return true;
         Dialog& d=*windows.back();
         if(d.CaptureKey(key,down))return true;
         if(key==K_MOUSE1&&d.Pointer(pointerX,pointerY,key,down))return true;
         if(key==K_MOUSE1) {
             if(!down) {
-                int old=pressed;pressed=-1;dragging=resizing=false;
+                int old=pressed;pressed=-1;dragging=resizing=scrollDragging=false;
                 if(old>=0&&Hit(d,pointerX,pointerY)==old) Activate(d,old);
                 return true;
             }
@@ -130,6 +161,13 @@ private:
             if(titlebar.Contains(pointerX,pointerY)){dragging=true;dragX=pointerX-d.bounds.x;dragY=pointerY-d.bounds.y;return true;}
             pressed=Hit(d,pointerX,pointerY);d.focus=pressed;
             if(pressed>=0){Control& c=d.controls[pressed];if(c.kind==Kind::Slider)SliderAt(d,c,pointerX);
+                if(c.kind==Kind::ScrollBar){
+                    Rect r=Absolute(d,c),track=ScrollTrack(r),thumb=ScrollThumb(c,r);
+                    if(thumb.Contains(pointerX,pointerY)){scrollDragging=true;scrollGrab=pointerY-thumb.y;}
+                    else {int delta=pointerY<track.y?-c.step:pointerY>=track.y+track.h?c.step:pointerY<thumb.y?-c.pageSize:c.pageSize;
+                        c.number=ClampF(c.number+delta,c.minimum,c.maximum);d.Changed(c);}
+                    return true;
+                }
                 if(c.kind==Kind::List){c.selected=Clamp(c.scroll+(pointerY-Absolute(d,c).y)/20,0,int(c.choices.size())-1);d.Changed(c);}
                 if(c.kind==Kind::Edit)c.cursor=int(c.value.size());}
             return true;
@@ -157,7 +195,7 @@ std::string Localize(const std::string& token){
     for(size_t i=0;i<text.size();) {if(text[i]=='&')text.erase(i,1);else ++i;}
     return text;
 }
-void Fill(Rect r,unsigned color){if(r.w>0&&r.h>0)UI_FillRect(r.x,r.y,r.w,r.h,color);}
+void Fill(Rect r,unsigned color){if(paintClip.w>0)r=Intersect(r,paintClip);if(r.w>0&&r.h>0)UI_FillRect(r.x,r.y,r.w,r.h,color);}
 unsigned ThemeColor(const char* key,unsigned fallback){
     Resources();std::string name=key;
     const char* aliases[][2]={{"Label.TextColor","FgColor"},{"Label.DisabledFgColor","DisabledFgColor1"},
@@ -193,14 +231,26 @@ void SchemeBorder(Rect r,const char* name){
 void Text(Rect r,const std::string& text,unsigned color,bool console,bool centered){
     Fonts();HFont font=console?consoleFont:normalFont;int tall=g_FontMgr->GetFontTall(font);
     if(r.w<=0||r.h<=0)return;
-    EngFuncs::PIC_EnableScissor(r.x,r.y,r.w,r.h);
+    Rect clip=paintClip.w>0?Intersect(r,paintClip):r;if(clip.w<=0||clip.h<=0)return;
+    EngFuncs::PIC_EnableScissor(clip.x,clip.y,clip.w,clip.h);
     UI_DrawString(font,r.x,r.y,r.w,r.h,text.c_str(),color,tall,centered?QM_CENTER:QM_LEFT,ETF_FORCECOL|ETF_NOSIZELIMIT|ETF_NO_WRAP);
     EngFuncs::PIC_DisableScissor();
 }
 int TextWidth(const std::string& text,bool console){Fonts();return g_FontMgr->GetTextWideScaled(console?consoleFont:normalFont,text.c_str(),16);}
+void Arrow(Rect r,bool down,unsigned color,bool menu){
+    // GameUI 1007b322/10079630: Marlett u/t, not literal v/^ in Tahoma.
+    Fonts();const int tall=g_FontMgr->GetFontTall(arrowFont);
+    Rect clip=paintClip.w>0?Intersect(r,paintClip):r;if(clip.w<=0||clip.h<=0)return;
+    EngFuncs::PIC_EnableScissor(clip.x,clip.y,clip.w,clip.h);
+    UI_DrawString(arrowFont,r.x+(menu?3:1),r.y+(menu?0:down?-1:1),r.w-(menu?3:0),r.h,
+        down?"u":"t",color,tall,menu?QM_LEFT:QM_CENTER,ETF_FORCECOL|ETF_NOSIZELIMIT|ETF_NO_WRAP);
+    EngFuncs::PIC_DisableScissor();
+}
 int Complete(const std::string& p,int i,char* out,int capacity){return engine.complete?engine.complete(p.c_str(),i,out,capacity):0;}
 void PaintControl(const Control& c,int x,int y,bool focused,bool hovered,bool down){
     if(!c.visible)return;Rect r=c.bounds;r.x+=x;r.y+=y;
+    ControlClip clip(c,x,y);
+    if(c.kind==Kind::Combo)paintClip=paintClip.w>0?Intersect(r,paintClip):r;
     unsigned fg=ThemeColor(c.enabled?"Label.TextColor":"Label.DisabledFgColor",c.enabled?0xffd8ded3:0xff777777);
     unsigned bg=ThemeColor("Button.BgColor",0x80282828);
     if(c.kind==Kind::Image){HIMAGE image=EngFuncs::PIC_Load(c.value.c_str());if(image){EngFuncs::PIC_Set(image,255,255,255,255);EngFuncs::PIC_DrawTrans(r.x,r.y,r.w,r.h);}return;}
@@ -219,8 +269,15 @@ void PaintControl(const Control& c,int x,int y,bool focused,bool hovered,bool do
         std::string visible=value;int cursor=Clamp(c.cursor,0,int(value.size()));
         if(c.kind==Kind::Edit&&focused)while(cursor>0&&TextWidth(visible.substr(0,cursor),c.consoleFont)>t.w-2){size_t skip=1;while(skip<visible.size()&&(visible[skip]&0xc0)==0x80)++skip;visible.erase(0,skip);cursor-=int(skip);}
         Text(t,visible,fg,c.consoleFont);
-        if(c.kind==Kind::Combo){Rect b={r.x+r.w-18,r.y+2,16,r.h-4};Fill(b,bg);Border(b);Text(b,"v",fg,false,true);}
+        if(c.kind==Kind::Combo){Rect b={r.x+r.w-r.h+4,r.y+2,r.h-2,r.h-2};Fill(b,ThemeColor("MenuButton/ButtonBgColor",bg));SchemeBorder(b,down?"ScrollBarButtonDepressedBorder":"ScrollBarButtonBorder");Arrow(b,true,ThemeColor(c.enabled&&(hovered||down)?"MenuButton/ArmedArrowColor":"MenuButton/ButtonArrowColor",fg),true);}
         if(c.kind==Kind::Edit&&focused&&int(gpGlobals->time*2)%2==0){int cx=TextWidth(visible.substr(0,cursor),c.consoleFont);Fill({t.x+Clamp(cx,0,t.w-1),t.y+2,1,t.h-4},ThemeColor("TextCursorColor",fg));}}
+    else if(c.kind==Kind::ScrollBar){
+        Fill(r,ThemeColor("ScrollBarSlider/ScrollBarSliderBgColor",0xc8282828));
+        Rect up={r.x,r.y,r.w-1,r.w},bottom={r.x,r.y+r.h-r.w,r.w-1,r.w};
+        Fill(up,bg);Fill(bottom,bg);SchemeBorder(up,"ScrollBarButtonBorder");SchemeBorder(bottom,"ScrollBarButtonBorder");
+        Arrow(up,false,ThemeColor("DimBaseText",fg));Arrow(bottom,true,ThemeColor("DimBaseText",fg));
+        Rect thumb=ScrollThumb(c,r);Fill(thumb,ThemeColor("ScrollBarSlider/ScrollBarSliderFgColor",bg));SchemeBorder(thumb,"ButtonBorder");
+    }
     else if(c.kind==Kind::List){Fill(r,ThemeColor("ListBG",0xc8282828));Border(r,true);int rows=r.h/20;
         for(int i=0;i<rows;++i){int n=c.scroll+i;if(n>=int(c.choices.size()))break;Rect row={r.x+2,r.y+i*20+1,r.w-4,20};if(n==c.selected)Fill(row,ThemeColor("SelectionBG",0xa0e09c30));Text(row,c.choices[n],fg,c.consoleFont);}}
     if(focused&&c.enabled&&c.kind==Kind::Button){unsigned focus=ThemeColor("ButtonFocusBorder",0xff000000);for(int xx=r.x+4;xx<r.x+r.w-4;xx+=3){Fill({xx,r.y+3,1,1},focus);Fill({xx,r.y+r.h-4,1,1},focus);}}
@@ -248,7 +305,8 @@ bool Dialog::Key(int key,bool down){
         else if(key==K_HOME)c.cursor=0;else if(key==K_END)c.cursor=int(c.value.size());
         else if(key=='v'&&EngFuncs::KEY_IsDown(K_CTRL)){const char* clip=EngFuncs::GetClipboardData();if(clip){for(const char* p=clip;*p&&c.value.size()<4096;++p)if(*p!='\r'&&*p!='\n'){c.value.insert(c.cursor,1,*p);++c.cursor;}Changed(c);}}
         else if(key==K_ENTER)Command(c.id);return true;}
-    if(c.kind==Kind::Slider&&(key==K_LEFTARROW||key==K_RIGHTARROW)){c.number=ClampF(c.number+(key==K_RIGHTARROW?1:-1)*(c.maximum-c.minimum)/20,c.minimum,c.maximum);Changed(c);}
+    if(c.kind==Kind::ScrollBar&&(key==K_UPARROW||key==K_DOWNARROW||key==K_PGUP||key==K_PGDN)){int delta=(key==K_UPARROW||key==K_PGUP)?-1:1;delta*=(key==K_PGUP||key==K_PGDN)?c.pageSize:c.step;c.number=ClampF(c.number+delta,c.minimum,c.maximum);Changed(c);}
+    else if(c.kind==Kind::Slider&&(key==K_LEFTARROW||key==K_RIGHTARROW)){c.number=ClampF(c.number+(key==K_RIGHTARROW?1:-1)*(c.maximum-c.minimum)/20,c.minimum,c.maximum);Changed(c);}
     else if((c.kind==Kind::Combo||c.kind==Kind::List)&&(key==K_UPARROW||key==K_DOWNARROW||key==K_MWHEELUP||key==K_MWHEELDOWN)){int sign=(key==K_DOWNARROW||key==K_MWHEELDOWN)?1:-1;c.selected=Clamp(c.selected+sign,0,int(c.choices.size())-1);if(c.selected<c.scroll)c.scroll=c.selected;if(c.selected>=c.scroll+c.bounds.h/20)c.scroll=c.selected-c.bounds.h/20+1;Changed(c);}
     else if(key==K_ENTER||key==K_SPACE)Activate(*this,focus);
     return true;
@@ -275,10 +333,10 @@ void Dialog::LoadControls(const std::string& path){
 void Show(Dialog& d){
     Resources();Fonts();if(!host.IsVisible())windows.clear();
     windows.erase(std::remove(windows.begin(),windows.end(),&d),windows.end());windows.push_back(&d);
-    d.Open();pressed=combo=-1;host.Show();host.DisableTransition();
+    d.Open();pressed=combo=-1;dragging=resizing=scrollDragging=false;host.Show();host.DisableTransition();
 }
 void Close(Dialog& d){
-    windows.erase(std::remove(windows.begin(),windows.end(),&d),windows.end());d.Closed();pressed=combo=-1;dragging=resizing=false;
+    windows.erase(std::remove(windows.begin(),windows.end(),&d),windows.end());d.Closed();pressed=combo=-1;dragging=resizing=scrollDragging=false;
     if(windows.empty()){UI_EnableTextInput(false);host.Hide();host.DisableTransition();}
 }
 bool Visible(const Dialog& d){return host.IsVisible()&&std::find(windows.begin(),windows.end(),&d)!=windows.end();}

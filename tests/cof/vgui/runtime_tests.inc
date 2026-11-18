@@ -1,6 +1,42 @@
 // Opt-in integration test: exercise the same menu input path as real input.
 namespace cof { namespace vgui {
+void PointerTestFrame() {
+    static int phase=0,failures=0;
+    static double next=EngFuncs::DoubleTime()+3;
+    static Rect before;
+    double now=EngFuncs::DoubleTime();if(now<next)return;next=now+.75;
+    auto check=[&](bool ok,const char* name){Con_Printf("COF_POINTER %s %s\n",ok?"PASS":"FAIL",name);if(!ok)++failures;};
+    Dialog* d=ActiveDialog();
+    switch(phase++) {
+    case 0:EngFuncs::ClientCmd(false,"menu_options\n");break;
+    case 1:if(!d){check(false,"options opened");EngFuncs::ClientCmd(false,"quit\n");return;}before=d->bounds;
+        Con_Printf("COF_POINTER_DRAG options %d %d 80 45\n",before.x+120,before.y+12);next=now+3;break;
+    case 2:check(d&&d->bounds.x==before.x+80&&d->bounds.y==before.y+45,"native options drag");
+        if(d)Con_Printf("COF_POINTER_BOUNDS %d %d -> %d %d\n",before.x,before.y,d->bounds.x,d->bounds.y);
+        EngFuncs::ClientCmd(false,"snapshot\n");break;
+    case 3:if(d){d->Command("Tab5");Control* c=d->Find("AdvancedScroll");if(c){Rect r=Absolute(*d,*c),thumb=ScrollThumb(*c,r);
+        Con_Printf("COF_POINTER_DRAG scrollbar %d %d 0 %d\n",thumb.x+8,thumb.y+4,r.h-2*r.w-8);}}next=now+3;break;
+    case 4:{Control* c=d?d->Find("AdvancedScroll"):nullptr;check(c&&c->number==c->maximum,"native scrollbar drag");EngFuncs::ClientCmd(false,"snapshot\n");break;}
+    case 5:Con_Printf("COF_POINTER_TOGGLE settings\n");next=now+2;break;
+    case 6:check(d&&d->Find("ConsoleEntry"),"native console toggle");
+        if(d&&d->Find("ConsoleEntry")){check(d->Find("ConsoleEntry")->value.empty(),"console key text suppressed");before=d->bounds;Con_Printf("COF_POINTER_DRAG console %d %d 80 45\n",before.x+120,before.y+12);}next=now+3;break;
+    case 7:check(d&&d->bounds.x==before.x+80&&d->bounds.y==before.y+45,"native console drag");EngFuncs::ClientCmd(false,"snapshot\n");break;
+    case 8:Con_Printf("COF_POINTER_TOGGLE close\n");next=now+2;break;
+    case 9:check(d&&d->Find("AdvancedScroll"),"console key returns to settings");if(d)Close(*d);EngFuncs::ClientCmd(false,"map c_game_menu1\n");next=now+5;break;
+    case 10:check(EngFuncs::ClientInGame(),"3D menu loaded");Con_Printf("COF_POINTER_TOGGLE menu3d\n");next=now+2;break;
+    case 11:check(d&&d->Find("ConsoleEntry"),"console over 3D menu");if(d)Close(*d);EngFuncs::ClientCmd(false,"cof_savemenu\n");break;
+    case 12:Con_Printf("COF_POINTER_TOGGLE save\n");next=now+2;break;
+    case 13:check(d&&d->Find("ConsoleEntry"),"console over client save panel");if(d)Close(*d);EngFuncs::ClientCmd(false,"map c_sdkmap1\n");next=now+5;break;
+    case 14:check(EngFuncs::ClientInGame(),"test map loaded");Con_Printf("COF_POINTER_TOGGLE game\n");next=now+2;break;
+    case 15:check(d&&d->Find("ConsoleEntry"),"console during gameplay");if(d)Close(*d);EngFuncs::ClientCmd(false,"+inventory\n");break;
+    case 16:Con_Printf("COF_POINTER_TOGGLE inventory\n");next=now+2;break;
+    case 17:check(d&&d->Find("ConsoleEntry"),"console over inventory");if(d)Close(*d);EngFuncs::ClientCmd(false,"messagemode\n");break;
+    case 18:Con_Printf("COF_POINTER_TOGGLE chat\n");next=now+2;break;
+    case 19:check(d&&d->Find("ConsoleEntry"),"console during chat");Con_Printf("COF_POINTER_COMPLETE failures=%d\n",failures);EngFuncs::ClientCmd(false,"quit\n");break;
+    }
+}
 void TestFrame() {
+    if(getenv("COF_POINTERTEST")){PointerTestFrame();return;}
     if(!getenv("COF_VGUITEST"))return;
     static int phase=0,failures=0;
     static double next=EngFuncs::DoubleTime()+4;
@@ -32,7 +68,11 @@ void TestFrame() {
     case 11:click("Tab4");break;
     case 12:shot();break;
     case 13:click("Tab5");break;
-    case 14:check(d&&d->Find("AdvancedUp"),"user.scr advanced page");shot();break;
+    case 14:{Control* c=d?d->Find("AdvancedScroll"):nullptr;check(c&&c->kind==Kind::ScrollBar,"user.scr advanced scrollbar");shot();
+        if(c){Rect r=Absolute(*d,*c),thumb=ScrollThumb(*c,r);UI_MouseMove(thumb.x+8,thumb.y+4);UI_KeyEvent(K_MOUSE1,1);UI_MouseMove(thumb.x+8,r.y+r.h-18);UI_KeyEvent(K_MOUSE1,0);
+            c=d->Find("AdvancedScroll");check(c&&c->number==c->maximum,"advanced thumb reaches last settings");
+            UI_KeyEvent(K_MWHEELUP,1);UI_KeyEvent(K_MWHEELUP,0);c=d->Find("AdvancedScroll");check(c&&c->number==c->maximum-24,"advanced wheel synchronizes thumb");}
+        break;}
     case 15:EngFuncs::ClientCmd(false,"toggleconsole\n");break;
     case 16:check(d&&d->Find("ConsoleEntry"),"engine toggle routes own console");if(!d||!d->Find("ConsoleEntry")){EngFuncs::ClientCmd(false,"quit\n");return;}
         Con_Printf("COF_VGUI_NATIVE_INPUT_READY\n");next=now+3;break;

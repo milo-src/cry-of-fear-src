@@ -175,12 +175,17 @@ class OptionsDialog: public Dialog {
         LoadControls("resource/MultiplayerAdvancedPage.res");
         Control* list=Find("PanelListPanel");if(list)list->visible=false;
         Control* image=Find("ImagePanel1");if(image){image->kind=Kind::Image;image->value="resource/menu_advoptions.tga";}
-        // Native rows are 28px high. Paging is an explicit source-layer scrollbar adaptation.
-        const int count=8;
-        advancedScroll=std::max(0,std::min(advancedScroll,std::max(0,int(advanced.size())-count)));
-        for(int i=advancedScroll;i<int(advanced.size())&&i<advancedScroll+count;++i) {
-            const auto& a=advanced[i];int y=84+28*(i-advancedScroll);
+        // GameUI CPanelListPanel: pixel offsets, 24px scroll step; clip partial
+        // 28px rows at the parent viewport (analysis/ui/controls.md).
+        const int viewportHeight=232,totalHeight=int(advanced.size())*28;
+        advancedScroll=std::max(0,std::min(advancedScroll,std::max(0,totalHeight-viewportHeight)));
+        Control scroll;scroll.id="AdvancedScroll";scroll.kind=Kind::ScrollBar;scroll.bounds={475,80,18,230};
+        scroll.maximum=float(std::max(0,totalHeight-viewportHeight));scroll.number=float(advancedScroll);scroll.pageSize=scroll.step=24;
+        controls.push_back(scroll);
+        for(int i=advancedScroll/28;i<int(advanced.size())&&28*i<advancedScroll+viewportHeight;++i) {
+            const auto& a=advanced[i];int y=84+28*i-advancedScroll;
             Control c;c.id="Advanced:"+a.cvar;c.bounds={262,y,212,20};
+            c.clip={10,80,465,viewportHeight};
             // These are the only shipped script settings with implemented
             // consumers in the current reconstruction. Registration alone does
             // not establish that an original rendering feature works.
@@ -195,11 +200,9 @@ class OptionsDialog: public Dialog {
             } else if(a.type=="BOOL") {
                 c.kind=Kind::Check;c.checked=Numeric(v.draft)!=0;c.bounds.x=15;c.bounds.w=445;c.text=a.prompt;
             } else {c.kind=Kind::Edit;c.minimum=a.minimum;c.maximum=a.maximum;}
-            if(a.type!="BOOL"){Control label;label.id="Label:"+a.cvar;label.text=a.prompt;label.bounds={15,y,247,20};controls.push_back(label);}
+            if(a.type!="BOOL"){Control label;label.id="Label:"+a.cvar;label.text=a.prompt;label.bounds={15,y,247,20};label.clip=c.clip;controls.push_back(label);}
             associations[c.id]=association;controls.push_back(c);
         }
-        Control up;up.id="AdvancedUp";up.text="^";up.kind=Kind::Button;up.bounds={477,82,16,20};up.enabled=advancedScroll>0;controls.push_back(up);
-        Control down=up;down.id="AdvancedDown";down.text="v";down.bounds.y=290;down.enabled=advancedScroll+count<int(advanced.size());controls.push_back(down);
     }
     void BuildPage() {
         associations.clear();controls.clear();focus=-1;
@@ -238,7 +241,7 @@ class OptionsDialog: public Dialog {
             if(Find("#GameUI_MicrophoneVolume")){Find("#GameUI_MicrophoneVolume")->kind=Kind::Slider;Find("#GameUI_MicrophoneVolume")->number=0;}
             if(Find("MicMeter"))Find("MicMeter")->visible=false;if(Find("MicMeter2"))Find("MicMeter2")->visible=false;
         }
-        for(auto& c:controls){c.bounds.x+=8;c.bounds.y+=54;}
+        for(auto& c:controls){c.bounds.x+=8;c.bounds.y+=54;if(c.clip.w>0){c.clip.x+=8;c.clip.y+=54;}}
         Buttons();
     }
     void Apply() {
@@ -287,6 +290,7 @@ public:
     }
     void Changed(Control& c) override {
         if(!c.enabled)return;
+        if(c.id=="AdvancedScroll") {int value=int(c.number);if(value!=advancedScroll){advancedScroll=value;BuildPage();Focus("AdvancedScroll");}return;}
         if(c.id=="listpanel_keybindlist"){RefreshKeyList();return;}
         if(c.id=="Resolution"&&c.selected>=0&&c.selected<int(videoModes.size()))selectedMode=videoModes[c.selected];
         if(c.id=="Windowed")selectedFullscreen=c.selected?1:0;
@@ -312,7 +316,6 @@ public:
         if(id=="OK"){Apply();Close(*this);return;}
         if(id=="Apply"){Apply();return;}
         if(id=="Close"||id=="Cancel"){captureRow=-1;Close(*this);return;}
-        if(id=="AdvancedUp"||id=="AdvancedDown"){advancedScroll+=id=="AdvancedUp"?-1:1;BuildPage();return;}
         if(id=="ChangeKeyButton"||id=="ChangeKey") {
             Control* list=Find("listpanel_keybindlist");if(!list||list->selected<0||list->selected>=int(actions.size())||actions[list->selected].command=="blank")return;
             captureRow=list->selected;status=Localize("#GameUI_KeyButton")+": ...";Control c;c.id="Status";c.text=status;c.bounds={12,350,488,20};controls.push_back(c);return;
@@ -341,7 +344,7 @@ public:
         return false;
     }
     bool Key(int key,bool down) override {
-        if(page==5&&down&&(key==K_MWHEELUP||key==K_MWHEELDOWN)) {advancedScroll+=key==K_MWHEELUP?-1:1;BuildPage();return true;}
+        if(page==5&&down&&(key==K_MWHEELUP||key==K_MWHEELDOWN)) {advancedScroll+=key==K_MWHEELUP?-24:24;BuildPage();return true;}
         return Dialog::Key(key,down);
     }
     void Paint() override {

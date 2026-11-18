@@ -145,9 +145,6 @@ public:
             control.cursor=std::min(control.cursor,static_cast<int>(control.value.size()));
             while (control.cursor>0 && control.cursor<static_cast<int>(control.value.size()) &&
                 (static_cast<unsigned char>(control.value[control.cursor])&0xc0)==0x80) --control.cursor;
-            if (!control.value.empty() && (control.value.back()=='`' || control.value.back()=='~')) {
-                control.value.clear(); control.cursor=0; Close(*this); return;
-            }
             if (!cycling && !matchesHistory && !matches.empty() && !control.value.empty() && control.value.back()==' ')
                 Choose(0);
             Rebuild();
@@ -192,7 +189,7 @@ public:
         return Dialog::Key(key,down);
     }
     void Character(int codepoint) override {
-        if (codepoint=='`' || codepoint=='~') { Find("ConsoleEntry")->value.clear(); Close(*this); return; }
+        if (codepoint=='`' || codepoint=='~') return;
         Dialog::Character(codepoint);
     }
     void Paint() override {

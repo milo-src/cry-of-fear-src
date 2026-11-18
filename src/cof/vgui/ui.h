@@ -7,14 +7,15 @@
 // input are supplied by the engine's menu host; no original VGUI DLL is used.
 namespace cof { namespace vgui {
 struct Rect { int x,y,w,h; bool Contains(int px,int py) const { return px>=x && py>=y && px<x+w && py<y+h; } };
-enum class Kind { Label, Button, Check, Slider, Combo, Edit, List, Image };
+enum class Kind { Label, Button, Check, Slider, Combo, Edit, List, Image, ScrollBar };
 struct Control {
     std::string id, text, value, leftText, rightText;
     Rect bounds = {0,0,80,24};
+    Rect clip = {0,0,0,0}; // Optional parent viewport, in dialog coordinates.
     Kind kind = Kind::Label;
     bool visible=true, enabled=true, checked=false, password=false, consoleFont=false;
     float number=0, minimum=0, maximum=1;
-    int selected=0, scroll=0, tab=0, cursor=0;
+    int selected=0, scroll=0, tab=0, cursor=0, pageSize=1, step=1;
     std::vector<std::string> choices;
 };
 class Dialog {
@@ -50,6 +51,7 @@ int ViewHeight();
 void Fill(Rect rect, unsigned color);
 void Border(Rect rect, bool sunken=false);
 void SchemeBorder(Rect rect, const char* name);
+void Arrow(Rect rect, bool down, unsigned color, bool menu=false);
 void Text(Rect rect, const std::string& text, unsigned color=0xffd8ded3, bool console=false, bool centered=false);
 int TextWidth(const std::string& text, bool console=false);
 int Complete(const std::string& prefix, int index, char* output, int capacity);

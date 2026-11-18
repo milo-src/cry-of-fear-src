@@ -129,8 +129,9 @@ writes `user.scr`. The installed script contains these22 cvars:
 
 The captured installed script includes user-specific values; these are evidence
 of that file, not a claim about original factory defaults. Original list labels
-and values are retained. The replacement shows eight rows with paging/wheel
-controls, preserves drafts across pages, validates finite NUMBER entries and
+and values are retained. The replacement uses the recovered pixel scrollbar
+(18px wide, 24px step) and clips partially visible rows to the resource viewport;
+see `controls.md` for native addresses and geometry. It preserves drafts across pages, validates finite NUMBER entries and
 declared ranges, and persists engine settings with `host_writeconfig`.
 It does not rewrite `user.scr` or execute a potentially overriding userconfig.
 
