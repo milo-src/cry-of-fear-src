@@ -23,18 +23,23 @@ def prepare(target):
         '\tGL_SelectTexture( previousUnit );')
     text = text[:start] + part + text[end:]
     path.write_text(text)
-    # Only the ten main-menu buttons, including their hover images. The logo,
+    # Main-menu buttons and the animated CoF logo only. The studio logo,
     # fonts, HUD sprites, solid VGUI fills and scene textures retain their paths.
     path=target/'ref/gl/gl_opengl.c'
     text=path.read_text()
-    anchor='void pglTexImage2D( GLenum'
-    if text.count(anchor)!=1: raise ValueError('RTX UI texture hook changed')
-    text=text.replace(anchor,'#include "rtx_ui_blend.h"\n\n'+anchor)
+    anchor='void pglColor4f( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )\n{'
+    if text.count(anchor)!=1: raise ValueError('RTX logo modulation hook changed')
+    text=text.replace(anchor,'#include "rtx_ui_blend.h"\n\n'+anchor+'''
+    if (CofRTIsMenuLogo(rt_state.curTexture2DName)) {
+        red=CofRTLogoModulation(red);
+        green=CofRTLogoModulation(green);
+        blue=CofRTLogoModulation(blue);
+    }''')
     anchor='\t\t\t\tRgResult r = rgProvideOriginalTexture( rg_instance, &info );'
     if text.count(anchor)!=1: raise ValueError('RTX UI upload hook changed')
     text=text.replace(anchor,'''                unsigned char *cofMenuPixels=NULL;
                 if (width>0 && height>0 && width<=4096 && height<=4096 &&
-                    CofRTIsMenuButton(info.pTextureName)) {
+                    (CofRTIsMenuButton(info.pTextureName) || CofRTIsMenuLogo(info.pTextureName))) {
                     const size_t count=(size_t)width*(size_t)height;
                     cofMenuPixels=malloc(count*4);
                     if (cofMenuPixels) {

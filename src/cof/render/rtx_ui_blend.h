@@ -12,6 +12,13 @@
 #include <stddef.h>
 #include <string.h>
 
+static int CofRTIsMenuLogo(const char *name)
+{
+    if (!name) return 0;
+    if (!strncmp(name,"#HUD/",5)) name+=5;
+    return !strcmp(name,"gfx/vgui/menu_logo.tga");
+}
+
 static int CofRTIsMenuButton(const char *name)
 {
     static const char *buttons[]={"newgame","loadgame","customc","jserver",
@@ -34,6 +41,17 @@ static double CofRTDecodeSRGB(double value)
 static double CofRTEncodeSRGB(double value)
 {
     return value<=.0031308 ? value*12.92 : 1.055*pow(value,1./2.4)-.055;
+}
+/* TriangleAPI folds the logo's animated opacity into vertex RGB. RTGL
+ * multiplies those values in linear space, so decode that modulation too.
+ * Exact for white texels; a dark-backdrop approximation for the grey trails.
+ * Keep the original 0..50 VGUI transparency animation in game_menu.cpp.
+ */
+static float CofRTLogoModulation(float value)
+{
+    if (value<=0) return 0;
+    if (value>=1) return 1;
+    return (float)CofRTDecodeSRGB(value);
 }
 static void CofRTMenuBlendPixels(unsigned char *out,const unsigned char *in,size_t count)
 {
