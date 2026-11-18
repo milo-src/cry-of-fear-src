@@ -6,5 +6,5 @@
 // Evidence-guided CoF doors are implemented separately in recovered_doors.cpp.
 // Export an observable build identity without loading any original DLL.
 extern "C" DLLEXPORT const char* CofReconstructionBuild() {
-    return "cof-source-prototype-2-doors";
+    return "cof-source-prototype-3-keys";
 }

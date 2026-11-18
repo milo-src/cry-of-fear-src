@@ -37,9 +37,29 @@ def prepare():
         text = text.replace(f'\tPRECACHE_MODEL( "models/{name}.mdl" );', '')
     (target / 'dlls/world.cpp').write_text(text)
     text = (original / 'dlls/player.cpp').read_text()
+    text = '#include "recovered_inventory.h"\n' + text
+    text = text.replace('TYPEDESCRIPTION\tCBasePlayer::m_playerSaveData[] =\n{',
+                        'TYPEDESCRIPTION\tCBasePlayer::m_playerSaveData[] =\n{\n'
+                        '\tDEFINE_ARRAY(CBasePlayer, m_cofInventory, FIELD_STRING, 7),')
     text = text.replace('\tg_pGameRules->PlayerSpawn( this );',
                         '\tg_pGameRules->PlayerSpawn( this );\n\tpev->weapons |= (1 << WEAPON_SUIT); // enable prototype flashlight')
+    anchor = '\t\tInitStatusBar();\n\t}'
+    if anchor not in text:
+        raise ValueError('Unexpected player HUD initialization source revision')
+    text = text.replace(anchor, '\t\tCofInventorySync(this);\n' + anchor)
     (target / 'dlls/player.cpp').write_text(text)
+    text = (original / 'dlls/player.h').read_text()
+    anchor = 'class CBasePlayer : public CBaseMonster\n{\npublic:'
+    if anchor not in text:
+        raise ValueError('Unexpected player class source revision')
+    text = text.replace(anchor, anchor + '\n\tstring_t m_cofInventory[7]; // port slots 1..6, saved as strings')
+    (target / 'dlls/player.h').write_text(text)
+    text = (target / 'dlls/world.cpp').read_text()
+    anchor = 'void CWorld::Precache( void )\n{'
+    if anchor not in text:
+        raise ValueError('Unexpected world precache source revision')
+    text = text.replace(anchor, 'extern void CofInventoryPrecache();\n' + anchor + '\n\tCofInventoryPrecache();')
+    (target / 'dlls/world.cpp').write_text(text)
     text = (original / 'cl_dll/hud.h').read_text()
     text = text.replace('return ( index < 0 ) ? 0 : m_rghSprites[index];',
                         'return (index < 0 || index >= m_iSpriteCount) ? 0 : m_rghSprites[index];')
@@ -56,15 +76,30 @@ def prepare():
         raise ValueError('Unexpected HUD source revision')
     text = text.replace(anchor, '\tm_iIntermission = intermission;\n\tCofPrototypeFrame(flTime);\n\n\t// if no redrawing')
     (target / 'cl_dll/hud_redraw.cpp').write_text(text)
+    text = (original / 'cl_dll/cdll_int.cpp').read_text()
+    anchor = 'void DLLEXPORT HUD_Init( void )\n{'
+    if anchor not in text:
+        raise ValueError('Unexpected HUD_Init source revision')
+    text = text.replace(anchor, 'extern void CofInventoryClientInit();\n' + anchor + '\n\tCofInventoryClientInit();')
+    (target / 'cl_dll/cdll_int.cpp').write_text(text)
     text = (original / 'dlls/client.cpp').read_text()
     anchor = 'void StartFrame( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected StartFrame source revision')
-    text = text.replace(anchor, 'extern void CofDoorTestFrame();\n' + anchor + '\n\tCofDoorTestFrame();')
+    text = '#include "recovered_inventory.h"\n' + text
+    text = text.replace(anchor, 'extern void CofDoorTestFrame();\n' + anchor + '\n\tCofDoorTestFrame();\n\tCofInventoryTestFrame();')
+    anchor = '\tentvars_t *pev = &pEntity->v;\n\n\tif( FStrEq( pcmd, "say" ) )'
+    if anchor not in text:
+        raise ValueError('Unexpected ClientCommand source revision')
+    text = text.replace(anchor, '\tentvars_t *pev = &pEntity->v;\n'
+                        '\tif (CofInventoryCommand(static_cast<CBasePlayer*>(CBaseEntity::Instance(pEntity)), pcmd)) return;\n'
+                        '\n\tif( FStrEq( pcmd, "say" ) )')
     (target / 'dlls/client.cpp').write_text(text)
     shutil.copy2(ROOT / 'tests/door_runtime_tests.inc', target / 'dlls/door_runtime_tests.inc')
+    shutil.copy2(ROOT / 'tests/inventory_runtime_tests.inc', target / 'dlls/inventory_runtime_tests.inc')
     for name, folder in [('prototype_client.cpp', 'cl_dll'), ('prototype_entities.cpp', 'dlls'),
-                         ('recovered_doors.cpp', 'dlls')]:
+                         ('recovered_doors.cpp', 'dlls'), ('recovered_inventory.cpp', 'dlls'),
+                         ('recovered_inventory.h', 'dlls'), ('inventory_client.cpp', 'cl_dll')]:
         shutil.copy2(ROOT / 'src' / name, target / folder / name)
     text = (original / 'mod_options.txt').read_text()
     text = text.replace('GAMEDIR=valve', 'GAMEDIR=cryoffear')

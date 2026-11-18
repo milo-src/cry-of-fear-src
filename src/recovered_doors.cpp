@@ -1,11 +1,12 @@
 // Evidence-guided SDK port, not recovered original C++ or a binary ABI match.
 // hl.dll SHA-256 and per-function addresses: analysis/doors/capture.json.
 // Supported: single-player same-map doors, locks, disable/exit-change helpers.
-// Unrecovered: inventory unlocks, endings, CoF music/player extensions, co-op.
+// Unrecovered: endings, CoF music/player extensions, co-op.
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
+#include "recovered_inventory.h"
 
 class CInterDoor : public CBaseToggle
 {
@@ -232,6 +233,17 @@ public:
     } // 0x10048ef0: message selects an entity; target replaces its destination.
 };
 LINK_ENTITY_TO_CLASS(cof_inter_door_exitchange, CInterDoorExitChange);
+
+// 0x100e4410: the key command calls Unlock directly, rather than Use.
+bool CofUnlockDoorWithKey(CBaseEntity* entity, CBasePlayer* player,
+                          const char* mapName, int slot) {
+    if (!entity || !FClassnameIs(entity->pev, "inter_door")) return false;
+    auto* door = static_cast<CInterDoor*>(entity);
+    if (!door->IsLocked() || !FStrEq(STRING(door->m_sLockedBy), mapName)) return false;
+    if (!(door->pev->spawnflags & 1)) CofInventoryRemove(player, slot);
+    door->Unlock(player);
+    return true;
+}
 
 // Opt-in integration checks run only with COF_DOORTEST in the test process.
 #include "door_runtime_tests.inc"
