@@ -1,0 +1,2106 @@
+{
+  "installation": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear",
+  "method": "Read BSP version 30 header and lump 0 entity keyvalues; compare against textual LINK_ENTITY_TO_CLASS matches in hlsdk-portable/dlls (not proof all factories are compiled). Static standing-hull check traverses BSP hull 1 clipnodes; texture dependencies distinguish miptex pixel offsets from historical worldspawn wad declarations.",
+  "maps": {
+    "intro": {
+      "exists": false
+    },
+    "coft_1": {
+      "exists": false
+    },
+    "c_intro": {
+      "exists": true,
+      "sha256": "656980821d003a1d7974aaccb73210547d449318cacdf7661b0e03803f49a140",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 7224340,
+        "length": 80335
+      },
+      "entity_count": 573,
+      "class_counts": {
+        "ambient_fmodstream": 2,
+        "ambient_generic": 14,
+        "cof_introduction": 1,
+        "cof_logo": 7,
+        "cof_teleport": 1,
+        "env_customize": 11,
+        "env_dynlight": 23,
+        "env_fade": 9,
+        "env_model": 138,
+        "env_particle": 3,
+        "env_sprite": 33,
+        "env_static_decal": 4,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_illusionary": 119,
+        "func_shine": 6,
+        "func_tracktrain": 7,
+        "func_train": 4,
+        "func_wall": 39,
+        "info_landmark": 1,
+        "info_player_start": 1,
+        "info_target": 7,
+        "info_teleport_destination": 1,
+        "info_texlights": 1,
+        "light": 11,
+        "light_spot": 51,
+        "motion_manager": 1,
+        "multi_manager": 15,
+        "path_corner": 19,
+        "path_track": 23,
+        "rain_modify": 2,
+        "rain_settings": 2,
+        "trigger_camera": 10,
+        "trigger_changelevel": 1,
+        "trigger_once": 2,
+        "trigger_relay": 1,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ambient_fmodstream": 2,
+        "cof_introduction": 1,
+        "cof_logo": 7,
+        "cof_teleport": 1,
+        "env_customize": 11,
+        "env_dynlight": 23,
+        "env_model": 138,
+        "env_particle": 3,
+        "env_static_decal": 4,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_shine": 6,
+        "info_texlights": 1,
+        "motion_manager": 1,
+        "rain_modify": 2,
+        "rain_settings": 2
+      },
+      "spawns": [
+        {
+          "origin": "-1081 -2422 66",
+          "angles": "0 328 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 8
+        }
+      ],
+      "worldspawn": {
+        "wad": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof_new.wad;",
+        "mapversion": "220",
+        "nomusicstop": "1",
+        "WaveHeight": "0.0",
+        "sounds": "1",
+        "MaxRange": "14000",
+        "skyname": "black",
+        "classname": "worldspawn"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/Props/Blandat/byggnader.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/aud.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/aud_3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/foretag.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/foretag_2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/polisbil.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/vari_2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/vari_3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/cykel2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/cykel3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/sandlada.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/skrap.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/soptunna.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/stadlyktrund3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/stadlyktrund4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/bigtree1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/buske.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/granmodel.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/granmodel2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/lowpolygran.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/nakettrad4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/parktrad2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/stortrad2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/tall.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/fpsc/cement_heap.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/fpsc/compressor.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/fpsc/conduits.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/sky_blixt.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/aud_cut.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/kattscene.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/player3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/vari_cut.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/props/sky_sphere.mdl",
+          "exists": true
+        },
+        {
+          "path": "sprites/cof_shine1.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/flashing01.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/glow02.spr",
+          "exists": true
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof3.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\decals.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof_new.wad",
+          "local_basename_exists": true
+        }
+      ],
+      "textures": {
+        "embedded_count": 3,
+        "external_names": [
+          "+0~white",
+          "aaatrigger",
+          "black",
+          "clip",
+          "r_lyktstolpe",
+          "r_trkredside1",
+          "r_whitethings",
+          "+0c_rainwindow",
+          "+1c_rainwindow",
+          "+2c_rainwindow",
+          "+3c_rainwindow",
+          "+4c_rainwindow",
+          "+5c_rainwindow",
+          "+6c_rainwindow",
+          "+7c_rainwindow",
+          "c_asfaltvag2",
+          "c_asfaltvag3",
+          "c_basror",
+          "c_blurmetal",
+          "c_buildwhole2",
+          "c_buildwhole3",
+          "c_cretewall5",
+          "c_glasssharp",
+          "c_grass02",
+          "c_hogskylt2",
+          "c_jord2",
+          "c_k1_side2",
+          "c_kokmetalO",
+          "c_lysrorlampaof",
+          "c_lysrorlampaon",
+          "c_metalbrunn",
+          "c_obbsstwa1",
+          "c_rstblpipe",
+          "c_rstmetal",
+          "c_stenmur2",
+          "c_tabanawa1",
+          "c_tbanadoors",
+          "c_tbanagolv",
+          "c_tbanaguls",
+          "c_tbanakant",
+          "c_tbanaorange",
+          "c_tbanapost1",
+          "c_tbanapost10",
+          "c_tbanapost2",
+          "c_tbanapost3",
+          "c_tbanapost4",
+          "c_tbanapost5",
+          "c_tbanapost6",
+          "c_tbanapost7",
+          "c_tbanapost8",
+          "c_tbanapost9",
+          "c_tbanarals",
+          "c_tbanasits",
+          "c_tbanawa2",
+          "c_tbana_F",
+          "c_tbana_S1",
+          "c_tbana_S2",
+          "c_tbana_S3",
+          "c_tbana_T",
+          "c_vitmobel",
+          "{c_fencebig",
+          "{c_kraftelS",
+          "{c_treetops",
+          "c2_affaer2",
+          "c2_affaer5",
+          "c2_buildingp1",
+          "c2_buildingp2",
+          "c2_cretestripe2",
+          "c2_gabyggn2s",
+          "c2_hogfence1big",
+          "c2_introduction",
+          "c2_kokmetalO",
+          "c2_koktextur",
+          "c2_lyktstolle",
+          "c2_newrails",
+          "c2_roof1",
+          "c2_roofblack",
+          "c2_sublol2",
+          "c2_trottoka",
+          "c2_wood2",
+          "cn_asplattr",
+          "cn_cretewl5",
+          "cn_tbana_S1",
+          "cn_tbana_S2",
+          "{c2_treed2"
+        ],
+        "external_resolution": {
+          "+0~white": [
+            "aomdc22.wad",
+            "halflife.wad"
+          ],
+          "aaatrigger": [
+            "halflife.wad",
+            "v_collabtex.wad",
+            "zhlt.wad"
+          ],
+          "black": [
+            "halflife.wad"
+          ],
+          "clip": [
+            "halflife.wad",
+            "v_collabtex.wad",
+            "zhlt.wad"
+          ],
+          "r_lyktstolpe": [
+            "aomdc22.wad"
+          ],
+          "r_trkredside1": [
+            "aomdc22.wad"
+          ],
+          "r_whitethings": [
+            "aomdc22.wad"
+          ],
+          "+0c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+1c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+2c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+3c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+4c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+5c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+6c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "+7c_rainwindow": [
+            "cofreal22.wad"
+          ],
+          "c_asfaltvag2": [
+            "cofreal22.wad"
+          ],
+          "c_asfaltvag3": [
+            "cofreal22.wad"
+          ],
+          "c_basror": [
+            "cofreal22.wad"
+          ],
+          "c_blurmetal": [
+            "cofreal22.wad"
+          ],
+          "c_buildwhole2": [
+            "cofreal22.wad"
+          ],
+          "c_buildwhole3": [
+            "cofreal22.wad"
+          ],
+          "c_cretewall5": [
+            "cofreal22.wad"
+          ],
+          "c_glasssharp": [
+            "cofreal22.wad"
+          ],
+          "c_grass02": [
+            "cofreal22.wad"
+          ],
+          "c_hogskylt2": [
+            "cofreal22.wad"
+          ],
+          "c_jord2": [
+            "cofreal22.wad"
+          ],
+          "c_k1_side2": [
+            "cofreal22.wad"
+          ],
+          "c_kokmetalO": [
+            "cofreal22.wad"
+          ],
+          "c_lysrorlampaof": [
+            "cofreal22.wad"
+          ],
+          "c_lysrorlampaon": [
+            "cofreal22.wad"
+          ],
+          "c_metalbrunn": [
+            "cofreal22.wad"
+          ],
+          "c_obbsstwa1": [
+            "cofreal22.wad"
+          ],
+          "c_rstblpipe": [
+            "cofreal22.wad"
+          ],
+          "c_rstmetal": [
+            "cofreal22.wad"
+          ],
+          "c_stenmur2": [
+            "cofreal22.wad"
+          ],
+          "c_tabanawa1": [
+            "cofreal22.wad"
+          ],
+          "c_tbanadoors": [
+            "cofreal22.wad"
+          ],
+          "c_tbanagolv": [
+            "cofreal22.wad"
+          ],
+          "c_tbanaguls": [
+            "cofreal22.wad"
+          ],
+          "c_tbanakant": [
+            "cofreal22.wad"
+          ],
+          "c_tbanaorange": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost1": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost10": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost2": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost3": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost4": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost5": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost6": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost7": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost8": [
+            "cofreal22.wad"
+          ],
+          "c_tbanapost9": [
+            "cofreal22.wad"
+          ],
+          "c_tbanarals": [
+            "cofreal22.wad"
+          ],
+          "c_tbanasits": [
+            "cofreal22.wad"
+          ],
+          "c_tbanawa2": [
+            "cofreal22.wad"
+          ],
+          "c_tbana_F": [
+            "cofreal22.wad"
+          ],
+          "c_tbana_S1": [
+            "cofreal22.wad"
+          ],
+          "c_tbana_S2": [
+            "cofreal22.wad"
+          ],
+          "c_tbana_S3": [
+            "cofreal22.wad"
+          ],
+          "c_tbana_T": [
+            "cofreal22.wad"
+          ],
+          "c_vitmobel": [
+            "cofreal22.wad"
+          ],
+          "{c_fencebig": [
+            "cofreal22.wad"
+          ],
+          "{c_kraftelS": [
+            "cofreal22.wad"
+          ],
+          "{c_treetops": [
+            "cofreal22.wad"
+          ],
+          "c2_affaer2": [
+            "cof_new.wad"
+          ],
+          "c2_affaer5": [
+            "cof_new.wad"
+          ],
+          "c2_buildingp1": [
+            "cof_new.wad"
+          ],
+          "c2_buildingp2": [
+            "cof_new.wad"
+          ],
+          "c2_cretestripe2": [
+            "cof_new.wad"
+          ],
+          "c2_gabyggn2s": [
+            "cof_new.wad"
+          ],
+          "c2_hogfence1big": [
+            "cof_new.wad"
+          ],
+          "c2_introduction": [
+            "cof_new.wad"
+          ],
+          "c2_kokmetalO": [
+            "cof_new.wad"
+          ],
+          "c2_koktextur": [
+            "cof_new.wad"
+          ],
+          "c2_lyktstolle": [
+            "cof_new.wad"
+          ],
+          "c2_newrails": [
+            "cof_new.wad"
+          ],
+          "c2_roof1": [
+            "cof_new.wad"
+          ],
+          "c2_roofblack": [
+            "cof_new.wad"
+          ],
+          "c2_sublol2": [
+            "cof_new.wad"
+          ],
+          "c2_trottoka": [
+            "cof_new.wad"
+          ],
+          "c2_wood2": [
+            "cof_new.wad"
+          ],
+          "cn_asplattr": [
+            "cof_new.wad"
+          ],
+          "cn_cretewl5": [
+            "cof_new.wad"
+          ],
+          "cn_tbana_S1": [
+            "cof_new.wad"
+          ],
+          "cn_tbana_S2": [
+            "cof_new.wad"
+          ],
+          "{c2_treed2": [
+            "cof_new.wad"
+          ]
+        }
+      }
+    },
+    "c_start": {
+      "exists": true,
+      "sha256": "c69ff85d82d8f9e5a8059ea44e519cd4bd53ed92a54ec8e8c78589183e81f884",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 6758272,
+        "length": 176712
+      },
+      "entity_count": 1024,
+      "class_counts": {
+        "ambient_fmodstream": 7,
+        "ambient_generic": 64,
+        "cof_blur": 1,
+        "cof_camerazoom": 1,
+        "cof_chapter": 1,
+        "cof_clearitems": 1,
+        "cof_clothesmenu": 1,
+        "cof_developer_commentary": 4,
+        "cof_giveitems": 2,
+        "cof_hint": 8,
+        "cof_interdooronoff": 2,
+        "cof_ladder_manager": 3,
+        "cof_ladder_manager_use": 6,
+        "cof_objective": 2,
+        "cof_teleport": 6,
+        "cof_triggeron": 1,
+        "door_prop_view": 1,
+        "env_customize": 35,
+        "env_dynlight": 23,
+        "env_fade": 14,
+        "env_fog": 1,
+        "env_global": 1,
+        "env_glow": 10,
+        "env_model": 177,
+        "env_particle": 15,
+        "env_sprite": 50,
+        "env_static_decal": 28,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_button": 4,
+        "func_door": 1,
+        "func_door_rotating": 4,
+        "func_illusionary": 95,
+        "func_rotating": 10,
+        "func_stairs": 7,
+        "func_train": 1,
+        "func_wall": 44,
+        "func_wall_toggle": 8,
+        "func_water": 3,
+        "info_landmark": 3,
+        "info_node": 62,
+        "info_player_start": 2,
+        "info_target": 19,
+        "info_teleport_destination": 12,
+        "info_texlights": 1,
+        "inter_door": 16,
+        "inter_door_exit": 12,
+        "item_key": 2,
+        "item_nightvision": 1,
+        "item_padlock": 1,
+        "light": 56,
+        "light_spot": 36,
+        "monster_slower": 4,
+        "monstermaker": 2,
+        "multi_manager": 29,
+        "multisource": 1,
+        "path_corner": 16,
+        "path_track": 2,
+        "subtitle_linechange": 7,
+        "subtitle_main": 1,
+        "tape_recorder": 2,
+        "trigger_auto": 3,
+        "trigger_camera": 25,
+        "trigger_changelevel": 4,
+        "trigger_changevalue": 5,
+        "trigger_checkbrush": 1,
+        "trigger_cofmobile": 3,
+        "trigger_multiple": 2,
+        "trigger_once": 24,
+        "trigger_relay": 4,
+        "trigger_sound": 14,
+        "weapon_axe": 1,
+        "weapon_booklaser": 1,
+        "weapon_camera": 1,
+        "weapon_famas": 1,
+        "weapon_mp5": 1,
+        "weapon_syringe": 2,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ambient_fmodstream": 7,
+        "cof_blur": 1,
+        "cof_camerazoom": 1,
+        "cof_chapter": 1,
+        "cof_clearitems": 1,
+        "cof_clothesmenu": 1,
+        "cof_developer_commentary": 4,
+        "cof_giveitems": 2,
+        "cof_hint": 8,
+        "cof_interdooronoff": 2,
+        "cof_ladder_manager": 3,
+        "cof_ladder_manager_use": 6,
+        "cof_objective": 2,
+        "cof_teleport": 6,
+        "cof_triggeron": 1,
+        "door_prop_view": 1,
+        "env_customize": 35,
+        "env_dynlight": 23,
+        "env_fog": 1,
+        "env_model": 177,
+        "env_particle": 15,
+        "env_static_decal": 28,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_stairs": 7,
+        "info_texlights": 1,
+        "inter_door": 16,
+        "inter_door_exit": 12,
+        "item_key": 2,
+        "item_nightvision": 1,
+        "item_padlock": 1,
+        "monster_slower": 4,
+        "subtitle_linechange": 7,
+        "subtitle_main": 1,
+        "tape_recorder": 2,
+        "trigger_changevalue": 5,
+        "trigger_checkbrush": 1,
+        "trigger_cofmobile": 3,
+        "trigger_sound": 14,
+        "weapon_axe": 1,
+        "weapon_booklaser": 1,
+        "weapon_camera": 1,
+        "weapon_famas": 1,
+        "weapon_syringe": 2
+      },
+      "spawns": [
+        {
+          "origin": "639 -2953 -728",
+          "sequence": "0",
+          "angles": "0 90 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 4
+        },
+        {
+          "origin": "-935.796 382.154 -28",
+          "angles": "0 0 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 2
+        }
+      ],
+      "worldspawn": {
+        "_generator": "J.A.C.K. 1.1.1064 (vpHalfLife)",
+        "wad": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\EC.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\Manhuntforest.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\PazCoFTextures.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\aomdc22.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cdoclostecho.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\circus.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cof3.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cof_new.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cofreal22.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\darkydude.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\decals.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\e3cc4.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\egyptian.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\evina_halloween.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\halflife.wad;\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\liquids.wad;\\Steam\\steam\u00d8\u001a\u00c6Q\u00122A",
+        "mapversion": "220",
+        "angles": "0 0 0",
+        "newunit": "1",
+        "MaxRange": "10000",
+        "sounds": "1",
+        "skyname": "black",
+        "classname": "worldspawn"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/Props/Blandat/crows.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/baslampa.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/lysrorreal.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/pet_bottle.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/skitpobord2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/wine_bottle.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/bag3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/bag4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/padlock_lo.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/sandlada.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/selbox.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/skrap.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/soptunna.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/tunnellampaon1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/tunnellampaon2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/bigtree1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/bigtree2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/buske.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/nakettrad3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/nakettrad4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/fpsc/dirty_bucket.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/blacker.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/both.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/hammer_floor.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/mobileprop.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/player3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/simon_clothes.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/simon_clothesm.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/simon_talk.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/slower_arm_door.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/slowerdead.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/items/cassette_tape.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/items/package.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/ladder_climb.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/props/sky_sphere4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/slower.mdl",
+          "exists": true
+        },
+        {
+          "path": "sprites/blueflare1.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/flashing01.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/glow03.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/glow_cof.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/yelflare1.spr",
+          "exists": true
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\EC.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\Manhuntforest.wad",
+          "local_basename_exists": false
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\PazCoFTextures.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cdoclostecho.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\circus.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cof3.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cof_new.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\darkydude.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\decals.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\e3cc4.wad",
+          "local_basename_exists": false
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\egyptian.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\evina_halloween.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\halflife.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steamapps\\common\\Cry of Fear DEV\\cryoffear\\liquids.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\Steam\\steam\u00d8\u001a\u00c6Q\u00122A",
+          "local_basename_exists": false
+        }
+      ],
+      "textures": {
+        "embedded_count": 136,
+        "external_names": [],
+        "external_resolution": {}
+      }
+    },
+    "c_start2": {
+      "exists": true,
+      "sha256": "39147991fb5bcc1f52e291189c5c82a14ffaa566f764440650a6672cb931f82e",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 8787916,
+        "length": 62343
+      },
+      "entity_count": 443,
+      "class_counts": {
+        "ambient_fmodstream": 2,
+        "ambient_generic": 9,
+        "cof_computer": 1,
+        "cof_developer_commentary": 2,
+        "cof_hint": 1,
+        "cof_killmp3": 1,
+        "cof_passwordnote": 2,
+        "cof_triggeron": 1,
+        "env_customize": 2,
+        "env_dynlight": 2,
+        "env_glow": 2,
+        "env_model": 226,
+        "env_particle": 8,
+        "env_sprite": 17,
+        "env_static_decal": 28,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_button": 1,
+        "func_illusionary": 10,
+        "func_stairs": 5,
+        "func_wall": 9,
+        "func_wall_toggle": 2,
+        "info_landmark": 1,
+        "info_player_start": 1,
+        "info_texlights": 1,
+        "inter_door": 8,
+        "inter_door_disable": 1,
+        "inter_door_exit": 5,
+        "light": 57,
+        "light_spot": 11,
+        "monstermaker": 1,
+        "multi_manager": 3,
+        "rain_modify": 1,
+        "rain_settings": 1,
+        "trigger_changelevel": 1,
+        "trigger_checkbrush": 7,
+        "trigger_multiple": 1,
+        "trigger_once": 6,
+        "trigger_relay": 3,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ambient_fmodstream": 2,
+        "cof_computer": 1,
+        "cof_developer_commentary": 2,
+        "cof_hint": 1,
+        "cof_killmp3": 1,
+        "cof_passwordnote": 2,
+        "cof_triggeron": 1,
+        "env_customize": 2,
+        "env_dynlight": 2,
+        "env_model": 226,
+        "env_particle": 8,
+        "env_static_decal": 28,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_stairs": 5,
+        "info_texlights": 1,
+        "inter_door": 8,
+        "inter_door_disable": 1,
+        "inter_door_exit": 5,
+        "rain_modify": 1,
+        "rain_settings": 1,
+        "trigger_checkbrush": 7
+      },
+      "spawns": [
+        {
+          "origin": "2428 -883 -728",
+          "angles": "0 90 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 4
+        }
+      ],
+      "worldspawn": {
+        "wad": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof_new.wad;",
+        "mapversion": "220",
+        "nomusicstop": "1",
+        "WaveHeight": "0.0",
+        "MaxRange": "10000",
+        "classname": "worldspawn",
+        "sounds": "1",
+        "skyname": "black"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/Props/Blandat/lejon1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Blandat/linne.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Blandat/pumpa.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Blandat/start2streetadd.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/aud.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/foretag.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Fordon/foretag_2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/blomma1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/blomma2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/cafe_chair2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/cafe_painting.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/cigaretter.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/cup.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/datorpryl.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/glass.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/glass_cup.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/glass_rose.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/kanallampa.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/lysrorreal.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/pet_bottle.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/shrub_pot.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/skitpobord2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/skitpobord3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/wine_bottle.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Mobler/2msoffa3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Mobler/pc_chair.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Mobler/stormyslampaoff.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/bag3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/bag4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/cykel2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/cykel3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/gamlastan_light1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/gamlastan_light3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/sandlada.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/selbox.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/skrap.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/soptunna.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/stadlyktrund2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/stadlyktrund4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/bigtree1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/buske.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/nakettrad4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/stortrad2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/followme.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/props/inomhusd/cafe_monitor.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/props/sky_sphere4.mdl",
+          "exists": true
+        },
+        {
+          "path": "sprites/blueflare1.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/flashing01.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/glow03.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/lightfog1.spr",
+          "exists": true
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof3.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\decals.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof_new.wad",
+          "local_basename_exists": true
+        }
+      ],
+      "textures": {
+        "embedded_count": 148,
+        "external_names": [],
+        "external_resolution": {}
+      }
+    },
+    "c_sdkmap1": {
+      "exists": true,
+      "sha256": "eeb4e5719b61749f7c1854e61ab16a2a69d24f4abfbe5da604a1a1f7efd8300c",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 651424,
+        "length": 17490
+      },
+      "entity_count": 120,
+      "class_counts": {
+        "ambient_fmodstream": 1,
+        "ambient_generic": 2,
+        "cof_begingame": 1,
+        "cof_chapter": 1,
+        "cof_clothesmenu": 1,
+        "cof_developer_commentary": 1,
+        "cof_giveitems": 1,
+        "cof_killmp3": 1,
+        "cof_ladder_manager": 2,
+        "cof_ladder_manager_use": 4,
+        "cof_simpletext": 1,
+        "cof_teleport": 1,
+        "env_dynlight": 3,
+        "env_fade": 4,
+        "env_model": 15,
+        "env_sprite": 2,
+        "env_static_decal": 1,
+        "func_button": 2,
+        "func_illusionary": 14,
+        "func_wall": 12,
+        "info_landmark": 1,
+        "info_player_start": 1,
+        "info_target": 3,
+        "info_teleport_destination": 5,
+        "inter_door": 6,
+        "inter_door_exit": 5,
+        "item_key": 3,
+        "item_nightvision": 1,
+        "light": 3,
+        "light_spot": 7,
+        "multi_manager": 3,
+        "tape_recorder": 1,
+        "trigger_camera": 3,
+        "trigger_changelevel": 1,
+        "trigger_multiple": 1,
+        "trigger_once": 1,
+        "weapon_axe": 1,
+        "weapon_booklaser": 1,
+        "weapon_camera": 1,
+        "weapon_famas": 1,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ambient_fmodstream": 1,
+        "cof_begingame": 1,
+        "cof_chapter": 1,
+        "cof_clothesmenu": 1,
+        "cof_developer_commentary": 1,
+        "cof_giveitems": 1,
+        "cof_killmp3": 1,
+        "cof_ladder_manager": 2,
+        "cof_ladder_manager_use": 4,
+        "cof_simpletext": 1,
+        "cof_teleport": 1,
+        "env_dynlight": 3,
+        "env_model": 15,
+        "env_static_decal": 1,
+        "inter_door": 6,
+        "inter_door_exit": 5,
+        "item_key": 3,
+        "item_nightvision": 1,
+        "tape_recorder": 1,
+        "weapon_axe": 1,
+        "weapon_booklaser": 1,
+        "weapon_camera": 1,
+        "weapon_famas": 1
+      },
+      "spawns": [
+        {
+          "origin": "-152 106 51",
+          "angles": "0 90 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 8
+        }
+      ],
+      "worldspawn": {
+        "wad": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof_new.wad;",
+        "mapversion": "220",
+        "nomusicstop": "1",
+        "MaxRange": "4096",
+        "WaveHeight": "0.0",
+        "sounds": "1",
+        "classname": "worldspawn"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/Props/InomhusD/kanallampa.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/lysrorreal.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/selbox.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/simon_clothes.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/cutscene/simon_clothesm.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/items/cassette_tape.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/items/nyckel4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/items/package.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/ladder_climb.mdl",
+          "exists": true
+        },
+        {
+          "path": "sprites/glow03.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/lightfog1.spr",
+          "exists": true
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof3.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\decals.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof_new.wad",
+          "local_basename_exists": true
+        }
+      ],
+      "textures": {
+        "embedded_count": 50,
+        "external_names": [],
+        "external_resolution": {}
+      },
+      "startup_caveat": {
+        "trigger_once_model": "*1",
+        "bounds_min": [
+          -183,
+          59,
+          19
+        ],
+        "bounds_max": [
+          -115,
+          170,
+          122
+        ],
+        "target": "multiintro",
+        "spawn_inside_bounds": true,
+        "behavior_inferred_from_keyvalues": "multiintro fires intro_camera immediately (wait 28, spawnflags 116), intro_camera2 after 5 seconds (wait 23), fading white/black, then multistart at 28 seconds. Wait 30 seconds before testing movement, or explicitly document any prototype-only entity-lump override. This is static evidence, not runtime observation."
+      }
+    },
+    "c_sdkmap2": {
+      "exists": true,
+      "sha256": "8375c04aa4e747043e89ab2d6cf7f038b906f7e7dc985bc0d45ae42547334701",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 2264992,
+        "length": 32584
+      },
+      "entity_count": 228,
+      "class_counts": {
+        "ambient_fmodstream": 4,
+        "ambient_generic": 4,
+        "cof_blackandwhite": 1,
+        "cof_bosshealthbar": 1,
+        "cof_credits": 3,
+        "cof_interdooronoff": 1,
+        "cof_monster_random_spawn": 4,
+        "cof_teleport": 1,
+        "cof_triggeron": 1,
+        "dripper": 2,
+        "env_dynlight": 1,
+        "env_fade": 2,
+        "env_glow": 2,
+        "env_model": 74,
+        "env_particle": 4,
+        "env_sprite": 25,
+        "env_static_decal": 11,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_illusionary": 2,
+        "func_wall": 9,
+        "func_water": 1,
+        "info_landmark": 1,
+        "info_player_start": 1,
+        "info_target": 2,
+        "info_teleport_destination": 1,
+        "infodecal": 3,
+        "inter_door": 5,
+        "inter_door_exit": 5,
+        "light": 22,
+        "light_spot": 10,
+        "monster_sawrunner": 1,
+        "multi_manager": 2,
+        "rain_modify": 2,
+        "rain_settings": 2,
+        "tape_recorder": 1,
+        "trigger_camera": 2,
+        "trigger_changelevel": 1,
+        "trigger_multiple": 1,
+        "trigger_once": 2,
+        "weapon_m16": 8,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ambient_fmodstream": 4,
+        "cof_blackandwhite": 1,
+        "cof_bosshealthbar": 1,
+        "cof_credits": 3,
+        "cof_interdooronoff": 1,
+        "cof_monster_random_spawn": 4,
+        "cof_teleport": 1,
+        "cof_triggeron": 1,
+        "dripper": 2,
+        "env_dynlight": 1,
+        "env_model": 74,
+        "env_particle": 4,
+        "env_static_decal": 11,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "inter_door": 5,
+        "inter_door_exit": 5,
+        "monster_sawrunner": 1,
+        "rain_modify": 2,
+        "rain_settings": 2,
+        "tape_recorder": 1,
+        "weapon_m16": 8
+      },
+      "spawns": [
+        {
+          "origin": "-395 473 806",
+          "angles": "0 180 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 10
+        }
+      ],
+      "worldspawn": {
+        "wad": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof_new.wad;",
+        "mapversion": "220",
+        "nomusicstop": "1",
+        "MaxRange": "4096",
+        "WaveHeight": "0.0",
+        "sounds": "1",
+        "classname": "worldspawn"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/Props/Blandat/crows.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/hogberglampa2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/InomhusD/lysrorreal.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/bicycle_prop.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/cykel.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/hattlykta.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/sandlada.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/selbox.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/skrap.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/soptunna.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/stadlyktrund2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/stadlyktrund4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/tunnellampaon1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/UtomhusD/tunnellampaon2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/bigtree2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/buske2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/nakettrad3.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/nakettrad4.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/stortrad1.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Vaxter/stortrad2.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/props/sky_sphere4.mdl",
+          "exists": true
+        },
+        {
+          "path": "sprites/blueflare1.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/flashing01.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/glow03.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/lightfog1.spr",
+          "exists": true
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof3.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\decals.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear_dev\\cof_new.wad",
+          "local_basename_exists": true
+        }
+      ],
+      "textures": {
+        "embedded_count": 83,
+        "external_names": [],
+        "external_resolution": {}
+      }
+    },
+    "range": {
+      "exists": true,
+      "sha256": "9be46e6f664634068e391d11e691e62b3f2082675fedc8f258432b6824966af8",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 1590496,
+        "length": 27770
+      },
+      "entity_count": 111,
+      "class_counts": {
+        "ammo_glock": 3,
+        "ammo_m16": 3,
+        "ammo_p345": 3,
+        "ammo_revolver": 3,
+        "ammo_rifle": 3,
+        "ammo_shells": 3,
+        "ammo_tmp": 3,
+        "ammo_vp70": 3,
+        "info_player_start": 1,
+        "item_glocktaclight": 2,
+        "light": 30,
+        "weapon_axe": 1,
+        "weapon_booklaser": 1,
+        "weapon_branch": 1,
+        "weapon_camera": 1,
+        "weapon_famas": 1,
+        "weapon_flare": 4,
+        "weapon_flashlight": 1,
+        "weapon_g43": 4,
+        "weapon_glock": 3,
+        "weapon_lantern": 1,
+        "weapon_m16": 4,
+        "weapon_mobile": 1,
+        "weapon_mp5": 2,
+        "weapon_nightstick": 1,
+        "weapon_p345": 3,
+        "weapon_revolver": 3,
+        "weapon_rifle": 4,
+        "weapon_shotgun": 4,
+        "weapon_sledgehammer": 1,
+        "weapon_switchblade": 1,
+        "weapon_syringe": 5,
+        "weapon_tmp": 3,
+        "weapon_vp70": 3,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ammo_glock": 3,
+        "ammo_m16": 3,
+        "ammo_p345": 3,
+        "ammo_revolver": 3,
+        "ammo_rifle": 3,
+        "ammo_shells": 3,
+        "ammo_tmp": 3,
+        "ammo_vp70": 3,
+        "item_glocktaclight": 2,
+        "weapon_axe": 1,
+        "weapon_booklaser": 1,
+        "weapon_branch": 1,
+        "weapon_camera": 1,
+        "weapon_famas": 1,
+        "weapon_flare": 4,
+        "weapon_flashlight": 1,
+        "weapon_g43": 4,
+        "weapon_lantern": 1,
+        "weapon_m16": 4,
+        "weapon_mobile": 1,
+        "weapon_nightstick": 1,
+        "weapon_p345": 3,
+        "weapon_revolver": 3,
+        "weapon_rifle": 4,
+        "weapon_sledgehammer": 1,
+        "weapon_switchblade": 1,
+        "weapon_syringe": 5,
+        "weapon_tmp": 3,
+        "weapon_vp70": 3
+      },
+      "spawns": [
+        {
+          "origin": "-534 -222 85",
+          "angles": "0 0 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 2
+        }
+      ],
+      "worldspawn": {
+        "compiler": "ZHLT v3.4 VL33 (Feb  2 2014)",
+        "_generator": "J.A.C.K. 1.1.1064 (vpHalfLife)",
+        "wad": "aomdc22.wad;cof_new.wad;cofreal22.wad;halflife.wad;",
+        "mapversion": "220",
+        "sounds": "1",
+        "WaveHeight": "0.0",
+        "MaxRange": "4096",
+        "startdark": "0",
+        "gametitle": "0",
+        "newunit": "0",
+        "defaultteam": "0",
+        "nomusicstop": "1",
+        "noitemdropping": "0",
+        "nosimon": "0",
+        "iuser1": "0",
+        "iuser2": "0",
+        "materialstxt": "sound/materials.txt",
+        "player1": "police1",
+        "player2": "police2",
+        "player3": "police3",
+        "player4": "police4",
+        "iuser3": "0",
+        "classname": "worldspawn"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/egg.mdl",
+          "exists": false
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "cof_new.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "halflife.wad",
+          "local_basename_exists": true
+        }
+      ],
+      "textures": {
+        "embedded_count": 0,
+        "external_names": [
+          "+0r_tunnellight",
+          "+Ar_tunnellight",
+          "po_buildgen",
+          "r_forhouseside",
+          "c2_hogdoor4",
+          "c2_stgolv1",
+          "c2_subccrete1",
+          "c2_tbste3",
+          "c_wood2",
+          "crete4_flr03",
+          "out_targt2"
+        ],
+        "external_resolution": {
+          "+0r_tunnellight": [
+            "aomdc22.wad"
+          ],
+          "+Ar_tunnellight": [
+            "aomdc22.wad"
+          ],
+          "po_buildgen": [
+            "aomdc22.wad"
+          ],
+          "r_forhouseside": [
+            "aomdc22.wad"
+          ],
+          "c2_hogdoor4": [
+            "cof_new.wad"
+          ],
+          "c2_stgolv1": [
+            "cof_new.wad"
+          ],
+          "c2_subccrete1": [
+            "cof_new.wad"
+          ],
+          "c2_tbste3": [
+            "cof_new.wad"
+          ],
+          "c_wood2": [
+            "cofreal22.wad"
+          ],
+          "crete4_flr03": [
+            "halflife.wad"
+          ],
+          "out_targt2": [
+            "halflife.wad"
+          ]
+        }
+      }
+    },
+    "c_game_menu1": {
+      "exists": true,
+      "sha256": "f46547044f97d9d601178e28b46f50532cfb597c5c88a7eca4674f5455bb2ea4",
+      "bsp_version": 30,
+      "entity_lump": {
+        "offset": 3720652,
+        "length": 18069
+      },
+      "entity_count": 127,
+      "class_counts": {
+        "ambient_fmodstream": 1,
+        "ambient_generic": 3,
+        "cof_blackandwhite": 1,
+        "cof_gamemenu": 1,
+        "env_dynlight": 7,
+        "env_fade": 1,
+        "env_model": 4,
+        "env_sprite": 15,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "func_illusionary": 60,
+        "func_train": 4,
+        "func_water": 1,
+        "info_player_start": 1,
+        "info_target": 2,
+        "info_texlights": 1,
+        "light_environment": 1,
+        "light_spot": 7,
+        "multi_manager": 2,
+        "path_corner": 7,
+        "rain_modify": 1,
+        "rain_settings": 1,
+        "trigger_camera": 2,
+        "trigger_once": 1,
+        "worldspawn": 1
+      },
+      "unsupported_class_counts": {
+        "ambient_fmodstream": 1,
+        "cof_blackandwhite": 1,
+        "cof_gamemenu": 1,
+        "env_dynlight": 7,
+        "env_model": 4,
+        "envpos_sky": 1,
+        "envpos_world": 1,
+        "info_texlights": 1,
+        "rain_modify": 1,
+        "rain_settings": 1
+      },
+      "spawns": [
+        {
+          "origin": "-3742 -256 -205",
+          "angles": "0 0 0",
+          "classname": "info_player_start",
+          "hull1_contents_at_origin": -1,
+          "hull1_first_solid_units_below_origin": 12
+        }
+      ],
+      "worldspawn": {
+        "wad": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof_new.wad;",
+        "mapversion": "220",
+        "nomusicstop": "1",
+        "WaveHeight": "0.0",
+        "sounds": "1",
+        "MaxRange": "15000",
+        "skyname": "blue22",
+        "classname": "worldspawn"
+      },
+      "referenced_entity_models": [
+        {
+          "path": "models/Props/Blandat/byggnader.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/Props/Blandat/crows.mdl",
+          "exists": true
+        },
+        {
+          "path": "models/props/sky_sphere4.mdl",
+          "exists": true
+        },
+        {
+          "path": "sprites/cof_shine1.spr",
+          "exists": true
+        },
+        {
+          "path": "sprites/flashing01.spr",
+          "exists": true
+        }
+      ],
+      "wad_declarations": [
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\aomdc22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof3.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cofreal22.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\decals.wad",
+          "local_basename_exists": true
+        },
+        {
+          "declared_path": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof_new.wad",
+          "local_basename_exists": true
+        }
+      ],
+      "textures": {
+        "embedded_count": 37,
+        "external_names": [],
+        "external_resolution": {}
+      }
+    }
+  },
+  "recommendation": {
+    "map": "c_sdkmap1",
+    "reason": "Small authored walking/demo level, one empty standing-hull start, all declared entity model files available; intro/coft_1 absent. Still contains 23 unsupported entity class types and must not be described as recovered gameplay. c_game_menu1 has fewer unsupported types but is a menu stage.",
+    "caveat": "Start is inside authored 28-second camera/fade sequence; initial black/white view or lack of control need not indicate engine failure."
+  }
+}

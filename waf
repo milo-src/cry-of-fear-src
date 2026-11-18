@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Repository Waf entry point; delegates to the pinned SDK's actual Waf driver."""
+import sys
+from pathlib import Path
+import subprocess
+import json
+import os
+
+root = Path(__file__).resolve().parent
+sys.path.insert(0, str(root / 'tools'))
+from prepare_game import prepare
+from prepare_sdk import main as prepare_sdk
+
+prepare_sdk()
+source = prepare()
+args = sys.argv[1:] or ['build']
+if 'configure' in args:
+    vswhere = Path(os.environ['ProgramFiles(x86)']) / 'Microsoft Visual Studio/Installer/vswhere.exe'
+    installs = json.loads(subprocess.check_output([str(vswhere), '-products', '*',
+        '-version', '[17.0,18.0)', '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
+        '-format', 'json', '-utf8'], encoding='utf-8'))
+    if not installs:
+        raise RuntimeError('Visual Studio 2022 C++ Build Tools required')
+    version = '.'.join(installs[0]['installationVersion'].split('.')[:2])
+    args += ['-T', 'humanrights', '-4', '--disable-werror', '--msvc_version=msvc ' + version,
+             '--check-c-compiler=msvc', '--check-cxx-compiler=msvc',
+             '-o', str(root / 'build/game-waf')]
+if 'install' in args:
+    args += ['--destdir=' + str(root / 'out/runtime')]
+env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8', VSLANG='1033')
+raise SystemExit(subprocess.call([sys.executable, str(source / 'waf'), *args], cwd=source, env=env))

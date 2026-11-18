@@ -1,0 +1,194 @@
+[
+  {
+    "module": "client.dll",
+    "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "bytes": 1754112,
+    "export_count": 593,
+    "coverage": {
+      "examined_entries": 593,
+      "exports": 593,
+      "reason": null,
+      "status": "complete"
+    },
+    "exports_evidence_id": "ev_32aa6f0a8ab1f5251bafc0a8f15b1c9cf3e96ed5b06e38665f112f58ff030eeb",
+    "machine": 332,
+    "image_base": "0x10000000",
+    "coff_timestamp_raw": 1603923456,
+    "flags": 8450,
+    "sections": [
+      {
+        "name": ".text",
+        "rva": "0x1000",
+        "virtual_size": 1278988,
+        "raw_offset": 1024,
+        "raw_size": 1279488
+      },
+      {
+        "name": ".rdata",
+        "rva": "0x13a000",
+        "virtual_size": 326482,
+        "raw_offset": 1280512,
+        "raw_size": 326656
+      },
+      {
+        "name": ".data",
+        "rva": "0x18a000",
+        "virtual_size": 4003304,
+        "raw_offset": 1607168,
+        "raw_size": 39936
+      },
+      {
+        "name": ".rsrc",
+        "rva": "0x55c000",
+        "virtual_size": 480,
+        "raw_offset": 1647104,
+        "raw_size": 512
+      },
+      {
+        "name": ".reloc",
+        "rva": "0x55d000",
+        "virtual_size": 106328,
+        "raw_offset": 1647616,
+        "raw_size": 106496
+      }
+    ],
+    "embedded_pdb_path_hints": [
+      "D:\\CoFFinalPatch\\code\\cl_dll\\Release\\client.pdb"
+    ],
+    "imports_evidence_id": "ev_f18deff6e6225fc8da3e1b4d37f0e4e6e9b5aea9b1987fe6065bbf143ff10012",
+    "imported_libraries": [
+      "WINMM.dll",
+      "vgui.dll",
+      "WSOCK32.dll",
+      "OPENGL32.dll",
+      "steam_api.dll",
+      "KERNEL32.dll",
+      "USER32.dll",
+      "ADVAPI32.dll",
+      "id3lib.dll",
+      "cg.dll",
+      "cgGL.dll",
+      "irrKlang.dll",
+      "DevIL.dll"
+    ]
+  },
+  {
+    "module": "GameUI.dll",
+    "sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+    "bytes": 1056863,
+    "export_count": 1,
+    "coverage": {
+      "examined_entries": 1,
+      "exports": 1,
+      "reason": null,
+      "status": "complete"
+    },
+    "exports_evidence_id": "ev_b2095171f77bb56899b1c58a5a46699dbcd8ebf66962bb6fecd7f5a195738aa0",
+    "machine": 332,
+    "image_base": "0x10000000",
+    "coff_timestamp_raw": 1366557389,
+    "flags": 8462,
+    "sections": [
+      {
+        "name": ".text",
+        "rva": "0x1000",
+        "virtual_size": 783622,
+        "raw_offset": 4096,
+        "raw_size": 786432
+      },
+      {
+        "name": ".rdata",
+        "rva": "0xc1000",
+        "virtual_size": 117229,
+        "raw_offset": 790528,
+        "raw_size": 118784
+      },
+      {
+        "name": ".data",
+        "rva": "0xde000",
+        "virtual_size": 167592,
+        "raw_offset": 909312,
+        "raw_size": 73728
+      },
+      {
+        "name": ".reloc",
+        "rva": "0x107000",
+        "virtual_size": 71840,
+        "raw_offset": 983040,
+        "raw_size": 73728
+      }
+    ],
+    "embedded_pdb_path_hints": [
+      "C:\\Documents and Settings\\XPMUser\\Desktop\\GoldSource\\gameui\\Release\\GameUI.pdb"
+    ],
+    "imports_evidence_id": "ev_be4c7803c94acfb47331c7e99ed2c97367d307a25ad3c2ae0ee085649e0b0388",
+    "imported_libraries": [
+      "KERNEL32.dll",
+      "USER32.dll",
+      "WSOCK32.dll"
+    ]
+  },
+  {
+    "module": "hl.dll",
+    "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+    "bytes": 2413568,
+    "export_count": 846,
+    "coverage": {
+      "examined_entries": 846,
+      "exports": 846,
+      "reason": null,
+      "status": "complete"
+    },
+    "exports_evidence_id": "ev_d4edd1dd254aef37e75f3bdfb0bc60500eefa5ad1fbfdde88f14ec4baf91ead0",
+    "machine": 332,
+    "image_base": "0x10000000",
+    "coff_timestamp_raw": 1604099770,
+    "flags": 8450,
+    "sections": [
+      {
+        "name": ".text",
+        "rva": "0x1000",
+        "virtual_size": 1703532,
+        "raw_offset": 1024,
+        "raw_size": 1703936
+      },
+      {
+        "name": ".rdata",
+        "rva": "0x1a1000",
+        "virtual_size": 457238,
+        "raw_offset": 1704960,
+        "raw_size": 457728
+      },
+      {
+        "name": ".data",
+        "rva": "0x211000",
+        "virtual_size": 141588,
+        "raw_offset": 2162688,
+        "raw_size": 64512
+      },
+      {
+        "name": ".rsrc",
+        "rva": "0x234000",
+        "virtual_size": 480,
+        "raw_offset": 2227200,
+        "raw_size": 512
+      },
+      {
+        "name": ".reloc",
+        "rva": "0x235000",
+        "virtual_size": 185640,
+        "raw_offset": 2227712,
+        "raw_size": 185856
+      }
+    ],
+    "embedded_pdb_path_hints": [
+      "D:\\CoFFinalPatch\\code\\dlls\\Releasehl\\hl.pdb"
+    ],
+    "imports_evidence_id": "ev_f1851a8224ef9c6a52db647afea4d68bdb3364166081c3a9371e62da4e8cb37e",
+    "imported_libraries": [
+      "KERNEL32.dll",
+      "USER32.dll",
+      "steam_api.dll"
+    ]
+  }
+]

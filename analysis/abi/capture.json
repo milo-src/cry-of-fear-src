@@ -1,0 +1,263 @@
+{
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "exports_evidence_id": "ev_d4edd1dd254aef37e75f3bdfb0bc60500eefa5ad1fbfdde88f14ec4baf91ead0",
+  "observation": "static disassembly; target not executed",
+  "objdump_version": "GNU objdump (Binutils for MinGW-W64 x86_64, built by Brecht Sanders, r2) 2.46.0.20260210",
+  "captures": [
+    {
+      "name": "GetEntityAPI",
+      "start": "0x100183d0",
+      "end_exclusive": "0x100183ff",
+      "file_offset": 96208,
+      "bytes_hex": "558bec578b7d0885ff741f817d0c8c000000751656b932000000bef8192110f3a55eb8010000005f5dc333c05f5dc3",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100183d0",
+        "--stop-address=0x100183ff",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "GetEntityAPI2",
+      "start": "0x10018400",
+      "end_exclusive": "0x10018437",
+      "file_offset": 96256,
+      "bytes_hex": "558bec8b450c578b7d0885ff741e81388c000000751656b932000000bef8192110f3a55eb8010000005f5dc3c7008c00000033c05f5dc3",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10018400",
+        "--stop-address=0x10018437",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "GiveFnptrsToDll",
+      "start": "0x100b4aa0",
+      "end_exclusive": "0x100b4ac2",
+      "file_offset": 736928,
+      "bytes_hex": "558bec8b450cb990000000568b750857bf482f2210f3a55fa3883122105e5dc20800",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b4aa0",
+        "--stop-address=0x100b4ac2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    }
+  ],
+  "callback_table_va": "0x102119f8",
+  "callback_slots": [
+    {
+      "index": 0,
+      "preferred_va": "0x100ae130"
+    },
+    {
+      "index": 1,
+      "preferred_va": "0x100167d0"
+    },
+    {
+      "index": 2,
+      "preferred_va": "0x10016a30"
+    },
+    {
+      "index": 3,
+      "preferred_va": "0x100169e0"
+    },
+    {
+      "index": 4,
+      "preferred_va": "0x10016980"
+    },
+    {
+      "index": 5,
+      "preferred_va": "0x10016a80"
+    },
+    {
+      "index": 6,
+      "preferred_va": "0x10016940"
+    },
+    {
+      "index": 7,
+      "preferred_va": "0x10016ab0"
+    },
+    {
+      "index": 8,
+      "preferred_va": "0x10016c80"
+    },
+    {
+      "index": 9,
+      "preferred_va": "0x10017000"
+    },
+    {
+      "index": 10,
+      "preferred_va": "0x10017030"
+    },
+    {
+      "index": 11,
+      "preferred_va": "0x100170a0"
+    },
+    {
+      "index": 12,
+      "preferred_va": "0x101216f0"
+    },
+    {
+      "index": 13,
+      "preferred_va": "0x10121610"
+    },
+    {
+      "index": 14,
+      "preferred_va": "0x10121530"
+    },
+    {
+      "index": 15,
+      "preferred_va": "0x1001cc70"
+    },
+    {
+      "index": 16,
+      "preferred_va": "0x1001cc90"
+    },
+    {
+      "index": 17,
+      "preferred_va": "0x1001cef0"
+    },
+    {
+      "index": 18,
+      "preferred_va": "0x1001d830"
+    },
+    {
+      "index": 19,
+      "preferred_va": "0x10018d60"
+    },
+    {
+      "index": 20,
+      "preferred_va": "0x1001d870"
+    },
+    {
+      "index": 21,
+      "preferred_va": "0x1001e9e0"
+    },
+    {
+      "index": 22,
+      "preferred_va": "0x1001ea70"
+    },
+    {
+      "index": 23,
+      "preferred_va": "0x1001e7b0"
+    },
+    {
+      "index": 24,
+      "preferred_va": "0x1001e770"
+    },
+    {
+      "index": 25,
+      "preferred_va": "0x1001ece0"
+    },
+    {
+      "index": 26,
+      "preferred_va": "0x1001e6d0"
+    },
+    {
+      "index": 27,
+      "preferred_va": "0x1001e6a0"
+    },
+    {
+      "index": 28,
+      "preferred_va": "0x1001e070"
+    },
+    {
+      "index": 29,
+      "preferred_va": "0x1001e6e0"
+    },
+    {
+      "index": 30,
+      "preferred_va": "0x1001ec80"
+    },
+    {
+      "index": 31,
+      "preferred_va": "0x1001eca0"
+    },
+    {
+      "index": 32,
+      "preferred_va": "0x1001ecc0"
+    },
+    {
+      "index": 33,
+      "preferred_va": "0x1001ed40"
+    },
+    {
+      "index": 34,
+      "preferred_va": "0x10006f30"
+    },
+    {
+      "index": 35,
+      "preferred_va": "0x100061d0"
+    },
+    {
+      "index": 36,
+      "preferred_va": "0x100056f0"
+    },
+    {
+      "index": 37,
+      "preferred_va": "0x1001eaa0"
+    },
+    {
+      "index": 38,
+      "preferred_va": "0x1001ed60"
+    },
+    {
+      "index": 39,
+      "preferred_va": "0x10018870"
+    },
+    {
+      "index": 40,
+      "preferred_va": "0x1001db50"
+    },
+    {
+      "index": 41,
+      "preferred_va": "0x1001e940"
+    },
+    {
+      "index": 42,
+      "preferred_va": "0x1001e0f0"
+    },
+    {
+      "index": 43,
+      "preferred_va": "0x1001dad0"
+    },
+    {
+      "index": 44,
+      "preferred_va": "0x1001da90"
+    },
+    {
+      "index": 45,
+      "preferred_va": "0x1001db40"
+    },
+    {
+      "index": 46,
+      "preferred_va": "0x1001e080"
+    },
+    {
+      "index": 47,
+      "preferred_va": "0x1001dcd0"
+    },
+    {
+      "index": 48,
+      "preferred_va": "0x1001e570"
+    },
+    {
+      "index": 49,
+      "preferred_va": "0x10018cc0"
+    }
+  ]
+}
