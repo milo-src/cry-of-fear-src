@@ -201,8 +201,10 @@ void CofGameMenuDraw() {
     if (nextHover != hovered && nextHover >= 0)
         gEngfuncs.pfnPlaySoundByName(const_cast<char*>("ui/3d_rollover.wav"), .5f);
     hovered = nextHover;
+    // Keep the mean of the original 0..50 transparency range, without its
+    // per-frame random flicker (requested presentation adjustment).
     CofDrawImage("gfx/vgui/menu_logo.tga", ScreenWidth/2-256, ScreenHeight/2-198,
-                 512, 66, 0, 0, 1, 1, 1, 1, 1, 1-gEngfuncs.pfnRandomLong(0, 50)/255.f);
+                 512, 66, 0, 0, 1, 1, 1, 1, 1, 1.f-25.f/255.f);
     CofDrawImage("gfx/vgui/menu_logo_ts.tga", ScreenWidth-120-15, ScreenHeight-102-15);
     for (int i = 0; i < 10; ++i) {
         char path[96];

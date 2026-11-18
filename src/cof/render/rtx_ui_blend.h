@@ -42,10 +42,10 @@ static double CofRTEncodeSRGB(double value)
 {
     return value<=.0031308 ? value*12.92 : 1.055*pow(value,1./2.4)-.055;
 }
-/* TriangleAPI folds the logo's animated opacity into vertex RGB. RTGL
+/* TriangleAPI folds the logo's opacity into vertex RGB. RTGL
  * multiplies those values in linear space, so decode that modulation too.
  * Exact for white texels; a dark-backdrop approximation for the grey trails.
- * Keep the original 0..50 VGUI transparency animation in game_menu.cpp.
+ * The requested constant logo opacity is owned by game_menu.cpp.
  */
 static float CofRTLogoModulation(float value)
 {
