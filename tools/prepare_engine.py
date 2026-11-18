@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import shutil
 from prepare_graphics import prepare_lighting
+from prepare_vgui import prepare_vgui
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -86,6 +87,7 @@ def prepare():
             text = text.replace(anchor, replacement)
         (target / 'ref/gl' / name).write_text(text)
     prepare_lighting(target)
+    prepare_vgui(target)
     return target
 
 

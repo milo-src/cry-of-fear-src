@@ -1,6 +1,6 @@
 // CoF's 2D GameUI main menu, hosted by the source-built MainUI backend.
 // Evidence: analysis/menu/assets.md and GameUI.dll 0x1003d1d7/0x1003fa90.
-// MainUI remains responsible for platform input, options and server browsing.
+// MainUI supplies platform input/drawing; options use src/cof/vgui.
 #include "BaseWindow.h"
 #include "Action.h"
 #include "YesNoMessageBox.h"
