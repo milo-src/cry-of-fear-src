@@ -123,7 +123,7 @@ def main():
                 text=logpath.read_text(errors='replace') if logpath.exists() else ''
                 markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
-                if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE']
+                if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE','COF_CONSOLE_MAP_CAPTURE']
                 for marker in markers:
                     if marker in text and marker not in observed:
                         shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot)

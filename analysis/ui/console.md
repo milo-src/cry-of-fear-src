@@ -112,6 +112,18 @@ when the input owns keyboard focus. VGUI keycodes are67(Tab),88(Up),90(Down),
 
 ## Engine transport
 
+### Map argument completion in the source adapter
+
+The source console additionally completes `map ` and `changelevel ` arguments.
+The engine bridge enumerates `maps/*.bsp` through the mounted filesystem,
+including archives, and filters names case-insensitively by the typed prefix.
+This is an adapter extension to the command/cvar-only behavior documented above.
+Selecting a suggestion inserts the whole command and map name without executing
+it. Tab/Shift+Tab and arrow keys cycle the results, with a seven-row scrolling
+viewport; the popup opens upwards when there is insufficient screen space below.
+The local `--console-output` runtime check covers filtering, empty results,
+keyboard cycling, click selection and upward placement in both renderers.
+
 `hw.dll` loader `01d010e6` (selector `01d01245`) requests GameConsole003 and
 stores it at `01eda254`. `toggleconsole` is registered to `01d4a538`:
 IsVisible `01d0f8e9` calls interface slot5 and chooses show/hide through engine

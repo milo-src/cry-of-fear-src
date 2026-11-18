@@ -32,7 +32,7 @@ class ConsoleDialog : public Dialog {
     bool logDirty=true;
     bool scrollDragging=false;
     int scrollGrab=0, visibleRows=0;
-    bool cycling=false, matchesHistory=false;
+    bool cycling=false, matchesHistory=false, matchesArguments=false;
     int nextMatch=0, scrollback=0;
     bool initialized=false;
 public:
@@ -66,6 +66,16 @@ public:
         return wrapped.empty() ? track.h : std::min(track.h,std::max(12,track.h*visibleRows/static_cast<int>(wrapped.size())));
     }
     bool Pointer(int x,int y,int key,bool down) override {
+        Control* popup=Find("CompletionList");
+        Rect popupRect=popup->bounds; popupRect.x+=bounds.x; popupRect.y+=bounds.y;
+        if (popup->visible && popupRect.Contains(x,y)) {
+            if (key==K_MOUSE1 && down) {
+                Choose(popup->scroll+(y-popupRect.y)/20);
+                popup->visible=false;
+                return true;
+            }
+            return key==K_MOUSE1;
+        }
         const Rect track=ScrollTrack();
         const int travel=track.h-ScrollThumb();
         const int total=std::max(0,static_cast<int>(wrapped.size())-visibleRows);
@@ -110,25 +120,29 @@ public:
     void Rebuild() {
         const std::string prefix=Find("ConsoleEntry")->value;
         matches.clear(); matchesHistory=prefix.empty(); nextMatch=0; cycling=false;
+        matchesArguments=prefix.find(' ')!=std::string::npos;
         if (matchesHistory) matches=history;
-        else if (prefix.find(' ')==std::string::npos) {
+        else {
             char result[512];
             for (int index=0; index<4096 && Complete(prefix,index,result,sizeof(result)); ++index)
                 matches.push_back(result);
         }
         Control* popup=Find("CompletionList");
         popup->choices.clear(); popup->scroll=popup->selected=0;
-        for (size_t i=0; i<matches.size() && i<7; ++i)
-            popup->choices.push_back(i==6 ? "..." : matches[i]);
+        popup->choices=matches;
         popup->visible=!matches.empty() && Visible(*this);
     }
     void Choose(int index) {
         if (index<0 || index>=static_cast<int>(matches.size())) return;
         Control* entry=Find("ConsoleEntry");
         std::string value=matches[index];
-        if (!matchesHistory) value=value.substr(0,value.find(' '));
+        if (!matchesHistory && !matchesArguments) value=value.substr(0,value.find(' '));
         entry->value=Utf8Prefix(value,254)+" ";
         entry->cursor=static_cast<int>(entry->value.size());
+        Control* popup=Find("CompletionList");
+        popup->selected=index;
+        if (index<popup->scroll) popup->scroll=index;
+        if (index>=popup->scroll+7) popup->scroll=index-6;
         Focus("ConsoleEntry");
     }
     void Cycle(bool reverse) {
@@ -145,10 +159,15 @@ public:
             control.cursor=std::min(control.cursor,static_cast<int>(control.value.size()));
             while (control.cursor>0 && control.cursor<static_cast<int>(control.value.size()) &&
                 (static_cast<unsigned char>(control.value[control.cursor])&0xc0)==0x80) --control.cursor;
-            if (!cycling && !matchesHistory && !matches.empty() && !control.value.empty() && control.value.back()==' ')
-                Choose(0);
+            if (!cycling && !matchesHistory && !matchesArguments && !matches.empty() && !control.value.empty() && control.value.back()==' ') {
+                const std::string typed=Fold(TrimEnd(control.value));
+                const bool exact=std::any_of(matches.begin(),matches.end(),[&](const std::string& match) {
+                    return Fold(match.substr(0,match.find(' ')))==typed;
+                });
+                if (!exact) Choose(0);
+            }
             Rebuild();
-        } else if (control.id=="CompletionList" && control.selected<6) {
+        } else if (control.id=="CompletionList") {
             Choose(control.selected); control.visible=false;
         }
     }
@@ -200,8 +219,12 @@ public:
         Control* popup=Find("CompletionList");
         int popupWidth=120;
         for (const std::string& text:popup->choices) popupWidth=std::max(popupWidth,TextWidth(text)+20);
-        popup->bounds={8,h,std::min(w-16,popupWidth),static_cast<int>(popup->choices.size())*20+4};
-        Dialog::Paint();
+        const int popupHeight=std::min(7,static_cast<int>(popup->choices.size()))*20+4;
+        const int popupY=bounds.y+h+popupHeight<=ViewHeight() ? h : h-32-popupHeight;
+        popup->bounds={8,popupY,std::min(w-16,popupWidth),popupHeight};
+        // Draw the popup last, including when it opens upwards over history.
+        const bool popupVisible=popup->visible;
+        popup->visible=false; Dialog::Paint(); popup->visible=popupVisible;
         const Rect area={bounds.x+8,bounds.y+36,w-16,h-76};
         Fill(area,ThemeColor("WindowBG",0x96282828)); Border(area,true);
         const int available=std::max(1,area.w-16), rowHeight=16;
@@ -248,6 +271,7 @@ public:
             const int total=std::max(1,static_cast<int>(rows.size())-count);
             Fill({track.x,track.y+travel-travel*scrollback/total,track.w,thumb},ThemeColor("BorderDark",0xff707070));
         }
+        if (popupVisible) PaintControl(*popup,bounds.x,bounds.y,true,false,false);
     }
 #include "console_runtime_tests.inc"
 };

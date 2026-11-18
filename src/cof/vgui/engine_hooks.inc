@@ -12,7 +12,30 @@ static int CofUIComplete( const char *prefix, int index, char *output, int capac
 {
     int found = 0;
     size_t length = Q_strlen( prefix );
-    if( !output || capacity <= 0 || !length || Q_strchr( prefix, ' ' )) return 0;
+    static search_t *maps;
+    if( index == 0 && maps ) { Mem_Free( maps ); maps = NULL; }
+    if( !output || capacity <= 0 || !length || index < 0 ) return 0;
+    const char *argument = Q_strchr( prefix, ' ' );
+    if( argument )
+    {
+        const size_t commandLength = argument - prefix;
+        if( !((commandLength == 3 && !Q_strnicmp( prefix, "map", 3 )) ||
+              (commandLength == 11 && !Q_strnicmp( prefix, "changelevel", 11 )))) return 0;
+        while( *argument == ' ' ) ++argument;
+        // Search the mounted game filesystem (including archives). Match the
+        // typed argument literally; do not interpret it as a wildcard pattern.
+        if( index == 0 ) maps = FS_Search( "maps/*.bsp", true, false );
+        if( !maps ) return 0;
+        for( int i = 0; i < maps->numfilenames; ++i )
+        {
+            string name;
+            COM_FileBase( maps->filenames[i], name, sizeof(name) );
+            if( !Q_strnicmp( name, argument, Q_strlen(argument) ) && found++ == index )
+            { Q_snprintf( output, capacity, "%.*s %s", (int)commandLength, prefix, name ); return 1; }
+        }
+        Mem_Free( maps ); maps = NULL;
+        return 0;
+    }
     for( cmd_t *cmd = Cmd_GetFirstFunctionHandle(); cmd; cmd = Cmd_GetNextFunctionHandle( cmd ))
     {
         const char *name = Cmd_GetName( cmd );
