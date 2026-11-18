@@ -249,10 +249,11 @@ void RT_ParseStaticLightEntities(void)
     if (!cof_rt_menu_scene)
         for (int i=0;i<g_lights.static_lights_count;++i) {
             rt_static_light_t* light=&g_lights.static_lights[i];
-            // Finite lamp emitters give a soft penumbra and a readable highlight
-            // in glossy tiles. No extra energy and no camera-relative offsets.
-            light->fill_radius=METRIC_TO_QUAKEUNIT(bound(.025f,
-                RT_CVAR_TO_FLOAT(rt_light_radius)*(.85f+.3f*sqrtf(Q_max(0,light->intensity))),.065f));
+            // Brightness does not determine emitter size. The previous
+            // intensity-dependent 2.5--6.5 cm radii softened character shadows
+            // more for brighter lamps. Use a compact finite emitter in gameplay;
+            // this is an RT adaptation, not a recovered BSP lamp dimension.
+            light->fill_radius=METRIC_TO_QUAKEUNIT(.02f);
         }
     // RTGL supports one volumetric source. Pick a fixed authored spotlight at
     // map load, never the nearest light each frame (which makes fog flash).

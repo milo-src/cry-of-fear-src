@@ -105,7 +105,7 @@ def main():
     parser.add_argument('--cvar',nargs=2,action='append',default=[],metavar=('NAME','VALUE'),help='Read-only comparison run with temporary runtime cvars')
     parser.add_argument('--label',default='',help='Suffix for comparison artifacts')
     parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
-    parser.add_argument('--denoiser',choices=['0','1'],default='0')
+    parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
     if args.cursor and not args.interactive:parser.error('--cursor changes focus and requires an explicitly authorized --interactive session')
@@ -131,7 +131,7 @@ def main():
     report=ROOT/'analysis/local';report.mkdir(parents=True,exist_ok=True)
     tag=args.renderer+('-settings' if args.ui else '-'+args.map)
     if args.console_output:tag=args.renderer+'-console-output'
-    if args.motion:tag+='-motion-'+args.denoiser
+    if args.motion:tag+='-motion-'+(args.denoiser or 'default')
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
     if args.menu_cycle:tag+='-cycle'
@@ -164,7 +164,7 @@ def main():
     if not args.console_output:command+=['-dev','2']
     for name,value in args.cvar:command+=['+'+name,value]
     command += ['+menu_main'] if args.ui else ['+map',args.map]
-    command += ['+rt_denoiser',args.denoiser]
+    if args.denoiser is not None:command += ['+rt_denoiser',args.denoiser]
     if args.menu_scene:command += ['+con_notifytime','0']
     if not args.interactive:command += ['+m_ignore','1']
     startup=subprocess.STARTUPINFO();startup.dwFlags=subprocess.STARTF_USESHOWWINDOW;startup.wShowWindow=0
@@ -248,6 +248,11 @@ def main():
                         raise RuntimeError('Gameplay exposure/fog can reveal authored darkness')
                 if args.lighting and (not policies or not exposures):
                     raise RuntimeError('Missing runtime lighting policy observations')
+                filters=re.findall(r'COF_RTX_SHADOW_FILTER menu=(\d) denoiser=(\d)',text)
+                if args.lighting and ('0',args.denoiser or '1') not in filters:
+                    raise RuntimeError('Gameplay shadow filter was not observed')
+                if args.menu_scene and ('1','0') not in filters:
+                    raise RuntimeError('Cinematic menu did not retain REBLUR')
                 for name in ('vulkan-1.dll','RayTracedGL1.dll','NRI.dll','ref_gl.dll','client_amd64.dll'):
                     if not any(Path(p).name.lower()==name.lower() for p in modules):raise RuntimeError('Module not observed: '+name)
                 if not args.console_output and 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')

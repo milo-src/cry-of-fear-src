@@ -12,7 +12,8 @@
             gEngfuncs.Cvar_SetValue("rt_framegen", 0);
             gEngfuncs.Cvar_SetValue("rt_shadowrays", profile + 1);
             gEngfuncs.Cvar_SetValue("rt_indir2bounces", profile > 0);
-            gEngfuncs.Cvar_SetValue("rt_denoiser", 0);
+            // Gameplay uses RELAX; the cinematic menu keeps its REBLUR filter.
+            gEngfuncs.Cvar_SetValue("rt_denoiser", 1);
             gEngfuncs.Cvar_SetValue("rt_antifirefly", 1);
             // Calm ripples keep reflected architecture readable in flooded rooms.
             gEngfuncs.Cvar_SetValue("rt_normalmap_stren_water", .60f);

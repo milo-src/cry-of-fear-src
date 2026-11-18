@@ -1,5 +1,7 @@
 /* Gameplay preserves darkness rather than inventing ambient illumination.
  * The cinematic menu and the rasterized UI retain their separate grading. */
+if (cof_rt_menu_scene)
+    illum_params.denoiserMode=RG_DENOISER_MODE_REBLUR;
 if (!cof_rt_menu_scene) {
     // Fixed baseline: looking into darkness must not raise the exposure.
     // EV 2 is the bridge's baseline, not a recovered GoldSrc camera constant.
@@ -29,5 +31,7 @@ if (!cof_rt_menu_scene) {
         gEngfuncs.Con_DPrintf("COF_RTX_EXPOSURE menu=%d min=%.3f max=%.3f fog_ambient=%.3f\n",
             previousPolicy,tnmp_params.ev100Min,tnmp_params.ev100Max,
             volumetric_params.ambientColor.data[0]);
+        gEngfuncs.Con_DPrintf("COF_RTX_SHADOW_FILTER menu=%d denoiser=%d\n",
+            previousPolicy,(int)illum_params.denoiserMode);
     }
 }
