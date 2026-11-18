@@ -31,6 +31,13 @@
             gEngfuncs.Cvar_SetValue("rt_volume_far", 900);
             gEngfuncs.Cvar_SetValue("rt_light_radius", .045f);
             gEngfuncs.Cvar_SetValue("rt_light_s", 1100);
+            // Permit dark-adapted night exposure without flattening sunlit maps.
+            gEngfuncs.Cvar_SetValue("rt_tnmp_ev100_min", .5f);
+            gEngfuncs.Cvar_SetValue("rt_tnmp_ev100_max", 7.7f);
+            gEngfuncs.Cvar_SetValue("rt_tnmp_saturation_r", .15f);
+            gEngfuncs.Cvar_SetValue("rt_tnmp_saturation_g", .15f);
+            gEngfuncs.Cvar_SetValue("rt_tnmp_saturation_b", .15f);
+            gEngfuncs.Cvar_SetValue("rt_texture_nearest", 0);
             gEngfuncs.Cvar_SetValue("rt_bloom", 1);
             gEngfuncs.Cvar_SetValue("rt_bloom_intensity", .10f);
             gEngfuncs.Cvar_SetValue("rt_bloom_threshold", 4);

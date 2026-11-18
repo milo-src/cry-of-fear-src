@@ -13,6 +13,21 @@ def prepare(target):
             raise ValueError('RTX light hook changed: '+old[:100])
         text = text.replace(old, new)
     replace('#include "ref_params.h"', '#include "ref_params.h"\n#include "rtx_light_identity.h"')
+    replace('    float             spot_outer_cone_rad;', '    float             spot_outer_cone_rad;\n    float             fill_radius;')
+    replace('        dst->is_spot     = is_spot;', '        dst->is_spot     = is_spot;\n        dst->fill_radius = 0;')
+    # Baked-light fallback uses broad sources, real map lights retain their radius.
+    start = text.index('void RT_UploadAllLights')
+    end = text.index('    for( qboolean is_e_light', start)
+    section = text[start:end]
+    if section.count('METRIC_TO_QUAKEUNIT( RT_CVAR_TO_FLOAT( rt_light_radius ) )') != 2:
+        raise ValueError('RTX static light radius hooks changed')
+    section = section.replace('METRIC_TO_QUAKEUNIT( RT_CVAR_TO_FLOAT( rt_light_radius ) )',
+        '(src->fill_radius > 0 ? src->fill_radius : METRIC_TO_QUAKEUNIT( RT_CVAR_TO_FLOAT( rt_light_radius ) ))')
+    text = text[:start] + section + text[end:]
+    start = text.index('void RT_ParseStaticLightEntities()')
+    end = text.index('static qboolean IsPlayerFlashlight', start)
+    text = text[:start] + '#include "rtx_map_lights.inc"\n\n' + text[end:]
+    shutil.copy2(ROOT/'src/cof/render/rtx_map_lights.inc',target/'ref/gl/rtx_map_lights.inc')
     start = text.index('    static uint32_t rt_dlight_gen[')
     end = text.index('\nvoid RT_UploadAllLights', start)
     text = text[:start]+'''    static CofRTLightIdentity cof_dlight_ids[MAX_DLIGHTS];

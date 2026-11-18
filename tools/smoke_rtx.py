@@ -3,6 +3,7 @@ import argparse
 import ctypes as C
 from ctypes import wintypes as W
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -85,9 +86,16 @@ def main():
     parser.add_argument('--graphics',action='store_true',help='Use the stationary water/lighting fixture')
     parser.add_argument('--water-view',action='store_true',help='Inspect water reflections from a low camera angle')
     parser.add_argument('--motion',action='store_true',help='Walk past the water and capture settling light')
+    parser.add_argument('--lighting',action='store_true',help='Hold a fixed camera with flashlight off on the selected map')
+    parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
     parser.add_argument('--denoiser',choices=['0','1'],default='0')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.pose:
+        try: pose=[float(v) for v in args.pose.split()]
+        except ValueError: parser.error('--pose requires six finite numbers')
+        if not args.lighting or len(pose)!=6 or not all(math.isfinite(v) for v in pose):
+            parser.error('--pose requires --lighting and six finite numbers')
     if args.console_output:args.ui=True
     if args.water_view:args.graphics=True
     if args.graphics or args.motion:args.map='cof_graphics_test'
@@ -98,12 +106,15 @@ def main():
     if args.console_output:tag=args.renderer+'-console-output'
     if args.motion:tag+='-motion-'+args.denoiser
     if args.water_view:tag+='-water-view'
+    if args.lighting:tag+='-lighting'
     settings=ROOT/'build'/('test-'+tag+'-renderer.cfg');settings.unlink(missing_ok=True)
     env=dict(os.environ,COF_RENDERER_SETTINGS=str(settings),COF_RTX_AVAILABLE='1',
              COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1')
-    for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST'):
+    for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST','COF_RTX_LIGHTINGTEST','COF_RTX_LIGHTING_POSE'):
         env.pop(flag,None)
     if args.water_view:env['COF_RTX_WATER_VIEW']='1'
+    if args.lighting:env['COF_RTX_LIGHTINGTEST']='1'
+    if args.pose:env['COF_RTX_LIGHTING_POSE']=args.pose
     env['COF_RTX_UITEST' if args.ui else 'COF_RTX_MOTIONTEST' if args.motion else 'COF_GRAPHICSTEST' if args.graphics else 'COF_SMOKETEST']='1'
     if args.console_output:
         env.pop('COF_RTX_UITEST',None);env['COF_CONSOLE_OUTPUTTEST']='1'
@@ -159,7 +170,7 @@ def main():
                 if not args.console_output and 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')
             if any('steamapps' in p.lower() for p in modules):raise RuntimeError('Original game binary loaded')
             movement=re.search(r'COF_SMOKE_MOVEMENT ([\d.-]+) ([\d.-]+) ([\d.-]+) -> ([\d.-]+) ([\d.-]+) ([\d.-]+)',text)
-            if not args.ui and args.map=='c_sdkmap1':
+            if not args.ui and not args.lighting and args.map=='c_sdkmap1':
                 if not movement:raise RuntimeError('Player movement not observed')
                 xyz=list(map(float,movement.groups()))
                 if sum((xyz[i]-xyz[i+3])**2 for i in range(3))<1:raise RuntimeError('Player did not move')

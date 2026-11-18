@@ -1,6 +1,7 @@
 /* CoF RT material response. Original images, BSPs and UI art remain untouched.
  * Explicit names avoid turning painted walls, window frames or wood into metal.
  * These are artistic RT adaptations, not recovered original shader constants. */
+extern void CofRTTexlightMaterial(RgMeshPrimitiveInfo*, RgEditorInfo*, const char*);
 static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor)
 {
     static struct { const char *name; float roughness, metallic; qboolean reported; } materials[] = {
@@ -43,6 +44,7 @@ static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *edi
         }
         return;
     }
+    CofRTTexlightMaterial(primitive,editor,name);
     for (size_t i = 0; i < sizeof(materials)/sizeof(materials[0]); ++i) {
         if (Q_stricmp(name, materials[i].name)) continue;
         editor->pbrInfoExists = true;
