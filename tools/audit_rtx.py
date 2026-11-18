@@ -23,12 +23,15 @@ def audit():
         'cryoffear/dlls/hl_amd64.dll':'build/game-rtx/dlls/hl_amd64.dll',
     }
     expected={name:digest((ROOT/source).read_bytes()) for name,source in sources.items()}
+    shaders={'rt/shaders/CmPrepareFinal.comp.spv':digest((ROOT/'build/rtx-shaders/CmPrepareFinal.comp.spv').read_bytes())}
     with zipfile.ZipFile(package) as archive:
         expected.update({name:digest(archive.read('rt_bin/'+name)) for name in DLLS if name!='NRI.dll'})
         for name in archive.namelist():
             if name.startswith('rt/shaders/') and name.endswith('.spv') or name in (
                 'rt/BlueNoise_LDR_RGBA_128.ktx2','rt/WaterNormal_n.ktx2','rt/DirtMask.ktx2'):
-                if (RUNTIME/name).read_bytes()!=archive.read(name):raise RuntimeError('RT resource mismatch: '+name)
+                if name in shaders:
+                    if digest((RUNTIME/name).read_bytes())!=shaders[name]:raise RuntimeError('Waf shader mismatch: '+name)
+                elif (RUNTIME/name).read_bytes()!=archive.read(name):raise RuntimeError('RT resource mismatch: '+name)
     actual={p.relative_to(RUNTIME).as_posix() for p in RUNTIME.rglob('*') if p.suffix.lower() in ('.dll','.exe')}
     if actual!=set(expected):raise RuntimeError('Unexpected native modules: '+str(actual^set(expected)))
     for name,sha in expected.items():
@@ -39,7 +42,8 @@ def audit():
             raise RuntimeError('Expected x64 module: '+name)
     manifest=json.loads((RUNTIME/'rtx-build-manifest.json').read_text())
     if expected!=manifest['files']:raise RuntimeError('RTX manifest mismatch')
-    report=dict(result='pass',native_modules=expected,original_cof_native_modules='none',build='Waf x64',
+    if shaders!=manifest['shaders']:raise RuntimeError('RTX shader manifest mismatch')
+    report=dict(result='pass',native_modules=expected,shaders=shaders,original_cof_native_modules='none',build='Waf x64',
                 external_binaries='Pinned RTGL1, FidelityFX, NVIDIA DLSS; official SDL2. NRI rebuilt with Waf.')
     (RUNTIME/'runtime-audit.json').write_text(json.dumps(report,indent=2)+'\n')
     print(f'PASS: {len(expected)} x64 modules; own engine/game/NRI, pinned tracing dependencies, no original game DLLs')

@@ -47,6 +47,7 @@ def prepare(target):
     if text.count(anchor) != 1: raise ValueError('RTX atmosphere hook changed')
     text = text.replace(anchor, '#include "rtx_atmosphere.inc"\n'+anchor)
     shutil.copy2(ROOT/'src/cof/render/rtx_atmosphere.inc', target/'ref/gl/rtx_atmosphere.inc')
+    shutil.copy2(ROOT/'src/cof/render/rtx_fog.inc', target/'ref/gl/rtx_fog.inc')
     for old, new in (
         ('.waterWaveSpeed          = METRIC_TO_QUAKEUNIT( 0.4f )',
          '.waterWaveSpeed          = METRIC_TO_QUAKEUNIT( 0.12f )'),

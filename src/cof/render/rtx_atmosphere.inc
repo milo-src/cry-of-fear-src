@@ -35,3 +35,4 @@ if (!cof_rt_menu_scene) {
             previousPolicy,(int)illum_params.denoiserMode);
     }
 }
+#include "rtx_fog.inc"

@@ -251,6 +251,16 @@ def main():
                         raise RuntimeError('Gameplay exposure/fog can reveal authored darkness')
                 if args.lighting and (not policies or not exposures):
                     raise RuntimeError('Missing runtime lighting policy observations')
+                scales=re.findall(r'COF_RTX_MAP_LIGHT_SCALE menu=(\d) scale=([\d.]+)',text)
+                if ((args.lighting or args.graphics or args.menu_scene) and not scales) or any(abs(float(scale)-(1 if menu=='1' else .25))>.0001 for menu,scale in scales):
+                    raise RuntimeError('Map light conversion does not preserve gameplay/menu calibration')
+                fog=re.findall(r'COF_RTX_AUTHORED_FOG active=(\d) start=([\d.]+) end=([\d.]+) menu=(\d)',text)
+                if any(active=='1' and (menu!='0' or not 0<float(start)<float(end)) for active,start,end,menu in fog):
+                    raise RuntimeError('Authored fog enabled with invalid range or in cinematic menu')
+                if args.graphics and not any(active=='1' and float(start)==8 and float(end)==180 for active,start,end,menu in fog):
+                    raise RuntimeError('SetFog fixture did not reach the RTX final-pass adapter')
+                if args.graphics and (not fog or fog[-1][0]!='0'):
+                    raise RuntimeError('SetFog fixture did not disable the RTX fog adapter')
                 filters=re.findall(r'COF_RTX_SHADOW_FILTER menu=(\d) denoiser=(\d)',text)
                 arms=re.findall(r'COF_RTX_ARM side=(\d) blocked=(\d) corrected=(\d) clear=(\d) angle=([\d.]+) length_error=([\d.]+)',text)
                 for side,blocked,corrected,clear,angle,error in arms:

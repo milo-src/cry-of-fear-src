@@ -9,6 +9,10 @@ float cof_rt_sky_energy = 0;
 qboolean cof_rt_has_sky;
 qboolean cof_rt_menu_scene;
 static int cof_rt_volume_light=-1;
+// Reduce the previous gameplay RT conversion by four. Keep
+// source ratios and inverse-square transport, but reduce spill into authored
+// darkness. This is renderer calibration, not a recovered compiler constant.
+static float CofRTMapLightScale(void) { return cof_rt_menu_scene ? 1.f : .25f; }
 
 static char *CofRTReadEntity(char *text, CofRTEntity *entity)
 {
@@ -94,11 +98,11 @@ void CofRTTexlightMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor,
     for (int i=0;i<cof_texlight_count;++i) {
         if (Q_stricmp(name,cof_texlights[i].name)) continue;
         const float power=cof_texlights[i].power;
-        primitive->emissive=Q_max(primitive->emissive,power*1.5f);
+        primitive->emissive=Q_max(primitive->emissive,power*1.5f*CofRTMapLightScale());
         editor->attachedLightExists=power>0;
         editor->attachedLightEvenOnDynamic=true;
         editor->attachedLight.color=cof_texlights[i].color;
-        editor->attachedLight.intensity=RT_CVAR_TO_FLOAT(rt_light_s)*power*.35f;
+        editor->attachedLight.intensity=RT_CVAR_TO_FLOAT(rt_light_s)*power*.35f*CofRTMapLightScale();
         return;
     }
 }
@@ -254,6 +258,7 @@ void RT_ParseStaticLightEntities(void)
             // more for brighter lamps. Use a compact finite emitter in gameplay;
             // this is an RT adaptation, not a recovered BSP lamp dimension.
             light->fill_radius=METRIC_TO_QUAKEUNIT(.02f);
+            light->intensity*=CofRTMapLightScale();
         }
     // RTGL supports one volumetric source. Pick a fixed authored spotlight at
     // map load, never the nearest light each frame (which makes fog flash).
@@ -267,6 +272,7 @@ void RT_ParseStaticLightEntities(void)
             }
         }
     int fills=CofRTBakedFill();
+    gEngfuncs.Con_Printf("COF_RTX_MAP_LIGHT_SCALE menu=%d scale=%.2f\n",cof_rt_menu_scene,CofRTMapLightScale());
     gEngfuncs.Con_Printf("COF_RTX_LIGHTING_POLICY menu=%d synthetic_night=0 sky_energy=%.4f baked_fill=%d\n",
         cof_rt_menu_scene,cof_rt_sky_energy,fills);
     gEngfuncs.Con_DPrintf("COF_RTX_ATMOSPHERE menu=%d volumetric_spot=%d sun=%d\n",

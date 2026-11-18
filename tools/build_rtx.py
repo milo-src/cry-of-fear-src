@@ -69,6 +69,13 @@ def main():
     definition.write_text('LIBRARY RayTracedGL1\nEXPORTS\n'+'\n'.join(exports)+'\n')
     subprocess.run([str(lib), '/nologo', '/machine:x64', '/def:'+str(definition), '/out:'+str(libdir/'RayTracedGL1.lib')], check=True)
     env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8', VSLANG='1033', RTGL1_SDK_PATH=str(sdk), COF_REPO_ROOT=str(ROOT))
+    from prepare_rtx_shaders import prepare as prepare_shaders, verify as verify_shader
+    shaders=prepare_shaders()
+    run_waf(shaders,ROOT/'build/rtx-shaders',[],env)
+    fog_shader=ROOT/'build/rtx-shaders/CmPrepareFinal.comp.spv'
+    shader_destination=RUNTIME/'rt/shaders/CmPrepareFinal.comp.spv'
+    verify_shader(shader_destination,fog_shader)
+    shutil.copy2(fog_shader,shader_destination)
     nri = prepare_nri()
     run_waf(nri, ROOT/'build/nri', ['--msvc_version='+compiler,'--check-cxx-compiler=msvc'], env)
     shutil.copy2(ROOT/'build/nri/NRI.dll', RUNTIME/'NRI.dll')
@@ -118,7 +125,8 @@ def main():
     native={p.relative_to(RUNTIME).as_posix():sha(p) for p in RUNTIME.rglob('*') if p.suffix.lower() in ('.dll','.exe')}
     (RUNTIME/'rtx-build-manifest.json').write_text(json.dumps(dict(architecture='x64',build='Waf',
         xash_rt_commit='72234513ab02502f16a5fa7e0f4e6c6a5c52f5e8',package_url=PACKAGE_URL,
-        package_sha256=PACKAGE_SHA,files=native),indent=2)+'\n')
+        package_sha256=PACKAGE_SHA,files=native,
+        shaders={'rt/shaders/CmPrepareFinal.comp.spv':sha(shader_destination)}),indent=2)+'\n')
     from audit_rtx import audit
     audit()
     print('Built optional Vulkan RT runtime:',RUNTIME)
