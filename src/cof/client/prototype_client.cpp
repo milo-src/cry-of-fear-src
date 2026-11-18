@@ -4,6 +4,8 @@
 #include "cl_entity.h"
 #include <cstdlib>
 extern void CofInventoryDraw();
+extern void CofStatusHudDraw();
+extern void CofUiTestFrame();
 
 void CofPrototypeFrame(float time) {
     static cvar_t* smoke = nullptr;
@@ -13,9 +15,8 @@ void CofPrototypeFrame(float time) {
     static float before[3] = {};
     if (!smoke) smoke = gEngfuncs.pfnRegisterVariable("cof_smoketest", std::getenv("COF_SMOKETEST") ? "1" : "0", 0);
     if (first < 0.0f || time < first) { first = time; captured = false; movement_stage = 0; }
-    gEngfuncs.pfnDrawSetTextColor(0.8f, 0.85f, 0.85f);
-    gEngfuncs.pfnDrawConsoleString(16, 16, const_cast<char*>("COF reconstruction | map exploration prototype"));
-    gEngfuncs.pfnDrawConsoleString(16, 36, const_cast<char*>("WASD move | E interact | Tab inventory | 1-6 use item | F light | N noclip | Esc menu"));
+    CofUiTestFrame();
+    CofStatusHudDraw();
     CofInventoryDraw();
     if (smoke && smoke->value != 0 && !std::getenv("COF_DOORTEST") && !std::getenv("COF_INVENTORYTEST")) {
         cl_entity_t* player = gEngfuncs.GetLocalPlayer();

@@ -61,6 +61,15 @@ def main():
                 continue
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(file, destination)
+    # One-time migration from the old text-only prototype, which forced hud_draw=0.
+    # Later user changes to hud_draw remain persistent.
+    migration = target / '.cof-tga-hud-v1'
+    if not migration.exists():
+        config = target / 'config.cfg'
+        text = config.read_text(encoding='latin1')
+        text = re.sub(r'(?m)^hud_draw\s+"?0"?\s*$', 'hud_draw "1"', text)
+        config.write_text(text, encoding='latin1')
+        migration.write_text('Original TGA HUD enabled\n')
     # The shipped hud.txt header declares 211 entries but only 57 are present.
     hud = target / 'sprites/hud.txt'
     lines = hud.read_text(encoding='latin1').splitlines()

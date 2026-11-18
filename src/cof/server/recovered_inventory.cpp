@@ -6,62 +6,18 @@
 #include "player.h"
 #include "recovered_inventory.h"
 #include <string>
-#include <map>
+#include "item_descriptor.h"
 #include <cstdlib>
 
 namespace {
 int inventoryMessage;
 cvar_t difficulty = {"difficulty", "1", FCVAR_SERVER};
-using Descriptor = std::map<std::string, std::string>;
-
-// Bounded replacement for the original token parser (0x1004dbf0/0x100dff70).
-// Keep CP1251 display bytes intact; identifiers and resource paths are ASCII.
-bool Token(const std::string& data, size_t& pos, std::string& token) {
-    token.clear();
-    while (pos < data.size()) {
-        unsigned char ch = data[pos];
-        if (ch <= ' ') { ++pos; continue; }
-        if (data.compare(pos, 2, "//") == 0) {
-            while (pos < data.size() && data[pos] != '\n') ++pos;
-            continue;
-        }
-        break;
-    }
-    if (pos == data.size()) return false;
-    char ch = data[pos++];
-    if (ch == '"') {
-        while (pos < data.size() && data[pos] != '"') token += data[pos++];
-        if (pos == data.size()) { ++pos; return false; } // error, not clean EOF
-        ++pos;
-    } else if (ch == '{' || ch == '}') token += ch;
-    else {
-        token += ch;
-        while (pos < data.size() && static_cast<unsigned char>(data[pos]) > ' ' &&
-               data[pos] != '{' && data[pos] != '}') token += data[pos++];
-    }
-    if (token.size() > 4096) { pos = data.size() + 1; return false; }
-    return true;
-}
-
-bool ParseDescriptor(const std::string& data, Descriptor& result) {
-    result.clear();
-    size_t pos = 0;
-    std::string section, brace, key, value, end;
-    while (Token(data, pos, section)) {
-        if (!Token(data, pos, brace) || brace != "{" ||
-            !Token(data, pos, key) || key != "data" ||
-            !Token(data, pos, value) || !Token(data, pos, end) || end != "}" ||
-            result.count(section)) return false;
-        result[section] = value;
-    }
-    return pos == data.size() && !result.empty();
-}
+using cof::Descriptor;
+using cof::ParseDescriptor;
 
 bool ReadDescriptor(const char* path, Descriptor& result) {
     const std::string name = path ? path : "";
-    if (name.compare(0, 15, "inventoryitems/") != 0 || name.size() > 127 ||
-        name.find("..") != std::string::npos || name.find('\\') != std::string::npos ||
-        name.size() < 19 || name.substr(name.size() - 4) != ".txt") return false;
+    if (!cof::ValidDescriptorPath(name)) return false;
     int length = 0;
     byte* buffer = LOAD_FILE_FOR_ME(const_cast<char*>(path), &length);
     if (!buffer) return false;
@@ -96,30 +52,25 @@ bool AddKey(CBasePlayer* player, string_t description) { // 0x100dad40, non-weap
 }
 
 void CofInventoryPrecache() {
-    if (!inventoryMessage) inventoryMessage = REG_USER_MSG("CofInv", -1);
+    if (!inventoryMessage) inventoryMessage = REG_USER_MSG("Inventory", -1);
     if (!CVAR_GET_POINTER("difficulty")) CVAR_REGISTER(&difficulty);
     PRECACHE_SOUND("weapons/item_get.wav");
     PRECACHE_SOUND("inventory/inventory_no.wav");
     PRECACHE_SOUND("inventory/inventory_click.wav");
 }
 
-// Port UI protocol: one slot + ASCII map_name per message. Original VGUI protocol
-// also carries mode flags, and is deliberately not claimed compatible here.
+// Original UpdateSlot (0x100e4360): slot, resetImages, descriptor, three mode bytes.
+// This server currently implements ordinary six-slot single-player inventory.
 void CofInventorySync(CBasePlayer* player) {
     if (!inventoryMessage || !player) return;
     for (int slot = 1; slot <= 6; ++slot) {
-        Descriptor description;
-        std::string label;
-        if (player->m_cofInventory[slot]) {
-            if (ReadDescriptor(STRING(player->m_cofInventory[slot]), description))
-                label = description["map_name"];
-            if (label.empty()) label = "[unavailable item]";
-        }
-        // User messages have a fixed engine payload limit.
-        if (label.size() > 127) label.resize(127);
+        const char* path = player->m_cofInventory[slot] ? STRING(player->m_cofInventory[slot]) : "";
+        if (*path && !cof::ValidDescriptorPath(path)) path = "";
         MESSAGE_BEGIN(MSG_ONE, inventoryMessage, nullptr, player->pev);
         WRITE_BYTE(slot);
-        WRITE_STRING(label.c_str());
+        WRITE_BYTE(0);
+        WRITE_STRING(path);
+        WRITE_BYTE(0); WRITE_BYTE(0); WRITE_BYTE(0);
         MESSAGE_END();
     }
 }
@@ -166,12 +117,19 @@ bool CofInventoryCommand(CBasePlayer* player, const char* command) {
         CofInventorySync(player);
         return true;
     }
-    if (!FStrEq(command, "inventoryuse")) return false;
+    const bool equip = FStrEq(command, "inventoryequip");
+    if (!equip && !FStrEq(command, "inventoryuse")) return false;
     if (CMD_ARGC() == 2) {
         const char* argument = CMD_ARGV(1);
         // Six slots, no atoi overflow or accidental negative array index.
-        if (argument[0] >= '1' && argument[0] <= '6' && argument[1] == '\0')
-            CofInventoryUse(player, argument[0] - '0');
+        if (argument[0] >= '1' && argument[0] <= '6' && argument[1] == '\0') {
+            const int slot = argument[0] - '0';
+            Descriptor item;
+            // Original inventoryequip routes item_key to inventoryuse (0x100e4231).
+            if (!equip || (player && player->m_cofInventory[slot] &&
+                ReadDescriptor(STRING(player->m_cofInventory[slot]), item) && item["classname"] == "item_key"))
+                CofInventoryUse(player, slot);
+        }
     }
     return true;
 }

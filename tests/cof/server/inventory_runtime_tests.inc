@@ -125,7 +125,17 @@ void CofInventoryTestFrame() {
         player->pev->fixangle = 1;
         mapDoor->Use(player, player, USE_TOGGLE, 0);
         InventoryCheck(!mapDoor->pev->owner, "real_door_locked_before_key_use");
-        due = gpGlobals->time + 0.5f;
+        if (std::getenv("COF_UITEST")) {
+            const int staminaMsg = REG_USER_MSG("Stamina", 3);
+            const int capMsg = REG_USER_MSG("HealthCap", 1);
+            MESSAGE_BEGIN(MSG_ONE, staminaMsg, nullptr, player->pev);
+            WRITE_BYTE(40); WRITE_COORD(0); MESSAGE_END();
+            MESSAGE_BEGIN(MSG_ONE, capMsg, nullptr, player->pev);
+            WRITE_BYTE(1); MESSAGE_END();
+            player->pev->health = 65;
+            CLIENT_COMMAND(player->edict(), "cof_ui_test\n");
+        }
+        due = gpGlobals->time + (std::getenv("COF_UITEST") ? 1.5f : 0.5f);
         phase = 3;
     } else if (phase == 3 && gpGlobals->time > due) {
         if (std::getenv("COF_INVENTORYSAVE") && !saveChecked) {
@@ -134,7 +144,7 @@ void CofInventoryTestFrame() {
             phase = 40;
             return;
         }
-        CLIENT_COMMAND(player->edict(), "inventoryuse 1\n");
+        if (!std::getenv("COF_UITEST")) CLIENT_COMMAND(player->edict(), "inventoryuse 1\n");
         due = gpGlobals->time + 0.3f;
         phase = 4;
     } else if (phase == 4 && gpGlobals->time > due) {

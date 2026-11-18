@@ -75,13 +75,35 @@ def prepare():
     if anchor not in text:
         raise ValueError('Unexpected HUD source revision')
     text = text.replace(anchor, '\tm_iIntermission = intermission;\n\tCofPrototypeFrame(flTime);\n\n\t// if no redrawing')
+    # Replace HL-specific artwork, preserving messages/chat and other SDK infrastructure.
+    anchor = '\t\twhile( pList )\n\t\t{'
+    text = text.replace(anchor, anchor + '\n\t\t\tif (pList->p == &m_Health || pList->p == &m_Ammo || pList->p == &m_Battery ||\n'
+                        '\t\t\t    pList->p == &m_Flash || pList->p == &m_Train || pList->p == &m_AmmoSecondary) {\n'
+                        '\t\t\t\tpList = pList->pNext; continue;\n\t\t\t}')
     (target / 'cl_dll/hud_redraw.cpp').write_text(text)
     text = (original / 'cl_dll/cdll_int.cpp').read_text()
     anchor = 'void DLLEXPORT HUD_Init( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected HUD_Init source revision')
-    text = text.replace(anchor, 'extern void CofInventoryClientInit();\n' + anchor + '\n\tCofInventoryClientInit();')
+    text = '#include "ui_draw.h"\nextern void CofInventoryClientInit();\nextern void CofInventoryVidInit();\nextern void CofStatusHudInit();\n' + text
+    text = text.replace('\tgHUD.Init();', '\tgHUD.Init();\n\tCofInventoryClientInit();\n\tCofStatusHudInit();')
+    text = text.replace('\tgHUD.VidInit();', '\tgHUD.VidInit();\n\tCofUiVidInit();\n\tCofInventoryVidInit();')
     (target / 'cl_dll/cdll_int.cpp').write_text(text)
+    text = (original / 'cl_dll/input.cpp').read_text()
+    text = 'extern bool CofInventoryVisible();\nextern int CofInventoryKeyEvent(int, int, const char*);\n' + text
+    anchor = 'int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )\n{'
+    text = text.replace(anchor, anchor + '\n\tif (!CofInventoryKeyEvent(down, keynum, pszCurrentBinding)) return 0;')
+    anchor = 'void DLLEXPORT CL_CreateMove( float frametime, struct usercmd_s *cmd, int active )\n{'
+    text = text.replace(anchor, anchor + '\n\tfloat cofAngles[3];\n\tgEngfuncs.GetViewAngles(cofAngles);')
+    anchor = '\n}\n\n/*\n============\nCL_IsDead'
+    if anchor not in text:
+        raise ValueError('Unexpected CL_CreateMove source revision')
+    text = text.replace(anchor, '\n\tif (CofInventoryVisible()) {\n'
+                        '\t\tcmd->forwardmove = cmd->sidemove = cmd->upmove = 0;\n'
+                        '\t\tcmd->buttons = cmd->impulse = cmd->weaponselect = 0;\n'
+                        '\t\tgEngfuncs.SetViewAngles(cofAngles);\n'
+                        '\t\tVectorCopy(cofAngles, cmd->viewangles);\n\t}\n' + anchor)
+    (target / 'cl_dll/input.cpp').write_text(text)
     text = (original / 'dlls/client.cpp').read_text()
     anchor = 'void StartFrame( void )\n{'
     if anchor not in text:
@@ -97,15 +119,24 @@ def prepare():
     (target / 'dlls/client.cpp').write_text(text)
     for name in ('door_runtime_tests.inc', 'inventory_runtime_tests.inc'):
         shutil.copy2(ROOT / 'tests/cof/server' / name, target / 'dlls' / name)
+    shutil.copy2(ROOT / 'tests/cof/client/ui_runtime_tests.inc', target / 'cl_dll/ui_runtime_tests.inc')
     # Source ownership follows src/cof; the disposable SDK tree keeps its layout.
     # reference/ contains incomplete analysis models and must not enter either DLL.
     for side, folder, names in [
         ('server', 'dlls', ('prototype_entities.cpp', 'recovered_doors.cpp',
                             'recovered_inventory.cpp', 'recovered_inventory.h')),
-        ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp')),
+        ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp',
+                                'ui_draw.cpp', 'ui_draw.h', 'status_hud.cpp')),
     ]:
         for name in names:
             shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / name)
+    shutil.copy2(ROOT / 'src/cof/shared/item_descriptor.h', target / 'common/item_descriptor.h')
+    # Keep the complete vendored renderer ABI; adapt only its basic-type include to SDK types.
+    renderer = ROOT / 'external/xash3d-fwgs/common'
+    shutil.copy2(renderer / 'render_api.h', target / 'common/cof_render_api.h')
+    lightstyle = (renderer / 'lightstyle.h').read_text().replace('#include "xash3d_types.h"',
+        '// Basic types supplied by the HLSDK client headers.')
+    (target / 'common/lightstyle.h').write_text(lightstyle)
     text = (original / 'mod_options.txt').read_text()
     text = text.replace('GAMEDIR=valve', 'GAMEDIR=cryoffear')
     text = text.replace('CLIENT_WEAPONS=ON', 'CLIENT_WEAPONS=OFF')

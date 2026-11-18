@@ -17,9 +17,9 @@ The existing HLSDK and Xash3D sources remain in `external/hlsdk-portable/` and
 `external/xash3d-fwgs/`. Runtime configuration belongs in `runtime/`; build,
 staging and analysis scripts belong in `tools/`; evidence belongs in `analysis/`.
 
-There is no shared game implementation yet. When client/server protocol types or
-other common code are extracted, place them in `src/cof/shared/` and explicitly
-wire them into both build targets. Do not put server-only headers there.
+`shared/item_descriptor.h` contains the bounded descriptor parser used by both
+client and server. It is copied to the generated SDK common include directory.
+Do not put server-only headers there.
 
 `tools/prepare_game.py` lists the CoF source files for each target and copies
 them into SDK `dlls/` or `cl_dll/`; add new build files to the corresponding list.
