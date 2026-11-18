@@ -235,6 +235,19 @@ def main():
                 geometry=dict(frames=frames,samples=samples,unexpected_changes=changed)
             if args.interactive and not shots:raise RuntimeError('No window pixels captured')
             if args.renderer=='rtx':
+                # Runtime inputs only, not proof of pixel-level parity with
+                # GoldSrc. Protect authored darkness on every playable BSP.
+                policies=re.findall(r'COF_RTX_LIGHTING_POLICY menu=(\d) synthetic_night=(\d) sky_energy=([\d.]+) baked_fill=(\d+)',text)
+                for menu,night,sky,fills in policies:
+                    if int(night) or (menu=='0' and int(fills)):
+                        raise RuntimeError('Synthetic lighting re-enabled on a gameplay map')
+                exposures=re.findall(r'COF_RTX_EXPOSURE menu=(\d) min=([\d.]+) max=([\d.]+) fog_ambient=([\d.]+)',text)
+                for menu,low,high,ambient in exposures:
+                    if menu=='0' and (abs(float(low)-2)>.0001 or
+                        not 0<float(high)-float(low)<.002 or float(ambient)!=0):
+                        raise RuntimeError('Gameplay exposure/fog can reveal authored darkness')
+                if args.lighting and (not policies or not exposures):
+                    raise RuntimeError('Missing runtime lighting policy observations')
                 for name in ('vulkan-1.dll','RayTracedGL1.dll','NRI.dll','ref_gl.dll','client_amd64.dll'):
                     if not any(Path(p).name.lower()==name.lower() for p in modules):raise RuntimeError('Module not observed: '+name)
                 if not args.console_output and 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')

@@ -36,7 +36,8 @@
             gEngfuncs.Cvar_SetValue("rt_flsh_radius", .025f);
             gEngfuncs.Cvar_SetValue("rt_flsh_r", -.12f);
             gEngfuncs.Cvar_SetValue("rt_flsh_u", -.12f);
-            // Permit dark-adapted night exposure without flattening sunlit maps.
+            // Preserve the calibrated menu exposure. Gameplay overrides this
+            // range in rtx_atmosphere.inc to prevent revealing dark areas.
             gEngfuncs.Cvar_SetValue("rt_tnmp_ev100_min", .5f);
             gEngfuncs.Cvar_SetValue("rt_tnmp_ev100_max", 7.7f);
             gEngfuncs.Cvar_SetValue("rt_tnmp_saturation_r", .15f);

@@ -64,8 +64,6 @@ def prepare(target):
     replace('.position  = RT_VEC3( light_pos ),', '.position  = RT_VEC3( l->origin ),')
     replace('.angleInner   = 0,',
         '.angleInner   = DEG2RAD( RT_CVAR_TO_FLOAT( rt_flsh_angle ) * .35f ),')
-    replace('void RT_UploadAllLights( void )\n{',
-        'void RT_UploadAllLights( void )\n{\n    CofRTNightFill();')
     path.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_light_identity.h',target/'ref/gl/rtx_light_identity.h')
     # Keep an opt-in runtime regression check at the actual geometry boundary.

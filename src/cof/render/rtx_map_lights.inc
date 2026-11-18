@@ -5,33 +5,10 @@ typedef struct { char name[64]; RgColor4DPacked32 color; float power; } CofRTTex
 static CofRTTexlight cof_texlights[256];
 static int cof_texlight_count;
 float cof_rt_sky_origin[3], cof_rt_world_origin[3], cof_rt_sky_speed;
-float cof_rt_sky_energy = 1;
+float cof_rt_sky_energy = 0;
 qboolean cof_rt_has_sky;
 qboolean cof_rt_menu_scene;
-static qboolean cof_rt_open_sky;
 static int cof_rt_volume_light=-1;
-
-// Artistic RT fallback for outdoor maps without light_environment. A real
-// shadowed directional light keeps silhouettes readable; roofs still occlude
-// it. Never add it to the cinematic menu or maps that authored their own sun.
-static void CofRTNightFill(void)
-{
-    if (cof_rt_menu_scene || g_lights.sun_exists || !cof_rt_open_sky) return;
-    static cvar_t *setting;
-    if (!setting) setting=gEngfuncs.Cvar_Get("rt_night_fill","3",FCVAR_ARCHIVE,
-        "Outdoor RT night fill when no environment light exists; 0 disables");
-    float intensity=isfinite(setting->value) ? bound(0,setting->value,10) : 3;
-    if (intensity<=0) return;
-    RgDirectionalLightUploadInfo light={
-        .uniqueID=1, .isExportable=false,
-        .extra={.exists=true,.isVolumetric=cof_rt_volume_light<0},
-        .color=0, .intensity=intensity,
-        .direction={{-.350878f,.451129f,-.820940f}},
-        .angularDiameterDegrees=3,
-    };
-    light.color=rgUtilPackColorByte4D(156,183,220,255);
-    RG_CHECK(rgUploadDirectionalLight(rg_instance,&light));
-}
 
 static char *CofRTReadEntity(char *text, CofRTEntity *entity)
 {
@@ -125,12 +102,13 @@ void CofRTTexlightMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor,
         return;
     }
 }
-// Compiled bounce/ambient light has no corresponding entity on many GoldSrc
-// maps. Approximate it with sparse, fixed, shadow-casting soft lights. Only
-// constant style-0 floor samples qualify; switchable lights remain switchable.
+// Preserve the separately calibrated cinematic menu only. Turning baked
+// gameplay lightmap samples into new emitters lights areas the author left
+// dark and double-counts indirect light already calculated by the path tracer.
 // Positions and IDs are independent of camera/PVS and rebuilt only on map load.
 static int CofRTBakedFill(void)
 {
+    if (!cof_rt_menu_scene) return 0;
     cvar_t *setting=gEngfuncs.Cvar_Get("rt_baked_fill","1",FCVAR_ARCHIVE,
         "Baked ambient approximation, 0-2; takes effect on map reload");
     const float strength=isfinite(setting->value) ? bound(0,setting->value,2) : 1;
@@ -194,16 +172,12 @@ void RT_ParseStaticLightEntities(void)
     cof_texlight_count=0;
     cof_rt_has_sky=false;
     cof_rt_menu_scene=false;
-    cof_rt_open_sky=false;
     cof_rt_sky_speed=0;
-    cof_rt_sky_energy=1;
+    // A visible sky is not evidence of an authored environment light.
+    cof_rt_sky_energy=0;
     VectorClear(cof_rt_sky_origin);
     VectorClear(cof_rt_world_origin);
     if (!WORLDMODEL || !WORLDMODEL->entities) return;
-    for (int i=0;i<WORLDMODEL->nummodelsurfaces;++i)
-        if (WORLDMODEL->surfaces[WORLDMODEL->firstmodelsurface+i].flags & SURF_DRAWSKY) {
-            cof_rt_open_sky=true; break;
-        }
     CofRTEntity entity;
     char *text=WORLDMODEL->entities;
     int spots=0, points=0;
@@ -292,6 +266,8 @@ void RT_ParseStaticLightEntities(void)
             }
         }
     int fills=CofRTBakedFill();
+    gEngfuncs.Con_Printf("COF_RTX_LIGHTING_POLICY menu=%d synthetic_night=0 sky_energy=%.4f baked_fill=%d\n",
+        cof_rt_menu_scene,cof_rt_sky_energy,fills);
     gEngfuncs.Con_DPrintf("COF_RTX_ATMOSPHERE menu=%d volumetric_spot=%d sun=%d\n",
         cof_rt_menu_scene,cof_rt_volume_light,g_lights.sun_exists);
     gEngfuncs.Con_Printf("COF_RTX_MAP_LIGHTS %s points=%d spots=%d sun=%d texlights=%d baked_fill=%d\n",
