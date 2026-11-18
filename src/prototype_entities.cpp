@@ -3,9 +3,8 @@
 #include "util.h"
 #include "cbase.h"
 
-// The available maps contain info_player_start already. CoF-specific entity
-// behavior is deliberately left unresolved until recovered from evidence.
+// Evidence-guided CoF doors are implemented separately in recovered_doors.cpp.
 // Export an observable build identity without loading any original DLL.
 extern "C" DLLEXPORT const char* CofReconstructionBuild() {
-    return "cof-source-prototype-1";
+    return "cof-source-prototype-2-doors";
 }

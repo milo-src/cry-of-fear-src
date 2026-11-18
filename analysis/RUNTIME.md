@@ -4,6 +4,10 @@ The first Windows x86 map exploration prototype starts without loading original
 Cry of Fear DLLs. Build entry point: `build.bat`. Launch entry point: `launch.bat`.
 The engine and game are built by Waf. No CMake step is part of the build.
 
+This page records the initial launch milestone. A subsequent door recovery pass
+adds ordinary single-player transitions and controllers; see `doors/README.md`.
+The unsupported-class counts below describe the initial baseline, before that pass.
+
 ## Evidence
 
 - `analysis/local/smoke-c_sdkmap1.json`: exit code 0, rendered-frame marker,
@@ -60,7 +64,7 @@ are **not** recovered or validated by this launch milestone.
 
 ```powershell
 .\build.bat
-powershell -NoProfile -ExecutionPolicy Bypass -File tools/smoke.ps1
+pwsh -NoProfile -ExecutionPolicy Bypass -File tools/smoke.ps1
 python tools/audit_runtime.py
 .\launch.bat
 ```

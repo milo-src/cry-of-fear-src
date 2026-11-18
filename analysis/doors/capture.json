@@ -1,0 +1,1332 @@
+{
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "rea_export_evidence": "ev_d4edd1dd254aef37e75f3bdfb0bc60500eefa5ad1fbfdde88f14ec4baf91ead0",
+  "rea_selected_exports": "ev_6f5fa4be13a4dc9575c46a6994af29f9295eedc576de3f94e16c7bd8002b6513",
+  "method": "Static bounded GNU objdump and PE data reads; target not executed",
+  "limitations": [
+    "Semantic function labels except exports are analyst inferences.",
+    "Ranges may include alignment padding; not whole-program function discovery.",
+    "Vtable slot meanings inferred from code; only first 70 slots sampled.",
+    "Literal string candidates are not complete cross-references.",
+    "No original runtime or behavioral-equivalence validation."
+  ],
+  "objdump_version": "GNU objdump (Binutils for MinGW-W64 x86_64, built by Brecht Sanders, r2) 2.46.0.20260210",
+  "captures": [
+    {
+      "name": "factories",
+      "start": "0x10047eb0",
+      "end_exclusive": "0x10048030",
+      "file_offset": 291504,
+      "bytes_sha256": "b19407c1d3797f78e22a908e8ec2945a2d6f3a666fbd71047d45b004a2b548de",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10047eb0",
+        "--stop-address=0x10048030",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "SetDisabled",
+      "start": "0x10048030",
+      "end_exclusive": "0x10048040",
+      "file_offset": 291888,
+      "bytes_sha256": "ff81d05732edcf7b2868127289392d71c0aaf7876e42627d4711684213c8a6bb",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048030",
+        "--stop-address=0x10048040",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "EndGame",
+      "start": "0x10048040",
+      "end_exclusive": "0x10048070",
+      "file_offset": 291904,
+      "bytes_sha256": "4ee87889dec3c219da57a629490b62493db4814be21a9e3fbb5f227fdb6598e7",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048040",
+        "--stop-address=0x10048070",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "EndSequence",
+      "start": "0x10048070",
+      "end_exclusive": "0x10048540",
+      "file_offset": 291952,
+      "bytes_sha256": "29ab75bb569bcfa1a36a14dbbb9497a8903fffa8fb2aa9a63d8323f3650952ad",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048070",
+        "--stop-address=0x10048540",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "IsLocked",
+      "start": "0x10048540",
+      "end_exclusive": "0x10048550",
+      "file_offset": 293184,
+      "bytes_sha256": "cc24a0e6c14ebb8c50e1054c7116a03301aacc87c839b0ff857991e6c0949db1",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048540",
+        "--stop-address=0x10048550",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "KeyValue",
+      "start": "0x10048550",
+      "end_exclusive": "0x100488a0",
+      "file_offset": 293200,
+      "bytes_sha256": "7858fc80f4524d6e10a55a1d2cd530fbb4552567a0aeed914257db683d7b85c8",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048550",
+        "--stop-address=0x100488a0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "ObjectCaps",
+      "start": "0x100488a0",
+      "end_exclusive": "0x100488c0",
+      "file_offset": 294048,
+      "bytes_sha256": "883718dcb7400badd3350e54d3f3659065885dfbee37a3b765bad9b88c6057a0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100488a0",
+        "--stop-address=0x100488c0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "Precache",
+      "start": "0x100488c0",
+      "end_exclusive": "0x10048950",
+      "file_offset": 294080,
+      "bytes_sha256": "c7a1a4401042494f61a8a83f0e8328224bbdde78e7907482aedf124636e26cfd",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100488c0",
+        "--stop-address=0x10048950",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "Restore",
+      "start": "0x10048950",
+      "end_exclusive": "0x10048990",
+      "file_offset": 294224,
+      "bytes_sha256": "c7cff8304a5c85994c77f0a39b0e9b4af3a32b552c86616e963ab11fce1640c9",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048950",
+        "--stop-address=0x10048990",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "Save",
+      "start": "0x10048990",
+      "end_exclusive": "0x100489f0",
+      "file_offset": 294288,
+      "bytes_sha256": "325d584ac9c5ff454ceb3651e35b52fce8bac00a245f4a09a17853633abee418",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048990",
+        "--stop-address=0x100489f0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "nearby_entity_helper",
+      "start": "0x100489f0",
+      "end_exclusive": "0x10048ba0",
+      "file_offset": 294384,
+      "bytes_sha256": "263eecde63f0537035d2c175ef90e40adf766d9be042ca51b9d931b10c9711ff",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100489f0",
+        "--stop-address=0x10048ba0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "ExitChangeSpawn",
+      "start": "0x10048ba0",
+      "end_exclusive": "0x10048bd0",
+      "file_offset": 294816,
+      "bytes_sha256": "569f390a6d01f521db429b93d6e26baf7521f6f989fbb082e6b1dc58be6490b1",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048ba0",
+        "--stop-address=0x10048bd0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "Spawn",
+      "start": "0x10048bd0",
+      "end_exclusive": "0x10048c70",
+      "file_offset": 294864,
+      "bytes_sha256": "ab418230ba40397ecd24126523fc115bae2b35ffee390c4da924fc185415f3e2",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048bd0",
+        "--stop-address=0x10048c70",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "DisableSpawn",
+      "start": "0x10048c70",
+      "end_exclusive": "0x10048cb0",
+      "file_offset": 295024,
+      "bytes_sha256": "4c5b29148a0f957919e16015107f20d3460b6c30967d6fe12aeeb26fc3bf7fa5",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048c70",
+        "--stop-address=0x10048cb0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "StartSequence",
+      "start": "0x10048cb0",
+      "end_exclusive": "0x10048e40",
+      "file_offset": 295088,
+      "bytes_sha256": "b6c44146ff6424e0f68e07e348b754d92301771b05f753a9cd3310ed49ad3e19",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048cb0",
+        "--stop-address=0x10048e40",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "Unlock",
+      "start": "0x10048e40",
+      "end_exclusive": "0x10048ef0",
+      "file_offset": 295488,
+      "bytes_sha256": "dc44af270934337789a072ef964e57a8e7ac2822e03b936f397457a1d0b7d6f0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048e40",
+        "--stop-address=0x10048ef0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "ExitChangeUse",
+      "start": "0x10048ef0",
+      "end_exclusive": "0x10048f70",
+      "file_offset": 295664,
+      "bytes_sha256": "d1fa906edb7330dcba8bc6de7f6a866c36cbc7aaffe7f7fd0b4c3d2c7d24176d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048ef0",
+        "--stop-address=0x10048f70",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "Use",
+      "start": "0x10048f70",
+      "end_exclusive": "0x10049280",
+      "file_offset": 295792,
+      "bytes_sha256": "5f818141a474ea6503841ec5ddc786466e47877d76887b0200aacb1b27cf8487",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10048f70",
+        "--stop-address=0x10049280",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "DisableUse",
+      "start": "0x10049280",
+      "end_exclusive": "0x10049370",
+      "file_offset": 296576,
+      "bytes_sha256": "1d907556a2531c435c15c945ec53b262e018ba8d6ed68929f82e465a88b21f37",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10049280",
+        "--stop-address=0x10049370",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "export_thunks",
+      "start": "0x10049370",
+      "end_exclusive": "0x100493b0",
+      "file_offset": 296816,
+      "bytes_sha256": "307279fa8a0b6e334db02af196004e42b4cab9d994e917fb5e81f9ed50f58362",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10049370",
+        "--stop-address=0x100493b0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "ExitSpawn",
+      "start": "0x10102c40",
+      "end_exclusive": "0x10102c50",
+      "file_offset": 1056832,
+      "bytes_sha256": "15090b69e6ea1cc8ec27b7582b6985e4a3bad2867892cb31ad02253780a70e19",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10102c40",
+        "--stop-address=0x10102c50",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    },
+    {
+      "name": "think_delay_wrapper",
+      "start": "0x1000e1f0",
+      "end_exclusive": "0x1000e210",
+      "file_offset": 54768,
+      "bytes_sha256": "20f88c864b154c28f9ca3e88b3f87ac2f68e2fdbc3b16662b8425144facbd792",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e1f0",
+        "--stop-address=0x1000e210",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "stderr": ""
+    }
+  ],
+  "save_table_va": "0x10212480",
+  "save_fields": [
+    {
+      "name": "m_sMusic",
+      "type_id": 1,
+      "offset": "0x18c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_sLockedBy",
+      "type_id": 1,
+      "offset": "0x190",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_sLockedMsg",
+      "type_id": 1,
+      "offset": "0x194",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_sUnlockedMsg",
+      "type_id": 1,
+      "offset": "0x198",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_sProperTarget",
+      "type_id": 1,
+      "offset": "0x19c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_sUseUnlock",
+      "type_id": 1,
+      "offset": "0x1a0",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_fNextUse",
+      "type_id": 15,
+      "offset": "0x1a4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_iMusicFadeOut",
+      "type_id": 0,
+      "offset": "0x1a8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_iMusicFadeIn",
+      "type_id": 0,
+      "offset": "0x1ac",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_bSilentRoom",
+      "type_id": 12,
+      "offset": "0x188",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_bDisabled",
+      "type_id": 12,
+      "offset": "0x180",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "name": "m_iNewLevelDoorSound",
+      "type_id": 1,
+      "offset": "0x184",
+      "count": 1,
+      "flags": 0
+    }
+  ],
+  "vtables": {
+    "inter_door": {
+      "preferred_va": "0x101b0ab8",
+      "slots": [
+        "0x1000d590",
+        "0x10017110",
+        "0x1000e1f0",
+        "0x100171b0",
+        "0x1000d3b0",
+        "0x10017210",
+        "0x1000d450",
+        "0x1000d480",
+        "0x1000d470",
+        "0x1000dac0",
+        "0x1000d870",
+        "0x10048bd0",
+        "0x100488c0",
+        "0x10048550",
+        "0x10048990",
+        "0x10048950",
+        "0x100488a0",
+        "0x10017250",
+        "0x1000df80",
+        "0x100172a0",
+        "0x1000d570",
+        "0x1000d580",
+        "0x1000d9d0",
+        "0x101022c0",
+        "0x1008c390",
+        "0x100172b0",
+        "0x10017590",
+        "0x10017600",
+        "0x1000d420",
+        "0x1008c7e0",
+        "0x1000df00",
+        "0x1000df10",
+        "0x100102c0",
+        "0x1000d3e0",
+        "0x1000d3f0",
+        "0x1000d3d0",
+        "0x1000dfe0",
+        "0x1000da20",
+        "0x100101f0",
+        "0x1000db20",
+        "0x1000df70",
+        "0x10017630",
+        "0x1000e210",
+        "0x1000e270",
+        "0x1000e280",
+        "0x1000df60",
+        "0x1000db90",
+        "0x1000dad0",
+        "0x1000db00",
+        "0x1000dfa0",
+        "0x1000da30",
+        "0x10017660",
+        "0x1000db80",
+        "0x1000db70",
+        "0x1000e290",
+        "0x100176f0",
+        "0x1000e2a0",
+        "0x1000e2b0",
+        "0x10048f70",
+        "0x1000d400",
+        "0x1000dff0",
+        "0x1000e2d0",
+        "0x1000d640",
+        "0x1000d4a0",
+        "0x1000d5f0",
+        "0x1000d5a0",
+        "0x1000d430",
+        "0x1000da90",
+        "0x10088250",
+        "0x100882c0"
+      ]
+    },
+    "inter_door_disable": {
+      "preferred_va": "0x101b0e04",
+      "slots": [
+        "0x1000d590",
+        "0x10017110",
+        "0x1000e1f0",
+        "0x100171b0",
+        "0x1000d3b0",
+        "0x10017210",
+        "0x1000d450",
+        "0x1000d480",
+        "0x1000d470",
+        "0x1000dac0",
+        "0x1000d870",
+        "0x10048c70",
+        "0x1000df90",
+        "0x1000dba0",
+        "0x10018000",
+        "0x10017f30",
+        "0x1000df20",
+        "0x10017250",
+        "0x1000df80",
+        "0x100172a0",
+        "0x1000d570",
+        "0x1000d580",
+        "0x1000d9d0",
+        "0x1000d9e0",
+        "0x1008c390",
+        "0x100172b0",
+        "0x10017590",
+        "0x10017600",
+        "0x1000d420",
+        "0x1008c7e0",
+        "0x1000df00",
+        "0x1000df10",
+        "0x1000da10",
+        "0x1000d3e0",
+        "0x1000d3f0",
+        "0x1000d3d0",
+        "0x1000dfe0",
+        "0x1000da20",
+        "0x1000d880",
+        "0x1000db20",
+        "0x1000df70",
+        "0x10017630",
+        "0x1000e210",
+        "0x1000e270",
+        "0x1000e280",
+        "0x1000df60",
+        "0x1000db90",
+        "0x1000dad0",
+        "0x1000db00",
+        "0x1000dfa0",
+        "0x1000da30",
+        "0x10017660",
+        "0x1000db80",
+        "0x1000db70",
+        "0x1000e290",
+        "0x100176f0",
+        "0x1000e2a0",
+        "0x1000e2b0",
+        "0x10049280",
+        "0x1000d400",
+        "0x1000dff0",
+        "0x1000e2d0",
+        "0x1000d640",
+        "0x1000d4a0",
+        "0x1000d5f0",
+        "0x1000d5a0",
+        "0x1000d430",
+        "0x1000da90",
+        "0x10088250",
+        "0x100882c0"
+      ]
+    },
+    "inter_door_exit": {
+      "preferred_va": "0x101a249c",
+      "slots": [
+        "0x1000d590",
+        "0x10017110",
+        "0x1000e1f0",
+        "0x100171b0",
+        "0x1000d3b0",
+        "0x10017210",
+        "0x1000d450",
+        "0x1000d480",
+        "0x1000d470",
+        "0x1000dac0",
+        "0x1000d870",
+        "0x10102c40",
+        "0x1000df90",
+        "0x1000dba0",
+        "0x10018000",
+        "0x10017f30",
+        "0x1000df40",
+        "0x10017250",
+        "0x1000df80",
+        "0x100172a0",
+        "0x1000d570",
+        "0x1000d580",
+        "0x1000d9d0",
+        "0x1000d9e0",
+        "0x1008c390",
+        "0x100172b0",
+        "0x10017590",
+        "0x10017600",
+        "0x1000d420",
+        "0x1008c7e0",
+        "0x1000df00",
+        "0x1000df10",
+        "0x1000da10",
+        "0x1000d3e0",
+        "0x1000d3f0",
+        "0x1000d3d0",
+        "0x1000dfe0",
+        "0x1000da20",
+        "0x1000d880",
+        "0x1000db20",
+        "0x1000df70",
+        "0x10017630",
+        "0x1000e210",
+        "0x1000e270",
+        "0x1000e280",
+        "0x1000df60",
+        "0x1000db90",
+        "0x1000dad0",
+        "0x1000db00",
+        "0x1000dfa0",
+        "0x1000da30",
+        "0x10017660",
+        "0x1000db80",
+        "0x1000db70",
+        "0x1000e290",
+        "0x100176f0",
+        "0x1000e2a0",
+        "0x1000e2b0",
+        "0x1000e2e0",
+        "0x1000d400",
+        "0x1000dff0",
+        "0x1000e2d0",
+        "0x1000d640",
+        "0x1000d4a0",
+        "0x1000d5f0",
+        "0x1000d5a0",
+        "0x1000d430",
+        "0x1000da90",
+        "0x10088250",
+        "0x100882c0"
+      ]
+    },
+    "cof_inter_door_exitchange": {
+      "preferred_va": "0x101b0f24",
+      "slots": [
+        "0x1000d590",
+        "0x10017110",
+        "0x1000e1f0",
+        "0x100171b0",
+        "0x1000d3b0",
+        "0x10017210",
+        "0x1000d450",
+        "0x1000d480",
+        "0x1000d470",
+        "0x1000dac0",
+        "0x1000d870",
+        "0x10048ba0",
+        "0x1000df90",
+        "0x1000dba0",
+        "0x10018000",
+        "0x10017f30",
+        "0x1000df20",
+        "0x10017250",
+        "0x1000df80",
+        "0x100172a0",
+        "0x1000d570",
+        "0x1000d580",
+        "0x1000d9d0",
+        "0x1000d9e0",
+        "0x1008c390",
+        "0x100172b0",
+        "0x10017590",
+        "0x10017600",
+        "0x1000d420",
+        "0x1008c7e0",
+        "0x1000df00",
+        "0x1000df10",
+        "0x1000da10",
+        "0x1000d3e0",
+        "0x1000d3f0",
+        "0x1000d3d0",
+        "0x1000dfe0",
+        "0x1000da20",
+        "0x1000d880",
+        "0x1000db20",
+        "0x1000df70",
+        "0x10017630",
+        "0x1000e210",
+        "0x1000e270",
+        "0x1000e280",
+        "0x1000df60",
+        "0x1000db90",
+        "0x1000dad0",
+        "0x1000db00",
+        "0x1000dfa0",
+        "0x1000da30",
+        "0x10017660",
+        "0x1000db80",
+        "0x1000db70",
+        "0x1000e290",
+        "0x100176f0",
+        "0x1000e2a0",
+        "0x1000e2b0",
+        "0x10048ef0",
+        "0x1000d400",
+        "0x1000dff0",
+        "0x1000e2d0",
+        "0x1000d640",
+        "0x1000d4a0",
+        "0x1000d5f0",
+        "0x1000d5a0",
+        "0x1000d430",
+        "0x1000da90",
+        "0x10088250",
+        "0x100882c0"
+      ]
+    }
+  },
+  "entvars_field_table_excerpt": [
+    {
+      "record_va": "0x1021ac40",
+      "name": "mins",
+      "type_id": 7,
+      "offset": "0xdc",
+      "count": 1,
+      "flags": 1
+    },
+    {
+      "record_va": "0x1021ac50",
+      "name": "maxs",
+      "type_id": 7,
+      "offset": "0xe8",
+      "count": 1,
+      "flags": 1
+    },
+    {
+      "record_va": "0x1021ac60",
+      "name": "size",
+      "type_id": 7,
+      "offset": "0xf4",
+      "count": 1,
+      "flags": 1
+    },
+    {
+      "record_va": "0x1021ac70",
+      "name": "ltime",
+      "type_id": 15,
+      "offset": "0x100",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ac80",
+      "name": "nextthink",
+      "type_id": 15,
+      "offset": "0x104",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ac90",
+      "name": "solid",
+      "type_id": 10,
+      "offset": "0x10c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aca0",
+      "name": "movetype",
+      "type_id": 10,
+      "offset": "0x108",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021acb0",
+      "name": "skin",
+      "type_id": 10,
+      "offset": "0x110",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021acc0",
+      "name": "body",
+      "type_id": 10,
+      "offset": "0x114",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021acd0",
+      "name": "effects",
+      "type_id": 10,
+      "offset": "0x118",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ace0",
+      "name": "gravity",
+      "type_id": 0,
+      "offset": "0x11c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021acf0",
+      "name": "friction",
+      "type_id": 0,
+      "offset": "0x120",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad00",
+      "name": "light_level",
+      "type_id": 0,
+      "offset": "0x124",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad10",
+      "name": "frame",
+      "type_id": 0,
+      "offset": "0x134",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad20",
+      "name": "scale",
+      "type_id": 0,
+      "offset": "0x148",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad30",
+      "name": "sequence",
+      "type_id": 10,
+      "offset": "0x12c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad40",
+      "name": "animtime",
+      "type_id": 15,
+      "offset": "0x138",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad50",
+      "name": "framerate",
+      "type_id": 0,
+      "offset": "0x13c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad60",
+      "name": "controller",
+      "type_id": 10,
+      "offset": "0x140",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad70",
+      "name": "blending",
+      "type_id": 10,
+      "offset": "0x144",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad80",
+      "name": "rendermode",
+      "type_id": 10,
+      "offset": "0x14c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ad90",
+      "name": "renderamt",
+      "type_id": 0,
+      "offset": "0x150",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ada0",
+      "name": "rendercolor",
+      "type_id": 7,
+      "offset": "0x154",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021adb0",
+      "name": "renderfx",
+      "type_id": 10,
+      "offset": "0x160",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021adc0",
+      "name": "health",
+      "type_id": 0,
+      "offset": "0x164",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021add0",
+      "name": "frags",
+      "type_id": 0,
+      "offset": "0x168",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ade0",
+      "name": "weapons",
+      "type_id": 10,
+      "offset": "0x16c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021adf0",
+      "name": "takedamage",
+      "type_id": 0,
+      "offset": "0x170",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae00",
+      "name": "deadflag",
+      "type_id": 0,
+      "offset": "0x174",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae10",
+      "name": "view_ofs",
+      "type_id": 7,
+      "offset": "0x178",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae20",
+      "name": "button",
+      "type_id": 10,
+      "offset": "0x184",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae30",
+      "name": "impulse",
+      "type_id": 10,
+      "offset": "0x188",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae40",
+      "name": "chain",
+      "type_id": 6,
+      "offset": "0x18c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae50",
+      "name": "dmg_inflictor",
+      "type_id": 6,
+      "offset": "0x190",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae60",
+      "name": "enemy",
+      "type_id": 6,
+      "offset": "0x194",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae70",
+      "name": "aiment",
+      "type_id": 6,
+      "offset": "0x198",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae80",
+      "name": "owner",
+      "type_id": 6,
+      "offset": "0x19c",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021ae90",
+      "name": "groundentity",
+      "type_id": 6,
+      "offset": "0x1a0",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aea0",
+      "name": "spawnflags",
+      "type_id": 10,
+      "offset": "0x1a4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aeb0",
+      "name": "flags",
+      "type_id": 0,
+      "offset": "0x1a8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aec0",
+      "name": "colormap",
+      "type_id": 10,
+      "offset": "0x1ac",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aed0",
+      "name": "team",
+      "type_id": 10,
+      "offset": "0x1b0",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aee0",
+      "name": "max_health",
+      "type_id": 0,
+      "offset": "0x1b4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aef0",
+      "name": "teleport_time",
+      "type_id": 15,
+      "offset": "0x1b8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af00",
+      "name": "armortype",
+      "type_id": 0,
+      "offset": "0x1bc",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af10",
+      "name": "armorvalue",
+      "type_id": 0,
+      "offset": "0x1c0",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af20",
+      "name": "waterlevel",
+      "type_id": 10,
+      "offset": "0x1c4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af30",
+      "name": "watertype",
+      "type_id": 10,
+      "offset": "0x1c8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af40",
+      "name": "target",
+      "type_id": 1,
+      "offset": "0x1cc",
+      "count": 1,
+      "flags": 1
+    },
+    {
+      "record_va": "0x1021af50",
+      "name": "targetname",
+      "type_id": 1,
+      "offset": "0x1d0",
+      "count": 1,
+      "flags": 1
+    },
+    {
+      "record_va": "0x1021af60",
+      "name": "netname",
+      "type_id": 1,
+      "offset": "0x1d4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af70",
+      "name": "message",
+      "type_id": 1,
+      "offset": "0x1d8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af80",
+      "name": "dmg_take",
+      "type_id": 0,
+      "offset": "0x1dc",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021af90",
+      "name": "dmg_save",
+      "type_id": 0,
+      "offset": "0x1e0",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021afa0",
+      "name": "dmg",
+      "type_id": 0,
+      "offset": "0x1e4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021afb0",
+      "name": "dmgtime",
+      "type_id": 15,
+      "offset": "0x1e8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021afc0",
+      "name": "noise",
+      "type_id": 17,
+      "offset": "0x1ec",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021afd0",
+      "name": "noise1",
+      "type_id": 17,
+      "offset": "0x1f0",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021afe0",
+      "name": "noise2",
+      "type_id": 17,
+      "offset": "0x1f4",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021aff0",
+      "name": "noise3",
+      "type_id": 17,
+      "offset": "0x1f8",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021b000",
+      "name": "speed",
+      "type_id": 0,
+      "offset": "0x1fc",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021b010",
+      "name": "air_finished",
+      "type_id": 15,
+      "offset": "0x200",
+      "count": 1,
+      "flags": 0
+    },
+    {
+      "record_va": "0x1021b020",
+      "name": "pain_finished",
+      "type_id": 15,
+      "offset": "0x204",
+      "count": 1,
+      "flags": 0
+    }
+  ],
+  "literal_ascii_candidates": {
+    "0x101a2130": "player",
+    "0x101b0cb8": "map c_game_menu1\n",
+    "0x101b0ccc": "No PLAYER!\n",
+    "0x101b0cd8": "closegame1",
+    "0x101b0ce4": "End of apartment demo chapter!",
+    "0x101b0d04": "closegame2",
+    "0x101b0d10": "End of city demo chapter!",
+    "0x101b0d2c": "closegame3",
+    "0x101b0d38": "End of subway demo chapter!",
+    "0x101b0d54": "closegame4",
+    "0x101b0d60": "End of forest demo chapter!",
+    "0x101b0d7c": "endingcheck",
+    "0x101b0d90": "xit1",
+    "0x101b0d88": "ending_exit1",
+    "0x101b0da0": "xit2",
+    "0x101b0d98": "ending_exit2",
+    "0x101b0db0": "xit3",
+    "0x101b0da8": "ending_exit3",
+    "0x101b0dc0": "xit4",
+    "0x101b0db8": "ending_exit4",
+    "0x101b0dd0": "xit5",
+    "0x101b0dc8": "ending_exit5",
+    "0x101b0dd8": "No TARGET!\n",
+    "0x101b0de4": "No USER!\n",
+    "0x101b0be4": "opensound",
+    "0x101b0bf0": "closesound",
+    "0x101b0bfc": "music",
+    "0x101a5744": "lockedby",
+    "0x101a5750": "lockedmsg",
+    "0x101a575c": "lockedsnd",
+    "0x101a5768": "unlockedsnd",
+    "0x101a5774": "unlockedmsg",
+    "0x101a5780": "propertarget",
+    "0x101b0c04": "useunlock",
+    "0x101b0c10": "musicfadein",
+    "0x101b0c1c": "musicfadeout",
+    "0x101b0c2c": "silentroom",
+    "0x101b0c38": "newlevelsnd",
+    "0x101b0bd8": "CInterDoor",
+    "0x101b0df0": "monster_spitter",
+    "0x101a60d8": "monster_",
+    "0x101a60e4": "monster_generic",
+    "0x101b0c44": "unlockablesdoor",
+    "0x101b0c84": "inter_door"
+  }
+}

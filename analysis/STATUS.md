@@ -5,6 +5,11 @@ Xash3D/HLSDK, with no original game DLLs. See `RUNTIME.md` for observed startup,
 movement, module audit and the distinction between SDK prototype behavior and
 recovered original code. This does not complete the reconstruction below.
 
+Next milestone: ordinary single-player interaction doors and their controllers
+are now ported from bounded static evidence and tested in our runtime. See
+`doors/README.md` for 22 captures, original field metadata, all-map entity
+inventory, runtime checks and unresolved inventory/music/co-op behavior.
+
 ## Target identity
 
 Local installation: `D:/Steam/steamapps/common/Cry of Fear`.

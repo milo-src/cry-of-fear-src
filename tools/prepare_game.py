@@ -56,7 +56,15 @@ def prepare():
         raise ValueError('Unexpected HUD source revision')
     text = text.replace(anchor, '\tm_iIntermission = intermission;\n\tCofPrototypeFrame(flTime);\n\n\t// if no redrawing')
     (target / 'cl_dll/hud_redraw.cpp').write_text(text)
-    for name, folder in [('prototype_client.cpp', 'cl_dll'), ('prototype_entities.cpp', 'dlls')]:
+    text = (original / 'dlls/client.cpp').read_text()
+    anchor = 'void StartFrame( void )\n{'
+    if anchor not in text:
+        raise ValueError('Unexpected StartFrame source revision')
+    text = text.replace(anchor, 'extern void CofDoorTestFrame();\n' + anchor + '\n\tCofDoorTestFrame();')
+    (target / 'dlls/client.cpp').write_text(text)
+    shutil.copy2(ROOT / 'tests/door_runtime_tests.inc', target / 'dlls/door_runtime_tests.inc')
+    for name, folder in [('prototype_client.cpp', 'cl_dll'), ('prototype_entities.cpp', 'dlls'),
+                         ('recovered_doors.cpp', 'dlls')]:
         shutil.copy2(ROOT / 'src' / name, target / folder / name)
     text = (original / 'mod_options.txt').read_text()
     text = text.replace('GAMEDIR=valve', 'GAMEDIR=cryoffear')

@@ -15,7 +15,7 @@ void CofPrototypeFrame(float time) {
     gEngfuncs.pfnDrawSetTextColor(0.8f, 0.85f, 0.85f);
     gEngfuncs.pfnDrawConsoleString(16, 16, const_cast<char*>("COF reconstruction | map exploration prototype"));
     gEngfuncs.pfnDrawConsoleString(16, 36, const_cast<char*>("WASD move | Mouse look | Space jump | Ctrl crouch | F light | N noclip | Esc menu"));
-    if (smoke && smoke->value != 0) {
+    if (smoke && smoke->value != 0 && !std::getenv("COF_DOORTEST")) {
         cl_entity_t* player = gEngfuncs.GetLocalPlayer();
         if (player && time - first > 2 && movement_stage == 0) {
             for (int i = 0; i < 3; ++i) before[i] = player->origin[i];
