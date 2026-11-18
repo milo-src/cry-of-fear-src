@@ -1,0 +1,153 @@
+/*
+sys_win.c - posix system utils
+Copyright (C) 2019 a1batross
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+*/
+
+#include <unistd.h> // fork
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <signal.h>
+#include "platform/platform.h"
+#include "menu_int.h"
+
+#if !XASH_ANDROID && !XASH_NSWITCH && !XASH_PSVITA
+void Platform_ShellExecute( const char *path, const char *parms )
+{
+	const char *argv[] = { OPEN_COMMAND, path, NULL };
+	pid_t id = fork();
+
+	if( id == 0 )
+	{
+		execvp( OPEN_COMMAND, (char **)argv );
+		fprintf( stderr, "error opening %s %s", OPEN_COMMAND, path );
+		exit( 1 );
+	}
+}
+#endif // !XASH_ANDROID && !XASH_NSWITCH && !XASH_PSVITA
+
+void Posix_Daemonize( void )
+{
+	if( Sys_CheckParm( "-daemonize" ))
+	{
+#if XASH_POSIX && defined(_POSIX_VERSION) && !defined(XASH_MOBILE_PLATFORM)
+		pid_t daemon = fork();
+
+		if( daemon < 0 )
+		{
+			Host_Error( "fork() failed: %s\n", strerror( errno ) );
+		}
+
+		if( daemon > 0 )
+		{
+			// parent
+			Con_Reportf( "Child pid: %ld\n", (long)daemon );
+			exit( 0 );
+		}
+		else
+		{
+			// don't be closed by parent
+			if( setsid() < 0 )
+			{
+				Host_Error( "setsid() failed: %s\n", strerror( errno ) );
+			}
+
+			// set permissions
+			umask( 0 );
+
+			// engine will still use stdin/stdout,
+			// so just redirect them to /dev/null
+			close( STDIN_FILENO );
+			close( STDOUT_FILENO );
+			close( STDERR_FILENO );
+			open("/dev/null", O_RDONLY); // becomes stdin
+			open("/dev/null", O_RDWR); // stdout
+			open("/dev/null", O_RDWR); // stderr
+
+			// fallthrough
+		}
+#elif defined(XASH_MOBILE_PLATFORM)
+		Sys_Error( "Can't run in background on mobile platforms!" );
+#else
+		Sys_Error( "Daemonize not supported on this platform!" );
+#endif
+	}
+
+}
+
+static void Posix_SigtermCallback( int signal )
+{
+	string reason;
+	Q_snprintf( reason, sizeof( reason ), "caught signal %d", signal );
+	Sys_Quit( reason );
+}
+
+void Posix_SetupSigtermHandling( void )
+{
+#if !XASH_PSVITA
+	struct sigaction act = { 0 };
+	act.sa_handler = Posix_SigtermCallback;
+	act.sa_flags = 0;
+	sigaction( SIGTERM, &act, NULL );
+#endif
+}
+
+#if XASH_TIMER == TIMER_POSIX
+double Platform_DoubleTime( void )
+{
+	static qboolean s_ClockInit;
+	static time_t s_ClockStart;
+	struct timespec ts;
+#if XASH_IRIX
+	clock_gettime( CLOCK_SGI_CYCLE, &ts );
+#elif defined( CLOCK_MONOTONIC )
+	clock_gettime( CLOCK_MONOTONIC, &ts );
+#else
+	struct timeval tv;
+	gettimeofday( &tv, NULL );
+	ts.tv_sec  = tv.tv_sec;
+	ts.tv_nsec = tv.tv_usec * 1000;
+#endif
+
+	if( !s_ClockInit )
+	{
+		s_ClockStart = ts.tv_sec;
+		s_ClockInit = true;
+	}
+
+	return (double)( ts.tv_sec - s_ClockStart ) + (double) ts.tv_nsec/1000000000.0;
+}
+
+void Platform_Sleep( int msec )
+{
+	usleep( msec * 1000 );
+}
+#endif // XASH_TIMER == TIMER_POSIX
+
+#if defined( HAVE_GETRUSAGE )
+#include <sys/resource.h>
+
+double Posix_GetCPUTime( void )
+{
+	struct rusage usage;
+
+	if( getrusage( RUSAGE_SELF, &usage ) != 0 )
+		return 0.0;
+
+	return usage.ru_utime.tv_sec + usage.ru_utime.tv_usec * 1e-6
+		+ usage.ru_stime.tv_sec + usage.ru_stime.tv_usec * 1e-6;
+}
+#endif // HAVE_GETRUSAGE
+

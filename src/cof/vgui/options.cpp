@@ -4,11 +4,13 @@
 #include "ui.h"
 #include "enginecallback_menu.h"
 #include "keydefs.h"
+#include "renderer_settings.h"
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <map>
 #include <sstream>
+#include <functional>
 
 namespace cof { namespace vgui {
 namespace {
@@ -75,6 +77,29 @@ std::vector<AdvancedOption> ReadAdvanced() {
 struct Value { std::string original,draft; };
 struct Association { std::string cvar; bool negative=false; std::vector<std::string> values; };
 struct KeyAction { std::string command,label; };
+class RTXConfirmation: public Dialog {
+public:
+    std::function<void()> confirmed;
+    void Open() override {
+        title="Включить RTX?";bounds={(ViewWidth()-440)/2,(ViewHeight()-204)/2,440,204};controls.clear();
+        const char* lines[]={"Вы уверены, что хотите включить трассировку?",
+            "Игра будет использовать Vulkan и трассировку лучей.",
+            "Нужна видеокарта с аппаратной трассировкой.","Потребуется перезапустить игру."};
+        for(int i=0;i<4;++i){Control c;c.text=lines[i];c.bounds={14,36+i*24,412,22};controls.push_back(c);}
+        Control yes;yes.id="ConfirmRTX";yes.text="Включить";yes.kind=Kind::Button;yes.bounds={224,166,96,24};controls.push_back(yes);
+        Control no;no.id="Cancel";no.text="Отмена";no.kind=Kind::Button;no.bounds={328,166,96,24};controls.push_back(no);Focus("Cancel");
+    }
+    void Command(const std::string& id) override {
+        if(id=="ConfirmRTX"){auto callback=confirmed;Close(*this);if(callback)callback();return;}
+        Dialog::Command(id);
+    }
+    void Paint() override {
+        // A modal confirmation must hide the settings text beneath it even
+        // when the shipped scheme uses translucent frame backgrounds.
+        Fill(bounds,0xff151515);Dialog::Paint();
+    }
+};
+RTXConfirmation rtxConfirmation;
 class OptionsDialog: public Dialog {
     int page=0,advancedScroll=0,captureRow=-1;
     std::map<std::string,Value> values;
@@ -85,6 +110,7 @@ class OptionsDialog: public Dialog {
     std::vector<int> videoModes;
     int selectedMode=-1,originalMode=-1,selectedFullscreen=0,originalFullscreen=0,selectedAspect=0;
     std::string status;
+    RendererSettings rendererOriginal,rendererDraft;
     Value& ValueFor(const std::string& name,const std::string& fallback="0") {
         auto found=values.find(name); if(found!=values.end())return found->second;
         const char* current=EngFuncs::GetCvarString(name.c_str());
@@ -96,13 +122,14 @@ class OptionsDialog: public Dialog {
         Value v;v.original=v.draft=value;return values.emplace(name,v).first->second;
     }
     bool Dirty() const {
+        if(rendererOriginal.enabled!=rendererDraft.enabled||rendererOriginal.profile!=rendererDraft.profile)return true;
         for(const auto& v:values)if(v.second.original!=v.second.draft)return true;
         return originalKeys!=draftKeys||originalMode!=selectedMode||originalFullscreen!=selectedFullscreen;
     }
     void Buttons() {
-        const char* tabs[]={"#GameUI_Keyboard","#GameUI_Mouse","#GameUI_Audio","#GameUI_Video","#GameUI_Voice","#GameUI_AdvancedNoEllipsis"};
+        const char* tabs[]={"#GameUI_Keyboard","#GameUI_Mouse","#GameUI_Audio","#GameUI_Video","#GameUI_Voice","#GameUI_AdvancedNoEllipsis","RTX"};
         int tabX=8;
-        for(int i=0;i<6;++i) {
+        for(int i=0;i<7;++i) {
             Control c;c.id="Tab"+std::to_string(i);c.text=tabs[i];c.kind=Kind::Button;
             int width=std::max(44,TextWidth(Localize(tabs[i]))+16);
             c.bounds={tabX,28,width,24};tabX+=width;c.checked=i==page;controls.push_back(c);
@@ -204,10 +231,24 @@ class OptionsDialog: public Dialog {
             associations[c.id]=association;controls.push_back(c);
         }
     }
+    void RTXPage() {
+        Control enabled;enabled.id="RTXEnabled";enabled.kind=Kind::Check;enabled.text="Включить RTX (Vulkan)";
+        enabled.checked=rendererDraft.enabled!=0;enabled.enabled=RTXAvailable()||enabled.checked;enabled.bounds={12,14,472,24};controls.push_back(enabled);
+        Control label;label.text="Профиль качества";label.bounds={12,58,200,22};controls.push_back(label);
+        Control profile;profile.id="RTXProfile";profile.kind=Kind::Combo;profile.choices={"Производительность","Баланс","Качество"};
+        profile.selected=rendererDraft.profile;profile.bounds={222,58,260,24};controls.push_back(profile);
+        const char* lines[]={"Трассировка света, мягкие тени и отражения.",
+            "Вода с отражением и преломлением света.",
+            "DLSS / FSR выбирается по возможностям видеокарты.",
+            "Генерация кадров выключена.","Потребуется перезапустить игру."};
+        for(int i=0;i<5;++i){Control c;c.id="RTXInfo"+std::to_string(i);c.text=lines[i];c.bounds={12,106+24*i,472,22};controls.push_back(c);}
+        Control current;current.text=RTXActive()?"Сейчас: Vulkan / RTX":"Сейчас: обычный рендер (OpenGL)";current.bounds={12,242,472,22};controls.push_back(current);
+        if(!RTXAvailable()){Control c;c.text="RTX не собран. Запустите build-rtx.bat и start-game.bat.";c.bounds={12,270,472,22};controls.push_back(c);}
+    }
     void BuildPage() {
         associations.clear();controls.clear();focus=-1;
         const char* resources[]={"Keyboard","Mouse","Audio","Video","Voice"};
-        if(page==5)AdvancedPage();else LoadControls(std::string("resource/OptionsSub")+resources[page]+".res");
+        if(page==6)RTXPage();else if(page==5)AdvancedPage();else LoadControls(std::string("resource/OptionsSub")+resources[page]+".res");
         if(page==0){RefreshKeyList();if(Find("Defaults"))Find("Defaults")->enabled=!FileText("gfx/shell/kb_def.lst").empty();}
         if(page==1) {
             Bind("ReverseMouse","m_pitch",Kind::Check,0,1,true);Bind("MouseLook","$mlook",Kind::Check);
@@ -244,7 +285,12 @@ class OptionsDialog: public Dialog {
         for(auto& c:controls){c.bounds.x+=8;c.bounds.y+=54;if(c.clip.w>0){c.clip.x+=8;c.clip.y+=54;}}
         Buttons();
     }
-    void Apply() {
+    bool Apply() {
+        if(rendererOriginal.enabled!=rendererDraft.enabled||rendererOriginal.profile!=rendererDraft.profile) {
+            if(!WriteRendererSettings(rendererDraft)){status="Не удалось сохранить настройки RTX.";BuildPage();return false;}
+            rendererOriginal=rendererDraft;
+            status="Сохранено. Потребуется перезапустить игру.";
+        }
         auto sensitivity=values.find("sensitivity");
         if(sensitivity!=values.end()&&sensitivity->second.draft!=sensitivity->second.original) {
             char* end=nullptr;float value=std::strtof(sensitivity->second.draft.c_str(),&end);
@@ -277,11 +323,13 @@ class OptionsDialog: public Dialog {
         }
         originalMode=selectedMode;originalFullscreen=selectedFullscreen;
         EngFuncs::ClientCmd(false,"host_writeconfig\n");if(Find("Apply"))Find("Apply")->enabled=false;
+        return true;
     }
 public:
     void Open() override {
         title="#GameUI_Options";bounds={(ViewWidth()-512)/2,(ViewHeight()-406)/2,512,406};
         page=0;advancedScroll=0;captureRow=-1;values.clear();status.clear();advanced=ReadAdvanced();ReadKeys();
+        rendererOriginal=rendererDraft=ReadRendererSettings();
         originalMode=selectedMode=int(EngFuncs::GetCvarFloat("vid_mode"));
         originalFullscreen=selectedFullscreen=EngFuncs::GetCvarFloat("fullscreen")!=0;
         int w=ViewWidth(),h=ViewHeight();const char* mode=EngFuncs::GetModeString(selectedMode);
@@ -290,6 +338,15 @@ public:
     }
     void Changed(Control& c) override {
         if(!c.enabled)return;
+        if(c.id=="RTXEnabled") {
+            if(c.checked&&!rendererDraft.enabled) {
+                c.checked=false;
+                rtxConfirmation.confirmed=[this](){rendererDraft.enabled=1;BuildPage();};
+                Show(rtxConfirmation);
+            } else {rendererDraft.enabled=0;BuildPage();}
+            return;
+        }
+        if(c.id=="RTXProfile"){rendererDraft.profile=std::max(0,std::min(2,c.selected));if(Find("Apply"))Find("Apply")->enabled=Dirty();return;}
         if(c.id=="AdvancedScroll") {int value=int(c.number);if(value!=advancedScroll){advancedScroll=value;BuildPage();Focus("AdvancedScroll");}return;}
         if(c.id=="listpanel_keybindlist"){RefreshKeyList();return;}
         if(c.id=="Resolution"&&c.selected>=0&&c.selected<int(videoModes.size()))selectedMode=videoModes[c.selected];
@@ -312,9 +369,9 @@ public:
         if(Find("Apply"))Find("Apply")->enabled=Dirty();
     }
     void Command(const std::string& id) override {
-        if(id.compare(0,3,"Tab")==0){page=std::atoi(id.c_str()+3);page=std::max(0,std::min(5,page));captureRow=-1;status.clear();BuildPage();return;}
-        if(id=="OK"){Apply();Close(*this);return;}
-        if(id=="Apply"){Apply();return;}
+        if(id.compare(0,3,"Tab")==0){page=std::atoi(id.c_str()+3);page=std::max(0,std::min(6,page));captureRow=-1;status.clear();BuildPage();return;}
+        if(id=="OK"){if(Apply())Close(*this);return;}
+        if(id=="Apply"){if(Apply())BuildPage();return;}
         if(id=="Close"||id=="Cancel"){captureRow=-1;Close(*this);return;}
         if(id=="ChangeKeyButton"||id=="ChangeKey") {
             Control* list=Find("listpanel_keybindlist");if(!list||list->selected<0||list->selected>=int(actions.size())||actions[list->selected].command=="blank")return;

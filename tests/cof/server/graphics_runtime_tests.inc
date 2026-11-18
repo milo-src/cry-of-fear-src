@@ -2,11 +2,40 @@
 #include <cstdlib>
 #include <cmath>
 static int graphicsTestFailures;
+static void RTMotionTestFrame(CBasePlayer* player) {
+    if (!player || !player->IsAlive()) return;
+    static float began = -1;
+    static int capture = -1;
+    if (began < 0) began = gpGlobals->time;
+    const float elapsed = gpGlobals->time - began;
+    // Identical short walk above the water, then hold still to expose trails.
+    const float offset = elapsed < 3 ? 0 : elapsed < 6 ? (elapsed-3)*40 : 120;
+    player->pev->movetype = MOVETYPE_NONE;
+    player->pev->flags |= FL_NOTARGET;
+    player->pev->effects &= ~EF_DIMLIGHT;
+    const float y = 100-offset;
+    // The user's staircase in c_apartment3: BSP hull supplies step heights.
+    TraceResult floor;
+    UTIL_TraceHull(Vector(440,y,90),Vector(440,y,-30),ignore_monsters,human_hull,player->edict(),&floor);
+    UTIL_SetOrigin(player->pev, floor.vecEndPos + Vector(0,0,1));
+    player->pev->v_angle = player->pev->angles = Vector(11, 345, 0);
+    player->pev->fixangle = 1;
+    const int sample = int(elapsed*2);
+    if (sample >= 4 && sample != capture) {
+        capture = sample;
+        ALERT(at_console, "COF_RTX_MOTION_CAPTURE %d xyz=%.2f %.2f %.2f\n",sample,player->pev->origin.x,player->pev->origin.y,player->pev->origin.z);
+    }
+    if (elapsed > 9) {
+        ALERT(at_console, "COF_RTX_MOTION_COMPLETE\n");
+        CLIENT_COMMAND(player->edict(), "quit\n");
+    }
+}
 static void GraphicsCheck(bool pass, const char* name) {
     ALERT(at_console, "COF_GRAPHICS_SERVER %s %s\n", pass ? "PASS" : "FAIL", name);
     if (!pass) ++graphicsTestFailures;
 }
 void CofGraphicsServerTestFrame(CBasePlayer* player) {
+    if (std::getenv("COF_RTX_MOTIONTEST")) { RTMotionTestFrame(player); return; }
     if (!std::getenv("COF_GRAPHICSTEST") || !player || !player->IsAlive()) return;
     static int phase;
     static float began;

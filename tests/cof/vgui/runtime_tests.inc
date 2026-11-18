@@ -1,5 +1,38 @@
 // Opt-in integration test: exercise the same menu input path as real input.
+#include "renderer_settings.h"
 namespace cof { namespace vgui {
+void RTXTestFrame() {
+    static int phase=0,failures=0;
+    static double next=EngFuncs::DoubleTime()+3;
+    static Dialog* options=nullptr;
+    double now=EngFuncs::DoubleTime();if(now<next)return;next=now+1.5;
+    auto check=[&](bool ok,const char* what){Con_Printf("COF_RTX_UI %s %s\n",ok?"PASS":"FAIL",what);if(!ok)++failures;};
+    auto click=[&](const char* id){Dialog* d=ActiveDialog();Control* c=d?d->Find(id):nullptr;
+        check(c&&c->enabled,id);if(!c||!c->enabled)return;
+        UI_MouseMove(d->bounds.x+c->bounds.x+c->bounds.w/2,d->bounds.y+c->bounds.y+c->bounds.h/2);
+        UI_KeyEvent(K_MOUSE1,1);UI_KeyEvent(K_MOUSE1,0);};
+    Dialog* d=ActiveDialog();
+    switch(phase++) {
+    case 0:OpenOptions();break;
+    case 1:options=d;click("Tab6");break;
+    case 2:check(d&&d->Find("RTXProfile")&&d->Find("RTXProfile")->selected==1,"balanced default");
+        check(!ReadRendererSettings().enabled,"classic default");EngFuncs::ClientCmd(false,"snapshot\n");click("RTXEnabled");break;
+    case 3:check(d&&d!=options&&d->Find("ConfirmRTX"),"enable confirmation");EngFuncs::ClientCmd(false,"snapshot\n");click("Cancel");break;
+    case 4:check(d==options&&!d->Find("RTXEnabled")->checked,"confirmation cancel");click("RTXEnabled");break;
+    case 5:click("ConfirmRTX");break;
+    case 6:check(d==options&&d->Find("RTXEnabled")->checked&&!ReadRendererSettings().enabled,"confirmed draft only");click("Cancel");OpenOptions();break;
+    case 7:options=d;click("Tab6");check(!d->Find("RTXEnabled")->checked,"options cancel discards RTX");click("RTXEnabled");break;
+    case 8:click("ConfirmRTX");break;
+    case 9:click("Apply");check(ReadRendererSettings().enabled==1&&ReadRendererSettings().profile==1,"apply persists balanced RTX");break;
+    case 10:if(d&&d->Find("RTXProfile")){Control& c=*d->Find("RTXProfile");c.selected=2;d->Changed(c);}click("Apply");
+        check(ReadRendererSettings().profile==2,"quality persisted");click("Cancel");OpenOptions();break;
+    case 11:click("Tab6");check(d&&d->Find("RTXEnabled")->checked&&d->Find("RTXProfile")->selected==2,"reopen saved choice");click("RTXEnabled");break;
+    case 12:if(d&&d->Find("RTXProfile")){Control& c=*d->Find("RTXProfile");c.selected=1;d->Changed(c);}click("Apply");
+        check(!ReadRendererSettings().enabled&&ReadRendererSettings().profile==1,"disable and restore balance");
+        EngFuncs::ClientCmd(false,"snapshot\n");break;
+    case 13:Con_Printf("COF_RTX_UI_COMPLETE failures=%d\n",failures);EngFuncs::ClientCmd(false,"quit\n");break;
+    }
+}
 void PointerTestFrame() {
     static int phase=getenv("COF_MENU_TRANSITIONTEST")?9:0,failures=0;
     static double next=EngFuncs::DoubleTime()+3;
@@ -39,6 +72,7 @@ void PointerTestFrame() {
     }
 }
 void TestFrame() {
+    if(getenv("COF_RTX_UITEST")){RTXTestFrame();return;}
     if(getenv("COF_POINTERTEST")){PointerTestFrame();return;}
     if(!getenv("COF_VGUITEST"))return;
     static int phase=0,failures=0;

@@ -5,9 +5,9 @@ import json
 from prepare_sdk import ROOT
 
 
-def prepare():
+def prepare(raytracing=False):
     original = ROOT / 'external/hlsdk-portable'
-    target = ROOT / 'build/game-source'
+    target = ROOT / ('build/game-rtx-source' if raytracing else 'build/game-source')
     target.mkdir(parents=True, exist_ok=True)
     manifest = target / '.vendor-files.json'
     files = {path.relative_to(original).as_posix(): path for path in original.rglob('*')
@@ -176,7 +176,7 @@ def prepare():
             shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / name)
     shutil.copy2(ROOT / 'src/cof/shared/item_descriptor.h', target / 'common/item_descriptor.h')
     # Keep the complete vendored renderer ABI; adapt only its basic-type include to SDK types.
-    renderer = ROOT / 'external/xash3d-fwgs/common'
+    renderer = ROOT / ('external/xash-rt/common' if raytracing else 'external/xash3d-fwgs/common')
     shutil.copy2(renderer / 'render_api.h', target / 'common/cof_render_api.h')
     lightstyle = (renderer / 'lightstyle.h').read_text().replace('#include "xash3d_types.h"',
         '// Basic types supplied by the HLSDK client headers.')

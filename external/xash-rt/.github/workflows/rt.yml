@@ -1,0 +1,226 @@
+name: Build Xash-RT RayTracing
+
+on:
+  workflow_dispatch:
+    inputs:
+      rtgl1_run_id:
+        description: 'RayTracedGL1 workflow run ID (optional)'
+        required: false
+        type: string
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch RTGL1 Artifact
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          $targetRepo = "boofiboi/RayTracedGL1"
+          $targetBranch = "hl1"
+          $targetRunId = "${{ inputs.rtgl1_run_id }}".Trim()
+
+          if (-not $targetRunId) {
+            $latestSha = (gh api "repos/$targetRepo/commits/$targetBranch" --jq '.sha' 2>$null)
+
+            $maxWaitSec = 600
+            $startTime = Get-Date
+
+            while (((Get-Date) - $startTime).TotalSeconds -lt $maxWaitSec) {
+              $runJson = (gh run list --repo $targetRepo --branch $targetBranch --limit 1 --json databaseId,headSha,status,conclusion 2>$null)
+              if ($runJson) {
+                $latestRun = ($runJson | ConvertFrom-Json)[0]
+                if ($latestRun) {
+                  if ($latestSha -and $latestRun.headSha -ne $latestSha) {
+                    Start-Sleep -Seconds 10
+                    continue
+                  }
+
+                  if ($latestRun.status -ne "completed") {
+                    gh run watch $($latestRun.databaseId) --repo $targetRepo --exit-status
+                    $targetRunId = $latestRun.databaseId
+                    break
+                  } else {
+                    if ($latestRun.conclusion -eq "success") {
+                      $targetRunId = $latestRun.databaseId
+                    }
+                    break
+                  }
+                }
+              }
+              Start-Sleep -Seconds 10
+            }
+          }
+
+          if ($targetRunId) {
+            gh run download $targetRunId --repo $targetRepo --name RayTracedGL1-Artifact --dir rtgl1_sdk 2>$null
+          } else {
+            gh run download --repo $targetRepo --name RayTracedGL1-Artifact --dir rtgl1_sdk 2>$null
+          }
+
+          $LASTEXITCODE = 0
+          if (Test-Path "rtgl1_sdk/Build/x64-Release/Release/RayTracedGL1.lib") {
+            echo "RTGL1_SDK_PATH=$((Get-Item rtgl1_sdk).FullName)" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "Prebuilt RTGL1 artifact not found; WAF will pull and compile RTGL1 automatically."
+          }
+
+      - name: Configure xash-rt
+        shell: pwsh
+        run: |
+          python waf configure --enable-raytracing -8 --enable-lto --enable-poly-opt --disable-menu-changegame -T Release
+
+      - name: Build xash-rt
+        shell: pwsh
+        run: |
+          python waf build
+
+      - name: Assemble Release Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "package/rt_bin"
+          New-Item -ItemType Directory -Force -Path "package/rt/shaders"
+
+          Copy-Item -Path "build/ref/gl/ref_gl.dll" -Destination "package/rt_bin/ref_gl.dll" -Force
+          Copy-Item -Path "build/engine/xash.dll" -Destination "package/rt_bin/xash.dll" -Force
+          Copy-Item -Path "build/game_launch/xash3d.exe" -Destination "package/rt_bin/xash3d.exe" -Force
+          Copy-Item -Path "build/filesystem/filesystem_stdio.dll" -Destination "package/rt_bin/filesystem_stdio.dll" -Force
+          Copy-Item -Path "build/3rdparty/mainui/menu.dll" -Destination "package/rt_bin/menu.dll" -Force
+          Copy-Item -Path "SDL2_VC/lib/x64/SDL2.dll" -Destination "package/rt_bin/SDL2.dll" -Force
+
+          if (Test-Path "build/3rdparty/vgui_support/vgui_support.dll") {
+            Copy-Item -Path "build/3rdparty/vgui_support/vgui_support.dll" -Destination "package/rt_bin/vgui_support.dll" -Force
+          }
+
+          $rtgl1Dir = $env:RTGL1_SDK_PATH
+          if (-not $rtgl1Dir -or -not (Test-Path $rtgl1Dir)) {
+            if (Test-Path "rtgl1_sdk") {
+              $rtgl1Dir = (Get-Item "rtgl1_sdk").FullName
+            } elseif (Test-Path "../RayTracedGL1") {
+              $rtgl1Dir = (Get-Item "../RayTracedGL1").FullName
+            }
+          }
+
+          Copy-Item -Path "$rtgl1Dir/Build/x64-Release/Release/RayTracedGL1.dll" -Destination "package/rt_bin/RayTracedGL1.dll" -Force
+          Copy-Item -Path "$rtgl1Dir/Build/x64-Release/Release/NRI.dll" -Destination "package/rt_bin/NRI.dll" -Force
+          if (Test-Path "$rtgl1Dir/Build/x64-Release/Release/nvngx_dlss.dll") {
+            Copy-Item -Path "$rtgl1Dir/Build/x64-Release/Release/nvngx_*.dll" -Destination "package/rt_bin/" -Force
+          } elseif (Test-Path "$rtgl1Dir/Source/External/DLSS/lib/Windows_x86_64/rel/nvngx_dlss.dll") {
+            Copy-Item -Path "$rtgl1Dir/Source/External/DLSS/lib/Windows_x86_64/rel/nvngx_*.dll" -Destination "package/rt_bin/" -Force
+          }
+          Copy-Item -Path "$rtgl1Dir/bin/amd_fidelityfx_vk.dll" -Destination "package/rt_bin/amd_fidelityfx_vk.dll" -Force
+          Copy-Item -Path "$rtgl1Dir/Build/shaders/*.spv" -Destination "package/rt/shaders/" -Force
+
+      - name: Upload Release Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xash-rt-windows-x64
+          path: package/
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev libfreetype-dev libfontconfig-dev pkg-config ninja-build libwayland-dev libwayland-bin libxkbcommon-dev libx11-dev libxext-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+
+      - name: Install Vulkan SDK
+        uses: jakoch/install-vulkan-sdk-action@v1.7.0
+        with:
+          version: 1.3.296.0
+          use-cache: true
+
+      - name: Fetch RTGL1 Artifact
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          target_repo="boofiboi/RayTracedGL1"
+          target_branch="hl1"
+          target_run_id="$(printf '%s' '${{ inputs.rtgl1_run_id }}' | xargs)"
+
+          if [ -z "$target_run_id" ]; then
+            latest_sha=$(gh api "repos/$target_repo/commits/$target_branch" --jq '.sha' 2>/dev/null || true)
+            start_ts=$(date +%s)
+            max_wait=600
+
+            while [ $(($(date +%s) - start_ts)) -lt $max_wait ]; do
+              run_json=$(gh run list --repo "$target_repo" --branch "$target_branch" --limit 1 --json databaseId,headSha,status,conclusion 2>/dev/null || true)
+              if [ -n "$run_json" ] && [ "$run_json" != "[]" ]; then
+                run_id=$(printf '%s' "$run_json" | jq -r '.[0].databaseId // empty')
+                head_sha=$(printf '%s' "$run_json" | jq -r '.[0].headSha // empty')
+                status=$(printf '%s' "$run_json" | jq -r '.[0].status // empty')
+                conclusion=$(printf '%s' "$run_json" | jq -r '.[0].conclusion // empty')
+
+                if [ -n "$latest_sha" ] && [ "$head_sha" != "$latest_sha" ]; then
+                  sleep 10
+                  continue
+                fi
+
+                if [ "$status" != "completed" ]; then
+                  gh run watch "$run_id" --repo "$target_repo" --exit-status || true
+                  target_run_id="$run_id"
+                  break
+                else
+                  if [ "$conclusion" = "success" ]; then
+                    target_run_id="$run_id"
+                  fi
+                  break
+                fi
+              fi
+              sleep 10
+            done
+          fi
+
+          if [ -n "$target_run_id" ]; then
+            gh run download "$target_run_id" --repo "$target_repo" --name RayTracedGL1-Artifact-Linux --dir rtgl1_sdk || true
+          else
+            gh run download --repo "$target_repo" --name RayTracedGL1-Artifact-Linux --dir rtgl1_sdk || true
+          fi
+
+          if [ -f "rtgl1_sdk/Build/linux-x64-Release/libRayTracedGL1.so" ]; then
+            echo "RTGL1_SDK_PATH=$(pwd)/rtgl1_sdk" >> "$GITHUB_ENV"
+          else
+            echo "Prebuilt RTGL1 artifact not found; WAF will pull and compile RTGL1 automatically."
+          fi
+
+      - name: Configure xash-rt
+        run: |
+          python3 waf configure -o build_linux --enable-raytracing -8 --enable-lto --enable-poly-opt --disable-menu-changegame --enable-bundled-deps -T Release
+
+      - name: Build xash-rt
+        run: |
+          python3 waf build
+
+      - name: Assemble Release Package
+        run: |
+          python3 waf install --destdir=package
+          printf '%s\n' '#!/usr/bin/env sh' 'cd "$(dirname "$0")" || exit 1' 'exec ./rt_bin/xash3d "$@"' > package/run_rt.sh
+          chmod +x package/run_rt.sh
+
+      - name: Upload Release Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xash-rt-linux-x64
+          path: package/

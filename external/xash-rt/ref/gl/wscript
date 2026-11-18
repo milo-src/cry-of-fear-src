@@ -1,0 +1,141 @@
+#! /usr/bin/env python
+# encoding: utf-8
+# mittorn, 2018
+
+from waflib import Logs
+import os
+
+top = '.'
+
+def options(opt):
+	grp = opt.add_option_group('ref_gl options')
+
+	grp.add_option('--enable-static-gl', action='store_true', dest='GL_STATIC', default=False,
+		help = 'enable direct linking to opengl [default: %(default)s]')
+
+	# stub
+	return
+
+def configure(conf):
+	conf.env.GL_STATIC = conf.options.GL_STATIC
+	if conf.env.GL_STATIC:
+		conf.check(lib='GL')
+
+	if conf.env.DEST_OS2 == 'android':
+		conf.check_cc(lib='log')
+
+def build(bld):
+	libs = [ 'ref_common', 'engine_includes', 'werror', 'yy_thunks' ]
+	# on PSVita do not link any libraries that are already in the main executable, but add the includes target
+	if bld.env.DEST_OS == 'psvita':
+		libs += [ 'sdk_includes', 'vgl_shim' ]
+	else:
+		libs += [ 'public', 'M' ]
+
+	source = bld.path.ant_glob(['*.c', 'gl2_shim/*.c'])
+	includes = ['.']
+	libpath = []
+	extra_libs = []
+	extra_defines = []
+
+	if bld.env.RAYTRACING:
+		rtgl1_sdk = getattr(bld.env, 'RTGL1_SDK_PATH', None)
+		if not rtgl1_sdk or not os.path.exists(rtgl1_sdk):
+			from waflib.Tools import rtgl1
+			rtgl1_sdk = rtgl1.get_rtgl1_sdk(bld)
+		includes.append(os.path.join(rtgl1_sdk, 'Include'))
+		if bld.env.DEST_OS != 'win32':
+			libpath.append(os.path.join(rtgl1_sdk, 'Build', 'linux-x64-Release'))
+		libpath.extend([
+			os.path.join(rtgl1_sdk, 'Build', 'x64-Release', 'Release'),
+			os.path.join(rtgl1_sdk, 'Build', 'x64-Release', 'RelWithDebInfo'),
+			os.path.join(rtgl1_sdk, 'Build', 'x64-Release'),
+			os.path.join(rtgl1_sdk, 'Build', 'Release', 'Release'),
+			os.path.join(rtgl1_sdk, 'Build', 'Release'),
+			os.path.join(rtgl1_sdk, 'Build', 'x64-Debug', 'Debug'),
+			os.path.join(rtgl1_sdk, 'Build', 'x64-Debug'),
+			os.path.join(rtgl1_sdk, 'Build', 'Debug', 'Debug'),
+			os.path.join(rtgl1_sdk, 'Build', 'Debug'),
+			os.path.join(rtgl1_sdk, 'Build', 'x64-Release-NonAVX', 'Release'),
+		])
+		if bld.env.DEST_OS == 'win32':
+			extra_libs.extend(['RayTracedGL1', 'opengl32', 'user32', 'gdi32'])
+		else:
+			extra_libs.extend(['RayTracedGL1', 'dl', 'pthread'])
+		extra_defines.extend(['XASH_RAYTRACING=1', 'XASH_GL_STATIC=1'])
+
+		def copy_rtgl1_dll(bld_ctx):
+			import shutil
+			rt_name = 'RayTracedGL1.dll' if bld_ctx.env.DEST_OS == 'win32' else 'libRayTracedGL1.so'
+			ffx_name = 'amd_fidelityfx_vk.dll' if bld_ctx.env.DEST_OS == 'win32' else 'libamd_fidelityfx_vk.so'
+			candidates = [
+				os.path.join(rtgl1_sdk, 'Build', 'x64-Release', 'Release', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'x64-Release', 'RelWithDebInfo', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'x64-Release', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'Release', 'Release', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'Release', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'x64-Debug', 'Debug', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'x64-Debug', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'Debug', 'Debug', rt_name),
+				os.path.join(rtgl1_sdk, 'Build', 'Debug', rt_name),
+			]
+			if bld_ctx.env.DEST_OS != 'win32':
+				candidates.insert(0, os.path.join(rtgl1_sdk, 'Build', 'linux-x64-Release', rt_name))
+			src_dll = None
+			for c in candidates:
+				if os.path.exists(c):
+					src_dll = c
+					break
+			if src_dll:
+				dst = bld_ctx.bldnode.abspath()
+				shutil.copy(src_dll, dst)
+				src_ffx = os.path.join(rtgl1_sdk, 'bin', ffx_name)
+				if not os.path.exists(src_ffx):
+					src_ffx = os.path.join(os.path.dirname(src_dll), ffx_name)
+				if os.path.exists(src_ffx):
+					shutil.copy(src_ffx, dst)
+
+		bld.add_post_fun(copy_rtgl1_dll)
+
+	targets = {
+		'ref_gl': {
+			'enable':  bld.env.GL,
+			'libs':    (['GL'] if bld.env.GL_STATIC else []) + extra_libs,
+			'defines': (['XASH_GL_STATIC=1'] if bld.env.GL_STATIC else []) + extra_defines,
+		},
+		'ref_gles1': {
+			'enable':  bld.env.NANOGL,
+			'libs':    ['DL', 'nanogl', 'LOG'],
+			'defines': ['XASH_NANOGL=1'],
+		},
+		'ref_gles2': {
+			'enable':  bld.env.GLWES,
+			'libs':    ['DL', 'gl-wes-v2', 'LOG'],
+			'defines': ['XASH_WES=1'],
+		},
+		'ref_gl4es': {
+			'enable':  bld.env.GL4ES,
+			'libs':    ['DL', 'gl4es', 'LOG'],
+			'defines': ['XASH_GL_STATIC=1', 'XASH_GL4ES=1'],
+		},
+		'ref_gles3compat': {
+			'enable':  bld.env.GLES3COMPAT,
+			'libs':    [],
+			'defines': ['XASH_GLES3COMPAT=1'],
+		},
+	}
+
+	for k,v in targets.items():
+		if not v['enable']:
+			continue
+
+		bld.shlib(source = source,
+			target = k,
+			includes = includes,
+			features = 'format',
+			libpath = libpath,
+			lib = v['libs'],
+			use = libs,
+			defines = v['defines'] + ['REF_DLL=1'],
+			rpath = bld.env.DEFAULT_RPATH,
+			install_path = bld.env.LIBDIR)

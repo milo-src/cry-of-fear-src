@@ -8,9 +8,9 @@ from prepare_vgui import prepare_vgui
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def prepare():
-    original = ROOT / 'external/xash3d-fwgs'
-    target = ROOT / 'build/engine-source'
+def prepare(raytracing=False):
+    original = ROOT / ('external/xash-rt' if raytracing else 'external/xash3d-fwgs')
+    target = ROOT / ('build/engine-rtx-source' if raytracing else 'build/engine-source')
     target.mkdir(parents=True, exist_ok=True)
     manifest = target / '.vendor-files.json'
     files = {p.relative_to(original).as_posix(): p for p in original.rglob('*')
@@ -29,8 +29,18 @@ def prepare():
         if not destination.exists() or source.read_bytes() != destination.read_bytes():
             shutil.copy2(source, destination)
     manifest.write_text(json.dumps(sorted(files)) + '\n')
+    if raytracing:
+        # Reuse already-vendored dependency sources; keep fork build scripts.
+        dependencies = ROOT / 'external/xash3d-fwgs/3rdparty'
+        for source in dependencies.rglob('*'):
+            if not source.is_file(): continue
+            destination = target / '3rdparty' / source.relative_to(dependencies)
+            if not destination.exists() or source.is_relative_to(dependencies / 'mainui'):
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, destination)
+    menu_original = ROOT / 'external/xash3d-fwgs'
     shutil.copy2(ROOT / 'src/cof/menu/Main.cpp', target / '3rdparty/mainui/menus/Main.cpp')
-    menu = original / '3rdparty/mainui/BaseMenu.cpp'
+    menu = menu_original / '3rdparty/mainui/BaseMenu.cpp'
     text = menu.read_text()
     anchor = 'void UI_UpdateMenu( float flTime )\n{'
     if anchor not in text:
@@ -39,7 +49,7 @@ def prepare():
     (target / '3rdparty/mainui/BaseMenu.cpp').write_text(text)
     # MainUI passes Unicode codepoints. Its ANSI GetGlyphOutline alias truncates
     # Cyrillic to low-byte Latin glyphs; use the explicit wide Windows API.
-    font = original / '3rdparty/mainui/font/WinAPIFont.cpp'
+    font = menu_original / '3rdparty/mainui/font/WinAPIFont.cpp'
     text = font.read_text()
     if text.count('::GetGlyphOutline(') != 2:
         raise ValueError('Unexpected MainUI Windows glyph renderer')
@@ -55,10 +65,31 @@ def prepare():
     text = text.replace('::GetGlyphOutlineW( m_hDC, ch, GGO_GRAY8_BITMAP, &glyphMetrics, bytesNeeded, lpbuf, &mat2 );',
         'if (m_iFlags & FONT_VGUI_EXACT) ::GetGlyphOutlineA( m_hDC, ch, GGO_GRAY8_BITMAP, &glyphMetrics, bytesNeeded, lpbuf, &mat2 );\n\t\telse ::GetGlyphOutlineW( m_hDC, ch, GGO_GRAY8_BITMAP, &glyphMetrics, bytesNeeded, lpbuf, &mat2 );')
     (target / '3rdparty/mainui/font/WinAPIFont.cpp').write_text(text)
-    header = original / '3rdparty/mainui/font/FontRenderer.h'
+    header = menu_original / '3rdparty/mainui/font/FontRenderer.h'
     text = header.read_text().replace('FONT_STRIKEOUT = 1 << 2',
         'FONT_STRIKEOUT = 1 << 2,\n\tFONT_VGUI_EXACT = 1 << 3 // source-owned CoF menu metrics')
     (target / '3rdparty/mainui/font/FontRenderer.h').write_text(text)
+    if raytracing:
+        # Path tracing supplies its own water, lighting and tonemapping.
+        filesystem = target / 'engine/common/filesystem_engine.c'
+        text = filesystem.read_text()
+        start = text.index('#if XASH_RAYTRACING\n\t// use parent folder')
+        end = text.index('\n\tFS_DetermineReadOnlyRootDirectory', start)
+        filesystem.write_text(text[:start] + '\tCOM_StripDirectorySlash( rootdir );\n' + text[end:])
+        render = target / 'ref/gl/gl_opengl.c'
+        text = render.read_text()
+        text = text.replace('\t\tRgInstanceCreateInfo info = {',
+            '\t\tgEngfuncs.Cvar_SetValue("rt_framegen", 0); // no frame generation in CoF profiles\n\t\tRgInstanceCreateInfo info = {')
+        text = text.replace('\t\tgEngfuncs.Con_Printf( "Ray tracing upscaling:',
+            '\t\tCofRTProfile();\n\t\tgEngfuncs.Con_Printf( "Ray tracing upscaling:')
+        anchor = '\t\tCofRTProfile();'
+        profile = (ROOT / 'src/cof/render/rtx_profile.inc').read_text()
+        text = text.replace(anchor, profile)
+        render.write_text(text)
+        from prepare_rtx_lighting import prepare as prepare_rtx_lighting
+        prepare_rtx_lighting(target)
+        prepare_vgui(target)
+        return target
     # Shader ports and renderer glue are owned by this repository. The pinned
     # engine remains untouched; Waf's ref/gl source glob picks up this C file.
     render = ROOT / 'src/cof/render'
