@@ -35,6 +35,19 @@ def prepare(target):
 '''+text[end:]
     # Off-screen sunlight still illuminates visible surfaces via reflection/GI.
     replace('if( g_lights.sun_exists && RI.isSkyVisible )', 'if( g_lights.sun_exists )')
+    replace('.uniqueID               = RT_IDBASE_SUN,',
+        '.uniqueID               = RT_IDBASE_SUN,\n'
+        '            .extra = { .exists = true, .isVolumetric = !cof_rt_menu_scene },')
+    # Only the spot branch: spherical lamps and ambient fills are not a second
+    # volume source. Preserve lightstyle and the calibrated cinematic menu.
+    start = text.index('void RT_UploadAllLights')
+    end = text.index('            RgResult r = rgUploadSpotLight', start)
+    section = text[start:end]
+    anchor = '.extra        = { .exists = true, .lightstyle = src->light_style },'
+    if section.count(anchor) != 1: raise ValueError('RTX volumetric spot hook changed')
+    section = section.replace(anchor, '.extra = { .exists = true, .lightstyle = src->light_style,\n'
+        '                    .isVolumetric = !cof_rt_menu_scene && i == cof_rt_volume_light },')
+    text = text[:start]+section+text[end:]
     start = text.index('            if( !l || l->dark )', text.index('void RT_UploadAllLights'))
     end = text.index('            if( IsPlayerFlashlight( l ) )', start)
     text = text[:start]+'''            CofRTLightIdentity *identity = is_e_light ? &cof_elight_ids[i] : &cof_dlight_ids[i];

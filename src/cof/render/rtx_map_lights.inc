@@ -9,6 +9,7 @@ float cof_rt_sky_energy = 1;
 qboolean cof_rt_has_sky;
 qboolean cof_rt_menu_scene;
 static qboolean cof_rt_open_sky;
+static int cof_rt_volume_light=-1;
 
 // Artistic RT fallback for outdoor maps without light_environment. A real
 // shadowed directional light keeps silhouettes readable; roofs still occlude
@@ -23,6 +24,7 @@ static void CofRTNightFill(void)
     if (intensity<=0) return;
     RgDirectionalLightUploadInfo light={
         .uniqueID=1, .isExportable=false,
+        .extra={.exists=true,.isVolumetric=cof_rt_volume_light<0},
         .color=0, .intensity=intensity,
         .direction={{-.350878f,.451129f,-.820940f}},
         .angularDiameterDegrees=3,
@@ -270,7 +272,28 @@ void RT_ParseStaticLightEntities(void)
         }
     }
     FilterTheSunFromPotential(WORLDMODEL->name);
+    if (!cof_rt_menu_scene)
+        for (int i=0;i<g_lights.static_lights_count;++i) {
+            rt_static_light_t* light=&g_lights.static_lights[i];
+            // Finite lamp emitters give a soft penumbra and a readable highlight
+            // in glossy tiles. No extra energy and no camera-relative offsets.
+            light->fill_radius=METRIC_TO_QUAKEUNIT(bound(.025f,
+                RT_CVAR_TO_FLOAT(rt_light_radius)*(.85f+.3f*sqrtf(Q_max(0,light->intensity))),.065f));
+        }
+    // RTGL supports one volumetric source. Pick a fixed authored spotlight at
+    // map load, never the nearest light each frame (which makes fog flash).
+    cof_rt_volume_light=-1;
+    float bestPower=0;
+    if (!cof_rt_menu_scene && !g_lights.sun_exists)
+        for (int i=0;i<g_lights.static_lights_count;++i) {
+            const rt_static_light_t* light=&g_lights.static_lights[i];
+            if (light->is_spot && light->intensity>bestPower) {
+                bestPower=light->intensity; cof_rt_volume_light=i;
+            }
+        }
     int fills=CofRTBakedFill();
+    gEngfuncs.Con_DPrintf("COF_RTX_ATMOSPHERE menu=%d volumetric_spot=%d sun=%d\n",
+        cof_rt_menu_scene,cof_rt_volume_light,g_lights.sun_exists);
     gEngfuncs.Con_Printf("COF_RTX_MAP_LIGHTS %s points=%d spots=%d sun=%d texlights=%d baked_fill=%d\n",
         WORLDMODEL->name,points,spots,g_lights.sun_exists,cof_texlight_count,fills);
 }

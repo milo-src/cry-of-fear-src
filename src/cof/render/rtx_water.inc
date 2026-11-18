@@ -9,16 +9,38 @@ static qboolean CofRTWaterVolume(cl_entity_t *entity)
         gEngfuncs.pfnGetCvarFloat("cg_water") == 0) return false;
     const float *lo = entity->curstate.mins, *hi = entity->curstate.maxs;
     if (hi[0] <= lo[0] || hi[1] <= lo[1]) return false;
-    RgPrimitiveVertex vertices[4] = {0};
-    static const uint32_t indices[] = {0,1,2,0,2,3};
-    for (int i=0;i<4;++i) {
-        vertices[i].position[0] = i==1 || i==2 ? hi[0] : lo[0];
-        vertices[i].position[1] = i>=2 ? hi[1] : lo[1];
-        vertices[i].position[2] = hi[2];
-        vertices[i].normal[2] = 1;
-        vertices[i].texCoord[0] = vertices[i].position[0]/128.f;
-        vertices[i].texCoord[1] = vertices[i].position[1]/128.f;
-        vertices[i].color = rgUtilPackColorByte4D(255,255,255,255);
+    // Fixed topology and world-anchored phases keep temporal correspondence
+    // stable while a broad swell bends reflections. RTGL adds the fine ripples.
+    // The cinematic river retains its calibrated original four-vertex surface.
+    enum { GRID=12, MAX_VERTICES=(GRID+1)*(GRID+1), MAX_INDICES=GRID*GRID*6 };
+    RgPrimitiveVertex vertices[MAX_VERTICES] = {0};
+    uint32_t indices[MAX_INDICES];
+    const int cells=cof_rt_menu_scene ? 1 : GRID;
+    const int stride=cells+1;
+    int indexCount=0;
+    const double time=gp_cl->time;
+    for (int y=0;y<=cells;++y) for (int x=0;x<=cells;++x) {
+        RgPrimitiveVertex* v=&vertices[y*stride+x];
+        v->position[0]=lo[0]+(hi[0]-lo[0])*x/cells;
+        v->position[1]=lo[1]+(hi[1]-lo[1])*y/cells;
+        v->position[2]=hi[2];
+        v->normal[2]=1;
+        if (!cof_rt_menu_scene) {
+            const double a=v->position[0]*.012+v->position[1]*.007-time*.65;
+            const double b=v->position[0]*-.006+v->position[1]*.015-time*.41;
+            v->normal[0]=.055f*cos(a)-.025f*cos(b);
+            v->normal[1]=.032f*cos(a)+.048f*cos(b);
+            const float inverse=1.f/sqrtf(v->normal[0]*v->normal[0]+v->normal[1]*v->normal[1]+1);
+            for (int axis=0;axis<3;++axis) v->normal[axis]*=inverse;
+        }
+        v->texCoord[0]=v->position[0]/128.f;
+        v->texCoord[1]=v->position[1]/128.f;
+        v->color=0xffffffffu;
+        if (x<cells && y<cells) {
+            const uint32_t i=y*stride+x;
+            indices[indexCount++]=i; indices[indexCount++]=i+1; indices[indexCount++]=i+stride+1;
+            indices[indexCount++]=i; indices[indexCount++]=i+stride+1; indices[indexCount++]=i+stride;
+        }
     }
     RgMeshInfo mesh = {
         .uniqueObjectID = entity->index,
@@ -43,9 +65,9 @@ static qboolean CofRTWaterVolume(cl_entity_t *entity)
     RgMeshPrimitiveInfo primitive = {
         .pPrimitiveNameInMesh = "cof_water_surface",
         .primitiveIndexInMesh = 0,
-        .flags = RG_MESH_PRIMITIVE_WATER,
-        .pVertices = vertices, .vertexCount = 4,
-        .pIndices = indices, .indexCount = 6,
+        .flags = RG_MESH_PRIMITIVE_WATER | (cof_rt_menu_scene ? 0 : RG_MESH_PRIMITIVE_DONT_GENERATE_NORMALS),
+        .pVertices = vertices, .vertexCount = stride*stride,
+        .pIndices = indices, .indexCount = indexCount,
         .color = 0xffffffffu,
         .pEditorInfo = &material,
     };
@@ -53,7 +75,7 @@ static qboolean CofRTWaterVolume(cl_entity_t *entity)
     static qboolean reported;
     if (!reported) {
         reported = true;
-        gEngfuncs.Con_DPrintf("COF_RTX_WATER_VOLUME entity=%d top=%.1f\n",entity->index,hi[2]);
+        gEngfuncs.Con_DPrintf("COF_RTX_WATER_VOLUME entity=%d top=%.1f cells=%d\n",entity->index,hi[2],cells);
     }
     entity->visframe = tr.realframecount;
     return true;

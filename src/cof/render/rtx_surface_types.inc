@@ -44,12 +44,13 @@ static char CofRTSurfaceTypeFor(const char *name)
 }
 static void CofRTSurfaceResponse(RgEditorInfo *editor,const char *name)
 {
-    float roughness=.88f;
+    float roughness=.84f;
     switch (CofRTSurfaceTypeFor(name)) {
-    case 'M': case 'V': case 'G': roughness=.48f; break;
+    case 'C': roughness=.86f; break; // Concrete remains diffuse, with broad highlights.
+    case 'M': case 'V': case 'G': roughness=.44f; break;
     case 'T': roughness=.32f; break;
     case 'Y': roughness=.20f; break; // Reflective coating; no invented transparency.
-    case 'W': roughness=.72f; break;
+    case 'W': roughness=.68f; break;
     case 'I': case 'S': roughness=.50f; break;
     case 'D': case 'U': case 'O': case 'R': case 'B': roughness=.94f; break;
     case 'H': case 'Z': case 'F': roughness=.96f; break;

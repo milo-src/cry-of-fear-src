@@ -28,14 +28,21 @@ void Vertex(float u, float v, const Vector& p) {
 }
 }
 
+#include "rain_lens.inc"
+
 void CofWeatherInit() {
     enabled = CVAR_CREATE("r_weather", "1", FCVAR_ARCHIVE);
     ripples = CVAR_CREATE("cl_ripples", "1", FCVAR_ARCHIVE);
+    lensEnabled = CVAR_CREATE("rt_rain_lens", "1", FCVAR_ARCHIVE);
+    CVAR_CREATE("cof_rain_exposure", "0", 0);
+    const char* active=std::getenv("COF_RTX_ACTIVE");
+    lensRTX=active && std::atoi(active)!=0;
 }
 void CofWeatherReset() {
     count = impactCount = rainSprite = snowSprite = ringSprite = splashSprite = 0;
     haveTime = reported = false;
     credit = 0;
+    ResetRainLens();
 }
 void CofWeatherView(const ref_params_s* view) {
     eye = Vector(view->vieworg);
@@ -44,14 +51,16 @@ void CofWeatherView(const ref_params_s* view) {
     const double now = view->time;
     if (!haveTime || now < previous) {
         count = impactCount = 0; credit = 0; previous = now; haveTime = true;
+        ResetRainLens();
         return;
     }
     const float dt = float(now-previous);
     previous = now;
-    if (!enabled || enabled->value == 0) { count = impactCount = 0; credit = 0; return; }
+    if (!enabled || enabled->value == 0) { count = impactCount = 0; credit = 0; ResetRainLens(); return; }
     if (dt <= 0 || view->paused) return;
     // A stalled renderer must not emit seconds of new particles at once.
-    if (dt > .5f) { count = impactCount = 0; credit = 0; return; }
+    if (dt > .5f) { count = impactCount = 0; credit = 0; ResetRainLens(); return; }
+    UpdateRainLens(view,dt);
     for (int i=0;i<impactCount;)
         if (now >= impacts[i].birth+impacts[i].life) impacts[i] = impacts[--impactCount];
         else ++i;

@@ -5,6 +5,7 @@
 #include <cstdlib>
 extern void CofInventoryDraw();
 extern void CofStatusHudDraw();
+extern void CofRainLensDraw();
 extern void CofUiTestFrame();
 extern void CofGameMenuDraw();
 extern bool CofGameMenuWorld();
@@ -25,6 +26,7 @@ void CofPrototypeFrame(float time) {
     CofMenuTestFrame();
     CofChatTestFrame(time);
     CofGraphicsClientTestFrame(time);
+    CofRainLensDraw(); // Behind HUD, inventory and menu text, never over them.
     if (!CofGameMenuWorld() && !CofGameMenuVisible()) {
         CofStatusHudDraw();
         CofInventoryDraw();

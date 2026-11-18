@@ -9,6 +9,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <cmath>
 
 namespace {
 render_api_t renderer = {};
@@ -26,6 +27,41 @@ extern "C" int DLLEXPORT HUD_GetRenderInterface(int version, render_api_t* api, 
 }
 
 void CofUiVidInit() { textures.clear(); }
+
+void CofDrawRainLens(int x,int y,int width,int height,float alpha) {
+    if (!renderer.GL_LoadTexture || alpha<=0) return;
+    const char* name="#cof/procedural_rain_lens.tga";
+    if (textures.find(name)==textures.end()) {
+        // Transparent centre, faint dark meniscus and a small specular crescent.
+        // Analytic coverage: no sprite edits, square quads or full-screen tint.
+        // This lightweight lens overlay does not sample/refract the scene buffer.
+        const int w=64,h=128;
+        std::vector<byte> image(18+w*h*4,0);
+        image[2]=2; image[12]=w; image[14]=h; image[16]=32; image[17]=0x28;
+        for (int py=0;py<h;++py) for (int px=0;px<w;++px) {
+            const float u=(px+.5f)/w*2-1, v=(py+.5f)/h;
+            // A round lower bead merging into a long, tapering drainage trail.
+            const float bulb=std::sqrt(u*u+std::pow((v-.73f)*3.8f,2.f))-.78f;
+            const float trailWidth=.045f+.16f*v;
+            const float trail=std::fmax((std::fabs)(u+.025f*std::sin(v*15))-trailWidth,
+                                        std::fmax(.06f-v,v-.72f));
+            const float distance=std::fmin(bulb,trail);
+            const float coverage=std::fmax(0.f,std::fmin(1.f,-distance*32));
+            const float rim=std::exp(-(std::fabs)(distance+.035f)*34)*coverage;
+            const float glint=std::exp(-((u+.44f)*(u+.44f)*65+(v-.62f)*(v-.62f)*350))*coverage;
+            const float light=std::fmax(0.f,-u)*rim*.24f+glint*.35f;
+            const float dark=std::fmax(0.f,u)*rim*.18f;
+            const float opacity=light+dark;
+            const int index=18+(py*w+px)*4;
+            const byte shade=opacity>0 ? byte(255*light/opacity) : 0;
+            image[index]=image[index+1]=image[index+2]=shade;
+            image[index+3]=byte(255*std::fmin(opacity,.48f));
+        }
+        Texture texture={renderer.GL_LoadTexture(name,image.data(),int(image.size()),TF_CLAMP|TF_NOMIPMAP),w,h};
+        textures.emplace(name,texture);
+    }
+    CofDrawImage(name,x,y,width,height,0,0,1,1,1,1,1,alpha);
+}
 
 bool CofDrawImage(const char* path, int x, int y, int width, int height,
                   float u0, float v0, float u1, float v1, float red, float green, float blue, float alpha) {

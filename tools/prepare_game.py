@@ -188,7 +188,7 @@ def prepare(raytracing=False):
                             'camera.cpp', 'graphics.cpp', 'graphics.h')),
         ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp', 'saytext.cpp',
                                 'ui_draw.cpp', 'ui_draw.h', 'ui_font.cpp', 'ui_font.h', 'status_hud.cpp',
-                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h', 'weather.cpp', 'weather.h')),
+                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h', 'weather.cpp', 'weather.h', 'rain_lens.inc')),
     ]:
         for name in names:
             # Preserve the SDK's standard doors.cpp alongside CoF's custom doors.
