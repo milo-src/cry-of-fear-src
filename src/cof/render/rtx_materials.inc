@@ -47,6 +47,29 @@ static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *edi
         return;
     }
     CofRTTexlightMaterial(primitive,editor,name);
+    // The shipped "black" texture is uniformly RGB 0 and is used as an
+    // authored void/occluder. A dielectric still has F0=0.04 in RTGL, which
+    // reveals these otherwise black surfaces under lamps. A rough, black
+    // conductor has zero diffuse and zero specular response in RTGL's GGX
+    // model (F0=albedo, F90=max(1-roughness,F0)). Keep its opaque geometry:
+    // primary, shadow and indirect rays must still hit it. This is material
+    // compatibility, not a negative light or a rule for all unlit surfaces.
+    if (!cof_rt_menu_scene && !Q_stricmp(name,"black") &&
+        !editor->attachedLightExists && primitive->emissive==0 &&
+        !(primitive->flags & (RG_MESH_PRIMITIVE_TRANSLUCENT |
+                              RG_MESH_PRIMITIVE_ALPHA_TESTED |
+                              RG_MESH_PRIMITIVE_SKY_VISIBILITY))) {
+        primitive->color=rgUtilPackColorByte4D(0,0,0,255);
+        editor->pbrInfoExists=true;
+        editor->pbrInfo.roughnessDefault=1;
+        editor->pbrInfo.metallicDefault=1;
+        static qboolean reported;
+        if (!reported) {
+            reported=true;
+            gEngfuncs.Con_DPrintf("COF_RTX_BLACK_OCCLUDER opaque=1 roughness=1 metallic=1\n");
+        }
+        return;
+    }
     if (!cof_rt_menu_scene && !(primitive->flags & (RG_MESH_PRIMITIVE_TRANSLUCENT|RG_MESH_PRIMITIVE_SKY_VISIBILITY)))
         CofRTSurfaceResponse(editor,name);
     for (size_t i = 0; i < sizeof(materials)/sizeof(materials[0]); ++i) {
