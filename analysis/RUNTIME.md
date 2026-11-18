@@ -38,7 +38,9 @@ recovered gameplay implementation in this runtime.
 SDK and engine sources are vendored in `external/hlsdk-portable` and
 `external/xash3d-fwgs`, initially restored from commit 2971dbb. Builds use these
 repository files directly and do not need that commit or any Git history.
-The prior speculative `src/cof` tree is not reused.
+The prior speculative source was not reused. Current reconstruction code now
+lives in `src/cof/server` and `src/cof/client`; `src/cof/reference` holds unbuilt
+semantic models. Server integration fixtures are in `tests/cof/server`.
 Their licenses and source notices remain in those trees. SDL2 2.32.10 is the
 official separate runtime dependency, not a DLL taken from Cry of Fear.
 

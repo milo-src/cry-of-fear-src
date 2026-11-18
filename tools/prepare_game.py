@@ -95,12 +95,17 @@ def prepare():
                         '\tif (CofInventoryCommand(static_cast<CBasePlayer*>(CBaseEntity::Instance(pEntity)), pcmd)) return;\n'
                         '\n\tif( FStrEq( pcmd, "say" ) )')
     (target / 'dlls/client.cpp').write_text(text)
-    shutil.copy2(ROOT / 'tests/door_runtime_tests.inc', target / 'dlls/door_runtime_tests.inc')
-    shutil.copy2(ROOT / 'tests/inventory_runtime_tests.inc', target / 'dlls/inventory_runtime_tests.inc')
-    for name, folder in [('prototype_client.cpp', 'cl_dll'), ('prototype_entities.cpp', 'dlls'),
-                         ('recovered_doors.cpp', 'dlls'), ('recovered_inventory.cpp', 'dlls'),
-                         ('recovered_inventory.h', 'dlls'), ('inventory_client.cpp', 'cl_dll')]:
-        shutil.copy2(ROOT / 'src' / name, target / folder / name)
+    for name in ('door_runtime_tests.inc', 'inventory_runtime_tests.inc'):
+        shutil.copy2(ROOT / 'tests/cof/server' / name, target / 'dlls' / name)
+    # Source ownership follows src/cof; the disposable SDK tree keeps its layout.
+    # reference/ contains incomplete analysis models and must not enter either DLL.
+    for side, folder, names in [
+        ('server', 'dlls', ('prototype_entities.cpp', 'recovered_doors.cpp',
+                            'recovered_inventory.cpp', 'recovered_inventory.h')),
+        ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp')),
+    ]:
+        for name in names:
+            shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / name)
     text = (original / 'mod_options.txt').read_text()
     text = text.replace('GAMEDIR=valve', 'GAMEDIR=cryoffear')
     text = text.replace('CLIENT_WEAPONS=ON', 'CLIENT_WEAPONS=OFF')
