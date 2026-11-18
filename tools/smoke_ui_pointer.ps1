@@ -1,5 +1,5 @@
 #requires -Version 7.0
-param([int]$Width = 1280, [int]$Height = 720)
+param([int]$Width = 1280, [int]$Height = 720, [switch]$TransitionsOnly)
 $ErrorActionPreference = 'Stop'
 if ($Width -lt 800 -or $Width -gt 3840 -or $Height -lt 600 -or $Height -gt 2160) { throw 'Invalid resolution' }
 $taskRoot = Split-Path $PSScriptRoot -Parent
@@ -7,6 +7,8 @@ $runtime = Join-Path $taskRoot 'out/runtime'
 $reportDir = Join-Path $taskRoot 'analysis/local'
 New-Item -ItemType Directory -Force -Path $reportDir | Out-Null
 $previous = $env:COF_POINTERTEST
+$previousTransition = $env:COF_MENU_TRANSITIONTEST
+$reportName = if ($TransitionsOnly) { 'menu-transitions' } else { 'pointer' }
 $started = Get-Date
 $configPath = "$runtime/cryoffear/config.cfg"
 $configBackup = [IO.File]::ReadAllBytes($configPath)
@@ -45,8 +47,9 @@ $savedCursor = [CofVguiInput+Point]::new()
 [CofVguiInput]::GetCursorPos([ref]$savedCursor) | Out-Null
 try {
     $env:COF_POINTERTEST = '1'
+    $env:COF_MENU_TRANSITIONTEST = if ($TransitionsOnly) { '1' } else { $null }
     $process = Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +cof_menu_2d_test" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
-} finally { $env:COF_POINTERTEST = $previous }
+} finally { $env:COF_POINTERTEST = $previous; $env:COF_MENU_TRANSITIONTEST = $previousTransition }
 $modules = @()
 $watch = [Diagnostics.Stopwatch]::StartNew()
 try {
@@ -92,7 +95,7 @@ try {
     $process.WaitForExit()
     if ($process.ExitCode -ne 0) { throw "Game exited with $($process.ExitCode)" }
     $log = Get-Content "$runtime/engine.log" -Raw
-    $log | Set-Content "$reportDir/pointer-${Width}x${Height}.log"
+    $log | Set-Content "$reportDir/${reportName}-${Width}x${Height}.log"
     if ($log -notmatch 'COF_POINTER_COMPLETE failures=0' -or $log -match 'COF_POINTER FAIL') { throw 'VGUI input/render checks failed' }
     foreach ($required in @('xash.dll', 'menu.dll', 'ref_gl.dll', 'cryoffear\cl_dlls\client.dll')) {
         $expected = [IO.Path]::GetFullPath((Join-Path $runtime $required))
@@ -102,12 +105,14 @@ try {
     $screenshots = @(Get-ChildItem $runtime -Filter '*.png' | Where-Object { $_.LastWriteTime -ge $started } | Sort-Object LastWriteTime | ForEach-Object FullName)
     if ($screenshots.Count -lt 2) { throw 'Expected menu/panel captures missing' }
     [ordered]@{ result='pass'; resolution=@($Width,$Height); screenshots=$screenshots; modules=$modules; originalGameModulesLoaded=$false } |
-        ConvertTo-Json -Depth 5 | Set-Content "$reportDir/pointer-${Width}x${Height}.json"
+        ConvertTo-Json -Depth 5 | Set-Content "$reportDir/${reportName}-${Width}x${Height}.json"
     Write-Output "PASS: CoF options/console; input; own DLLs; exit 0 ($Width x $Height)."
     Write-Output $screenshots
 } finally {
     if (-not $process.HasExited) { Stop-Process -Id $process.Id }
-    [CofVguiInput]::mouse_event(4,0,0,0,[UIntPtr]::Zero)
-    [CofVguiInput]::SetCursorPos($savedCursor.X,$savedCursor.Y) | Out-Null
+    if (-not $TransitionsOnly) {
+        [CofVguiInput]::mouse_event(4,0,0,0,[UIntPtr]::Zero)
+        [CofVguiInput]::SetCursorPos($savedCursor.X,$savedCursor.Y) | Out-Null
+    }
     [IO.File]::WriteAllBytes($configPath, $configBackup)
 }

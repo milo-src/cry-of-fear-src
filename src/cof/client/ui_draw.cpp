@@ -42,12 +42,15 @@ bool CofDrawImage(const char* path, int x, int y, int width, int height,
                 // VGUI bitmap fonts store glyph coverage in RGB and zero alpha.
                 // Adapt that font-only encoding to Xash's normal RGBA loader.
                 int uploadLength = length;
-                if (!std::strcmp(path,"gfx/vgui/fonts/640_credits.tga") && length >= 18 &&
+                const bool creditsFont = !std::strcmp(path,"gfx/vgui/fonts/640_credits.tga");
+                const bool pagerFont = !std::strcmp(path,"gfx/vgui/fonts/640_pager.tga");
+                if ((creditsFont || pagerFont) && length >= 18 &&
                     data[1] == 0 && (data[2] == 2 || data[2] == 10) && data[16] == 32) {
                     const size_t start = 18 + data[0];
                     const size_t width = data[12] | (data[13] << 8);
                     const size_t height = data[14] | (data[15] << 8);
-                    if (width == 4864 && height == 22 && start <= static_cast<size_t>(length)) {
+                    if (((creditsFont && width == 4864 && height == 22) ||
+                         (pagerFont && width == 2560 && height == 16)) && start <= static_cast<size_t>(length)) {
                         const size_t count = width*height;
                         font.assign(18+count*4,0);
                         std::memcpy(font.data(),data,18);

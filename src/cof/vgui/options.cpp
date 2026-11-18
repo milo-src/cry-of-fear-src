@@ -380,5 +380,5 @@ public:
 };
 OptionsDialog options;
 }
-void OpenOptions(){Show(options);}
+void OpenOptions(){if(!OpenAfter2DMenu("cof_vgui_options"))Show(options);}
 } }

@@ -1,7 +1,7 @@
 // Opt-in integration test: exercise the same menu input path as real input.
 namespace cof { namespace vgui {
 void PointerTestFrame() {
-    static int phase=0,failures=0;
+    static int phase=getenv("COF_MENU_TRANSITIONTEST")?9:0,failures=0;
     static double next=EngFuncs::DoubleTime()+3;
     static Rect before;
     double now=EngFuncs::DoubleTime();if(now<next)return;next=now+.75;
@@ -22,17 +22,20 @@ void PointerTestFrame() {
         if(d&&d->Find("ConsoleEntry")){check(d->Find("ConsoleEntry")->value.empty(),"console key text suppressed");before=d->bounds;Con_Printf("COF_POINTER_DRAG console %d %d 80 45\n",before.x+120,before.y+12);}next=now+3;break;
     case 7:check(d&&d->bounds.x==before.x+80&&d->bounds.y==before.y+45,"native console drag");EngFuncs::ClientCmd(false,"snapshot\n");break;
     case 8:Con_Printf("COF_POINTER_TOGGLE close\n");next=now+2;break;
-    case 9:check(d&&d->Find("AdvancedScroll"),"console key returns to settings");if(d)Close(*d);EngFuncs::ClientCmd(false,"map c_game_menu1\n");next=now+5;break;
-    case 10:check(EngFuncs::ClientInGame(),"3D menu loaded");Con_Printf("COF_POINTER_TOGGLE menu3d\n");next=now+2;break;
-    case 11:check(d&&d->Find("ConsoleEntry"),"console over 3D menu");if(d)Close(*d);EngFuncs::ClientCmd(false,"cof_savemenu\n");break;
-    case 12:Con_Printf("COF_POINTER_TOGGLE save\n");next=now+2;break;
-    case 13:check(d&&d->Find("ConsoleEntry"),"console over client save panel");if(d)Close(*d);EngFuncs::ClientCmd(false,"map c_sdkmap1\n");next=now+5;break;
-    case 14:check(EngFuncs::ClientInGame(),"test map loaded");Con_Printf("COF_POINTER_TOGGLE game\n");next=now+2;break;
-    case 15:check(d&&d->Find("ConsoleEntry"),"console during gameplay");if(d)Close(*d);EngFuncs::ClientCmd(false,"+inventory\n");break;
-    case 16:Con_Printf("COF_POINTER_TOGGLE inventory\n");next=now+2;break;
-    case 17:check(d&&d->Find("ConsoleEntry"),"console over inventory");if(d)Close(*d);EngFuncs::ClientCmd(false,"messagemode\n");break;
-    case 18:Con_Printf("COF_POINTER_TOGGLE chat\n");next=now+2;break;
-    case 19:check(d&&d->Find("ConsoleEntry"),"console during chat");Con_Printf("COF_POINTER_COMPLETE failures=%d\n",failures);EngFuncs::ClientCmd(false,"quit\n");break;
+    case 9:if(!getenv("COF_MENU_TRANSITIONTEST"))check(d&&d->Find("AdvancedScroll"),"console key returns to settings");if(d)Close(*d);EngFuncs::ClientCmd(false,"map c_game_menu1\n");next=now+5;break;
+    case 10:check(EngFuncs::ClientInGame(),"3D menu loaded");EngFuncs::ClientCmd(false,"cof_menu_options\n");next=now+2;break;
+    case 11:check(d&&d->Find("Tab0")&&!EngFuncs::ClientInGame(),"3D menu switches to 2D before settings");EngFuncs::ClientCmd(false,"snapshot\n");break;
+    case 12:if(d)Close(*d);check(uiStatic.menu.IsActive()&&!ActiveDialog()&&!EngFuncs::ClientInGame(),"closing settings keeps 2D menu");EngFuncs::ClientCmd(false,"to3dmenu\n");next=now+5;break;
+    case 13:check(EngFuncs::ClientInGame(),"3D menu reloaded");Con_Printf("COF_POINTER_TOGGLE menu3d\n");next=now+2;break;
+    case 14:check(d&&d->Find("ConsoleEntry")&&!EngFuncs::ClientInGame(),"3D menu switches to 2D before console");EngFuncs::ClientCmd(false,"snapshot\n");break;
+    case 15:if(d)Close(*d);check(uiStatic.menu.IsActive()&&!ActiveDialog()&&!EngFuncs::ClientInGame(),"closing console keeps 2D menu");EngFuncs::ClientCmd(false,"map c_sdkmap1\n");next=now+5;break;
+    case 16:check(EngFuncs::ClientInGame(),"test map loaded");Con_Printf("COF_POINTER_TOGGLE game\n");next=now+2;break;
+    case 17:check(d&&d->Find("ConsoleEntry")&&EngFuncs::ClientInGame(),"gameplay console preserves map");if(d)Close(*d);EngFuncs::ClientCmd(false,"menu_options\n");break;
+    case 18:check(d&&d->Find("Tab0")&&EngFuncs::ClientInGame(),"gameplay settings preserve map");if(d)Close(*d);EngFuncs::ClientCmd(false,"+inventory\n");break;
+    case 19:Con_Printf("COF_POINTER_TOGGLE inventory\n");next=now+2;break;
+    case 20:check(d&&d->Find("ConsoleEntry")&&EngFuncs::ClientInGame(),"console over inventory preserves map");if(d)Close(*d);EngFuncs::ClientCmd(false,"messagemode\n");break;
+    case 21:Con_Printf("COF_POINTER_TOGGLE chat\n");next=now+2;break;
+    case 22:check(d&&d->Find("ConsoleEntry"),"console during chat");Con_Printf("COF_POINTER_COMPLETE failures=%d\n",failures);EngFuncs::ClientCmd(false,"quit\n");break;
     }
 }
 void TestFrame() {

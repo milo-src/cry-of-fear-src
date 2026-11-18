@@ -335,16 +335,65 @@ void Show(Dialog& d){
     windows.erase(std::remove(windows.begin(),windows.end(),&d),windows.end());windows.push_back(&d);
     d.Open();pressed=combo=-1;dragging=resizing=scrollDragging=false;host.Show();host.DisableTransition();
 }
+bool OpenAfter2DMenu(const char* command){
+    if(!engine.in_menu_world||!engine.in_menu_world())return false;
+    // ReturnMenu queues disconnect + menu_main itself. Queue the continuation
+    // from the following command, after those appended commands, so teardown
+    // cannot hide the newly opened dialog. Never disconnect a gameplay map.
+    EngFuncs::ClientCmd(false,(std::string("returnmenu\ncof_vgui_after_2d ")+command+"\n").c_str());
+    return true;
+}
+void After2DMenu(){
+    if(EngFuncs::CmdArgc()!=2)return;
+    const std::string command=EngFuncs::CmdArgv(1);
+    if(command=="cof_vgui_options"||command=="cof_vgui_console")
+        EngFuncs::ClientCmd(false,(command+"\n").c_str());
+}
 void Close(Dialog& d){
     windows.erase(std::remove(windows.begin(),windows.end(),&d),windows.end());d.Closed();pressed=combo=-1;dragging=resizing=scrollDragging=false;
     if(windows.empty()){UI_EnableTextInput(false);host.Hide();host.DisableTransition();}
 }
 bool Visible(const Dialog& d){return host.IsVisible()&&std::find(windows.begin(),windows.end(),&d)!=windows.end();}
 Dialog* ActiveDialog(){return !host.IsVisible()||windows.empty()?nullptr:windows.back();}
-void Register(){EngFuncs::Cmd_AddCommand("cof_vgui_options",OpenOptions);EngFuncs::Cmd_AddCommand("cof_vgui_console",ToggleConsole);}
+void Register(){EngFuncs::Cmd_AddCommand("cof_vgui_options",OpenOptions);EngFuncs::Cmd_AddCommand("cof_vgui_console",ToggleConsole);EngFuncs::Cmd_AddCommand("cof_vgui_after_2d",After2DMenu);}
+// Original engine selected EngineFont from TrackerScheme, with physical pixel
+// heights for yres variants. This bridge paints without opening a menu/dialog.
+void ChatInput(int y,const char* command,const char* text,int cursor,unsigned color,int blink) {
+    Resources();
+    const KeyValue* fonts=Scheme(scheme).Font("EngineFont");
+    const KeyValue* selected=nullptr;
+    if(fonts) for(const auto& variant:fonts->children) {
+        int low=0,high=0;
+        if(std::sscanf(variant.Get("yres").c_str(),"%d %d",&low,&high)==2 && ViewHeight()>=low && ViewHeight()<=high) {selected=&variant;break;}
+        if(!selected&&variant.Get("yres").empty())selected=&variant;
+    }
+    std::string name=selected?selected->Get("name","Verdana"):"Verdana";
+    int tall=selected?selected->Int("tall",13):13;
+    int weight=selected?selected->Int("weight",0):0;
+    static HFont font;
+    CBaseFont* current=g_FontMgr->GetIFontFromHandle(font);
+    if(!current||!current->IsEqualTo(name.c_str(),tall,weight,0,FONT_COF_CONTROL))
+        font=CFontBuilder(name.c_str(),tall,weight).SetFlags(FONT_COF_CONTROL).Create();
+    auto width=[&](const std::string& value){return g_FontMgr->GetTextWideScaled(font,value.c_str(),tall);};
+    auto draw=[&](int x,const std::string& value){
+        if(!selected||selected->Int("dropshadow",1))UI_DrawString(font,x+1,y+1,ViewWidth()-x,tall+2,value.c_str(),0xff000000,tall,QM_TOPLEFT,ETF_FORCECOL|ETF_NOSIZELIMIT|ETF_NO_WRAP);
+        UI_DrawString(font,x,y,ViewWidth()-x,tall+2,value.c_str(),color,tall,QM_TOPLEFT,ETF_FORCECOL|ETF_NOSIZELIMIT|ETF_NO_WRAP);
+    };
+    EngFuncs::PIC_EnableScissor(0,y,ViewWidth(),tall+2);
+    int x=8;draw(x,command);x+=width(command)+3;draw(x,":");x+=width(":")+3;
+    std::string slice=text;
+    size_t start=slice.size()>size_t(ViewWidth()/10)?slice.size()-ViewWidth()/10:0;
+    while(start<slice.size()&&(static_cast<unsigned char>(slice[start])&0xc0)==0x80)++start;
+    slice.erase(0,start);cursor=std::max(0,cursor-int(start));
+    draw(x,slice);
+    // Port extension: a visible caret for the UTF-8 field editor.
+    if(blink)UI_FillRect(x+width(slice.substr(0,cursor))+1,y,1,tall,color);
+    EngFuncs::PIC_DisableScissor();
+    if(getenv("COF_CHATTEST")){static bool logged;if(!logged){Con_Printf("COF_CHAT_FONT %s tall=%d x=8\n",name.c_str(),tall);logged=true;}}
+}
 } }
 
 extern "C" EXPORT int GetCofUIAPI(int version,const cof_ui_engine_t* input,cof_ui_exports_t* output){
     if(version!=COF_UI_API_VERSION||!input||!output)return 0;
-    cof::vgui::engine=*input;output->toggle_console=cof::vgui::ToggleConsole;output->console_print=cof::vgui::ConsolePrint;output->console_clear=cof::vgui::ConsoleClear;return 1;
+    cof::vgui::engine=*input;output->toggle_console=cof::vgui::ToggleConsole;output->console_print=cof::vgui::ConsolePrint;output->console_clear=cof::vgui::ConsoleClear;output->chat_input=cof::vgui::ChatInput;return 1;
 }

@@ -138,6 +138,10 @@ def prepare():
                         '\t\tVectorCopy(cofAngles, cmd->viewangles);\n\t}\n' + anchor)
     (target / 'cl_dll/input.cpp').write_text(text)
     text = (original / 'dlls/client.cpp').read_text()
+    begin = text.index('void Host_Say( edict_t *pEntity, int teamonly )')
+    end = text.index('/*\n===========\nClientCommand', begin)
+    text = text[:begin] + '#include "recovered_chat.inc"\n\n' + text[end:]
+    shutil.copy2(ROOT / 'src/cof/server/recovered_chat.inc', target / 'dlls/recovered_chat.inc')
     anchor = 'void StartFrame( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected StartFrame source revision')
@@ -154,6 +158,7 @@ def prepare():
     for name in ('door_runtime_tests.inc', 'inventory_runtime_tests.inc', 'graphics_runtime_tests.inc'):
         shutil.copy2(ROOT / 'tests/cof/server' / name, target / 'dlls' / name)
     shutil.copy2(ROOT / 'tests/cof/client/ui_runtime_tests.inc', target / 'cl_dll/ui_runtime_tests.inc')
+    shutil.copy2(ROOT / 'tests/cof/client/chat_runtime_tests.inc', target / 'cl_dll/chat_runtime_tests.inc')
     shutil.copy2(ROOT / 'tests/cof/client/menu_runtime_tests.inc', target / 'cl_dll/menu_runtime_tests.inc')
     shutil.copy2(ROOT / 'tests/cof/client/graphics_runtime_tests.inc', target / 'cl_dll/graphics_runtime_tests.inc')
     shutil.copy2(ROOT / 'tests/cof/client/graphics_protocol_tests.inc', target / 'cl_dll/graphics_protocol_tests.inc')
@@ -163,7 +168,7 @@ def prepare():
         ('server', 'dlls', ('prototype_entities.cpp', 'recovered_doors.cpp',
                             'recovered_inventory.cpp', 'recovered_inventory.h', 'recovered_menu.cpp', 'recovered_menu.h',
                             'recovered_camera.cpp', 'recovered_graphics.cpp', 'recovered_graphics.h')),
-        ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp',
+        ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp', 'saytext.cpp',
                                 'ui_draw.cpp', 'ui_draw.h', 'ui_font.cpp', 'ui_font.h', 'status_hud.cpp',
                                 'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h')),
     ]:

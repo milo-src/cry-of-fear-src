@@ -197,3 +197,19 @@ there. The harness uses fresh-log timestamps to avoid replaying a previous run.
 The Waf build and runtime module audit pass. No original game DLL is a runtime
 dependency. General options Apply/Cancel, bindings, console history/completion,
 scroll wheel and visual captures are exercised by `tools/smoke_vgui.ps1`.
+
+### Requested front-end transition
+
+Opening settings or console on a front-end map now returns to the 2D root
+first, then opens the requested dialog. Closing it leaves that root visible.
+Bridge API v3 includes a read-only menu-map query (game_menu family,
+c_loadgame, c_difficulty_settings); ordinary gameplay/pause maps are preserved.
+The existing `returnmenu` command queues teardown and the 2D root, so a deferred
+continuation appends the dialog-open command after both. This ordering avoids
+disconnect hiding a dialog opened prematurely.
+
+`tools/smoke_ui_pointer.ps1 -TransitionsOnly` verifies both routes and both
+close paths, reloads 3D between them, then verifies that settings/console and
+inventory/chat console access keep an ordinary gameplay map loaded. It uses
+Windows key events without moving the user's pointer. Results are saved in
+`analysis/local/menu-transitions-1280x720.json` and its log.

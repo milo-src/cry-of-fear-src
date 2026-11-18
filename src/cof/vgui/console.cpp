@@ -251,7 +251,7 @@ public:
 };
 ConsoleDialog& Console() { static ConsoleDialog dialog; return dialog; }
 }
-void ToggleConsole() { ConsoleDialog& dialog=Console(); if (Visible(dialog)) Close(dialog); else Show(dialog); }
+void ToggleConsole() { ConsoleDialog& dialog=Console(); if (Visible(dialog)) Close(dialog); else if(!OpenAfter2DMenu("cof_vgui_console")) Show(dialog); }
 void ConsolePrint(const char* text) { Console().Append(text); }
 void ConsoleClear() { Console().Clear(); }
 } }

@@ -43,6 +43,7 @@ public:
 bool LoadResource(const std::string& path, KeyValue& result);
 std::string Localize(const std::string& token);
 void Show(Dialog& dialog);
+bool OpenAfter2DMenu(const char* command);
 void Close(Dialog& dialog);
 bool Visible(const Dialog& dialog);
 Dialog* ActiveDialog();

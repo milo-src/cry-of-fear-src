@@ -87,6 +87,16 @@ def main():
         config.write_text(text, encoding='latin1')
         migration.write_text('Original TGA HUD enabled\n')
     # The shipped hud.txt header declares 211 entries but only 57 are present.
+    migration = target / '.cof-chat-v1'
+    if not migration.exists():
+        config = target / 'config.cfg'
+        text = config.read_text(encoding='latin1')
+        bindings = dict(re.findall(r'(?mi)^bind\s+"([^"\r\n]+)"\s+"([^"\r\n]*)"', text))
+        for key, command in (('y', 'messagemode'), ('u', 'messagemode2')):
+            if key not in bindings and command not in bindings.values():
+                text += f'\nbind "{key}" "{command}"\n'
+        config.write_text(text, encoding='latin1')
+        migration.write_text('Chat defaults installed without replacing existing bindings\n')
     hud = target / 'sprites/hud.txt'
     lines = hud.read_text(encoding='latin1').splitlines()
     entries = [line for line in lines[1:] if len(line.split('//')[0].split()) == 7]
