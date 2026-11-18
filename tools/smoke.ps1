@@ -2,6 +2,7 @@
 # PowerShell 7 can enumerate the x86 game's modules from this x64 host.
 param([string]$Map = 'c_sdkmap1', [switch]$Doors, [switch]$Inventory, [switch]$InventorySave, [switch]$Ui, [int]$Width = 1280, [int]$Height = 720)
 $ErrorActionPreference = 'Stop'
+if ($env:COF_INTERACTIVE_TEST -ne '1') { throw 'Interactive test disabled. Use python tools/smoke_rtx.py for isolated testing. Set COF_INTERACTIVE_TEST=1 only for an explicitly authorized interactive session.' }
 if ($Ui) { $Inventory = $true }
 if ($Ui -and $InventorySave) { throw 'UI and save fixtures run separately' }
 if ($Width -lt 800 -or $Width -gt 3840 -or $Height -lt 480 -or $Height -gt 2160) { throw 'Invalid test resolution' }
@@ -25,7 +26,7 @@ $env:COF_DOORTEST = if ($Doors) { '1' } else { $null }
 $env:COF_INVENTORYTEST = if ($Inventory) { '1' } else { $null }
 $env:COF_INVENTORYSAVE = if ($InventorySave) { '1' } else { $null }
 try {
-    $process = Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +map $Map" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
+    $process = Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-nosound -game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +map $Map" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
 } finally {
     $env:COF_UITEST = $oldUi
     $env:COF_SMOKETEST = $oldSmoke

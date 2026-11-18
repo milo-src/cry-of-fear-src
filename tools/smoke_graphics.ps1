@@ -1,6 +1,7 @@
 #requires -Version 7.0
 param([int]$Width = 1280, [int]$Height = 720)
 $ErrorActionPreference = 'Stop'
+if ($env:COF_INTERACTIVE_TEST -ne '1') { throw 'Interactive test disabled. Use python tools/smoke_rtx.py for isolated testing. Set COF_INTERACTIVE_TEST=1 only for an explicitly authorized interactive session.' }
 if ($Width -lt 800 -or $Width -gt 3840 -or $Height -lt 480 -or $Height -gt 2160) { throw 'Invalid resolution' }
 $taskRoot = Split-Path $PSScriptRoot -Parent
 $runtime = Join-Path $taskRoot 'out/runtime'
@@ -14,7 +15,7 @@ $started = Get-Date
 try {
     $env:COF_GRAPHICSTEST = '1'
     $env:COF_SMOKETEST = $null
-    $process = Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +map cof_graphics_test" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
+    $process = Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-nosound -game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +map cof_graphics_test" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
 } finally { $env:COF_GRAPHICSTEST = $previous; $env:COF_SMOKETEST = $oldSmoke }
 $modules = @()
 $watch = [Diagnostics.Stopwatch]::StartNew()

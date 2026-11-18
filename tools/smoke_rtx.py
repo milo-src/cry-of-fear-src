@@ -1,4 +1,4 @@
-"""Exercise RTX preferences or a real map, recording native modules and window pixels."""
+"""Exercise maps/UI silently on an isolated desktop; pixel checks require --interactive."""
 import argparse
 import ctypes as C
 from ctypes import wintypes as W
@@ -11,14 +11,12 @@ import subprocess
 import time
 from PIL import Image, ImageGrab
 from renderer_settings import ROOT
+from test_desktop import TestDesktop
 
 def capture(pid, path):
     user = C.WinDLL('user32', use_last_error=True)
     user.GetForegroundWindow.restype = W.HWND
     user.GetWindowThreadProcessId.argtypes = [W.HWND, C.POINTER(W.DWORD)]
-    user.SetForegroundWindow.argtypes = [W.HWND]
-    user.ShowWindow.argtypes = [W.HWND, C.c_int]
-    user.SetWindowPos.argtypes = [W.HWND, W.HWND, C.c_int, C.c_int, C.c_int, C.c_int, W.UINT]
     user.WindowFromPoint.argtypes = [W.POINT]
     user.WindowFromPoint.restype = W.HWND
     user.SetProcessDPIAware()
@@ -32,33 +30,20 @@ def capture(pid, path):
         return True
     user.EnumWindows(visit, 0)
     if not windows: raise RuntimeError('Game SDL window missing')
-    hwnd=windows[0];user.ShowWindow(hwnd, 9)
-    # Windows may refuse foreground activation from a background test process.
-    # Join the foreground input queue briefly; never send synthetic keystrokes.
-    foreground=user.GetForegroundWindow()
-    thread=user.GetWindowThreadProcessId(foreground,None)
-    own=C.WinDLL('kernel32').GetCurrentThreadId()
-    joined=thread != own and user.AttachThreadInput(own,thread,True)
-    try: user.SetForegroundWindow(hwnd)
-    finally:
-        if joined:user.AttachThreadInput(own,thread,False)
-    time.sleep(.25)
+    hwnd=windows[0]
+    # Interactive capture is passive: the user must expose the window.
+    # Never raise, activate, restore or move it on their behalf.
     rect=W.RECT();point=W.POINT();user.GetClientRect(hwnd,C.byref(rect));user.ClientToScreen(hwnd,C.byref(point))
-    # Vulkan swapchains cannot be captured with PrintWindow (black pixels).
-    # Raising briefly also works when Windows refuses focus. Verify that the
-    # game's HWND covers the capture region instead of trusting activation.
-    user.SetWindowPos(hwnd,W.HWND(-1),0,0,0,0,0x13)
-    try:
-        time.sleep(.15)
-        def check_visible():
-            for x in (2,rect.right//2,rect.right-3):
-                for y in (2,rect.bottom//2,rect.bottom-3):
-                    if user.WindowFromPoint(W.POINT(point.x+x,point.y+y))!=hwnd:
-                        raise RuntimeError('Game window is occluded; capture refused')
-        check_visible()
-        frame=ImageGrab.grab(bbox=(point.x,point.y,point.x+rect.right,point.y+rect.bottom))
-        check_visible()
-    finally:user.SetWindowPos(hwnd,W.HWND(-2),0,0,0,0,0x13)
+    def check_visible():
+        if rect.right <= 0 or rect.bottom <= 0:
+            raise RuntimeError('Game window is not visible; no capture')
+        for x in (2,rect.right//2,rect.right-3):
+            for y in (2,rect.bottom//2,rect.bottom-3):
+                if user.WindowFromPoint(W.POINT(point.x+x,point.y+y))!=hwnd:
+                    raise RuntimeError('Game window is occluded; capture refused without raising it')
+    check_visible()
+    frame=ImageGrab.grab(bbox=(point.x,point.y,point.x+rect.right,point.y+rect.bottom))
+    check_visible()
     if max(frame.convert('L').getextrema())-min(frame.convert('L').getextrema())<8:
         raise RuntimeError('Window capture is blank; no visual verification')
     frame.save(path)
@@ -105,6 +90,7 @@ def check_menu_night_materials(path):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--interactive',action='store_true',help='Explicit opt-in: visible game on your desktop with passive pixel capture')
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
     parser.add_argument('--ui',action='store_true')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
@@ -122,6 +108,7 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],default='0')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.cursor and not args.interactive:parser.error('--cursor changes focus and requires an explicitly authorized --interactive session')
     if args.flashlight and not args.lighting:parser.error('--flashlight requires --lighting')
     if args.label and not re.fullmatch('[a-zA-Z0-9_-]+',args.label):parser.error('Invalid label')
     for name,value in args.cvar:
@@ -149,6 +136,7 @@ def main():
     if args.lighting:tag+='-lighting'
     if args.menu_cycle:tag+='-cycle'
     if args.label:tag+='-'+args.label
+    if not args.interactive:tag+='-isolated'
     settings=ROOT/'build'/('test-'+tag+'-renderer.cfg');settings.unlink(missing_ok=True)
     env=dict(os.environ,COF_RENDERER_SETTINGS=str(settings),COF_RTX_AVAILABLE='1',
              COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1')
@@ -172,16 +160,18 @@ def main():
         env.pop('COF_RTX_UITEST',None);env['COF_CONSOLE_OUTPUTTEST']='1'
     configs={p:p.read_bytes() for p in (runtime/'cryoffear').glob('*.cfg')}
     logpath=runtime/'engine.log';logpath.unlink(missing_ok=True)
-    command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-windowed','-width','1280','-height','720','-log']
+    command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-windowed','-width','1280','-height','720','-log','-nosound']
     if not args.console_output:command+=['-dev','2']
     for name,value in args.cvar:command+=['+'+name,value]
     command += ['+menu_main'] if args.ui else ['+map',args.map]
     command += ['+rt_denoiser',args.denoiser]
     if args.menu_scene:command += ['+con_notifytime','0']
+    if not args.interactive:command += ['+m_ignore','1']
     startup=subprocess.STARTUPINFO();startup.dwFlags=subprocess.STARTF_USESHOWWINDOW;startup.wShowWindow=0
-    shots=[];modules=[];observed=set()
-    with (report/(tag+'-stderr.log')).open('w') as errors:
-        process=subprocess.Popen(command,cwd=runtime,env=env,startupinfo=startup,stdout=errors,stderr=errors)
+    shots=[];modules=[];observed=set();desktop_verified=False
+    with TestDesktop(args.interactive) as desktop, (report/(tag+'-stderr.log')).open('w') as errors:
+        process=(subprocess.Popen(command,cwd=runtime,env=env,startupinfo=startup,stdout=errors,stderr=errors,creationflags=subprocess.BELOW_NORMAL_PRIORITY_CLASS)
+                 if args.interactive else desktop.launch(command,runtime,env))
         try:
             begin=time.monotonic()
             while process.poll() is None and time.monotonic()-begin<(120 if args.menu_cycle else 60):
@@ -193,17 +183,21 @@ def main():
                 if args.menu_cycle:markers+=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (87,94)]
                 for marker in markers:
                     if marker in text and marker not in observed:
-                        shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot)
-                        check_ui_pixels(shot,marker,args.graphics or args.motion)
-                        shots.append(str(shot));observed.add(marker)
+                        if args.interactive:
+                            shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot)
+                            check_ui_pixels(shot,marker,args.graphics or args.motion)
+                            shots.append(str(shot))
+                        observed.add(marker)
                         if not modules:
-                            output=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-Process -Id {process.pid}).Modules | ForEach-Object FileName | ConvertTo-Json'],text=True)
+                            desktop_verified=desktop.verify_process(process.pid)
+                            output=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-Process -Id {process.pid}).Modules | ForEach-Object FileName | ConvertTo-Json'],text=True,creationflags=subprocess.CREATE_NO_WINDOW)
                             modules=json.loads(output)
                 if 'Crash: address' in text or 'Host_Error:' in text:raise RuntimeError('Runtime crash: '+str(logpath))
                 time.sleep(.1)
             if process.poll() is None:raise RuntimeError('Smoke timed out: '+str(logpath))
             if process.returncode:raise RuntimeError('Exit code '+str(process.returncode))
             text=logpath.read_text(errors='replace');(report/(tag+'.log')).write_text(text)
+            if 'Audio: Disabled' not in text:raise RuntimeError('Test audio was not disabled')
             marker='COF_RTX_UI_COMPLETE failures=0' if args.ui else 'COF_GRAPHICS_CLIENT_COMPLETE failures=0' if args.graphics else 'COF_SMOKE_CLIENT_RENDERED'
             if args.motion:marker='COF_RTX_MOTION_COMPLETE'
             if args.console_output:marker='COF_CONSOLE_OUTPUT_COMPLETE failures=0'
@@ -214,16 +208,17 @@ def main():
                     for required in ('COF_RTX_SKY_MODEL models/props/sky_sphere4.mdl speed=80',
                                      'COF_RTX_WATER_VOLUME'):
                         if required not in text:raise RuntimeError('Missing scene submission: '+required)
-                    if len(shots)!=(6 if args.menu_cycle else 4):raise RuntimeError('Missing scene captures')
-                    from PIL import ImageChops, ImageStat
-                    a=Image.open(shots[1]).crop((0,340,500,395)).convert('RGB')
-                    b=Image.open(shots[2]).crop((0,340,500,395)).convert('RGB')
-                    if sum(ImageStat.Stat(ImageChops.difference(a,b)).mean)<8:
-                        raise RuntimeError('Train position changed on server but not in rendered frames')
-                    sky=Image.open(shots[2]).crop((20,100,300,270)).convert('L')
-                    if ImageStat.Stat(sky).mean[0]>35:raise RuntimeError('Night menu sky became daylight')
-                    material_check=check_menu_night_materials(shots[2])
-                    (report/(tag+'-materials.json')).write_text(json.dumps(material_check,indent=2))
+                    if args.interactive:
+                        if len(shots)!=(6 if args.menu_cycle else 4):raise RuntimeError('Missing scene captures')
+                        from PIL import ImageChops, ImageStat
+                        a=Image.open(shots[1]).crop((0,340,500,395)).convert('RGB')
+                        b=Image.open(shots[2]).crop((0,340,500,395)).convert('RGB')
+                        if sum(ImageStat.Stat(ImageChops.difference(a,b)).mean)<8:
+                            raise RuntimeError('Train position changed on server but not in rendered frames')
+                        sky=Image.open(shots[2]).crop((20,100,300,270)).convert('L')
+                        if ImageStat.Stat(sky).mean[0]>35:raise RuntimeError('Night menu sky became daylight')
+                        material_check=check_menu_night_materials(shots[2])
+                        (report/(tag+'-materials.json')).write_text(json.dumps(material_check,indent=2))
             if marker not in text or 'COF_RTX_UI FAIL' in text:raise RuntimeError('Missing/failed assertions')
             if args.cursor and 'COF_CURSOR_COMPLETE failures=0' not in text:
                 raise RuntimeError('Cursor/focus regression probe did not pass')
@@ -238,7 +233,7 @@ def main():
                 if len(poses)<8 or float(poses[-1][2])-float(poses[0][2])<30:
                     raise RuntimeError('Staircase ascent did not occur')
                 geometry=dict(frames=frames,samples=samples,unexpected_changes=changed)
-            if not shots:raise RuntimeError('No window pixels captured')
+            if args.interactive and not shots:raise RuntimeError('No window pixels captured')
             if args.renderer=='rtx':
                 for name in ('vulkan-1.dll','RayTracedGL1.dll','NRI.dll','ref_gl.dll','client_amd64.dll'):
                     if not any(Path(p).name.lower()==name.lower() for p in modules):raise RuntimeError('Module not observed: '+name)
@@ -249,10 +244,11 @@ def main():
                 if not movement:raise RuntimeError('Player movement not observed')
                 xyz=list(map(float,movement.groups()))
                 if sum((xyz[i]-xyz[i+3])**2 for i in range(3))<1:raise RuntimeError('Player did not move')
-            (report/(tag+'.json')).write_text(json.dumps(dict(result='pass',command=command,screenshots=shots,modules=modules,geometry=geometry),indent=2))
-            print('PASS',tag,*shots,sep='\n')
+            (report/(tag+'.json')).write_text(json.dumps(dict(result='pass',mode='interactive' if args.interactive else 'isolated-desktop',desktop_verified=desktop_verified,audio='disabled',visual_checks='passed' if args.interactive else 'not_run',command=command,screenshots=shots,modules=modules,geometry=geometry),indent=2))
+            print('PASS',tag,'Visual checks: passed' if args.interactive else 'Runtime assertions only; visual checks NOT RUN (isolated desktop)',*shots,sep='\n')
         finally:
             if process.poll() is None:process.terminate();process.wait(timeout=5)
+            if not args.interactive:process.close()
             for path,data in configs.items():path.write_bytes(data)
             settings.unlink(missing_ok=True)
 

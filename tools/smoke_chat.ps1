@@ -1,6 +1,7 @@
 #requires -Version 7.0
 param([int]$Width=1280,[int]$Height=720)
 $ErrorActionPreference='Stop'
+if ($env:COF_INTERACTIVE_TEST -ne '1') { throw 'Interactive test disabled. Use python tools/smoke_rtx.py for isolated testing. Set COF_INTERACTIVE_TEST=1 only for an explicitly authorized interactive session.' }
 $root=Split-Path $PSScriptRoot -Parent
 $runtime=Join-Path $root 'out/runtime'
 $map=Join-Path $runtime 'cryoffear/maps/cof_chat_fixture.bsp'
@@ -16,7 +17,7 @@ try {
     python "$PSScriptRoot/create_chat_fixture.py"
     if($LASTEXITCODE -ne 0){throw 'Could not create chat fixture'}
     $env:COF_CHATTEST='1'
-    $process=Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +con_notifytime 0 +scr_drawversion 0 +map cof_chat_fixture" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
+    $process=Start-Process -FilePath "$runtime/xash3d.exe" -ArgumentList "-nosound -game cryoffear -windowed -width $Width -height $Height -console -dev 1 -log +con_notifytime 0 +scr_drawversion 0 +map cof_chat_fixture" -WorkingDirectory $runtime -WindowStyle Hidden -PassThru
     $env:COF_CHATTEST=$previous
     $watch=[Diagnostics.Stopwatch]::StartNew()
     while(-not $process.HasExited -and $watch.Elapsed.TotalSeconds -lt 45) {
