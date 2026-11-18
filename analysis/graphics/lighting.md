@@ -50,7 +50,7 @@ Client 0x10060000 consumes renderfx 71 entities. Radius is network renderamt
 shifted left three, RGB is rendercolor divided by 128, lifetime is time+0.01.
 Nonzero scale supplies both spotlight FOVs; rendermode selects
 `gfx/spotlight%d.tga`. Server creation and use transitions are implemented in
-`recovered_graphics.cpp`, but the native custom-light renderer is not yet ported.
+`graphics.cpp`, but the native custom-light renderer is not yet ported.
 The pre-existing source-engine flashlight is still a prototype.
 
 0x1005c0f0 allocates 32 custom lights, keyed by entity or expired slot.

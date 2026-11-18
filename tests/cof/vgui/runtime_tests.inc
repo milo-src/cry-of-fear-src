@@ -30,7 +30,18 @@ void RTXTestFrame() {
     case 12:if(d&&d->Find("RTXProfile")){Control& c=*d->Find("RTXProfile");c.selected=1;d->Changed(c);}click("Apply");
         check(!ReadRendererSettings().enabled&&ReadRendererSettings().profile==1,"disable and restore balance");
         EngFuncs::ClientCmd(false,"snapshot\n");break;
-    case 13:Con_Printf("COF_RTX_UI_COMPLETE failures=%d\n",failures);EngFuncs::ClientCmd(false,"quit\n");break;
+    case 13:click("Tab0");break;
+    case 14:check(d&&d->Find("listpanel_keybindlist"),"keyboard window visible");break;
+    case 15:click("Tab5");break;
+    case 16:check(d&&d->Find("AdvancedScroll"),"advanced scrollbar visible");break;
+    case 17:EngFuncs::ClientCmd(false,"toggleconsole\n");break;
+    case 18:check(d&&d->Find("ConsoleEntry"),"console window visible");
+        if(d&&d->Find("ConsoleEntry")){
+            const char* sample="\xd0\xbf\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82";
+            for(const unsigned char* p=reinterpret_cast<const unsigned char*>(sample);*p;++p)UI_CharEvent(*p);
+            check(d->Find("ConsoleEntry")->value==sample,"UTF8 console input");
+        }break;
+    case 19:Con_Printf("COF_RTX_UI_COMPLETE failures=%d\n",failures);EngFuncs::ClientCmd(false,"quit\n");break;
     }
 }
 void PointerTestFrame() {
@@ -72,6 +83,7 @@ void PointerTestFrame() {
     }
 }
 void TestFrame() {
+    if(getenv("COF_CONSOLE_OUTPUTTEST")){ConsoleOutputTestFrame();return;}
     if(getenv("COF_RTX_UITEST")){RTXTestFrame();return;}
     if(getenv("COF_POINTERTEST")){PointerTestFrame();return;}
     if(!getenv("COF_VGUITEST"))return;

@@ -62,7 +62,7 @@ The main map's camera has flags 84 = 4 + 16 + 64 and `wait=666`:
 - `zangle` key is parsed to an integer and overrides roll when nonzero.
 - Original camera also supports attached models, view entities, skip-manager, noise/letterbox and several other flags. These are not needed by the main menu camera and are not fully ported here.
 
-Exact map camera/path coordinates and two multimanager schedules are in assets.md / assets.json. Do not replace that scene with an invented camera orbit. The SDK's moving-camera path implementation is retained; the CoF differences above are added in `src/cof/server/recovered_camera.cpp`.
+Exact map camera/path coordinates and two multimanager schedules are in assets.md / assets.json. Do not replace that scene with an invented camera orbit. The SDK's moving-camera path implementation is retained; the CoF differences above are added in `src/cof/server/camera.cpp`.
 
 Evidence: Use `ev_5a26cbd43b1b243c39ddfb335f42052f66125ac78160d3f427822dff2f7e06ad`; FollowTarget `ev_ad514ca2a90a30ab93093d57a89ea803b274f8fc9697668ceae864a0478613e6`; Spawn `ev_49f9e0875e02f62f641b0951d544942adda8c614e7f71351a5cbb8e273961542`; KeyValue `ev_1b229a093d77c4e6fb852afa3d365575d4ab8e00cac8083c90ab32d4f2025b35`.
 
@@ -90,6 +90,6 @@ Evidence: music Use `ev_f67f40fb1412836c6aded84c47d19672699f4b9b354dfb54ae9a9808
 
 ## Port differences and validation boundaries
 
-`recovered_menu.cpp` adds strict integer/range validation and safe existing-map basenames for campaign commands, rather than original atoi/raw format arguments. A dedicated hidden entity performs GameStart's delayed command so it does not overwrite the SDK player's Think. Nightmare difficulty selection is stored, but nightmare campaign mechanics are not reconstructed by this UI work. Subtitle cvar archival is a port addition; per-player subtitle delivery remains unrecovered. Camera exit restores prior damage value, rather than assuming DAMAGE_AIM; explicit off also terminates an infinite camera.
+`menu.cpp` adds strict integer/range validation and safe existing-map basenames for campaign commands, rather than original atoi/raw format arguments. A dedicated hidden entity performs GameStart's delayed command so it does not overwrite the SDK player's Think. Nightmare difficulty selection is stored, but nightmare campaign mechanics are not reconstructed by this UI work. Subtitle cvar archival is a port addition; per-player subtitle delivery remains unrecovered. Camera exit restores prior damage value, rather than assuming DAMAGE_AIM; explicit off also terminates an infinite camera.
 
-Build integration: copy recovered_menu.cpp/.h and recovered_camera.cpp to the prepared SDK; remove the vendor's trigger-camera section to avoid duplicate class/export; call CofMenuPrecache in world precache, CofMenuPlayerInit in player HUD init, and CofMenuCommand before standard ClientCommand dispatch. Runtime/build testing is recorded by the integrating task separately. This static report alone is not evidence that campaign, all VGUI panels, custom rendering, rain or postprocessing are complete.
+Build integration: copy menu.cpp/.h and camera.cpp to the prepared SDK; remove the vendor's trigger-camera section to avoid duplicate class/export; call CofMenuPrecache in world precache, CofMenuPlayerInit in player HUD init, and CofMenuCommand before standard ClientCommand dispatch. Runtime/build testing is recorded by the integrating task separately. This static report alone is not evidence that campaign, all VGUI panels, custom rendering, rain or postprocessing are complete.

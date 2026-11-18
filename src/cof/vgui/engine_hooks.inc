@@ -50,4 +50,11 @@ static void CofUILoad( void )
     cof_ui_engine_t engine = { CofUIComplete, CofUIInMenuWorld };
     memset( &cof_ui, 0, sizeof(cof_ui) );
     if( get ) get( COF_UI_API_VERSION, &engine, &cof_ui );
+    if( cof_ui.toggle_console && cof_ui.console_print )
+    {
+        // Our console is available in ordinary launches too. Con_Printf drops
+        // all replies while this flag is false; keep the disconnect default in
+        // sync without enabling developer diagnostics or the legacy console.
+        host.allow_console = host.allow_console_init = true;
+    }
 }

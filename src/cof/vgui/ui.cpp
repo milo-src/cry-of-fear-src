@@ -3,6 +3,7 @@
 #include "keydefs.h"
 #include "ui.h"
 #include "engine_bridge.h"
+#include "utflib.h"
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -132,7 +133,19 @@ public:
     }
     bool KeyDown(int key) override { return Input(key,true); }
     bool KeyUp(int key) override { return Input(key,false); }
-    void Char(int key) override {if(!windows.empty()) windows.back()->Character(key);}
+    void Char(int key) override {
+        // MainUI receives SDL UTF-8 bytes, whereas Dialog expects codepoints.
+        // Encoding each byte again produces the mojibake seen in the console.
+        static utfstate_t decoder;
+        static Dialog* receiver=nullptr;
+        static int inputFocus=-1;
+        Dialog* active=windows.empty()?nullptr:windows.back();
+        if(active!=receiver || (active&&active->focus!=inputFocus))decoder.Reset();
+        receiver=active;inputFocus=active?active->focus:-1;
+        if(!active)return;
+        const int cp=decoder.Decode(static_cast<uint8_t>(key));
+        if(cp)active->Character(cp);
+    }
 protected:
     void _VidInit() override { SetCoord(0,0);SetSize(ViewWidth(),ViewHeight()); Fonts(); }
 private:

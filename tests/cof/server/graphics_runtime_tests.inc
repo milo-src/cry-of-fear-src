@@ -1,4 +1,4 @@
-// Test-only fixture driver. Include after recovered_graphics.cpp classes.
+// Test-only fixture driver. Include after graphics.cpp classes.
 #include <cstdlib>
 #include <cmath>
 static int graphicsTestFailures;
@@ -57,10 +57,24 @@ void CofGraphicsServerTestFrame(CBasePlayer* player) {
         player->pev->flags |= FL_NOTARGET;
         UTIL_SetOrigin(player->pev, Vector(565, 210, 50));
         player->pev->v_angle = player->pev->angles = Vector(55, 90, 0);
+        if (std::getenv("COF_RTX_WATER_VIEW")) {
+            UTIL_SetOrigin(player->pev, Vector(565, 140, 0));
+            player->pev->v_angle = player->pev->angles = Vector(18, 90, 0);
+        }
         player->pev->fixangle = 1;
         phase = 1;
     }
     const float elapsed = gpGlobals->time - began;
+    // Keep pixel comparisons reproducible even if the foreground test window
+    // receives real mouse/key input while the user works on the desktop.
+    if (std::getenv("COF_RTX_WATER_VIEW")) {
+        UTIL_SetOrigin(player->pev, Vector(565, 140, 0));
+        player->pev->v_angle = player->pev->angles = Vector(18, 90, 0);
+    } else {
+        UTIL_SetOrigin(player->pev, Vector(565, 210, 50));
+        player->pev->v_angle = player->pev->angles = Vector(55, 90, 0);
+    }
+    player->pev->fixangle = 1;
     if (phase == 1 && elapsed > 2) {
         CLIENT_COMMAND(player->edict(), "cof_graphics_stage 0\n"); phase = 2;
     } else if (phase == 2 && elapsed > 4) {

@@ -194,8 +194,9 @@ public:
     }
     void Paint() override {
         const int w=bounds.w,h=bounds.h;
-        Find("ConsoleEntry")->bounds={8,h-32,w-88,24};
-        Find("ConsoleSubmit")->bounds={w-72,h-32,64,24};
+        const int submitWidth=std::min(w/2,std::max(64,TextWidth(Find("ConsoleSubmit")->text)+16));
+        Find("ConsoleEntry")->bounds={8,h-32,w-submitWidth-24,24};
+        Find("ConsoleSubmit")->bounds={w-submitWidth-8,h-32,submitWidth,24};
         Control* popup=Find("CompletionList");
         int popupWidth=120;
         for (const std::string& text:popup->choices) popupWidth=std::max(popupWidth,TextWidth(text)+20);
@@ -248,10 +249,12 @@ public:
             Fill({track.x,track.y+travel-travel*scrollback/total,track.w,thumb},ThemeColor("BorderDark",0xff707070));
         }
     }
+#include "console_runtime_tests.inc"
 };
 ConsoleDialog& Console() { static ConsoleDialog dialog; return dialog; }
 }
 void ToggleConsole() { ConsoleDialog& dialog=Console(); if (Visible(dialog)) Close(dialog); else if(!OpenAfter2DMenu("cof_vgui_console")) Show(dialog); }
 void ConsolePrint(const char* text) { Console().Append(text); }
 void ConsoleClear() { Console().Clear(); }
+void ConsoleOutputTestFrame() { Console().OutputTestFrame(); }
 } }

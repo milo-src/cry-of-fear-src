@@ -5,7 +5,7 @@
 #include "player.h"
 #include "saverestore.h"
 #include "shake.h"
-#include "recovered_menu.h"
+#include "menu.h"
 #include <cstring>
 #include <string>
 

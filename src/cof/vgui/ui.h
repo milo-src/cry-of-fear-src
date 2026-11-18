@@ -62,6 +62,7 @@ void OpenOptions();
 void ToggleConsole();
 void ConsolePrint(const char* text);
 void ConsoleClear();
+void ConsoleOutputTestFrame();
 void Register();
 void TestFrame();
 } }

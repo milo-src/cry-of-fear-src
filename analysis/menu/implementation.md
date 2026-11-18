@@ -21,7 +21,7 @@ read statically, never executed or loaded into the reconstructed game.
 
 - Client code: `src/cof/client/game_menu.cpp`, `secondary_menus.cpp`,
   `save_load_menu.cpp`, `ui_font.cpp`, `ui_draw.cpp`.
-- Server code: `src/cof/server/recovered_menu.cpp`, `recovered_camera.cpp`.
+- Server code: `src/cof/server/menu.cpp`, `camera.cpp`.
 - Disconnected frontend: `src/cof/menu/Main.cpp`.
 - Waf uses generated SDK/engine copies under ignored `build/`. Vendored
   trees remain intact; `prepare_game.py` and `prepare_engine.py` make explicit

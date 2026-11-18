@@ -4,7 +4,7 @@ Edit the CoF code here. `build/game-source` is a generated SDK copy and is
 recreated by `tools/prepare_game.py` whenever the root Waf entry point runs.
 
 - `server/`: code for `hl.dll`: entities, doors, inventory state, pickup/use,
-  persistence and server interfaces. `recovered_inventory.h` belongs here
+  persistence and server interfaces. `inventory.h` belongs here
   because its API uses server entities and players; it is not a shared protocol.
 - `client/`: code for `client.dll`: inventory presentation, client commands,
   HUD and prototype frame instrumentation.

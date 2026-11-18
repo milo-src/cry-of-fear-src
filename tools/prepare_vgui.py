@@ -21,6 +21,7 @@ def prepare_vgui(target):
         if file.suffix in ('.h', '.cpp'):
             shutil.copy2(file, folder / file.name)
     shutil.copy2(ROOT/'tests/cof/vgui/runtime_tests.inc', folder/'runtime_tests.inc')
+    shutil.copy2(ROOT/'tests/cof/vgui/console_runtime_tests.inc', folder/'console_runtime_tests.inc')
     with (folder/'ui.cpp').open('a') as stream:
         stream.write('\n#include "runtime_tests.inc"\n')
     replace_once(ui/'wscript', "\t\t'*.cpp',", "\t\t'*.cpp',\n\t\t'cof_vgui/*.cpp',")

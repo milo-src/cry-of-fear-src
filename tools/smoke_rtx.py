@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 import subprocess
 import time
-from PIL import ImageGrab
+from PIL import Image, ImageGrab
 from renderer_settings import ROOT
 
 def capture(pid, path):
@@ -62,30 +62,55 @@ def capture(pid, path):
         raise RuntimeError('Window capture is blank; no visual verification')
     frame.save(path)
 
+def check_ui_pixels(path, marker, connected):
+    """Check actual 1280x720 output, including the multitexture HUD regression."""
+    frame=Image.open(path).convert('RGB')
+    if frame.size!=(1280,720):raise RuntimeError('Unexpected UI capture size')
+    if marker in ('keyboard window visible','advanced scrollbar visible','console window visible'):
+        x,top,bottom=(40,45,390) if marker=='console window visible' else (384,165,550)
+        visible=sum(min(frame.getpixel((x,y)))>100 for y in range(top,bottom))
+        if visible/(bottom-top)<.9:raise RuntimeError('Solid VGUI frame disappeared: '+marker)
+    if connected:
+        # The two narrow health/stamina sprites have a dark gap; an untextured
+        # sprite quad fills this entire area white (the reported regression).
+        pixels=[frame.getpixel((x,y)) for y in range(570,675) for x in range(57,71)]
+        if sum(min(p)>220 for p in pixels)/len(pixels)>.8:
+            raise RuntimeError('HUD sprites became solid white rectangles')
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
     parser.add_argument('--ui',action='store_true')
+    parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
     parser.add_argument('--graphics',action='store_true',help='Use the stationary water/lighting fixture')
+    parser.add_argument('--water-view',action='store_true',help='Inspect water reflections from a low camera angle')
     parser.add_argument('--motion',action='store_true',help='Walk past the water and capture settling light')
     parser.add_argument('--denoiser',choices=['0','1'],default='0')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.console_output:args.ui=True
+    if args.water_view:args.graphics=True
     if args.graphics or args.motion:args.map='cof_graphics_test'
     if not re.fullmatch('[a-zA-Z0-9_]+',args.map):parser.error('Invalid map')
     runtime=ROOT/('out/runtime-rtx' if args.renderer=='rtx' else 'out/runtime')
     report=ROOT/'analysis/local';report.mkdir(parents=True,exist_ok=True)
     tag=args.renderer+('-settings' if args.ui else '-'+args.map)
+    if args.console_output:tag=args.renderer+'-console-output'
     if args.motion:tag+='-motion-'+args.denoiser
+    if args.water_view:tag+='-water-view'
     settings=ROOT/'build'/('test-'+tag+'-renderer.cfg');settings.unlink(missing_ok=True)
     env=dict(os.environ,COF_RENDERER_SETTINGS=str(settings),COF_RTX_AVAILABLE='1',
              COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1')
-    for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST'):
+    for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST'):
         env.pop(flag,None)
+    if args.water_view:env['COF_RTX_WATER_VIEW']='1'
     env['COF_RTX_UITEST' if args.ui else 'COF_RTX_MOTIONTEST' if args.motion else 'COF_GRAPHICSTEST' if args.graphics else 'COF_SMOKETEST']='1'
+    if args.console_output:
+        env.pop('COF_RTX_UITEST',None);env['COF_CONSOLE_OUTPUTTEST']='1'
     configs={p:p.read_bytes() for p in (runtime/'cryoffear').glob('*.cfg')}
     logpath=runtime/'engine.log';logpath.unlink(missing_ok=True)
-    command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-windowed','-width','1280','-height','720','-log','-dev','2']
+    command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-windowed','-width','1280','-height','720','-log']
+    if not args.console_output:command+=['-dev','2']
     command += ['+menu_main'] if args.ui else ['+map',args.map]
     command += ['+rt_denoiser',args.denoiser]
     startup=subprocess.STARTUPINFO();startup.dwFlags=subprocess.STARTF_USESHOWWINDOW;startup.wShowWindow=0
@@ -96,11 +121,14 @@ def main():
             begin=time.monotonic()
             while process.poll() is None and time.monotonic()-begin<60:
                 text=logpath.read_text(errors='replace') if logpath.exists() else ''
-                markers=['balanced default','enable confirmation','disable and restore balance'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
+                markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
+                if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE']
                 for marker in markers:
                     if marker in text and marker not in observed:
-                        shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot);shots.append(str(shot));observed.add(marker)
+                        shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot)
+                        check_ui_pixels(shot,marker,args.graphics or args.motion)
+                        shots.append(str(shot));observed.add(marker)
                         if not modules:
                             output=subprocess.check_output(['powershell','-NoProfile','-Command',f'(Get-Process -Id {process.pid}).Modules | ForEach-Object FileName | ConvertTo-Json'],text=True)
                             modules=json.loads(output)
@@ -111,6 +139,7 @@ def main():
             text=logpath.read_text(errors='replace');(report/(tag+'.log')).write_text(text)
             marker='COF_RTX_UI_COMPLETE failures=0' if args.ui else 'COF_GRAPHICS_CLIENT_COMPLETE failures=0' if args.graphics else 'COF_SMOKE_CLIENT_RENDERED'
             if args.motion:marker='COF_RTX_MOTION_COMPLETE'
+            if args.console_output:marker='COF_CONSOLE_OUTPUT_COMPLETE failures=0'
             if marker not in text or 'COF_RTX_UI FAIL' in text:raise RuntimeError('Missing/failed assertions')
             geometry = None
             if args.motion and args.renderer=='rtx':
@@ -127,7 +156,7 @@ def main():
             if args.renderer=='rtx':
                 for name in ('vulkan-1.dll','RayTracedGL1.dll','NRI.dll','ref_gl.dll','client_amd64.dll'):
                     if not any(Path(p).name.lower()==name.lower() for p in modules):raise RuntimeError('Module not observed: '+name)
-                if 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')
+                if not args.console_output and 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')
             if any('steamapps' in p.lower() for p in modules):raise RuntimeError('Original game binary loaded')
             movement=re.search(r'COF_SMOKE_MOVEMENT ([\d.-]+) ([\d.-]+) ([\d.-]+) -> ([\d.-]+) ([\d.-]+) ([\d.-]+)',text)
             if not args.ui and args.map=='c_sdkmap1':

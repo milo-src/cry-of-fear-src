@@ -9,6 +9,10 @@ def prepare(raytracing=False):
     original = ROOT / 'external/hlsdk-portable'
     target = ROOT / ('build/game-rtx-source' if raytracing else 'build/game-source')
     target.mkdir(parents=True, exist_ok=True)
+    # Remove the previous CoF filenames: Waf discovers every .cpp in dlls.
+    for name in ('camera.cpp', 'chat.inc', 'doors.cpp', 'graphics.cpp', 'graphics.h',
+                 'inventory.cpp', 'inventory.h', 'menu.cpp', 'menu.h'):
+        (target / 'dlls' / ('recovered_' + name)).unlink(missing_ok=True)
     manifest = target / '.vendor-files.json'
     files = {path.relative_to(original).as_posix(): path for path in original.rglob('*')
              if path.is_file() and not any(part == '__pycache__' or part.startswith('waf3-')
@@ -49,7 +53,7 @@ def prepare(raytracing=False):
         text = text.replace(f'\tPRECACHE_MODEL( "models/{name}.mdl" );', '')
     (target / 'dlls/world.cpp').write_text(text)
     text = (original / 'dlls/player.cpp').read_text()
-    text = '#include "recovered_graphics.h"\n#include "recovered_inventory.h"\n#include "recovered_menu.h"\n' + text
+    text = '#include "graphics.h"\n#include "inventory.h"\n#include "menu.h"\n' + text
     text = text.replace('TYPEDESCRIPTION\tCBasePlayer::m_playerSaveData[] =\n{',
                         'TYPEDESCRIPTION\tCBasePlayer::m_playerSaveData[] =\n{\n'
                         '\tDEFINE_ARRAY(CBasePlayer, m_cofInventory, FIELD_STRING, 7),\n'
@@ -140,12 +144,12 @@ def prepare(raytracing=False):
     text = (original / 'dlls/client.cpp').read_text()
     begin = text.index('void Host_Say( edict_t *pEntity, int teamonly )')
     end = text.index('/*\n===========\nClientCommand', begin)
-    text = text[:begin] + '#include "recovered_chat.inc"\n\n' + text[end:]
-    shutil.copy2(ROOT / 'src/cof/server/recovered_chat.inc', target / 'dlls/recovered_chat.inc')
+    text = text[:begin] + '#include "chat.inc"\n\n' + text[end:]
+    shutil.copy2(ROOT / 'src/cof/server/chat.inc', target / 'dlls/chat.inc')
     anchor = 'void StartFrame( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected StartFrame source revision')
-    text = '#include "recovered_inventory.h"\n#include "recovered_menu.h"\n' + text
+    text = '#include "inventory.h"\n#include "menu.h"\n' + text
     text = text.replace(anchor, 'extern void CofDoorTestFrame();\n' + anchor + '\n\tCofDoorTestFrame();\n\tCofInventoryTestFrame();')
     anchor = '\tentvars_t *pev = &pEntity->v;\n\n\tif( FStrEq( pcmd, "say" ) )'
     if anchor not in text:
@@ -165,15 +169,17 @@ def prepare(raytracing=False):
     # Source ownership follows src/cof; the disposable SDK tree keeps its layout.
     # reference/ contains incomplete analysis models and must not enter either DLL.
     for side, folder, names in [
-        ('server', 'dlls', ('prototype_entities.cpp', 'recovered_doors.cpp',
-                            'recovered_inventory.cpp', 'recovered_inventory.h', 'recovered_menu.cpp', 'recovered_menu.h',
-                            'recovered_camera.cpp', 'recovered_graphics.cpp', 'recovered_graphics.h')),
+        ('server', 'dlls', ('prototype_entities.cpp', 'doors.cpp',
+                            'inventory.cpp', 'inventory.h', 'menu.cpp', 'menu.h',
+                            'camera.cpp', 'graphics.cpp', 'graphics.h')),
         ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp', 'saytext.cpp',
                                 'ui_draw.cpp', 'ui_draw.h', 'ui_font.cpp', 'ui_font.h', 'status_hud.cpp',
                                 'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h')),
     ]:
         for name in names:
-            shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / name)
+            # Preserve the SDK's standard doors.cpp alongside CoF's custom doors.
+            destination = 'cof_doors.cpp' if side == 'server' and name == 'doors.cpp' else name
+            shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / destination)
     shutil.copy2(ROOT / 'src/cof/shared/item_descriptor.h', target / 'common/item_descriptor.h')
     # Keep the complete vendored renderer ABI; adapt only its basic-type include to SDK types.
     renderer = ROOT / ('external/xash-rt/common' if raytracing else 'external/xash3d-fwgs/common')

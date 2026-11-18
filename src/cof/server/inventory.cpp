@@ -4,7 +4,7 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
-#include "recovered_inventory.h"
+#include "inventory.h"
 #include <string>
 #include "item_descriptor.h"
 #include <cstdlib>

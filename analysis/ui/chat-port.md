@@ -15,7 +15,7 @@ DLLs were analyzed read-only, never loaded into the reconstructed runtime.
 - `ui_font.cpp` adds the pager atlas, independently of existing credits text.
   `ui_draw.cpp` converts the pager's zero-alpha RGB coverage to RGBA, as for
   credits. The six original resolution assets are identical.
-- `src/cof/server/recovered_chat.inc` supplies Host_Say: 128-byte formatted
+- `src/cof/server/chat.inc` supplies Host_Say: 128-byte formatted
   string including NUL, public/TEAM prefix, sender echo, relationship/mute
   filtering and one-second rate limit. The SDK SPEC-only branch is removed.
 - `src/cof/vgui/ui.cpp` paints input with resource-selected EngineFont, its

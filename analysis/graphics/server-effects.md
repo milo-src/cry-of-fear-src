@@ -100,7 +100,7 @@ the resulting zero value; the port now bridges this key in BlackWhite::KeyValue
 using atoi/fHandled. The fixture key is unchanged. Capture tool emits the raw
 descriptor/vtable evidence as `blackwhite-keyvalue.json`.
 
-`src/cof/server/recovered_graphics.cpp/h` implements the confirmed core classes.
+`src/cof/server/graphics.cpp/h` implements the confirmed core classes.
 World precache registers messages. Player init sends current blackwhite/rain
 and active fog; PlayerFrame advances rain. Player fields are saved as integers,
 float arrays and FIELD_TIME timers by the source-preparation integration.

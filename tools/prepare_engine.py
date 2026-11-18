@@ -88,6 +88,10 @@ def prepare(raytracing=False):
         render.write_text(text)
         from prepare_rtx_lighting import prepare as prepare_rtx_lighting
         prepare_rtx_lighting(target)
+        from prepare_rtx_ui import prepare as prepare_rtx_ui
+        prepare_rtx_ui(target)
+        from prepare_rtx_materials import prepare as prepare_rtx_materials
+        prepare_rtx_materials(target)
         prepare_vgui(target)
         return target
     # Shader ports and renderer glue are owned by this repository. The pinned

@@ -4,7 +4,7 @@
 #include "cbase.h"
 #include "player.h"
 #include "saverestore.h"
-#include "recovered_graphics.h"
+#include "graphics.h"
 
 namespace {
 int blackWhiteMessage;
