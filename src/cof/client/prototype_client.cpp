@@ -10,6 +10,7 @@ extern void CofGameMenuDraw();
 extern bool CofGameMenuWorld();
 extern bool CofGameMenuVisible();
 extern void CofMenuTestFrame();
+#include "graphics_runtime_tests.inc"
 
 void CofPrototypeFrame(float time) {
     static cvar_t* smoke = nullptr;
@@ -21,6 +22,7 @@ void CofPrototypeFrame(float time) {
     if (first < 0.0f || time < first) { first = time; captured = false; movement_stage = 0; }
     CofUiTestFrame();
     CofMenuTestFrame();
+    CofGraphicsClientTestFrame(time);
     if (!CofGameMenuWorld() && !CofGameMenuVisible()) {
         CofStatusHudDraw();
         CofInventoryDraw();

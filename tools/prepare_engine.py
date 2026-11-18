@@ -2,6 +2,7 @@
 from pathlib import Path
 import json
 import shutil
+from prepare_graphics import prepare_lighting
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -57,6 +58,34 @@ def prepare():
     text = header.read_text().replace('FONT_STRIKEOUT = 1 << 2',
         'FONT_STRIKEOUT = 1 << 2,\n\tFONT_VGUI_EXACT = 1 << 3 // source-owned CoF menu metrics')
     (target / '3rdparty/mainui/font/FontRenderer.h').write_text(text)
+    # Shader ports and renderer glue are owned by this repository. The pinned
+    # engine remains untouched; Waf's ref/gl source glob picks up this C file.
+    render = ROOT / 'src/cof/render'
+    for name in ('gl_cof.c', 'gl_cof.h'):
+        shutil.copy2(render / name, target / 'ref/gl' / name)
+    shader_header = ['/* Generated from src/cof/render/shaders; do not edit. */']
+    for name in ('water.vert', 'water.frag', 'black.vert', 'black.frag', 'desaturate.frag'):
+        shader_header.append('static const char cof_' + name.replace('.', '_') + '[] =')
+        shader_header.extend(json.dumps(line + '\n') for line in
+                             (render / 'shaders' / name).read_text().splitlines())
+        shader_header.append(';')
+    (target / 'ref/gl/cof_shader_sources.h').write_text('\n'.join(shader_header) + '\n')
+    for name, hooks in {
+        'gl_opengl.c': [('\tR_InitImages();', '\tR_InitImages();\n\tCofRenderInit();'),
+                        ('\tR_ShutdownImages();', '\tCofRenderShutdown();\n\tR_ShutdownImages();')],
+        'gl_rmain.c': [('\t\tgEngfuncs.pfnDrawTransparentTriangles ();',
+                         '\t\tgEngfuncs.pfnDrawTransparentTriangles ();\n\t\tCofRenderWater();'),
+                        ('\tR_DrawWorld();', '\tCofRenderFog();\n\tR_DrawWorld();'),
+                        ('\tR_DrawWaterSurfaces();', '\tR_DrawWaterSurfaces();\n\tCofRenderPostProcess();')],
+    }.items():
+        text = (original / 'ref/gl' / name).read_text()
+        text = text.replace('#include "gl_local.h"', '#include "gl_local.h"\n#include "gl_cof.h"')
+        for anchor, replacement in hooks:
+            if text.count(anchor) != 1:
+                raise ValueError(f'Unexpected CoF renderer hook in {name}: {anchor}')
+            text = text.replace(anchor, replacement)
+        (target / 'ref/gl' / name).write_text(text)
+    prepare_lighting(target)
     return target
 
 

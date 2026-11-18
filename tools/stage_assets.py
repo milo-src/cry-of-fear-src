@@ -31,7 +31,7 @@ def main():
             continue
         rel = path.relative_to(source)
         if path.suffix.lower() not in ALLOWED or (len(rel.parts) > 1 and rel.parts[0].lower() not in
-                {'maps', 'models', 'sprites', 'sound', 'gfx', 'events', 'inventoryitems', 'resource', 'mp3'}):
+                {'maps', 'models', 'sprites', 'sound', 'gfx', 'textures', 'events', 'inventoryitems', 'resource', 'mp3'}):
             continue
         destination = target / rel
         destination.parent.mkdir(parents=True, exist_ok=True)

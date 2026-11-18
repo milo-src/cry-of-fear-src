@@ -82,7 +82,7 @@ def main():
         BUILD / '3rdparty/extras/extras.pk3': 'cryoffear/extras.pk3',
         sdl / 'lib/x86/SDL2.dll': 'SDL2.dll',
     }
-    manifest = {'engine_source': 'vendored external/xash3d-fwgs + src/cof/menu/Main.cpp',
+    manifest = {'engine_source': 'vendored external/xash3d-fwgs + src/cof/menu + src/cof/render',
                 'sdl_url': SDL_URL, 'sdl_archive_sha256': SDL_SHA256,
                 'compiler': f'MSVC {msvc_version}, x86', 'files': {}}
     for source, relative in artifacts.items():
