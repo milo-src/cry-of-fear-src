@@ -114,6 +114,7 @@ def main():
     parser.add_argument('--lighting',action='store_true',help='Hold a fixed camera with flashlight off on the selected map')
     parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
     parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
+    parser.add_argument('--cursor',action='store_true',help='Check RTX client-panel cursor, capture and focus transitions')
     parser.add_argument('--cvar',nargs=2,action='append',default=[],metavar=('NAME','VALUE'),help='Read-only comparison run with temporary runtime cvars')
     parser.add_argument('--label',default='',help='Suffix for comparison artifacts')
     parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
@@ -124,6 +125,9 @@ def main():
     for name,value in args.cvar:
         if not re.fullmatch('[a-zA-Z0-9_]+',name) or not re.fullmatch('[-+.0-9]+',value):parser.error('Invalid numeric cvar')
     if args.menu_cycle:args.menu_scene=True
+    if args.cursor:
+        if args.renderer!='rtx':parser.error('--cursor requires the RTX engine probe')
+        args.menu_scene=True
     if args.menu_scene:args.map='c_game_menu1'
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
@@ -150,6 +154,8 @@ def main():
         env.pop(flag,None)
     env.pop('COF_MENU_SCENETEST',None)
     env.pop('COF_MENU_CYCLETEST',None)
+    env.pop('COF_CURSORTEST',None)
+    if args.cursor:env['COF_CURSORTEST']='1'
     if args.water_view:env['COF_RTX_WATER_VIEW']='1'
     if args.lighting:env['COF_RTX_LIGHTINGTEST']='1'
     if args.pose:env['COF_RTX_LIGHTING_POSE']=args.pose
@@ -215,6 +221,8 @@ def main():
                     material_check=check_menu_night_materials(shots[2])
                     (report/(tag+'-materials.json')).write_text(json.dumps(material_check,indent=2))
             if marker not in text or 'COF_RTX_UI FAIL' in text:raise RuntimeError('Missing/failed assertions')
+            if args.cursor and 'COF_CURSOR_COMPLETE failures=0' not in text:
+                raise RuntimeError('Cursor/focus regression probe did not pass')
             geometry = None
             if args.motion and args.renderer=='rtx':
                 observations=re.findall(r'COF_RTX_GEOMETRY frames=(\d+) samples=(\d+) changed=(\d+)',text)

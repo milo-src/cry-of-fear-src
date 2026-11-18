@@ -71,6 +71,8 @@ def prepare(raytracing=False):
     (target / '3rdparty/mainui/font/FontRenderer.h').write_text(text)
     if raytracing:
         # Path tracing supplies its own water, lighting and tonemapping.
+        from prepare_rtx_input import prepare as prepare_rtx_input
+        prepare_rtx_input(target)
         filesystem = target / 'engine/common/filesystem_engine.c'
         text = filesystem.read_text()
         start = text.index('#if XASH_RAYTRACING\n\t// use parent folder')
