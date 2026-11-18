@@ -4,6 +4,7 @@
 #include "cl_util.h"
 #include "cl_entity.h"
 #include "graphics.h"
+#include "weather.h"
 
 namespace {
 struct FogState {
@@ -76,6 +77,11 @@ int RainDataMessage(const char*, int size, void* data) {
 #include "graphics_protocol_tests.inc"
 
 void CofGraphicsInit() {
+    CVAR_CREATE("cg_water", "1", FCVAR_ARCHIVE);
+    CVAR_CREATE("skybrightvalue", "0.1", FCVAR_ARCHIVE);
+    CVAR_CREATE("skybrightcolourr", "0", FCVAR_ARCHIVE);
+    CVAR_CREATE("skybrightcolourg", "0", FCVAR_ARCHIVE);
+    CVAR_CREATE("skybrightcolourb", "0", FCVAR_ARCHIVE);
     const char* bridge[] = { "cof_blackwhite", "cof_fog_enable", "cof_fog_r",
         "cof_fog_g", "cof_fog_b", "cof_fog_start", "cof_fog_end" };
     for (unsigned i = 0; i < sizeof(bridge) / sizeof(bridge[0]); ++i)
@@ -88,6 +94,7 @@ void CofGraphicsInit() {
     CofGraphicsProtocolTests();
 }
 void CofGraphicsReset() {
+    CofWeatherReset();
     fog = FogState();
     rain = CofRainState();
     blackWhite = 0;
@@ -95,6 +102,7 @@ void CofGraphicsReset() {
     Publish();
 }
 void CofGraphicsVidInit() {
+    CofWeatherReset();
     // GL resources belong to the renderer. Retain messages across vid_restart.
     Publish();
 }

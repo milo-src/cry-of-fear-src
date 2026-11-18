@@ -78,6 +78,31 @@ def check_ui_pixels(path, marker, connected):
         if sum(min(p)>220 for p in pixels)/len(pixels)>.8:
             raise RuntimeError('HUD sprites became solid white rectangles')
 
+def check_menu_night_materials(path):
+    """24-second authored camera: catch the reported glowing train/green water.
+
+    Exclude UI, bridge pillars and train windows from the body sample. Medians
+    and a window percentile tolerate moving snow and small capture-time skew.
+    These are regression bounds, not a pixel-equality claim for the RT image.
+    """
+    import statistics
+    frame=Image.open(path).convert('RGB')
+    def pixels(box):return list(frame.crop(box).get_flattened_data())
+    def brightness(p):return sum(p)/3
+    body=statistics.median(map(brightness,pixels((210,374,285,381))))
+    windows=sorted(map(brightness,pixels((218,357,290,369))))
+    window95=windows[int(len(windows)*.95)]
+    water=pixels((70,580,420,680))
+    water_level=statistics.median(map(brightness,water))
+    green=statistics.mean(g-(r+b)/2 for r,g,b in water)
+    if body>25:raise RuntimeError('Menu train body is overlit')
+    if window95<30:raise RuntimeError('Authored train window overlay disappeared')
+    if window95>165:raise RuntimeError('Additive train windows have extra screen glow')
+    if water_level>12 or abs(green)>1.25:
+        raise RuntimeError('Night water acquired a bright/colored unlit floor')
+    return dict(train_body_median=body,train_window_p95=window95,
+                water_median=water_level,water_green_excess=green)
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
@@ -87,10 +112,19 @@ def main():
     parser.add_argument('--water-view',action='store_true',help='Inspect water reflections from a low camera angle')
     parser.add_argument('--motion',action='store_true',help='Walk past the water and capture settling light')
     parser.add_argument('--lighting',action='store_true',help='Hold a fixed camera with flashlight off on the selected map')
+    parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
+    parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
+    parser.add_argument('--cvar',nargs=2,action='append',default=[],metavar=('NAME','VALUE'),help='Read-only comparison run with temporary runtime cvars')
+    parser.add_argument('--label',default='',help='Suffix for comparison artifacts')
     parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
     parser.add_argument('--denoiser',choices=['0','1'],default='0')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.label and not re.fullmatch('[a-zA-Z0-9_-]+',args.label):parser.error('Invalid label')
+    for name,value in args.cvar:
+        if not re.fullmatch('[a-zA-Z0-9_]+',name) or not re.fullmatch('[-+.0-9]+',value):parser.error('Invalid numeric cvar')
+    if args.menu_cycle:args.menu_scene=True
+    if args.menu_scene:args.map='c_game_menu1'
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
         except ValueError: parser.error('--pose requires six finite numbers')
@@ -107,34 +141,46 @@ def main():
     if args.motion:tag+='-motion-'+args.denoiser
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
+    if args.menu_cycle:tag+='-cycle'
+    if args.label:tag+='-'+args.label
     settings=ROOT/'build'/('test-'+tag+'-renderer.cfg');settings.unlink(missing_ok=True)
     env=dict(os.environ,COF_RENDERER_SETTINGS=str(settings),COF_RTX_AVAILABLE='1',
              COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1')
     for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST','COF_RTX_LIGHTINGTEST','COF_RTX_LIGHTING_POSE'):
         env.pop(flag,None)
+    env.pop('COF_MENU_SCENETEST',None)
+    env.pop('COF_MENU_CYCLETEST',None)
     if args.water_view:env['COF_RTX_WATER_VIEW']='1'
     if args.lighting:env['COF_RTX_LIGHTINGTEST']='1'
     if args.pose:env['COF_RTX_LIGHTING_POSE']=args.pose
     env['COF_RTX_UITEST' if args.ui else 'COF_RTX_MOTIONTEST' if args.motion else 'COF_GRAPHICSTEST' if args.graphics else 'COF_SMOKETEST']='1'
+    if args.menu_scene:
+        env.pop('COF_SMOKETEST',None)
+        env['COF_MENU_SCENETEST']='1'
+        if args.menu_cycle:env['COF_MENU_CYCLETEST']='1'
     if args.console_output:
         env.pop('COF_RTX_UITEST',None);env['COF_CONSOLE_OUTPUTTEST']='1'
     configs={p:p.read_bytes() for p in (runtime/'cryoffear').glob('*.cfg')}
     logpath=runtime/'engine.log';logpath.unlink(missing_ok=True)
     command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-windowed','-width','1280','-height','720','-log']
     if not args.console_output:command+=['-dev','2']
+    for name,value in args.cvar:command+=['+'+name,value]
     command += ['+menu_main'] if args.ui else ['+map',args.map]
     command += ['+rt_denoiser',args.denoiser]
+    if args.menu_scene:command += ['+con_notifytime','0']
     startup=subprocess.STARTUPINFO();startup.dwFlags=subprocess.STARTF_USESHOWWINDOW;startup.wShowWindow=0
     shots=[];modules=[];observed=set()
     with (report/(tag+'-stderr.log')).open('w') as errors:
         process=subprocess.Popen(command,cwd=runtime,env=env,startupinfo=startup,stdout=errors,stderr=errors)
         try:
             begin=time.monotonic()
-            while process.poll() is None and time.monotonic()-begin<60:
+            while process.poll() is None and time.monotonic()-begin<(120 if args.menu_cycle else 60):
                 text=logpath.read_text(errors='replace') if logpath.exists() else ''
                 markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
                 if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE','COF_CONSOLE_MAP_CAPTURE']
+                if args.menu_scene:markers=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (10,18,24,36)]
+                if args.menu_cycle:markers+=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (87,94)]
                 for marker in markers:
                     if marker in text and marker not in observed:
                         shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot)
@@ -151,6 +197,23 @@ def main():
             marker='COF_RTX_UI_COMPLETE failures=0' if args.ui else 'COF_GRAPHICS_CLIENT_COMPLETE failures=0' if args.graphics else 'COF_SMOKE_CLIENT_RENDERED'
             if args.motion:marker='COF_RTX_MOTION_COMPLETE'
             if args.console_output:marker='COF_CONSOLE_OUTPUT_COMPLETE failures=0'
+            if args.menu_scene:
+                marker='COF_MENU_SCENE_COMPLETE failures=0'
+                if 'COF_WEATHER_DRAW' not in text:raise RuntimeError('No client precipitation drawn')
+                if args.renderer=='rtx':
+                    for required in ('COF_RTX_SKY_MODEL models/props/sky_sphere4.mdl speed=80',
+                                     'COF_RTX_WATER_VOLUME'):
+                        if required not in text:raise RuntimeError('Missing scene submission: '+required)
+                    if len(shots)!=(6 if args.menu_cycle else 4):raise RuntimeError('Missing scene captures')
+                    from PIL import ImageChops, ImageStat
+                    a=Image.open(shots[1]).crop((0,340,500,395)).convert('RGB')
+                    b=Image.open(shots[2]).crop((0,340,500,395)).convert('RGB')
+                    if sum(ImageStat.Stat(ImageChops.difference(a,b)).mean)<8:
+                        raise RuntimeError('Train position changed on server but not in rendered frames')
+                    sky=Image.open(shots[2]).crop((20,100,300,270)).convert('L')
+                    if ImageStat.Stat(sky).mean[0]>35:raise RuntimeError('Night menu sky became daylight')
+                    material_check=check_menu_night_materials(shots[2])
+                    (report/(tag+'-materials.json')).write_text(json.dumps(material_check,indent=2))
             if marker not in text or 'COF_RTX_UI FAIL' in text:raise RuntimeError('Missing/failed assertions')
             geometry = None
             if args.motion and args.renderer=='rtx':

@@ -4,6 +4,10 @@ typedef struct { CofRTKey pairs[128]; int count; } CofRTEntity;
 typedef struct { char name[64]; RgColor4DPacked32 color; float power; } CofRTTexlight;
 static CofRTTexlight cof_texlights[256];
 static int cof_texlight_count;
+float cof_rt_sky_origin[3], cof_rt_world_origin[3], cof_rt_sky_speed;
+float cof_rt_sky_energy = 1;
+qboolean cof_rt_has_sky;
+qboolean cof_rt_menu_scene;
 
 static char *CofRTReadEntity(char *text, CofRTEntity *entity)
 {
@@ -161,6 +165,12 @@ void RT_ParseStaticLightEntities(void)
     g_lights.potential_sun_count=0;
     g_lights.sun_exists=false;
     cof_texlight_count=0;
+    cof_rt_has_sky=false;
+    cof_rt_menu_scene=false;
+    cof_rt_sky_speed=0;
+    cof_rt_sky_energy=1;
+    VectorClear(cof_rt_sky_origin);
+    VectorClear(cof_rt_world_origin);
     if (!WORLDMODEL || !WORLDMODEL->entities) return;
     CofRTEntity entity;
     char *text=WORLDMODEL->entities;
@@ -168,6 +178,18 @@ void RT_ParseStaticLightEntities(void)
     while ((text=CofRTReadEntity(text,&entity))!=NULL) {
         const char *classname=CofRTValue(&entity,"classname");
         if (!classname) continue;
+        if (!Q_stricmp(classname,"cof_gamemenu")) cof_rt_menu_scene=true;
+        // Same authored fields transported by skymark_sky/skymark_w in CoF.
+        // The RT backend can read immutable BSP data directly at map load.
+        if (!Q_stricmp(classname,"envpos_sky")) {
+            cof_rt_has_sky=CofRTVector(CofRTValue(&entity,"origin"),cof_rt_sky_origin);
+            continue;
+        }
+        if (!Q_stricmp(classname,"envpos_world")) {
+            CofRTVector(CofRTValue(&entity,"origin"),cof_rt_world_origin);
+            cof_rt_sky_speed=CofRTNumber(&entity,"health",0);
+            continue;
+        }
         if (!Q_stricmp(classname,"info_texlights")) {
             for (int i=0;i<entity.count;++i) {
                 const CofRTKey *pair=&entity.pairs[i];
@@ -195,6 +217,14 @@ void RT_ParseStaticLightEntities(void)
         if (!CofRTColor(CofRTValue(&entity,"_light"),&color,&power)) continue;
         CofRTDirection(&entity,origin,direction);
         if (sun) {
+            // RT adaptation: use authored diffuse sky energy, instead of the
+            // upstream constant daylight on every map, including night scenes.
+            RgColor4DPacked32 diffuseColor=color;
+            float diffusePower=power;
+            const char *diffuse=CofRTValue(&entity,"_diffuse_light");
+            if (diffuse) CofRTColor(diffuse,&diffuseColor,&diffusePower);
+            cof_rt_sky_energy=diffusePower *
+                Q_max(diffuseColor & 255,Q_max((diffuseColor>>8)&255,(diffuseColor>>16)&255))/255.f;
             if (g_lights.potential_sun_count<RT_MAX_POTENTIAL_SUN_LIGHTS) {
                 float pitch=RAD2DEG(asin(bound(-1,direction[2],1)));
                 float yaw=RAD2DEG(atan2(direction[1],direction[0]));

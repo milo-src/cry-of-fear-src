@@ -92,6 +92,8 @@ def prepare(raytracing=False):
         prepare_rtx_ui(target)
         from prepare_rtx_materials import prepare as prepare_rtx_materials
         prepare_rtx_materials(target)
+        from prepare_rtx_scene import prepare as prepare_rtx_scene
+        prepare_rtx_scene(target)
         prepare_vgui(target)
         return target
     # Shader ports and renderer glue are owned by this repository. The pinned

@@ -116,6 +116,8 @@ def prepare(raytracing=False):
     text = text.replace('\tgHUD.Init();', '\tgHUD.Init();\n\tCofGraphicsInit();\n\tCofInventoryClientInit();\n\tCofStatusHudInit();\n\tCofGameMenuInit();')
     text = text.replace('\tgHUD.VidInit();', '\tgHUD.VidInit();\n\tCofGraphicsVidInit();\n\tCofUiVidInit();\n\tCofInventoryVidInit();\n\tCofGameMenuVidInit();')
     (target / 'cl_dll/cdll_int.cpp').write_text(text)
+    text = text.replace('CofGraphicsInit();', 'CofGraphicsInit();\n\tCofWeatherInit();')
+    (target / 'cl_dll/cdll_int.cpp').write_text('#include "weather.h"\n' + text)
     for name, anchor, call in (
         ('hud_msg.cpp', 'int CHud::MsgFunc_ResetHUD( const char *pszName, int iSize, void *pbuf )\n{', 'CofGraphicsReset();'),
         ('view.cpp', 'void DLLEXPORT V_CalcRefdef( struct ref_params_s *pparams )\n{', 'CofGraphicsFrame(pparams->time);'),
@@ -126,6 +128,15 @@ def prepare(raytracing=False):
             raise ValueError('Unexpected graphics hook in ' + name)
         text = '#include "graphics.h"\n' + text.replace(anchor, anchor + '\n\t' + call)
         (target / 'cl_dll' / name).write_text(text)
+    path = target / 'cl_dll/view.cpp'
+    text = path.read_text()
+    anchor = '/*\n// Example of how to overlay the whole screen with red at 50 % alpha'
+    if text.count(anchor) != 1: raise ValueError('Weather camera hook changed')
+    path.write_text('#include "weather.h"\n' + text.replace(anchor, '\tCofWeatherView(pparams);\n' + anchor))
+    text = (original / 'cl_dll/tri.cpp').read_text()
+    anchor = 'void DLLEXPORT HUD_DrawTransparentTriangles( void )\n{'
+    if text.count(anchor) != 1: raise ValueError('Weather draw hook changed')
+    (target / 'cl_dll/tri.cpp').write_text('#include "weather.h"\n' + text.replace(anchor, anchor+'\n\tCofWeatherDraw();'))
     text = (original / 'cl_dll/input.cpp').read_text()
     text = 'extern bool CofInventoryVisible();\nextern int CofInventoryKeyEvent(int, int, const char*);\nextern bool CofGameMenuVisible();\nextern int CofGameMenuKeyEvent(int, int, const char*);\n' + text
     anchor = 'int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )\n{'
@@ -142,6 +153,9 @@ def prepare(raytracing=False):
                         '\t\tVectorCopy(cofAngles, cmd->viewangles);\n\t}\n' + anchor)
     (target / 'cl_dll/input.cpp').write_text(text)
     text = (original / 'dlls/client.cpp').read_text()
+    # Sky models live in a separate miniature area, outside the camera PVS.
+    text = text.replace('if( !FClassnameIs( ent, "env_sky" ) )',
+        'if( !FClassnameIs( ent, "env_sky" ) && ent->v.renderfx != 70 && ent->v.renderfx != 137 && ent->v.renderfx != 184 )')
     begin = text.index('void Host_Say( edict_t *pEntity, int teamonly )')
     end = text.index('/*\n===========\nClientCommand', begin)
     text = text[:begin] + '#include "chat.inc"\n\n' + text[end:]
@@ -150,7 +164,7 @@ def prepare(raytracing=False):
     if anchor not in text:
         raise ValueError('Unexpected StartFrame source revision')
     text = '#include "inventory.h"\n#include "menu.h"\n' + text
-    text = text.replace(anchor, 'extern void CofDoorTestFrame();\n' + anchor + '\n\tCofDoorTestFrame();\n\tCofInventoryTestFrame();')
+    text = text.replace(anchor, 'extern void CofMenuSceneTestFrame();\nextern void CofDoorTestFrame();\n' + anchor + '\n\tCofMenuSceneTestFrame();\n\tCofDoorTestFrame();\n\tCofInventoryTestFrame();')
     anchor = '\tentvars_t *pev = &pEntity->v;\n\n\tif( FStrEq( pcmd, "say" ) )'
     if anchor not in text:
         raise ValueError('Unexpected ClientCommand source revision')
@@ -159,7 +173,7 @@ def prepare(raytracing=False):
                         '\tif (CofMenuCommand(static_cast<CBasePlayer*>(CBaseEntity::Instance(pEntity)), pcmd)) return;\n'
                         '\n\tif( FStrEq( pcmd, "say" ) )')
     (target / 'dlls/client.cpp').write_text(text)
-    for name in ('door_runtime_tests.inc', 'inventory_runtime_tests.inc', 'graphics_runtime_tests.inc'):
+    for name in ('menu_scene_tests.inc', 'door_runtime_tests.inc', 'inventory_runtime_tests.inc', 'graphics_runtime_tests.inc'):
         shutil.copy2(ROOT / 'tests/cof/server' / name, target / 'dlls' / name)
     shutil.copy2(ROOT / 'tests/cof/client/ui_runtime_tests.inc', target / 'cl_dll/ui_runtime_tests.inc')
     shutil.copy2(ROOT / 'tests/cof/client/chat_runtime_tests.inc', target / 'cl_dll/chat_runtime_tests.inc')
@@ -174,12 +188,14 @@ def prepare(raytracing=False):
                             'camera.cpp', 'graphics.cpp', 'graphics.h')),
         ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp', 'saytext.cpp',
                                 'ui_draw.cpp', 'ui_draw.h', 'ui_font.cpp', 'ui_font.h', 'status_hud.cpp',
-                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h')),
+                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h', 'weather.cpp', 'weather.h')),
     ]:
         for name in names:
             # Preserve the SDK's standard doors.cpp alongside CoF's custom doors.
             destination = 'cof_doors.cpp' if side == 'server' and name == 'doors.cpp' else name
             shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / destination)
+    path = target / 'dlls/menu.cpp'
+    path.write_text(path.read_text() + '\n#include "menu_scene_tests.inc"\n')
     shutil.copy2(ROOT / 'src/cof/shared/item_descriptor.h', target / 'common/item_descriptor.h')
     # Keep the complete vendored renderer ABI; adapt only its basic-type include to SDK types.
     renderer = ROOT / ('external/xash-rt/common' if raytracing else 'external/xash3d-fwgs/common')
