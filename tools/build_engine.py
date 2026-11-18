@@ -12,9 +12,9 @@ import shutil
 import subprocess
 import urllib.request
 import zipfile
+from prepare_engine import prepare
 
 ROOT = Path(__file__).resolve().parents[1]
-ENGINE = ROOT / 'external/xash3d-fwgs'
 BUILD = ROOT / 'build/engine'
 RUNTIME = ROOT / 'out/runtime'
 SDL_VERSION = '2.32.10'
@@ -29,9 +29,12 @@ def sha256(path):
 
 def main():
     import sys
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(errors='replace')
     if os.name != 'nt':
         raise RuntimeError('This build entrypoint targets Windows x86.')
     subprocess.run([sys.executable, str(ROOT / 'tools/prepare_sdk.py')], check=True)
+    engine = prepare()
     sdk_root = ROOT / 'deps/sdl2'
     sdk_root.mkdir(parents=True, exist_ok=True)
     archive = sdk_root / SDL_ARCHIVE
@@ -64,7 +67,7 @@ def main():
         log = ROOT / 'build' / f'engine-{command[0]}.log'
         print(f'Engine {command[0]}: {log}', flush=True)
         with log.open('w', encoding='utf-8') as output:
-            result = subprocess.run([sys.executable, 'waf', *command], cwd=ENGINE,
+            result = subprocess.run([sys.executable, 'waf', *command], cwd=engine,
                                     env=env, stdout=output, stderr=subprocess.STDOUT)
         if result.returncode:
             print(log.read_text(encoding='utf-8')[-12000:])
@@ -79,7 +82,7 @@ def main():
         BUILD / '3rdparty/extras/extras.pk3': 'cryoffear/extras.pk3',
         sdl / 'lib/x86/SDL2.dll': 'SDL2.dll',
     }
-    manifest = {'engine_source': 'vendored external/xash3d-fwgs',
+    manifest = {'engine_source': 'vendored external/xash3d-fwgs + src/cof/menu/Main.cpp',
                 'sdl_url': SDL_URL, 'sdl_archive_sha256': SDL_SHA256,
                 'compiler': f'MSVC {msvc_version}, x86', 'files': {}}
     for source, relative in artifacts.items():

@@ -11,7 +11,7 @@ import os
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED = {'.bsp', '.wad', '.mdl', '.spr', '.wav', '.mp3', '.ogg', '.tga', '.bmp',
-           '.png', '.jpg', '.jpeg', '.dds', '.txt', '.seq', '.lst', '.lmp'}
+           '.png', '.jpg', '.jpeg', '.dds', '.txt', '.seq', '.lst', '.lmp', '.res', '.custom', '.chw'}
 
 
 def main():
@@ -31,7 +31,7 @@ def main():
             continue
         rel = path.relative_to(source)
         if path.suffix.lower() not in ALLOWED or (len(rel.parts) > 1 and rel.parts[0].lower() not in
-                {'maps', 'models', 'sprites', 'sound', 'gfx', 'events', 'inventoryitems'}):
+                {'maps', 'models', 'sprites', 'sound', 'gfx', 'events', 'inventoryitems', 'resource', 'mp3'}):
             continue
         destination = target / rel
         destination.parent.mkdir(parents=True, exist_ok=True)

@@ -14,4 +14,4 @@ commands = [
 ]
 for command in commands:
     subprocess.run(command, cwd=ROOT, check=True)
-print('Build ready. Run launch.bat to explore c_sdkmap1.')
+print('Build ready. Run start-game.bat for the 3D menu, or start-game.bat --2d for the 2D menu.')

@@ -10,7 +10,8 @@ RUNTIME = ROOT / 'out/runtime'
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--map', default='c_sdkmap1')
+    parser.add_argument('--map', default='c_game_menu1')
+    parser.add_argument('--2d', dest='menu_2d', action='store_true', help='Start in the disconnected 2D menu')
     args = parser.parse_args()
     if not re.fullmatch(r'[A-Za-z0-9_]+', args.map):
         parser.error('Map must be a plain map name')
@@ -21,7 +22,11 @@ def main():
     if missing:
         raise SystemExit('Run build.bat first. Missing: ' + ', '.join(missing))
     command = [str(RUNTIME / 'xash3d.exe'), '-game', 'cryoffear', '-windowed',
-               '-width', '1280', '-height', '720', '-log', '+map', args.map]
+               '-width', '1280', '-height', '720', '-log']
+    if not args.menu_2d:
+        command += ['+map', args.map]
+    else:
+        command += ['+menu_main']
     process = subprocess.Popen(command, cwd=RUNTIME)
     print(f'Prototype started (PID {process.pid}). Log: {RUNTIME / "engine.log"}')
 

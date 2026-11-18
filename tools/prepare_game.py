@@ -31,13 +31,25 @@ def prepare():
     end = text.index('\tg_sModelIndexFireball =', begin)
     text = text[:begin] + '\t// Exploration prototype: no Half-Life inventory precaches.\n' + text[end:]
     (target / 'dlls/weapons.cpp').write_text(text)
+    text = (original / 'dlls/triggers.cpp').read_text()
+    anchor = '#define SF_CAMERA_PLAYER_POSITION'
+    if anchor not in text:
+        raise ValueError('Unexpected trigger_camera source revision')
+    # CoF camera behavior has its own source, including original SDK attribution.
+    (target / 'dlls/triggers.cpp').write_text(text[:text.index(anchor)])
+    text = (original / 'dlls/game.cpp').read_text()
+    anchor = 'void GameDLLInit( void )\n{'
+    if anchor not in text:
+        raise ValueError('Unexpected GameDLLInit source revision')
+    text = text.replace(anchor, 'extern void CofMenuRegisterCvars();\n' + anchor + '\n\tCofMenuRegisterCvars();')
+    (target / 'dlls/game.cpp').write_text(text)
     text = (original / 'dlls/world.cpp').read_text()
     # CoF does not ship the unrelated Half-Life gib models.
     for name in ('hgibs', 'agibs'):
         text = text.replace(f'\tPRECACHE_MODEL( "models/{name}.mdl" );', '')
     (target / 'dlls/world.cpp').write_text(text)
     text = (original / 'dlls/player.cpp').read_text()
-    text = '#include "recovered_inventory.h"\n' + text
+    text = '#include "recovered_inventory.h"\n#include "recovered_menu.h"\n' + text
     text = text.replace('TYPEDESCRIPTION\tCBasePlayer::m_playerSaveData[] =\n{',
                         'TYPEDESCRIPTION\tCBasePlayer::m_playerSaveData[] =\n{\n'
                         '\tDEFINE_ARRAY(CBasePlayer, m_cofInventory, FIELD_STRING, 7),')
@@ -46,7 +58,7 @@ def prepare():
     anchor = '\t\tInitStatusBar();\n\t}'
     if anchor not in text:
         raise ValueError('Unexpected player HUD initialization source revision')
-    text = text.replace(anchor, '\t\tCofInventorySync(this);\n' + anchor)
+    text = text.replace(anchor, '\t\tCofInventorySync(this);\n\t\tCofMenuPlayerInit(this);\n' + anchor)
     (target / 'dlls/player.cpp').write_text(text)
     text = (original / 'dlls/player.h').read_text()
     anchor = 'class CBasePlayer : public CBaseMonster\n{\npublic:'
@@ -58,7 +70,7 @@ def prepare():
     anchor = 'void CWorld::Precache( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected world precache source revision')
-    text = text.replace(anchor, 'extern void CofInventoryPrecache();\n' + anchor + '\n\tCofInventoryPrecache();')
+    text = text.replace(anchor, 'extern void CofInventoryPrecache();\nextern void CofMenuPrecache();\n' + anchor + '\n\tCofInventoryPrecache();\n\tCofMenuPrecache();')
     (target / 'dlls/world.cpp').write_text(text)
     text = (original / 'cl_dll/hud.h').read_text()
     text = text.replace('return ( index < 0 ) ? 0 : m_rghSprites[index];',
@@ -85,20 +97,20 @@ def prepare():
     anchor = 'void DLLEXPORT HUD_Init( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected HUD_Init source revision')
-    text = '#include "ui_draw.h"\nextern void CofInventoryClientInit();\nextern void CofInventoryVidInit();\nextern void CofStatusHudInit();\n' + text
-    text = text.replace('\tgHUD.Init();', '\tgHUD.Init();\n\tCofInventoryClientInit();\n\tCofStatusHudInit();')
-    text = text.replace('\tgHUD.VidInit();', '\tgHUD.VidInit();\n\tCofUiVidInit();\n\tCofInventoryVidInit();')
+    text = '#include "ui_draw.h"\nextern void CofInventoryClientInit();\nextern void CofInventoryVidInit();\nextern void CofStatusHudInit();\nextern void CofGameMenuInit();\nextern void CofGameMenuVidInit();\n' + text
+    text = text.replace('\tgHUD.Init();', '\tgHUD.Init();\n\tCofInventoryClientInit();\n\tCofStatusHudInit();\n\tCofGameMenuInit();')
+    text = text.replace('\tgHUD.VidInit();', '\tgHUD.VidInit();\n\tCofUiVidInit();\n\tCofInventoryVidInit();\n\tCofGameMenuVidInit();')
     (target / 'cl_dll/cdll_int.cpp').write_text(text)
     text = (original / 'cl_dll/input.cpp').read_text()
-    text = 'extern bool CofInventoryVisible();\nextern int CofInventoryKeyEvent(int, int, const char*);\n' + text
+    text = 'extern bool CofInventoryVisible();\nextern int CofInventoryKeyEvent(int, int, const char*);\nextern bool CofGameMenuVisible();\nextern int CofGameMenuKeyEvent(int, int, const char*);\n' + text
     anchor = 'int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )\n{'
-    text = text.replace(anchor, anchor + '\n\tif (!CofInventoryKeyEvent(down, keynum, pszCurrentBinding)) return 0;')
+    text = text.replace(anchor, anchor + '\n\tif (!CofGameMenuKeyEvent(down, keynum, pszCurrentBinding)) return 0;\n\tif (!CofInventoryKeyEvent(down, keynum, pszCurrentBinding)) return 0;')
     anchor = 'void DLLEXPORT CL_CreateMove( float frametime, struct usercmd_s *cmd, int active )\n{'
     text = text.replace(anchor, anchor + '\n\tfloat cofAngles[3];\n\tgEngfuncs.GetViewAngles(cofAngles);')
     anchor = '\n}\n\n/*\n============\nCL_IsDead'
     if anchor not in text:
         raise ValueError('Unexpected CL_CreateMove source revision')
-    text = text.replace(anchor, '\n\tif (CofInventoryVisible()) {\n'
+    text = text.replace(anchor, '\n\tif (CofInventoryVisible() || CofGameMenuVisible()) {\n'
                         '\t\tcmd->forwardmove = cmd->sidemove = cmd->upmove = 0;\n'
                         '\t\tcmd->buttons = cmd->impulse = cmd->weaponselect = 0;\n'
                         '\t\tgEngfuncs.SetViewAngles(cofAngles);\n'
@@ -108,25 +120,29 @@ def prepare():
     anchor = 'void StartFrame( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected StartFrame source revision')
-    text = '#include "recovered_inventory.h"\n' + text
+    text = '#include "recovered_inventory.h"\n#include "recovered_menu.h"\n' + text
     text = text.replace(anchor, 'extern void CofDoorTestFrame();\n' + anchor + '\n\tCofDoorTestFrame();\n\tCofInventoryTestFrame();')
     anchor = '\tentvars_t *pev = &pEntity->v;\n\n\tif( FStrEq( pcmd, "say" ) )'
     if anchor not in text:
         raise ValueError('Unexpected ClientCommand source revision')
     text = text.replace(anchor, '\tentvars_t *pev = &pEntity->v;\n'
                         '\tif (CofInventoryCommand(static_cast<CBasePlayer*>(CBaseEntity::Instance(pEntity)), pcmd)) return;\n'
+                        '\tif (CofMenuCommand(static_cast<CBasePlayer*>(CBaseEntity::Instance(pEntity)), pcmd)) return;\n'
                         '\n\tif( FStrEq( pcmd, "say" ) )')
     (target / 'dlls/client.cpp').write_text(text)
     for name in ('door_runtime_tests.inc', 'inventory_runtime_tests.inc'):
         shutil.copy2(ROOT / 'tests/cof/server' / name, target / 'dlls' / name)
     shutil.copy2(ROOT / 'tests/cof/client/ui_runtime_tests.inc', target / 'cl_dll/ui_runtime_tests.inc')
+    shutil.copy2(ROOT / 'tests/cof/client/menu_runtime_tests.inc', target / 'cl_dll/menu_runtime_tests.inc')
     # Source ownership follows src/cof; the disposable SDK tree keeps its layout.
     # reference/ contains incomplete analysis models and must not enter either DLL.
     for side, folder, names in [
         ('server', 'dlls', ('prototype_entities.cpp', 'recovered_doors.cpp',
-                            'recovered_inventory.cpp', 'recovered_inventory.h')),
+                            'recovered_inventory.cpp', 'recovered_inventory.h', 'recovered_menu.cpp', 'recovered_menu.h',
+                            'recovered_camera.cpp')),
         ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp',
-                                'ui_draw.cpp', 'ui_draw.h', 'status_hud.cpp')),
+                                'ui_draw.cpp', 'ui_draw.h', 'ui_font.cpp', 'ui_font.h', 'status_hud.cpp',
+                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp')),
     ]:
         for name in names:
             shutil.copy2(ROOT / 'src/cof' / side / name, target / folder / name)

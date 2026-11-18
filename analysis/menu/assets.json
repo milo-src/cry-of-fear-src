@@ -1,0 +1,8588 @@
+{
+  "schema": 1,
+  "method": "Static file parsing; no original code executed.",
+  "target": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear",
+  "maps": [
+    {
+      "path": "maps/c_game_menu1.bsp",
+      "sha256": "f46547044f97d9d601178e28b46f50532cfb597c5c88a7eca4674f5455bb2ea4",
+      "entity_lump_offset": 3720652,
+      "entity_lump_size": 18069,
+      "entity_lump_sha256": "07de81312b1625d06022f9761e891b9d85ee664f1a3c38160169985376bb5121",
+      "class_counts": {
+        "worldspawn": 1,
+        "func_illusionary": 60,
+        "info_texlights": 1,
+        "light_spot": 7,
+        "info_player_start": 1,
+        "func_water": 1,
+        "env_model": 4,
+        "func_train": 4,
+        "path_corner": 7,
+        "info_target": 2,
+        "env_dynlight": 7,
+        "trigger_once": 1,
+        "trigger_camera": 2,
+        "multi_manager": 2,
+        "light_environment": 1,
+        "envpos_world": 1,
+        "envpos_sky": 1,
+        "env_sprite": 15,
+        "rain_modify": 1,
+        "rain_settings": 1,
+        "env_fade": 1,
+        "ambient_fmodstream": 1,
+        "ambient_generic": 3,
+        "cof_blackandwhite": 1,
+        "cof_gamemenu": 1
+      },
+      "entities": [
+        {
+          "ordinal": 0,
+          "lump_byte_span": [
+            0,
+            720
+          ],
+          "keyvalues": {
+            "wad": "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof_new.wad;",
+            "mapversion": "220",
+            "nomusicstop": "1",
+            "WaveHeight": "0.0",
+            "sounds": "1",
+            "MaxRange": "15000",
+            "skyname": "blue22",
+            "classname": "worldspawn"
+          },
+          "pairs": [
+            [
+              "wad",
+              "\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\halflife.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\valve\\liquids.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\aomdc22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof3.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cofreal22.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\decals.wad;\\program files (x86)\\steam\\steamapps\\rumpel4550\\half-life\\cryoffear\\cof_new.wad;"
+            ],
+            [
+              "mapversion",
+              "220"
+            ],
+            [
+              "nomusicstop",
+              "1"
+            ],
+            [
+              "WaveHeight",
+              "0.0"
+            ],
+            [
+              "sounds",
+              "1"
+            ],
+            [
+              "MaxRange",
+              "15000"
+            ],
+            [
+              "skyname",
+              "blue22"
+            ],
+            [
+              "classname",
+              "worldspawn"
+            ],
+            [
+              "classname",
+              "worldspawn"
+            ]
+          ]
+        },
+        {
+          "ordinal": 1,
+          "lump_byte_span": [
+            721,
+            837
+          ],
+          "keyvalues": {
+            "model": "*1",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendermode": "4",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*1"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 2,
+          "lump_byte_span": [
+            838,
+            954
+          ],
+          "keyvalues": {
+            "model": "*2",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendermode": "4",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*2"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 3,
+          "lump_byte_span": [
+            955,
+            1111
+          ],
+          "keyvalues": {
+            "origin": "-2119 -1961 127",
+            "+0~WHITE": "255 255 255 100",
+            "c_lysrorlampaon": "255 255 255 100",
+            "c_hogskylt2": "255 255 255 100",
+            "classname": "info_texlights"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2119 -1961 127"
+            ],
+            [
+              "+0~WHITE",
+              "255 255 255 100"
+            ],
+            [
+              "c_lysrorlampaon",
+              "255 255 255 100"
+            ],
+            [
+              "c_hogskylt2",
+              "255 255 255 100"
+            ],
+            [
+              "classname",
+              "info_texlights"
+            ]
+          ]
+        },
+        {
+          "ordinal": 4,
+          "lump_byte_span": [
+            1112,
+            1193
+          ],
+          "keyvalues": {
+            "model": "*3",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*3"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 5,
+          "lump_byte_span": [
+            1194,
+            1310
+          ],
+          "keyvalues": {
+            "model": "*4",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*4"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 6,
+          "lump_byte_span": [
+            1311,
+            1427
+          ],
+          "keyvalues": {
+            "model": "*5",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*5"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 7,
+          "lump_byte_span": [
+            1428,
+            1544
+          ],
+          "keyvalues": {
+            "model": "*6",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*6"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 8,
+          "lump_byte_span": [
+            1545,
+            1661
+          ],
+          "keyvalues": {
+            "model": "*7",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*7"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 9,
+          "lump_byte_span": [
+            1662,
+            1797
+          ],
+          "keyvalues": {
+            "origin": "-1757 232 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 232 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 10,
+          "lump_byte_span": [
+            1798,
+            1914
+          ],
+          "keyvalues": {
+            "model": "*8",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*8"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 11,
+          "lump_byte_span": [
+            1915,
+            2031
+          ],
+          "keyvalues": {
+            "model": "*9",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*9"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 12,
+          "lump_byte_span": [
+            2032,
+            2149
+          ],
+          "keyvalues": {
+            "model": "*10",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*10"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 13,
+          "lump_byte_span": [
+            2150,
+            2267
+          ],
+          "keyvalues": {
+            "model": "*11",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*11"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 14,
+          "lump_byte_span": [
+            2268,
+            2385
+          ],
+          "keyvalues": {
+            "model": "*12",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*12"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 15,
+          "lump_byte_span": [
+            2386,
+            2503
+          ],
+          "keyvalues": {
+            "model": "*13",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*13"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 16,
+          "lump_byte_span": [
+            2504,
+            2621
+          ],
+          "keyvalues": {
+            "model": "*14",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*14"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 17,
+          "lump_byte_span": [
+            2622,
+            2739
+          ],
+          "keyvalues": {
+            "model": "*15",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*15"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 18,
+          "lump_byte_span": [
+            2740,
+            2857
+          ],
+          "keyvalues": {
+            "model": "*16",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*16"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 19,
+          "lump_byte_span": [
+            2858,
+            2975
+          ],
+          "keyvalues": {
+            "model": "*17",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*17"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 20,
+          "lump_byte_span": [
+            2976,
+            3093
+          ],
+          "keyvalues": {
+            "model": "*18",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*18"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 21,
+          "lump_byte_span": [
+            3094,
+            3211
+          ],
+          "keyvalues": {
+            "model": "*19",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*19"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 22,
+          "lump_byte_span": [
+            3212,
+            3348
+          ],
+          "keyvalues": {
+            "origin": "-1757 -372 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 -372 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 23,
+          "lump_byte_span": [
+            3349,
+            3431
+          ],
+          "keyvalues": {
+            "model": "*20",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*20"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 24,
+          "lump_byte_span": [
+            3432,
+            3514
+          ],
+          "keyvalues": {
+            "model": "*21",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*21"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 25,
+          "lump_byte_span": [
+            3515,
+            3594
+          ],
+          "keyvalues": {
+            "origin": "-3742 -256 -205",
+            "angles": "0 0 0",
+            "classname": "info_player_start"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3742 -256 -205"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "info_player_start"
+            ]
+          ]
+        },
+        {
+          "ordinal": 26,
+          "lump_byte_span": [
+            3595,
+            3677
+          ],
+          "keyvalues": {
+            "model": "*22",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*22"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 27,
+          "lump_byte_span": [
+            3678,
+            3795
+          ],
+          "keyvalues": {
+            "model": "*23",
+            "renderamt": "255",
+            "rendermode": "2",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*23"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 28,
+          "lump_byte_span": [
+            3796,
+            3878
+          ],
+          "keyvalues": {
+            "model": "*24",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*24"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 29,
+          "lump_byte_span": [
+            3879,
+            4032
+          ],
+          "keyvalues": {
+            "model": "*25",
+            "skin": "-3",
+            "wait": "3",
+            "speed": "100",
+            "angles": "0 0 0",
+            "renderamt": "255",
+            "rendermode": "2",
+            "rendercolor": "0 0 0",
+            "classname": "func_water"
+          },
+          "pairs": [
+            [
+              "model",
+              "*25"
+            ],
+            [
+              "skin",
+              "-3"
+            ],
+            [
+              "wait",
+              "3"
+            ],
+            [
+              "speed",
+              "100"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_water"
+            ]
+          ]
+        },
+        {
+          "ordinal": 30,
+          "lump_byte_span": [
+            4033,
+            4171
+          ],
+          "keyvalues": {
+            "origin": "-1702 2068 43",
+            "model": "models/Props/Blandat/byggnader.mdl",
+            "rendercolor": "0 0 0",
+            "angles": "0 -45 0",
+            "classname": "env_model"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1702 2068 43"
+            ],
+            [
+              "model",
+              "models/Props/Blandat/byggnader.mdl"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 -45 0"
+            ],
+            [
+              "classname",
+              "env_model"
+            ]
+          ]
+        },
+        {
+          "ordinal": 31,
+          "lump_byte_span": [
+            4172,
+            4315
+          ],
+          "keyvalues": {
+            "model": "*26",
+            "origin": "-1851 1106 78",
+            "target": "stop1",
+            "targetname": "togasso",
+            "speed": "400",
+            "rendercolor": "0 0 0",
+            "classname": "func_train"
+          },
+          "pairs": [
+            [
+              "model",
+              "*26"
+            ],
+            [
+              "origin",
+              "-1851 1106 78"
+            ],
+            [
+              "target",
+              "stop1"
+            ],
+            [
+              "targetname",
+              "togasso"
+            ],
+            [
+              "speed",
+              "400"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_train"
+            ]
+          ]
+        },
+        {
+          "ordinal": 32,
+          "lump_byte_span": [
+            4316,
+            4443
+          ],
+          "keyvalues": {
+            "origin": "-1851 -3715 79",
+            "target": "stop2",
+            "targetname": "stop1",
+            "angles": "0 0 0",
+            "spawnflags": "3",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1851 -3715 79"
+            ],
+            [
+              "target",
+              "stop2"
+            ],
+            [
+              "targetname",
+              "stop1"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "spawnflags",
+              "3"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 33,
+          "lump_byte_span": [
+            4444,
+            4570
+          ],
+          "keyvalues": {
+            "origin": "-1851 3666 79",
+            "target": "stop1",
+            "targetname": "stop2",
+            "angles": "0 0 0",
+            "spawnflags": "1",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1851 3666 79"
+            ],
+            [
+              "target",
+              "stop1"
+            ],
+            [
+              "targetname",
+              "stop2"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "spawnflags",
+              "1"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 34,
+          "lump_byte_span": [
+            4571,
+            4650
+          ],
+          "keyvalues": {
+            "origin": "-1734 1842 104",
+            "targetname": "fokusyao",
+            "classname": "info_target"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1734 1842 104"
+            ],
+            [
+              "targetname",
+              "fokusyao"
+            ],
+            [
+              "classname",
+              "info_target"
+            ]
+          ]
+        },
+        {
+          "ordinal": 35,
+          "lump_byte_span": [
+            4651,
+            4768
+          ],
+          "keyvalues": {
+            "model": "*27",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*27"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 36,
+          "lump_byte_span": [
+            4769,
+            4886
+          ],
+          "keyvalues": {
+            "model": "*28",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*28"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 37,
+          "lump_byte_span": [
+            4887,
+            5004
+          ],
+          "keyvalues": {
+            "model": "*29",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*29"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 38,
+          "lump_byte_span": [
+            5005,
+            5122
+          ],
+          "keyvalues": {
+            "model": "*30",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*30"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 39,
+          "lump_byte_span": [
+            5123,
+            5205
+          ],
+          "keyvalues": {
+            "model": "*31",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*31"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 40,
+          "lump_byte_span": [
+            5206,
+            5323
+          ],
+          "keyvalues": {
+            "model": "*32",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*32"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 41,
+          "lump_byte_span": [
+            5324,
+            5441
+          ],
+          "keyvalues": {
+            "model": "*33",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*33"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 42,
+          "lump_byte_span": [
+            5442,
+            5559
+          ],
+          "keyvalues": {
+            "model": "*34",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*34"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 43,
+          "lump_byte_span": [
+            5560,
+            5677
+          ],
+          "keyvalues": {
+            "model": "*35",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*35"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 44,
+          "lump_byte_span": [
+            5678,
+            5795
+          ],
+          "keyvalues": {
+            "model": "*36",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*36"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 45,
+          "lump_byte_span": [
+            5796,
+            5913
+          ],
+          "keyvalues": {
+            "model": "*37",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*37"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 46,
+          "lump_byte_span": [
+            5914,
+            6031
+          ],
+          "keyvalues": {
+            "model": "*38",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*38"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 47,
+          "lump_byte_span": [
+            6032,
+            6149
+          ],
+          "keyvalues": {
+            "model": "*39",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*39"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 48,
+          "lump_byte_span": [
+            6150,
+            6232
+          ],
+          "keyvalues": {
+            "model": "*40",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*40"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 49,
+          "lump_byte_span": [
+            6233,
+            6350
+          ],
+          "keyvalues": {
+            "model": "*41",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*41"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 50,
+          "lump_byte_span": [
+            6351,
+            6468
+          ],
+          "keyvalues": {
+            "model": "*42",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*42"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 51,
+          "lump_byte_span": [
+            6469,
+            6586
+          ],
+          "keyvalues": {
+            "model": "*43",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*43"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 52,
+          "lump_byte_span": [
+            6587,
+            6704
+          ],
+          "keyvalues": {
+            "model": "*44",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*44"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 53,
+          "lump_byte_span": [
+            6705,
+            6822
+          ],
+          "keyvalues": {
+            "model": "*45",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*45"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 54,
+          "lump_byte_span": [
+            6823,
+            6940
+          ],
+          "keyvalues": {
+            "model": "*46",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*46"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 55,
+          "lump_byte_span": [
+            6941,
+            7058
+          ],
+          "keyvalues": {
+            "model": "*47",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*47"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 56,
+          "lump_byte_span": [
+            7059,
+            7176
+          ],
+          "keyvalues": {
+            "model": "*48",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*48"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 57,
+          "lump_byte_span": [
+            7177,
+            7294
+          ],
+          "keyvalues": {
+            "model": "*49",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*49"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 58,
+          "lump_byte_span": [
+            7295,
+            7412
+          ],
+          "keyvalues": {
+            "model": "*50",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*50"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 59,
+          "lump_byte_span": [
+            7413,
+            7530
+          ],
+          "keyvalues": {
+            "model": "*51",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*51"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 60,
+          "lump_byte_span": [
+            7531,
+            7648
+          ],
+          "keyvalues": {
+            "model": "*52",
+            "renderamt": "255",
+            "rendermode": "4",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*52"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 61,
+          "lump_byte_span": [
+            7649,
+            7766
+          ],
+          "keyvalues": {
+            "model": "*53",
+            "rendermode": "4",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*53"
+            ],
+            [
+              "rendermode",
+              "4"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 62,
+          "lump_byte_span": [
+            7767,
+            7928
+          ],
+          "keyvalues": {
+            "origin": "-2070 -790 -19",
+            "movewith": "rot",
+            "rendermode": "1",
+            "scale": "90",
+            "renderamt": "130",
+            "rendercolor": "0 0 0",
+            "angles": "90 0 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2070 -790 -19"
+            ],
+            [
+              "movewith",
+              "rot"
+            ],
+            [
+              "rendermode",
+              "1"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "130"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "90 0 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 63,
+          "lump_byte_span": [
+            7929,
+            8046
+          ],
+          "keyvalues": {
+            "model": "*54",
+            "skin": "-1",
+            "rendermode": "2",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*54"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 64,
+          "lump_byte_span": [
+            8047,
+            8207
+          ],
+          "keyvalues": {
+            "origin": "-2070 145 -19",
+            "movewith": "rot",
+            "rendermode": "1",
+            "scale": "90",
+            "renderamt": "130",
+            "rendercolor": "0 0 0",
+            "angles": "90 0 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2070 145 -19"
+            ],
+            [
+              "movewith",
+              "rot"
+            ],
+            [
+              "rendermode",
+              "1"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "130"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "90 0 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 65,
+          "lump_byte_span": [
+            8208,
+            8325
+          ],
+          "keyvalues": {
+            "model": "*55",
+            "skin": "-1",
+            "rendermode": "2",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*55"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 66,
+          "lump_byte_span": [
+            8326,
+            8487
+          ],
+          "keyvalues": {
+            "origin": "-2070 1074 -19",
+            "movewith": "rot",
+            "rendermode": "1",
+            "scale": "90",
+            "renderamt": "130",
+            "rendercolor": "0 0 0",
+            "angles": "90 0 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2070 1074 -19"
+            ],
+            [
+              "movewith",
+              "rot"
+            ],
+            [
+              "rendermode",
+              "1"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "130"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "90 0 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 67,
+          "lump_byte_span": [
+            8488,
+            8605
+          ],
+          "keyvalues": {
+            "model": "*56",
+            "skin": "-1",
+            "rendermode": "2",
+            "renderamt": "255",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*56"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 68,
+          "lump_byte_span": [
+            8606,
+            8718
+          ],
+          "keyvalues": {
+            "origin": "-3621 -197 -62",
+            "target": "stop2s",
+            "targetname": "stop1s",
+            "angles": "0 0 0",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3621 -197 -62"
+            ],
+            [
+              "target",
+              "stop2s"
+            ],
+            [
+              "targetname",
+              "stop1s"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 69,
+          "lump_byte_span": [
+            8719,
+            8831
+          ],
+          "keyvalues": {
+            "origin": "-3648 -264 -77",
+            "target": "stop3s",
+            "targetname": "stop2s",
+            "angles": "0 0 0",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3648 -264 -77"
+            ],
+            [
+              "target",
+              "stop3s"
+            ],
+            [
+              "targetname",
+              "stop2s"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 70,
+          "lump_byte_span": [
+            8832,
+            8961
+          ],
+          "keyvalues": {
+            "origin": "-3599 -369 -57",
+            "target": "stop1s",
+            "targetname": "stop3s",
+            "angles": "0 0 0",
+            "spawnflags": "1",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3599 -369 -57"
+            ],
+            [
+              "target",
+              "stop1s"
+            ],
+            [
+              "targetname",
+              "stop3s"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "spawnflags",
+              "1"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 71,
+          "lump_byte_span": [
+            8962,
+            9027
+          ],
+          "keyvalues": {
+            "model": "*57",
+            "target": "multimenu",
+            "classname": "trigger_once"
+          },
+          "pairs": [
+            [
+              "model",
+              "*57"
+            ],
+            [
+              "target",
+              "multimenu"
+            ],
+            [
+              "classname",
+              "trigger_once"
+            ]
+          ]
+        },
+        {
+          "ordinal": 72,
+          "lump_byte_span": [
+            9028,
+            9216
+          ],
+          "keyvalues": {
+            "origin": "-1994 1976 97",
+            "speed": "30",
+            "target": "fokusyao",
+            "targetname": "kameayao2",
+            "deceleration": "500",
+            "acceleration": "500",
+            "wait": "40",
+            "spawnflags": "116",
+            "classname": "trigger_camera"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1994 1976 97"
+            ],
+            [
+              "speed",
+              "30"
+            ],
+            [
+              "target",
+              "fokusyao"
+            ],
+            [
+              "targetname",
+              "kameayao2"
+            ],
+            [
+              "deceleration",
+              "500"
+            ],
+            [
+              "acceleration",
+              "500"
+            ],
+            [
+              "wait",
+              "40"
+            ],
+            [
+              "spawnflags",
+              "116"
+            ],
+            [
+              "classname",
+              "trigger_camera"
+            ]
+          ]
+        },
+        {
+          "ordinal": 73,
+          "lump_byte_span": [
+            9217,
+            9447
+          ],
+          "keyvalues": {
+            "origin": "-3242 -331 -154",
+            "m_iszSequence_Off": "action1",
+            "m_iszSequence_On": "idle1",
+            "targetname": "crow2",
+            "model": "models/Props/Blandat/crows.mdl",
+            "sequence": "1",
+            "rendercolor": "0 0 0",
+            "angles": "0 -174 0",
+            "classname": "env_model"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3242 -331 -154"
+            ],
+            [
+              "m_iszSequence_Off",
+              "action1"
+            ],
+            [
+              "m_iszSequence_On",
+              "idle1"
+            ],
+            [
+              "targetname",
+              "crow2"
+            ],
+            [
+              "model",
+              "models/Props/Blandat/crows.mdl"
+            ],
+            [
+              "sequence",
+              "1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 -174 0"
+            ],
+            [
+              "classname",
+              "env_model"
+            ]
+          ]
+        },
+        {
+          "ordinal": 74,
+          "lump_byte_span": [
+            9448,
+            9755
+          ],
+          "keyvalues": {
+            "origin": "-3446 -447 25",
+            "menumusic": "0",
+            "menufade": "0",
+            "togasso2#2": "85",
+            "togasso2#1": "84",
+            "togasso#2": "85",
+            "togasso#1": "84",
+            "2togasso2": "32.01",
+            "2togasso": "32",
+            "kamera": "0",
+            "crow2": "17.7",
+            "crow1": "17",
+            "togasso2": "14.01",
+            "bluryao": "0",
+            "togasso": "14",
+            "targetname": "multimenu",
+            "classname": "multi_manager"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3446 -447 25"
+            ],
+            [
+              "menumusic",
+              "0"
+            ],
+            [
+              "menufade",
+              "0"
+            ],
+            [
+              "togasso2#2",
+              "85"
+            ],
+            [
+              "togasso2#1",
+              "84"
+            ],
+            [
+              "togasso#2",
+              "85"
+            ],
+            [
+              "togasso#1",
+              "84"
+            ],
+            [
+              "2togasso2",
+              "32.01"
+            ],
+            [
+              "2togasso",
+              "32"
+            ],
+            [
+              "kamera",
+              "0"
+            ],
+            [
+              "crow2",
+              "17.7"
+            ],
+            [
+              "crow1",
+              "17"
+            ],
+            [
+              "togasso2",
+              "14.01"
+            ],
+            [
+              "bluryao",
+              "0"
+            ],
+            [
+              "togasso",
+              "14"
+            ],
+            [
+              "targetname",
+              "multimenu"
+            ],
+            [
+              "classname",
+              "multi_manager"
+            ]
+          ]
+        },
+        {
+          "ordinal": 75,
+          "lump_byte_span": [
+            9756,
+            9958
+          ],
+          "keyvalues": {
+            "origin": "-3655 -265 -78",
+            "speed": "5",
+            "moveto": "stop1s",
+            "target": "fokuses",
+            "targetname": "kamera",
+            "deceleration": "500",
+            "acceleration": "500",
+            "wait": "666",
+            "spawnflags": "84",
+            "classname": "trigger_camera"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3655 -265 -78"
+            ],
+            [
+              "speed",
+              "5"
+            ],
+            [
+              "moveto",
+              "stop1s"
+            ],
+            [
+              "target",
+              "fokuses"
+            ],
+            [
+              "targetname",
+              "kamera"
+            ],
+            [
+              "deceleration",
+              "500"
+            ],
+            [
+              "acceleration",
+              "500"
+            ],
+            [
+              "wait",
+              "666"
+            ],
+            [
+              "spawnflags",
+              "84"
+            ],
+            [
+              "classname",
+              "trigger_camera"
+            ]
+          ]
+        },
+        {
+          "ordinal": 76,
+          "lump_byte_span": [
+            9959,
+            10037
+          ],
+          "keyvalues": {
+            "origin": "-1934 -110 109",
+            "targetname": "fokuses",
+            "classname": "info_target"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1934 -110 109"
+            ],
+            [
+              "targetname",
+              "fokuses"
+            ],
+            [
+              "classname",
+              "info_target"
+            ]
+          ]
+        },
+        {
+          "ordinal": 77,
+          "lump_byte_span": [
+            10038,
+            10177
+          ],
+          "keyvalues": {
+            "origin": "-1689 -410 306",
+            "_diffuse_light": "1 1 1 1",
+            "_light": "1 1 1 1",
+            "_falloff": "2",
+            "angles": "0 0 0",
+            "classname": "light_environment"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1689 -410 306"
+            ],
+            [
+              "_diffuse_light",
+              "1 1 1 1"
+            ],
+            [
+              "_light",
+              "1 1 1 1"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "light_environment"
+            ]
+          ]
+        },
+        {
+          "ordinal": 78,
+          "lump_byte_span": [
+            10178,
+            10295
+          ],
+          "keyvalues": {
+            "model": "*58",
+            "skin": "-1",
+            "renderamt": "255",
+            "rendermode": "5",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*58"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 79,
+          "lump_byte_span": [
+            10296,
+            10364
+          ],
+          "keyvalues": {
+            "origin": "-1965 342 75",
+            "health": "80",
+            "classname": "envpos_world"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1965 342 75"
+            ],
+            [
+              "health",
+              "80"
+            ],
+            [
+              "classname",
+              "envpos_world"
+            ]
+          ]
+        },
+        {
+          "ordinal": 80,
+          "lump_byte_span": [
+            10365,
+            10462
+          ],
+          "keyvalues": {
+            "origin": "-2058 1710 -1121",
+            "body": "25",
+            "skin": "32",
+            "spawnflags": "3",
+            "classname": "envpos_sky"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2058 1710 -1121"
+            ],
+            [
+              "body",
+              "25"
+            ],
+            [
+              "skin",
+              "32"
+            ],
+            [
+              "spawnflags",
+              "3"
+            ],
+            [
+              "classname",
+              "envpos_sky"
+            ]
+          ]
+        },
+        {
+          "ordinal": 81,
+          "lump_byte_span": [
+            10463,
+            10706
+          ],
+          "keyvalues": {
+            "origin": "-2055 1710 -1060",
+            "renderfx": "137",
+            "m_iAction_Off": "1",
+            "m_iszSequence_Off": "idle",
+            "m_iAction_On": "1",
+            "m_iszSequence_On": "idle",
+            "model": "models/props/sky_sphere4.mdl",
+            "rendercolor": "0 0 0",
+            "angles": "0 90 0",
+            "classname": "env_model"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2055 1710 -1060"
+            ],
+            [
+              "renderfx",
+              "137"
+            ],
+            [
+              "m_iAction_Off",
+              "1"
+            ],
+            [
+              "m_iszSequence_Off",
+              "idle"
+            ],
+            [
+              "m_iAction_On",
+              "1"
+            ],
+            [
+              "m_iszSequence_On",
+              "idle"
+            ],
+            [
+              "model",
+              "models/props/sky_sphere4.mdl"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 90 0"
+            ],
+            [
+              "classname",
+              "env_model"
+            ]
+          ]
+        },
+        {
+          "ordinal": 82,
+          "lump_byte_span": [
+            10707,
+            10789
+          ],
+          "keyvalues": {
+            "model": "*59",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*59"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 83,
+          "lump_byte_span": [
+            10790,
+            10925
+          ],
+          "keyvalues": {
+            "origin": "-1757 231 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 231 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 84,
+          "lump_byte_span": [
+            10926,
+            11127
+          ],
+          "keyvalues": {
+            "origin": "-1757 232 193",
+            "scale": "0.6",
+            "rendermode": "5",
+            "model": "sprites/flashing01.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "20",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 232 193"
+            ],
+            [
+              "scale",
+              "0.6"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/flashing01.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "20"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 85,
+          "lump_byte_span": [
+            11128,
+            11331
+          ],
+          "keyvalues": {
+            "origin": "-1757 232 267",
+            "scale": "0.15",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "255",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 232 267"
+            ],
+            [
+              "scale",
+              "0.15"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 86,
+          "lump_byte_span": [
+            11332,
+            11533
+          ],
+          "keyvalues": {
+            "origin": "-1757 232 267",
+            "scale": "0.4",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "10",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 232 267"
+            ],
+            [
+              "scale",
+              "0.4"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "10"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 87,
+          "lump_byte_span": [
+            11534,
+            11616
+          ],
+          "keyvalues": {
+            "model": "*60",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*60"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 88,
+          "lump_byte_span": [
+            11617,
+            11753
+          ],
+          "keyvalues": {
+            "origin": "-1756 -372 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1756 -372 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 89,
+          "lump_byte_span": [
+            11754,
+            11956
+          ],
+          "keyvalues": {
+            "origin": "-1756 -371 193",
+            "scale": "0.6",
+            "rendermode": "5",
+            "model": "sprites/flashing01.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "20",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1756 -371 193"
+            ],
+            [
+              "scale",
+              "0.6"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/flashing01.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "20"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 90,
+          "lump_byte_span": [
+            11957,
+            12161
+          ],
+          "keyvalues": {
+            "origin": "-1756 -371 267",
+            "scale": "0.15",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "255",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1756 -371 267"
+            ],
+            [
+              "scale",
+              "0.15"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 91,
+          "lump_byte_span": [
+            12162,
+            12364
+          ],
+          "keyvalues": {
+            "origin": "-1756 -371 267",
+            "scale": "0.4",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "10",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1756 -371 267"
+            ],
+            [
+              "scale",
+              "0.4"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "10"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 92,
+          "lump_byte_span": [
+            12365,
+            12447
+          ],
+          "keyvalues": {
+            "model": "*61",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*61"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 93,
+          "lump_byte_span": [
+            12448,
+            12585
+          ],
+          "keyvalues": {
+            "origin": "-1757 -1627 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 -1627 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 94,
+          "lump_byte_span": [
+            12586,
+            12789
+          ],
+          "keyvalues": {
+            "origin": "-1757 -1626 193",
+            "scale": "0.6",
+            "rendermode": "5",
+            "model": "sprites/flashing01.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "20",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 -1626 193"
+            ],
+            [
+              "scale",
+              "0.6"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/flashing01.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "20"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 95,
+          "lump_byte_span": [
+            12790,
+            12995
+          ],
+          "keyvalues": {
+            "origin": "-1757 -1626 267",
+            "scale": "0.15",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "255",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 -1626 267"
+            ],
+            [
+              "scale",
+              "0.15"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 96,
+          "lump_byte_span": [
+            12996,
+            13199
+          ],
+          "keyvalues": {
+            "origin": "-1757 -1626 267",
+            "scale": "0.4",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "10",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 -1626 267"
+            ],
+            [
+              "scale",
+              "0.4"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "10"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 97,
+          "lump_byte_span": [
+            13200,
+            13282
+          ],
+          "keyvalues": {
+            "model": "*62",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*62"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 98,
+          "lump_byte_span": [
+            13283,
+            13418
+          ],
+          "keyvalues": {
+            "origin": "-1757 904 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 904 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 99,
+          "lump_byte_span": [
+            13419,
+            13620
+          ],
+          "keyvalues": {
+            "origin": "-1757 905 193",
+            "scale": "0.6",
+            "rendermode": "5",
+            "model": "sprites/flashing01.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "20",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 905 193"
+            ],
+            [
+              "scale",
+              "0.6"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/flashing01.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "20"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 100,
+          "lump_byte_span": [
+            13621,
+            13824
+          ],
+          "keyvalues": {
+            "origin": "-1757 905 267",
+            "scale": "0.15",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "255",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 905 267"
+            ],
+            [
+              "scale",
+              "0.15"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 101,
+          "lump_byte_span": [
+            13825,
+            14026
+          ],
+          "keyvalues": {
+            "origin": "-1757 905 267",
+            "scale": "0.4",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "10",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 905 267"
+            ],
+            [
+              "scale",
+              "0.4"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "10"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 102,
+          "lump_byte_span": [
+            14027,
+            14109
+          ],
+          "keyvalues": {
+            "model": "*63",
+            "skin": "-1",
+            "rendercolor": "0 0 0",
+            "classname": "func_illusionary"
+          },
+          "pairs": [
+            [
+              "model",
+              "*63"
+            ],
+            [
+              "skin",
+              "-1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_illusionary"
+            ]
+          ]
+        },
+        {
+          "ordinal": 103,
+          "lump_byte_span": [
+            14110,
+            14246
+          ],
+          "keyvalues": {
+            "origin": "-1757 1734 261",
+            "pitch": "-90",
+            "_cone2": "80",
+            "_cone": "70",
+            "_falloff": "2",
+            "_light": "173 120 61 200",
+            "classname": "light_spot"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 1734 261"
+            ],
+            [
+              "pitch",
+              "-90"
+            ],
+            [
+              "_cone2",
+              "80"
+            ],
+            [
+              "_cone",
+              "70"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "173 120 61 200"
+            ],
+            [
+              "classname",
+              "light_spot"
+            ]
+          ]
+        },
+        {
+          "ordinal": 104,
+          "lump_byte_span": [
+            14247,
+            14449
+          ],
+          "keyvalues": {
+            "origin": "-1757 1735 193",
+            "scale": "0.6",
+            "rendermode": "5",
+            "model": "sprites/flashing01.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "20",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 1735 193"
+            ],
+            [
+              "scale",
+              "0.6"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/flashing01.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "20"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 105,
+          "lump_byte_span": [
+            14450,
+            14654
+          ],
+          "keyvalues": {
+            "origin": "-1757 1735 267",
+            "scale": "0.15",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "255",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 1735 267"
+            ],
+            [
+              "scale",
+              "0.15"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 106,
+          "lump_byte_span": [
+            14655,
+            14857
+          ],
+          "keyvalues": {
+            "origin": "-1757 1735 267",
+            "scale": "0.4",
+            "rendermode": "5",
+            "model": "sprites/cof_shine1.spr",
+            "framerate": "10.0",
+            "rendercolor": "173 120 61 200",
+            "renderamt": "10",
+            "angles": "0 0 0",
+            "classname": "env_sprite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1757 1735 267"
+            ],
+            [
+              "scale",
+              "0.4"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "model",
+              "sprites/cof_shine1.spr"
+            ],
+            [
+              "framerate",
+              "10.0"
+            ],
+            [
+              "rendercolor",
+              "173 120 61 200"
+            ],
+            [
+              "renderamt",
+              "10"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "env_sprite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 107,
+          "lump_byte_span": [
+            14858,
+            15007
+          ],
+          "keyvalues": {
+            "origin": "-2691 -307 190",
+            "m_flRandY": "80",
+            "m_flRandX": "80",
+            "m_flWindY": "80",
+            "m_flWindX": "80",
+            "m_iDripsPerSecond": "800",
+            "classname": "rain_modify"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2691 -307 190"
+            ],
+            [
+              "m_flRandY",
+              "80"
+            ],
+            [
+              "m_flRandX",
+              "80"
+            ],
+            [
+              "m_flWindY",
+              "80"
+            ],
+            [
+              "m_flWindX",
+              "80"
+            ],
+            [
+              "m_iDripsPerSecond",
+              "800"
+            ],
+            [
+              "classname",
+              "rain_modify"
+            ]
+          ]
+        },
+        {
+          "ordinal": 108,
+          "lump_byte_span": [
+            15008,
+            15101
+          ],
+          "keyvalues": {
+            "origin": "-2707 -307 190",
+            "m_iMode": "1",
+            "m_flDistance": "1000",
+            "classname": "rain_settings"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2707 -307 190"
+            ],
+            [
+              "m_iMode",
+              "1"
+            ],
+            [
+              "m_flDistance",
+              "1000"
+            ],
+            [
+              "classname",
+              "rain_settings"
+            ]
+          ]
+        },
+        {
+          "ordinal": 109,
+          "lump_byte_span": [
+            15102,
+            15247
+          ],
+          "keyvalues": {
+            "model": "*64",
+            "origin": "-1667 1107 78",
+            "target": "2stop1",
+            "targetname": "2togasso",
+            "speed": "400",
+            "rendercolor": "0 0 0",
+            "classname": "func_train"
+          },
+          "pairs": [
+            [
+              "model",
+              "*64"
+            ],
+            [
+              "origin",
+              "-1667 1107 78"
+            ],
+            [
+              "target",
+              "2stop1"
+            ],
+            [
+              "targetname",
+              "2togasso"
+            ],
+            [
+              "speed",
+              "400"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_train"
+            ]
+          ]
+        },
+        {
+          "ordinal": 110,
+          "lump_byte_span": [
+            15248,
+            15376
+          ],
+          "keyvalues": {
+            "origin": "-1667 3667 79",
+            "target": "2stop2",
+            "targetname": "2stop1",
+            "angles": "0 0 0",
+            "spawnflags": "3",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1667 3667 79"
+            ],
+            [
+              "target",
+              "2stop2"
+            ],
+            [
+              "targetname",
+              "2stop1"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "spawnflags",
+              "3"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 111,
+          "lump_byte_span": [
+            15377,
+            15506
+          ],
+          "keyvalues": {
+            "origin": "-1667 -3714 79",
+            "target": "2stop1",
+            "targetname": "2stop2",
+            "angles": "0 0 0",
+            "spawnflags": "1",
+            "classname": "path_corner"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1667 -3714 79"
+            ],
+            [
+              "target",
+              "2stop1"
+            ],
+            [
+              "targetname",
+              "2stop2"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "spawnflags",
+              "1"
+            ],
+            [
+              "classname",
+              "path_corner"
+            ]
+          ]
+        },
+        {
+          "ordinal": 112,
+          "lump_byte_span": [
+            15507,
+            15671
+          ],
+          "keyvalues": {
+            "origin": "-1826 2386 33",
+            "movewith": "togasso",
+            "rendermode": "2",
+            "scale": "90",
+            "renderamt": "500",
+            "rendercolor": "0 0 0",
+            "angles": "0 90 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1826 2386 33"
+            ],
+            [
+              "movewith",
+              "togasso"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "500"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 90 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 113,
+          "lump_byte_span": [
+            15672,
+            15836
+          ],
+          "keyvalues": {
+            "origin": "-1882 2386 33",
+            "movewith": "togasso",
+            "rendermode": "2",
+            "scale": "90",
+            "renderamt": "500",
+            "rendercolor": "0 0 0",
+            "angles": "0 90 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1882 2386 33"
+            ],
+            [
+              "movewith",
+              "togasso"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "500"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 90 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 114,
+          "lump_byte_span": [
+            15837,
+            16016
+          ],
+          "keyvalues": {
+            "model": "*65",
+            "origin": "-1851 1107 78",
+            "rendermode": "5",
+            "target": "stop1",
+            "targetname": "togasso2",
+            "speed": "400",
+            "renderamt": "100",
+            "rendercolor": "0 0 0",
+            "classname": "func_train"
+          },
+          "pairs": [
+            [
+              "model",
+              "*65"
+            ],
+            [
+              "origin",
+              "-1851 1107 78"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "target",
+              "stop1"
+            ],
+            [
+              "targetname",
+              "togasso2"
+            ],
+            [
+              "speed",
+              "400"
+            ],
+            [
+              "renderamt",
+              "100"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_train"
+            ]
+          ]
+        },
+        {
+          "ordinal": 115,
+          "lump_byte_span": [
+            16017,
+            16198
+          ],
+          "keyvalues": {
+            "model": "*66",
+            "origin": "-1666 1098 78",
+            "rendermode": "5",
+            "target": "2stop1",
+            "targetname": "2togasso2",
+            "speed": "400",
+            "renderamt": "100",
+            "rendercolor": "0 0 0",
+            "classname": "func_train"
+          },
+          "pairs": [
+            [
+              "model",
+              "*66"
+            ],
+            [
+              "origin",
+              "-1666 1098 78"
+            ],
+            [
+              "rendermode",
+              "5"
+            ],
+            [
+              "target",
+              "2stop1"
+            ],
+            [
+              "targetname",
+              "2togasso2"
+            ],
+            [
+              "speed",
+              "400"
+            ],
+            [
+              "renderamt",
+              "100"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "func_train"
+            ]
+          ]
+        },
+        {
+          "ordinal": 116,
+          "lump_byte_span": [
+            16199,
+            16391
+          ],
+          "keyvalues": {
+            "origin": "-1641 -183 33",
+            "targetname": "toglampor2",
+            "movewith": "2togasso",
+            "rendermode": "2",
+            "scale": "90",
+            "renderamt": "500",
+            "rendercolor": "0 0 0",
+            "angles": "0 270 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1641 -183 33"
+            ],
+            [
+              "targetname",
+              "toglampor2"
+            ],
+            [
+              "movewith",
+              "2togasso"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "500"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 270 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 117,
+          "lump_byte_span": [
+            16392,
+            16584
+          ],
+          "keyvalues": {
+            "origin": "-1697 -183 33",
+            "targetname": "toglampor2",
+            "movewith": "2togasso",
+            "rendermode": "2",
+            "scale": "90",
+            "renderamt": "500",
+            "rendercolor": "0 0 0",
+            "angles": "0 270 0",
+            "classname": "env_dynlight"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-1697 -183 33"
+            ],
+            [
+              "targetname",
+              "toglampor2"
+            ],
+            [
+              "movewith",
+              "2togasso"
+            ],
+            [
+              "rendermode",
+              "2"
+            ],
+            [
+              "scale",
+              "90"
+            ],
+            [
+              "renderamt",
+              "500"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 270 0"
+            ],
+            [
+              "classname",
+              "env_dynlight"
+            ]
+          ]
+        },
+        {
+          "ordinal": 118,
+          "lump_byte_span": [
+            16585,
+            16815
+          ],
+          "keyvalues": {
+            "origin": "-3021 -220 -154",
+            "m_iszSequence_Off": "action1",
+            "m_iszSequence_On": "idle1",
+            "targetname": "crow1",
+            "model": "models/Props/Blandat/crows.mdl",
+            "sequence": "1",
+            "rendercolor": "0 0 0",
+            "angles": "0 -146 0",
+            "classname": "env_model"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3021 -220 -154"
+            ],
+            [
+              "m_iszSequence_Off",
+              "action1"
+            ],
+            [
+              "m_iszSequence_On",
+              "idle1"
+            ],
+            [
+              "targetname",
+              "crow1"
+            ],
+            [
+              "model",
+              "models/Props/Blandat/crows.mdl"
+            ],
+            [
+              "sequence",
+              "1"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "angles",
+              "0 -146 0"
+            ],
+            [
+              "classname",
+              "env_model"
+            ]
+          ]
+        },
+        {
+          "ordinal": 119,
+          "lump_byte_span": [
+            16816,
+            16978
+          ],
+          "keyvalues": {
+            "origin": "-3511 -542 -7",
+            "holdtime": "1",
+            "targetname": "menufade",
+            "rendercolor": "0 0 0",
+            "renderamt": "255",
+            "duration": "5",
+            "spawnflags": "1",
+            "classname": "env_fade"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3511 -542 -7"
+            ],
+            [
+              "holdtime",
+              "1"
+            ],
+            [
+              "targetname",
+              "menufade"
+            ],
+            [
+              "rendercolor",
+              "0 0 0"
+            ],
+            [
+              "renderamt",
+              "255"
+            ],
+            [
+              "duration",
+              "5"
+            ],
+            [
+              "spawnflags",
+              "1"
+            ],
+            [
+              "classname",
+              "env_fade"
+            ]
+          ]
+        },
+        {
+          "ordinal": 120,
+          "lump_byte_span": [
+            16979,
+            17110
+          ],
+          "keyvalues": {
+            "origin": "-3483 -592 -3",
+            "message": "gamestartup.mp3",
+            "targetname": "menumusic",
+            "spawnflags": "2",
+            "classname": "ambient_fmodstream"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3483 -592 -3"
+            ],
+            [
+              "message",
+              "gamestartup.mp3"
+            ],
+            [
+              "targetname",
+              "menumusic"
+            ],
+            [
+              "spawnflags",
+              "2"
+            ],
+            [
+              "classname",
+              "ambient_fmodstream"
+            ]
+          ]
+        },
+        {
+          "ordinal": 121,
+          "lump_byte_span": [
+            17111,
+            17286
+          ],
+          "keyvalues": {
+            "origin": "-3303 -262 16",
+            "message": "ambience/menu_ambience.wav",
+            "pitchstart": "100",
+            "pitch": "100",
+            "channel": "6",
+            "health": "10",
+            "spawnflags": "1",
+            "classname": "ambient_generic"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3303 -262 16"
+            ],
+            [
+              "message",
+              "ambience/menu_ambience.wav"
+            ],
+            [
+              "pitchstart",
+              "100"
+            ],
+            [
+              "pitch",
+              "100"
+            ],
+            [
+              "channel",
+              "6"
+            ],
+            [
+              "health",
+              "10"
+            ],
+            [
+              "spawnflags",
+              "1"
+            ],
+            [
+              "classname",
+              "ambient_generic"
+            ]
+          ]
+        },
+        {
+          "ordinal": 122,
+          "lump_byte_span": [
+            17287,
+            17491
+          ],
+          "keyvalues": {
+            "origin": "-2083 -54 16",
+            "targetname": "togljud_m1",
+            "message": "ambience/train_long_pass1.wav",
+            "pitchstart": "100",
+            "pitch": "100",
+            "channel": "6",
+            "health": "10",
+            "spawnflags": "49",
+            "classname": "ambient_generic"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2083 -54 16"
+            ],
+            [
+              "targetname",
+              "togljud_m1"
+            ],
+            [
+              "message",
+              "ambience/train_long_pass1.wav"
+            ],
+            [
+              "pitchstart",
+              "100"
+            ],
+            [
+              "pitch",
+              "100"
+            ],
+            [
+              "channel",
+              "6"
+            ],
+            [
+              "health",
+              "10"
+            ],
+            [
+              "spawnflags",
+              "49"
+            ],
+            [
+              "classname",
+              "ambient_generic"
+            ]
+          ]
+        },
+        {
+          "ordinal": 123,
+          "lump_byte_span": [
+            17492,
+            17696
+          ],
+          "keyvalues": {
+            "origin": "-2083 -77 16",
+            "targetname": "togljud_m2",
+            "message": "ambience/train_long_pass2.wav",
+            "pitchstart": "100",
+            "pitch": "100",
+            "channel": "6",
+            "health": "10",
+            "spawnflags": "49",
+            "classname": "ambient_generic"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-2083 -77 16"
+            ],
+            [
+              "targetname",
+              "togljud_m2"
+            ],
+            [
+              "message",
+              "ambience/train_long_pass2.wav"
+            ],
+            [
+              "pitchstart",
+              "100"
+            ],
+            [
+              "pitch",
+              "100"
+            ],
+            [
+              "channel",
+              "6"
+            ],
+            [
+              "health",
+              "10"
+            ],
+            [
+              "spawnflags",
+              "49"
+            ],
+            [
+              "classname",
+              "ambient_generic"
+            ]
+          ]
+        },
+        {
+          "ordinal": 124,
+          "lump_byte_span": [
+            17697,
+            17889
+          ],
+          "keyvalues": {
+            "origin": "-3446 -470 25",
+            "toglampor2#1": "32",
+            "toglampor2": "0",
+            "blacknwhite": "0",
+            "togljud_m1#1": "84",
+            "togljud_m2": "32",
+            "togljud_m1": "14",
+            "targetname": "multimenu",
+            "classname": "multi_manager"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3446 -470 25"
+            ],
+            [
+              "toglampor2#1",
+              "32"
+            ],
+            [
+              "toglampor2",
+              "0"
+            ],
+            [
+              "blacknwhite",
+              "0"
+            ],
+            [
+              "togljud_m1#1",
+              "84"
+            ],
+            [
+              "togljud_m2",
+              "32"
+            ],
+            [
+              "togljud_m1",
+              "14"
+            ],
+            [
+              "targetname",
+              "multimenu"
+            ],
+            [
+              "classname",
+              "multi_manager"
+            ]
+          ]
+        },
+        {
+          "ordinal": 125,
+          "lump_byte_span": [
+            17890,
+            17993
+          ],
+          "keyvalues": {
+            "origin": "-3555 -463 -34",
+            "iuser1": "190",
+            "targetname": "blacknwhite",
+            "classname": "cof_blackandwhite"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3555 -463 -34"
+            ],
+            [
+              "iuser1",
+              "190"
+            ],
+            [
+              "targetname",
+              "blacknwhite"
+            ],
+            [
+              "classname",
+              "cof_blackandwhite"
+            ]
+          ]
+        },
+        {
+          "ordinal": 126,
+          "lump_byte_span": [
+            17994,
+            18067
+          ],
+          "keyvalues": {
+            "origin": "-3526 -515 -63",
+            "angles": "0 0 0",
+            "classname": "cof_gamemenu"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-3526 -515 -63"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "cof_gamemenu"
+            ]
+          ]
+        }
+      ],
+      "textures": [
+        {
+          "name": "+0~white",
+          "size": [
+            32,
+            32
+          ],
+          "embedded": true
+        },
+        {
+          "name": "black",
+          "size": [
+            32,
+            32
+          ],
+          "embedded": true
+        },
+        {
+          "name": "red",
+          "size": [
+            16,
+            16
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_basror",
+          "size": [
+            64,
+            128
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_hogskylt2",
+          "size": [
+            96,
+            48
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_jord2",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_jord23",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_rstmetal",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_tbana_F",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_tbana_S1",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_tbana_S2",
+          "size": [
+            272,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_tbana_S3",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c_tbana_T",
+          "size": [
+            256,
+            128
+          ],
+          "embedded": true
+        },
+        {
+          "name": "{c_fencebig",
+          "size": [
+            448,
+            128
+          ],
+          "embedded": true
+        },
+        {
+          "name": "{c_fencesmall",
+          "size": [
+            112,
+            32
+          ],
+          "embedded": true
+        },
+        {
+          "name": "{c_kraftelS",
+          "size": [
+            64,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "AAATRIGGER",
+          "size": [
+            16,
+            16
+          ],
+          "embedded": true
+        },
+        {
+          "name": "CLIP",
+          "size": [
+            16,
+            16
+          ],
+          "embedded": true
+        },
+        {
+          "name": "NULL",
+          "size": [
+            16,
+            16
+          ],
+          "embedded": true
+        },
+        {
+          "name": "origin",
+          "size": [
+            16,
+            16
+          ],
+          "embedded": true
+        },
+        {
+          "name": "sky",
+          "size": [
+            16,
+            16
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_basfloor1",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_bricks1",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_cretewall5",
+          "size": [
+            384,
+            208
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_cretz1",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_newrails",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_roof1",
+          "size": [
+            96,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "c2_roofblack",
+          "size": [
+            96,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_buini3",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_buini4",
+          "size": [
+            256,
+            128
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_buini6",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_buini7",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_cretewl5",
+          "size": [
+            512,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_hamn1",
+          "size": [
+            512,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_hamn2",
+          "size": [
+            512,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_tbana_S1",
+          "size": [
+            256,
+            256
+          ],
+          "embedded": true
+        },
+        {
+          "name": "cn_tbana_S2",
+          "size": [
+            272,
+            256
+          ],
+          "embedded": true
+        }
+      ]
+    },
+    {
+      "path": "maps/c_loadgame.bsp",
+      "sha256": "9255a38bcf6a6dc00ad6e9c04b84698923d6b60dd49152ccc3cca1d1b29066bc",
+      "entity_lump_offset": 11204,
+      "entity_lump_size": 508,
+      "entity_lump_sha256": "d3501cf67c58d87b58a2fbf5480451c8dd36aa93ad1d0b7002f3ef39190d2fa3",
+      "class_counts": {
+        "worldspawn": 1,
+        "info_player_start": 1,
+        "light": 1,
+        "game_player_equip": 1,
+        "cof_loadgame": 1
+      },
+      "entities": [
+        {
+          "ordinal": 0,
+          "lump_byte_span": [
+            0,
+            239
+          ],
+          "keyvalues": {
+            "wad": "\\lol\\cofreal22.wad;\\lol\\cof3.wad;\\lol\\cof_new.wad;\\halflife.wad;\\liquids.wad;\\aomdc22.wad;",
+            "mapversion": "220",
+            "nomusicstop": "1",
+            "MaxRange": "4096",
+            "WaveHeight": "0.0",
+            "sounds": "1",
+            "classname": "worldspawn"
+          },
+          "pairs": [
+            [
+              "wad",
+              "\\lol\\cofreal22.wad;\\lol\\cof3.wad;\\lol\\cof_new.wad;\\halflife.wad;\\liquids.wad;\\aomdc22.wad;"
+            ],
+            [
+              "mapversion",
+              "220"
+            ],
+            [
+              "nomusicstop",
+              "1"
+            ],
+            [
+              "MaxRange",
+              "4096"
+            ],
+            [
+              "WaveHeight",
+              "0.0"
+            ],
+            [
+              "sounds",
+              "1"
+            ],
+            [
+              "classname",
+              "worldspawn"
+            ],
+            [
+              "classname",
+              "worldspawn"
+            ]
+          ]
+        },
+        {
+          "ordinal": 1,
+          "lump_byte_span": [
+            240,
+            310
+          ],
+          "keyvalues": {
+            "origin": "0 0 48",
+            "angles": "0 0 0",
+            "classname": "info_player_start"
+          },
+          "pairs": [
+            [
+              "origin",
+              "0 0 48"
+            ],
+            [
+              "angles",
+              "0 0 0"
+            ],
+            [
+              "classname",
+              "info_player_start"
+            ]
+          ]
+        },
+        {
+          "ordinal": 2,
+          "lump_byte_span": [
+            311,
+            399
+          ],
+          "keyvalues": {
+            "origin": "-320 192 64",
+            "_falloff": "2",
+            "_light": "255 255 128 200",
+            "classname": "light"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-320 192 64"
+            ],
+            [
+              "_falloff",
+              "2"
+            ],
+            [
+              "_light",
+              "255 255 128 200"
+            ],
+            [
+              "classname",
+              "light"
+            ]
+          ]
+        },
+        {
+          "ordinal": 3,
+          "lump_byte_span": [
+            400,
+            454
+          ],
+          "keyvalues": {
+            "origin": "0 0 128",
+            "classname": "game_player_equip"
+          },
+          "pairs": [
+            [
+              "origin",
+              "0 0 128"
+            ],
+            [
+              "classname",
+              "game_player_equip"
+            ]
+          ]
+        },
+        {
+          "ordinal": 4,
+          "lump_byte_span": [
+            455,
+            506
+          ],
+          "keyvalues": {
+            "origin": "-16 0 128",
+            "classname": "cof_loadgame"
+          },
+          "pairs": [
+            [
+              "origin",
+              "-16 0 128"
+            ],
+            [
+              "classname",
+              "cof_loadgame"
+            ]
+          ]
+        }
+      ],
+      "textures": [
+        {
+          "name": "black",
+          "size": [
+            32,
+            32
+          ],
+          "embedded": true
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "path": "1024_textscheme.txt",
+      "bytes": 1276,
+      "sha256": "f192b4d5ea4c4d20939b06ae9b62dedb5a08fd305985de145a5cc395fca84288",
+      "encoding": "ascii"
+    },
+    {
+      "path": "1152_textscheme.txt",
+      "bytes": 1288,
+      "sha256": "6b3d0b2d34222ca8c24513efbf716ebbf2fdcf82e508d7615c78d8769e1c2259",
+      "encoding": "ascii"
+    },
+    {
+      "path": "1280_textscheme.txt",
+      "bytes": 1276,
+      "sha256": "f4876aee3d966e0b9fb5a1a08ff4d312c56632b883613e6047b3ba3370d84541",
+      "encoding": "ascii"
+    },
+    {
+      "path": "1600_textscheme.txt",
+      "bytes": 1277,
+      "sha256": "a2f0e0a23ca65d0744965af005f6a6277ecbdfd61d9e37e681f9f44d17cc4e0f",
+      "encoding": "ascii"
+    },
+    {
+      "path": "640_textscheme.txt",
+      "bytes": 2069,
+      "sha256": "503a89910bea1d52214b12efca2c6082f21c031ca6da6644a035b1c0d8c45bfa",
+      "encoding": "ascii"
+    },
+    {
+      "path": "800_textscheme.txt",
+      "bytes": 1276,
+      "sha256": "c3967a29b8c1984b9a937d32b2fea61a61ee97d868c0379242c04667e31d3063",
+      "encoding": "ascii"
+    },
+    {
+      "path": "gfx/vgui/640_difficulty.tga",
+      "bytes": 921644,
+      "sha256": "34e83b0b08244b41b773f679e3ad32354a4f9e297ca5894698464bb00a46e231",
+      "size": [
+        640,
+        480
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        640,
+        480
+      ]
+    },
+    {
+      "path": "gfx/vgui/640_difficultylocked.tga",
+      "bytes": 921644,
+      "sha256": "12dbc18aa7d7c5f2998f388ba74ea804330be7d4bb0cefc8357dff5511e0f6de",
+      "size": [
+        640,
+        480
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        640,
+        480
+      ]
+    },
+    {
+      "path": "gfx/vgui/backgroundtoall.TGA",
+      "bytes": 1920044,
+      "sha256": "9457ceaa0af7937f291c41efd316cb6f788a21844673ef6422cdb9ce2a9bd79e",
+      "size": [
+        800,
+        600
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        800,
+        600
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/aomdc.tga",
+      "bytes": 220818,
+      "sha256": "c8caa09a816157bda61f5af8d7aff07f7a657fdeb72f9355c98c934147f0b80f",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        1,
+        0,
+        586,
+        92
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/aomdc_mo.tga",
+      "bytes": 220818,
+      "sha256": "2e0d78502ffb17646b47d6f88195461d0a313226563900f2d355aea4bf33e9e7",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        1,
+        0,
+        586,
+        92
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/cancel.tga",
+      "bytes": 42578,
+      "sha256": "ff63b80d13b5ec8482edb38f526c396f88b46bcba383458a6bb02c03cb8ff0f2",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        70,
+        7,
+        207,
+        26
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/cancel_mo.tga",
+      "bytes": 42578,
+      "sha256": "b4b533d6685a1de6380d1db03b31d08b935c8c17a0607eb3d73d2a6e96157f04",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        70,
+        7,
+        207,
+        26
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/clothes.tga",
+      "bytes": 220818,
+      "sha256": "15c4117ded991d564a8152ca16a0d489b2adbb203ed5cb556961b5e375ee4044",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        0,
+        585,
+        92
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/clothes_mo.tga",
+      "bytes": 220818,
+      "sha256": "dda8f3f6cf58454b919c078ef3c0a12dd187066be4008fe8b66cd60ae91f56c6",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        0,
+        585,
+        92
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/customc.tga",
+      "bytes": 42578,
+      "sha256": "8a7084ac647d684c06e764414d61a6555ac277ad340c27fed11ab6963bb3f7d2",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        23,
+        7,
+        254,
+        26
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/customc_mo.tga",
+      "bytes": 42578,
+      "sha256": "9ed38ad2ae43aa081651c2556a64f7dd4e7b327323a903c4d82b70d2aba7eafe",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        23,
+        7,
+        254,
+        26
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/donate.tga",
+      "bytes": 220844,
+      "sha256": "de371303873e800b81dde67ef9c1fe35dcdea5a89f180c67fa1267ece92c33eb",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        1,
+        0,
+        530,
+        92
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/donate_mo.tga",
+      "bytes": 220844,
+      "sha256": "cbd38b6feaf93c9b27840bbf0289d46e7ab2b0c4ce53ed9a90c94d080dcb6178",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        1,
+        0,
+        530,
+        92
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/extras.tga",
+      "bytes": 42578,
+      "sha256": "f74b0eaf49f34afd436f4311c90095a5ad256bcd2f60e6265ef6149659aa640f",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        24,
+        7,
+        252,
+        29
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/extras_mo.tga",
+      "bytes": 42578,
+      "sha256": "b62be68f91a3185853a1374cfdcbb4c4685ad434105d697b99799a2cd7ce7e57",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        24,
+        7,
+        252,
+        29
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/facebook.tga",
+      "bytes": 220844,
+      "sha256": "d4575457afbc6548a2778c0ff6f3441c6da3def90d77c3a387ce0c06e5291dbe",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        1,
+        7,
+        532,
+        88
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/facebook_mo.tga",
+      "bytes": 220844,
+      "sha256": "44a307f3b02b0c99096302fabdb8f4602f7d24b5106afb4c8efa1c2609064566",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        1,
+        7,
+        532,
+        88
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/hserver.tga",
+      "bytes": 42578,
+      "sha256": "7dda14192e287d4987896a7b4dc40767c766d9d9378c3ca4e280612492a111ca",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        24,
+        7,
+        253,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/hserver_mo.tga",
+      "bytes": 42578,
+      "sha256": "ca4c8b7a885dbfb1b59ffdf2531ae183bfc1451fce0f4fa29bc250415001d021",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        24,
+        7,
+        253,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/jserver.tga",
+      "bytes": 42578,
+      "sha256": "25c2eccbc8eb81e02700e5f16ccdcf6567293b2e41fcdda8709487bd9190a1da",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        36,
+        7,
+        242,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/jserver_mo.tga",
+      "bytes": 42578,
+      "sha256": "891983794b8e37ab9ac202fd673ef9a0d8cd604d8ec2e5f37defb07c24a738fb",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        36,
+        7,
+        242,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/language.tga",
+      "bytes": 42578,
+      "sha256": "ed57c7f3de7d48662918326853290138647288ac7fefc327303331c8e2f5dd52",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        24,
+        7,
+        253,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/language_mo.tga",
+      "bytes": 42578,
+      "sha256": "eeec20742e9b2ef99275c8a398698921628672d3267f59f951869d227d067030",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        24,
+        7,
+        253,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/loadgame.tga",
+      "bytes": 42578,
+      "sha256": "a2ff8e88113c054299562d7a783116db736340cbafae7efefe2cbaae8174a760",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        33,
+        7,
+        243,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/loadgame_mo.tga",
+      "bytes": 42578,
+      "sha256": "bcca6cbc2617553a6d3aaa4da192fcd4c8ec71e44f248f975dbdae76063bbdb5",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        33,
+        7,
+        243,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/newgame.tga",
+      "bytes": 42578,
+      "sha256": "4c366a2f04f42a2207793986406168b9f5397faf151e09478898ee43f4d6861a",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        51,
+        7,
+        227,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/newgame_mo.tga",
+      "bytes": 42578,
+      "sha256": "3d343db725b829f347953ec56655268536f0b45caedbc0d981bcc13ca023bd14",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        51,
+        7,
+        227,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/options.tga",
+      "bytes": 42578,
+      "sha256": "ea6bdbbb801e3f122eddb6858a6505a8491000569b28ba30606d7bab68789d7b",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        26,
+        7,
+        252,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/options_mo.tga",
+      "bytes": 42578,
+      "sha256": "d6effe0688ab60520bd1f6948f270732a291093992e5833ce5af16c6d91cdbcc",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        26,
+        7,
+        252,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/quit.tga",
+      "bytes": 42578,
+      "sha256": "3ab0ff2640a1638ed1fb1fbbacef75bfc2286a05f2f74331502c03a3160960eb",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        34,
+        7,
+        244,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/quit_mo.tga",
+      "bytes": 42578,
+      "sha256": "a37c15e7b019ce6d49b60e02228b5f9bdba080935bc713b56b04a0fcdace528b",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        34,
+        7,
+        244,
+        30
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/soundtrack1.tga",
+      "bytes": 220844,
+      "sha256": "b19fd11864a384fd9244ce808c3ab081fa1687bb33dbd025cd8863de7f54d8c1",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        6,
+        526,
+        85
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/soundtrack1_mo.tga",
+      "bytes": 220844,
+      "sha256": "8ee919893909146a5624b7ae4b5dc34a19abf2403da0049c8540bf5260083d9d",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        6,
+        526,
+        85
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/soundtrack2.tga",
+      "bytes": 220844,
+      "sha256": "ffdbc706d2e6eea6fb96cbb05419a622fc7bb0ee1ff3ec116e9a3b2a40c62d0d",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        6,
+        526,
+        85
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/soundtrack2_mo.tga",
+      "bytes": 220844,
+      "sha256": "5f92225f02fdc6b83cf94f61df3e34755953f328a86aab37050fe3ffcb4238f2",
+      "size": [
+        600,
+        92
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        6,
+        526,
+        85
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/unlockables.tga",
+      "bytes": 42578,
+      "sha256": "3d5769dfbbd3c72e8d8c4e721536713ba931db76fe4fbf6852be0e0f72579eb9",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        9,
+        7,
+        268,
+        29
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu/unlockables_mo.tga",
+      "bytes": 42578,
+      "sha256": "ebdf370d66a17933da481629fd603cc9de922875189e13d42d9b98651090c158",
+      "size": [
+        280,
+        38
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        9,
+        7,
+        268,
+        29
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu_logo.tga",
+      "bytes": 135212,
+      "sha256": "3c7fc6a58fea3092a63638371dcb421cf4cd2fb3feb73f5f5f213f603c7afa9a",
+      "size": [
+        512,
+        66
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        10,
+        511,
+        55
+      ]
+    },
+    {
+      "path": "gfx/vgui/menu_logo_ts.tga",
+      "bytes": 49004,
+      "sha256": "c5623b742f5f99ea9016ba747c423cfe3322b2a6e8167c98a926deaa81877313",
+      "size": [
+        120,
+        102
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        2,
+        6,
+        119,
+        97
+      ]
+    },
+    {
+      "path": "gfx/vgui/mouse.tga",
+      "bytes": 1068,
+      "sha256": "5768afa6d5852d71d2551319ee8a62200592e9ae5e2a62dc4d921da2a23b7cd9",
+      "size": [
+        16,
+        16
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        4,
+        0,
+        14,
+        16
+      ]
+    },
+    {
+      "path": "media/menu.mp3",
+      "bytes": 4849649,
+      "sha256": "d62544540b4f120fcbdcb2a7763723a714c7869a69aa739cfa28517965c713b1"
+    },
+    {
+      "path": "menu_settings.txt",
+      "bytes": 656,
+      "sha256": "cbb669881382b1f0b4864ebbc071a3b938af7ddddcb0b9d3b6c44ac9ab40ccc6",
+      "encoding": "ascii"
+    },
+    {
+      "path": "models/bookmenu.mdl",
+      "bytes": 2122688,
+      "sha256": "61abf41bfbb7e8b750c077f82c963abcd271eb068fe55ea24588811bca0e3175",
+      "studio": {
+        "sequences": [
+          {
+            "index": 0,
+            "label": "book_start",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              50.156959533691406,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 1,
+            "label": "p1p2idle",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              9.772449493408203,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 2,
+            "label": "p1p2top3p4",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              49.56632995605469,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 3,
+            "label": "p3p4idle",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              10.101397514343262,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 4,
+            "label": "p3p4top5p6",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              49.99846649169922,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 5,
+            "label": "p5p6idle",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              11.01602554321289,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 6,
+            "label": "p5p6top3p4",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              49.99846649169922,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          },
+          {
+            "index": 7,
+            "label": "p3p4top1p2",
+            "fps": 30.0,
+            "flags": 0,
+            "frames": 31,
+            "bounds": [
+              -7.167684555053711,
+              -51.87409973144531,
+              -36.81001663208008,
+              49.56632995605469,
+              49.30592346191406,
+              35.760013580322266
+            ]
+          }
+        ],
+        "textures": [
+          {
+            "name": "tex1.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 19392
+          },
+          {
+            "name": "page2.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 282304
+          },
+          {
+            "name": "page3.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 545216
+          },
+          {
+            "name": "page0.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 808128
+          },
+          {
+            "name": "page1.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 1071040
+          },
+          {
+            "name": "page4.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 1333952
+          },
+          {
+            "name": "page5.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 1596864
+          },
+          {
+            "name": "page6.BMP",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 1859776
+          }
+        ]
+      }
+    },
+    {
+      "path": "models/Props/Blandat/byggnader.mdl",
+      "bytes": 1175884,
+      "sha256": "59bbb0ea1d1171af2ef5b2b9589057a120657057ba9a465b1ca193cb1a114f6c",
+      "studio": {
+        "sequences": [
+          {
+            "index": 0,
+            "label": "idle",
+            "fps": 213.0,
+            "flags": 1,
+            "frames": 213,
+            "bounds": [
+              -7269.21435546875,
+              -3198.8525390625,
+              -726.9310913085938,
+              1293.8453369140625,
+              6407.357421875,
+              722.818359375
+            ]
+          }
+        ],
+        "textures": [
+          {
+            "name": "{c2_treed1.bmp",
+            "flags": 64,
+            "size": [
+              256,
+              512
+            ],
+            "pixel_offset": 67052
+          },
+          {
+            "name": "{c2_ligran1b.bmp",
+            "flags": 64,
+            "size": [
+              256,
+              256
+            ],
+            "pixel_offset": 198892
+          },
+          {
+            "name": "{c2_treed2.bmp",
+            "flags": 64,
+            "size": [
+              256,
+              512
+            ],
+            "pixel_offset": 265196
+          },
+          {
+            "name": "c2_buini1.bmp",
+            "flags": 0,
+            "size": [
+              116,
+              184
+            ],
+            "pixel_offset": 397036
+          },
+          {
+            "name": "c_buildwhole2.bmp",
+            "flags": 0,
+            "size": [
+              512,
+              512
+            ],
+            "pixel_offset": 419148
+          },
+          {
+            "name": "c_buildwhole3.bmp",
+            "flags": 0,
+            "size": [
+              448,
+              512
+            ],
+            "pixel_offset": 682060
+          },
+          {
+            "name": "c_buildwhole4.bmp",
+            "flags": 0,
+            "size": [
+              384,
+              512
+            ],
+            "pixel_offset": 912204
+          },
+          {
+            "name": "c_grass02.bmp",
+            "flags": 0,
+            "size": [
+              256,
+              256
+            ],
+            "pixel_offset": 1109580
+          }
+        ]
+      }
+    },
+    {
+      "path": "models/Props/Blandat/crows.mdl",
+      "bytes": 82836,
+      "sha256": "745ff3acd2c0dd64c1f778ca20e3f9fec2f6fee52068d947b8869c7597e95d35",
+      "studio": {
+        "sequences": [
+          {
+            "index": 0,
+            "label": "idle1",
+            "fps": 30.0,
+            "flags": 1,
+            "frames": 101,
+            "bounds": [
+              -7.806363105773926,
+              307.9609375,
+              78.10259246826172,
+              7.560390472412109,
+              323.6746520996094,
+              90.23399353027344
+            ]
+          },
+          {
+            "index": 1,
+            "label": "action1",
+            "fps": 20.0,
+            "flags": 0,
+            "frames": 101,
+            "bounds": [
+              -13.058492660522461,
+              -367.29632568359375,
+              77.69337463378906,
+              437.2730712890625,
+              326.3230895996094,
+              216.60435485839844
+            ]
+          }
+        ],
+        "textures": [
+          {
+            "name": "crow_map.bmp",
+            "flags": 64,
+            "size": [
+              256,
+              256
+            ],
+            "pixel_offset": 16532
+          }
+        ]
+      }
+    },
+    {
+      "path": "models/props/sky_sphere4.mdl",
+      "bytes": 305224,
+      "sha256": "86895721963451577f28c96ec768bbc604dd43ca41f76971dc89c2b7edc12a00",
+      "studio": {
+        "sequences": [
+          {
+            "index": 0,
+            "label": "idle",
+            "fps": 5.0,
+            "flags": 1,
+            "frames": 500,
+            "bounds": [
+              -130.60043334960938,
+              -130.5804443359375,
+              -130.7899932861328,
+              130.60043334960938,
+              130.5804443359375,
+              130.7899932861328
+            ]
+          }
+        ],
+        "textures": [
+          {
+            "name": "skysphere_tex.bmp",
+            "flags": 0,
+            "size": [
+              768,
+              189
+            ],
+            "pixel_offset": 13384
+          },
+          {
+            "name": "skysphere_tex2.bmp",
+            "flags": 32,
+            "size": [
+              768,
+              189
+            ],
+            "pixel_offset": 159304
+          }
+        ]
+      }
+    },
+    {
+      "path": "mp3/gamestartup.mp3",
+      "bytes": 4851937,
+      "sha256": "2fa24ba9b3c81fe4c384a44cba0e5c19081df48be22a6dd429ec9da122d71cb1"
+    },
+    {
+      "path": "resource/background/1024_1_a_loaded.tga",
+      "bytes": 262188,
+      "sha256": "ac9daadfb555d3f43a4e51651c02e515c2607b8271889038eec462b10130b042",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_a_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_b_loaded.tga",
+      "bytes": 262188,
+      "sha256": "c4dd5232530fcc7f5486e36029f3dcb0dc26a4ef730403d54775b40639bcb599",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_b_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_c_loaded.tga",
+      "bytes": 262188,
+      "sha256": "b2426e30949707f0c51a5d7f6826e7416bfcaf261c985811ed0091b6294f7245",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_c_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_d_loaded.tga",
+      "bytes": 262188,
+      "sha256": "4a52207640ab4a37d4af516bb0c4c57bbceb828f21b0bd9d972f7153ca211572",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_1_d_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_a_loaded.tga",
+      "bytes": 262188,
+      "sha256": "bc490fdafbe9890e25551d7d5bfcd42075d0b1cb3dc05d0b042b7923157c85ff",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_a_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_b_loaded.tga",
+      "bytes": 262188,
+      "sha256": "8c0e911288fed5343af3052d2cac6ea8f46e86a89c011f09100ece113f312c7a",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_b_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_c_loaded.tga",
+      "bytes": 262188,
+      "sha256": "1c947df1fd20d8601971fd5c4c62ae67d35decb7b001990638cc1ff95c71f6c9",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_c_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_d_loaded.tga",
+      "bytes": 262188,
+      "sha256": "a23d4487ffd5424bf11dfd57b9e749da9360cc977e84378955c99639b1af8cf9",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_2_d_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_a_loaded.tga",
+      "bytes": 262188,
+      "sha256": "653ae05f53aa097040f7231554019bd862714a75a5cdfb5ef40c62186b7aea3c",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_a_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_b_loaded.tga",
+      "bytes": 262188,
+      "sha256": "9c8428d3c460dcc29531428539f6bad76e07376b780d275b759f2061b4c069f8",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_b_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_c_loaded.tga",
+      "bytes": 262188,
+      "sha256": "9c8428d3c460dcc29531428539f6bad76e07376b780d275b759f2061b4c069f8",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_c_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_d_loaded.tga",
+      "bytes": 262188,
+      "sha256": "df743dcbda3cfe4f8c693e7921a4a4c33c107de649028bb01b51698987f14ce2",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/background/1024_3_d_loading.tga",
+      "bytes": 262188,
+      "sha256": "b24116a61cee180cccf0a70eb13c0361be767e112c0768ddddface747e7cc8ed",
+      "size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    {
+      "path": "resource/BackgroundLayout.txt",
+      "bytes": 707,
+      "sha256": "8fe636d5dff89a697a366dc77b9ec2c2e410d9f32520f6dca2830c36c3c30d30",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/BackgroundLoadingLayout.txt",
+      "bytes": 719,
+      "sha256": "1993394be5d7512b6f259c18c10e0f647fca87d10721a73f14124bf70853f85a",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/CDKeyEntryDialog.res",
+      "bytes": 3590,
+      "sha256": "d2d82c47b1609ee44d934fb24359a974cccd68ab92b53a2b56f16c6d5cb143c5",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/ChangeGameDialog.res",
+      "bytes": 1871,
+      "sha256": "733fb25550573e13885406e1a618d380627afc94d71d2ee3b95e335d9a64f934",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/clientscheme.res",
+      "bytes": 14876,
+      "sha256": "6a90c78621c5b2cf2c80cfc09e6870c27b8c7e4327f8f3ef75580b434306bd82",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/ContentControlDialog.res",
+      "bytes": 3248,
+      "sha256": "0e275ade9ff0cceea0baddb9f574c6529937a5efb9d260e22491fd8ea6ebcd9a",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/CreateMultiplayerGameGameplayPage.res",
+      "bytes": 1561,
+      "sha256": "8c33b6bacebdce59a18ff4b764eaf93bff7bdf10becb2ae41652545d58150ab2",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/CreateMultiplayerGameServerPage.res",
+      "bytes": 4078,
+      "sha256": "1d23924da8e5c8e427e291a28d59948557749bbf785d3b89f058bf02feecb3cf",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/DemoEditDialog.res",
+      "bytes": 2417,
+      "sha256": "1e2a95b54169bbeded76f19f2d8027e7ba2eeca50c0d9586ddcedf54a13f0b21",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/DemoEventsDialog.res",
+      "bytes": 1376,
+      "sha256": "80469d72c71afe79f669645524db7d3403ddf1148a5f6e4bb64bc3328e9bc5a1",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/DemoPlayerDialog.res",
+      "bytes": 4098,
+      "sha256": "a4ce71bc83084650123078a702fccb27ab387108c7cea3c8a0e473d4e7b4ec16",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/DemoPlayerFileDialog.res",
+      "bytes": 945,
+      "sha256": "e51844e1b142fd07c5428d26e1496ba329a76119813563d58992091c914b3e1f",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/DialogOptionsIngame.res",
+      "bytes": 1168,
+      "sha256": "78dc56276b0cb1d07bae3075747a41409df346e9d24b4e3940c79e9d7595c83a",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/fake_microphone_meter.tga",
+      "bytes": 32812,
+      "sha256": "70999f06873c9e9d4a184cd6ddf6a7192a10b3f36cd81004586729def0576fa3",
+      "size": [
+        256,
+        32
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        157,
+        21
+      ]
+    },
+    {
+      "path": "resource/game_menu.tga",
+      "bytes": 30764,
+      "sha256": "ec0c743d4c0ce4954ce272cbc44b39bbda72fe17bd2f547d476622c50df27863",
+      "size": [
+        240,
+        32
+      ],
+      "alpha_range": [
+        0,
+        0
+      ],
+      "alpha_bounds": null
+    },
+    {
+      "path": "resource/game_menu_mouseover.tga",
+      "bytes": 30764,
+      "sha256": "ec0c743d4c0ce4954ce272cbc44b39bbda72fe17bd2f547d476622c50df27863",
+      "size": [
+        240,
+        32
+      ],
+      "alpha_range": [
+        0,
+        0
+      ],
+      "alpha_bounds": null
+    },
+    {
+      "path": "resource/GameMenu.res",
+      "bytes": 881,
+      "sha256": "94027af115e96523e95296a028e878d5bc34e5f5149ffb1679f72b6ef4f256ed",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/gameui_english.txt",
+      "bytes": 32560,
+      "sha256": "12a137d5e78313c55677b202d9e5a37833f1ea68b0e8f2eed678dc70df70f169",
+      "encoding": "utf-16le-bom"
+    },
+    {
+      "path": "resource/icon_blocked.tga",
+      "bytes": 620,
+      "sha256": "d1b62d3ad3efa85a177d2870753eacf3bcb5126bf22d94c1fa980cfb0e417f5b",
+      "size": [
+        12,
+        12
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        12,
+        12
+      ]
+    },
+    {
+      "path": "resource/icon_end.tga",
+      "bytes": 1149,
+      "sha256": "10e8ea40e5c623c890a94ae58f475cc7656f3b40f7c82797bce982bc8bf92ec6",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_faster.tga",
+      "bytes": 1123,
+      "sha256": "194f627180ed5a8dd3c4573b5a3de360c8d2a12cf34f6d2f15d5266e8a10eb1d",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_friend_indicator_scoreboard.tga",
+      "bytes": 2604,
+      "sha256": "9b57b6dfd6df01fb2c7540ff87e7c6e8b3f5b3ff910ba070696594bb1b025f7a",
+      "size": [
+        20,
+        32
+      ],
+      "alpha_range": [
+        16,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        20,
+        32
+      ]
+    },
+    {
+      "path": "resource/icon_hlicon1.tga",
+      "bytes": 1307,
+      "sha256": "db6edb7e6c775e916a3287e98a1520ae5e3c4ae69650aaf0f036218ee5047204",
+      "size": [
+        16,
+        16
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "path": "resource/icon_hlicon2.tga",
+      "bytes": 1307,
+      "sha256": "bdcd34d7b2d100dc8417c987f4409a3401e0463e43f3527f865fadc52e353ff1",
+      "size": [
+        16,
+        16
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "path": "resource/icon_load.tga",
+      "bytes": 821,
+      "sha256": "6d3cd26bbd2db25b698d53d305b7ea82933d8504ad9a0d9fd2911ada0ccbd67e",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_pause.tga",
+      "bytes": 1219,
+      "sha256": "3e2056e33a3e121233857d2e6ca28cb5f97d44628cb18a07acd16a8dec838ef8",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_play.tga",
+      "bytes": 948,
+      "sha256": "67a9f8621ccc9688c8ad565a75f07b0e9e7cad1250350af09e885c22582bfd98",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_slower.tga",
+      "bytes": 1123,
+      "sha256": "001a124f45ef2e30cfaa7e4e820b306c7510d7a168cb8735d8a3ea70a7ec2ee6",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_start.tga",
+      "bytes": 1149,
+      "sha256": "aed14b69e496db1887515f26bf541c04eb4937b2dc5f05dcbbde243b0468cefc",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_stepb.tga",
+      "bytes": 1143,
+      "sha256": "f67c47331c39c14523be06c8eea89866dc59ca1f4ce79b5b01b043f39334244e",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_stepf.tga",
+      "bytes": 1143,
+      "sha256": "3d730d691e48064a84609bad16de2df0c5a0406ee93bb7b5c863916b5ecdf5b0",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_stop.tga",
+      "bytes": 1103,
+      "sha256": "832bb3c4ba73a4bf43e230ceedd04126fdea0f042c8055e975bd2f3db1c2a2a9",
+      "size": [
+        13,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        13,
+        18
+      ]
+    },
+    {
+      "path": "resource/icon_vac.tga",
+      "bytes": 16923,
+      "sha256": "8d2230289eac31eedb53c68caf115c8f505901d38fa01ace2b3761be4c27351e",
+      "size": [
+        64,
+        64
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "path": "resource/LoadGameDialog.res",
+      "bytes": 3085,
+      "sha256": "a4e13c4f85a8ec52b42d9557885dff956b0d2e6e2ded2022c67335d3d50d8acd",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialog.res",
+      "bytes": 1849,
+      "sha256": "206ae1d22753fff48c2b61c5833a2ff539c7d01cb6776aa4ac547c8c22e3bdac",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogConnectionLost.res",
+      "bytes": 2646,
+      "sha256": "4818bac96cc56e169b8a9b5f6e9cd4d8cd10da4c406179dde55d4d64d5133880",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogDualProgress.res",
+      "bytes": 3098,
+      "sha256": "939bad3715140f28d2fb3a92f2d82fa2f20424c51ee07eebe0352ad40b9ec1a6",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogDualProgressVAC.res",
+      "bytes": 4009,
+      "sha256": "4d25c49105774b826fd2a7f149f702369a4a0cf04d0577499dbdcda86b10bb1f",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogError.res",
+      "bytes": 3078,
+      "sha256": "32446b575d3d87efd4e907e0df0a89fb7132380bb6b750eaffaa147e24ad6418",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogErrorLoggedInElsewhere.res",
+      "bytes": 2652,
+      "sha256": "e5545ccfbf8ec1ff9da92a2a374190f8b4240358c002b1999e25a941a3b3f6ec",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogErrorNoSteamConnection.res",
+      "bytes": 3067,
+      "sha256": "8691efc0baaeb37bb0d86e79d179856600c4140ba59ccc2aef16ee507f831237",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogErrorVACBanned.res",
+      "bytes": 2812,
+      "sha256": "7338dab79b9068f6117bba745fed42b1fe8bab8c20d8b0e499fb2c86bf611619",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogNoBanner.res",
+      "bytes": 3050,
+      "sha256": "727d34d5fdae5f32f75a78baac5d05eeefc6aa094b8cc2138f88874044e74e42",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogNoBannerSingle.res",
+      "bytes": 3042,
+      "sha256": "71c1a660c29cff29c52866321710c00ce664fa37f952a8e999f5f52c92dfbdc4",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/LoadingDialogVAC.res",
+      "bytes": 4189,
+      "sha256": "9287af6ea28791e62191b7c2551c3cb2dfefc4972e79c6c410f2474a638c7b5a",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/logo_game.tga",
+      "bytes": 66075,
+      "sha256": "0f5f4eb6936d716b674952b8a25617e6d79111a468404c23f205ce87c5d66f1a",
+      "size": [
+        512,
+        32
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        7,
+        8,
+        287,
+        25
+      ]
+    },
+    {
+      "path": "resource/menu_advoptions.tga",
+      "bytes": 112018,
+      "sha256": "251b316c9335788885e59536551e3b6e39e442281146dd0135dc96412974ad0b",
+      "size": [
+        400,
+        70
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        16,
+        12,
+        382,
+        61
+      ]
+    },
+    {
+      "path": "resource/menu_hl_no_icon.tga",
+      "bytes": 4148,
+      "sha256": "21a2f0a90c6c335a1e34393601640699dab3bbda91759a391da793c1fa39e4c7",
+      "size": [
+        76,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        76,
+        18
+      ]
+    },
+    {
+      "path": "resource/menu_hl_with_icon.tga",
+      "bytes": 5228,
+      "sha256": "360d6bbd986976be96e6e79a2a51715eb698222d4da6d9c3b4ab5fe698b290c1",
+      "size": [
+        96,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        96,
+        18
+      ]
+    },
+    {
+      "path": "resource/menu_steam_no_icon.tga",
+      "bytes": 2960,
+      "sha256": "1c5836f3f14d4ded8e02fe416cc66e6af155b2c0d86692990e8348f44d275413",
+      "size": [
+        54,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        54,
+        18
+      ]
+    },
+    {
+      "path": "resource/menu_steam_with_icon.tga",
+      "bytes": 4472,
+      "sha256": "4d01e030e5ce6c6cc0101d6867484bc6d3ced0a7c0ce69fc172fa55080116806",
+      "size": [
+        82,
+        18
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        82,
+        18
+      ]
+    },
+    {
+      "path": "resource/menu_vidoptions.tga",
+      "bytes": 240018,
+      "sha256": "ad595d0e5d3c706bb090f047b54464fa3481fe707b89ec24ca5e45842cd44c67",
+      "size": [
+        400,
+        150
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        4,
+        41,
+        395,
+        109
+      ]
+    },
+    {
+      "path": "resource/mic_meter_dead.tga",
+      "bytes": 20268,
+      "sha256": "95e7e68e71443e08088475a91acfb0e9c065b4b7683c5b9e9177097b203052fc",
+      "size": [
+        158,
+        32
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        157,
+        21
+      ]
+    },
+    {
+      "path": "resource/mic_meter_live.tga",
+      "bytes": 20268,
+      "sha256": "38e9b353145a885e23443275aeb5250e2533403ddca7761426c683e343ba4eae",
+      "size": [
+        158,
+        32
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        0,
+        0,
+        157,
+        21
+      ]
+    },
+    {
+      "path": "resource/MultiplayerAdvancedDialog.res",
+      "bytes": 1528,
+      "sha256": "dd63dc19eb64f5f18957888dedbb168ee268d426662805698521347f6b0c2c88",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/multiplayeradvancedpage.res",
+      "bytes": 633,
+      "sha256": "da1abe7cd7ec1843b2746ed8464007822c1163de9f79b23c8f87d776890ff345",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/NewGameDialog.res",
+      "bytes": 3021,
+      "sha256": "158c796730f476e658d7dc5e794850df09ca251dd00f56c6839a9931ec6e1064",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubAdvanced.res",
+      "bytes": 832,
+      "sha256": "913e7617c1a91dcb5c729b341cfba26df52374407d2dab734bac664ff6e3e8ca",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubAudio.res",
+      "bytes": 3155,
+      "sha256": "41bd6b781744d6e6a57f2530af766445a5eac7e2322501a676b3136ce93141e9",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubKeyboard.res",
+      "bytes": 1495,
+      "sha256": "2d8b55de33b18e496d44c1fafcef51824070472a1d9d7e72692a0ba52c695890",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubMouse.res",
+      "bytes": 5391,
+      "sha256": "16414a133df2f3a4a1f5f8e756dd1c21b52c8c2e5f1e6c6cea4976dd6efbab39",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubMultiplayer.res",
+      "bytes": 8834,
+      "sha256": "3c9bf03ac4394cd48abc39ae20ec9456477801386f5777ce316ba04e760d4600",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubVideo.res",
+      "bytes": 3782,
+      "sha256": "9a471cd9852c9a9123d15b5bd10ccd86a919d30f536057c98862413e2e434837",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubVideoo.res",
+      "bytes": 5725,
+      "sha256": "252ccc1d476bf74d7162974f6cfc49c748d5494e2ac21a9dc3b7cf123ba280f2",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/OptionsSubVoice.res",
+      "bytes": 4960,
+      "sha256": "c150f1896dacb5f37b5cf42157ecc7f2860e81b79611d7b27de0ec56f26ffc0c",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/PlayerListDialog.res",
+      "bytes": 1353,
+      "sha256": "3a9bc032a711c079526a84820feeec339ca2362caeeecdbed68f3affcf0d756e",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/refreshlogin.res",
+      "bytes": 3445,
+      "sha256": "eec6e958fb21abdebb15ffeb8da0f2c0175912e73c8db56deb7514888e63a73c",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/SaveGameDialog.res",
+      "bytes": 1917,
+      "sha256": "2123838a78fa284b7e49a5b12ccd1b759adb260e612a39729e21cb67fb131feb",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/steam_menu.tga",
+      "bytes": 25132,
+      "sha256": "71c7a53873699e102fddc49102c76c8773f29e7f8cc97a317b7314fcc2ba7fd2",
+      "size": [
+        196,
+        32
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        74,
+        0,
+        196,
+        32
+      ]
+    },
+    {
+      "path": "resource/steam_menu_mouseover.tga",
+      "bytes": 25132,
+      "sha256": "b25ad9c31fe119b44b159c7dc89a083b8457fb23e8e3864ea8f2ec31cb13e77c",
+      "size": [
+        196,
+        32
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "alpha_bounds": [
+        74,
+        0,
+        196,
+        32
+      ]
+    },
+    {
+      "path": "resource/SteamPasswordDialog.res",
+      "bytes": 1881,
+      "sha256": "0347efab8e3380e0d1bce8d49522cd61c0ada4679ae093046c03d209d74c2fcd",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/trackerscheme.res",
+      "bytes": 15157,
+      "sha256": "b20ab05dbe99df111e1a76392c54829c285de5f40b1c501f9e1245c9e4c4aa24",
+      "encoding": "ascii"
+    },
+    {
+      "path": "resource/valve_english.txt",
+      "bytes": 14170,
+      "sha256": "b9e6190a49f1856d2159e851717db9ddfcb0fddf2aa06d61686738a30cafdaeb",
+      "encoding": "utf-16le-bom"
+    },
+    {
+      "path": "resource/ValveCDKeyEntryDialog.res",
+      "bytes": 3267,
+      "sha256": "d17371c392ad0d55f2b956917def495b468d22dcb50851d0415914c54357959f",
+      "encoding": "ascii"
+    },
+    {
+      "path": "sound/ambience/menu_ambience.wav",
+      "bytes": 3895716,
+      "sha256": "212eecdeae476dae3364b06c6676a2e66308bb57fb284ec3659938e4bdd477cf"
+    },
+    {
+      "path": "sound/ambience/train_long_pass1.wav",
+      "bytes": 1258532,
+      "sha256": "87d35f65e68e5b7862f8df98cd7a0b8ab235397085a233d053dfc9e453a533c1"
+    },
+    {
+      "path": "sound/ambience/train_long_pass2.wav",
+      "bytes": 1294492,
+      "sha256": "84350e5b285d3f7305b384ec7a90598aeaeca715a976f371ed83d06c7c632bbe"
+    },
+    {
+      "path": "sprites/cof_shine1.spr",
+      "bytes": 66366,
+      "sha256": "977f481b0c8b37ee1eb8af229bcd55d04cc88eb894a5eb4b08531c1255f15fd8"
+    },
+    {
+      "path": "sprites/flashing01.spr",
+      "bytes": 33598,
+      "sha256": "2c1ed3e7eb153741b4676487ad93260300fe5ae366fa1a2c8d7f4664a3a4ec83"
+    },
+    {
+      "path": "valve.rc",
+      "bytes": 356,
+      "sha256": "5b1b2dd68c2ff1fc6cda3f415cfa7087884ca075c371574aa19c1e4474c4d540"
+    }
+  ]
+}

@@ -6,6 +6,10 @@
 extern void CofInventoryDraw();
 extern void CofStatusHudDraw();
 extern void CofUiTestFrame();
+extern void CofGameMenuDraw();
+extern bool CofGameMenuWorld();
+extern bool CofGameMenuVisible();
+extern void CofMenuTestFrame();
 
 void CofPrototypeFrame(float time) {
     static cvar_t* smoke = nullptr;
@@ -16,8 +20,12 @@ void CofPrototypeFrame(float time) {
     if (!smoke) smoke = gEngfuncs.pfnRegisterVariable("cof_smoketest", std::getenv("COF_SMOKETEST") ? "1" : "0", 0);
     if (first < 0.0f || time < first) { first = time; captured = false; movement_stage = 0; }
     CofUiTestFrame();
-    CofStatusHudDraw();
-    CofInventoryDraw();
+    CofMenuTestFrame();
+    if (!CofGameMenuWorld() && !CofGameMenuVisible()) {
+        CofStatusHudDraw();
+        CofInventoryDraw();
+    }
+    CofGameMenuDraw();
     if (smoke && smoke->value != 0 && !std::getenv("COF_DOORTEST") && !std::getenv("COF_INVENTORYTEST")) {
         cl_entity_t* player = gEngfuncs.GetLocalPlayer();
         if (player && time - first > 2 && movement_stage == 0) {
