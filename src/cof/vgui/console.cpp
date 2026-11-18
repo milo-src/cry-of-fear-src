@@ -271,7 +271,23 @@ public:
             const int total=std::max(1,static_cast<int>(rows.size())-count);
             Fill({track.x,track.y+travel-travel*scrollback/total,track.w,thumb},ThemeColor("BorderDark",0xff707070));
         }
-        if (popupVisible) PaintControl(*popup,bounds.x,bounds.y,true,false,false);
+        if (popupVisible) {
+            // Completion uses the console's monochrome styling, independently
+            // of the legacy scheme's opaque amber list selection.
+            Rect r=popup->bounds; r.x+=bounds.x; r.y+=bounds.y;
+            Fill(r,0x30202020);
+            const unsigned edge=0x28707070;
+            Fill({r.x,r.y,r.w,1},edge); Fill({r.x,r.y+r.h-1,r.w,1},edge);
+            Fill({r.x,r.y,1,r.h},edge); Fill({r.x+r.w-1,r.y,1,r.h},edge);
+            for (int i=0;i<7 && popup->scroll+i<static_cast<int>(popup->choices.size());++i) {
+                const int n=popup->scroll+i;
+                Rect row={r.x+2,r.y+1+i*20,r.w-4,20};
+                const bool selected=n==popup->selected;
+                if (selected) Fill(row,0x108f8f8f);
+                Text({row.x+3,row.y,row.w-6,row.h},popup->choices[n],
+                    selected ? 0xffeeeeee : 0xffcccccc);
+            }
+        }
     }
 #include "console_runtime_tests.inc"
 };
