@@ -105,6 +105,7 @@ def main():
     parser.add_argument('--cvar',nargs=2,action='append',default=[],metavar=('NAME','VALUE'),help='Read-only comparison run with temporary runtime cvars')
     parser.add_argument('--label',default='',help='Suffix for comparison artifacts')
     parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
+    parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
@@ -118,6 +119,8 @@ def main():
         if args.renderer!='rtx':parser.error('--cursor requires the RTX engine probe')
         args.menu_scene=True
     if args.menu_scene:args.map='c_game_menu1'
+    if args.arm_pose_check and (not args.lighting or args.renderer!='rtx'):
+        parser.error('--arm-pose-check requires RTX --lighting')
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
         except ValueError: parser.error('--pose requires six finite numbers')
@@ -249,6 +252,19 @@ def main():
                 if args.lighting and (not policies or not exposures):
                     raise RuntimeError('Missing runtime lighting policy observations')
                 filters=re.findall(r'COF_RTX_SHADOW_FILTER menu=(\d) denoiser=(\d)',text)
+                arms=re.findall(r'COF_RTX_ARM side=(\d) blocked=(\d) corrected=(\d) clear=(\d) angle=([\d.]+) length_error=([\d.]+)',text)
+                for side,blocked,corrected,clear,angle,error in arms:
+                    if corrected=='1' and (blocked!='1' or clear!='1' or float(error)>.002):
+                        raise RuntimeError('RTX arm correction left penetration or changed limb length')
+                    if blocked=='0' and (corrected!='0' or float(angle)!=0):
+                        raise RuntimeError('Unobstructed player animation was modified')
+                if args.arm_pose_check:
+                    if {a[0] for a in arms}!={'0','1'}:raise RuntimeError('Both arm poses were not observed')
+                    if args.arm_pose_check=='contact':
+                        if not any(a[2]=='1' for a in arms) or any(a[3]!='1' for a in arms):
+                            raise RuntimeError('Near-wall arm collision was not resolved')
+                    elif any(a[1]!='0' or a[2]!='0' or a[3]!='1' for a in arms):
+                        raise RuntimeError('Open-space arm pose was not clear/unchanged')
                 if args.lighting and ('0',args.denoiser or '1') not in filters:
                     raise RuntimeError('Gameplay shadow filter was not observed')
                 if args.menu_scene and ('1','0') not in filters:

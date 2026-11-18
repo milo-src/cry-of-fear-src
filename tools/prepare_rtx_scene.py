@@ -11,6 +11,13 @@ def prepare(target):
     anchor = 'if( !bbox && R_CullModel( e, studio_mins, studio_maxs ))'
     if text.count(anchor) != 1: raise ValueError('RT sky bounds hook changed')
     text = text.replace(anchor,'if( !bbox && !CofRTIsSky(e) && R_CullModel( e, studio_mins, studio_maxs ))')
+    shutil.copy2(ROOT/'src/cof/render/rtx_player_pose.inc',target/'ref/gl/rtx_player_pose.inc')
+    anchor = 'static int R_StudioDrawPlayer( int flags, entity_state_t *pplayer )'
+    if text.count(anchor) != 1: raise ValueError('RT player pose declaration hook changed')
+    text = text.replace(anchor, '#include "rtx_player_pose.inc"\n\n'+anchor)
+    anchor = '\tm_pPlayerInfo = pfnPlayerInfo( m_nPlayerIndex );\n\tR_StudioSetupBones( RI.currententity );'
+    if text.count(anchor) != 1: raise ValueError('RT player pose hook changed')
+    text = text.replace(anchor, anchor+'\n\tCofRTPlayerPose();')
     path.write_text(text)
     path = target / 'ref/gl/gl_opengl.c'
     text = path.read_text().replace('#include "gl_local.h"','#include "gl_local.h"\n#include "rtx_sky.h"')
