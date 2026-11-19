@@ -1,0 +1,87 @@
+{
+  "date": "2026-11-19",
+  "pixel_comparison": {
+    "before": {
+      "phone_roi": [
+        850,
+        350,
+        1100,
+        635
+      ],
+      "white_pixels_all_channels_ge245": 22229,
+      "pixel_count": 71250,
+      "image": "analysis/local/rtx-c_apartment3-lighting-phone-before-isolated-0.png",
+      "sha256": "6774d03dcb8ad232edaa52ad4f867672ca5e59967a1aac7043a478aa8702da88"
+    },
+    "after": {
+      "phone_roi": [
+        850,
+        350,
+        1100,
+        635
+      ],
+      "white_pixels_all_channels_ge245": 0,
+      "pixel_count": 71250,
+      "image": "analysis/local/rtx-c_apartment3-lighting-phone-after-isolated-0.png",
+      "sha256": "38b188ebb090ea5082b84edc0ba128b4087e0d36e9ac365cc93344016db32710"
+    },
+    "final": {
+      "phone_roi": [
+        850,
+        350,
+        1100,
+        635
+      ],
+      "white_pixels_all_channels_ge245": 0,
+      "pixel_count": 71250,
+      "image": "analysis/local/rtx-c_apartment3-lighting-phone-final-isolated-0.png",
+      "sha256": "dfaf4f9f57c61ab7b49ee6d7733088a0de41d3e9818470730301a80714e63a80"
+    }
+  },
+  "scope": "Same isolated camera; GPU swapchain readback. Before has previous visibility shader, after excludes self-light, final also sets readable screen/keypad emission. Not original-game parity.",
+  "normal": "normal-c_sdkmap1-lighting-phone-isolated: real phone and 9 in-memory fullbright skin flags passed; no scene pixel readback.",
+  "build": "Waf x86/x64 and 8 SPIR-V ABI checks passed.",
+  "reports": {
+    "normal-c_sdkmap1-lighting-phone-isolated": {
+      "result": "pass",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "json_sha256": "435a4b4e43af6f15c5c825493b1428ca896567ffb8e591d2aedbc94e098b2389",
+      "log_sha256": "6d7c0ce4f6a531fd178871073e34a72a2a4449544620eccc8403309de51bbff5"
+    },
+    "rtx-c_apartment3-lighting-phone-before-isolated": {
+      "result": "pass",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "json_sha256": "d304dd91f66b512bc351b313a10ce0e9bbce8b396a6f496b6ffcb2db03ab3a22",
+      "log_sha256": "62b40bebacb6270bdc7a826230561396dee89bd2526d6d22a38ea6609c8167fb"
+    },
+    "rtx-c_apartment3-lighting-phone-after-isolated": {
+      "result": "pass",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "json_sha256": "b158a2364a638990c213c4fd90b437ecf89dae741d6d58681a59b9ca5de386b1",
+      "log_sha256": "5b5222deeccc9a681078aabc92f56bc39fd8748d40b09a33add1fb39c00a3f7b"
+    },
+    "rtx-c_apartment3-lighting-phone-final-isolated": {
+      "result": "pass",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "json_sha256": "37a41d7218c5f60a75db659257759acff7df0088d8a0038ea75706b8248ac85c",
+      "log_sha256": "22c966631f6ed483905a0eb02251d2e21be76451ff2d5e8047fbb930d017688d"
+    }
+  },
+  "sources": {
+    "tools/prepare_attached_lights.py": "1e61928fd11b4e41f7d8a1af293e074d4384726aa1063d3020640cc1f113c29f",
+    "tools/prepare_projected_lights.py": "0dbdd49c93c3d15e06e9fdf7fa6dde5ff4b2de3e532b7d74bf4bf27e4fc0a83c",
+    "tools/prepare_rtx_shaders.py": "da765239316b5407d9f91ec67681303524c46fb2b3973edd3f53529ea8ebd8f8",
+    "tools/prepare_rtx_weapons.py": "5012516af9a43537996aa7a5fc0980addf51eb7d0a04e393b2a583ca3f69db24",
+    "tools/smoke_rtx.py": "a3ce8fa301fcb72e8a00e1632de41602a950ba33075f289ccaa9f1ab828dcd53",
+    "src/cof/server/cof_special.cpp": "7ea4edb266a275c7cb2b3907f4ab76fab118a738008ea9a0d5c3a11ba56b30d7"
+  },
+  "rtx_deployed": {
+    "audit": "out/runtime-rtx/runtime-audit.json",
+    "sha256": "878a811dd436ed93853ac6e02f7b1e68f2f75928c7eedbeee519283c441704b6"
+  },
+  "normal_deployment": "Pending close of user game; isolated runtime-phone-test already passed."
+}

@@ -103,6 +103,17 @@ def prepare():
     volume.write_text(text)
     common=target/'Shaders/RaygenCommon.h'
     text=common.read_text()
+    # The attached light is inside/next to its first-person mesh. Excluding
+    # player-body shadows does not exclude illumination of that mesh: near-field
+    # inverse-square radiance otherwise burns the phone white. Keep world and
+    # reflected world illumination, and every other scene light, unchanged.
+    anchor='float traceVisibility(const Surface surf, const vec3 lightPosition, uint lightIndex)\n{'
+    if text.count(anchor)!=1:raise ValueError('Handheld receiver visibility hook changed')
+    text=text.replace(anchor,anchor+'''
+    if ((surf.instCustomIndex & INSTANCE_CUSTOM_INDEX_FLAG_FIRST_PERSON) != 0 &&
+        lightIndex == globalUniform.lightIndexIgnoreFPVShadows)
+        return 0.0;
+''')
     anchor='void shade(const Surface surf, const LightSample light, float oneOverPdf, out vec3 diffuse, out vec3 specular)\n{'
     if text.count(anchor)!=1:raise ValueError('Volume scattering hook changed')
     text=text.replace(anchor,anchor+'''

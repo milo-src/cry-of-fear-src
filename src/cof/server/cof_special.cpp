@@ -633,6 +633,30 @@ void CofSpecialLightSync(CBasePlayer* player,bool force) {
 }
 void CofSpecialPlayerFrame(CBasePlayer* player) {
     if(!player) return;
+    // Isolated regression fixture: use the real pickup/deploy/light protocol,
+    // not just a synthetic dlight with no first-person receiver.
+    if(std::getenv("COF_PHONE_LIGHTTEST") && player->IsAlive()) {
+        static bool initialized=false,reported=false;
+        static float began;
+        if(!initialized) {
+            initialized=true;began=gpGlobals->time;
+            CBaseEntity* entity=CBaseEntity::Create("weapon_mobile",player->pev->origin+Vector(0,0,256),g_vecZero,nullptr);
+            if(entity) {
+                entity->Use(player,player,USE_TOGGLE,0);
+                player->SelectItem("weapon_mobile");
+            }
+        }
+        CCofWeapon* phone=nullptr;
+        for(int slot=1;slot<=6;++slot) {
+            CCofWeapon* item=CofWeaponForSlot(player,slot);
+            if(item && item->Definition().id==2 && item==player->m_pActiveItem) phone=item;
+        }
+        if(phone && !phone->m_mode && !phone->m_action) phone->PrimaryAttack();
+        if(!reported && gpGlobals->time-began>4) {
+            reported=true;
+            ALERT(at_console,"COF_PHONE_READY %s\n",phone && phone->m_mode ? "PASS" : "FAIL");
+        }
+    }
     if(player->m_pActiveItem && FClassnameIs(player->m_pActiveItem->pev,"weapon_dualweapon"))
         static_cast<CCofDual*>(player->m_pActiveItem)->RefreshHands();
     CofSpecialLightSync(player,false);

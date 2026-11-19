@@ -55,7 +55,10 @@ def prepare(target, raytracing=False):
                     .angleInner = DEG2RAD(l->cof_fov[0]*.175f),
                 };
                 RG_CHECK(rgUploadSpotLight(rg_instance,&info));
-                rt_state.flashlight_uniqueid=info.uniqueID;
+                /* Keep the phone as the local self-light exclusion source in
+                 * a dual-hand pair; later tactical uploads must not replace it. */
+                if(l->cof_kind==1 || rt_state.flashlight_uniqueid==RT_ID_LIGHTNONE)
+                    rt_state.flashlight_uniqueid=info.uniqueID;
                 if(getenv("COF_PROJECTEDTEST")) {
                     static int reported;
                     if(!(reported&(1<<l->cof_kind))) {

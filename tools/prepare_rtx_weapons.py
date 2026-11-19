@@ -68,3 +68,22 @@ def prepare(target):
         }
 '''+anchor)
     text=text[:start]+segment+text[end:];path.write_text(text)
+    text=path.read_text()
+    anchor='\t\tif( RT_CVAR_TO_BOOL( rt_norms_studio ) )'
+    text=one(text,anchor,'''        if(isviewmodel && !Q_stricmp(RI.currentmodel->name,"models/weapons/mobile/v_mobile.mdl") &&
+           prim.pTextureName && Q_stristr(prim.pTextureName,"fullbright")) {
+            // Match an unlit screen/keypad at roughly its authored albedo,
+            // rather than the generic additive 0.35 * HDR screen boost.
+            prim.emissive=1.0f / max(1.0f,RT_CVAR_TO_FLOAT(rt_emis_maxscrcolor));
+            if(getenv("COF_PHONE_LIGHTTEST")) {
+                static int reported;
+                int part=Q_stristr(prim.pTextureName,"buttons")?2:1;
+                if(!(reported&part)) {
+                    reported|=part;
+                    gEngfuncs.Con_Printf("COF_PHONE_EMISSION part=%d screen_scale=%g\\n",part,
+                        prim.emissive*RT_CVAR_TO_FLOAT(rt_emis_maxscrcolor));
+                }
+            }
+        }
+'''+anchor)
+    path.write_text(text)

@@ -112,6 +112,7 @@ def main():
     parser.add_argument('--lens',action='store_true',help='RTX real rain/stop/snow/disabled lens sequence; requires --lighting on an outdoor pose')
     parser.add_argument('--flashlight',action='store_true',help='Enable the real player flashlight with --lighting')
     parser.add_argument('--projected',action='store_true',help='Isolated phone/torch/tactical light sequence; normal additionally checks pixels in a private shader FBO')
+    parser.add_argument('--phone-light',action='store_true',help='Equip the actual phone for self-light and fullbright regression checks')
     parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
     parser.add_argument('--menu-optics',action='store_true',help='RTX menu glass and synthetic local pointer targets; no OS pointer movement')
     parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
@@ -131,6 +132,9 @@ def main():
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
     if args.projected:args.lighting=True;args.flashlight=True
+    if args.phone_light:
+        args.lighting=True;args.flashlight=True
+        if args.projected:parser.error('--phone-light uses real weapon state; do not combine with --projected')
     if args.weapons and any((args.movement,args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
         parser.error('--weapons is a dedicated gameplay scenario')
     if args.movement and any((args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
@@ -193,6 +197,7 @@ def main():
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
     if args.projected:tag+='-projected'
+    if args.phone_light:tag+='-phone'
     if args.menu_cycle:tag+='-cycle'
     if args.label:tag+='-'+args.label
     if not args.interactive:tag+='-isolated'
@@ -227,6 +232,8 @@ def main():
     if args.projected:env['COF_PROJECTEDTEST']='1'
     env.pop('COF_RTX_LENSTEST',None)
     if args.flashlight:env['COF_RTX_FLASHLIGHTTEST']='1'
+    env.pop('COF_PHONE_LIGHTTEST',None)
+    if args.phone_light:env['COF_PHONE_LIGHTTEST']='1'
     if args.cursor:env['COF_CURSORTEST']='1'
     if args.water_view:env['COF_RTX_WATER_VIEW']='1'
     if args.lighting:env['COF_RTX_LIGHTINGTEST']='1'
@@ -271,6 +278,7 @@ def main():
                 markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
                 if args.upscaling:markers=['saved startup preference','off survives reopening','quality cancel and reopen']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
+                if args.phone_light:markers=['COF_PHONE_READY PASS']
                 if args.lens:markers=['COF_LENS_CAPTURE '+str(i)+' ' for i in range(7)]
                 if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE','COF_CONSOLE_MAP_CAPTURE']
                 if args.menu_scene:markers=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (10,18,24,36)]
@@ -347,6 +355,13 @@ def main():
                     if required not in text:raise RuntimeError('Missing renderer submission: '+required)
                 if args.renderer=='normal' and ('COF_PROJECTED_READBACK_COMPLETE failures=0' not in text or 'COF_PROJECTED_READBACK FAIL' in text):
                     raise RuntimeError('Projected-light private FBO pixel assertions failed or did not run')
+            if args.phone_light:
+                if 'COF_PHONE_READY PASS' not in text or 'COF_PHONE_READY FAIL' in text:
+                    raise RuntimeError('Real phone deployment/light state did not pass')
+                if args.renderer=='normal' and not all('COF_PHONE_FULLBRIGHT texture='+name in text for name in ('fullbright_mess1.bmp','buttons_fullbright.bmp')):
+                    raise RuntimeError('Phone screen/keypad fullbright materials were not loaded')
+                if args.renderer=='rtx' and not all(f'COF_PHONE_EMISSION part={part} screen_scale=1' in text for part in (1,2)):
+                    raise RuntimeError('Phone screen/keypad emission was not submitted at authored scale')
             if args.cursor and 'COF_CURSOR_COMPLETE failures=0' not in text:
                 raise RuntimeError('Cursor/focus regression probe did not pass')
             geometry = None

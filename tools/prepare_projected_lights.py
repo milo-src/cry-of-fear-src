@@ -55,6 +55,19 @@ def prepare_projected_lights(target):
     text = replace_once(text, 'static void R_NewMap( void )\n{',
         'static void R_NewMap( void )\n{\n\tCofProjectedNewMap();')
     context.write_text(text)
+    studio = destination / 'gl_studio.c'
+    text = studio.read_text()
+    anchor = '\tif( ptexture->flags & STUDIO_NF_NORMALMAP )'
+    text = replace_once(text, anchor, '''    // CoF phone skins use a name convention, not STUDIO_NF_FULLBRIGHT.
+    // Change only the in-memory material; never rewrite the original MDL.
+    if( !Q_stricmp(mod->name,"models/weapons/mobile/v_mobile.mdl") &&
+        Q_stristr(ptexture->name,"fullbright") ) {
+        ptexture->flags |= STUDIO_NF_FULLBRIGHT;
+        if(getenv("COF_PHONE_LIGHTTEST"))
+            gEngfuncs.Con_Printf("COF_PHONE_FULLBRIGHT texture=%s flags=%d\\n",ptexture->name,ptexture->flags);
+    }
+'''+anchor)
+    studio.write_text(text)
     # The old model-origin sampler treats every dlight as a sphere. A projected
     # receiver must not flood all studio models (especially the held phone).
     # Studio triangle projection is a separately documented remaining pass.

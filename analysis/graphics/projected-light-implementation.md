@@ -4,6 +4,7 @@
 
 ## Навигация
 
+- Исправление самозасветки телефона в RTX и fullbright экрана/кнопок: `phone-light-fix.md`, результаты `phone-light-verification.json`.
 - Оригинальные параметры, attachments, texgen, стадии света: `flashlight-native-followup.md/.json`.
 - Все найденные текстовые программы и их хэши: `shader-coverage.md/.json`.
 - Вызовы, samplers, матрицы, bump/specular/blur и порядок проходов: `shader-pass-contracts.md/.json`.
