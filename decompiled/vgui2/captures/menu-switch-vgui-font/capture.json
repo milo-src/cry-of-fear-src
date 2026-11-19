@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/menu-switch-vgui-font",
+  "binary": "vgui2.dll",
+  "binary_sha256": "42107e58ad018020de5b5b7253f512c7265d6e12ab3f68c45b00cd475011472b",
+  "functions": [
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "f3e66d3775e2b47d839df1bf8d012bb2b199fedc97f9f12660c0f399efeb690e",
+      "procedure": "ram:0x1002749f",
+      "evidence_id": "ev_a39ca0b4bd0d7507e82df4bb1814d0154b0df140e35d5cdfd22bb5dd7bea5130",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

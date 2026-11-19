@@ -1,0 +1,40 @@
+{
+  "source_capture": "analysis/local/chat-client-gates-font",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "537354e76449c64099172107674b99a0bf5594e1c09c80f20234e7ce47066264",
+      "procedure": "ram:0x100a5290",
+      "evidence_id": "ev_6db136cc467b9a6f84957104a8d3fd8af6d1627e9498739ce6bbcb156ebc286d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "171d0dd4ec4f124852e1400b8599057e980153e334db5e51b3ba52e736e40074",
+      "procedure": "ram:0x1009d350",
+      "evidence_id": "ev_c073dad5e028f9e90da069830e8daa4acbb95844fcf130cef8c976f7a23d468d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "d7f43301d81a535376a64fa1f8ca7cfebccd58ebebdc3a37bbe256a67646f47d",
+      "procedure": "ram:0x1009d3a0",
+      "evidence_id": "ev_3de58509e5293de2bdaf501d7314142c6f94472d590b28e0f24ec3c7fd39e79e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

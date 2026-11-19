@@ -1,0 +1,62 @@
+{
+  "source_capture": "analysis/local/graphics-client-blackwhite",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "1a8c5413ace51f2e706f0edb74ef4eb08618889e334b7f702ea6f67a8781ce21",
+      "procedure": "ram:0x1006f9f0",
+      "evidence_id": "ev_41ff3967134160edd2553970255190ef4e7e7789eddbc5cc1bfbbf98e940ac72",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "56c4cc2959ef0a0acd30a6d5d000b4fa3338075f9428b16dadefab95a28c566a",
+      "procedure": "ram:0x10072740",
+      "evidence_id": "ev_5931047cd0472d35e20c9d7026889b116753e7620ad3c50e6cb64d6fc48a7e24",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "6f6a00404169f3470ba5dd56186f652605ddba320f1ed72cc608420340bde370",
+      "procedure": "ram:0x100877d0",
+      "evidence_id": "ev_4aa25ab09266bc0165e7ffed1ef2461ef21ed69d61bff728ae624f4a032b5af2",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "4483cd052409b40d9cf1bb19a3810a0c617b19ea5c8ba5e59c5b8b3d3f7551bf",
+      "procedure": "ram:0x10086670",
+      "evidence_id": "ev_f0c44e6f9cdf3adaac19d6d3fd8dd3e35afb5ea77326f1196ce69dc5bc4cf1d7",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "004-pseudocode.c",
+      "sha256": "ab11a8a21ed23b043bef65f070855ffe5456b4151e71f92ed4a8fa297e1a7bab",
+      "procedure": "ram:0x10086580",
+      "evidence_id": "ev_5b26570c039b339a4783a058020885b8025d79f4f360f965a9ff93c283722a53",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

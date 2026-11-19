@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/ui-options-keyboard",
+  "binary": "GameUI.dll",
+  "binary_sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "a8881c99adaca82da93e0c3c301caee90bf61b311f496d58233dc99f4e1ca941",
+      "procedure": "ram:0x10051154",
+      "evidence_id": "ev_a5ba2d0038ec82f230c1d4585e1ce206dc8d82b539f4c596b7c9a3564d45f8bc",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "01c841ad60c573e3534a729880198cb97dd71c7b7676b7ff911bd927d3c276a6",
+      "procedure": "ram:0x100513cd",
+      "evidence_id": "ev_b83850b3e12efdf4cedf69ddfc0265c5db4f7aea9c71499b35db4a8dd22fceb3",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

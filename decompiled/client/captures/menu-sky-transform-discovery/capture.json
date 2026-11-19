@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/menu-sky-transform-discovery",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "a2b8fe6587c858e54bb63cfe5bf4ed5b867c8df1707e6b0b655ccef3e48aacc8",
+      "procedure": "ram:0x10064040",
+      "evidence_id": "ev_e58f2073818c0dd964f265857aa1600a0772347f8a93826e7cbf94c58732bd33",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/graphics-client-fog-waterlevel",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "1af04e5e0a1cb4d695fd5dfdd836eaec4bdcdabc7303e386ff66d229768d125d",
+      "procedure": "ram:0x100b0e7f",
+      "evidence_id": "ev_3bea2cfc18f38a1a7cbd3a1173a610eb90edb70dd7aa6160097bcd82f2b68a64",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

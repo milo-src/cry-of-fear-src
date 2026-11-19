@@ -1,0 +1,68 @@
+// rea decompile_all
+// name: FUN_100bcdc0
+// address: 0x100bcdc0
+// body: available
+// range: 0x100bcdc0-0x100bceef inclusive
+// non_contiguous: false
+// provider: Ghidra 12.1.4 (ghidra)
+// analysis_profile: 5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6
+// limitations: The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.; Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).; Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.; Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.; Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.; The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.; Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.; The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.; Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.; External functions and functions without an analyzable body return null; other decompiler failures remain explicit.
+// pseudocode: provider-specific; not original source
+
+
+float10 FUN_100bcdc0(float param_1)
+
+{
+  float fVar1;
+  int in_ECX;
+  float10 fVar2;
+  float fVar3;
+  float fVar4;
+  float fVar5;
+  
+  fVar2 = (float10)FUN_10117420(*(undefined4 *)(*(int *)(in_ECX + 4) + 0x54));
+  fVar1 = (float)fVar2;
+  fVar4 = *(float *)(*(int *)(in_ECX + 4) + 0xac);
+  if (fVar1 == fVar4) {
+    param_1 = 0.0;
+  }
+  else {
+    fVar3 = fVar4 - fVar1;
+    fVar5 = (float)(int)param_1 * *(float *)(DAT_10223188 + 4) * 10.0;
+    if (fVar4 <= fVar1) {
+      if (fVar3 <= -180.0) {
+        fVar3 = fVar3 + 360.0;
+      }
+    }
+    else if (180.0 <= fVar3) {
+      fVar3 = fVar3 - 360.0;
+    }
+    if (fVar3 <= 0.0) {
+      param_1 = -fVar5;
+      if (-fVar5 <= fVar3) {
+        param_1 = fVar3;
+      }
+    }
+    else {
+      param_1 = fVar5;
+      if (fVar3 <= fVar5) {
+        param_1 = fVar3;
+      }
+    }
+    fVar2 = (float10)FUN_10117420(param_1 + fVar1);
+    *(float *)(*(int *)(in_ECX + 4) + 0x54) = (float)fVar2;
+    if ((*(uint *)(in_ECX + 0x304) & 0x400) != 0) {
+      fVar4 = *(float *)(*(int *)(in_ECX + 4) + 0xac) - *(float *)(*(int *)(in_ECX + 4) + 0x54);
+      if (180.0 < fVar4) {
+        fVar4 = fVar4 - 360.0;
+      }
+      if (fVar4 < -180.0) {
+        fVar4 = fVar4 + 360.0;
+      }
+      FUN_1000eb70(0,fVar4);
+      return (float10)param_1;
+    }
+  }
+  return (float10)param_1;
+}
+

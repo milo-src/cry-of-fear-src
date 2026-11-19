@@ -1,0 +1,51 @@
+{
+  "source_capture": "analysis/local/menu-switch-vgui-font-detail",
+  "binary": "vgui2.dll",
+  "binary_sha256": "42107e58ad018020de5b5b7253f512c7265d6e12ab3f68c45b00cd475011472b",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "2309a9659412c5101f2276e8e68b8ee53cfe69bcd7155de4e256676f12ad7df1",
+      "procedure": "ram:0x10026bc1",
+      "evidence_id": "ev_ae61162cff93d6a281da9f58a1138f86a00e9467ce274be729ba2cef6e370557",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "91c9f37efced6c76f44dd9543761e42d4ecee1f1b555875f72e16abcc7f068e9",
+      "procedure": "ram:0x10027875",
+      "evidence_id": "ev_b4b22cd03d5fc25fbd41c7593bbc44e35357bd6118aa3edf78d9137b1b45d90f",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "1e0c04c541ec00098bb9fb8f8292ceec74768e0f3c83779552ae07a30307c7de",
+      "procedure": "ram:0x10013af3",
+      "evidence_id": "ev_06401ae90cb737d5834093b2f53a4e832e8e0b5ca33426b9dcf65346781cead3",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "53a9bb7b8220b91ecab1c0eb6a2d1d1610cb7a7e659d65b65e44a4cbac4b02dd",
+      "procedure": "ram:0x100135cf",
+      "evidence_id": "ev_87f2a354a47ff5db1bc0cc41513e17da6ff0cb5571b34adc76e1901d1851c7e3",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

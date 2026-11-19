@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/chat-client-init",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "2a69a3e4d7bb583c943035bc3fbc110821601a64f0830de6d4a56120de976c26",
+      "procedure": "ram:0x1008a7c0",
+      "evidence_id": "ev_f2905af88400bd4190140643b9432ce2a55a984bf990e96d2c2ce0eb09e05aa5",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

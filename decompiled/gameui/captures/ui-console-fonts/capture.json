@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/ui-console-fonts",
+  "binary": "GameUI.dll",
+  "binary_sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "c11468e7e47de554b1cd4790c56a6567ebaf6000cec69007ee974a5c9cfdfa0a",
+      "procedure": "ram:0x1007d68d",
+      "evidence_id": "ev_d02c444775a103bb3a138b6bc026e4af23670f38bb4267720c7792be006bab3e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "c85519ec41399dd18597cfbf88de31f2ef4979aa5bd67a912444ddc0a0447a23",
+      "procedure": "ram:0x100748b8",
+      "evidence_id": "ev_ddcdac9981b463e995e169d7c72eb257921a45fb89d03f41a5021108f06d11f2",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

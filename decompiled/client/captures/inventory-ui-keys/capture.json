@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/inventory-ui-keys",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "768b929883d6d1fd68adb17fadb1211f828ad724c519deb4465bff5be0a734fc",
+      "procedure": "ram:0x10044040",
+      "evidence_id": "ev_adcd0cabc977deabb1443493a44ff39e50931078616ad1712e2c0813b47ec586",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/graphics-client-messages",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "527ab65f28285d65dbef12a465722b4c4e0e95dbad7e633a0fed142d6e7e6e6d",
+      "procedure": "ram:0x10071760",
+      "evidence_id": "ev_5c2e6431a08fc13e8d89f80e404f12edc15ada93f9bca1d55a3c14e61af4f575",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "847a504d110dfff3693eb063393a535715389fa5b87a2af84dd51e1fd1c6789f",
+      "procedure": "ram:0x10071440",
+      "evidence_id": "ev_b953e4ab7c0f5fcddb32e092cabc62e46480d8e7b8d5ea841cd198067edb4696",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

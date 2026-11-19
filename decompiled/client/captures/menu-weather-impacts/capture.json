@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/menu-weather-impacts",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "9fdc55a0229600f63dc4317409a23c81fa2bbe99820f6ceaf72a4b85d260a68e",
+      "procedure": "ram:0x100862b0",
+      "evidence_id": "ev_1f91e90f9b1547fd6f3be4c8708a2f6dce44b97f803fabac7a443b9b79795c34",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "129fc60891f93ea55fce823dd32430ec52190a1acca1e4e8da57174fcffaf336",
+      "procedure": "ram:0x10085740",
+      "evidence_id": "ev_fe61d6e286c27a1f5c8b4f8908a111f32c034bd709071b265d48fa0f77129838",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

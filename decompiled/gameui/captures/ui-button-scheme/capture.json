@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/ui-button-scheme",
+  "binary": "GameUI.dll",
+  "binary_sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "436cbc855e190db896b30834192304475356083dc6356766b0e37f9bc9af235e",
+      "procedure": "ram:0x100597f0",
+      "evidence_id": "ev_3a6f9b70898822f3b967c991aefccf1f655ec982a391a76dd14a8cfc288f21d4",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

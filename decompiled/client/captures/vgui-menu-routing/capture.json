@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/vgui-menu-routing",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "82981885f8511b8ddb8a12d8b0873298f4e5533b465d2636f92f8166d3d677b1",
+      "procedure": "ram:0x100aa7f0",
+      "evidence_id": "ev_f72aa75fff0f75c538420cee9197777bd8d7ffd29d817294333f154c18fb559c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

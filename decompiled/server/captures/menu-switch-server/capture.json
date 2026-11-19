@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/menu-switch-server",
+  "binary": "hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "32ee15c3998947e6a24b8a1976a7ad8e6019302f6d4ea85bbd44b0598fb4af1a",
+      "procedure": "ram:0x1009d940",
+      "evidence_id": "ev_7506d821b02abbf11afc93c579fd9fb8c40ffa2339821ae5779a3a201f63791c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "943dc9c03e9e68c60069418d4c794ddead8661af6e311542d9390db0017f48e0",
+      "procedure": "ram:0x100908e0",
+      "evidence_id": "ev_848ff63096c494c4438783486db291057bbad8b355b1b3c830e05a2a06eb8535",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

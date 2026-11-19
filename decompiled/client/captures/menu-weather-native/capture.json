@@ -1,0 +1,51 @@
+{
+  "source_capture": "analysis/local/menu-weather-native",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "e31f7224ffa8868869709262b0585265ab2efa54915ee98f89c4eefc81eaf956",
+      "procedure": "ram:0x100858a0",
+      "evidence_id": "ev_fd539ba4759b58633485ba4b8a4a1b2c10e74378e22f9e8fee6815388df14298",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "fbfb7423a4aa89b02be78968f3d53375c3626c62c24d4ec207b805f5a776e435",
+      "procedure": "ram:0x10085980",
+      "evidence_id": "ev_de24f63e9f75015df09e7fce56e54b43965dc67c2c3d97ca02c6a04a28126231",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "1735b3057453129bc3d18cdd53876532899bbb8afaa6de700cd6508d9662d185",
+      "procedure": "ram:0x10092850",
+      "evidence_id": "ev_0e898440ecdf65dd6c5f95763edcde64f9b82cd47153f6e2e524cb5749fb914f",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "acec6bbdbe8ffe767d753586d5cc5192f88b650c8a9f1136113aa261a5f7e57d",
+      "procedure": "ram:0x10092390",
+      "evidence_id": "ev_9ee11b0bac66b681bc42101a8c8a3a846c67ee079f57e7e6185adf8d4ffda089",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

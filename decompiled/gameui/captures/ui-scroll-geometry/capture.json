@@ -1,0 +1,62 @@
+{
+  "source_capture": "analysis/local/ui-scroll-geometry",
+  "binary": "GameUI.dll",
+  "binary_sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "f84312d5d1a5330ed33c5331db303b3753d63dd249978a63d897330ba3425b26",
+      "procedure": "ram:0x1007b905",
+      "evidence_id": "ev_21d4ce280247b8a24a3bba669e5ad34f9a9e53e84a2619cbce870e93e0745b34",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "8b33108cc327455857184825525699a9070a6b6eed7a044bace933d490e52ab6",
+      "procedure": "ram:0x10079999",
+      "evidence_id": "ev_a04c6568ff354bd439bcdc07c1bc5ad251f2256148a7d9a944d91edbd07cbd38",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "c97562447088052388f0296eae9355c690e618f54f061e03f053c5388bab68c3",
+      "procedure": "ram:0x10079630",
+      "evidence_id": "ev_92e5123199018eb04dd4e067c495d4b0932d64acab56f3f476b6261d39360c45",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "53692b4f8872126525aaf254b54b80265d0ce1d40b81e6d1f01ae4e2527be976",
+      "procedure": "ram:0x100a8240",
+      "evidence_id": "ev_df336f06eb2422462888e1d0aabff08db8a22e9c65a5e20f08997887a29afa62",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "004-pseudocode.c",
+      "sha256": "352109a2c3091a839d1fe8b54c19533cd9c2f9ba5d33c77b73225667ea0b753c",
+      "procedure": "ram:0x10079d8b",
+      "evidence_id": "ev_672d1278888e8268aeea43a3c97c946beaa547bdfd34c058a0ead80b8e1f2998",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/menu-switch-gamestart",
+  "binary": "hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "1bc76984f37f6328471de53d158ba821804b3553b3a71d1712a6c63e07335776",
+      "procedure": "ram:0x100dfc10",
+      "evidence_id": "ev_01b139bd8b63628304a3cac3ca7300411a4e31f9b6425e600c3280c9519ab4f5",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

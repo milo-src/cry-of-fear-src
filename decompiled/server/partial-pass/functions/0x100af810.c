@@ -1,0 +1,256 @@
+// rea decompile_all
+// name: FUN_100af810
+// address: 0x100af810
+// body: available
+// range: 0x100af810-0x100aff63 inclusive
+// non_contiguous: false
+// provider: Ghidra 12.1.4 (ghidra)
+// analysis_profile: 5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6
+// limitations: The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.; Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).; Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.; Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.; Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.; The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.; Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.; The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.; Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.; External functions and functions without an analyzable body return null; other decompiler failures remain explicit.
+// pseudocode: provider-specific; not original source
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_100af810(void)
+
+{
+  float10 fVar1;
+  
+  fVar1 = (float10)(*DAT_1022302c)("difficulty");
+  DAT_10222efc = (int)fVar1;
+  if (DAT_10222efc < 1) {
+    DAT_10226728 = 1;
+  }
+  else {
+    DAT_10226728 = DAT_10222efc;
+    if (4 < DAT_10222efc) {
+      DAT_10226728 = 4;
+    }
+  }
+  (*DAT_1022303c)(1,&DAT_101cd9fc,DAT_10226728);
+  fVar1 = (float10)FUN_100fc6c0("sk_syringe_heal");
+  _DAT_1022672c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_flare_burn_time");
+  DAT_10226730 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_spitter_health");
+  DAT_10226738 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_aom_pills");
+  DAT_1022673c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_axe");
+  DAT_10226740 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher_health");
+  DAT_10226744 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher_dmg_one_slash");
+  _DAT_10226748 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher_dmg_both_slash");
+  _DAT_1022674c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher2_health");
+  DAT_10226750 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher2_dmg_one_slash");
+  _DAT_10226754 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher2_dmg_both_slash");
+  _DAT_10226758 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher3_health");
+  DAT_1022675c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher3_dmg_one_slash");
+  _DAT_10226760 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher3_dmg_both_slash");
+  _DAT_10226764 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher4_health");
+  _DAT_10226768 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher4_dmg_one_slash");
+  _DAT_1022676c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_twitcher4_dmg_both_slash");
+  _DAT_10226770 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sewmo_health");
+  DAT_10226774 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sewmo_dmg_one_slash");
+  _DAT_10226778 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sewmo_dmg_both_slash");
+  _DAT_1022677c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_slower3_health");
+  DAT_10226780 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_slower3_dmg_one_slash");
+  _DAT_10226784 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_slower3_dmg_both_slash");
+  _DAT_10226788 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sewerboss_health");
+  DAT_1022678c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sewerboss_melee");
+  _DAT_10226790 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_roofboss_health");
+  DAT_10226794 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_roofboss_headhit");
+  DAT_10226798 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_roofboss_headhealth");
+  DAT_1022679c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_roofboss_attacktime");
+  DAT_102267a0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_zombie_health");
+  DAT_102267b0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_zombie_dmg_one_slash");
+  _DAT_102267b4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_zombie_dmg_both_slash");
+  _DAT_102267b8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_taller_health");
+  DAT_102267bc = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_taller_dmg_punch");
+  _DAT_102267c0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_suicider_health");
+  DAT_102267a4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_suicider_bullet");
+  _DAT_102267a8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_suicider_suicide");
+  DAT_102267ac = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_flygare_acid");
+  DAT_102267c4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_flygare_health");
+  DAT_102267c8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_flygare_melee");
+  DAT_102267cc = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_child_health");
+  DAT_102267f4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_child_dmg_one_slash");
+  _DAT_102267f8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_child_dmg_both_slash");
+  _DAT_102267fc = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sawrunner_health");
+  DAT_10226800 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sawrunner_dmg_one_slash");
+  _DAT_10226804 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sawrunner_dmg_both_slash");
+  _DAT_10226808 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_doctor_health");
+  DAT_102267d0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_doctor_p345");
+  DAT_102267d4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_doctor_revolver");
+  DAT_102267d8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_rcrazy_health");
+  DAT_102267dc = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_rcrazy_dmg_one_slash");
+  _DAT_102267e0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_rcrazy_dmg_both_slash");
+  _DAT_102267e4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_faceless_health");
+  _DAT_102267e8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_faceless_dmg_one_slash");
+  _DAT_102267ec = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_faceless_dmg_both_slash");
+  _DAT_102267f0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_chainsawboss_health");
+  DAT_10226734 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_faster_health");
+  DAT_1022680c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_faster_dmg_one_slash");
+  _DAT_10226810 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_faster_dmg_both_slash");
+  _DAT_10226814 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_krypande_health");
+  DAT_10226818 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_krypande_dmg_one_slash");
+  _DAT_1022681c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_krypande_dmg_both_slash");
+  _DAT_10226820 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_baby_health");
+  DAT_10226824 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_baby_damage");
+  DAT_10226828 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_stranger_health");
+  DAT_1022682c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_stranger_damage");
+  DAT_10226830 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_nightstick");
+  DAT_10226838 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_switchblade");
+  DAT_1022683c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_punch");
+  DAT_10226844 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_2switchblade");
+  DAT_10226840 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_branch");
+  DAT_10226848 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_sledgehammer");
+  DAT_1022684c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_weapon_melee");
+  _DAT_10226834 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_m16");
+  _DAT_10226854 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_VP70");
+  _DAT_10226858 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_glock");
+  DAT_10226850 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_shotgun");
+  _DAT_1022685c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_p345");
+  _DAT_10226860 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_rifle");
+  _DAT_10226864 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_revolver");
+  _DAT_10226868 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_cof_g43");
+  _DAT_1022686c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_suitcharger");
+  _DAT_10226870 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_battery");
+  _DAT_10226874 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_healthcharger");
+  _DAT_10226878 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_healthkit");
+  _DAT_1022687c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_flashcharge");
+  _DAT_10226880 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_head");
+  DAT_10226884 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_chest");
+  _DAT_10226888 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_stomach");
+  _DAT_1022688c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_leg");
+  _DAT_10226890 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_arm");
+  _DAT_10226894 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_head");
+  DAT_10226898 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_chest");
+  DAT_1022689c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_stomach");
+  DAT_102268a0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_leg");
+  DAT_102268a4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_arm");
+  DAT_102268a8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0(&DAT_101ce1c4);
+  _DAT_102268ac = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_head");
+  DAT_10226884 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_chest");
+  _DAT_10226888 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_stomach");
+  _DAT_1022688c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_leg");
+  _DAT_10226890 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_monster_arm");
+  _DAT_10226894 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_head");
+  DAT_10226898 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_chest");
+  DAT_1022689c = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_stomach");
+  DAT_102268a0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_leg");
+  DAT_102268a4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_player_arm");
+  DAT_102268a8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_primary_speed");
+  DAT_102268b0 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_secondary_speed");
+  DAT_102268b4 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_sprint_speed");
+  DAT_102268b8 = (float)fVar1;
+  fVar1 = (float10)FUN_100fc6c0("sk_stair_speed");
+  DAT_102268bc = (float)fVar1;
+  return;
+}
+

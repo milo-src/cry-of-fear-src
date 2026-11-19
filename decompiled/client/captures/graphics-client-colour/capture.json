@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/graphics-client-colour",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "a03507f04779068f2583e590087c4a9178cb9d69de2a414d1d93c041a5cdb558",
+      "procedure": "ram:0x1005e230",
+      "evidence_id": "ev_efb38c3276444deafac2bc9fef04af2a6bfb024278bca4755e96b850d167079e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

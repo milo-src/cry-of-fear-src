@@ -1,0 +1,72 @@
+// rea decompile_all
+// name: __crt_stdio_output::output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_>::write_string_impl
+// address: 0x1015ca4f
+// body: available
+// range: 0x1015ca4f-0x1015caec inclusive
+// non_contiguous: false
+// provider: Ghidra 12.1.4 (ghidra)
+// analysis_profile: 5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6
+// limitations: The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.; Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).; Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.; Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.; Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.; The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.; Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.; The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.; Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.; External functions and functions without an analyzable body return null; other decompiler failures remain explicit.
+// pseudocode: provider-specific; not original source
+
+
+/* Library Function - Single Match
+    protected: void __thiscall __crt_stdio_output::output_adapter_common<char,class
+   __crt_stdio_output::stream_output_adapter<char> >::write_string_impl(char const * const,int,int *
+   const,class __crt_deferred_errno_cache &)const 
+   
+   Library: Visual Studio 2019 Release */
+
+void __thiscall
+__crt_stdio_output::output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_>::
+write_string_impl(output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_> *this
+                 ,char *param_1,int param_2,int *param_3,__crt_deferred_errno_cache *param_4)
+
+{
+  int iVar1;
+  bool bVar2;
+  int *piVar3;
+  int *piVar4;
+  char *pcVar5;
+  
+  piVar3 = *(int **)param_4;
+  if (piVar3 == (int *)0x0) {
+    piVar3 = __errno();
+    *(int **)param_4 = piVar3;
+  }
+  iVar1 = *piVar3;
+  pcVar5 = param_1 + param_2;
+  *piVar3 = 0;
+  do {
+    if (param_1 == pcVar5) {
+LAB_1015cadc:
+      if ((*piVar3 == 0) && (iVar1 != 0)) {
+        *piVar3 = iVar1;
+      }
+      return;
+    }
+    bVar2 = stream_output_adapter<char>::write_character_without_count_update
+                      ((stream_output_adapter<char> *)this,*param_1);
+    if (bVar2) {
+LAB_1015cac3:
+      *param_3 = *param_3 + 1;
+    }
+    else {
+      piVar4 = *(int **)param_4;
+      if (piVar4 == (int *)0x0) {
+        piVar4 = __errno();
+        *(int **)param_4 = piVar4;
+      }
+      if (*piVar4 != 0x2a) {
+        *param_3 = -1;
+        goto LAB_1015cadc;
+      }
+      bVar2 = stream_output_adapter<char>::write_character_without_count_update
+                        ((stream_output_adapter<char> *)this,'?');
+      if (bVar2) goto LAB_1015cac3;
+      *param_3 = -1;
+    }
+    param_1 = param_1 + 1;
+  } while( true );
+}
+

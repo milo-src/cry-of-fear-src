@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/menu-sky-functions",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "7929fb4e762921a60c9deefab24b660d2ba7c4cc55defd6afe658845bf07cc08",
+      "procedure": "ram:0x10063fb0",
+      "evidence_id": "ev_340a2d6d0daede1afbcec11479a3fe63b5eb0478907783819788c75757cf1b46",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "fec6b7de9cf32b53a969da6384178b4600933be4c2ca3e4d0a408f8e134c97f5",
+      "procedure": "ram:0x100678d0",
+      "evidence_id": "ev_87edf833c5752a9053c69cc22ab1fd048f6340d27f446083817c83936c28e064",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

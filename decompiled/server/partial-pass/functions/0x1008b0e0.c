@@ -1,0 +1,102 @@
+// rea decompile_all
+// name: FUN_1008b0e0
+// address: 0x1008b0e0
+// body: available
+// range: 0x1008b0e0-0x1008b386 inclusive
+// non_contiguous: false
+// provider: Ghidra 12.1.4 (ghidra)
+// analysis_profile: 5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6
+// limitations: The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.; Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).; Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.; Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.; Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.; The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.; Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.; The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.; Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.; External functions and functions without an analyzable body return null; other decompiler failures remain explicit.
+// pseudocode: provider-specific; not original source
+
+
+void FUN_1008b0e0(int param_1,undefined4 param_2)
+
+{
+  int iVar1;
+  int iVar2;
+  int iVar3;
+  float *pfVar4;
+  undefined4 uVar5;
+  int *piVar6;
+  float10 fVar7;
+  float fVar8;
+  undefined1 local_1c [12];
+  float local_10;
+  float fStack_c;
+  float local_8;
+  
+  iVar1 = FUN_1002a8e0(0);
+  FUN_1008ac80(param_2);
+  *(undefined4 *)(*(int *)(iVar1 + 4) + 0x114) = 0;
+  if (param_1 == 0) goto LAB_1008b37a;
+  local_8 = *(float *)(param_1 + 0x180) + *(float *)(param_1 + 0x10);
+  iVar2 = *(int *)(iVar1 + 4);
+  *(ulonglong *)(iVar2 + 8) =
+       CONCAT44(*(float *)(param_1 + 0x17c) + *(float *)(param_1 + 0xc),
+                *(float *)(param_1 + 8) + *(float *)(param_1 + 0x178));
+  *(float *)(iVar2 + 0x10) = local_8;
+  iVar2 = (*DAT_10222f8c)(*(undefined4 *)(*(int *)(iVar1 + 4) + 0x20c));
+  iVar3 = (*DAT_102230b0)(0,100);
+  if ((iVar3 < 6) && (iVar2 != 0)) {
+    iVar3 = *(int *)(iVar1 + 4);
+    local_10 = (*(float *)(iVar2 + 0x1f8) + *(float *)(iVar2 + 0x88)) - *(float *)(iVar3 + 8);
+    fStack_c = (*(float *)(iVar2 + 0x1fc) + *(float *)(iVar2 + 0x8c)) - *(float *)(iVar3 + 0xc);
+    local_8 = (*(float *)(iVar2 + 0x200) + *(float *)(iVar2 + 0x90)) - *(float *)(iVar3 + 0x10);
+    pfVar4 = (float *)FUN_10017e70(local_1c);
+    local_8 = pfVar4[2] * 300.0;
+    *(ulonglong *)(iVar3 + 0x20) = CONCAT44(pfVar4[1] * 300.0,*pfVar4 * 300.0);
+    *(float *)(iVar3 + 0x28) = local_8;
+    *(float *)(*(int *)(iVar1 + 4) + 0x28) = *(float *)(*(int *)(iVar1 + 4) + 0x28) + 100.0;
+  }
+  else {
+    fVar7 = (float10)(*DAT_102230b4)(0xc2c80000,0x42c80000);
+    local_10 = (float)fVar7;
+    fVar7 = (float10)(*DAT_102230b4)(0xc2c80000,0x42c80000);
+    fStack_c = (float)fVar7;
+    fVar7 = (float10)(*DAT_102230b4)(0x43480000,0x43960000);
+    iVar2 = *(int *)(iVar1 + 4);
+    local_8 = (float)fVar7;
+    *(ulonglong *)(iVar2 + 0x20) = CONCAT44(fStack_c,local_10);
+    *(float *)(iVar2 + 0x28) = local_8;
+  }
+  fVar7 = (float10)(*DAT_102230b4)(0x42c80000,0x43480000);
+  *(float *)(*(int *)(iVar1 + 4) + 0x5c) = (float)fVar7;
+  fVar7 = (float10)(*DAT_102230b4)(0x42c80000,0x43960000);
+  *(float *)(*(int *)(iVar1 + 4) + 0x60) = (float)fVar7;
+  iVar2 = *(int *)(param_1 + 0x20c);
+  if (iVar2 == 0) {
+    iVar2 = (*DAT_1022305c)(0);
+    if (iVar2 != 0) goto LAB_1008b2ea;
+    piVar6 = (int *)0x0;
+  }
+  else {
+LAB_1008b2ea:
+    piVar6 = *(int **)(iVar2 + 0x7c);
+  }
+  uVar5 = (**(code **)(*piVar6 + 0x70))();
+  iVar2 = *(int *)(iVar1 + 4);
+  *(undefined4 *)(iVar1 + 0xdc) = uVar5;
+  if (*(float *)(param_1 + 0x164) <= -50.0) {
+    if (*(float *)(param_1 + 0x164) <= -200.0) {
+      fVar8 = 4.0;
+      goto LAB_1008b34c;
+    }
+    local_8 = *(float *)(iVar2 + 0x28) + *(float *)(iVar2 + 0x28);
+    *(ulonglong *)(iVar2 + 0x20) =
+         CONCAT44(*(float *)(iVar2 + 0x24) + *(float *)(iVar2 + 0x24),
+                  *(float *)(iVar2 + 0x20) + *(float *)(iVar2 + 0x20));
+  }
+  else {
+    fVar8 = 0.7;
+LAB_1008b34c:
+    local_8 = *(float *)(iVar2 + 0x28) * fVar8;
+    *(ulonglong *)(iVar2 + 0x20) =
+         CONCAT44(*(float *)(iVar2 + 0x24) * fVar8,*(float *)(iVar2 + 0x20) * fVar8);
+  }
+  *(float *)(iVar2 + 0x28) = local_8;
+LAB_1008b37a:
+  FUN_1008a440();
+  return;
+}
+

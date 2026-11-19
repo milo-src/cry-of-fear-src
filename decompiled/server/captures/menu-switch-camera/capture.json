@@ -1,0 +1,51 @@
+{
+  "source_capture": "analysis/local/menu-switch-camera",
+  "binary": "hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "608a206453ce4d886f2896756ae7af321fa7f74058449db5a8f44932e780701c",
+      "procedure": "ram:0x10113b60",
+      "evidence_id": "ev_5a26cbd43b1b243c39ddfb335f42052f66125ac78160d3f427822dff2f7e06ad",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "f108e908946259a1c008770b3ca041b26dbde88c08d23f9ff59fc1c419c17c0f",
+      "procedure": "ram:0x1010af30",
+      "evidence_id": "ev_ad514ca2a90a30ab93093d57a89ea803b274f8fc9697668ceae864a0478613e6",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "932a2406bd6169978fcf8904312824caa6acc2f97f0950efd40389c7391a7634",
+      "procedure": "ram:0x10110b80",
+      "evidence_id": "ev_49f9e0875e02f62f641b0951d544942adda8c614e7f71351a5cbb8e273961542",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "f7cc1a0b6a9c56c9b4da7713cd6decc1953900d97c502da2e1e4e47adfc40ce8",
+      "procedure": "ram:0x1010cbc0",
+      "evidence_id": "ev_1b229a093d77c4e6fb852afa3d365575d4ab8e00cac8083c90ab32d4f2025b35",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

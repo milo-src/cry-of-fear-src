@@ -1,0 +1,40 @@
+{
+  "source_capture": "analysis/local/menu-assets/gameui-font-position",
+  "binary": "GameUI.dll",
+  "binary_sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "143b9d8bbc379077ea3a8e10caf8a4e9eee12c4f3df608c4a44039c965257d09",
+      "procedure": "ram:0x1005b618",
+      "evidence_id": "ev_cd21aa08fd7db60fb97db16587b75cfb14ac3ad0931007671b12aed533cf4c21",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "6b241865225a072cef2b0e3c363bb081d55da7f0ab0e878e12195837d8213355",
+      "procedure": "ram:0x1005da5a",
+      "evidence_id": "ev_840973c8eb31af8f3cf6f0560be402b49bcc2012d1c13fb37c9610b74aa5fbdb",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "2b55577ffb127814e56674ecdd30a90734832c8cb49648cd41bd5b5512e50924",
+      "procedure": "ram:0x1005ad10",
+      "evidence_id": "ev_476f1ec6be3e8c910b56706e7f076fe5178b0e3bf34cf372186ff5df9759c01e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

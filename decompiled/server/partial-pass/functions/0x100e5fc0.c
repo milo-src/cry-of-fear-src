@@ -1,0 +1,177 @@
+// rea decompile_all
+// name: FUN_100e5fc0
+// address: 0x100e5fc0
+// body: available
+// range: 0x100e5fc0-0x100e6aef inclusive
+// non_contiguous: false
+// provider: Ghidra 12.1.4 (ghidra)
+// analysis_profile: 5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6
+// limitations: The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.; Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).; Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.; Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.; Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.; The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.; Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.; The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.; Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.; External functions and functions without an analyzable body return null; other decompiler failures remain explicit.
+// pseudocode: provider-specific; not original source
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_100e5fc0(void)
+
+{
+  if (DAT_1022649c == 0) {
+    DAT_1022649c = (*DAT_10223074)("SelAmmo",4);
+    DAT_102264cc = (*DAT_10223074)("CurWeapon",3);
+    DAT_10226528 = (*DAT_10223074)("Geiger",1);
+    DAT_102264a0 = (*DAT_10223074)("Flashlight",2);
+    _DAT_102264a4 = (*DAT_10223074)("FlashBat",1);
+    DAT_102264d0 = (*DAT_10223074)("Health",3);
+    DAT_102264d4 = (*DAT_10223074)("Damage",0xd);
+    DAT_102264d8 = (*DAT_10223074)("Battery",2);
+    DAT_102264dc = (*DAT_10223074)("Train",1);
+    DAT_1022648c = (*DAT_10223074)("HudText",0xffffffff);
+    DAT_10226518 = (*DAT_10223074)("SayText",0xffffffff);
+    DAT_1022651c = (*DAT_10223074)("TextMsg",0xffffffff);
+    DAT_102264e4 = (*DAT_10223074)("WeaponList",0xffffffff);
+    DAT_102264a8 = (*DAT_10223074)("ResetHUD",1);
+    DAT_102264ac = (*DAT_10223074)("InitHUD",0);
+    DAT_102264b0 = (*DAT_10223074)("SetFog",9);
+    DAT_102264b4 = (*DAT_10223074)("KeyedDLight",0xffffffff);
+    DAT_102264b8 = (*DAT_10223074)("SetSky",7);
+    DAT_102264bc = (*DAT_10223074)("HUDColor",4);
+    DAT_102264c0 = (*DAT_10223074)("AddShine",0xffffffff);
+    DAT_10226490 = (*DAT_10223074)("Particle",0xffffffff);
+    _DAT_102264c4 = (*DAT_10223074)("DelPart",0xffffffff);
+    DAT_102264c8 = (*DAT_10223074)("GameTitle",1);
+    DAT_102264ec = (*DAT_10223074)("DeathMsg",0xffffffff);
+    DAT_102264f0 = (*DAT_10223074)("ScoreInfo",9);
+    DAT_102264f4 = (*DAT_10223074)("TeamInfo",0xffffffff);
+    _DAT_102264f8 = (*DAT_10223074)("TeamScore",0xffffffff);
+    DAT_102264fc = (*DAT_10223074)("GameMode",1);
+    DAT_10226500 = (*DAT_10223074)(&DAT_101dabe4,0xffffffff);
+    DAT_10226504 = (*DAT_10223074)("ServerName",0xffffffff);
+    DAT_10226508 = (*DAT_10223074)("AmmoPickup",0xffffffff);
+    _DAT_10226700 = (*DAT_10223074)("WeapPickup",1);
+    DAT_1022650c = (*DAT_10223074)("ItemPickup",0xffffffff);
+    DAT_10226510 = (*DAT_10223074)("HideWeapon",1);
+    DAT_10226520 = (*DAT_10223074)("SetFOV",1);
+    _DAT_10226524 = (*DAT_10223074)("ShowMenu",0xffffffff);
+    DAT_1022671c = (*DAT_10223074)("ScreenShake",6);
+    DAT_10226720 = (*DAT_10223074)("ScreenFade",10);
+    DAT_102264e8 = (*DAT_10223074)("AmmoX",3);
+    DAT_1022652c = (*DAT_10223074)("TeamNames",0xffffffff);
+    DAT_10226530 = (*DAT_10223074)("StatusIcon",0xffffffff);
+    _DAT_10226534 = (*DAT_10223074)("StatusText",0xffffffff);
+    _DAT_10226538 = (*DAT_10223074)("StatusValue",3);
+    _DAT_1022653c = (*DAT_10223074)("SpecTank",0xffffffff);
+    DAT_10226540 = (*DAT_10223074)("TextWindow",0xffffffff);
+    DAT_10226544 = (*DAT_10223074)("PlayMP3",0xffffffff);
+    DAT_10226548 = (*DAT_10223074)("RainData",0x10);
+    DAT_1022654c = (*DAT_10223074)("GrassInfo",0xffffffff);
+    DAT_10226550 = (*DAT_10223074)("RadioIcon",0xffffffff);
+    DAT_10226554 = (*DAT_10223074)("TabPanel",0xffffffff);
+    DAT_10226558 = (*DAT_10223074)("customdecal",0xffffffff);
+    DAT_1022655c = (*DAT_10223074)("mydlight",0xffffffff);
+    DAT_10226560 = (*DAT_10223074)("skymark_sky",0xffffffff);
+    DAT_10226564 = (*DAT_10223074)("skymark_w",0xffffffff);
+    DAT_10226568 = (*DAT_10223074)("ProFont",0xffffffff);
+    DAT_102265e4 = (*DAT_10223074)("Inventory",0xffffffff);
+    DAT_1022656c = (*DAT_10223074)("Maglite",1);
+    DAT_10226570 = (*DAT_10223074)("BlackBars",0xffffffff);
+    DAT_10226574 = (*DAT_10223074)(&DAT_101dad34,1);
+    DAT_10226578 = (*DAT_10223074)("UnreadSMS",2);
+    DAT_1022657c = (*DAT_10223074)("Stamina",3);
+    DAT_10226580 = (*DAT_10223074)("VGUIMenu",2);
+    DAT_10226584 = (*DAT_10223074)("board",0xffffffff);
+    DAT_10226588 = (*DAT_10223074)("NoteDoc",0xffffffff);
+    DAT_1022658c = (*DAT_10223074)("Keypad",3);
+    DAT_10226590 = (*DAT_10223074)("Phone",1);
+    DAT_10226594 = (*DAT_10223074)("Puzzlebar",1);
+    DAT_10226598 = (*DAT_10223074)("CoFLogo",1);
+    _DAT_1022659c = (*DAT_10223074)(&DAT_101dad90,1);
+    _DAT_102265a0 = (*DAT_10223074)("CoFWeapon",0xffffffff);
+    DAT_102265a4 = (*DAT_10223074)("ViewKnock",1);
+    DAT_102265a8 = (*DAT_10223074)("ViewEntity",0xffffffff);
+    DAT_102265ac = (*DAT_10223074)("ViewLock",0xffffffff);
+    _DAT_102265e0 = (*DAT_10223074)("CanUse",0xffffffff);
+    DAT_102265e8 = (*DAT_10223074)("Concuss",2);
+    DAT_102265b0 = (*DAT_10223074)("Ladder",0xffffffff);
+    DAT_102265b4 = (*DAT_10223074)("FallOver",0xffffffff);
+    DAT_102265b8 = (*DAT_10223074)("WpnInfo",4);
+    _DAT_102265bc = (*DAT_10223074)("ShowHint",0xffffffff);
+    _DAT_102265c0 = (*DAT_10223074)("Accuracy",0xffffffff);
+    DAT_102265c4 = (*DAT_10223074)("YesNo",0xffffffff);
+    DAT_102265c8 = (*DAT_10223074)("Statue",0xffffffff);
+    DAT_102265ec = (*DAT_10223074)("Computer",0xffffffff);
+    DAT_102265f0 = (*DAT_10223074)("UserDoc",2);
+    DAT_102265f4 = (*DAT_10223074)("HeadShield",0xffffffff);
+    DAT_102265cc = (*DAT_10223074)("CameraZoom",0xffffffff);
+    DAT_102265d0 = (*DAT_10223074)("Padlock",1);
+    DAT_102265d4 = (*DAT_10223074)("SaveLoad",0xffffffff);
+    DAT_102265d8 = (*DAT_10223074)("GameMenu",0);
+    DAT_102265dc = (*DAT_10223074)("BlackWhite",1);
+    DAT_102265f8 = (*DAT_10223074)("WeaponBody",1);
+    DAT_102265fc = (*DAT_10223074)("Scope",1);
+    _DAT_10226600 = (*DAT_10223074)(&DAT_101dae88,1);
+    DAT_10226604 = (*DAT_10223074)("PhoneOff",1);
+    DAT_10226608 = (*DAT_10223074)("Muzzleflash",0xffffffff);
+    DAT_1022660c = (*DAT_10223074)("DualWield",0xffffffff);
+    DAT_10226610 = (*DAT_10223074)("DualAnim",1);
+    DAT_10226614 = (*DAT_10223074)("DualFlash",1);
+    DAT_10226618 = (*DAT_10223074)("ModelAttach",0xffffffff);
+    DAT_10226620 = (*DAT_10223074)("BossBar",0xffffffff);
+    DAT_1022661c = (*DAT_10223074)("HealthCap",1);
+    DAT_10226624 = (*DAT_10223074)("DualAmmo",0xffffffff);
+    DAT_10226628 = (*DAT_10223074)("ThirdPerson",0xffffffff);
+    DAT_1022662c = (*DAT_10223074)("Telephone",0xffffffff);
+    DAT_10226630 = (*DAT_10223074)("Telescope",0xffffffff);
+    DAT_10226634 = (*DAT_10223074)("QSlotClear",2);
+    DAT_10226638 = (*DAT_10223074)("FlashFlags",0xffffffff);
+    _DAT_1022663c = (*DAT_10223074)("Documents",0xffffffff);
+    DAT_10226640 = (*DAT_10223074)(&DAT_101daf40,0xffffffff);
+    DAT_10226644 = (*DAT_10223074)("Ripple",0xffffffff);
+    DAT_10226648 = (*DAT_10223074)("AddNote",0xffffffff);
+    DAT_1022664c = (*DAT_10223074)("AttachCam",0xffffffff);
+    DAT_10226650 = (*DAT_10223074)("BigPrick",1);
+    _DAT_10226654 = (*DAT_10223074)("NewFade",0xffffffff);
+    DAT_10226658 = (*DAT_10223074)("Chapter",0xffffffff);
+    DAT_1022665c = (*DAT_10223074)("SkipScene",0);
+    DAT_10226660 = (*DAT_10223074)("KillWpnPart",1);
+    DAT_10226664 = (*DAT_10223074)("WpnDeploy",0);
+    DAT_10226668 = (*DAT_10223074)("IronSights",0xffffffff);
+    _DAT_1022666c = (*DAT_10223074)("Ignite",0xffffffff);
+    DAT_10226670 = (*DAT_10223074)("Wheelchair",0xffffffff);
+    DAT_10226674 = (*DAT_10223074)("ControlHint",0xffffffff);
+    DAT_10226678 = (*DAT_10223074)("LensFlare",6);
+    DAT_1022667c = (*DAT_10223074)("GreyFade",2);
+    _DAT_10226680 = (*DAT_10223074)("AmmoInv",3);
+    _DAT_10226684 = (*DAT_10223074)("ReadyRoom",1);
+    _DAT_10226688 = (*DAT_10223074)("RevolverCyl",1);
+    DAT_1022668c = (*DAT_10223074)("Credits",0xffffffff);
+    DAT_10226690 = (*DAT_10223074)("QSlotUpdate",2);
+    DAT_10226694 = (*DAT_10223074)("TakePhoto",0);
+    DAT_10226698 = (*DAT_10223074)("Clothes",7);
+    DAT_1022669c = (*DAT_10223074)("Objectives",0xffffffff);
+    DAT_102266a0 = (*DAT_10223074)("Unlocks",0xffffffff);
+    DAT_102266a4 = (*DAT_10223074)("Timer",6);
+    DAT_102266a8 = (*DAT_10223074)("TimerPlus",3);
+    DAT_102266ac = (*DAT_10223074)("AdLib",4);
+    DAT_102266b0 = (*DAT_10223074)("Lobby",3);
+    DAT_102266b4 = (*DAT_10223074)("InventChck",0);
+    DAT_102266b8 = (*DAT_10223074)("CoopStats",0xffffffff);
+    DAT_102266bc = (*DAT_10223074)("MPModel",0);
+    DAT_102266c0 = (*DAT_10223074)("BeatCoop",0);
+    DAT_102266c4 = (*DAT_10223074)("HoldBreath",1);
+    DAT_102266c8 = (*DAT_10223074)("DevDonator",2);
+    _DAT_102266cc = (*DAT_10223074)("CoopCamAnim",1);
+    DAT_102266d0 = (*DAT_10223074)("Introdn",3);
+    DAT_102266d4 = (*DAT_10223074)("LookingAt",1);
+    DAT_102266d8 = (*DAT_10223074)("SimonMode",1);
+    DAT_102266dc = (*DAT_10223074)("Syringe",2);
+    DAT_102266e0 = (*DAT_10223074)("CustomDoc",0xffffffff);
+    DAT_102266e4 = (*DAT_10223074)("Materials",0);
+    DAT_102266e8 = (*DAT_10223074)("CustomSlv",0xffffffff);
+    DAT_102266ec = (*DAT_10223074)("CustomFng",0xffffffff);
+    DAT_102266f0 = (*DAT_10223074)("CustomGlv",0xffffffff);
+    DAT_102266f4 = (*DAT_10223074)("PlaySFX",0xffffffff);
+    _DAT_102266f8 = (*DAT_10223074)("SaveHack",1);
+  }
+  return;
+}
+

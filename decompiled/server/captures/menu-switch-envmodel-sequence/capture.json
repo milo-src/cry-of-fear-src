@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/menu-switch-envmodel-sequence",
+  "binary": "hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "3809d3d75fec90a52bfeb17ebda1f01dfe0b31ec3af7ad28df5b83dc416a1258",
+      "procedure": "ram:0x1009bed0",
+      "evidence_id": "ev_84c4d64e053f9b27f5be9cd2d2d0c699d72ba9dac65ab3ce9787309bb9b9fbfb",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}
