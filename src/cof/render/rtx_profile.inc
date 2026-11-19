@@ -19,6 +19,9 @@
             if (!gEngfuncs.pfnGetCvarPointer("rt_material_masks"))
                 gEngfuncs.Cvar_Get("rt_material_masks", "1", FCVAR_ARCHIVE,
                     "Authored RTX roughness/normal masks on verified gameplay textures; reload map");
+            if (!gEngfuncs.pfnGetCvarPointer("rt_foliage"))
+                gEngfuncs.Cvar_Get("rt_foliage", "1", FCVAR_ARCHIVE,
+                    "RTX curved foliage cards and two-sided leaf relief; reload map");
             // Register before config/command-line execution, without overriding
             // the user's values when the selected quality profile is reapplied.
             if (!gEngfuncs.pfnGetCvarPointer("rt_darkness_strength"))

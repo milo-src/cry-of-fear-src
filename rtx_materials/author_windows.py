@@ -130,7 +130,7 @@ def masks(image, layout, plain=False):
 def author(game, output):
     evidence=wad_images(game,set(LAYOUTS))
     manifest=json.loads((output/'manifest.json').read_text())
-    manifest['channels']='ORM: G=roughness, B=metallic, A=inverse glass coverage for vehicles/windows; N: RG=slopes, B=height, A=254 world / 253 vehicle; window A=252, RG=room coordinates, B=aspect/4 (0=plain glass)'
+    manifest['channels']='ORM: G=roughness, B=metallic, A=inverse glass coverage for vehicles/windows; N: RG=slopes, B=height, A=254 world / 253 vehicle; window A=252, RG=room coordinates, B=aspect/4 (0=plain glass); foliage A=251, RG=leaf/branch slopes'
     manifest['materials']=[e for e in manifest['materials'] if e['name'] not in LAYOUTS]
     for name,layout in LAYOUTS.items():
         image,wad=evidence[name]

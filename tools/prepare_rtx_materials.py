@@ -31,6 +31,15 @@ def prepare(target):
     anchor = 'static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology )\n{'
     if text.count(anchor) != 1: raise ValueError('RTX material declaration hook changed')
     text = text.replace(anchor, '#include "rtx_materials.inc"\n#include "rtx_pbr.inc"\n\n' + anchor + '\n    cof_dark_current=NULL; cof_wet_current=NULL;')
+    text=text.replace('#include "rtx_pbr.inc"','#include "rtx_pbr.inc"\n#include "rtx_foliage.inc"')
+    anchor='static void FlushBatch( void )'
+    if text.count(anchor)!=1:raise ValueError('Foliage flush declaration changed')
+    text=text.replace(anchor,'static void CofRTFoliageFlush(RgMeshPrimitiveInfo *primitive);\n'+anchor)
+    anchor='\t\t\tRgResult r = rgUploadMeshPrimitive( rg_instance, &rt_batch.mesh, &rt_batch.primitive );'
+    if text.count(anchor)!=1:raise ValueError('Foliage geometry upload hook changed')
+    text=text.replace(anchor,'            CofRTFoliageFlush(&rt_batch.primitive);\n'+anchor)
+    for name in ('rtx_foliage.inc','rtx_foliage_mesh.h'):
+        shutil.copy2(ROOT/'src/cof/render'/name,target/'ref/gl'/name)
     anchor = '\t\tprim.pEditorInfo = &additional;'
     if text.count(anchor) != 1: raise ValueError('RTX brush material hook changed')
     text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);\n\t\tCofRTPbrApply(&prim,&additional);\n\t\tCofRTDarknessBegin(&mesh,&prim,&additional);\n        CofRTWetnessBegin(&mesh,&prim,&additional);')

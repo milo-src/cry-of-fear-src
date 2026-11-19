@@ -84,9 +84,9 @@ def build(source, output):
             raise ValueError('Invalid material identity: ' + key)
         mirrors = entry.get('mirror_commands', [])
         if len(mirrors)>16: raise ValueError('Too many mirror commands: '+name)
-        header.append('    {%s, "cof_pbr/%s", %du, %du, %du, false, false, false, {%s}},' %
+        header.append('    {%s, "cof_pbr/%s", %du, %du, %du, false, false, false, {%s}, %s},' %
             (json.dumps(key), name, entry['width'], entry['height'], entry['source_rgba_fnv1a'],
-             ','.join(str(h)+'u' for h in mirrors) or '0'))
+             ','.join(str(h)+'u' for h in mirrors) or '0', 'true' if entry.get('foliage') else 'false'))
         for suffix in ('orm', 'n'):
             with Image.open(source/'masks'/f'{name}_{suffix}.png') as image:
                 expected = (entry.get('mask_width',entry['width']), entry.get('mask_height',entry['height']))
@@ -96,8 +96,9 @@ def build(source, output):
                 if image.mode != 'RGBA' or image.size != expected:
                     raise ValueError('Invalid mask dimensions/mode: ' + name)
                 channels = image.getextrema()
-                valid_alpha = ((255,255),(254,254),(253,253),(252,252)) if suffix=='n' else ((255,255),)
-                vehicle = bool(entry.get('studio_texture'))
+                valid_alpha = ((255,255),(254,254),(253,253),(252,252),(251,251)) if suffix=='n' else ((255,255),)
+                foliage = bool(entry.get('foliage'))
+                vehicle = bool(entry.get('studio_texture')) and not foliage
                 window = bool(entry.get('window'))
                 if ((not (suffix == 'orm' and (vehicle or window)) and channels[3] not in valid_alpha) or
                     (suffix == 'orm' and channels[0] != (255, 255))):
@@ -108,6 +109,8 @@ def build(source, output):
                             raise ValueError('Vehicle glass requires the vehicle normal tag: '+name)
                         if window and normal.getextrema()[3] != (252,252):
                             raise ValueError('Window coordinates require the window tag: '+name)
+                        if foliage and normal.getextrema()[3] != (251,251):
+                            raise ValueError('Foliage requires the thin surface tag: '+name)
                         # Window RG is room coordinates, never normal slopes.
                         data = ktx2(image, None if window else normal)
                 else:

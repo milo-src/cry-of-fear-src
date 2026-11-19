@@ -5,6 +5,7 @@ typedef struct {
     unsigned width, height, hash;
     qboolean ready, reported, verified;
     unsigned mirrorCommands[16];
+    qboolean foliage;
 } CofPbrEntry;
 #include "rtx_pbr_catalog.inc"
 #include "rtx_pbr_auto.inc"
@@ -121,8 +122,11 @@ static void CofRTPbrApply(RgMeshPrimitiveInfo *primitive, const RgEditorInfo *ed
     if (cof_rt_menu_scene || gEngfuncs.pfnGetCvarFloat("rt_material_masks")<=0 ||
         primitive->emissive>0 || editor->attachedLightExists ||
         (primitive->flags&(RG_MESH_PRIMITIVE_WATER|RG_MESH_PRIMITIVE_SKY|
-          RG_MESH_PRIMITIVE_SKY_VISIBILITY|RG_MESH_PRIMITIVE_TRANSLUCENT|RG_MESH_PRIMITIVE_ALPHA_TESTED))) return;
+          RG_MESH_PRIMITIVE_SKY_VISIBILITY|RG_MESH_PRIMITIVE_TRANSLUCENT))) return;
     CofPbrEntry *entry=CofRTPbrFind(primitive->pTextureName);
+    // Only content-verified plant skins may use numeric masks on cutout meshes.
+    if ((primitive->flags & RG_MESH_PRIMITIVE_ALPHA_TESTED) && (!entry || !entry->foliage)) return;
+    if (entry && entry->foliage && gEngfuncs.pfnGetCvarFloat("rt_foliage")<=0) return;
     if (!entry || !entry->ready) {
         CofAutoPbr *automatic=CofAutoPbrFind(primitive->pTextureName);
         if (!automatic || !automatic->ready) return;

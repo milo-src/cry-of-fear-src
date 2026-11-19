@@ -25,6 +25,35 @@ material identification from a single color image.
 
 ## Build and use
 
+### RTX foliage
+
+`author_foliage.py` authors numeric masks for 74 masked skins from the stock
+`models/Props/Vaxter` trees, bushes, conifers and small vegetation. Raw palette
+fingerprints gate selection; other cutouts remain excluded. Index 255 supplies
+the leaf/branch silhouette, so colored transparent palette entries never become
+bumps. Original albedo, opacity and game resources are retained. Normal alpha
+251 selects two-sided leaf shading and is excluded from opaque-surface POM.
+Foliage is a rough dielectric, not glossy metal or emissive material.
+
+In RTX gameplay the renderer subdivides each verified foliage triangle into
+four and gently bows the cards in texture space (maximum six map units). This
+adds actual curvature to silhouettes, shadow geometry and reflections, while
+the numeric normals round individual leaf/needle/branch edges. It does not
+replace every textured leaf with a separate 3D mesh or simulate wind or
+subsurface transmission. Trunks and collision geometry are unchanged. UV-based
+deformation is deterministic across frames and views. Fixed 3 MiB scratch
+storage bounds geometry processing at 4096 input triangles per batch; larger
+batches retain their original geometry. No per-frame allocation is introduced.
+
+`rt_foliage 0` and map reload disable both curvature and foliage masks;
+`rt_material_masks 0` disables them along with the rest of the authored pack.
+Non-RTX and cinematic menus keep the original path. Author explicitly with
+`python rtx_materials/author_foliage.py --game-dir out/runtime/cryoffear`.
+Verify with `python -m unittest discover -s rtx_materials` and
+`python tools/check_rtx_foliage.py` (native Waf geometry checks). Background
+readbacks should compare nearby plants with `rt_foliage 1` and `0`; runtime logs
+include `COF_RTX_FOLIAGE` with source/result triangle counts.
+
 ### RTX building windows
 
 `author_windows.py` defines content-verified aperture layouts for 80 stock

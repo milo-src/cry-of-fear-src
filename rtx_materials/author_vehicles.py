@@ -165,7 +165,7 @@ def masks(image,layout):
 
 def author(game,output):
     path=output/'manifest.json';manifest=json.loads(path.read_text())
-    manifest['channels']='ORM: G=roughness, B=metallic, A=inverse glass coverage for vehicles/windows; N: RG=slopes, B=height, A=254 world / 253 vehicle; window A=252, RG=room coordinates, B=aspect/4 (0=plain glass)'
+    manifest['channels']='ORM: G=roughness, B=metallic, A=inverse glass coverage for vehicles/windows; N: RG=slopes, B=height, A=254 world / 253 vehicle; window A=252, RG=room coordinates, B=aspect/4 (0=plain glass); foliage A=251, RG=leaf/branch slopes'
     entries=[e for e in manifest['materials'] if not e['name'].startswith('vehicle_')]
     for model in sorted((game/'models/Props/Fordon').glob('*.mdl')):
         family=model.stem.split('_')[0]

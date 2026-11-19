@@ -249,6 +249,15 @@ def prepare():
     if(cofWindowMirror)
         h.geometryInstanceFlags |= COF_WINDOW_COATING | GEOM_INST_FLAG_REFLECT;
 ''')
+    # Leaves are thin, two-sided surfaces. Smooth studio normals otherwise stay
+    # directed away from the camera on their back side and look pitch black.
+    anchor='    h.instCustomIndex = instCustomIndex;'
+    if text.count(anchor)!=1:raise ValueError('Foliage normal orientation hook changed')
+    text=text.replace(anchor,'''    if(tr.normalTexture!=MATERIAL_NO_TEXTURE &&
+       abs(getTextureSampleLod(tr.normalTexture,texCoords[0],0).a-251.0/255.0)<.001 &&
+       dot(h.normal,rayOrigin-h.hitPosition)<0.0) h.normal=-h.normal;
+
+'''+anchor)
     hit.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_surface_detail.glsl',hit.parent/'rtx_surface_detail.glsl')
     shutil.copy2(ROOT/'src/cof/render/rtx_vehicle_glass.glsl',hit.parent/'rtx_vehicle_glass.glsl')
