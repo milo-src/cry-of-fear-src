@@ -42,6 +42,24 @@ bool MenuMotionActive() {
 }
 int MainRowX() { return ScreenWidth/2-140+menuDrawX; }
 int MainRowY(int row) { return ScreenHeight-(11-row)*38+menuDrawY; }
+// Snapshot of the last rendered plane: input must hit what was displayed,
+// even when a newer view update has already read a different pointer target.
+CofUiPlane menuButtonPlane;
+bool menuPerspectiveDrawn=false;
+CofUiPlane MenuPlane(float depth) {
+    return CofUiPerspective(ScreenWidth*.5f,ScreenHeight*.56f,
+        std::fmax(720.f,ScreenHeight*1.65f),
+        menuLookX*.13962634f,-menuLookY*.08726646f,depth);
+}
+bool MainRowHit(float x,float y,int row) {
+    if(menuRTX && menuPerspectiveDrawn) {
+        CofUiPoint local;
+        if(!CofUiUnproject(menuButtonPlane,x,y,local))return false;
+        x=local.x;y=local.y;
+    }
+    return x>=MainRowX() && x<MainRowX()+280 &&
+        y>=MainRowY(row) && y<MainRowY(row)+38;
+}
 const char* art[] = {"newgame", "loadgame", "customc", "jserver", "hserver",
                      "language", "unlockables", "extras", "options", "quit"};
 bool Inside(int x, int y, int bx, int by, int w, int h) {
@@ -50,6 +68,7 @@ bool Inside(int x, int y, int bx, int by, int w, int h) {
 void Sound() { gEngfuncs.pfnPlaySoundByName(const_cast<char*>("ui/3d_click.wav"), .5f); }
 void Show(Panel next) {
     panel = next;
+    menuPerspectiveDrawn=false;
     hovered = -1;
     gEngfuncs.pfnSetMouseEnable(next != Closed);
 }
@@ -123,7 +142,7 @@ void CancelDifficulty() {
 void Click(int x, int y) {
     if (panel == Main) {
         for (int i = 0; i < 10; ++i)
-            if (Inside(x, y, MainRowX(), MainRowY(i), 280, 38)) {
+            if (MainRowHit(float(x), float(y), i)) {
                 MainAction(i); return;
             }
     } else if (panel == Difficulty) {
@@ -218,6 +237,7 @@ void CofGameMenuInit() {
 void CofGameMenuVidInit() {
     menuLookX=menuLookY=menuOpticsTime=0;
     menuDrawX=menuDrawY=0;
+    menuPerspectiveDrawn=false;
     gEngfuncs.Cvar_SetValue("cof_menu_glass_visible",0);
     gEngfuncs.Cvar_SetValue("cof_menu_rain_film",0);
     gEngfuncs.Cvar_SetValue("cof_menu_rain_frame",-1);
@@ -261,23 +281,28 @@ void CofGameMenuDraw() {
     if (panel != Main) return;
     menuDrawX=MenuMotionActive() ? int(std::lround(-menuLookX*7.f)) : 0;
     menuDrawY=MenuMotionActive() ? int(std::lround(-menuLookY*4.f)) : 0;
+    menuPerspectiveDrawn=MenuMotionActive();
+    menuButtonPlane=MenuPlane(0);
+    const CofUiPlane logoPlane=MenuPlane(menuPerspectiveDrawn?18.f:0.f);
     int mx, my; gEngfuncs.GetMousePosition(&mx, &my);
     int nextHover = -1;
     for (int i = 0; i < 10; ++i)
-        if (Inside(mx, my, MainRowX(), MainRowY(i), 280, 38)) nextHover=i;
+        if (MainRowHit(float(mx), float(my), i)) nextHover=i;
     if (nextHover != hovered && nextHover >= 0)
         gEngfuncs.pfnPlaySoundByName(const_cast<char*>("ui/3d_rollover.wav"), .5f);
     hovered = nextHover;
     // Keep the mean of the original 0..50 transparency range, without its
     // per-frame random flicker (requested presentation adjustment).
     CofDrawImage("gfx/vgui/menu_logo.tga", ScreenWidth/2-256+menuDrawX*2, ScreenHeight/2-198+menuDrawY*2,
-                 512, 66, 0, 0, 1, 1, 1, 1, 1, 1.f-25.f/255.f);
+                 512, 66, 0, 0, 1, 1, 1, 1, 1, 1.f-25.f/255.f,
+                 menuPerspectiveDrawn?&logoPlane:nullptr);
     CofDrawImage("gfx/vgui/menu_logo_ts.tga", ScreenWidth-120-15, ScreenHeight-102-15);
     for (int i = 0; i < 10; ++i) {
         char path[96];
         std::snprintf(path, sizeof(path), "gfx/vgui/menu/%s%s.tga", art[i], i==hovered ? "_mo" : "");
         CofDrawImage(path, MainRowX() + (!menuRTX && i==hovered ? gEngfuncs.pfnRandomLong(-3,3) : 0),
-                     MainRowY(i));
+                     MainRowY(i),0,0,0,0,1,1,1,1,1,1,
+                     menuPerspectiveDrawn?&menuButtonPlane:nullptr);
     }
     CofMenuOpticsTestFrame();
 }

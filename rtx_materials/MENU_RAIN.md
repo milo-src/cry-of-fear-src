@@ -69,8 +69,14 @@ Looping and frame selection use menu game
 time, so pausing does not advance the film. The film is released on VidInit.
 The additive layer precedes CoF buttons/logos, preserves aspect ratio, and
 has a small separate parallax offset. Camera motion is smoothed and limited
-to ±1.2° yaw / ±0.8° pitch to suit CoF's existing scene. Button drawing and
-hit regions share the same offsets. This is an adaptation, not an exact
+to ±1.2° yaw / ±0.8° pitch to suit CoF's existing scene. The main logo and
+buttons are projected as UI cards with up to ±8° yaw / ±5° pitch, using the
+same smoothed pointer state. The logo sits slightly ahead of the button plane.
+Each card is subdivided into 16×2 quads to preserve lettering when projected
+through the renderer's 2D HUD interface. Hover and clicks use the inverse of
+the last displayed projection, including the existing position offsets.
+The standard renderer keeps its original single-quad drawing and rectangular
+hit testing. This is an adaptation, not an exact
 reproduction of Crysis's Flash projection or arbitrary-scene refraction.
 
 `rt_menu_glass 0` disables wet glass; `rt_menu_parallax 0` disables menu motion.
@@ -87,6 +93,7 @@ python tools/smoke_rtx.py --runtime-dir out/runtime-rtx-material-review --menu-o
 
 The test supplies normalized pointer targets internally; it never moves the
 OS pointer. It checks both parallax directions, a displaced button's real
-dispatch, return to center, imported-film upload and advancing frame indices.
+dispatch, projected hit regions for all ten rows, the standard-renderer hit
+guard, return to center, imported-film upload and advancing frame indices.
 GPU readbacks show the rain layer over CoF's own scene with clean foreground
 buttons. All game tests use the isolated desktop and `-nosound`.

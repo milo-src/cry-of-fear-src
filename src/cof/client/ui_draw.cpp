@@ -66,7 +66,8 @@ void CofDrawRainLens(int x,int y,int width,int height,float alpha) {
 }
 
 bool CofDrawImage(const char* path, int x, int y, int width, int height,
-                  float u0, float v0, float u1, float v1, float red, float green, float blue, float alpha) {
+                  float u0, float v0, float u1, float v1, float red, float green, float blue, float alpha,
+                  const CofUiPlane* plane) {
     if (!path || !*path || !renderer.GL_LoadTexture || !gEngfuncs.pTriAPI) return false;
     auto found = textures.find(path);
     if (found == textures.end()) {
@@ -142,12 +143,48 @@ bool CofDrawImage(const char* path, int x, int y, int width, int height,
     renderer.GL_Bind(0, texture.id);
     tri->Color4f(red, green, blue, alpha);
     tri->Begin(TRI_QUADS);
+    if (plane) {
+        // The HUD API has 2D clip coordinates (no projective texture q).
+        // Subdivide the projected card so letters do not shear at a diagonal
+        // or show the affine interpolation of one large quad.
+        const int columns=16,rows=2;
+        auto vertex=[&](float u,float v) {
+            const CofUiPoint p=CofUiProject(*plane,x+width*u,y+height*v);
+            tri->TexCoord2f(u0+(u1-u0)*u,v0+(v1-v0)*v);
+            tri->Vertex3f(p.x,p.y,0);
+        };
+        for(int row=0;row<rows;++row)for(int col=0;col<columns;++col) {
+            const float a=float(col)/columns,b=float(col+1)/columns;
+            const float c=float(row)/rows,d=float(row+1)/rows;
+            vertex(a,c);vertex(b,c);vertex(b,d);vertex(a,d);
+        }
+    } else {
     tri->TexCoord2f(u0, v0); tri->Vertex3f(x, y, 0);
     tri->TexCoord2f(u1, v0); tri->Vertex3f(x + width, y, 0);
     tri->TexCoord2f(u1, v1); tri->Vertex3f(x + width, y + height, 0);
     tri->TexCoord2f(u0, v1); tri->Vertex3f(x, y + height, 0);
+    }
     tri->End();
     tri->Color4f(1, 1, 1, 1);
     tri->RenderMode(kRenderNormal);
+    return true;
+}
+
+CofUiPlane CofUiPerspective(float cx,float cy,float distance,float yaw,float pitch,float depth) {
+    const float sy=std::sin(yaw),cyaw=std::cos(yaw),sp=std::sin(pitch),cp=std::cos(pitch);
+    return {cx,cy,distance,depth,cyaw,sy*sp,cp,-sy,cyaw*sp};
+}
+CofUiPoint CofUiProject(const CofUiPlane& p,float x,float y) {
+    x-=p.cx;y-=p.cy;
+    const float scale=p.distance/(p.distance-p.zx*x-p.zy*y-p.depth);
+    return {p.cx+(p.xx*x+p.xy*y)*scale,p.cy+p.yy*y*scale};
+}
+bool CofUiUnproject(const CofUiPlane& p,float x,float y,CofUiPoint& local) {
+    const float u=(x-p.cx)/p.distance,v=(y-p.cy)/p.distance;
+    const float a=p.xx+u*p.zx,b=p.xy+u*p.zy,c=v*p.zx,d=p.yy+v*p.zy;
+    const float det=a*d-b*c;
+    if(std::abs(det)<.000001f)return false;
+    const float rightX=u*(p.distance-p.depth),rightY=v*(p.distance-p.depth);
+    local={p.cx+(rightX*d-b*rightY)/det,p.cy+(a*rightY-rightX*c)/det};
     return true;
 }
