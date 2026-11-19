@@ -4,6 +4,17 @@
 // tagged N.RG is local window position, N.B is aspect/4, N.A is 252/255.
 #ifndef COF_WINDOW_GLSL
 #define COF_WINDOW_GLSL
+// Private per-hit flag, never uploaded on whole facade geometry. The pinned
+// renderer reserves this bit; it survives the primary -> reflection G-buffer.
+#define COF_WINDOW_COATING GEOM_INST_FLAG_RESERVED_5
+
+vec3 cofWindowReflectance(vec3 normal, vec3 direction)
+{
+    // Artistic dark, reflective glazing. Keep the reflection independent of
+    // the room's furniture/albedo, and increase it towards grazing angles.
+    return getFresnelSchlick(abs(dot(normal, direction)), vec3(.32,.34,.36));
+}
+
 float cofWindowBox(vec3 origin, vec3 direction, vec3 lo, vec3 hi)
 {
     vec3 inv=mix(vec3(-1),vec3(1),greaterThanEqual(direction,vec3(0)))/max(abs(direction),vec3(.0001));

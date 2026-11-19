@@ -39,9 +39,18 @@ walls, a floor, curtains and simple furniture silhouettes. All panes of a window
 share room coordinates. Perspective changes with the incident ray on primary,
 reflected and indirect hits. This is an artistic interior-mapping illusion: no
 walkable rooms, collision, true transmission, emissive interiors or additional
-scene geometry. The opaque coating receives the renderer's actual scene
-reflections and Fresnel response. Frosted/blind-covered panes have broader
-reflections; plain glass gets reflections without invented room boundaries.
+scene geometry. Clear panes use the same sharp scene-ray pass and checkerboard
+reconstruction as water/glass: one lane shades the virtual room, the other
+reflects the scene. Fresnel weights sum to one, with an artistic tinted coating
+reflectance of 0.32/0.34/0.36 at normal incidence and stronger reflection at
+grazing angles. Reflection color no longer comes from the room's furniture.
+The existing reflection-depth limit bounds work; no new render targets or
+per-frame allocations are added. The private per-hit `RESERVED_5` flag is only
+set inside fully covered clear apertures, never on an entire facade. Primary
+room lanes preserve their original motion and visibility buffers.
+Frosted/blind-covered panes retain broader BRDF reflections; plain glass gets
+reflections without invented room boundaries. Native transparent media and
+portals do not enter this virtual-room split.
 
 Window masks use normal alpha 252. RG stores local window coordinates, B stores
 aspect/4 (zero for plain glass), and ORM alpha stores inverse coverage. These RG
