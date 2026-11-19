@@ -108,6 +108,7 @@ def main():
     parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
     parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
     parser.add_argument('--lamp-check',action='store_true',help='Require park lamp geometry at the actual RTX upload boundary')
+    parser.add_argument('--material-check',choices=['authored','auto','disabled'],help='Check RTX numeric mask selection and KTX loading')
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
@@ -127,6 +128,7 @@ def main():
         parser.error('--darkness-check requires RTX --lighting')
     if args.lamp_check and (not args.lighting or args.renderer!='rtx'):
         parser.error('--lamp-check requires RTX --lighting')
+    if args.material_check and args.renderer!='rtx':parser.error('--material-check requires RTX')
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
         except ValueError: parser.error('--pose requires six finite numbers')
@@ -244,6 +246,15 @@ def main():
                 geometry=dict(frames=frames,samples=samples,unexpected_changes=changed)
             if args.interactive and not shots:raise RuntimeError('No window pixels captured')
             if args.renderer=='rtx':
+                if re.search(r'Failed to load texture override file:.*cof_(pbr|auto)',text):
+                    raise RuntimeError('Numeric RTX material mask failed to load')
+                uses=re.findall(r'COF_RTX_PBR_(AUTO_)?USE (\S+) menu=(\d)',text)
+                if args.menu_scene and uses:raise RuntimeError('Gameplay material masks leaked into cinematic menu')
+                if args.material_check=='authored' and not any(not automatic for automatic,_,_ in uses):
+                    raise RuntimeError('No authored masks selected for verified original textures')
+                if args.material_check=='auto' and not any(automatic for automatic,_,_ in uses):
+                    raise RuntimeError('No automatic masks selected outside the authored pack')
+                if args.material_check=='disabled' and uses:raise RuntimeError('Disabled material masks still applied')
                 if re.search(r'Too many (geometry infos|vertices|indices|textures)',text,re.I):
                     raise RuntimeError('RTX capacity exceeded: scene geometry/resources were dropped')
                 if 'COF_RTX_DARKNESS_UV FAIL' in text:

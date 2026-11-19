@@ -1,0 +1,17 @@
+import json
+import sys
+
+def options(opt):
+    pass
+
+def configure(conf):
+    conf.env.PYTHON = [sys.executable]
+    from PIL import Image
+
+def build(bld):
+    entries = json.loads(bld.path.find_resource('manifest.json').read())['materials']
+    outputs = ['pack.json', 'rtx_pbr_catalog.inc']
+    outputs += [e['name']+'_'+suffix+'.ktx2' for e in entries for suffix in ('orm', 'n')]
+    bld(rule='${PYTHON} ${SRC[0].abspath()} --source ${SRC[0].parent.abspath()} --output ${TGT[0].parent.abspath()}',
+        source=['build.py', 'manifest.json'] + ['masks/'+e['name']+'_'+s+'.png' for e in entries for s in ('orm', 'n')],
+        target=outputs, name='cof_pbr_masks')

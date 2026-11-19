@@ -43,7 +43,15 @@ def audit():
     manifest=json.loads((RUNTIME/'rtx-build-manifest.json').read_text())
     if expected!=manifest['files']:raise RuntimeError('RTX manifest mismatch')
     if shaders!=manifest['shaders']:raise RuntimeError('RTX shader manifest mismatch')
-    report=dict(result='pass',native_modules=expected,shaders=shaders,original_cof_native_modules='none',build='Waf x64',
+    pack=json.loads((ROOT/'build/rtx-materials/pack.json').read_text())
+    materials={'rt/mat/cof_pbr/'+name:sha for name,sha in pack['files'].items()}
+    if materials!=manifest['materials']:raise RuntimeError('RTX material manifest mismatch')
+    for name,sha in materials.items():
+        if not name.endswith(('_orm.ktx2','_n.ktx2')) or digest((RUNTIME/name).read_bytes())!=sha:
+            raise RuntimeError('RTX numeric sidecar mismatch: '+name)
+    actual_masks={p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'rt/mat/cof_pbr').rglob('*') if p.is_file()}
+    if actual_masks!=set(materials):raise RuntimeError('Unexpected owned material files: '+str(actual_masks^set(materials)))
+    report=dict(result='pass',native_modules=expected,shaders=shaders,materials=materials,original_cof_native_modules='none',build='Waf x64',
                 external_binaries='Pinned RTGL1, FidelityFX, NVIDIA DLSS; official SDL2. NRI rebuilt with Waf.')
     (RUNTIME/'runtime-audit.json').write_text(json.dumps(report,indent=2)+'\n')
     print(f'PASS: {len(expected)} x64 modules; own engine/game/NRI, pinned tracing dependencies, no original game DLLs')

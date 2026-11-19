@@ -69,6 +69,22 @@ def main():
     definition.write_text('LIBRARY RayTracedGL1\nEXPORTS\n'+'\n'.join(exports)+'\n')
     subprocess.run([str(lib), '/nologo', '/machine:x64', '/def:'+str(definition), '/out:'+str(libdir/'RayTracedGL1.lib')], check=True)
     env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8', VSLANG='1033', RTGL1_SDK_PATH=str(sdk), COF_REPO_ROOT=str(ROOT))
+    # Owned numeric material sidecars, built by Waf separately from game assets.
+    material_source=ROOT/'build/rtx-material-source'
+    shutil.copytree(ROOT/'rtx_materials',material_source,dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns('__pycache__'))
+    shutil.copy2(ROOT/'external/xash-rt/waf',material_source/'waf')
+    material_build=ROOT/'build/rtx-materials'
+    run_waf(material_source,material_build,[],env)
+    pack=json.loads((material_build/'pack.json').read_text())
+    material_destination=RUNTIME/'rt/mat/cof_pbr'
+    material_destination.mkdir(parents=True,exist_ok=True)
+    materials={}
+    for name,expected in pack['files'].items():
+        source=material_build/name
+        if sha(source)!=expected:raise RuntimeError('Material build mismatch: '+name)
+        shutil.copy2(source,material_destination/name)
+        materials['rt/mat/cof_pbr/'+name]=expected
     from prepare_rtx_shaders import prepare as prepare_shaders, verify as verify_shader
     shaders=prepare_shaders()
     run_waf(shaders,ROOT/'build/rtx-shaders',[],env)
@@ -126,7 +142,7 @@ def main():
     (RUNTIME/'rtx-build-manifest.json').write_text(json.dumps(dict(architecture='x64',build='Waf',
         xash_rt_commit='72234513ab02502f16a5fa7e0f4e6c6a5c52f5e8',package_url=PACKAGE_URL,
         package_sha256=PACKAGE_SHA,files=native,
-        shaders={'rt/shaders/CmPrepareFinal.comp.spv':sha(shader_destination)}),indent=2)+'\n')
+        shaders={'rt/shaders/CmPrepareFinal.comp.spv':sha(shader_destination)},materials=materials),indent=2)+'\n')
     from audit_rtx import audit
     audit()
     print('Built optional Vulkan RT runtime:',RUNTIME)

@@ -29,10 +29,19 @@ def prepare(target):
     shutil.copy2(ROOT/'src/cof/render/rtx_darkness.inc',target/'ref/gl/rtx_darkness.inc')
     anchor = 'static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology )\n{'
     if text.count(anchor) != 1: raise ValueError('RTX material declaration hook changed')
-    text = text.replace(anchor, '#include "rtx_materials.inc"\n\n' + anchor + '\n    cof_dark_current=NULL;')
+    text = text.replace(anchor, '#include "rtx_materials.inc"\n#include "rtx_pbr.inc"\n\n' + anchor + '\n    cof_dark_current=NULL;')
     anchor = '\t\tprim.pEditorInfo = &additional;'
     if text.count(anchor) != 1: raise ValueError('RTX brush material hook changed')
-    text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);\n\t\tCofRTDarknessBegin(&mesh,&prim,&additional);')
+    text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);\n\t\tCofRTPbrApply(&prim,&additional);\n\t\tCofRTDarknessBegin(&mesh,&prim,&additional);')
+    anchor='void pglDeleteTextures( const char* texturename )\n{'
+    if text.count(anchor)!=1:raise ValueError('RTX PBR deletion hook changed')
+    text=text.replace(anchor,'static void CofRTPbrDelete(const char *name);\n'+anchor+'\n    CofRTPbrDelete(texturename);')
+    anchor='RgResult r = rgProvideOriginalTexture( rg_instance, &info );'
+    if text.count(anchor)!=1:raise ValueError('RTX PBR original upload hook changed')
+    text=text.replace(anchor,anchor+'\n                if (r==RG_RESULT_SUCCESS || r==RG_RESULT_SUCCESS_FOUND_TEXTURE) CofRTPbrRegister(&info);')
+    shutil.copy2(ROOT/'src/cof/render/rtx_pbr.inc',target/'ref/gl/rtx_pbr.inc')
+    shutil.copy2(ROOT/'src/cof/render/rtx_pbr_auto.inc',target/'ref/gl/rtx_pbr_auto.inc')
+    shutil.copy2(ROOT/'build/rtx-materials/rtx_pbr_catalog.inc',target/'ref/gl/rtx_pbr_catalog.inc')
     # Studio additive glow meshes must not enter the opaque shadow geometry.
     begin = text.index('else if( curtype == RT_BATCH_TYPE_STUDIO )')
     end = text.index('else if( curtype == RT_BATCH_TYPE_BRUSH )', begin)
@@ -59,6 +68,19 @@ def prepare(target):
 '''+anchor)
     text = text[:begin] + studio + text[end:]
     path.write_text(text)
+    image_path=target/'ref/gl/gl_image.c'
+    image_text=image_path.read_text()
+    for function,next_function,call in (
+        ('int GL_LoadTexture( ', 'int GL_LoadTextureArray(', 'CofRTPbrSource(name,tex->name,buf,size);'),
+        ('int GL_LoadTextureFromBuffer(', 'int GL_CreateTexture(', 'CofRTPbrSource(name,tex->name,NULL,0);'),
+    ):
+        start=image_text.index(function);end=image_text.index(next_function,start)
+        part=image_text[start:end]
+        anchor='\tGL_ProcessImage( tex, pic );'
+        if part.count(anchor)!=1:raise ValueError('RTX raw material identity hook changed')
+        part=part.replace(anchor,'\textern void CofRTPbrSource(const char*,const char*,const unsigned char*,size_t);\n\t'+call+'\n'+anchor)
+        image_text=image_text[:start]+part+image_text[end:]
+    image_path.write_text(image_text)
     surfaces=target/'ref/gl/gl_rsurf.c'
     surf=surfaces.read_text()
     anchor='\t\trgUtilImScratchPushVertices( rg_instance, p->numverts,'
