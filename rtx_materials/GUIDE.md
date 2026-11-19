@@ -25,6 +25,35 @@ material identification from a single color image.
 
 ## Build and use
 
+### RTX building windows
+
+`author_windows.py` defines content-verified aperture layouts for 80 stock
+window/glass textures, including multi-window facades. It exports only numeric
+masks from read-only WAD evidence. Frames, mullions, arches and wall areas stay
+outside the glass coverage; material identity checks reject modified textures.
+Run `python rtx_materials/author_windows.py --game-dir out/runtime/cryoffear`.
+The general author preserves these entries; use the window author to edit them.
+
+The shader traces a small procedural room box behind each aperture, with side
+walls, a floor, curtains and simple furniture silhouettes. All panes of a window
+share room coordinates. Perspective changes with the incident ray on primary,
+reflected and indirect hits. This is an artistic interior-mapping illusion: no
+walkable rooms, collision, true transmission, emissive interiors or additional
+scene geometry. The opaque coating receives the renderer's actual scene
+reflections and Fresnel response. Frosted/blind-covered panes have broader
+reflections; plain glass gets reflections without invented room boundaries.
+
+Window masks use normal alpha 252. RG stores local window coordinates, B stores
+aspect/4 (zero for plain glass), and ORM alpha stores inverse coverage. These RG
+values must never be decoded as normal slopes or counted as slope variance in
+roughness mips. Facade wall regions retain procedural surface grain. Sidecars
+are capped at 512 pixels per dimension, are mipmapped, and allocate nothing per
+frame. Existing real translucent brushes, broken glass, animated rain overlays,
+boarded windows and menus retain their specialized rendering. Ordinary non-RTX
+rendering never selects these masks. `rt_material_masks 0` and map reload disable
+the complete pack. Run `python -m unittest discover -s rtx_materials` for aperture,
+metadata, mip and memory-budget regressions, and isolated GPU readbacks for QA.
+
 ### RTX vehicles
 
 The `aud`, `vari`, `polisbil` and `foretag` families (including shipped color

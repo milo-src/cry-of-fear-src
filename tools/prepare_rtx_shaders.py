@@ -194,6 +194,7 @@ def prepare():
     text=hit.read_text()
     text=text.replace('#include "rtx_relief.glsl"','#include "rtx_relief.glsl"\n#include "rtx_surface_detail.glsl"')
     text=text.replace('#include "rtx_surface_detail.glsl"','#include "rtx_surface_detail.glsl"\n#include "rtx_vehicle_glass.glsl"')
+    text=text.replace('#include "rtx_vehicle_glass.glsl"','#include "rtx_vehicle_glass.glsl"\n#include "rtx_window.glsl"')
     anchor='    if( tr.occlusionRougnessMetallicTexture != MATERIAL_NO_TEXTURE )'
     if text.count(anchor)!=1:raise ValueError('Vehicle glass ORM hook changed')
     text=text.replace(anchor,'    float cofGlassCoverage=0.0;\n'+anchor)
@@ -211,6 +212,8 @@ def prepare():
         if(orm.a<.999 && tr.normalTexture!=MATERIAL_NO_TEXTURE) {
             float marker=getTextureSampleLod(tr.normalTexture,texCoords[0],0).a;
             cofGlassCoverage=cofVehicleGlass(orm,marker,h.albedo,h.roughness,h.metallic);
+            cofGlassCoverage=max(cofGlassCoverage,cofWindowMaterial(tr,texCoords[0],orm,
+                rayOrigin-h.hitPosition,h.normal,h.albedo,h.roughness,h.metallic));
         }
 ''')
     anchor='        vec2 nrm ='
@@ -221,6 +224,12 @@ def prepare():
     if text.count(anchor)!=1:raise ValueError('Surface detail normal decode hook changed')
     text=text.replace(anchor,'''            ;
         vec2 nrm = (cofNormalSample.xy * 2.0 - vec2(1.0))*(1.0-cofGlassCoverage);
+        // Window RG encodes room coordinates rather than a normal vector.
+        if(abs(cofNormalSample.a-252.0/255.0)<.001) {
+            nrm=vec2(0);
+            // Retain procedural plaster/stone grain outside the apertures.
+            if(cofGlassCoverage<.001)cofNormalSample.a=254.0/255.0;
+        }
     #if defined(HITINFO_INL_PRIM)
         cofSurfaceDetail(tr,texCoords[0],dTdx[0],dTdy[0],cofNormalSample.a,h.metallic,h.roughness,nrm);
     #elif defined(HITINFO_INL_RFL)
@@ -229,6 +238,7 @@ def prepare():
     hit.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_surface_detail.glsl',hit.parent/'rtx_surface_detail.glsl')
     shutil.copy2(ROOT/'src/cof/render/rtx_vehicle_glass.glsl',hit.parent/'rtx_vehicle_glass.glsl')
+    shutil.copy2(ROOT/'src/cof/render/rtx_window.glsl',hit.parent/'rtx_window.glsl')
     direct=target/'Shaders/RtRaygenDirect.rgen'
     text=direct.read_text().replace('#version 460','#version 460\n#extension GL_GOOGLE_include_directive : require',1)
     text=text.replace('#define MATERIAL_MAX_ALBEDO_LAYERS 0','#define MATERIAL_MAX_ALBEDO_LAYERS 4')

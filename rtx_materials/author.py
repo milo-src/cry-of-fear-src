@@ -193,6 +193,11 @@ def main():
     parser.add_argument('--only', nargs='+', help='Author selected profile keys and retain the rest of the committed pack')
     args = parser.parse_args()
     profiles = json.loads((ROOT/'profiles.json').read_text())['materials']
+    previous=json.loads((ROOT/'manifest.json').read_text()) if (ROOT/'manifest.json').exists() else {}
+    windows={e['name'] for e in previous.get('materials',[]) if e.get('window')}
+    if args.only and windows.intersection(args.only):
+        raise ValueError('Use author_windows.py for verified window layouts')
+    profiles={name:profile for name,profile in profiles.items() if name not in windows}
     if args.only:
         profiles = {name: profiles[name] for name in args.only}
     if any(not name.replace('_', '').isalnum() or name != name.lower() for name in profiles):
@@ -203,7 +208,8 @@ def main():
     manifest = dict(version=1, channels='ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 world relief / 253 vehicle relief (255 legacy)', materials=[])
     if (ROOT/'manifest.json').exists():
         manifest['materials'] = [e for e in json.loads((ROOT/'manifest.json').read_text())['materials']
-                                 if e.get('studio_texture') or (args.only and e['name'] not in profiles)]
+                                 if e.get('studio_texture') or e.get('window') or (args.only and e['name'] not in profiles)]
+        manifest['channels']=previous['channels']
     for name, profile in profiles.items():
         original, wad = sources[name]
         profile = dict(profile, detail_seed=int.from_bytes(hashlib.sha256(name.encode('ascii')).digest()[:4], 'little'))
