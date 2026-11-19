@@ -118,6 +118,7 @@ def main():
     parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
     parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
     parser.add_argument('--lamp-check',action='store_true',help='Require park lamp geometry at the actual RTX upload boundary')
+    parser.add_argument('--vehicle-check',choices=['enabled','disabled'],help='Assert vehicle masks and mirror geometry at the RTX upload boundary')
     parser.add_argument('--wetness-check',choices=['enabled','disabled'],help='Check wet-film atlas and complete per-vertex UV uploads; disable both wetness cvars for disabled check')
     parser.add_argument('--material-check',choices=['authored','auto','disabled'],help='Check RTX numeric mask selection and KTX loading')
     parser.add_argument('--water-check',choices=['zero-alpha','disabled'],help='Require native alpha-zero water at the RT upload boundary, or no replacement water')
@@ -152,6 +153,8 @@ def main():
         parser.error('--darkness-check requires RTX --lighting')
     if args.lamp_check and (not args.lighting or args.renderer!='rtx'):
         parser.error('--lamp-check requires RTX --lighting')
+    if args.vehicle_check and (not args.lighting or args.renderer!='rtx'):
+        parser.error('--vehicle-check requires RTX --lighting')
     if args.material_check and args.renderer!='rtx':parser.error('--material-check requires RTX')
     if args.wetness_check and args.renderer!='rtx':parser.error('--wetness-check requires RTX')
     if args.water_check and args.renderer!='rtx':parser.error('--water-check requires RTX')
@@ -332,6 +335,13 @@ def main():
                 geometry=dict(frames=frames,samples=samples,unexpected_changes=changed)
             if args.interactive and not shots:raise RuntimeError('No window pixels captured')
             if args.renderer=='rtx':
+                vehicles=re.findall(r'COF_RTX_VEHICLE_UPLOAD mirror=(\d) masks=(\d) traced=(\d) vertices=(\d+) menu=(\d)',text)
+                if args.vehicle_check=='enabled':
+                    for kind in (0,1):
+                        if not any(row[kind]=='1' and row[2]=='1' and int(row[3])>=3 and row[4]=='0' for row in vehicles):
+                            raise RuntimeError('Missing traced vehicle '+('mirror' if kind==0 else 'masks'))
+                if args.vehicle_check=='disabled' and vehicles:
+                    raise RuntimeError('Disabled vehicle materials still reached the tracer')
                 volumes=re.findall(r'COF_RTX_LOCAL_VOLUME enabled=(\d) menu=(\d) cell_history=0',text)
                 if args.volume_check and (not volumes or volumes[-1][0]!=str(int(args.volume_check=='enabled'))):
                     raise RuntimeError('Unexpected local-light volumetric path')

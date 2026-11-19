@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "channels": "ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 height marker (255 legacy)",
+  "channels": "ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 world relief / 253 vehicle relief (255 legacy)",
   "materials": [
     {
       "name": "c_obbsowa",
@@ -251,6 +251,213 @@
       "source_rgba_fnv1a": 376198158,
       "mask_width": 1152,
       "mask_height": 1152
+    },
+    {
+      "name": "vehicle_aud_0",
+      "studio_texture": "#models/Props/Fordon/aud/tex1.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 1264095352,
+      "source_sha256": "8b5a30a6779895dcbb5c26321b4743b7bea70bec094bd11dbfa3925420253c70",
+      "source_model_sha256": "e6ecba1a0219944a11c989378c99a75c6a21e4d2eebd8168c68a2fc2722342b4",
+      "mirror_commands": [
+        3856088432,
+        12023665,
+        35085920
+      ]
+    },
+    {
+      "name": "vehicle_aud_2_0",
+      "studio_texture": "#models/Props/Fordon/aud_2/tex1.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 3814027081,
+      "source_sha256": "de1d7f5c964948a04964fa5328cc4da41d9ddcad3271f698168dc43d2c301e21",
+      "source_model_sha256": "df25379f5433a7b0f9902c26936415868a7985ad6960ab545f720378b90037b8",
+      "mirror_commands": [
+        3856088432,
+        12023665,
+        35085920
+      ]
+    },
+    {
+      "name": "vehicle_aud_3_0",
+      "studio_texture": "#models/Props/Fordon/aud_3/tex1.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 3733666288,
+      "source_sha256": "e325f514ef9c323a3ea8caf6ab862bacb61bfe2322bc5282f1965b0e7b7b1491",
+      "source_model_sha256": "aa64acc53d67a5aef371782a10a74630c13e8f556078e9fff0f09206a1fe1609",
+      "mirror_commands": [
+        3856088432,
+        12023665,
+        35085920
+      ]
+    },
+    {
+      "name": "vehicle_foretag_0",
+      "studio_texture": "#models/Props/Fordon/foretag/text.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 670528183,
+      "source_sha256": "ea97977cb7bdb869d9fa0f962f299c10c962556800b7f5f35cbdcef21bd5391c",
+      "source_model_sha256": "f29f964863403cce93e0beb0c61b99b2adcffdb4c76eb5d559c04328d5b3cba7",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_foretag_1",
+      "studio_texture": "#models/Props/Fordon/foretag/text_unpro.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 2702461724,
+      "source_sha256": "e8b88b26e3b0066e873f3b0dcb830ca2a8007f7fd80aab54e418f7bd6ff01db2",
+      "source_model_sha256": "f29f964863403cce93e0beb0c61b99b2adcffdb4c76eb5d559c04328d5b3cba7",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_foretag_2_0",
+      "studio_texture": "#models/Props/Fordon/foretag_2/text.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 3797543915,
+      "source_sha256": "28acaa8f1702b429868da3a45fa4eca9752f860e7664f3acb857db3a27f071b9",
+      "source_model_sha256": "327fd84db748bda22dbd1344ca3a378383a5cd747497d4446b39309b941153b5",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_foretag_2_1",
+      "studio_texture": "#models/Props/Fordon/foretag_2/text_unpro.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 3797543915,
+      "source_sha256": "28acaa8f1702b429868da3a45fa4eca9752f860e7664f3acb857db3a27f071b9",
+      "source_model_sha256": "327fd84db748bda22dbd1344ca3a378383a5cd747497d4446b39309b941153b5",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_foretag_push_0",
+      "studio_texture": "#models/Props/Fordon/foretag_push/text.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 4157174301,
+      "source_sha256": "386b10bc7c628bcbb8664ed89fe0a961d867e06a3556a5a17be3f510a96ccb3e",
+      "source_model_sha256": "49afc1bd86623b35561306eb26ad4dd4e4ee9b08427a4fbcd6778e8c4fd477ca",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_foretag_push_1",
+      "studio_texture": "#models/Props/Fordon/foretag_push/text_unpro.mdl",
+      "width": 512,
+      "height": 512,
+      "mask_width": 1024,
+      "mask_height": 1024,
+      "source_rgba_fnv1a": 4188149149,
+      "source_sha256": "7bdc9a1baafb699d080a9901b92313753e32664ecb424dfd7c12749f3c8f0751",
+      "source_model_sha256": "49afc1bd86623b35561306eb26ad4dd4e4ee9b08427a4fbcd6778e8c4fd477ca",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_polisbil_0",
+      "studio_texture": "#models/Props/Fordon/polisbil/policecartex.mdl",
+      "width": 504,
+      "height": 504,
+      "mask_width": 1008,
+      "mask_height": 1008,
+      "source_rgba_fnv1a": 1751632554,
+      "source_sha256": "84a909a468d9d25bba0de66bf072627b86152d38e93725f8c2aa58d4e446ae40",
+      "source_model_sha256": "2d713c0ad38d91c9f8a2aa405b405aec7a91edadd1e450405787a5699d8da1c8",
+      "mirror_commands": [
+        1431782317,
+        3726424740
+      ]
+    },
+    {
+      "name": "vehicle_polisbil_blood_0",
+      "studio_texture": "#models/Props/Fordon/polisbil_blood/policecartex.mdl",
+      "width": 504,
+      "height": 504,
+      "mask_width": 1008,
+      "mask_height": 1008,
+      "source_rgba_fnv1a": 845618653,
+      "source_sha256": "6da84507c2e35fb2ca68ed90f056161f6f1556154976f5323c8393e3a2866302",
+      "source_model_sha256": "5268f9da42651109c103ec6984e9a4a4722602b3ceac1a889754322972a024a7",
+      "mirror_commands": []
+    },
+    {
+      "name": "vehicle_vari_0",
+      "studio_texture": "#models/Props/Fordon/vari/text.mdl",
+      "width": 488,
+      "height": 488,
+      "mask_width": 976,
+      "mask_height": 976,
+      "source_rgba_fnv1a": 58191390,
+      "source_sha256": "978c075fc162d7dc82f1ff47ade496b040f27c5d51332d115f6eb09f270835c7",
+      "source_model_sha256": "35a18c8b04fae3cf3d5e7ed59e7f744821318c83d6487aebb85eeedcef6ac3f8",
+      "mirror_commands": [
+        2363804411,
+        395337055
+      ]
+    },
+    {
+      "name": "vehicle_vari_1",
+      "studio_texture": "#models/Props/Fordon/vari/text2_fullbright.mdl",
+      "width": 488,
+      "height": 488,
+      "mask_width": 976,
+      "mask_height": 976,
+      "source_rgba_fnv1a": 2410275019,
+      "source_sha256": "d64ad698a2d3e45510deb7225a4e9693f9e4bc3782a2ff9e02ba52893e342260",
+      "source_model_sha256": "35a18c8b04fae3cf3d5e7ed59e7f744821318c83d6487aebb85eeedcef6ac3f8",
+      "mirror_commands": [
+        2363804411,
+        395337055
+      ]
+    },
+    {
+      "name": "vehicle_vari_2_0",
+      "studio_texture": "#models/Props/Fordon/vari_2/text.mdl",
+      "width": 488,
+      "height": 488,
+      "mask_width": 976,
+      "mask_height": 976,
+      "source_rgba_fnv1a": 3003597191,
+      "source_sha256": "b24aea32d95bf057c37e57b69600af0f2dab283ade59289a0839043b0ba64b0a",
+      "source_model_sha256": "b2fdf96acd3cfd715007cc728ac4607c9ccf324583bd9aabf9249a61d4031914",
+      "mirror_commands": [
+        2363804411,
+        395337055
+      ]
+    },
+    {
+      "name": "vehicle_vari_3_0",
+      "studio_texture": "#models/Props/Fordon/vari_3/text.mdl",
+      "width": 488,
+      "height": 488,
+      "mask_width": 976,
+      "mask_height": 976,
+      "source_rgba_fnv1a": 2100390843,
+      "source_sha256": "c098e94fea431af6ca7613977355eb85682763f38a704e9eba0c20179ebdebab",
+      "source_model_sha256": "5bcc13bbbde0cfddd53ecb2e1860920be128acec50de9c881123ed775deadb8d",
+      "mirror_commands": [
+        2363804411,
+        395337055
+      ]
     }
   ]
 }

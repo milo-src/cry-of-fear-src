@@ -200,9 +200,10 @@ def main():
     sources = wad_images(args.wad_dir, set(profiles))
     output = ROOT/'masks'
     output.mkdir(exist_ok=True)
-    manifest = dict(version=1, channels='ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 height marker (255 legacy)', materials=[])
-    if args.only and (ROOT/'manifest.json').exists():
-        manifest['materials'] = [e for e in json.loads((ROOT/'manifest.json').read_text())['materials'] if e['name'] not in profiles]
+    manifest = dict(version=1, channels='ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 world relief / 253 vehicle relief (255 legacy)', materials=[])
+    if (ROOT/'manifest.json').exists():
+        manifest['materials'] = [e for e in json.loads((ROOT/'manifest.json').read_text())['materials']
+                                 if e.get('studio_texture') or (args.only and e['name'] not in profiles)]
     for name, profile in profiles.items():
         original, wad = sources[name]
         profile = dict(profile, detail_seed=int.from_bytes(hashlib.sha256(name.encode('ascii')).digest()[:4], 'little'))

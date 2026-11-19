@@ -79,8 +79,14 @@ def build(source, output):
         name = entry['name']
         if not name.replace('_', '').isalnum() or name != name.lower():
             raise ValueError('Invalid texture key: ' + name)
-        header.append('    {"#maps/%s.mip", "cof_pbr/%s", %du, %du, %du},' %
-            (name, name, entry['width'], entry['height'], entry['source_rgba_fnv1a']))
+        key = entry.get('studio_texture', '#maps/%s.mip' % name)
+        if not key.startswith(('#maps/', '#models/')) or any(c in key for c in '\"\\\n\r'):
+            raise ValueError('Invalid material identity: ' + key)
+        mirrors = entry.get('mirror_commands', [])
+        if len(mirrors)>16: raise ValueError('Too many mirror commands: '+name)
+        header.append('    {%s, "cof_pbr/%s", %du, %du, %du, false, false, false, {%s}},' %
+            (json.dumps(key), name, entry['width'], entry['height'], entry['source_rgba_fnv1a'],
+             ','.join(str(h)+'u' for h in mirrors) or '0'))
         for suffix in ('orm', 'n'):
             with Image.open(source/'masks'/f'{name}_{suffix}.png') as image:
                 expected = (entry.get('mask_width',entry['width']), entry.get('mask_height',entry['height']))
@@ -90,7 +96,7 @@ def build(source, output):
                 if image.mode != 'RGBA' or image.size != expected:
                     raise ValueError('Invalid mask dimensions/mode: ' + name)
                 channels = image.getextrema()
-                valid_alpha = ((255,255),(254,254)) if suffix=='n' else ((255,255),)
+                valid_alpha = ((255,255),(254,254),(253,253)) if suffix=='n' else ((255,255),)
                 if channels[3] not in valid_alpha or (suffix == 'orm' and channels[0] != (255, 255)):
                     raise ValueError('Unexpected opacity/AO in numeric mask: ' + name)
                 if suffix == 'orm':

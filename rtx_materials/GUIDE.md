@@ -11,7 +11,7 @@ The ordinary renderer and cinematic 3D menu retain their existing materials.
   custom maps work without a material pack. The existing `sound/materials.txt`
   supplies surface classes where available; unknown surfaces stay matte and
   nonmetallic. Color/brightness alone cannot identify a physical substance.
-* **Authored:** the pack has 25 materials / 50 PNG masks, covering paving,
+* **Authored:** the world pack has 25 materials / 50 PNG masks, covering paving,
   masonry, concrete, asphalt, gravel, earth, painted and rusted metal. Matching
   raw texture content selects these more carefully tuned masks. A different
   custom texture with the same name receives the automatic treatment instead.
@@ -19,11 +19,45 @@ The ordinary renderer and cinematic 3D menu retain their existing materials.
 Both paths preserve the renderer's original color pixels, geometry, light
 intensity, exposure and darkness settings. Water, sky, translucent surfaces,
 cutout foliage, animated frames, emissive surfaces and UI keep their specialized
-render paths. Models currently retain the existing studio material adapter;
-this pack targets world/brush surfaces. It does not promise physically accurate
+render paths. The vehicle extension adds 15 studio skins / 30 PNG masks;
+other models retain the existing studio adapter. It does not promise physically accurate
 material identification from a single color image.
 
 ## Build and use
+
+### RTX vehicles
+
+The `aud`, `vari`, `polisbil` and `foretag` families (including shipped color
+variants) have content-verified atlas masks for glass, painted panels, rubber
+and wheels. Windows reflect the traced scene with dielectric Fresnel response;
+the original painted cabin remains behind that surface. Door seams and handles
+receive shallow normal/parallax relief. No new interior, silhouette or collision
+geometry is reconstructed.
+
+Passenger-car mirror faces use a separate traced metallic material, selected
+by fingerprints of their exact studio drawing commands. This avoids turning
+shared window UVs or mirror housings into mirrors. Van mirrors retain their
+existing material because their glass and housing share drawing commands.
+The fire engine is outside this passenger-car/van pack. Unsupported or modified
+skins retain the stock studio response. Menus and the ordinary renderer never
+select these aliases or mirror overrides.
+
+Generate with `python rtx_materials/author_vehicles.py --game-dir out/runtime/cryoffear`.
+Only numeric PNGs and manifest fingerprints are exported. Original MDLs,
+palettes and color textures are read-only. The 30 vehicle PNGs occupy about
+20 MiB; building them does not require the original resources. Normal alpha
+253 marks shallow vehicle relief and excludes porous world grain; world masks
+retain alpha 254. Glass stays opaque because the models lack full interiors.
+`rt_material_masks 0` plus map reload disables vehicle masks and mirror overrides.
+
+Verification: `python -m unittest discover -s rtx_materials`, native mip tests,
+and `tools/smoke_rtx.py --lighting --map c_park --vehicle-check enabled --readback ...`.
+The vehicle check observes masks and mirrors at the geometry-upload boundary;
+readbacks require separate visual review. Use `--vehicle-check disabled
+--cvar rt_material_masks 0` for fallback checks. Automated runs retain `-nosound`
+and the isolated desktop.
+
+### Waf build
 
 Run `python tools/build_rtx.py` from the repository root. Waf compiles the
 committed PNGs to linear RGBA8 KTX2 with mipmaps and installs them only in
@@ -144,7 +178,7 @@ masks belong in the ignored build/runtime folders. No automatic commit is made.
 
 All 50 PNG masks in `rtx_materials/masks/` now contain separately generated
 periodic microstructure. Six wall materials use 1536–2048 px on their long edge;
-the remaining materials use 1024�1152 px. Aspect ratios stay unchanged: the slab wall
+the remaining materials use 1024–1152 px. Aspect ratios stay unchanged: the slab wall
 `c_hogmur2b` is 1792x1536, while `c_concrete1` is 2048x2048. The plaster/window panels `c_obbsobwin1/2` have 2048x2048 masks with
 separate plaster, frame and recessed glass responses. The source color
 textures and content fingerprints retain their original dimensions and bytes.

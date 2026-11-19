@@ -65,10 +65,33 @@ def prepare(target):
             studioSurface.pbrInfo.roughnessDefault = rt_alphatest ? .86f : .72f;
             studioSurface.pbrInfo.metallicDefault = 0;
             prim.pEditorInfo = &studioSurface;
+            CofRTPbrApply(&prim,&studioSurface);
+            if (cof_vehicle_mirror) {
+                prim.pTextureName = NULL;
+                prim.color = rgUtilPackColorByte4D(235,235,235,255);
+                studioSurface.pbrInfo.roughnessDefault = .075f;
+                studioSurface.pbrInfo.metallicDefault = 1.0f;
+            }
         }
 '''+anchor)
     text = text[:begin] + studio + text[end:]
     path.write_text(text)
+    studio_path=target/'ref/gl/gl_studio.c'
+    text=studio_path.read_text()
+    anchor='\t\tptexture->index = GL_LoadTexture( texname, (byte *)ptexture, size, flags );'
+    if text.count(anchor)!=1:raise ValueError('Studio PBR source hook changed')
+    text=text.replace(anchor,'''        extern void CofRTPbrStudioSource(const char*,unsigned,unsigned,const unsigned char*);
+        CofRTPbrStudioSource(texname,ptexture->width,ptexture->height,(byte*)phdr+ptexture->index);
+'''+anchor)
+    start=text.index('static void R_StudioDrawNormalMesh(')
+    end=text.index('static void R_StudioDrawFloatMesh(',start)
+    part=text[start:end]
+    anchor='\twhile(( i = *( ptricmds++ )))\n\t{'
+    if part.count(anchor)!=1:raise ValueError('Studio vehicle command hook changed')
+    part=part.replace(anchor,anchor+'\n        extern void CofRTVehicleCommand(const short*,int);\n        CofRTVehicleCommand(ptricmds,i);')
+    part=part.replace('\t\tpglEnd();','\t\tpglEnd();\n        CofRTVehicleCommand(NULL,0);')
+    text=text[:start]+part+text[end:]
+    studio_path.write_text(text)
     image_path=target/'ref/gl/gl_image.c'
     image_text=image_path.read_text()
     for function,next_function,call in (

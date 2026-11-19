@@ -16,7 +16,8 @@ vec2 cofReliefUV(ShTriangle tr, vec2 uv, vec2 dx, vec2 dy, vec3 normal, vec3 toE
     if(fade<=0.0)return uv;
     float lod=max(0.0,log2(max(footprint,1.0)));
     vec4 sample0=getTextureSampleLod(tr.normalTexture,uv,lod);
-    if(abs(sample0.a-254.0/255.0)>.001)return uv;
+    bool vehicle=abs(sample0.a-253.0/255.0)<.001;
+    if(!vehicle && abs(sample0.a-254.0/255.0)>.001)return uv;
     vec2 t1=tr.layerTexCoord[0][1]-tr.layerTexCoord[0][0];
     vec2 t2=tr.layerTexCoord[0][2]-tr.layerTexCoord[0][0];
     float det=t1.x*t2.y-t1.y*t2.x;
@@ -28,7 +29,7 @@ vec2 cofReliefUV(ShTriangle tr, vec2 uv, vec2 dx, vec2 dy, vec3 normal, vec3 toE
     vec3 eye=normalize(toEye);
     float facing=abs(dot(normal,eye));
     fade*=smoothstep(.015,.06,facing);
-    float heightRange=min(length(u),length(v))*.024*fade;
+    float heightRange=min(length(u),length(v))*(vehicle?.008:.024)*fade;
     vec2 direction=vec2(dot(eye,u)*c-dot(eye,v)*b,dot(eye,v)*a-dot(eye,u)*b)/gram;
     vec2 delta=direction*heightRange/max(facing,.04);
     delta*=min(1.0,.12/max(length(delta),1e-6));

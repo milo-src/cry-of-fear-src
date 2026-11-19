@@ -4,6 +4,7 @@ typedef struct {
     const char *original, *alias;
     unsigned width, height, hash;
     qboolean ready, reported, verified;
+    unsigned mirrorCommands[16];
 } CofPbrEntry;
 #include "rtx_pbr_catalog.inc"
 #include "rtx_pbr_auto.inc"
@@ -20,6 +21,7 @@ void CofRTPbrSource(const char *source,const char *key,const unsigned char *data
 {
     CofPbrEntry *entry=CofRTPbrFind(key);
     if (!entry) return;
+    if (!Q_strnicmp(key,"#models/",8)) return; // validated at the studio raw-palette boundary
     entry->verified=false;
     unsigned char *owned=NULL;
     if (!data) {
@@ -46,6 +48,39 @@ void CofRTPbrSource(const char *source,const char *key,const unsigned char *data
         }
     }
     free(owned);
+}
+
+/* Studio buffers are not WAD mips. Hash raw indexed pixels before texgamma. */
+void CofRTPbrStudioSource(const char *key,unsigned w,unsigned h,const unsigned char *pixels)
+{
+    CofPbrEntry *entry=CofRTPbrFind(key);
+    if (!entry) return;
+    entry->verified=false;
+    if (!pixels || w!=entry->width || h!=entry->height || w>2048 || h>2048) return;
+    const unsigned char *palette=pixels+(size_t)w*h;
+    unsigned hash=2166136261u;
+    for (size_t i=0;i<(size_t)w*h;++i) {
+        for (unsigned c=0;c<3;++c) hash=(hash^palette[pixels[i]*3+c])*16777619u;
+        hash=(hash^255u)*16777619u;
+    }
+    entry->verified=hash==entry->hash;
+}
+
+static qboolean cof_vehicle_mirror;
+void CofRTVehicleCommand(const short *command,int count)
+{
+    cof_vehicle_mirror=false;
+    if (!command || !count || cof_rt_menu_scene || gEngfuncs.pfnGetCvarFloat("rt_material_masks")<=0) return;
+    if (!rt_state.curTexture2DName || Q_strnicmp(rt_state.curTexture2DName,"#models/Props/Fordon/",21)) return;
+    CofPbrEntry *entry=CofRTPbrFind(rt_state.curTexture2DName);
+    if (!entry || !entry->ready || !entry->verified || !entry->mirrorCommands[0]) return;
+    // Match topology/count plus vertex/normal/UV indices, not shared UV pixels.
+    unsigned hash=2166136261u;
+    const unsigned char *bytes=(const unsigned char *)(command-1);
+    size_t size=2+(size_t)abs(count)*8;
+    for (size_t i=0;i<size;++i) hash=(hash^bytes[i])*16777619u;
+    for (int i=0;i<16 && entry->mirrorCommands[i];++i)
+        if(hash==entry->mirrorCommands[i]) {cof_vehicle_mirror=true;break;}
 }
 
 static void CofRTPbrDelete(const char *name)
