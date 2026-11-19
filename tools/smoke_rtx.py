@@ -95,6 +95,9 @@ def main():
     parser.add_argument('--runtime-dir',type=Path,help='Separate staged runtime under out/; keeps an active user build untouched')
     parser.add_argument('--timeout',type=int,default=0,help='Bounded startup/runtime allowance for a cold shader cache (seconds, 1-600)')
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
+    parser.add_argument('--borderless',action='store_true',help='Test the native borderless desktop window')
+    parser.add_argument('--width',type=int,default=1280)
+    parser.add_argument('--height',type=int,default=720)
     parser.add_argument('--ui',action='store_true')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
     parser.add_argument('--graphics',action='store_true',help='Use the stationary water/lighting fixture')
@@ -120,6 +123,7 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if not (640<=args.width<=16384 and 480<=args.height<=16384):parser.error('Invalid test resolution')
     if args.readback and (args.interactive or args.renderer!='rtx'):parser.error('--readback requires isolated RTX mode')
     if args.cursor and not args.interactive:parser.error('--cursor changes focus and requires an explicitly authorized --interactive session')
     if args.flashlight and not args.lighting:parser.error('--flashlight requires --lighting')
@@ -206,7 +210,7 @@ def main():
         env.pop('COF_RTX_UITEST',None);env['COF_CONSOLE_OUTPUTTEST']='1'
     configs={p:p.read_bytes() for p in (runtime/'cryoffear').glob('*.cfg')}
     logpath=runtime/'engine.log';logpath.unlink(missing_ok=True)
-    command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-windowed','-width','1280','-height','720','-log','-nosound']
+    command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-borderless' if args.borderless else '-windowed','-width',str(args.width),'-height',str(args.height),'-log','-nosound']
     if not args.console_output:command+=['-dev','2']
     for name,value in args.cvar:command+=['+'+name,value]
     command += ['+menu_main'] if args.ui else ['+map',args.map]
@@ -238,7 +242,7 @@ def main():
                             if not ppm.exists():raise RuntimeError('Vulkan readback failed; no desktop capture fallback')
                             shot=ppm.with_suffix('.png')
                             with Image.open(ppm) as frame:
-                                if frame.size!=(1280,720) or frame.convert('L').getextrema()[1]-frame.convert('L').getextrema()[0]<8:
+                                if frame.size!=(args.width,args.height) or frame.convert('L').getextrema()[1]-frame.convert('L').getextrema()[0]<8:
                                     raise RuntimeError('Invalid or blank Vulkan readback')
                                 frame.save(shot)
                             shots.append(str(shot));ppm.unlink()
