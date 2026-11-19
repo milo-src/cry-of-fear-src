@@ -1,6 +1,7 @@
 // Opt-in engine assertions. No desktop input or original DLL execution.
 #include "client.h"
 static int ladderTestFailures;
+static int LadderTestInvisible(const edict_t*, unsigned char*) { return 0; }
 static void LadderCheck(bool pass,const char* name) {
     ALERT(at_console,"COF_LADDER_TEST %s %s\n",pass?"PASS":"FAIL",name);
     if (!pass) ++ladderTestFailures;
@@ -84,6 +85,18 @@ void CofLadderTestFrame() {
         manager->Use(player,player,USE_TOGGLE,0);
         LadderCheck(CofLadderActive(player)&&manager->Camera()&&(player->pev->flags&FL_FROZEN),"mount_creates_camera_and_freezes");
         LadderCheck(manager->Camera()&&manager->Camera()->pev->sequence==manager->Camera()->LookupSequence("climb_start_up"),"authored_mount_sequence");
+        if (manager->Camera()) {
+            auto oldVisibility = g_engfuncs.pfnCheckVisibility;
+            g_engfuncs.pfnCheckVisibility = LadderTestInvisible;
+            entity_state_t cameraPacket = {};
+            auto* camera = manager->Camera();
+            LadderCheck(AddToFullPack(&cameraPacket,camera->entindex(),camera->edict(),player->edict(),0,0,nullptr) &&
+                cameraPacket.iuser1 == 1 && cameraPacket.iuser4 == 0x434f46,
+                "owner_camera_transports_play_serial_outside_model_pvs");
+            LadderCheck(!AddToFullPack(&cameraPacket,camera->entindex(),camera->edict(),bottom->edict(),0,0,nullptr),
+                "camera_pvs_exception_is_owner_only");
+            g_engfuncs.pfnCheckVisibility = oldVisibility;
+        }
         mounted=gpGlobals->time; deadline=gpGlobals->time+45;
         CofLadderCommand(player,"forwardpressed"); phase=1;
     } else if (phase==1) {

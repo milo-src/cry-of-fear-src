@@ -1,5 +1,6 @@
 """Exercise maps/UI silently on an isolated desktop; optional --readback captures GPU images for review."""
 import argparse
+from collections import Counter
 import ctypes as C
 from ctypes import wintypes as W
 import json
@@ -460,6 +461,18 @@ def main():
                     raise RuntimeError('Recovered gameplay assertion failed')
                 if not re.search(r'COF_MOVEMENT_CAMERA_APPLIED entity=\d+ network_eye=1',text):
                     raise RuntimeError('Animated ladder camera did not reach client view')
+                # Actual networked camera timeline -> sound API, beyond fixture
+                # calls. Compare against read-only original model event evidence;
+                # preserve authored simultaneous events, reject omissions/repeats.
+                # -nosound keeps physical playback disabled throughout the run.
+                model_events = json.loads((ROOT/'analysis/movement/ladder-model-events.json').read_text())
+                expected = Counter((s['sequence'], e['event'], e['frame'])
+                    for s in model_events['sequences'] if s['sequence'] in (0, 1, 2, 5, 8, 9)
+                    for e in s['events'] if e['event'] in (5090, 5093, 5094))
+                observed = Counter((int(s), int(e), int(f)) for e,s,f in
+                    re.findall(r'COF_LADDER_AUDIO event=(\d+) sequence=(\d+) frame=(\d+)', text))
+                if observed != expected:
+                    raise RuntimeError(f'Ladder sound event mismatch: missing={expected-observed}, extra={observed-expected}')
             movement=re.search(r'COF_SMOKE_MOVEMENT ([\d.-]+) ([\d.-]+) ([\d.-]+) -> ([\d.-]+) ([\d.-]+) ([\d.-]+)',text)
             if not args.ui and not args.lighting and args.map=='c_sdkmap1':
                 if not movement:raise RuntimeError('Player movement not observed')

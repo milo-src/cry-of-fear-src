@@ -51,6 +51,8 @@ public:
             reinterpret_cast<const byte*>(hdr) + hdr->seqindex) + seq;
         if (desc->fps <= 0 || desc->numframes <= 1) return 0;
         pev->sequence = seq; pev->frame = 0; pev->animtime = gpGlobals->time;
+        // Project protocol: distinguish repeated identical climb_loop steps.
+        ++pev->iuser1;
         pev->framerate = 1; ResetSequenceInfo();
         // Each authored climbing cycle is a discrete step, including looping sequences.
         m_fSequenceLoops = FALSE;

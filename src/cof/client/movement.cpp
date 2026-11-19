@@ -8,6 +8,9 @@
 #include "ref_params.h"
 #include "parsemsg.h"
 #include "movement.h"
+#include "studio_event.h"
+#include "studio.h"
+#include "r_studioint.h"
 extern "C" {
 #include "kbutton.h"
 }
@@ -34,6 +37,8 @@ extern bool CofGameMenuWorld();
 extern void CofStatusHudReset();
 extern int CofStatusHudProtocolTest();
 extern "C" int CofPMRunTests(void);
+extern "C" void HUD_StudioEvent(const mstudioevent_s*, const cl_entity_s*);
+extern engine_studio_api_t IEngineStudio;
 
 namespace {
 constexpr unsigned SprintBit = 0x1000, DodgeBit = 0x80;
@@ -51,6 +56,9 @@ bool ladderInputBlocked;
 bool dodgeGrounded;
 int cameraAttachCount;
 int fovUpdateCount;
+int ladderSoundEntity, ladderSoundSerial, ladderSoundSequence, ladderSoundEmittingSequence;
+float ladderSoundFrame = -1;
+bool ladderSoundDispatch;
 const char* dodgeCommands[] = {"dodgeforward", "dodgebackward", "dodgeleft", "dodgeright"};
 
 bool OverlayOpen() { return CofInventoryVisible() || CofGameMenuVisible() || CofGameMenuWorld(); }
@@ -93,6 +101,7 @@ void ClearActionKeys() {
     in_jump = {}; in_duck = {};
 }
 void FinishLadder() {
+    ladderSoundEntity = 0; ladderSoundFrame = -1;
     cameraEntity = ladderState = 0;
     cameraViewLogged = false;
     cameraNetworkEyeLogged = false;
@@ -105,6 +114,7 @@ int AttachCameraMessage(const char*, int size, void* data) {
     BEGIN_READ(data, size);
     const int entity = READ_SHORT(), enabled = READ_BYTE();
     if (enabled && (entity <= 0 || entity >= 4096)) return 0;
+    if (!enabled || entity != cameraEntity) { ladderSoundEntity = 0; ladderSoundFrame = -1; }
     cameraEntity = enabled ? entity : 0;
     cameraViewLogged = false;
     cameraNetworkEyeLogged = false;
@@ -148,6 +158,72 @@ int CameraZoomMessage(const char*, int size, void* data) {
     zoomRate = std::max(0.0f, std::min(1000.0f, rate));
     return 1;
 }
+}
+
+bool CofMovementStudioEvent(const mstudioevent_s* event, const cl_entity_s* entity) {
+    if (!event || !entity) return false;
+    const bool soundEvent = event->event == 5090 || event->event == 5093 || event->event == 5094;
+    // Our local animated camera is serviced independently of model culling.
+    // Suppress the renderer's second delivery of the same authored events.
+    if (soundEvent && !ladderSoundDispatch && entity->curstate.iuser4 == 0x434f46 &&
+        (entity->index == cameraEntity || entity->index == ladderSoundEntity)) return true;
+    // Native HUD_StudioEvent 1004c6c0. These are authored client events in
+    // ladder_climb.mdl, not a movement timer or server-side animation events.
+    const char* sample = nullptr;
+    float volume = 1;
+    bool positional = true;
+    switch (event->event) {
+    case 5090: {
+        static const char* sounds[] = {"common/bodydrop1.wav", "common/bodydrop2.wav",
+                                     "common/bodydrop3.wav", "common/bodydrop4.wav"};
+        sample = sounds[gEngfuncs.pfnRandomLong(0, 3)];
+        break;
+    }
+    case 5093:
+        sample = "player/get_up.wav"; volume = 0.5f;
+        break;
+    case 5094:
+        sample = gEngfuncs.pfnRandomLong(0, 1) ? "player/ladder_2.wav" : "player/ladder_1.wav";
+        positional = false;
+        break;
+    default:
+        // 5095 exists in the model but is outside the original sound switch.
+        return false;
+    }
+    const float* origin = entity->curstate.iuser4 == 0x434f46 ? entity->curstate.vuser1 : entity->attachment[0];
+    if (positional) gEngfuncs.pfnPlaySoundByNameAtLocation(sample, volume, origin);
+    else gEngfuncs.pfnPlaySoundByName(sample, volume);
+    if (std::getenv("COF_LADDERTEST") && entity->curstate.iuser4 == 0x434f46)
+        gEngfuncs.Con_Printf("COF_LADDER_AUDIO event=%d sequence=%d frame=%d entity=%d sample=%s\n",
+            event->event, ladderSoundDispatch ? ladderSoundEmittingSequence : entity->curstate.sequence,
+            event->frame, entity->index, sample);
+    return true;
+}
+
+static void LadderSoundEvents(const cl_entity_t* camera, const studiohdr_t* hdr, float frame) {
+    const int sequence = camera->curstate.sequence;
+    if (!hdr || sequence < 0 || sequence >= hdr->numseq) return;
+    const auto* sequences = reinterpret_cast<const mstudioseqdesc_t*>(reinterpret_cast<const byte*>(hdr) + hdr->seqindex);
+    const auto emit = [&](int seq, float start, float end) {
+        const auto& desc = sequences[seq];
+        const auto* events = reinterpret_cast<const mstudioevent_t*>(reinterpret_cast<const byte*>(hdr) + desc.eventindex);
+        ladderSoundDispatch = true;
+        ladderSoundEmittingSequence = seq;
+        for (int i = 0; i < desc.numevents; ++i)
+            if (events[i].frame > start && events[i].frame <= end) CofMovementStudioEvent(&events[i], camera);
+        ladderSoundDispatch = false;
+    };
+    if (camera->index != ladderSoundEntity || camera->curstate.iuser1 != ladderSoundSerial || sequence != ladderSoundSequence) {
+        // A new serial on the same manager camera means the preceding authored
+        // step completed. Catch its tail even if snapshots crossed the boundary.
+        if (camera->index == ladderSoundEntity && ladderSoundSequence >= 0 && ladderSoundSequence < hdr->numseq)
+            emit(ladderSoundSequence, ladderSoundFrame, float(sequences[ladderSoundSequence].numframes - 1));
+        ladderSoundEntity = camera->index; ladderSoundSerial = camera->curstate.iuser1;
+        ladderSoundSequence = sequence; ladderSoundFrame = -1;
+    }
+    frame = std::max(0.0f, std::min(frame, float(sequences[sequence].numframes - 1)));
+    emit(sequence, ladderSoundFrame, frame);
+    ladderSoundFrame = std::max(ladderSoundFrame, frame);
 }
 
 bool CofMovementCameraActive() { return cameraEntity != 0; }
@@ -213,6 +289,15 @@ void CofMovementView(ref_params_s* view) {
         cl_entity_t* camera = gEngfuncs.GetEntityByIndex(cameraEntity);
         if (camera && camera->model) {
             const bool networkEye = camera->curstate.iuser4 == 0x434f46;
+            if (networkEye && IEngineStudio.Mod_Extradata) {
+                const auto* hdr = static_cast<const studiohdr_t*>(IEngineStudio.Mod_Extradata(camera->model));
+                if (hdr && camera->curstate.sequence >= 0 && camera->curstate.sequence < hdr->numseq) {
+                    const auto* seq = reinterpret_cast<const mstudioseqdesc_t*>(reinterpret_cast<const byte*>(hdr) + hdr->seqindex) + camera->curstate.sequence;
+                    const float frame = camera->curstate.frame * (seq->numframes - 1) / 256.0f +
+                        std::max(0.0f, view->time - camera->curstate.animtime) * camera->curstate.framerate * seq->fps;
+                    LadderSoundEvents(camera, hdr, frame);
+                }
+            }
             bool attachmentValid = false;
             for (int i = 0; i < 3; ++i)
                 attachmentValid = attachmentValid || std::fabs(camera->attachment[0][i]) > 0.001f;
@@ -260,6 +345,8 @@ float CofMovementFov(float target, float time) {
 }
 
 void CofMovementReset() {
+    ladderSoundEntity = ladderSoundSerial = 0; ladderSoundSequence = -1;
+    ladderSoundFrame = -1; ladderSoundDispatch = false;
     ClearActionKeys();
     fallOver = getupRequired = getupTaps = cameraEntity = ladderState = holdBreath = 0;
     cameraViewLogged = false;
@@ -306,6 +393,17 @@ int CaptureLadderCommand(const char* command) {
     return 1;
 }
 int TestNoClipOff() { return 0; }
+int soundCalls, soundRandom, soundRandomHigh, soundPositioned;
+float soundVolume, soundOrigin[3];
+const char* soundName;
+int CaptureSoundRandom(int low, int high) { soundRandomHigh = high; return low + soundRandom; }
+void CaptureSound(const char* name, float volume) {
+    ++soundCalls; soundName = name; soundVolume = volume; soundPositioned = 0;
+}
+void CaptureSoundAt(const char* name, float volume, const float* origin) {
+    CaptureSound(name, volume); soundPositioned = 1;
+    std::copy(origin, origin + 3, soundOrigin);
+}
 }
 void CofMovementTestFrame(float time) {
     if (!std::getenv("COF_MOVEMENTTEST") || clientTestsComplete || time < 0.5f ||
@@ -377,6 +475,74 @@ void CofMovementTestFrame(float time) {
     check(!gHUD.m_Health.MsgFunc_Damage("Damage", 11, damage), "damage_short_packet_rejected");
     failures += CofStatusHudProtocolTest();
     failures += CofPMRunTests();
+    // Exercise the exported renderer callback while intercepting audio calls.
+    // This stays silent even if somebody runs the opt-in fixture without -nosound.
+    auto oldSound = gEngfuncs.pfnPlaySoundByName;
+    auto oldSoundAt = gEngfuncs.pfnPlaySoundByNameAtLocation;
+    auto oldRandom = gEngfuncs.pfnRandomLong;
+    gEngfuncs.pfnPlaySoundByName = CaptureSound;
+    gEngfuncs.pfnPlaySoundByNameAtLocation = CaptureSoundAt;
+    gEngfuncs.pfnRandomLong = CaptureSoundRandom;
+    cl_entity_t soundEntity = {};
+    soundEntity.attachment[0][0] = 11; soundEntity.attachment[0][1] = 22; soundEntity.attachment[0][2] = 33;
+    mstudioevent_t soundEvent = {};
+    soundEvent.event = 5094;
+    bool ladderSounds = true;
+    for (int i = 0; i < 2; ++i) {
+        soundRandom = i; soundCalls = 0;
+        HUD_StudioEvent(&soundEvent, &soundEntity);
+        ladderSounds = ladderSounds && soundCalls == 1 && soundRandomHigh == 1 && !soundPositioned && soundVolume == 1 &&
+            !std::strcmp(soundName, i ? "player/ladder_2.wav" : "player/ladder_1.wav");
+    }
+    check(ladderSounds, "ladder_studio_event_two_native_grip_sounds");
+    soundEvent.event = 5093; soundCalls = 0;
+    HUD_StudioEvent(&soundEvent, &soundEntity);
+    check(soundCalls == 1 && soundPositioned && soundVolume == .5f &&
+          !std::strcmp(soundName, "player/get_up.wav") && soundOrigin[0] == 11 && soundOrigin[1] == 22 && soundOrigin[2] == 33,
+          "ladder_mount_sound_uses_attachment_and_half_volume");
+    const char* bodySounds[] = {"common/bodydrop1.wav", "common/bodydrop2.wav", "common/bodydrop3.wav", "common/bodydrop4.wav"};
+    bool bodyDrops = true;
+    soundEvent.event = 5090;
+    for (int i = 0; i < 4; ++i) {
+        soundRandom = i; soundCalls = 0;
+        HUD_StudioEvent(&soundEvent, &soundEntity);
+        bodyDrops = bodyDrops && soundCalls == 1 && soundRandomHigh == 3 && soundPositioned && soundVolume == 1 &&
+            !std::strcmp(soundName, bodySounds[i]);
+    }
+    check(bodyDrops, "ladder_custom_exit_bodydrop_sound_variants");
+    soundEvent.event = 5095; soundCalls = 0;
+    HUD_StudioEvent(&soundEvent, &soundEntity);
+    check(soundCalls == 0, "ladder_5095_has_no_invented_sound");
+    struct SoundModelFixture { studiohdr_t hdr; mstudioseqdesc_t seq; mstudioevent_t events[3]; } soundModel = {};
+    soundModel.hdr.numseq = 1;
+    soundModel.hdr.seqindex = int(reinterpret_cast<byte*>(&soundModel.seq) - reinterpret_cast<byte*>(&soundModel));
+    soundModel.seq.numframes = 55; soundModel.seq.numevents = 3;
+    soundModel.seq.eventindex = int(reinterpret_cast<byte*>(soundModel.events) - reinterpret_cast<byte*>(&soundModel));
+    // Deliberately unsorted and with two authored events at the same frame.
+    soundModel.events[0].frame = 32; soundModel.events[1].frame = soundModel.events[2].frame = 10;
+    for (auto& event : soundModel.events) event.event = 5094;
+    soundRandom = 0; soundCalls = 0;
+    soundEntity.index = 2047; soundEntity.curstate.iuser1 = 1;
+    ladderSoundEntity = 0;
+    LadderSoundEvents(&soundEntity, &soundModel.hdr, 12);
+    check(soundCalls == 2, "ladder_timeline_preserves_authored_simultaneous_events");
+    LadderSoundEvents(&soundEntity, &soundModel.hdr, 12);
+    LadderSoundEvents(&soundEntity, &soundModel.hdr, 9);
+    LadderSoundEvents(&soundEntity, &soundModel.hdr, 20);
+    check(soundCalls == 2, "ladder_timeline_paused_or_corrected_frame_does_not_repeat");
+    LadderSoundEvents(&soundEntity, &soundModel.hdr, 40);
+    check(soundCalls == 3, "ladder_timeline_crosses_skipped_render_frames");
+    ++soundEntity.curstate.iuser1;
+    LadderSoundEvents(&soundEntity, &soundModel.hdr, 12);
+    check(soundCalls == 5, "ladder_timeline_repeated_sequence_uses_play_serial");
+    soundEntity.curstate.iuser4 = 0x434f46; soundEvent.event = 5094;
+    HUD_StudioEvent(&soundEvent, &soundEntity);
+    check(soundCalls == 5, "ladder_timeline_suppresses_duplicate_renderer_sound");
+    // Do not retain the synthetic camera when the real test starts climbing.
+    ladderSoundEntity = 0; ladderSoundFrame = -1;
+    gEngfuncs.pfnPlaySoundByName = oldSound;
+    gEngfuncs.pfnPlaySoundByNameAtLocation = oldSoundAt;
+    gEngfuncs.pfnRandomLong = oldRandom;
     check(fovUpdateCount > 0, "fov_float_hud_output_hook_invoked");
     zoomFov = zoomTime = -1; zoomRate = 0;
     check(CofMovementFov(90, 0) == 90, "fov_initialization");

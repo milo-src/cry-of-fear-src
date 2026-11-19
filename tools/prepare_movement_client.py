@@ -58,7 +58,10 @@ def prepare(target):
     path.write_text(text)
 
     path = target / 'cl_dll/entity.cpp'
-    text = path.read_text()
+    text = '#include "movement.h"\n' + path.read_text()
+    anchor = 'void DLLEXPORT HUD_StudioEvent( const struct mstudioevent_s *event, const struct cl_entity_s *entity )\n{'
+    text = replace_once(text, anchor, anchor + '\n\tif (CofMovementStudioEvent(event, entity)) return;',
+                        'authored CoF ladder studio sound events')
     anchor = '\tpcd->fuser3\t\t\t\t\t= ppcd->fuser3;'
     text = replace_once(text, anchor, anchor +
                         '\n\t// Native CoF adapter: preserve remapped secondary ammo type.\n'

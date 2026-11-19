@@ -1,0 +1,85 @@
+{
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "static_only": true,
+  "original_unchanged": true,
+  "ghidra_capture": "decompiled/client/captures/ladder-sound-client",
+  "assembly_command": [
+    "objdump",
+    "-d",
+    "-M",
+    "intel",
+    "--start-address=0x1004d03f",
+    "--stop-address=0x1004d18f",
+    "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+  ],
+  "assembly_sha256": "051838feff77fdafcf3d5d9712e20c0fe197bf2261357d045ec6e0899fa19349",
+  "strings": [
+    {
+      "address": "0x10149794",
+      "file_offset": 1343892,
+      "text": "common/bodydrop1.wav"
+    },
+    {
+      "address": "0x101497ac",
+      "file_offset": 1343916,
+      "text": "common/bodydrop2.wav"
+    },
+    {
+      "address": "0x101497c4",
+      "file_offset": 1343940,
+      "text": "common/bodydrop3.wav"
+    },
+    {
+      "address": "0x101497dc",
+      "file_offset": 1343964,
+      "text": "common/bodydrop4.wav"
+    },
+    {
+      "address": "0x101497f4",
+      "file_offset": 1343988,
+      "text": "player/get_up.wav"
+    },
+    {
+      "address": "0x10149808",
+      "file_offset": 1344008,
+      "text": "player/ladder_1.wav"
+    },
+    {
+      "address": "0x1014981c",
+      "file_offset": 1344028,
+      "text": "player/ladder_2.wav"
+    }
+  ],
+  "event_dispatch": [
+    {
+      "event": 5090,
+      "dispatch_index": 13,
+      "branch": "0x1004d03f"
+    },
+    {
+      "event": 5091,
+      "dispatch_index": 16,
+      "branch": "0x1004d17e"
+    },
+    {
+      "event": 5092,
+      "dispatch_index": 16,
+      "branch": "0x1004d17e"
+    },
+    {
+      "event": 5093,
+      "dispatch_index": 14,
+      "branch": "0x1004d114"
+    },
+    {
+      "event": 5094,
+      "dispatch_index": 15,
+      "branch": "0x1004d142"
+    },
+    {
+      "event": 5095,
+      "branch": "default",
+      "reason": "unsigned event-5001 exceeds93"
+    }
+  ]
+}

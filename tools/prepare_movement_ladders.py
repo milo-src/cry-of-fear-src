@@ -58,5 +58,10 @@ def apply(target):
         '\t    !( ent->v.solid == SOLID_NOT && ent->v.skin == CONTENTS_LADDER ) )',
         'hidden ladder prediction visibility')
     block = replace_once(block, '\treturn 1;\n}', '\tCofLadderPackCamera(state, ent);\n\treturn 1;\n}', 'camera network state')
+    # The animated eye can leave the camera model's PVS leaf during mount/exit.
+    # Its owner still needs every animation snapshot for both view and sound.
+    block = replace_once(block, '\tif( ent != host )\n',
+        '\tif( ent != host && !( ent->v.owner == host && FClassnameIs(ent, "camera_model") ) )\n',
+        'owner camera survives model PVS culling')
     text = text[:begin] + block + text[end:]
     path.write_text(text)

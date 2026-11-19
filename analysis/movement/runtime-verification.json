@@ -1,5 +1,5 @@
 {
-  "date_utc": "2026-11-19T17:45:00.111490+00:00",
+  "date_utc": "2026-11-19T17:59:43.336250+00:00",
   "build_system": "Waf",
   "visual_verification": false,
   "original_runtime_parity": false,
@@ -8,7 +8,7 @@
       "renderer": "normal",
       "result": "pass",
       "report": "analysis/local/normal-c_sdkmap1-movement-isolated.json",
-      "log_sha256": "2ee0d42fc222b3f6b4eb0a737b24a1d795a9e92256ca35ac91fc979a348abbe1",
+      "log_sha256": "086216548f3c2dea14025f93fbf270169f064e0251edec0c6ceaebd8369ca006",
       "assertions": [
         "COF_PM_TEST PASS failures=0 side=server",
         "COF_PM_TEST PASS failures=0 side=client",
@@ -16,11 +16,11 @@
         "COF_MOVEMENT_CLIENT_COMPLETE failures=0",
         "COF_LADDER_TEST_COMPLETE failures=0"
       ],
-      "unique_named_checks": 118,
+      "unique_named_checks": 129,
       "camera_network_eye": true,
       "modules": {
-        "out/runtime/cryoffear/dlls/hl.dll": "544dd33791adc576cd311f0b74adbd67cc88db0f14c51fe14a76e2d6f943ee5f",
-        "out/runtime/cryoffear/cl_dlls/client.dll": "8c05fc074b97926b552cc93392b2597daebe790bdbcbb064a97e3f453be57a25"
+        "out/runtime/cryoffear/dlls/hl.dll": "dd145cb963ca5f63eafc5bd3fc3429e5754d56bf841674bb186171afd95497df",
+        "out/runtime/cryoffear/cl_dlls/client.dll": "6878d0be382e3950a790f75e12597f94713ca136681f4cedee570fc8cec72d35"
       },
       "original_delta_sha256": "f5e56639204dac9323bc8c9df08ea25a16514785061b2946f9777fec60c4c4de",
       "runtime_delta_sha256": "862998458a428c3e822ade8db9ecda441f8bb5200f966e1b5ea2a974773c819c",
@@ -50,13 +50,26 @@
         "fov_sprint_monotonic_clamped_endpoint",
         "fov_stop_delayed_target_smooth_return",
         "unlimited_stamina_jump_bypasses_empty_gate"
-      ]
+      ],
+      "ladder_sound": {
+        "authored_events_expected": 24,
+        "observed": 24,
+        "exact_event_sequence_frame_multiplicity_match": true,
+        "physical_audio_playback_tested": false,
+        "checks": [
+          "original sound API/sample/volume/random variant mapping",
+          "timeline pause/snapshot rollback/skipped frames/same sequence restart",
+          "duplicate renderer callbacks suppressed",
+          "owner camera PVS bypass and animation serial transport",
+          "all six ascent/descent sequences deliver every authored sound event"
+        ]
+      }
     },
     {
       "renderer": "rtx",
       "result": "pass",
       "report": "analysis/local/rtx-c_sdkmap1-movement-isolated.json",
-      "log_sha256": "9d3a3fa693fda916eaa073150cb35bc5113e94545167738b9d835b84847be9d9",
+      "log_sha256": "16a051c0acfdca0f102e7f30ad8afdec15238e656eb5acc5110f6a64320e2cef",
       "assertions": [
         "COF_PM_TEST PASS failures=0 side=server",
         "COF_PM_TEST PASS failures=0 side=client",
@@ -64,11 +77,11 @@
         "COF_MOVEMENT_CLIENT_COMPLETE failures=0",
         "COF_LADDER_TEST_COMPLETE failures=0"
       ],
-      "unique_named_checks": 118,
+      "unique_named_checks": 129,
       "camera_network_eye": true,
       "modules": {
-        "out/runtime-rtx/cryoffear/dlls/hl_amd64.dll": "83b40ae126e3ca6687a02d9df04279828eb901ee9e952fa9c0bda5f7e9dca833",
-        "out/runtime-rtx/cryoffear/cl_dlls/client_amd64.dll": "118e3a5e45b11a7ad30c52565db4623ee0e8ad17e2cfce7fc40b0480673feb05"
+        "out/runtime-rtx/cryoffear/dlls/hl_amd64.dll": "2e72edf65e7dffc02ea4c4d9afe10b4306468308a29f687b17da18cf78131ce4",
+        "out/runtime-rtx/cryoffear/cl_dlls/client_amd64.dll": "22b150d5c33e677c1ff02d6d1f500ac8466b15c3e1bfc1061edd2c26065a6d44"
       },
       "original_delta_sha256": "f5e56639204dac9323bc8c9df08ea25a16514785061b2946f9777fec60c4c4de",
       "runtime_delta_sha256": "862998458a428c3e822ade8db9ecda441f8bb5200f966e1b5ea2a974773c819c",
@@ -98,30 +111,47 @@
         "fov_sprint_monotonic_clamped_endpoint",
         "fov_stop_delayed_target_smooth_return",
         "unlimited_stamina_jump_bypasses_empty_gate"
-      ]
+      ],
+      "ladder_sound": {
+        "authored_events_expected": 24,
+        "observed": 24,
+        "exact_event_sequence_frame_multiplicity_match": true,
+        "physical_audio_playback_tested": false,
+        "checks": [
+          "original sound API/sample/volume/random variant mapping",
+          "timeline pause/snapshot rollback/skipped frames/same sequence restart",
+          "duplicate renderer callbacks suppressed",
+          "owner camera PVS bypass and animation serial transport",
+          "all six ascent/descent sequences deliver every authored sound event"
+        ]
+      }
     }
   ],
   "source_sha256": {
-    "src/cof/client/movement.cpp": "a988951f839aecbf7302259939bdbc659e4e78a7db6f98f74259bfa8d81a9500",
-    "src/cof/client/movement.h": "f7a9c30af18f87bd8560a16a550810c9e92c14a39ecbe795c3f98f3b515a793d",
+    "src/cof/client/movement.cpp": "655b12fefc95f757f495975d116502cf011b582d413cdf56b1dc95a036284910",
+    "src/cof/client/movement.h": "59b50973611658a91ceb99b5362b2117319232829ca094d9fda8799ca02a5425",
     "src/cof/client/prototype_client.cpp": "08fe233d53e38de1731308b7a666e43786a4b39b1d7d697afefc4a1efcefb2ea",
     "src/cof/client/status_hud.cpp": "854074c0dcbe3ab1b1d193bf1ed0ef40dded6dd9ad41b98610f9138d032cdb93",
-    "src/cof/server/ladders.cpp": "2649daca57265b68386936d41e885929c8f734cc38b7e85fa57750da4834d59e",
+    "src/cof/server/ladders.cpp": "0b5629468d179521beffc17beff5c4c06d6adcdd3ca2ec6aa753ebd9fe0da82e",
     "src/cof/server/ladders.h": "6f57ba40f55293dc614c9b7ec484ab11db1737970cea2f4d78b8a5454e1e497f",
     "src/cof/server/movement.cpp": "16be859d80378b628c2075b8f6900d8f0a7fb17c6a9b0413f6f0f6a4b73beb39",
     "src/cof/server/movement.h": "8d01134e234959441c5a869d0506d278bfb3144b3777e4e62a89779ee4823fbc",
-    "tests/cof/server/ladder_runtime_tests.inc": "fbb4a4d995e7e4b1a575d94f6992b098c1dbf922f6f2140de7a4fcdeef5ebcfc",
+    "tests/cof/server/ladder_runtime_tests.inc": "3fd3b11a827280c5ecc66a36a112cb539cd96fc69fbb5d1aec8807d59b71f93f",
     "tests/cof/server/movement_runtime_tests.inc": "09620a5392ad2b40b851c142a65147c7ecc4b5b750370d410ae0bc897b83f98d",
     "tests/cof/shared/movement_pm_tests.inc": "f9dcdd3b6c055280f83618dec736d5c4ec9e4f97437e85e3429f8defbb98ae1a",
     "tools/prepare_game.py": "ee2eb895a778142195d0fb767a4f115ac31de41c82b9e6c9b361c85db0b5c51f",
-    "tools/prepare_movement_client.py": "78aba51cc54cb76d63b024da5f4c39a3ca00437f6ef5bbfa8d6a8def6abe4b7b",
-    "tools/prepare_movement_ladders.py": "c1933dcbf042a935a1ca5874e395cb6d5cfe1039d4d809d4a7ed19f959940a5f",
+    "tools/prepare_movement_client.py": "3cd01786c1fe688dd371e117a20b07bbc7ae52572a293089e2a1106db36d0c4d",
+    "tools/prepare_movement_ladders.py": "1dd86bfef77e186af908b1fe18297596491db1f52a9d127cf6ac6b0d71e315a7",
     "tools/prepare_movement_physics.py": "d58b8e14c98eb2d6df7e9f727bf67cd21e15f9af47bfe8b4bb38a7bd479e1c5d",
     "tools/prepare_movement_protocol.py": "fbb76b3380f81c96fdbfd9cfcc1556e6f778a03a718327aa0b3e64d8f46889fd",
     "tools/prepare_movement_server.py": "64105abdebd2589a9806bb3a0d5a3633f99a299d0feda62440a01bbd6f2732db",
-    "tools/smoke_rtx.py": "61088c29922b9d314877cf88c0364c1069f7175dda7c6abef53063271665b2a2",
+    "tools/smoke_rtx.py": "3027479bc36aa97d723251df57e5d80f6e8317456e3b03ee78e3853a2fcd3e0a",
     "tools/stage_movement.py": "fbefbdaf3115425927e39fe937a83515add23f88cd0d17e234d335f13646ae9b",
     "runtime/config.cfg": "62088b7cdfa6cb0e797b7849491eb193b0a3be1373ac1e758e59959f92d5d8a7"
   },
-  "resource_policy": "Original installed game resources and vendor source checkouts unchanged by this correction; deployment confined to out/"
+  "resource_policy": "Original installed game resources and vendor source checkouts unchanged by this correction; deployment confined to out/",
+  "evidence_sha256": {
+    "analysis/movement/ladder-model-events.json": "0311eb2f5126830427095061b0a3ca73f5ae00bacda1e72f366c597c080baeba",
+    "decompiled/client/captures/ladder-sound-client/000-pseudocode.c": "3aaf09e1295c5e1feae63b90cf69deed3042a099152b43421408f6abe96db3e5"
+  }
 }

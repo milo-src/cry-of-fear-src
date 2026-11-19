@@ -1,0 +1,25 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1004c6c0",
+      "proposed_name": "HUD_StudioEvent",
+      "subsystem": "ladders",
+      "summary_ru": "Клиентские studio events: исследованы звуки анимированного карабканья.",
+      "confidence": "high",
+      "details_ru": [
+        "5094 RandomLong(0,1) выбирает player/ladder_1.wav/ladder_2.wav; PlaySoundByName(volume1).5093 PlaySoundByNameAtLocation(player/get_up.wav,0.5,attachment0).5090 RandomLong(0,3) выбирает common/bodydrop1..4.wav,AtLocation(volume1,attachment0).",
+        "5095 outside switch5001..5094, no-op; наличие события в модели не означает звук. Прочие оружейные/эффектные ветки этого большого export не считаются полностью восстановленными этим разбором.",
+        "src/cof/client/movement.cpp подключён через HUD_StudioEvent. Для локальной camera_model адаптация: курсор модельных кадров с отдельным Play serial, чтобы отбрасывание модели рендерером не пропускало/дублировало события; server owner-only PVS exception сохраняет snapshots камеры.",
+        "Обе Waf-сборки: isolated -nosound smoke129 named checks и24 точных sound events по sequence/event/frame/multiplicity. Проверен API dispatch, физическое воспроизведение не прослушивалось."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/ladder-sound-client/000-pseudocode.c",
+        "analysis/movement/ladder-sound-client-static/capture.json",
+        "analysis/movement/ladder-sound-client.md",
+        "analysis/movement/ladder-model-events.json",
+        "analysis/movement/runtime-verification.json"
+      ]
+    }
+  ]
+}
