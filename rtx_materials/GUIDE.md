@@ -11,7 +11,7 @@ The ordinary renderer and cinematic 3D menu retain their existing materials.
   custom maps work without a material pack. The existing `sound/materials.txt`
   supplies surface classes where available; unknown surfaces stay matte and
   nonmetallic. Color/brightness alone cannot identify a physical substance.
-* **Authored:** the pack has 19 materials / 38 PNG masks, covering paving,
+* **Authored:** the pack has 20 materials / 40 PNG masks, covering paving,
   masonry, concrete, asphalt, gravel, earth, painted and rusted metal. Matching
   raw texture content selects these more carefully tuned masks. A different
   custom texture with the same name receives the automatic treatment instead.
@@ -66,7 +66,11 @@ Masks can then be hand-edited without re-running the authoring command:
   B encodes height and A=254 marks the height-enabled contract. Legacy A=255
   remains valid and disables parallax. RTGL uses XY as slopes, not conventional
   normalized XYZ normals. This alpha is metadata, never surface opacity.
-* Keep the source dimensions and UV orientation. Large painted shadows are
+* Keep the source UV orientation and aspect ratio. Optional `mask_scale: 2|4`
+  authors higher-resolution numeric sidecars; manifest `mask_width/height`
+  describe these independently of the original identity dimensions (maximum
+  2048 per axis). This never enlarges or replaces the color texture.
+  Large painted shadows are
   **not** height: the generator subtracts broad shading before deriving slopes.
   Filters wrap periodically for tiled surfaces. Avoid strong relief and mirror
   roughness on rough stone. Optional damp variation belongs only on deliberately
@@ -75,7 +79,9 @@ Masks can then be hand-edited without re-running the authoring command:
 The generator combines fine grain with medium-scale relief so normal-map mip
 filtering does not erase all detail at ordinary viewing distances. Automatic
 masks use contrast-normalized medium-scale detail and a bounded slope; their
-cache namespace is `cof_auto/v6_...`. Neither path increases scene exposure.
+cache namespace is `cof_auto/v7_...`. Inferred macro height is intentionally
+shallow to avoid inflating painted stains/window frames; procedural grain
+supplies the independent fine detail. Neither path increases scene exposure.
 
 Height-enabled masks use bounded parallax occlusion mapping on primary and
 reflection hits. It shifts albedo, normal and ORM lookup coordinates together,
@@ -94,6 +100,27 @@ slab joint and upper moulding. Its grime changes roughness rather than becoming
 raised veins. `height_layout: cof_hogmur2b` is specific to that source image;
 do not copy it onto arbitrary custom textures. Other surfaces use the generic
 fallback or their own authored masks.
+
+`c_obbsowa` additionally has a content-verified three-course masonry layout.
+Its 896x640 numeric masks model recessed mortar and bevels; stains remain color
+detail, not large bumps. This layout is source-specific, not a generic brick
+detector for mod textures.
+
+Owned height-enabled materials also receive procedural close-range detail in
+`rtx_surface_detail.glsl`. Three analytic height gradients add surface grain
+and correlated roughness variation independently of the source image resolution.
+The pattern is anchored in UV space; no frame/time randomness is used. Smooth,
+wet and metallic responses suppress the porous grain. Each octave fades before
+it becomes subpixel, with remaining slope variance moved into roughness. This
+is an artistic fallback for unknown materials, not reconstructed geometry or
+new high-resolution albedo. Primary and reflected surfaces share the function;
+indirect lighting uses the macro material. Menu resources do not opt in.
+
+Shader includes are explicit Waf task inputs. A prior task-generator `dep_nodes`
+attribute was ignored by rule tasks, allowing changed `.glsl/.inl` files to leave
+old SPIR-V installed. The compiler now receives only the entry point while Waf
+tracks every include. Successful runtime loading alone does not prove that a
+source change was compiled; check build dependencies and final GPU frames.
 
 Numeric mipmaps preserve unresolved normal-slope variation as additional
 roughness. Both authored and automatic masks use the same bounded response;

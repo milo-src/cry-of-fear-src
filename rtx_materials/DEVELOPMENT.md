@@ -121,6 +121,47 @@ better authored material reconstruction remain separate work. GPU pass cost
 and arbitrary-map artistic quality are not yet established. Do not describe
 this checkpoint as completion of the full visual upgrade.
 
+## Shader dependency and surface-detail correction — 2026-11-19
+
+The following finding supersedes assumptions that earlier successful incremental
+builds necessarily installed the latest include changes: `dep_nodes` was set on
+the rule task generator, not its compiled task. The primary SPIR-V still had an
+older timestamp while HitInfo and owned GLSL had changed. Includes are now
+explicit task inputs, with only the entry point passed to glslang. A regression
+probe changed an include, observed all seven outputs rebuild, restored it, and
+verified that subsequent unchanged builds do no work. All seven descriptor and
+uniform ABI checks pass after actual recompilation.
+
+Close-range owned materials now have UV-anchored, three-scale analytic grain
+and correlated roughness variation. Octaves fade by pixel footprint; unresolved
+variance broadens the specular lobe. Wet/smooth/metallic surfaces suppress the
+porous response. This is shared by primary/reflection paths, not UI or the
+cinematic menu. It adds no ambient illumination or changes to source albedo.
+
+The verified `c_obbsowa` texture now has 4x-resolution numeric height/slope/ORM
+masks for its staggered joints and bevels (896x640, source remains 224x160).
+The authoring/build pipeline separates mask dimensions from original content
+identity. Mortar-height, metadata, source identity and mip-contract checks pass.
+Automatic cache v7 reduces guessed macro relief: after the shaders really
+recompiled, painted window frames/stains were excessively inflated. Independent
+grain supplies fine detail without interpreting every stain as a large bump.
+
+Readback comparisons: `block-before` versus `detail-final` at
+`c_park -480 850 39 -5 20 0`, plus `detail-before` and the alley-wide captures.
+`detail-normals` confirms the grain reaches the GPU normal buffer. A first coarse
+grain experiment looked dented and was reduced to finer scales. These are actual
+readbacks, not mockups. The visible improvement is strongest on joints/bevels;
+low-resolution painted color detail and flat BSP silhouettes remain limitations.
+No claim of a complete graphical remake or measured GPU pass cost is made.
+
+Final validation: the v7 alley capture was reviewed, the auto-material moving
+fixture passed with six readbacks (frames 0/3 reviewed), and the cinematic-menu
+test passed with four readbacks (frame 2 reviewed). The ordinary-renderer park
+smoke passed runtime assertions only, not visual QA. All runs used isolated
+desktops and `-nosound`. The exact staged binaries/shaders/masks were installed
+to `out/runtime-rtx` with checksums and rollback, then the installed runtime
+audit passed. No original map/color/model/audio files were modified.
+
 ## Remaining work
 
 1. Improve close-range and moving-camera shoreline validation; address exact volume boundaries and irregular or

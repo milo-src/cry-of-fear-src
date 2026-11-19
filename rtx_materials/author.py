@@ -60,6 +60,13 @@ def fnv(data):
 
 
 def masks(image, profile):
+    # Increase only numeric sidecar resolution. Source identity and the game's
+    # color texture remain at their original resolution.
+    scale = profile.get('mask_scale', 1)
+    if scale not in (1, 2, 4):
+        raise ValueError('mask_scale must be 1, 2 or 4')
+    if scale != 1:
+        image = image.resize((image.width*scale, image.height*scale), Image.Resampling.BICUBIC)
     rgb = np.asarray(image, dtype=np.float64)[..., :3] / 255
     lum = rgb @ [0.2126, 0.7152, 0.0722]
     # Local detail only: never interpret the original broad painted shadows as
@@ -71,6 +78,20 @@ def masks(image, profile):
     height = (0.35 * np.clip(detail / max(float(np.std(detail)) * 3, 0.06), -1, 1)
               + 0.65 * np.clip(medium / max(float(np.std(medium)) * 3, 0.06), -1, 1))
     relief_height = np.clip(.5 + height * min(.48, profile['relief'] * 1.5), .02, .98)
+    if profile.get('height_layout') == 'cof_obbsowa':
+        # Read-only c_obbsowa evidence: three offset courses of dressed stone.
+        # Model joints/bevels explicitly, not the painted stains and highlights.
+        y, x = np.mgrid[:image.height, :image.width]
+        x, y = x*224/image.width, y*160/image.height
+        joint_y = np.minimum.reduce([np.abs(y), np.abs(y-52), np.abs(y-107), np.abs(y-160)])
+        joint_x = np.full_like(x, 224.)
+        for low, high, seams in ((0,52,(1,113)), (52,107,(77,188)), (107,160,(55,168))):
+            distance = np.minimum.reduce([np.minimum(np.abs(x-s),224-np.abs(x-s)) for s in seams])
+            joint_x = np.where((y>=low)&(y<high), distance, joint_x)
+        distance = np.minimum(joint_x,joint_y)
+        bevel = np.clip((distance-.55)/2.1,0,1)
+        bevel = bevel*bevel*(3-2*bevel)
+        relief_height = .24 + .38*bevel + .006*np.clip(detail/.06,-1,1)*bevel
     if profile.get('height_layout') == 'cof_hogmur2b':
         # c_hogmur2B evidence: horizontal slab joint at y=101/192, top moulding
         # in the first 16 rows. Streaks are grime, not displaced stone veins.
@@ -90,6 +111,8 @@ def masks(image, profile):
     normal[..., 2] = relief_height
     normal[..., 3] = 254/255
     rough = profile['roughness'] - profile['variation'] * height
+    if profile.get('height_layout') == 'cof_obbsowa':
+        rough = .53 + .29*(1-bevel) + .10*np.clip(-detail/.06,-1,1)
     if profile.get('height_layout') == 'cof_hogmur2b':
         # Grime broadens the reflection while the smoother stone remains visible.
         grime=np.clip((blur(lum,2)-blur(lum,14)) / -.12,0,1)
@@ -133,9 +156,12 @@ def main():
         orm, normal = masks(original, profile)
         for suffix, mask in (('orm', orm), ('n', normal)):
             mask.save(output/f'{name}_{suffix}.png', optimize=True)
-        manifest['materials'].append(dict(name=name, width=original.width, height=original.height,
+        entry = dict(name=name, width=original.width, height=original.height,
             source_wad=wad, source_rgba_sha256=hashlib.sha256(original.tobytes()).hexdigest(),
-            source_rgba_fnv1a=fnv(original.tobytes())))
+            source_rgba_fnv1a=fnv(original.tobytes()))
+        if normal.size != original.size:
+            entry.update(mask_width=normal.width, mask_height=normal.height)
+        manifest['materials'].append(entry)
     (ROOT/'manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
     print(f'Authored {len(profiles)*2} masks; original resources read only')
 

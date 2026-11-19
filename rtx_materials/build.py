@@ -89,7 +89,11 @@ def build(source, output):
             (name, name, entry['width'], entry['height'], entry['source_rgba_fnv1a']))
         for suffix in ('orm', 'n'):
             with Image.open(source/'masks'/f'{name}_{suffix}.png') as image:
-                if image.mode != 'RGBA' or image.size != (entry['width'], entry['height']):
+                expected = (entry.get('mask_width',entry['width']), entry.get('mask_height',entry['height']))
+                if (min(expected)<1 or max(expected)>2048 or
+                    expected[0]*entry['height'] != expected[1]*entry['width']):
+                    raise ValueError('Invalid numeric sidecar resolution: ' + name)
+                if image.mode != 'RGBA' or image.size != expected:
                     raise ValueError('Invalid mask dimensions/mode: ' + name)
                 channels = image.getextrema()
                 valid_alpha = ((255,255),(254,254)) if suffix=='n' else ((255,255),)

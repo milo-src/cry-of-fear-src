@@ -152,7 +152,10 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
     qboolean ceramic=type=='T' || (preset && metallic==0 && roughness<=.4f);
     // Unknown materials are matte dielectrics. Acoustic metal labels often
     // represent paint, so never infer metallic from color/name or brightness.
-    float relief=type=='M'||type=='G'||type=='V'||type=='Y' ? .07f : ceramic ? .32f : type=='W' ? .22f : .20f;
+    // Keep inferred macro height shallow: painted window frames, stains and
+    // baked highlights are not reliable geometry. Independent shader grain
+    // supplies close detail without inflating those features into soft lumps.
+    float relief=type=='M'||type=='G'||type=='V'||type=='Y' ? .05f : ceramic ? .18f : type=='W' ? .10f : .07f;
     unsigned w=original->size.width,h=original->size.height;
     while (w>256 || h>256) {w=w>1?w/2:1;h=h>1?h/2:1;}
     float *luma=malloc((size_t)w*h*sizeof(float)),*detail=malloc((size_t)w*h*sizeof(float));
@@ -192,7 +195,7 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
         normal[i*4+2]=(unsigned char)(255*(.5f+amplitude*detail[i])+.5f);
         normal[i*4+3]=254; // source-owned height contract, never albedo opacity
     }
-    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v6_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
+    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v7_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
     _mkdir("rt/mat");_mkdir("rt/mat/cof_auto");
     qboolean ok=CofPbrWriteKtx(entry->alias,"orm",w,h,orm,normal) && CofPbrWriteKtx(entry->alias,"n",w,h,normal,NULL);
     free(luma);free(detail);free(orm);free(normal);

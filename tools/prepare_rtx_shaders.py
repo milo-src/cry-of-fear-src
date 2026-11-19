@@ -121,6 +121,23 @@ def prepare():
     text=text.replace(anchor,'    texCoords[0]=cofReliefUV(tr,texCoords[0],vec2(derivSet.u[0],0),vec2(0,derivSet.u[0]),h.normal,rayOrigin-h.hitPosition);\n\n'+anchor)
     hit.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_relief.glsl',hit.parent/'rtx_relief.glsl')
+    text=hit.read_text()
+    text=text.replace('#include "rtx_relief.glsl"','#include "rtx_relief.glsl"\n#include "rtx_surface_detail.glsl"')
+    anchor='        vec2 nrm ='
+    if text.count(anchor)!=1:raise ValueError('Surface detail normal sample hook changed')
+    text=text.replace(anchor,'        vec4 cofNormalSample =')
+    anchor='''            .xy;
+        nrm.xy = nrm.xy * 2.0 - vec2( 1.0 );'''
+    if text.count(anchor)!=1:raise ValueError('Surface detail normal decode hook changed')
+    text=text.replace(anchor,'''            ;
+        vec2 nrm = cofNormalSample.xy * 2.0 - vec2(1.0);
+    #if defined(HITINFO_INL_PRIM)
+        cofSurfaceDetail(tr,texCoords[0],dTdx[0],dTdy[0],cofNormalSample.a,h.metallic,h.roughness,nrm);
+    #elif defined(HITINFO_INL_RFL)
+        cofSurfaceDetail(tr,texCoords[0],vec2(derivSet.u[0],0),vec2(0,derivSet.u[0]),cofNormalSample.a,h.metallic,h.roughness,nrm);
+    #endif''')
+    hit.write_text(text)
+    shutil.copy2(ROOT/'src/cof/render/rtx_surface_detail.glsl',hit.parent/'rtx_surface_detail.glsl')
     direct=target/'Shaders/RtRaygenDirect.rgen'
     text=direct.read_text().replace('#version 460','#version 460\n#extension GL_GOOGLE_include_directive : require',1)
     text=text.replace('#define MATERIAL_MAX_ALBEDO_LAYERS 0','#define MATERIAL_MAX_ALBEDO_LAYERS 4')
