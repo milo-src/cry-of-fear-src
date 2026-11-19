@@ -45,6 +45,19 @@ def prepare():
     shader=target/'Shaders/CmPrepareFinal.comp'
     text=shader.read_text()
     text=text.replace('#version 460', '#version 460\n#extension GL_GOOGLE_include_directive : require', 1)
+    # A visible diffuser can be white after tonemapping while its unboosted
+    # emission falls below the generic HDR bloom threshold. Preserve that
+    # visible-emission contribution for optical glare, without changing any
+    # lighting ray or adding a duplicate sampled light. max avoids counting
+    # the same emission twice when the original bloom input is already bright.
+    anchor='''    return bloom * smoothstep( 0,
+                               globalUniform.bloomThreshold,
+                               getLuminance( bloom ) );'''
+    if text.count(anchor)!=1:raise ValueError('Visible emitter bloom hook changed')
+    text=text.replace(anchor,'''    vec3 thresholded=bloom * smoothstep(0, globalUniform.bloomThreshold, getLuminance(bloom));
+    vec3 visibleEmission=max(screenEmis,vec3(0))*globalUniform.emissionMaxScreenColor*.125;
+    if(any(isnan(visibleEmission)) || any(isinf(visibleEmission))) visibleEmission=vec3(0);
+    return max(thresholded,visibleEmission);''')
     anchor='void main()'
     if text.count(anchor)!=1:raise ValueError('Final shader entry changed')
     text=text.replace(anchor,'#include "rtx_fog.glsl"\n\n'+anchor)

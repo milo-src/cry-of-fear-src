@@ -18,8 +18,20 @@ Original models, textures and BSP files are unchanged.
 
 Wipe illumination and gameplay volumetric scattering are restored to their
 previous strengths (including the `.72` scattering multiplier). The separate
-rain density response, exposure and direct-light power are unchanged. No
-additional compact-bloom layer is stacked over the restored optics.
+rain density response, exposure and direct-light power are unchanged.
+
+Visible emitters now retain a calibrated emission contribution in the bloom
+input even when generic HDR thresholding would suppress it. This uses the
+resolved screen-emission buffer, with a maximum rather than addition to avoid
+counting an already bright bloom source twice. It changes optical glare only;
+sampled lights and traced illumination are unchanged.
+
+Gameplay adds a soft, isotropic halo from bloom levels 3 and 4 with the coarse
+level-6 tail removed. Its core and shoulder follow the visible surface, not a
+world-position sprite. It respects `rt_bloom` and `rt_bloom_intensity`, works
+with dirt and rain disabled, and does not restore horizontal streaks. The
+existing wipe mask and rain refraction remain separate. The halo is an optical
+post-process, not a second light source or a new ray-tracing pass.
 
 RTGL clamps the per-primitive emissive channel to 0..1. The diffuser uses 1;
 increasing that input beyond 1 would not increase its radiance. The existing
@@ -30,6 +42,12 @@ of a duplicate attached light at the upload boundary. The optics diagnostic
 records `wide_streaks=0` independently of the remaining optical intensity.
 Runtime assertions alone do not establish visual quality; compare GPU
 readbacks at a fixed pose to inspect the mask and lighting.
+
+Native 1920x1080 readbacks `emitter-halo-balanced` (alley) and
+`emitter-halo-clean-park` (dirt and lens reflections disabled) verify the
+localized diffuser glow. Both isolated, silent runs passed the traced-diffuser
+upload checks, including `attached=0`. No original assets are needed for the
+new halo beyond the game's existing visible emission.
 
 The following sections record the earlier optical experiment and its evidence;
 only its horizontal streak implementation is superseded by the above.

@@ -6,7 +6,8 @@ if (cameramedia == RG_MEDIA_TYPE_VACUUM) {
     float wet = bound(0, gEngfuncs.pfnGetCvarFloat("cof_lens_wetness"), 1);
     float dirt = bound(0, gEngfuncs.pfnGetCvarFloat("rt_lens_dirt"), 2);
     float flares = bound(0, gEngfuncs.pfnGetCvarFloat("rt_lens_flares"), 2);
-    waves_effect.isActive = visible > 0 && (wet > .001f || dirt > 0 || flares > 0);
+    waves_effect.isActive = visible > 0 && (wet > .001f || dirt > 0 || flares > 0 ||
+        gEngfuncs.pfnGetCvarFloat("rt_bloom") > 0);
     waves_effect.transitionDurationIn = 0;
     waves_effect.transitionDurationOut = 0;
     waves_effect.amplitude = .0001f + wet;

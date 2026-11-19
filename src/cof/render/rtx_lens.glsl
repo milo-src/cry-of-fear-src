@@ -40,6 +40,16 @@ float cofOpticsEdge(vec2 uv) {
     vec2 edge=min(uv,vec2(1)-uv);
     return smoothstep(0.0,.035,min(edge.x,edge.y));
 }
+vec3 cofEmitterHalo(vec2 uv) {
+    // Isotropic glare from the already visibility-tested HDR image. The bloom
+    // pyramid includes coarser levels additively: subtract the far tail so a
+    // bright diffuser gets a local halo, not a veil over the entire scene.
+    vec3 tail=textureLod(framebufBloom_Mip6_Sampler,uv,0).rgb;
+    vec3 core=max(textureLod(framebufBloom_Mip3_Sampler,uv,0).rgb-tail,vec3(0));
+    vec3 shoulder=max(textureLod(framebufBloom_Mip4_Sampler,uv,0).rgb-tail,vec3(0));
+    vec3 energy=(core*1.3+shoulder*1.6)*(globalUniform.bloomIntensity/.10);
+    return vec3(1)-exp(-energy);
+}
 vec3 cofOptics(vec2 uv,vec2 size,float mask,float dirt) {
     // Wide horizontal streaks intentionally omitted; retain lens reflections
     // and the light-reactive wipe mask independently of traced emission.
@@ -163,6 +173,12 @@ vec3 cofLensRender(ivec2 pix) {
     }
     vec3 original=effect_loadFromSource(pix);
     vec3 color=max(film,beads)>.001 ? cofLensSample(vec2(pix)+offset) : original;
+    if(!menuGlass && globalUniform.bloomIntensity>0.0) {
+        // Independent of dirt/rain: clean optics still scatter bright light.
+        // Screen blend keeps the luminous core bright without a second lamp,
+        // changing its direct illumination, or reintroducing horizontal flares.
+        color+=cofEmitterHalo(uv)*(vec3(1)-clamp(color,0,1));
+    }
     // Only highlights reveal oil/dust; no light positions shining through walls.
     // Tiny contiguous kernel avoids separate copies of the lamp silhouette.
     vec3 halo=vec3(0);
