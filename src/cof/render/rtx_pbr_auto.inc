@@ -28,7 +28,7 @@ static void CofAutoPbrDelete(const char *name)
     memset(entry,0,sizeof(*entry));
 }
 
-static qboolean CofPbrWriteKtx(const char *alias,const char *suffix,unsigned w,unsigned h,const unsigned char *rgba)
+static qboolean CofPbrWriteKtx(const char *alias,const char *suffix,unsigned w,unsigned h,const unsigned char *rgba,const unsigned char *normal)
 {
     char path[256];
     Q_snprintf(path,sizeof(path),"rt/mat/%s_%s.ktx2",alias,suffix);
@@ -49,16 +49,41 @@ static qboolean CofPbrWriteKtx(const char *alias,const char *suffix,unsigned w,u
     }
     unsigned char *mips=malloc(total);
     if (!mips) return false;
+    // Preserve unresolved normal variation as roughness rather than letting
+    // averaged normals create a smooth, sparkling distant surface. These are
+    // XY tangent slopes (the tracer does not consume normal-map Z).
+    float *moments=normal?malloc((size_t)w*h*4*sizeof(float)):NULL;
+    if(normal && !moments){free(mips);return false;}
+    if(moments) for(unsigned p=0;p<w*h;++p) {
+        float sx=normal[p*4]/127.5f-1,sy=normal[p*4+1]/127.5f-1,r=rgba[p*4+1]/255.f;
+        moments[p*4]=r*r*r*r;moments[p*4+1]=sx;moments[p*4+2]=sy;
+        moments[p*4+3]=sx*sx+sy*sy;
+    }
     memcpy(mips,rgba,sizes[0]);
     unsigned x=w,y=h;
     for (unsigned i=1;i<levels;++i) {
         unsigned nx=x>1?x/2:1,ny=y>1?y/2:1;
-        for (unsigned v=0;v<ny;++v) for (unsigned u=0;u<nx;++u) for (unsigned c=0;c<4;++c) {
-            unsigned sum=0,count=0;
-            for (unsigned dy=0;dy<(y>1?2:1);++dy) for (unsigned dx=0;dx<(x>1?2:1);++dx) {
-                sum+=mips[offsets[i-1]+((v*2+dy)*x+u*2+dx)*4+c]; ++count;
+        for (unsigned v=0;v<ny;++v) for (unsigned u=0;u<nx;++u) {
+            unsigned sum[4]={0},count=0;float mean[4]={0};
+            // Include the last row/column of non-power-of-two custom textures.
+            for(unsigned sy=v*y/ny;sy<(v+1)*y/ny;++sy) for(unsigned sx=u*x/nx;sx<(u+1)*x/nx;++sx) {
+                for(unsigned c=0;c<4;++c) {
+                    sum[c]+=mips[offsets[i-1]+(sy*x+sx)*4+c];
+                    if(moments)mean[c]+=moments[(sy*x+sx)*4+c];
+                }
+                ++count;
             }
-            mips[offsets[i]+(v*nx+u)*4+c]=(sum+count/2)/count;
+            unsigned p=(v*nx+u)*4;
+            for(unsigned c=0;c<4;++c) {
+                mips[offsets[i]+p+c]=(sum[c]+count/2)/count;
+                // Disjoint footprints allow compacting moments in place.
+                if(moments)moments[p+c]=mean[c]/count;
+            }
+            if(moments) {
+                float variance=Q_max(0,moments[p+3]-moments[p+1]*moments[p+1]-moments[p+2]*moments[p+2]);
+                float r=sqrtf(sqrtf(Q_min(1,moments[p]+.25f*variance)));
+                mips[offsets[i]+p+1]=(unsigned char)(255*r+.5f);
+            }
         }
         x=nx;y=ny;
     }
@@ -68,7 +93,7 @@ static qboolean CofPbrWriteKtx(const char *alias,const char *suffix,unsigned w,u
         index[i][0]=cursor;index[i][1]=index[i][2]=sizes[i];cursor+=sizes[i];
     }
     FILE *file=fopen(path,"wb");
-    if (!file) {free(mips);return false;}
+    if (!file) {free(moments);free(mips);return false;}
     const unsigned char magic[12]={0xab,'K','T','X',' ','2','0',0xbb,13,10,26,10};
     qboolean ok=fwrite(magic,1,12,file)==12 && fwrite(header,1,52,file)==52 &&
         fwrite(zero,1,16,file)==16 && fwrite(index,24,levels,file)==levels && fwrite(dfd,1,92,file)==92;
@@ -77,7 +102,7 @@ static qboolean CofPbrWriteKtx(const char *alias,const char *suffix,unsigned w,u
         if (ok && fwrite(mips+offsets[i],1,sizes[i],file)!=sizes[i]) ok=false;
     }
     if (fclose(file)!=0) ok=false;
-    free(mips);
+    free(moments);free(mips);
     return ok;
 }
 
@@ -165,9 +190,9 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
         normal[i*4+1]=(unsigned char)(255*(.5f-bound(-.48f,dy*relief,.48f)*.5f)+.5f);
         normal[i*4+2]=normal[i*4+3]=255;
     }
-    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v3_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
+    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v4_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
     _mkdir("rt/mat");_mkdir("rt/mat/cof_auto");
-    qboolean ok=CofPbrWriteKtx(entry->alias,"orm",w,h,orm) && CofPbrWriteKtx(entry->alias,"n",w,h,normal);
+    qboolean ok=CofPbrWriteKtx(entry->alias,"orm",w,h,orm,normal) && CofPbrWriteKtx(entry->alias,"n",w,h,normal,NULL);
     free(luma);free(detail);free(orm);free(normal);
     if (!ok) {memset(entry,0,sizeof(*entry));return false;}
     RgOriginalTextureInfo alias=*original;alias.pTextureName=entry->alias;

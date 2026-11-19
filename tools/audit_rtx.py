@@ -24,7 +24,7 @@ def audit():
     }
     expected={name:digest((ROOT/source).read_bytes()) for name,source in sources.items()}
     shaders={'rt/shaders/'+name:digest((ROOT/'build/rtx-shaders'/name).read_bytes())
-             for name in ('CmPrepareFinal.comp.spv','RtVolumetric.rgen.spv','RtRaygenPrimary.rgen.spv','RtRaygenReflRefr.rgen.spv')}
+             for name in ('CmPrepareFinal.comp.spv','RtVolumetric.rgen.spv','RtRaygenPrimary.rgen.spv','RtRaygenReflRefr.rgen.spv','RtRaygenIndirectInit.rgen.spv','RtRaygenIndirectFinal.rgen.spv')}
     with zipfile.ZipFile(package) as archive:
         expected.update({name:digest(archive.read('rt_bin/'+name)) for name in DLLS if name!='NRI.dll'})
         for name in archive.namelist():

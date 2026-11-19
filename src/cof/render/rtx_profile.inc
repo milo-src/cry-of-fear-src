@@ -1,6 +1,9 @@
         /* Launcher-selected presets; reapplied after loading archived GL settings.
          * This is a new CoF reconstruction feature, not an original game setting. */
         {
+            if (!gEngfuncs.pfnGetCvarPointer("rt_shore_wetness"))
+                gEngfuncs.Cvar_Get("rt_shore_wetness", "1", FCVAR_ARCHIVE,
+                    "RTX static water contact film on world surfaces; reload map");
             if (!gEngfuncs.pfnGetCvarPointer("rt_material_masks"))
                 gEngfuncs.Cvar_Get("rt_material_masks", "1", FCVAR_ARCHIVE,
                     "Authored RTX roughness/normal masks on verified gameplay textures; reload map");

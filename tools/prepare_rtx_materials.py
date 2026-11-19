@@ -9,30 +9,31 @@ def prepare(target):
     text = path.read_text()
     anchor='static qboolean ArePrimitivesSame('
     if text.count(anchor)!=1:raise ValueError('RTX darkness declaration hook changed')
-    text=text.replace(anchor,'#include "rtx_darkness.inc"\n\n'+anchor)
+    text=text.replace(anchor,'#include "rtx_darkness.inc"\n#include "rtx_wetness.inc"\n\n'+anchor)
     anchor='\t\t\trt_perf.c_uploads++;'
     if text.count(anchor)!=1:raise ValueError('RTX darkness atlas upload hook changed')
-    text=text.replace(anchor,anchor+'\n            CofRTDarknessFlush(&rt_batch.primitive,&rt_batch.additional);')
+    text=text.replace(anchor,anchor+'\n            CofRTDarknessFlush(&rt_batch.primitive,&rt_batch.additional);\n            CofRTWetnessFlush(&rt_batch.primitive,&rt_batch.additional);')
     anchor='\trgUtilImScratchClear( rg_instance );'
     if text.count(anchor)!=1:raise ValueError('RTX darkness atlas clear hook changed')
-    text=text.replace(anchor,anchor+'\n    cof_dark_uv_count=0; cof_dark_uv_failed=false;')
+    text=text.replace(anchor,anchor+'\n    cof_dark_uv_count=0; cof_dark_uv_failed=false; cof_wet_uv_count=0; cof_wet_failed=false;')
     anchor='static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology );'
     if text.count(anchor)!=1:raise ValueError('RTX darkness vertex declaration hook changed')
-    text=text.replace(anchor, 'void CofRTDarknessVertex(float x, float y, float z);\n'+anchor)
+    text=text.replace(anchor, 'void CofRTDarknessVertex(float x, float y, float z);\nvoid CofRTWetnessVertex(float x,float y,float z);\n'+anchor)
     for vertex, coords in (
         ('rgUtilImScratchVertex( rg_instance, x, y, z );', 'x,y,z'),
         ('rgUtilImScratchVertex( rg_instance, v[ 0 ], v[ 1 ], v[ 2 ] );', 'v[0],v[1],v[2]'),
         ('rgUtilImScratchVertex( rg_instance, x, y, 0.0f );', 'x,y,0'),
     ):
         if text.count(vertex)!=1:raise ValueError('RTX darkness vertex hook changed')
-        text=text.replace(vertex,'CofRTDarknessVertex('+coords+');\n\t'+vertex)
+        text=text.replace(vertex,'CofRTDarknessVertex('+coords+'); CofRTWetnessVertex('+coords+');\n\t'+vertex)
     shutil.copy2(ROOT/'src/cof/render/rtx_darkness.inc',target/'ref/gl/rtx_darkness.inc')
+    shutil.copy2(ROOT/'src/cof/render/rtx_wetness.inc',target/'ref/gl/rtx_wetness.inc')
     anchor = 'static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology )\n{'
     if text.count(anchor) != 1: raise ValueError('RTX material declaration hook changed')
-    text = text.replace(anchor, '#include "rtx_materials.inc"\n#include "rtx_pbr.inc"\n\n' + anchor + '\n    cof_dark_current=NULL;')
+    text = text.replace(anchor, '#include "rtx_materials.inc"\n#include "rtx_pbr.inc"\n\n' + anchor + '\n    cof_dark_current=NULL; cof_wet_current=NULL;')
     anchor = '\t\tprim.pEditorInfo = &additional;'
     if text.count(anchor) != 1: raise ValueError('RTX brush material hook changed')
-    text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);\n\t\tCofRTPbrApply(&prim,&additional);\n\t\tCofRTDarknessBegin(&mesh,&prim,&additional);')
+    text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);\n\t\tCofRTPbrApply(&prim,&additional);\n\t\tCofRTDarknessBegin(&mesh,&prim,&additional);\n        CofRTWetnessBegin(&mesh,&prim,&additional);')
     anchor='void pglDeleteTextures( const char* texturename )\n{'
     if text.count(anchor)!=1:raise ValueError('RTX PBR deletion hook changed')
     text=text.replace(anchor,'static void CofRTPbrDelete(const char *name);\n'+anchor+'\n    CofRTPbrDelete(texturename);')
@@ -86,15 +87,18 @@ def prepare(target):
     anchor='\t\trgUtilImScratchPushVertices( rg_instance, p->numverts,'
     if surf.count(anchor)!=1:raise ValueError('RTX darkness bulk vertex hook changed')
     surf=surf.replace(anchor,'''        extern void CofRTDarknessVertex(float x, float y, float z);
-        for (int i=0;i<p->numverts;++i)
+        extern void CofRTWetnessVertex(float,float,float);
+        for (int i=0;i<p->numverts;++i) {
             CofRTDarknessVertex(p->verts[i][0],p->verts[i][1],p->verts[i][2]);
+            CofRTWetnessVertex(p->verts[i][0],p->verts[i][1],p->verts[i][2]);
+        }
 '''+anchor)
     surfaces.write_text(surf)
     context=target/'ref/gl/gl_context.c'
     ctx=context.read_text()
     anchor='\tRT_ParseStaticLightEntities();'
     if ctx.count(anchor)!=1:raise ValueError('RTX darkness map reset hook changed')
-    ctx=ctx.replace(anchor,anchor+'\n\textern void CofRTDarknessReset(void);\n\tCofRTDarknessReset();')
+    ctx=ctx.replace(anchor,anchor+'\n\textern void CofRTDarknessReset(void);\n\tCofRTDarknessReset();\n    extern void CofRTWetnessReset(void); CofRTWetnessReset();')
     context.write_text(ctx)
     shutil.copy2(ROOT/'src/cof/render/rtx_materials.inc', target/'ref/gl/rtx_materials.inc')
     shutil.copy2(ROOT/'src/cof/render/rtx_surface_types.inc', target/'ref/gl/rtx_surface_types.inc')

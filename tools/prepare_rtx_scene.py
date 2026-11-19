@@ -59,9 +59,12 @@ def prepare(target):
     anchor = '.allowTexCoordLayer2        = false,'
     if text.count(anchor) != 1: raise ValueError('RT cinematic buffer hook changed')
     text = text.replace(anchor, '.allowTexCoordLayer2        = true,')
+    anchor = '.allowTexCoordLayer3        = false,'
+    if text.count(anchor)!=1:raise ValueError('RTX wetness vertex layer hook changed')
+    text = text.replace(anchor, '.allowTexCoordLayer3        = true,')
     for anchor, replacement in (
-        ('.primaryRaysMaxAlbedoLayers          = 2,', '.primaryRaysMaxAlbedoLayers          = 3,'),
-        ('.indirectIlluminationMaxAlbedoLayers = 1,', '.indirectIlluminationMaxAlbedoLayers = 3,'),
+        ('.primaryRaysMaxAlbedoLayers          = 2,', '.primaryRaysMaxAlbedoLayers          = 4,'),
+        ('.indirectIlluminationMaxAlbedoLayers = 1,', '.indirectIlluminationMaxAlbedoLayers = 4,'),
     ):
         if text.count(anchor) != 1: raise ValueError('RT cinematic layer limit changed')
         text = text.replace(anchor, replacement)

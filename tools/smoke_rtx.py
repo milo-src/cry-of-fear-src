@@ -92,6 +92,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--interactive',action='store_true',help='Explicit opt-in: visible game on your desktop with passive pixel capture')
     parser.add_argument('--readback',action='store_true',help='Opt-in Vulkan swapchain readback on the isolated desktop; build tools/build_readback.py first')
+    parser.add_argument('--timeout',type=int,default=0,help='Bounded startup/runtime allowance for a cold shader cache (seconds, 1-600)')
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
     parser.add_argument('--ui',action='store_true')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
@@ -109,6 +110,7 @@ def main():
     parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
     parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
     parser.add_argument('--lamp-check',action='store_true',help='Require park lamp geometry at the actual RTX upload boundary')
+    parser.add_argument('--wetness-check',choices=['enabled','disabled'],help='Check shoreline atlas and complete per-vertex UV uploads')
     parser.add_argument('--material-check',choices=['authored','auto','disabled'],help='Check RTX numeric mask selection and KTX loading')
     parser.add_argument('--water-check',choices=['zero-alpha','disabled'],help='Require native alpha-zero water at the RT upload boundary, or no replacement water')
     parser.add_argument('--volume-check',choices=['enabled','disabled'],help='Assert local-light volumetric path selection (not pixel visibility)')
@@ -133,6 +135,7 @@ def main():
     if args.lamp_check and (not args.lighting or args.renderer!='rtx'):
         parser.error('--lamp-check requires RTX --lighting')
     if args.material_check and args.renderer!='rtx':parser.error('--material-check requires RTX')
+    if args.wetness_check and args.renderer!='rtx':parser.error('--wetness-check requires RTX')
     if args.water_check and args.renderer!='rtx':parser.error('--water-check requires RTX')
     if args.volume_check and args.renderer!='rtx':parser.error('--volume-check requires RTX')
     if args.pose:
@@ -197,7 +200,7 @@ def main():
                  if args.interactive else desktop.launch(command,runtime,env))
         try:
             begin=time.monotonic()
-            while process.poll() is None and time.monotonic()-begin<(120 if args.menu_cycle else 60):
+            while process.poll() is None and time.monotonic()-begin<(min(600,max(1,args.timeout)) if args.timeout else 120 if args.menu_cycle else 60):
                 text=logpath.read_text(errors='replace') if logpath.exists() else ''
                 markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
@@ -291,6 +294,17 @@ def main():
                     raise RuntimeError('RTX capacity exceeded: scene geometry/resources were dropped')
                 if 'COF_RTX_DARKNESS_UV FAIL' in text:
                     raise RuntimeError('Invalid or missing per-vertex darkness atlas coordinates')
+                if 'COF_RTX_WETNESS_UV FAIL' in text:
+                    raise RuntimeError('Invalid or missing per-vertex wetness atlas coordinates')
+                wetness=re.findall(r'COF_RTX_WETNESS masks=(\d+) ready=(\d) menu=0',text)
+                if args.menu_scene and wetness:
+                    raise RuntimeError('Gameplay wetness leaked into cinematic menu')
+                if args.wetness_check=='enabled' and not any(int(count)>0 and ready=='1' for count,ready in wetness):
+                    raise RuntimeError('No shoreline wetness atlas uploaded')
+                if args.wetness_check=='enabled' and not re.search(r'COF_RTX_WETNESS_UPLOAD vertices=\d+ mapped=[1-9]\d*',text):
+                    raise RuntimeError('No wet receiver UVs reached the mesh upload boundary')
+                if args.wetness_check=='disabled' and any(ready=='1' for count,ready in wetness):
+                    raise RuntimeError('Disabled shoreline wetness still uploaded')
                 if args.lamp_check:
                     uploads=re.findall(r'COF_RTX_SCENE_UPLOADS frame=(\d+) primitives=(\d+) lamps=(\d+)',text)
                     if not uploads or not any(int(lamps)>0 for _,_,lamps in uploads):

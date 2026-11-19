@@ -73,7 +73,22 @@ Masks can then be hand-edited without re-running the authoring command:
 The generator combines fine grain with medium-scale relief so normal-map mip
 filtering does not erase all detail at ordinary viewing distances. Automatic
 masks use contrast-normalized medium-scale detail and a bounded slope; their
-cache namespace is `cof_auto/v3_...`. Neither path increases scene exposure.
+cache namespace is `cof_auto/v4_...`. Neither path increases scene exposure.
+
+Numeric mipmaps preserve unresolved normal-slope variation as additional
+roughness. Both authored and automatic masks use the same bounded response;
+base-level PNG data, metallic, opacity and AO are preserved. This avoids losing
+all surface variation when distant normals average out. Non-power-of-two masks
+include their border rows and columns. It is a filtering approximation, not a
+physical reconstruction of the source texture.
+
+Static shoreline wetness is RTX-only (`rt_shore_wetness 0` disables it after a
+map reload). A generated world-face atlas gradually lowers roughness and darkens
+surfaces near untargeted, unrotated `func_water` volumes. It uses a 20-unit lateral
+reach and 14-unit height fade, with conservative world-solid obstruction checks.
+It does not require map names or changes to game assets. Irregular water bounds,
+moving water and rain accumulation are not handled yet. The cinematic menu is
+excluded. Allocation/atlas limits retain the ordinary dry surface and geometry.
 
 Commit profiles, manifest, PNGs and code together. KTX2 outputs and automatic
 masks belong in the ignored build/runtime folders. No automatic commit is made.

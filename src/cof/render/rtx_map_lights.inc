@@ -9,6 +9,42 @@ float cof_rt_sky_energy = 0;
 qboolean cof_rt_has_sky;
 qboolean cof_rt_menu_scene;
 static int cof_rt_volume_light=-1;
+typedef struct { vec3_t lo,hi; } CofShoreVolume;
+static CofShoreVolume cof_shore_volumes[128];
+static int cof_shore_count;
+qboolean CofRTShoreMayReach(const vec3_t lo,const vec3_t hi)
+{
+    for(int i=0;i<cof_shore_count;++i) {
+        const CofShoreVolume *w=&cof_shore_volumes[i];
+        if(hi[0]>=w->lo[0]-21 && lo[0]<=w->hi[0]+21 &&
+           hi[1]>=w->lo[1]-21 && lo[1]<=w->hi[1]+21 &&
+           hi[2]>=w->lo[2]-2 && lo[2]<=w->hi[2]+15) return true;
+    }
+    return false;
+}
+float CofRTShoreWetness(const vec3_t p)
+{
+    float wet=0;
+    for (int i=0;i<cof_shore_count;++i) {
+        const CofShoreVolume *w=&cof_shore_volumes[i];
+        float height=p[2]-w->hi[2];
+        if(height>14 || p[2]<w->lo[2]-1) continue;
+        vec3_t q={bound(w->lo[0],p[0],w->hi[0]),bound(w->lo[1],p[1],w->hi[1]),p[2]};
+        float dx=p[0]-q[0],dy=p[1]-q[1],distance=sqrtf(dx*dx+dy*dy);
+        if(distance>=20)continue;
+        // A nearby pool behind a wall must not wet this receiving surface.
+        qboolean blocked=false;
+        for(int step=0;step<=8;++step) {
+            vec3_t sample={p[0]+(q[0]-p[0])*step/8,p[1]+(q[1]-p[1])*step/8,p[2]};
+            mleaf_t *leaf=gEngfuncs.Mod_PointInLeaf(sample,WORLDMODEL->nodes,WORLDMODEL);
+            if(!leaf || leaf->contents==CONTENTS_SOLID){blocked=true;break;}
+        }
+        if(blocked)continue;
+        float t=bound(0,distance/20,1),z=bound(0,Q_max(height,0)/14,1);
+        wet=Q_max(wet,(1-t*t*(3-2*t))*(1-z*z*(3-2*z)));
+    }
+    return wet;
+}
 // Reduce the previous gameplay RT conversion by four. Keep
 // source ratios and inverse-square transport, but reduce spill into authored
 // darkness. This is renderer calibration, not a recovered compiler constant.
@@ -205,6 +241,7 @@ static int CofRTBakedFill(void)
 }
 void RT_ParseStaticLightEntities(void)
 {
+    cof_shore_count=0;
     extern void CofRTLoadSurfaceTypes(void);
     CofRTLoadSurfaceTypes();
     g_lights.static_lights_count=0;
@@ -225,6 +262,20 @@ void RT_ParseStaticLightEntities(void)
     while ((text=CofRTReadEntity(text,&entity))!=NULL) {
         const char *classname=CofRTValue(&entity,"classname");
         if (!classname) continue;
+        if (!Q_stricmp(classname,"func_water") && cof_shore_count<128 &&
+            CofRTNumber(&entity,"skin",CONTENTS_WATER)==CONTENTS_WATER &&
+            !CofRTValue(&entity,"targetname")) {
+            const char *name=CofRTValue(&entity,"model");
+            vec3_t offset={0,0,0},angles={0,0,0};
+            CofRTVector(CofRTValue(&entity,"origin"),offset);
+            CofRTVector(CofRTValue(&entity,"angles"),angles);
+            model_t *model=name && name[0]=='*' && DotProduct(angles,angles)<.001f ?
+                gEngfuncs.Mod_ForName(name,false,false):NULL;
+            if(model) {
+                CofShoreVolume *w=&cof_shore_volumes[cof_shore_count++];
+                VectorAdd(model->mins,offset,w->lo);VectorAdd(model->maxs,offset,w->hi);
+            }
+        }
         if (!Q_stricmp(classname,"cof_gamemenu")) cof_rt_menu_scene=true;
         // Same authored fields transported by skymark_sky/skymark_w in CoF.
         // The RT backend can read immutable BSP data directly at map load.

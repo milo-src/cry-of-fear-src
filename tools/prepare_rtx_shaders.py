@@ -68,6 +68,39 @@ def prepare():
     anchor='const float suppressDetails = 5.0;'
     if text.count(anchor)!=1:raise ValueError('Normal footprint hook changed')
     hit.write_text(text.replace(anchor,'const float suppressDetails = 1.0;'))
+    # Reserved zero-alpha layer-3 tag carries a linear wetness mask in alpha.
+    # Stock shaders ignore the overlay; our primary/reflection/GI paths agree.
+    text=hit.read_text()
+    anchor='        if( layerColorTextures[ i ] != MATERIAL_NO_TEXTURE )'
+    wet_albedo="""        if (i == 3 && layerColors[3] == 0x00492511u && layerColorTextures[3] != MATERIAL_NO_TEXTURE) {
+#if defined(HITINFO_INL_PRIM)
+            float wet=getTextureSampleGrad(layerColorTextures[3],texCoords[3],dPdx[3],dPdy[3]).a;
+#elif defined(HITINFO_INL_RFL)
+            float wet=getTextureSampleDerivSet(layerColorTextures[3],texCoords[3],derivSet,3).a;
+#else
+            float wet=getTextureSampleLod(layerColorTextures[3],texCoords[3],lod).a;
+#endif
+            dst *= 1.0 - 0.16 * clamp(wet,0.0,1.0);
+            continue;
+        }
+"""
+    if text.count(anchor)!=1:raise ValueError('Wet albedo hook changed')
+    text=text.replace(anchor,wet_albedo+anchor)
+    anchor='    h.roughness = max( h.roughness, max( globalUniform.minRoughness, 0.03 ) );'
+    wet_response="""    if ((tr.geometryInstanceFlags & GEOM_INST_FLAG_EXISTS_LAYER3) != 0 &&
+        tr.layerColors[3] == 0x00492511u && tr.layerColorTextures[3] != MATERIAL_NO_TEXTURE) {
+#if defined(HITINFO_INL_PRIM)
+        float wet=getTextureSampleGrad(tr.layerColorTextures[3],texCoords[3],dTdx[3],dTdy[3]).a;
+#elif defined(HITINFO_INL_RFL)
+        float wet=getTextureSampleDerivSet(tr.layerColorTextures[3],texCoords[3],derivSet,3).a;
+#else
+        float wet=getTextureSampleLod(tr.layerColorTextures[3],texCoords[3],lod).a;
+#endif
+        h.roughness=mix(h.roughness,min(h.roughness,0.24),clamp(wet,0.0,1.0)*0.85);
+    }
+"""
+    if text.count(anchor)!=1:raise ValueError('Wet roughness hook changed')
+    hit.write_text(text.replace(anchor,wet_response+anchor))
     # Authored water should absorb light, not emit a constant colored fog.
     # Keep the original menu's near-black transmission approximation unchanged.
     media=target/'Shaders/Media.h'
@@ -75,7 +108,7 @@ def prepare():
     anchor='return inscattering;'
     if text.count(anchor)!=1:raise ValueError('Water scattering hook changed')
     media.write_text(text.replace(anchor,"return (perMatWaterColor.r > 0.001) ? vec3(0.0) : inscattering;"))
-    for name in ('RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen'):
+    for name in ('RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen','RtRaygenIndirectInit.rgen','RtRaygenIndirectFinal.rgen'):
         entry=target/'Shaders'/name
         entry.write_text(entry.read_text().replace('#version 460','#version 460\n#extension GL_GOOGLE_include_directive : require',1))
     shutil.copy2(ROOT/'src/cof/render/rtx_fog.glsl',shader.parent/'rtx_fog.glsl')
