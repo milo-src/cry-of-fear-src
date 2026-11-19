@@ -10,6 +10,10 @@ freezes on pause. There is no map-name whitelist.
 in dry weather. Range 0–2; 0 disables it independently of rain. Both controls
 default to 1. The effect does not change lights, exposure, materials or maps.
 
+`rt_lens_flares 1` adds Gaussian streaks, optical-axis ghosts and raised wipe
+detail lit by visible highlights. Range 0–2, quarter steps; 0 disables these
+additions independently of dirt and rain. See [evidence and limits](OPTICS.md).
+
 Dry-light scatter combines the filtered fourth and sixth bloom levels. The
 sixth level reveals broad wipe marks outside the lamp silhouette, while a
 bounded exponential response avoids unbounded additive glare. The imported
@@ -50,8 +54,10 @@ and highlight response are implemented in our GLSL, not extracted Crysis code.
 
 `EfWaves.comp` uses a negative xMultiplier as a tagged lens mode. Its original
 positive underwater mode and push-constant layout remain intact. The float
-transports an exact integer with 9 low bits for dirt strength and remaining
-bits for dry age at 32 ticks/second. All sampling reads the immutable ping-pong
+transports an exact integer with bits 0–8 for dirt strength, 9–19 for dry age
+at 32 ticks/second, and 20–23 for flare strength in quarter steps. The maximum
+payload plus sentinel is 9,421,311, below the exact float integer limit 2^24.
+All sampling reads the immutable ping-pong
 source and writes the opposite image. Wet areas bilinearly refract the scene;
 dry pixels retain their original scene sample. Existing bloom mips contribute
 only when bloom is enabled. There is no scene-history accumulation or UI glare.
