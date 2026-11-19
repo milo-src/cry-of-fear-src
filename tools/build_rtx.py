@@ -88,10 +88,13 @@ def main():
     from prepare_rtx_shaders import prepare as prepare_shaders, verify as verify_shader
     shaders=prepare_shaders()
     run_waf(shaders,ROOT/'build/rtx-shaders',[],env)
-    fog_shader=ROOT/'build/rtx-shaders/CmPrepareFinal.comp.spv'
-    shader_destination=RUNTIME/'rt/shaders/CmPrepareFinal.comp.spv'
-    verify_shader(shader_destination,fog_shader)
-    shutil.copy2(fog_shader,shader_destination)
+    shader_hashes={}
+    for name in ('CmPrepareFinal.comp.spv','RtVolumetric.rgen.spv'):
+        compiled=ROOT/'build/rtx-shaders'/name
+        destination=RUNTIME/'rt/shaders'/name
+        verify_shader(destination,compiled)
+        shutil.copy2(compiled,destination)
+        shader_hashes['rt/shaders/'+name]=sha(destination)
     nri = prepare_nri()
     run_waf(nri, ROOT/'build/nri', ['--msvc_version='+compiler,'--check-cxx-compiler=msvc'], env)
     shutil.copy2(ROOT/'build/nri/NRI.dll', RUNTIME/'NRI.dll')
@@ -142,7 +145,7 @@ def main():
     (RUNTIME/'rtx-build-manifest.json').write_text(json.dumps(dict(architecture='x64',build='Waf',
         xash_rt_commit='72234513ab02502f16a5fa7e0f4e6c6a5c52f5e8',package_url=PACKAGE_URL,
         package_sha256=PACKAGE_SHA,files=native,
-        shaders={'rt/shaders/CmPrepareFinal.comp.spv':sha(shader_destination)},materials=materials),indent=2)+'\n')
+        shaders=shader_hashes,materials=materials),indent=2)+'\n')
     from audit_rtx import audit
     audit()
     print('Built optional Vulkan RT runtime:',RUNTIME)

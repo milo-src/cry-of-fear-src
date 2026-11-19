@@ -3,10 +3,18 @@
  * Replace that volume with the same top plane, represented as RT dielectric
  * geometry instead of the original framebuffer/Cg composition. */
 extern qboolean cof_rt_menu_scene;
+qboolean CofRTIsWaterVolume(const cl_entity_t *entity)
+{
+    return entity && entity->model && entity->model->type == mod_brush &&
+        entity->curstate.skin == CONTENTS_WATER &&
+        gEngfuncs.pfnGetCvarFloat("cg_water") != 0 &&
+        entity->curstate.maxs[0] > entity->curstate.mins[0] &&
+        entity->curstate.maxs[1] > entity->curstate.mins[1];
+}
+
 static qboolean CofRTWaterVolume(cl_entity_t *entity)
 {
-    if (entity->curstate.skin != CONTENTS_WATER ||
-        gEngfuncs.pfnGetCvarFloat("cg_water") == 0) return false;
+    if (!CofRTIsWaterVolume(entity)) return false;
     const float *lo = entity->curstate.mins, *hi = entity->curstate.maxs;
     if (hi[0] <= lo[0] || hi[1] <= lo[1]) return false;
     // Fixed topology and world-anchored phases keep temporal correspondence
@@ -72,10 +80,13 @@ static qboolean CofRTWaterVolume(cl_entity_t *entity)
         .pEditorInfo = &material,
     };
     RG_CHECK(rgUploadMeshPrimitive(rg_instance, &mesh, &primitive));
-    static qboolean reported;
-    if (!reported) {
-        reported = true;
-        gEngfuncs.Con_DPrintf("COF_RTX_WATER_VOLUME entity=%d top=%.1f cells=%d\n",entity->index,hi[2],cells);
+    static int reported[32], reportedCount;
+    qboolean seen=false;
+    for (int i=0;i<reportedCount;++i) if (reported[i]==entity->index) seen=true;
+    if (!seen && reportedCount<32) {
+        reported[reportedCount++]=entity->index;
+        gEngfuncs.Con_DPrintf("COF_RTX_WATER_VOLUME entity=%d top=%.1f cells=%d alpha=%d model=%s\n",
+            entity->index,hi[2],cells,entity->curstate.renderamt,entity->model->name);
     }
     entity->visframe = tr.realframecount;
     return true;

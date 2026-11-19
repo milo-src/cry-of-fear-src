@@ -47,6 +47,20 @@ def prepare():
 
 '''+anchor)
     shader.write_text(text)
+    volume=target/'Shaders/RtVolumetric.rgen'
+    text=volume.read_text()
+    text=text.replace('#version 460', '#version 460\n#extension GL_GOOGLE_include_directive : require', 1)
+    # This image is indexed by camera-frustum cells, not stable world cells.
+    # Mixing last frame's radiance at the same index drags light through walls
+    # when the camera moves. CmScatterAccum already reprojects the actual
+    # volume; use that bounded filter instead of this second 20-frame history.
+    start=text.index('        vec3 radiance_Prev = imageLoad( g_illuminationVolume, cell ).rgb;')
+    end=text.index('        uint seed =',start)
+    text=text[:start]+text[end:]
+    anchor='        radiance = mix( radiance_Prev, radiance, 0.05 );'
+    if text.count(anchor)!=1:raise ValueError('Volume history hook changed')
+    text=text.replace(anchor,'        // CoF: current-frame light only; no stale frustum-cell history.')
+    volume.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_fog.glsl',shader.parent/'rtx_fog.glsl')
     shutil.copy2(ROOT/'src/cof/render/shaders.wscript',shader.parent/'wscript')
     shutil.copy2(ROOT/'external/xash-rt/waf',shader.parent/'waf')
@@ -62,7 +76,7 @@ def interface(path):
     while i<len(words):
         count=words[i]>>16;op=words[i]&65535;v=words[i+1:i+count]
         if not count:raise ValueError('Invalid SPIR-V instruction')
-        if 19<=op<=33:types[v[0]]=(op,v[1:])
+        if 19<=op<=33 or op==5341:types[v[0]]=(op,v[1:]) # OpTypeAccelerationStructureKHR
         elif op==43:constants[v[1]]=v[2:]
         elif op==59:variables[v[1]]=(v[0],v[2])
         elif op==71:decor.setdefault(v[0],[]).append(v[1:])
@@ -87,4 +101,4 @@ def verify(original,compiled):
     old,new=interface(original),interface(compiled)
     if not new or any(key not in old or old[key]!=value for key,value in new.items()):
         raise RuntimeError('CoF shader descriptor/uniform ABI differs from pinned RTGL shader')
-    print('PASS: authored fog shader descriptor and uniform ABI matches pinned RTGL')
+    print('PASS: '+compiled.name+' descriptor and uniform ABI matches pinned RTGL')

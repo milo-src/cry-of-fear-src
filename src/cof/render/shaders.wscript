@@ -11,7 +11,8 @@ def configure(conf):
     conf.env.COF_SHADER_INCLUDES=['-I'+conf.path.abspath(), '-I'+conf.path.parent.find_dir('Generated').abspath(), '-I'+conf.path.find_dir('LPM').abspath()]
 
 def build(bld):
-    bld(rule='${GLSLANG} -V --target-env vulkan1.2 ${COF_SHADER_INCLUDES} ${SRC} -o ${TGT}',
-        source='CmPrepareFinal.comp',target='CmPrepareFinal.comp.spv',
-        dep_nodes=bld.path.ant_glob('**/*.h **/*.glsl **/*.inl')+bld.path.parent.find_dir('Generated').ant_glob('**/*.h'),
-        name='cof_authored_fog')
+    for shader in ('CmPrepareFinal.comp','RtVolumetric.rgen'):
+        bld(rule='${GLSLANG} -V --target-env vulkan1.2 ${COF_SHADER_INCLUDES} ${SRC} -o ${TGT}',
+            source=shader,target=shader+'.spv',
+            dep_nodes=bld.path.ant_glob('**/*.h **/*.glsl **/*.inl')+bld.path.parent.find_dir('Generated').ant_glob('**/*.h'),
+            name='cof_'+shader)

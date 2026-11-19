@@ -20,8 +20,10 @@ if (!cof_rt_menu_scene) {
     volumetric_params.scaterring *= 1.f+.45f*rain;
     volumetric_params.assymetry = bound(-.8f,volumetric_params.assymetry,.65f);
     volumetric_params.volumetricFar *= 1.f-.15f*rain;
-    // Bound temporal reuse. The old illumination grid caused bright trails.
-    volumetric_params.useIlluminationVolume=false;
+    // Sample map lights, not only the single directional/fallback source.
+    // Our volume shader removes the un-reprojected illumination-cell history;
+    // the regular, world-reprojected volume filter remains bounded below.
+    volumetric_params.useIlluminationVolume=true;
     volumetric_params.maxHistoryLength=bound(0,volumetric_params.maxHistoryLength,4);
 }
 {
@@ -36,3 +38,12 @@ if (!cof_rt_menu_scene) {
     }
 }
 #include "rtx_fog.inc"
+{
+    static int previousVolume=-1;
+    const int volume=volumetric_params.enable && !volumetric_params.useSimpleDepthBased &&
+        volumetric_params.useIlluminationVolume;
+    if (previousVolume!=volume) {
+        previousVolume=volume;
+        gEngfuncs.Con_DPrintf("COF_RTX_LOCAL_VOLUME enabled=%d menu=%d cell_history=0\n",volume,cof_rt_menu_scene);
+    }
+}

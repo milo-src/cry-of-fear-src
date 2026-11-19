@@ -113,6 +113,16 @@ def prepare(target):
     path = target / 'ref/gl/gl_rmain.c'
     text = path.read_text()
     text = text.replace('#include "gl_local.h"','#include "gl_local.h"\n#include "rtx_sky.h"')
+    # Native CoF's water compositor deliberately accepts alpha-zero func_water.
+    # Retain these volumes through BOTH visibility gates until the RT dielectric
+    # adapter runs. Do not change their network state or ordinary alpha blending.
+    text = text.replace('#include "rtx_sky.h"', '#include "rtx_sky.h"\nextern qboolean CofRTIsWaterVolume(const cl_entity_t *entity);')
+    anchor = 'if( !R_ModelOpaque( clent->curstate.rendermode ) && CL_FxBlend( clent ) <= 0 )'
+    if text.count(anchor) != 1: raise ValueError('RT water admission hook changed')
+    text = text.replace(anchor, 'if( !CofRTIsWaterVolume(clent) && !R_ModelOpaque( clent->curstate.rendermode ) && CL_FxBlend( clent ) <= 0 )')
+    anchor = 'if( tr.blend <= 0.0f ) continue;'
+    if text.count(anchor) != 1: raise ValueError('RT water draw visibility hook changed')
+    text = text.replace(anchor, 'if( tr.blend <= 0.0f && !CofRTIsWaterVolume(RI.currententity) ) continue;')
     text = text.replace('.skyColorMultiplier          = RT_CVAR_TO_FLOAT( rt_sky ),',
         '.skyColorMultiplier          = RT_CVAR_TO_FLOAT( rt_sky ) * cof_rt_sky_energy,')
     anchor = '\t\tRgDrawFrameSkyParams skyParams = {'

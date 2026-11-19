@@ -65,9 +65,14 @@ def masks(image, profile):
     # Local detail only: never interpret the original broad painted shadows as
     # a height field. Strength is bounded even on contrasty low-res textures.
     detail = blur(lum, 0.65) - blur(lum, 3.5)
-    height = np.clip(detail / max(float(np.std(detail)) * 3, 0.06), -1, 1)
-    gx = (np.roll(height, -1, 1) - np.roll(height, 1, 1)) * profile['relief']
-    gy = (np.roll(height, -1, 0) - np.roll(height, 1, 0)) * profile['relief']
+    medium = blur(lum, 2.0) - blur(lum, 12.0)
+    # RTGL deliberately widens normal-map mip footprints. One-pixel slopes
+    # disappeared at normal viewing distances. Retain bounded, broader relief
+    # as well as fine grain, still rejecting large baked lighting gradients.
+    height = (0.35 * np.clip(detail / max(float(np.std(detail)) * 3, 0.06), -1, 1)
+              + 0.65 * np.clip(medium / max(float(np.std(medium)) * 3, 0.06), -1, 1))
+    gx = (np.roll(height, -3, 1) - np.roll(height, 3, 1)) * profile['relief']
+    gy = (np.roll(height, -3, 0) - np.roll(height, 3, 0)) * profile['relief']
     normal = np.ones((*lum.shape, 4), dtype=np.float64)
     # RTGL uses tangent XY slopes (not a conventional normalized XYZ normal).
     normal[..., 0] = 0.5 - np.clip(gx, -0.30, 0.30) * 0.5

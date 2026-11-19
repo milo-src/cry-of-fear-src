@@ -109,6 +109,8 @@ def main():
     parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
     parser.add_argument('--lamp-check',action='store_true',help='Require park lamp geometry at the actual RTX upload boundary')
     parser.add_argument('--material-check',choices=['authored','auto','disabled'],help='Check RTX numeric mask selection and KTX loading')
+    parser.add_argument('--water-check',choices=['zero-alpha','disabled'],help='Require native alpha-zero water at the RT upload boundary, or no replacement water')
+    parser.add_argument('--volume-check',choices=['enabled','disabled'],help='Assert local-light volumetric path selection (not pixel visibility)')
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
@@ -129,6 +131,8 @@ def main():
     if args.lamp_check and (not args.lighting or args.renderer!='rtx'):
         parser.error('--lamp-check requires RTX --lighting')
     if args.material_check and args.renderer!='rtx':parser.error('--material-check requires RTX')
+    if args.water_check and args.renderer!='rtx':parser.error('--water-check requires RTX')
+    if args.volume_check and args.renderer!='rtx':parser.error('--volume-check requires RTX')
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
         except ValueError: parser.error('--pose requires six finite numbers')
@@ -246,6 +250,14 @@ def main():
                 geometry=dict(frames=frames,samples=samples,unexpected_changes=changed)
             if args.interactive and not shots:raise RuntimeError('No window pixels captured')
             if args.renderer=='rtx':
+                volumes=re.findall(r'COF_RTX_LOCAL_VOLUME enabled=(\d) menu=(\d) cell_history=0',text)
+                if args.volume_check and (not volumes or volumes[-1][0]!=str(int(args.volume_check=='enabled'))):
+                    raise RuntimeError('Unexpected local-light volumetric path')
+                water=re.findall(r'COF_RTX_WATER_VOLUME entity=(\d+) top=([-\d.]+) cells=(\d+) alpha=(\d+) model=(\S+)',text)
+                if args.water_check=='zero-alpha' and not any(int(alpha)==0 for _,_,_,alpha,_ in water):
+                    raise RuntimeError('Native alpha-zero water never reached the RTX upload boundary')
+                if args.water_check=='disabled' and water:
+                    raise RuntimeError('Disabled water still submitted replacement geometry')
                 if re.search(r'Failed to load texture override file:.*cof_(pbr|auto)',text):
                     raise RuntimeError('Numeric RTX material mask failed to load')
                 uses=re.findall(r'COF_RTX_PBR_(AUTO_)?USE (\S+) menu=(\d)',text)

@@ -70,6 +70,11 @@ Masks can then be hand-edited without re-running the authoring command:
   roughness on rough stone. Optional damp variation belongs only on deliberately
   selected surfaces, not every room or every dark pixel.
 
+The generator combines fine grain with medium-scale relief so normal-map mip
+filtering does not erase all detail at ordinary viewing distances. Automatic
+masks use contrast-normalized medium-scale detail and a bounded slope; their
+cache namespace is `cof_auto/v2_...`. Neither path increases scene exposure.
+
 Commit profiles, manifest, PNGs and code together. KTX2 outputs and automatic
 masks belong in the ignored build/runtime folders. No automatic commit is made.
 

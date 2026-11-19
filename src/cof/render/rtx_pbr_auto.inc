@@ -115,7 +115,7 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
     float roughness=surface.pbrInfo.roughnessDefault;
     // Unknown materials are matte dielectrics. Acoustic metal labels often
     // represent paint, so never infer metallic from color/name or brightness.
-    float relief=type=='M'||type=='G'||type=='V'||type=='Y' ? .045f : type=='W' ? .09f : .07f;
+    float relief=type=='M'||type=='G'||type=='V'||type=='Y' ? .07f : type=='W' ? .18f : .15f;
     unsigned w=original->size.width,h=original->size.height;
     while (w>256 || h>256) {w=w>1?w/2:1;h=h>1?h/2:1;}
     float *luma=malloc((size_t)w*h*sizeof(float)),*detail=malloc((size_t)w*h*sizeof(float));
@@ -125,23 +125,31 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
         size_t src=((size_t)y*original->size.height/h*original->size.width+(size_t)x*original->size.width/w)*4;
         luma[y*w+x]=(pixels[src]*.2126f+pixels[src+1]*.7152f+pixels[src+2]*.0722f)/255.f;
     }
+    float variance=0;
     for (unsigned y=0;y<h;++y) for (unsigned x=0;x<w;++x) {
-        float avg=0;
+        float avg=0,local=0;
         for (int dy=-3;dy<=3;++dy) for (int dx=-3;dx<=3;++dx)
-            avg+=luma[(((int)y+dy+3*(int)h)%h)*w+((int)x+dx+3*(int)w)%w];
-        detail[y*w+x]=bound(-1,(luma[y*w+x]-avg/49)*3,1);
+            avg+=luma[(((int)y+dy*3+12*(int)h)%h)*w+((int)x+dx*3+12*(int)w)%w];
+        for (int dy=-1;dy<=1;++dy) for (int dx=-1;dx<=1;++dx)
+            local+=luma[(((int)y+dy+3*(int)h)%h)*w+((int)x+dx+3*(int)w)%w];
+        detail[y*w+x]=local/9-avg/49;
+        variance+=detail[y*w+x]*detail[y*w+x];
     }
+    // Contrast-normalized medium-scale detail survives the tracer's wider
+    // normal mip footprint. A floor avoids amplifying flat/noisy textures.
+    const float contrast=fmaxf(.06f,3*sqrtf(variance/(w*h)));
+    for (unsigned i=0;i<w*h;++i) detail[i]=bound(-1,detail[i]/contrast,1);
     for (unsigned y=0;y<h;++y) for (unsigned x=0;x<w;++x) {
         unsigned i=y*w+x;
-        float dx=detail[y*w+(x+1)%w]-detail[y*w+(x+w-1)%w];
-        float dy=detail[((y+1)%h)*w+x]-detail[((y+h-1)%h)*w+x];
+        float dx=detail[y*w+(x+3)%w]-detail[y*w+(x+3*w-3)%w];
+        float dy=detail[((y+3)%h)*w+x]-detail[((y+3*h-3)%h)*w+x];
         orm[i*4]=orm[i*4+3]=255;orm[i*4+2]=0;
-        orm[i*4+1]=(unsigned char)(255*bound(.25f,roughness-detail[i]*.08f,.99f));
-        normal[i*4]=(unsigned char)(255*(.5f-dx*relief*.5f)+.5f);
-        normal[i*4+1]=(unsigned char)(255*(.5f-dy*relief*.5f)+.5f);
+        orm[i*4+1]=(unsigned char)(255*bound(.25f,roughness-detail[i]*.12f,.99f));
+        normal[i*4]=(unsigned char)(255*(.5f-bound(-.30f,dx*relief,.30f)*.5f)+.5f);
+        normal[i*4+1]=(unsigned char)(255*(.5f-bound(-.30f,dy*relief,.30f)*.5f)+.5f);
         normal[i*4+2]=normal[i*4+3]=255;
     }
-    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v1_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
+    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v2_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
     _mkdir("rt/mat");_mkdir("rt/mat/cof_auto");
     qboolean ok=CofPbrWriteKtx(entry->alias,"orm",w,h,orm) && CofPbrWriteKtx(entry->alias,"n",w,h,normal);
     free(luma);free(detail);free(orm);free(normal);
