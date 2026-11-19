@@ -221,3 +221,52 @@ helper100788f0. Назначение всех полей HUD think не уста
 Jump/CheckParameters/WalkMove (`10013160/10010dc0/10016ba0`) исследуются отдельной
 симметричной выборкой с сервером; здесь сохранён факт сравнения, а формулы
 описаны в серверной/физической части анализа.
+
+## Нативная реализация в репозитории
+
+`src/cof/client/movement.cpp/.h` и `tools/prepare_movement_client.py` подключают
+ввод и сообщения к собираемому SDK. Transform работает только с disposable
+деревом `build/game*-source`, исходный SDK и оригинальные ресурсы игры не меняет.
+`status_hud.cpp` сохраняет прежние шкалы и получает reset на ResetHUD/InitHUD.
+
+Реализованы `+sprint/-sprint`, `+dodge/-dodge`, directional double-tap с окном
+0.18с, jump/duck gates при FallOver и camera attachment, сообщения Health,
+Stamina, HealthCap, FallOver, HoldBreath, Ladder, AttachCam и CameraZoom.
+Серверные проверки и расход stamina выполняет серверный movement-модуль.
+Исходные скорости forward/back/side по строке `1014fb80` равны230; stock SDK
+умножение движения на `cl_movespeedkey` и предварительный GetClientMaxspeed
+clamp удалены: CoF использует clientmaxspeed как процент в PM-коде.
+Существующая привязка `+speed` стала совместимым alias для `+sprint`.
+
+Передаются обычные поля `usercmd_t` SDK; оригинальное расширение0x38 и скрытые
+flags в roll/impact_position не копируются. Client gate10559515 не выдуман:
+ограничения dodge делегированы серверу. Исправлено залипание короткого dodge
+tap: его pressed-bit после сборки команды очищается. Health принимает3байта
+CoF и legacy1байт, Damage —12 или13, FallOver —1 или2; остальные обработчики
+отклоняют неверную длину до чтения. Health с mode!=0 проверяет message index,
+что строже оригинального reader. Remote player HP пока не отображается отдельной
+таблицей; обновление локальной шкалы реализовано.
+
+Лестничная камера использует native entity marker `iuser4=0x434f46`,
+`vuser1=world eye`, `vuser2=view angles`; это **новый безопасный транспорт порта**,
+а не утверждение об оригинальной ABI. Пакует поля серверный ladder-модуль,
+runtime delta готовит `tools/prepare_movement_protocol.py`. До появления этих
+полей возможен fallback на client attachment0/позицию камеры. Viewmodel скрывается
+при attachment, finishladder снимает local camera/input state. CameraZoom
+интерпретируется как скорость перехода к серверному SetFOV, не как FOV50;
+точный оригинальный интерполятор ещё не восстановлен.
+
+Нормальная Waf-сборка и изолированный movement smoke с `-nosound` прошли:
+`COF_MOVEMENT_CLIENT_COMPLETE failures=0`, включая проверки wire lengths,
+signed COORD, HP index, stamina deadline, sprint/dodge bits, FallOver блокировки
+и границы SDK usercmd. `COF_MOVEMENT_CAMERA_APPLIED ... network_eye=1` подтвердил
+доставку и применение сетевого положения головы. Это runtime assertions,
+**не визуальная проверка**. Итоговый повторный прогон x86 и RTX x64 также прошёл,
+включая shared PM на клиенте и сервере и переход ввода через меню.
+
+Оставшиеся ограничения: HoldBreath reader подключён, но отдельная scoped-rifle
+механика ожидает реализации оружия; camera interpolation является адаптацией.
+Лестница получает forward/back press/release команды. Открытие меню/инвентаря
+или потеря active ввода посылает release обоих направлений один раз; возврат
+посылает press только ещё удерживаемых кнопок. Тест вызывает настоящий обработчик
+перехода с перехватом сетевых команд и проверяет отсутствие повторных отправок.

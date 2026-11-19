@@ -99,6 +99,7 @@ def main():
     parser.add_argument('--width',type=int,default=1280)
     parser.add_argument('--height',type=int,default=720)
     parser.add_argument('--ui',action='store_true')
+    parser.add_argument('--movement',action='store_true',help='Run recovered movement, vitals and animated ladder assertions without desktop input')
     parser.add_argument('--upscaling',action='store_true',help='Live upscaler menu transactions in one process')
     parser.add_argument('--upscaling-native-start',action='store_true',help='Start the upscaling test from a saved native-resolution preference')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
@@ -126,6 +127,8 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.movement and any((args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
+        parser.error('--movement is a dedicated gameplay scenario')
     if args.upscaling_native_start:args.upscaling=True
     if args.upscaling and any((args.console_output,args.graphics,args.motion,args.lighting,args.lens,
                               args.menu_scene,args.menu_optics,args.menu_cycle,args.cursor,args.water_view)):
@@ -179,6 +182,7 @@ def main():
     if args.console_output:tag=args.renderer+'-console-output'
     if args.upscaling:tag=args.renderer+'-upscaling'
     if args.motion:tag+='-motion-'+(args.denoiser or 'default')
+    if args.movement:tag+='-movement'
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
     if args.menu_cycle:tag+='-cycle'
@@ -197,6 +201,9 @@ def main():
     for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST','COF_RTX_LIGHTINGTEST','COF_RTX_LIGHTING_POSE'):
         env.pop(flag,None)
     env.pop('COF_MENU_SCENETEST',None)
+    env.pop('COF_MOVEMENTTEST',None)
+    env.pop('COF_LADDERTEST',None)
+    if args.movement:env.update(COF_MOVEMENTTEST='1',COF_LADDERTEST='1')
     env.pop('COF_UPSCALERTEST',None)
     env.pop('COF_UPSCALER_NATIVE_START',None)
     env.pop('COF_MENU_CYCLETEST',None)
@@ -445,6 +452,14 @@ def main():
                     if not any(Path(p).name.lower()==name.lower() for p in modules):raise RuntimeError('Module not observed: '+name)
                 if not args.console_output and 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')
             if any('steamapps' in p.lower() for p in modules):raise RuntimeError('Original game binary loaded')
+            if args.movement:
+                for marker in ('COF_PM_TEST PASS failures=0 side=server', 'COF_PM_TEST PASS failures=0 side=client', 'COF_MOVEMENT_TEST_COMPLETE failures=0',
+                               'COF_MOVEMENT_CLIENT_COMPLETE failures=0', 'COF_LADDER_TEST_COMPLETE failures=0'):
+                    if marker not in text:raise RuntimeError('Missing gameplay assertion: '+marker)
+                if re.search(r'COF_(?:PM|MOVEMENT|LADDER).*\bFAIL\b',text):
+                    raise RuntimeError('Recovered gameplay assertion failed')
+                if not re.search(r'COF_MOVEMENT_CAMERA_APPLIED entity=\d+ network_eye=1',text):
+                    raise RuntimeError('Animated ladder camera did not reach client view')
             movement=re.search(r'COF_SMOKE_MOVEMENT ([\d.-]+) ([\d.-]+) ([\d.-]+) -> ([\d.-]+) ([\d.-]+) ([\d.-]+)',text)
             if not args.ui and not args.lighting and args.map=='c_sdkmap1':
                 if not movement:raise RuntimeError('Player movement not observed')

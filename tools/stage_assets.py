@@ -101,6 +101,8 @@ def main():
     lines = hud.read_text(encoding='latin1').splitlines()
     entries = [line for line in lines[1:] if len(line.split('//')[0].split()) == 7]
     hud.write_text(str(len(entries)) + '\n' + '\n'.join(lines[1:]) + '\n', encoding='latin1')
+    from stage_movement import stage as stage_movement
+    stage_movement(target.parent, source)
     manifest = dict(source=str(source), copied=copied, unchanged=skipped,
                     binary_policy='Only asset extensions allowed; no original DLL/EXE/PDB copied',
                     test_map_sha256=hashlib.sha256(bsp).hexdigest(),

@@ -209,6 +209,15 @@ def prepare(raytracing=False):
     text = text.replace('GAMEDIR=valve', 'GAMEDIR=cryoffear')
     text = text.replace('CLIENT_WEAPONS=ON', 'CLIENT_WEAPONS=OFF')
     (target / 'mod_options.txt').write_text(text)
+    # Gameplay reconstruction uses the same source and PM rules in both renderers.
+    from prepare_movement_physics import prepare as prepare_physics
+    from prepare_movement_server import prepare_server_movement
+    from prepare_movement_client import prepare as prepare_client_movement
+    from prepare_movement_ladders import apply as prepare_ladders
+    prepare_physics(ROOT, target)
+    prepare_server_movement(ROOT, target)
+    prepare_client_movement(target)
+    prepare_ladders(target)
     return target
 
 

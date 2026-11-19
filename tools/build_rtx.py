@@ -141,6 +141,8 @@ def main():
         if source.suffix.lower()=='.cfg' or len(relative.parts)==1:
             if not destination.exists():shutil.copy2(source,destination)
         elif not destination.exists(): os.link(source,destination)
+    from stage_movement import stage as stage_movement
+    stage_movement(RUNTIME)
     native={p.relative_to(RUNTIME).as_posix():sha(p) for p in RUNTIME.rglob('*') if p.suffix.lower() in ('.dll','.exe')}
     from import_menu_rain import stage as stage_menu_rain
     optics=stage_menu_rain(RUNTIME)

@@ -13,16 +13,17 @@ int stamina = 100, healthSet;
 float warningUntil;
 int warningAlpha;
 int StaminaMessage(const char*, int size, void* data) {
-    if (size != 3) return 0;
+    if (size != 3 || !data) return 0;
     BEGIN_READ(data, size);
     stamina = READ_BYTE();
+    if (std::getenv("COF_MOVEMENTTEST")) gEngfuncs.Con_Printf("COF_MOVEMENT_CLIENT_STAMINA value=%d\n", stamina);
     if (std::getenv("COF_UITEST")) gEngfuncs.Con_Printf("COF_UI_STAMINA value=%d\n", stamina);
     const float duration = READ_COORD();
     if (duration > 0) warningUntil = gEngfuncs.GetClientTime() + duration;
     return 1;
 }
 int HealthCapMessage(const char*, int size, void* data) {
-    if (size != 1) return 0;
+    if (size != 1 || !data) return 0;
     const int value = *static_cast<unsigned char*>(data);
     if (value <= 2) healthSet = value;
     if (std::getenv("COF_UITEST")) gEngfuncs.Con_Printf("COF_UI_HEALTHCAP value=%d\n", healthSet);
@@ -44,10 +45,36 @@ void Bar(const char* name, int x, int value, int warning = 0, const char* suffix
 }
 }
 
-void CofStatusHudInit() {
+void CofStatusHudReset() {
     stamina = 100; healthSet = 0; warningUntil = 0; warningAlpha = 0;
+}
+void CofStatusHudInit() {
+    CofStatusHudReset();
     gEngfuncs.pfnHookUserMsg("Stamina", StaminaMessage);
     gEngfuncs.pfnHookUserMsg("HealthCap", HealthCapMessage);
+}
+
+// Pure protocol checks; no input injection, renderer access or desktop activity.
+int CofStatusHudProtocolTest() {
+    const int previousStamina = stamina, previousSet = healthSet, previousAlpha = warningAlpha;
+    const float previousUntil = warningUntil;
+    int failures = 0;
+    const auto check = [&](bool ok, const char* name) {
+        if (!ok) ++failures;
+        gEngfuncs.Con_Printf("COF_MOVEMENT_CLIENT %s %s\n", ok ? "PASS" : "FAIL", name);
+    };
+    unsigned char valid[] = {37, 8, 0}, zero[] = {61, 0, 0}, cap[] = {2};
+    check(StaminaMessage("Stamina", 3, valid) && stamina == 37 &&
+          warningUntil > gEngfuncs.GetClientTime(), "stamina_coord_warning");
+    const float deadline = warningUntil;
+    check(StaminaMessage("Stamina", 3, zero) && stamina == 61 && warningUntil == deadline,
+          "stamina_zero_duration_keeps_warning");
+    check(!StaminaMessage("Stamina", 2, valid) && stamina == 61, "stamina_short_packet_rejected");
+    check(HealthCapMessage("HealthCap", 1, cap) && healthSet == 2, "health_cap_variant");
+    check(!HealthCapMessage("HealthCap", 0, cap) && healthSet == 2, "health_cap_short_packet_rejected");
+    stamina = previousStamina; healthSet = previousSet; warningAlpha = previousAlpha;
+    warningUntil = previousUntil;
+    return failures;
 }
 
 void CofStatusHudDraw() {

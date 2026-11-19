@@ -17,4 +17,8 @@ waf3-*/
 *.pak
 README.md
 !/decompiled/README.md
-/tests/
+/tests/**
+!/tests/**/
+!/tests/cof/shared/movement_pm_tests.inc
+!/tests/cof/server/movement_runtime_tests.inc
+!/tests/cof/server/ladder_runtime_tests.inc
