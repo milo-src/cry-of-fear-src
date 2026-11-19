@@ -61,6 +61,12 @@ def main():
     print(f'Renderer: {"Vulkan RTX" if enabled else "OpenGL"}; RTX profile: {("Performance","Balanced","Quality")[profile]}')
     if args.dry_run:
         print(subprocess.list2cmdline(command));return
+    if enabled:
+        from runtime_preflight import check_rtx_start
+        try:
+            check_rtx_start(runtime / 'xash3d.exe')
+        except (OSError, RuntimeError) as error:
+            raise SystemExit(str(error)) from error
     process = subprocess.Popen(command, cwd=runtime, env=env)
     print(f'Prototype started (PID {process.pid}). Log: {runtime / "engine.log"}')
 

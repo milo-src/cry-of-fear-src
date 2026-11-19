@@ -76,3 +76,13 @@ reported missing imported rain upload; the repeat failed at Vulkan memory
 allocation before rendering (`vkAllocateMemory`, result -2, rasterizer staging
 buffer). These attempts are not evidence of successful menu runtime validation.
 The new gameplay optics are explicitly excluded from the menu path.
+
+Follow-up startup diagnosis found severely exhausted Windows commit headroom
+and a failed CoF process still holding memory. The blue-noise resource matched
+the pinned archive; the loader reports any KTX load failure as a missing file,
+so that message alone does not establish a missing asset. After the failed
+process exited, the installed runtime passed the isolated menu-optics sequence,
+including imported rain upload, frame advancement, perspective hit testing and
+settling. See `analysis/local/rtx-c_game_menu1-crash-recovery-isolated.json`.
+The ordinary RTX launcher now rejects an already-running exact-path instance
+and severe commit-budget exhaustion before creating another game process.
