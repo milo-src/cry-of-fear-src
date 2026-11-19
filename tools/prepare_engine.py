@@ -96,6 +96,25 @@ def prepare(raytracing=False):
         prepare_rtx_materials(target)
         from prepare_rtx_scene import prepare as prepare_rtx_scene
         prepare_rtx_scene(target)
+        # Observe actual per-frame parameters, rather than treating saved cvars
+        # as proof that live upscaler transitions reached the tracing backend.
+        main_render = target / 'ref/gl/gl_rmain.c'
+        text = main_render.read_text()
+        anchor = '\t\tUpscaleCvarsToRtgl( &resolution_params );'
+        if text.count(anchor) != 1: raise RuntimeError('Missing upscaler submission hook')
+        text = text.replace(anchor, anchor + '''
+        if(getenv("COF_UPSCALERTEST")) {
+            static int previousMethod=-99,previousQuality=-99;
+            int method=resolution_params.upscaleTechnique==RG_RENDER_UPSCALE_TECHNIQUE_NVIDIA_DLSS?2:
+                resolution_params.upscaleTechnique==RG_RENDER_UPSCALE_TECHNIQUE_AMD_FSR3?1:0;
+            int quality=method?RT_CVAR_TO_INT32(rt_upscale_quality):0;
+            if(method!=previousMethod||quality!=previousQuality) {
+                gEngfuncs.Con_Printf("COF_UPSCALER_SUBMIT method=%d quality=%d\\n",method,quality);
+                previousMethod=method;previousQuality=quality;
+            }
+        }
+''')
+        main_render.write_text(text)
         prepare_vgui(target)
         return target
     # Shader ports and renderer glue are owned by this repository. The pinned

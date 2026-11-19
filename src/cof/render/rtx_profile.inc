@@ -32,8 +32,17 @@
             if(profile < 0 || profile > 2) profile = 1;
             int method = RT_CVAR_TO_BOOL(_rt_dlss_available) ? 2 :
                 RT_CVAR_TO_BOOL(_rt_fsr3_available) ? 1 : 0;
+            const char *upscaler = getenv("COF_RTX_UPSCALER");
+            int requested = upscaler ? atoi(upscaler) : -1;
+            if(requested >= 0 && requested <= 2) method = requested;
+            // An explicit unsupported choice stays off, never silently switches vendor.
+            if((method == 2 && !RT_CVAR_TO_BOOL(_rt_dlss_available)) ||
+               (method == 1 && !RT_CVAR_TO_BOOL(_rt_fsr3_available))) method = 0;
+            const char *qualitySetting = getenv("COF_RTX_UPSCALE_QUALITY");
+            int quality = qualitySetting ? atoi(qualitySetting) : 4 - profile;
+            if(quality < 1 || quality > 5) quality = 4 - profile;
             gEngfuncs.Cvar_SetValue("rt_upscale_method", method);
-            gEngfuncs.Cvar_SetValue("rt_upscale_quality", method ? 4 - profile : 0);
+            gEngfuncs.Cvar_SetValue("rt_upscale_quality", method ? quality : 0);
             gEngfuncs.Cvar_SetValue("rt_renderscale", 0);
             gEngfuncs.Cvar_SetValue("rt_framegen", 0);
             gEngfuncs.Cvar_SetValue("rt_shadowrays", profile + 1);

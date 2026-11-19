@@ -5,12 +5,23 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 SETTINGS = ROOT / 'out/runtime/cof_renderer.cfg'
 
-def read_settings(path=SETTINGS):
+def read_preferences(path=SETTINGS):
     try:
-        match = re.fullmatch(r'COF_RENDERER_V1\s+([01])\s+([012])\s*', path.read_text(encoding='ascii'))
+        text = path.read_text(encoding='ascii')
     except (OSError, UnicodeError):
-        match = None
-    return tuple(map(int, match.groups())) if match else (0, 1)
+        return (0, 1, -1, 3)
+    match = re.fullmatch(r'COF_RENDERER_V2\s+([01])\s+([012])\s+(-1|[012])\s+([1-5])\s*', text)
+    if match:
+        return tuple(map(int, match.groups()))
+    match = re.fullmatch(r'COF_RENDERER_V1\s+([01])\s+([012])\s*', text)
+    if match:
+        enabled, profile = map(int, match.groups())
+        return (enabled, profile, -1, 4-profile)
+    return (0, 1, -1, 3)
+
+
+def read_settings(path=SETTINGS):
+    return read_preferences(path)[:2]
 
 def rtx_available(runtime):
     from build_rtx import DLLS

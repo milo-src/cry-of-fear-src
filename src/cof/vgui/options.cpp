@@ -122,7 +122,7 @@ class OptionsDialog: public Dialog {
         Value v;v.original=v.draft=value;return values.emplace(name,v).first->second;
     }
     bool Dirty() const {
-        if(rendererOriginal.enabled!=rendererDraft.enabled||rendererOriginal.profile!=rendererDraft.profile)return true;
+        if(rendererOriginal!=rendererDraft)return true;
         for(const auto& v:values)if(v.second.original!=v.second.draft)return true;
         return originalKeys!=draftKeys||originalMode!=selectedMode||originalFullscreen!=selectedFullscreen;
     }
@@ -239,12 +239,22 @@ class OptionsDialog: public Dialog {
         Control label;label.text="Профиль качества";label.bounds={12,58,200,22};controls.push_back(label);
         Control profile;profile.id="RTXProfile";profile.kind=Kind::Combo;profile.choices={"Производительность","Баланс","Качество"};
         profile.selected=rendererDraft.profile;profile.bounds={222,58,260,24};controls.push_back(profile);
-        const char* lines[]={"Трассировка света, мягкие тени и отражения.",
-            "Вода с отражением и преломлением света.",
-            "DLSS / FSR выбирается по возможностям видеокарты.",
-            "Генерация кадров выключена.","Потребуется перезапустить игру."};
-        for(int i=0;i<5;++i){Control c;c.id="RTXInfo"+std::to_string(i);c.text=lines[i];c.bounds={12,106+24*i,472,22};controls.push_back(c);}
-        Control current;current.text=RTXActive()?"Сейчас: Vulkan / RTX":"Сейчас: обычный рендер (OpenGL)";current.bounds={12,242,472,22};controls.push_back(current);
+        Control upscaleLabel;upscaleLabel.text="Масштабирование";upscaleLabel.bounds={12,96,200,22};controls.push_back(upscaleLabel);
+        Control upscale;upscale.id="RTXUpscaler";upscale.kind=Kind::Combo;
+        upscale.choices={"Авто (DLSS / FSR)","Нет (родное разрешение)","AMD FSR","NVIDIA DLSS"};
+        upscale.selected=rendererDraft.upscaler+1;upscale.bounds={222,96,260,24};controls.push_back(upscale);
+        Control qualityLabel;qualityLabel.text="Качество DLSS / FSR";qualityLabel.bounds={12,134,200,22};controls.push_back(qualityLabel);
+        Control quality;quality.id="RTXUpscaleQuality";quality.kind=Kind::Combo;
+        quality.choices={"Сглаживание (Native AA)","Качество","Баланс","Производительность","Ультрапроизводительность"};
+        quality.selected=rendererDraft.quality-1;quality.enabled=rendererDraft.upscaler!=0;
+        quality.bounds={222,134,260,24};controls.push_back(quality);
+        const char* lines[]={"DLSS / FSR и профиль: применяются сразу в RTX.",
+            "Смена RTX / OpenGL: после перезапуска игры.","Генерация кадров выключена."};
+        for(int i=0;i<3;++i){Control c;c.id="RTXInfo"+std::to_string(i);c.text=lines[i];c.bounds={12,178+24*i,472,22};controls.push_back(c);}
+        Control current;current.text=RTXActive()?"Сейчас: Vulkan / RTX":"Сейчас: обычный рендер (OpenGL)";
+        if(RTXActive())current.text+=EngFuncs::GetCvarFloat("rt_upscale_quality")<=0?"; без масштабирования":
+            EngFuncs::GetCvarFloat("rt_upscale_method")==2?"; DLSS":"; FSR";
+        current.bounds={12,250,472,22};controls.push_back(current);
         if(!RTXAvailable()){Control c;c.text="RTX не собран. Запустите build-rtx.bat и start-game.bat.";c.bounds={12,270,472,22};controls.push_back(c);}
     }
     void BuildPage() {
@@ -290,10 +300,36 @@ class OptionsDialog: public Dialog {
         Buttons();
     }
     bool Apply() {
-        if(rendererOriginal.enabled!=rendererDraft.enabled||rendererOriginal.profile!=rendererDraft.profile) {
+        if(rendererOriginal!=rendererDraft) {
+            int method=rendererDraft.upscaler;
+            if(RTXActive()) {
+                const bool dlss=EngFuncs::GetCvarFloat("_rt_dlss_available")!=0,fsr=EngFuncs::GetCvarFloat("_rt_fsr3_available")!=0;
+                if((method==2&&!dlss)||(method==1&&!fsr)) {
+                    status=method==2?"DLSS недоступен. Выберите Авто, FSR или Нет.":"FSR недоступен. Выберите Авто или Нет.";
+                    BuildPage();return false;
+                }
+                if(method<0)method=dlss?2:fsr?1:0;
+            }
             if(!WriteRendererSettings(rendererDraft)){status="Не удалось сохранить настройки RTX.";BuildPage();return false;}
+            if(RTXActive()) {
+                if(rendererOriginal.upscaler!=rendererDraft.upscaler||rendererOriginal.quality!=rendererDraft.quality) {
+                    // Both must be zero for native resolution (including first-frame bootstrap).
+                    EngFuncs::CvarSetValue("rt_upscale_method",float(method));
+                    EngFuncs::CvarSetValue("rt_upscale_quality",float(method?rendererDraft.quality:0));
+                    EngFuncs::CvarSetValue("rt_renderscale",0);
+                    EngFuncs::CvarSetValue("rt_ef_vintage",0);
+                }
+                if(rendererOriginal.profile!=rendererDraft.profile) {
+                    int profile=rendererDraft.profile;
+                    EngFuncs::CvarSetValue("rt_shadowrays",float(profile+1));
+                    EngFuncs::CvarSetValue("rt_indir2bounces",float(profile>0));
+                    EngFuncs::CvarSetValue("rt_reflrefr_depth",float(profile==0?4:6));
+                    EngFuncs::CvarSetValue("rt_volume_type",float(profile==0?0:1));
+                }
+            }
             rendererOriginal=rendererDraft;
-            status="Сохранено. Потребуется перезапустить игру.";
+            status=bool(rendererDraft.enabled)!=RTXActive()?"Смена рендера сохранена. Перезапустите игру.":
+                RTXActive()?"Настройки RTX применены.":"Настройки сохранены для следующего запуска RTX.";
         }
         auto sensitivity=values.find("sensitivity");
         if(sensitivity!=values.end()&&sensitivity->second.draft!=sensitivity->second.original) {
@@ -355,6 +391,8 @@ public:
             return;
         }
         if(c.id=="RTXProfile"){rendererDraft.profile=std::max(0,std::min(2,c.selected));if(Find("Apply"))Find("Apply")->enabled=Dirty();return;}
+        if(c.id=="RTXUpscaler"){rendererDraft.upscaler=std::max(-1,std::min(2,c.selected-1));BuildPage();return;}
+        if(c.id=="RTXUpscaleQuality"){rendererDraft.quality=std::max(1,std::min(5,c.selected+1));if(Find("Apply"))Find("Apply")->enabled=Dirty();return;}
         if(c.id=="AdvancedScroll") {int value=int(c.number);if(value!=advancedScroll){advancedScroll=value;BuildPage();Focus("AdvancedScroll");}return;}
         if(c.id=="listpanel_keybindlist"){RefreshKeyList();return;}
         if(c.id=="Resolution"&&c.selected>=0&&c.selected<int(videoModes.size()))selectedMode=videoModes[c.selected];

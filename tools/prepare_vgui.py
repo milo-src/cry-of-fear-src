@@ -22,13 +22,14 @@ def prepare_vgui(target):
             shutil.copy2(file, folder / file.name)
     shutil.copy2(ROOT/'tests/cof/vgui/runtime_tests.inc', folder/'runtime_tests.inc')
     shutil.copy2(ROOT/'tests/cof/vgui/console_runtime_tests.inc', folder/'console_runtime_tests.inc')
+    shutil.copy2(ROOT/'tools/upscaler_runtime_tests.inc', folder/'upscaler_runtime_tests.inc')
     with (folder/'ui.cpp').open('a') as stream:
-        stream.write('\n#include "runtime_tests.inc"\n')
+        stream.write('\n#include "runtime_tests.inc"\n#include "upscaler_runtime_tests.inc"\n')
     replace_once(ui/'wscript', "\t\t'*.cpp',", "\t\t'*.cpp',\n\t\t'cof_vgui/*.cpp',")
     replace_once(ui/'BaseMenu.cpp', 'void UI_Init( void )\n{',
         'namespace cof { namespace vgui { void Register(); } }\nvoid UI_Init( void )\n{\n\tcof::vgui::Register();')
     replace_once(ui/'BaseMenu.cpp', 'void UI_UpdateMenu( float flTime )\n{',
-        'namespace cof { namespace vgui { void TestFrame(); } }\nvoid UI_UpdateMenu( float flTime )\n{\n\tcof::vgui::TestFrame();')
+        'namespace cof { namespace vgui { void TestFrame(); void UpscalerTestFrame(); } }\nvoid UI_UpdateMenu( float flTime )\n{\n\tcof::vgui::TestFrame();\n\tcof::vgui::UpscalerTestFrame();')
     # Route every options entry, including menu_options and client optionshack,
     # through the same recovered dialog. No stock configuration page remains.
     replace_once(ui/'menus/Configuration.cpp', 'ADD_MENU( menu_options, CMenuOptions, UI_Options_Menu );',

@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 import subprocess
 import os
-from renderer_settings import read_settings, rtx_available, SETTINGS
+from renderer_settings import read_preferences, rtx_available, SETTINGS
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNTIME = ROOT / 'out/runtime'
@@ -26,7 +26,7 @@ def main():
         parser.error('Specify both --width and --height')
     if args.width is not None and not (640 <= args.width <= 16384 and 480 <= args.height <= 16384):
         parser.error('Resolution must be between 640x480 and 16384x16384')
-    enabled, profile = read_settings()
+    enabled, profile, upscaler, quality = read_preferences()
     if args.renderer: enabled = int(args.renderer == 'rtx')
     rt_runtime = ROOT / 'out/runtime-rtx'
     available = rtx_available(rt_runtime)
@@ -57,7 +57,8 @@ def main():
     else:
         command += ['+menu_main']
     env = dict(os.environ, COF_RENDERER_SETTINGS=str(SETTINGS), COF_RTX_AVAILABLE=str(int(available)),
-               COF_RTX_ACTIVE=str(enabled), COF_RTX_PROFILE=str(profile))
+               COF_RTX_ACTIVE=str(enabled), COF_RTX_PROFILE=str(profile),
+               COF_RTX_UPSCALER=str(upscaler), COF_RTX_UPSCALE_QUALITY=str(quality))
     print(f'Renderer: {"Vulkan RTX" if enabled else "OpenGL"}; RTX profile: {("Performance","Balanced","Quality")[profile]}')
     if args.dry_run:
         print(subprocess.list2cmdline(command));return

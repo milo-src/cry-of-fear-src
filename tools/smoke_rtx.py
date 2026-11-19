@@ -99,6 +99,8 @@ def main():
     parser.add_argument('--width',type=int,default=1280)
     parser.add_argument('--height',type=int,default=720)
     parser.add_argument('--ui',action='store_true')
+    parser.add_argument('--upscaling',action='store_true',help='Live upscaler menu transactions in one process')
+    parser.add_argument('--upscaling-native-start',action='store_true',help='Start the upscaling test from a saved native-resolution preference')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
     parser.add_argument('--graphics',action='store_true',help='Use the stationary water/lighting fixture')
     parser.add_argument('--water-view',action='store_true',help='Inspect water reflections from a low camera angle')
@@ -123,6 +125,10 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.upscaling_native_start:args.upscaling=True
+    if args.upscaling and any((args.console_output,args.graphics,args.motion,args.lighting,args.lens,
+                              args.menu_scene,args.menu_optics,args.menu_cycle,args.cursor,args.water_view)):
+        parser.error('--upscaling cannot be combined with another scene driver')
     if not (640<=args.width<=16384 and 480<=args.height<=16384):parser.error('Invalid test resolution')
     if args.readback and (args.interactive or args.renderer!='rtx'):parser.error('--readback requires isolated RTX mode')
     if args.cursor and not args.interactive:parser.error('--cursor changes focus and requires an explicitly authorized --interactive session')
@@ -156,6 +162,7 @@ def main():
         if not args.lighting or len(pose)!=6 or not all(math.isfinite(v) for v in pose):
             parser.error('--pose requires --lighting and six finite numbers')
     if args.console_output:args.ui=True
+    if args.upscaling:args.ui=True
     if args.water_view:args.graphics=True
     if args.graphics or args.motion:args.map='cof_graphics_test'
     if not re.fullmatch('[a-zA-Z0-9_]+',args.map):parser.error('Invalid map')
@@ -167,6 +174,7 @@ def main():
     report=ROOT/'analysis/local';report.mkdir(parents=True,exist_ok=True)
     tag=args.renderer+('-settings' if args.ui else '-'+args.map)
     if args.console_output:tag=args.renderer+'-console-output'
+    if args.upscaling:tag=args.renderer+'-upscaling'
     if args.motion:tag+='-motion-'+(args.denoiser or 'default')
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
@@ -175,7 +183,8 @@ def main():
     if not args.interactive:tag+='-isolated'
     settings=ROOT/'build'/('test-'+tag+'-renderer.cfg');settings.unlink(missing_ok=True)
     env=dict(os.environ,COF_RENDERER_SETTINGS=str(settings),COF_RTX_AVAILABLE='1',
-             COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1')
+             COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1',
+             COF_RTX_UPSCALER='-1',COF_RTX_UPSCALE_QUALITY='3')
     request=ROOT/'build'/('readback-'+tag+'.request')
     if args.readback:
         layer=ROOT/'build/readback'
@@ -185,6 +194,8 @@ def main():
     for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST','COF_RTX_LIGHTINGTEST','COF_RTX_LIGHTING_POSE'):
         env.pop(flag,None)
     env.pop('COF_MENU_SCENETEST',None)
+    env.pop('COF_UPSCALERTEST',None)
+    env.pop('COF_UPSCALER_NATIVE_START',None)
     env.pop('COF_MENU_CYCLETEST',None)
     env.pop('COF_MENUOPTICSTEST',None)
     if args.menu_optics:env['COF_MENUOPTICSTEST']='1'
@@ -208,6 +219,14 @@ def main():
         if args.menu_cycle:env['COF_MENU_CYCLETEST']='1'
     if args.console_output:
         env.pop('COF_RTX_UITEST',None);env['COF_CONSOLE_OUTPUTTEST']='1'
+    if args.upscaling:
+        env.pop('COF_RTX_UITEST',None);env['COF_UPSCALERTEST']='1'
+        settings.write_text('COF_RENDERER_V1 0 1\n',encoding='ascii')
+        if args.upscaling_native_start:
+            settings.write_text('COF_RENDERER_V2 0 1 0 3\n',encoding='ascii')
+            from renderer_settings import read_preferences
+            _,_,upscaler,quality=read_preferences(settings)
+            env.update(COF_RTX_UPSCALER=str(upscaler),COF_RTX_UPSCALE_QUALITY=str(quality),COF_UPSCALER_NATIVE_START='1')
     configs={p:p.read_bytes() for p in (runtime/'cryoffear').glob('*.cfg')}
     logpath=runtime/'engine.log';logpath.unlink(missing_ok=True)
     command=[str(runtime/'xash3d.exe'),'-game','cryoffear','-borderless' if args.borderless else '-windowed','-width',str(args.width),'-height',str(args.height),'-log','-nosound']
@@ -227,6 +246,7 @@ def main():
             while process.poll() is None and time.monotonic()-begin<(min(600,max(1,args.timeout)) if args.timeout else 120 if args.menu_cycle else 60):
                 text=logpath.read_text(errors='replace') if logpath.exists() else ''
                 markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
+                if args.upscaling:markers=['saved startup preference','off survives reopening','quality cancel and reopen']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
                 if args.lens:markers=['COF_LENS_CAPTURE '+str(i)+' ' for i in range(7)]
                 if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE','COF_CONSOLE_MAP_CAPTURE']
@@ -268,6 +288,14 @@ def main():
                 if len(observed)!=7 or 'COF_LENS_CAPTURE' not in text or re.search(r'COF_LENS_CAPTURE \d+ FAIL',text):
                     raise RuntimeError('Rain lens state sequence failed')
             if args.console_output:marker='COF_CONSOLE_OUTPUT_COMPLETE failures=0'
+            if args.upscaling:
+                marker='COF_UPSCALER_COMPLETE failures=0'
+                if args.renderer=='rtx':
+                    submissions=[tuple(map(int,pair)) for pair in re.findall(r'COF_UPSCALER_SUBMIT method=(\d) quality=(\d)',text)]
+                    if (0,0) not in submissions or not all(any(m>0 and q==quality for m,q in submissions) for quality in (1,2,3,4)):
+                        raise RuntimeError('Live native/AA/quality/balanced/performance did not reach tracing backend')
+                    if args.upscaling_native_start and submissions[0]!=(0,0):
+                        raise RuntimeError('Saved native-resolution preference was overridden at startup')
             if args.menu_scene:
                 if args.menu_optics and 'COF_MENU_OPTICS_COMPLETE failures=0' not in text:
                     raise RuntimeError('RTX menu optics/input assertions failed')
