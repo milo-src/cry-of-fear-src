@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/shader-pass-vector-helpers",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "e71fa294dbe06def5a86ca5f6d7af10b13f78ef046df600e2ed5a99970bf7fb4",
+      "procedure": "ram:0x100947c0",
+      "evidence_id": "ev_5d8f70fc2a8e5ce5072c13ef7c2bd9349cfa09f42e50cdd23cb84f1fbc37f206",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "22aa974cdc1081907ac598fd22328f39fc3a028413d3d56e963cd938feaa2dd4",
+      "procedure": "ram:0x10094730",
+      "evidence_id": "ev_0eecf742c1f80dd1febdf1c586a8210ccfdd94f7a471e8241394c4b6d614fd12",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

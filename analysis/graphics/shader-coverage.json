@@ -1,0 +1,252 @@
+{
+  "schema": 1,
+  "target_executed": false,
+  "installation": "D:\\Steam\\steamapps\\common\\Cry of Fear",
+  "loose_source_extensions": [
+    ".cg",
+    ".fp",
+    ".frag",
+    ".fsh",
+    ".glsl",
+    ".vert",
+    ".vp",
+    ".vsh"
+  ],
+  "container_extensions": [
+    ".pak",
+    ".pk3",
+    ".zip",
+    ".vpk"
+  ],
+  "containers": [],
+  "scan_boundary": "all loose matching files under install; ASCII assembly markers in client.dll, hw.dll and opengl32.dll",
+  "limitations": [
+    "Does not identify dynamically assembled shaders or register-combiner state machines.",
+    "Container discovery is complete for the declared extensions; any found container requires a separate member-table inspection.",
+    "Does not analyze third-party Cg compiler libraries.",
+    "Raw pointer occurrences are candidates, not validated code references.",
+    "Shader source existence does not prove an active call path or pixel parity."
+  ],
+  "loose_sources": [
+    {
+      "path": "cryoffear/cgshaders/black_fp.cg",
+      "bytes": 558,
+      "sha256": "18f46679d2c995e75e05d42501402ff5bae4363206b3de037b9d361d4c5a46fb",
+      "uniforms": [
+        [
+          "sampler2D",
+          "DecalTex",
+          "TEXUNIT0"
+        ]
+      ],
+      "texture_lookups": [
+        [
+          "tex2D",
+          "DecalTex"
+        ]
+      ],
+      "source": "struct FragOut_s\r\n{\r\n\tfloat4 flColor : COLOR;\r\n};\r\n\r\nstruct VertIn_s\r\n{\r\n\tfloat4 flPos : POSITION;\r\n\tfloat4 flTexCoord0 : TEXCOORD0;\r\n};\r\n\r\nFragOut_s main( in VertIn_s IN, \r\n\t\t\t   uniform sampler2D DecalTex : TEXUNIT0 )\r\n{\r\n\tFragOut_s OUT;\r\n\r\n\tfloat4 flColor = tex2D( DecalTex, IN.flTexCoord0.xy );\r\n\r\n\tfloat flColor1 = ( ( flColor.r + flColor.g + flColor.b )/ 0.5f );\r\n\tflColor1 = 2.0f * (flColor1 - .5f);//expand( flColor1 );\r\n\t//flColor1 = flColor1/.001f;\r\n\tOUT.flColor.rgb = 0.2f - flColor1;\r\n\tOUT.flColor.a = 1;//OUT.flColor.rgb - 1;\r\n\t\r\n\treturn OUT;\r\n}"
+    },
+    {
+      "path": "cryoffear/cgshaders/black_vp.cg",
+      "bytes": 334,
+      "sha256": "cfc64cc77083299e46bf0f0683224e83121e7d62ad19d45e12af272b61d04b2e",
+      "uniforms": [
+        [
+          "float4x4",
+          "ModelViewProj",
+          ""
+        ]
+      ],
+      "texture_lookups": [],
+      "source": "struct VertOut_s\r\n{\r\n\tfloat4 flPos : POSITION;\r\n\tfloat4 flTexCoord0 : TEXCOORD0;\r\n};\r\n\r\n\r\nVertOut_s main( in float4 flPos : POSITION,\r\n\t\t\t   in float4 flTexCoord0 : TEXCOORD0,\r\n\t\t\t   uniform float4x4 ModelViewProj )\r\n{\r\n\tVertOut_s OUT;\r\n\tOUT.flTexCoord0 = flTexCoord0;\r\n\r\n\tOUT.flPos = mul( ModelViewProj, flPos );\r\n\r\n\treturn OUT;\r\n}\r\n"
+    },
+    {
+      "path": "cryoffear/cgshaders/fp20_black_fp.cg",
+      "bytes": 532,
+      "sha256": "d44bab007c2f46df3b5e6a7c1b502a156327105584f832f7ce456c7f94095105",
+      "uniforms": [
+        [
+          "sampler2D",
+          "DecalTex",
+          "TEXUNIT0"
+        ]
+      ],
+      "texture_lookups": [
+        [
+          "tex2D",
+          "DecalTex"
+        ]
+      ],
+      "source": "struct FragOut_s\r\n{\r\n\tfloat4 flColor : COLOR;\r\n};\r\n\r\nstruct VertIn_s\r\n{\r\n\tfloat4 flPos : POSITION;\r\n\tfloat4 flTexCoord0 : TEXCOORD0;\r\n};\r\n\r\nFragOut_s main( in VertIn_s IN, \r\n\t\t\t   uniform sampler2D DecalTex : TEXUNIT0 )\r\n{\r\n\tFragOut_s OUT;\r\n\r\n\tfloat4 flColor = tex2D( DecalTex, IN.flTexCoord0.xy );\r\n\r\n\tfloat flColor1 = ( ( flColor.r + flColor.g + flColor.b )/ 0.5f );\r\n\tflColor1 = expand( flColor1 );\r\n\t//flColor1 = flColor1/.001f;\r\n\tOUT.flColor.rgb = 0.2f - flColor1;\r\n\tOUT.flColor.a = 1;//OUT.flColor.rgb - 1;\r\n\t\r\n\treturn OUT;\r\n}"
+    },
+    {
+      "path": "cryoffear/cgshaders/fp20_water_fp.cg",
+      "bytes": 862,
+      "sha256": "5270b861d29b06e977b9c07e96b6b0827720969dff08da2c04c6d9b6a539734a",
+      "uniforms": [
+        [
+          "sampler2D",
+          "OffsetTex",
+          "TEXUNIT0"
+        ],
+        [
+          "sampler2D",
+          "Identity",
+          "TEXUNIT1"
+        ],
+        [
+          "sampler2D",
+          "DecalTex",
+          "TEXUNIT2"
+        ],
+        [
+          "sampler2D",
+          "MaskTex",
+          "TEXUNIT3"
+        ],
+        [
+          "float4",
+          "TexOffset",
+          ""
+        ]
+      ],
+      "texture_lookups": [
+        [
+          "tex2D",
+          "OffsetTex"
+        ],
+        [
+          "tex2D",
+          "Identity"
+        ],
+        [
+          "offsettex2D",
+          "DecalTex"
+        ],
+        [
+          "tex2D",
+          "MaskTex"
+        ]
+      ],
+      "source": "struct FragOut_s\r\n{\r\n\tfloat4 flColor : COLOR;\r\n};\r\n\r\nstruct VertIn_s\r\n{\r\n\tfloat4 flPos : POSITION;\r\n\tfloat4 flTexCoord0 : TEXCOORD0;\r\n\tfloat4 flTexCoord1 : TEXCOORD1;\r\n\tfloat4 flTexCoord2 : TEXCOORD2;\r\n\tfloat4 flTexCoord3 : TEXCOORD3;\r\n};\r\n\r\nFragOut_s main( in VertIn_s IN, \r\n\t\t\t   uniform sampler2D OffsetTex : TEXUNIT0,\r\n\t\t\t   uniform sampler2D Identity : TEXUNIT1,\r\n\t\t\t   uniform sampler2D DecalTex : TEXUNIT2,\r\n\t\t\t   uniform sampler2D MaskTex : TEXUNIT3,\r\n\t\t\t   uniform float4 TexOffset )\r\n{\r\n\tFragOut_s OUT;\r\n\r\n\tfloat4 flColor= tex2D( OffsetTex, IN.flTexCoord0 );\r\n\r\n\tfloat4 flPrevLookup = tex2D( Identity, flColor.gb );\r\n\r\n\r\n\tOUT.flColor = offsettex2D( DecalTex, IN.flTexCoord2.xy, flPrevLookup, TexOffset );\r\n\t\r\n\tOUT.flColor.a = 1;\r\n\t\r\n\tfloat flMask = tex2D( MaskTex, IN.flTexCoord3.xy ).r;\r\n\r\n\r\n\tOUT.flColor = OUT.flColor *( flMask );\r\n\t\r\n\treturn OUT;\r\n}"
+    },
+    {
+      "path": "cryoffear/cgshaders/water_fp.cg",
+      "bytes": 856,
+      "sha256": "1f4d4ef95e473896c71bb0c1337f91f9c22ebee547e9542b05cbc29e169be7d5",
+      "uniforms": [
+        [
+          "sampler2D",
+          "OffsetTex",
+          "TEXUNIT0"
+        ],
+        [
+          "sampler2D",
+          "Identity",
+          "TEXUNIT1"
+        ],
+        [
+          "sampler2D",
+          "DecalTex",
+          "TEXUNIT2"
+        ],
+        [
+          "sampler2D",
+          "MaskTex",
+          "TEXUNIT3"
+        ],
+        [
+          "float4",
+          "TexOffset",
+          ""
+        ]
+      ],
+      "texture_lookups": [
+        [
+          "tex2D",
+          "OffsetTex"
+        ],
+        [
+          "tex2D",
+          "DecalTex"
+        ],
+        [
+          "tex2D",
+          "MaskTex"
+        ]
+      ],
+      "source": "struct FragOut_s\r\n{\r\n\tfloat4 flColor : COLOR;\r\n};\r\n\r\nstruct VertIn_s\r\n{\r\n\tfloat4 flPos : POSITION;\r\n\tfloat4 flTexCoord0 : TEXCOORD0;\r\n\tfloat4 flTexCoord1 : TEXCOORD1;\r\n\tfloat4 flTexCoord2 : TEXCOORD2;\r\n\tfloat4 flTexCoord3 : TEXCOORD3;\r\n};\r\n\r\nFragOut_s main( in VertIn_s IN, \r\n\t\t\t   uniform sampler2D OffsetTex : TEXUNIT0,\r\n\t\t\t   uniform sampler2D Identity : TEXUNIT1,\r\n\t\t\t   uniform sampler2D DecalTex : TEXUNIT2,\r\n\t\t\t   uniform sampler2D MaskTex : TEXUNIT3,\r\n\t\t\t   uniform float4 TexOffset )\r\n{\r\n\tFragOut_s OUT;\r\n\r\n\tfloat4 flColor= tex2D( OffsetTex, IN.flTexCoord0.xy );\r\n\r\n\tfloat2 flTex = IN.flTexCoord1.xy + TexOffset.xy * flColor.xx + TexOffset.zw *flColor.yy;\r\n\tOUT.flColor = tex2D( DecalTex, flTex.xy );\r\n\tOUT.flColor.a = 1;\r\n\r\n\t\r\n\tfloat flMask = tex2D( MaskTex, IN.flTexCoord3.xy ).r;\r\n\r\n\r\n\tOUT.flColor = OUT.flColor *( flMask );\r\n\t\r\n\treturn OUT;\r\n}"
+    },
+    {
+      "path": "cryoffear/cgshaders/water_vp.cg",
+      "bytes": 674,
+      "sha256": "c809d78a482f6dadfeeb45cdbcd28510fbb7ad7f5bf5c7e081b6beed0308c58e",
+      "uniforms": [
+        [
+          "float4x4",
+          "ModelViewProj",
+          ""
+        ],
+        [
+          "float",
+          "flScreen",
+          ""
+        ]
+      ],
+      "texture_lookups": [],
+      "source": "struct VertOut_s\r\n{\r\n\tfloat4 flPos : POSITION;\r\n\tfloat4 flTexCoord0 : TEXCOORD0;\r\n\tfloat4 flTexCoord1 : TEXCOORD1;\r\n\tfloat4 flTexCoord2 : TEXCOORD2;\r\n\tfloat4 flTexCoord3 : TEXCOORD3;\r\n};\r\n\r\n\r\nVertOut_s main( in float4 flPos : POSITION,\r\n\t\t\t   in float4 flTexCoord0 : TEXCOORD0,\r\n\t\t\t   uniform float4x4 ModelViewProj,\r\n\t\t\t   in uniform float flScreen)\r\n{\r\n\tVertOut_s OUT;\r\n\tOUT.flTexCoord0 = flTexCoord0;\r\n//\tOUT.flTexCoord0.y = flTexCoord0.y * ( 1024 );\r\n\tOUT.flTexCoord1 = flTexCoord0;\r\n\tOUT.flTexCoord2 = flTexCoord0;\r\n\tOUT.flTexCoord2.y = flTexCoord0.y + ( flScreen );\r\n\tOUT.flTexCoord3 = flTexCoord0;\r\n\r\n\tOUT.flPos = mul( ModelViewProj, flPos );\r\n\r\n\treturn OUT;\r\n}\r\n\r\n\r\n"
+    }
+  ],
+  "renderer_modules": [
+    {
+      "path": "cryoffear/cl_dlls/client.dll",
+      "bytes": 1754112,
+      "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+      "programs": [
+        {
+          "file_offset": "0x18de58",
+          "address": "0x1018f858",
+          "bytes": 660,
+          "sha256": "2df8119a7cd961151f7325a425e89784015eba56c0deb0ee5b8424cbba2dbe07",
+          "nul_terminated": true,
+          "source": "!!ARBfp1.0\nOPTION ARB_precision_hint_fastest;\nATTRIB tex0 = fragment.texcoord[0];\nATTRIB tex1 = fragment.texcoord[1];\nATTRIB tex2 = fragment.texcoord[2];\nATTRIB tex3 = fragment.texcoord[3];\nPARAM scaler = { 4, 4, 2, -1 };\nOUTPUT outColor = result.color;\nTEMP eyevec, lightvec;\nTEMP specdot, col, res;\nTEX eyevec, tex0, texture[0], CUBE;\nMAD eyevec.rgb, eyevec, scaler.b, scaler.a;\nTEX lightvec, tex1, texture[1], 2D;\nMAD lightvec.rgb, lightvec, scaler.b, scaler.a;\nDP3_SAT specdot.a, eyevec, lightvec;\nPOW specdot.a, specdot.a, scaler.r;\nTEX col, tex2, texture[2], 2D;\nTEX res, tex3, texture[3], 2D;\nMUL res.rgb, col, res;\nMUL_SAT outColor, res, specdot.a;\nEND",
+          "raw_pointer_candidates": [
+            {
+              "file_offset": "0x6036e",
+              "address": "0x10060f6e"
+            }
+          ],
+          "pointer_candidates_are_not_validated_xrefs": true
+        },
+        {
+          "file_offset": "0x18e0f0",
+          "address": "0x1018faf0",
+          "bytes": 858,
+          "sha256": "4fb69448e13b0a454d24002e879afda8f924523426a8f5a368ee99ee3e2c8225",
+          "nul_terminated": true,
+          "source": "!!ARBfp1.0\nOPTION ARB_precision_hint_fastest;\nATTRIB tex_camdir = fragment.texcoord[0];\nATTRIB tex_lightmap = fragment.texcoord[1];\nATTRIB tex_face = fragment.texcoord[3];\nPARAM scaler = { 16, 8, 2, -1 };\nOUTPUT outColor = result.color;\nTEMP vec, halfvec;\nTEMP specdot, color;\nTEX vec, tex_lightmap, texture[1], 2D;\nMAD vec.rgb, vec, scaler.b, scaler.a;\nDP3 halfvec.x, tex_camdir, tex_camdir;\nRSQ halfvec.x, halfvec.x;\nMUL halfvec, tex_camdir, halfvec.x;\nADD halfvec, halfvec, vec;\nDP3 halfvec.w, halfvec, halfvec;\nRSQ halfvec.w, halfvec.w;\nMUL halfvec.xyz, halfvec, halfvec.w;\nTEX vec, tex_face, texture[0], 2D;\nMAD vec.rgb, vec, scaler.b, scaler.a;\nDP3_SAT specdot.a, vec, halfvec;\nPOW specdot.a, specdot.a, scaler.r;\nTEX color, tex_lightmap, texture[2], 2D;\nMUL_SAT color, color, specdot.a;\nTEX vec, tex_face, texture[3], 2D;\nMUL outColor, color, vec;\nEND",
+          "raw_pointer_candidates": [
+            {
+              "file_offset": "0x61df2",
+              "address": "0x100629f2"
+            }
+          ],
+          "pointer_candidates_are_not_validated_xrefs": true
+        }
+      ]
+    },
+    {
+      "path": "hw.dll",
+      "bytes": 2121828,
+      "sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+      "programs": []
+    },
+    {
+      "path": "opengl32.dll",
+      "bytes": 57344,
+      "sha256": "26732d7a9aeb8079f2d0c0920f7e433521a2fcc570017c7dafd45bdd30cdbeab",
+      "programs": []
+    }
+  ]
+}

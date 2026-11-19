@@ -22,6 +22,7 @@ extern "C" {
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <cmath>
 extern void KeyDown(kbutton_t*);
 extern void KeyUp(kbutton_t*);
 extern bool CofInventoryVisible();
@@ -44,6 +45,55 @@ bool ironActive, scoped;
 bool photoPending;
 struct HandView { cl_entity_t entity; int weapon, serial; bool active, firstEvents; } handViews[2];
 int drawingHand=-1;
+int lightMask=-1;
+bool lightBridgeRegistered;
+static void LightCvar(int kind,const char* field,float value) {
+    char name[64]; std::snprintf(name,sizeof(name),"cof_light%d_%s",kind,field);
+    gEngfuncs.Cvar_SetValue(name,value);
+}
+int LightMessage(const char*,int size,void* data) {
+    if(size!=1 || !data) return 0;
+    const int mask=*static_cast<unsigned char*>(data);
+    if(mask>7 && mask!=128) return 0;
+    lightMask=mask;
+    gEngfuncs.Cvar_SetValue("cof_light_mask",float(mask));
+    return 1;
+}
+// Native100af790 uses viewmodel attachments, not the centre of the screen.
+// Last rendered attachments are consumed by the next frame, as in the native client.
+void PublishAttachedLights(ref_params_s* view) {
+    if(!view) return;
+    cl_entity_t* single=gEngfuncs.GetViewModel();
+    for(int kind=1;kind<=3;++kind) {
+        const int id=kind==1?2:kind==2?1:3;
+        cl_entity_t* model=current==id?single:nullptr;
+        for(auto& hand:handViews) if(hand.active && hand.weapon==id) model=&hand.entity;
+        bool valid=model && model->model && !CofMovementCameraActive();
+        float distance=0,attachmentSpan=0;
+        if(valid) for(int axis=0;axis<3;++axis) {
+            float delta=model->attachment[1][axis]-view->vieworg[axis];distance+=delta*delta;
+            delta=model->attachment[1][axis]-model->attachment[0][axis];attachmentSpan+=delta*delta;
+        }
+        valid=valid && distance<128*128 && attachmentSpan>.0001f;
+        LightCvar(kind,"valid",valid?1.f:0.f);
+        if(!valid) continue;
+        float angles[3]={view->viewangles[0],view->viewangles[1],view->viewangles[2]};
+        if(kind!=1) {
+            float delta[3];
+            for(int axis=0;axis<3;++axis) delta[axis]=model->attachment[kind==2?1:2][axis]-model->attachment[kind==2?0:1][axis];
+            const float horizontal=std::sqrt(delta[0]*delta[0]+delta[1]*delta[1]);
+            if(horizontal*horizontal+delta[2]*delta[2]<.0001f) { LightCvar(kind,"valid",0);continue; }
+            angles[0]=-std::atan2(delta[2],horizontal)*57.295779513f;
+            angles[1]=std::atan2(delta[1],delta[0])*57.295779513f; angles[2]=0;
+        }
+        const char* axes[]={"x","y","z"};
+        for(int axis=0;axis<3;++axis) {
+            char field[8];std::snprintf(field,sizeof(field),"o%s",axes[axis]);LightCvar(kind,field,model->attachment[1][axis]);
+            std::snprintf(field,sizeof(field),"a%s",axes[axis]);LightCvar(kind,field,angles[axis]);
+            std::snprintf(field,sizeof(field),"s%s",axes[axis]);LightCvar(kind,field,kind==2?model->attachment[0][axis]:view->vieworg[axis]);
+        }
+    }
+}
 int ReadLong(const unsigned char* b) {
     unsigned int value=0;
     for(int i=0;i<4;++i) value|=static_cast<unsigned int>(b[i])<<(i*8);
@@ -223,6 +273,11 @@ void ProtocolTest() {
     check(RecoilPitch(15,3)==12 && RecoilPitch(-10,4)==-14 &&
         !ViewKnockMessage("ViewKnock",0,scope),"viewknock_signed_pitch_byte_contract");
     check(CofInventoryQuickSlotsTest(),"quickslot_authoritative_resync_bounds");
+    const int savedLightMask=lightMask;
+    unsigned char lightPair=5,invalidLight=8;
+    check(LightMessage("CofLight",1,&lightPair) && lightMask==5,"phone_tactical_light_pair_wire");
+    check(!LightMessage("CofLight",0,&lightPair) && !LightMessage("CofLight",1,&invalidLight) && lightMask==5,"light_reject_invalid_packet");
+    lightMask=savedLightMask;gEngfuncs.Cvar_SetValue("cof_light_mask",float(savedLightMask));
     unsigned char dual[]={0x2c,1,0,0,0xff,0xff,0xff,0xff};
     unsigned char clearDual[]={0xfe,0xff,0xff,0xff,0xfe,0xff,0xff,0xff};
     check(DualMessage("DualAmmo",8,dual) && dualClip[0]==300 && dualClip[1]==-1,"dual_signed_long_pair");
@@ -288,6 +343,12 @@ bool CofWeaponsListMessage(int size,const void* data) {
     weapons[b[6]]={static_cast<signed char>(b[0]),true}; return true;
 }
 void CofWeaponsClientReset() {
+    lightMask=-1;
+    if(lightBridgeRegistered) gEngfuncs.Cvar_SetValue("cof_light_mask",-1);
+    for(int kind=1;kind<=3;++kind) {
+        char name[64];std::snprintf(name,sizeof(name),"cof_light%d_valid",kind);
+        if(lightBridgeRegistered) gEngfuncs.Cvar_SetValue(name,0);
+    }
     std::memset(weapons,0,sizeof(weapons)); std::memset(reserve,0,sizeof(reserve));
     thirdAttack={}; current=0; clip=-1;
     weaponBody=-1;
@@ -298,6 +359,13 @@ void CofWeaponsClientReset() {
 }
 void CofWeaponsClientInit() {
     CofWeaponsClientReset(); tested=false;
+    CVAR_CREATE("cof_light_mask","-1",0);
+    const char* lightFields[]={"valid","ox","oy","oz","ax","ay","az","sx","sy","sz"};
+    for(int kind=1;kind<=3;++kind) for(const char* field:lightFields) {
+        char name[64];std::snprintf(name,sizeof(name),"cof_light%d_%s",kind,field);CVAR_CREATE(name,"0",0);
+    }
+    gEngfuncs.pfnHookUserMsg("CofLight",LightMessage);
+    lightBridgeRegistered=true;
     gEngfuncs.pfnAddCommand("+attack3",Attack3Down); gEngfuncs.pfnAddCommand("-attack3",Attack3Up);
     gEngfuncs.pfnHookUserMsg("IronSights",IronMessage);
     gEngfuncs.pfnHookUserMsg("Scope",ScopeMessage);
@@ -353,6 +421,7 @@ int CofWeaponsRenderHands(int flags,int (*draw)(int)) {
 }
 bool CofWeaponsAiming() { return ironActive || scoped; }
 void CofWeaponsClientView(ref_params_s* view) {
+    PublishAttachedLights(view);
     if(view && weaponBody>=0 && !handViews[0].active && !handViews[1].active) {
         cl_entity_t* weapon=gEngfuncs.GetViewModel();
         if(weapon) weapon->curstate.body=weaponBody;

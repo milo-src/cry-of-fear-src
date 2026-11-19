@@ -593,9 +593,49 @@ bool CofSpecialAnimate(CCofWeapon* weapon,int sequence) {
     SendHandState(weapon,hand,sequence,true);
     return true;
 }
+// Source-owned wire: preserve the three native attached-light identities.
+static int AttachedLight(CCofWeapon* weapon) {
+    if(!weapon) return 0;
+    const int id=weapon->Definition().id;
+    if(id==2 && weapon->m_mode) return 1; // phone
+    if(id==1 && weapon->m_mode) return 2; // flashlight2
+    return CofRangedTaclightOn(weapon)?4:0;
+}
+void CofSpecialLightSync(CBasePlayer* player,bool force) {
+    if(!player) return;
+    int mask=0;
+    if(player->IsAlive()) {
+        CCofDual* pair=FindDual(player);
+        if(pair && player->m_pActiveItem==pair && pair->m_pairActive)
+            mask=AttachedLight(pair->Hand(pair->m_left))|AttachedLight(pair->Hand(pair->m_right));
+        else for(int slot=1;slot<=6;++slot) {
+            CCofWeapon* item=CofWeaponForSlot(player,slot);
+            if(item && item==player->m_pActiveItem) mask|=AttachedLight(item);
+        }
+        // Explicit legacy impulse-100 source, used by engine fixtures too.
+        if(!mask && (player->pev->effects&EF_DIMLIGHT)) mask=128;
+    }
+    static int lastMask[33]={},message;
+    static float nextSync[33]={};
+    if(std::getenv("COF_PROJECTEDTEST")) {
+        static float began=-1;
+        if(began<0 || gpGlobals->time<began) began=gpGlobals->time;
+        const int sequence[]={1,2,4,5,0};
+        mask=sequence[min(4,int((gpGlobals->time-began)/1.25f))];
+    }
+    const int index=ENTINDEX(player->edict());
+    if(index<1 || index>32) return;
+    if(!force && mask==lastMask[index] && nextSync[index]>gpGlobals->time &&
+        nextSync[index]<=gpGlobals->time+1) return;
+    if(!message) message=REG_USER_MSG("CofLight",1);
+    MESSAGE_BEGIN(MSG_ONE,message,nullptr,player->pev);WRITE_BYTE(mask);MESSAGE_END();
+    lastMask[index]=mask;nextSync[index]=gpGlobals->time+1;
+}
 void CofSpecialPlayerFrame(CBasePlayer* player) {
-    if(!player || !player->m_pActiveItem || !FClassnameIs(player->m_pActiveItem->pev,"weapon_dualweapon")) return;
-    static_cast<CCofDual*>(player->m_pActiveItem)->RefreshHands();
+    if(!player) return;
+    if(player->m_pActiveItem && FClassnameIs(player->m_pActiveItem->pev,"weapon_dualweapon"))
+        static_cast<CCofDual*>(player->m_pActiveItem)->RefreshHands();
+    CofSpecialLightSync(player,false);
 }
 bool CofSpecialCombine(CBasePlayer* player,int first,int second,const char* result) {
     if(!player || !player->IsAlive() || (player->pev->flags&FL_FROZEN) || !result ||

@@ -44,14 +44,16 @@ rendering. The current implementation uses the recovered flat-normal fallback;
 per-pixel normals, high-specular passes and their render-state sequencing remain
 unimplemented. Merely staging the images does not activate these passes.
 
-## Dynamic/projected lights: native evidence, renderer pending
+## Dynamic/projected lights: current status
+
+2026-11-19: handheld phone/torch/tactical projected BSP receiver is now implemented in the normal renderer; see `projected-light-implementation.md` and `flashlight-native-followup.md`. The full receiver trace corrects the earlier parameter-only interpretation: stored RGB multipliers are **not consumed** by that native projected world pass. The colored cookie supplies its hue, and downstream diffuse blending contributes factor2. General renderfx71 custom map lights, studio receivers and static bump/specular are separate remaining work.
 
 Client 0x10060000 consumes renderfx 71 entities. Radius is network renderamt
 shifted left three, RGB is rendercolor divided by 128, lifetime is time+0.01.
 Nonzero scale supplies both spotlight FOVs; rendermode selects
 `gfx/spotlight%d.tga`. Server creation and use transitions are implemented in
 `graphics.cpp`, but the native custom-light renderer is not yet ported.
-The pre-existing source-engine flashlight is still a prototype.
+The old source-engine lightmap flashlight has been replaced for the three attached-light kinds; this does not implement the general renderfx71 consumer.
 
 0x1005c0f0 allocates 32 custom lights, keyed by entity or expired slot.
 0x1005a8c0 builds a 32-cubed attenuation texture: interior intensity is

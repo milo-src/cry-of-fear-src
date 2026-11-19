@@ -1,10 +1,14 @@
 # Graphics reconstruction ledger
 
+Current 2026-11-19 update: `projected-light-implementation.md` describes the new typed handheld-light receiver and isolated GPU readback checks. `shader-coverage.md/.json` inventories six shipped Cg programs and two embedded ARB programs; `shader-pass-contracts.md/.json` follows their real samplers, matrices, capability branches and pass ordering. The older verification notes below are historical, not a claim that all graphics are restored.
+
 Target: installed Cry of Fear client/server and resources, same build hashes as
 the menu investigation. Original native modules are inspected statically only.
 Runtime implementation uses source-built Xash/HLSDK through Waf on main.
 
-| Question | Evidence needed | Current status |
+The following table and scene observations record the earlier checkpoint; consult the current update above for subsequent handheld-light work.
+
+| Question | Evidence needed | Earlier checkpoint status |
 |---|---|---|
 | Water and Cg shader math | Shipped Cg plus native sampler binding, mask construction, pass order and cvars | Modern water shader and mask/noise/scene passes ported to GLSL; actual water scene captured at 1280x720 and 800x600. Legacy fp20 path not ported |
 | Black-and-white screen effect | BlackWhite server message, real client handler and blend path | Actual framebuffer desaturation ported, separate from black Cg. Entity iuser1 key, one-byte message, renderer and reset verified |
@@ -21,8 +25,7 @@ Evidence checkpoint: `analysis/evidence/graphics-2026-11-18.json`, 107 records,
 saved with REA reset after all static sessions were closed. Original native
 targets were never executed and capture verification records retain hashes.
 
-Reproduce the isolated runtime checks with `pwsh -File tools/smoke_graphics.ps1`
-(optionally `-Width 800 -Height 600`). This copies the original c_apartment3 BSP
+Current non-disruptive runtime checks use `python tools/smoke_rtx.py --renderer normal --graphics` (or `--projected` for the handheld-light receiver), with an isolated desktop and `-nosound`. The legacy `tools/smoke_graphics.ps1` needs explicit permission for an interactive session under AGENTS.md. The graphics fixture copies the original c_apartment3 BSP
 unchanged into ignored runtime output and supplies an independent entity patch.
 It does not change installed game maps. Logs/screenshots/module lists are in
 `analysis/local/graphics-<resolution>.json`. The fixture asserts dynamic-light

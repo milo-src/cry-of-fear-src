@@ -1,0 +1,614 @@
+{
+  "schema": "cof-flashlight-static-contract-v1",
+  "generated_utc": "2026-11-19T19:45:07.674963+00:00",
+  "target": {
+    "path": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/client.dll",
+    "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "executed": false
+  },
+  "contracts": {
+    "light_radius": 700,
+    "phone": {
+      "function": "0x100aea10",
+      "hud_bit": 1,
+      "key": -1,
+      "stored_rgb": [
+        0.46,
+        0.46,
+        0.51
+      ],
+      "rgb_consumed_in_recovered_projected_pass": false,
+      "mask": "gfx/flashlight.tga",
+      "fov": {
+        "base": 50,
+        "near_wall_expansion": 30
+      },
+      "origin": "viewmodel.attachment[1]",
+      "angles": "ref_params.viewangles"
+    },
+    "torch": {
+      "function": "0x100ae540",
+      "hud_bit": 8,
+      "key": -8,
+      "stored_rgb": [
+        1.4,
+        1.4,
+        1.4
+      ],
+      "rgb_consumed_in_recovered_projected_pass": false,
+      "mask": "gfx/flashlight2.tga",
+      "fov": {
+        "base": 50,
+        "near_wall_expansion": 30
+      },
+      "origin": "trace(attachment0,attachment1).endpos",
+      "angles": "VectorAngles(attachment1-attachment0), pitch negated"
+    },
+    "tactical": {
+      "function": "0x100aee70",
+      "hud_bit": 4,
+      "key": -66,
+      "stored_rgb": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "rgb_consumed_in_recovered_projected_pass": false,
+      "mask": "gfx/flashlight2.tga",
+      "fov": 70,
+      "origin": "trace(camera,attachment1).endpos",
+      "angles": "VectorAngles(attachment2-attachment1), pitch negated"
+    },
+    "projection": {
+      "depth": "dot(P-origin,forward)",
+      "attenuation_coordinate": "depth/radius",
+      "uv": "0.5 + vec2(dot(P-origin,right), -dot(P-origin,up)) / (2*tan(FOV*pi/360)*depth)",
+      "world_up": "(0,0,1), inverted for pitch helper1005c040 quarters1/2",
+      "roll_used": false,
+      "far_clip": "depth=radius"
+    },
+    "attenuation": {
+      "texels": 256,
+      "formula": "i=0 or255:0; otherwise trunc(255*(1-i*i/65536))",
+      "min_filter": "GL_NEAREST",
+      "mag_filter": "GL_LINEAR",
+      "wrap": "GL_CLAMP_TO_EDGE"
+    },
+    "render": {
+      "mask_wrap": "GL_CLAMP",
+      "depth_func": "GL_EQUAL",
+      "depth_write": false,
+      "normal_dot": "max(dot(surfaceNormal,normalize(lightOrigin-P)),0), or sampled tangent normal",
+      "spotlight_raw_factor": "maskRGB * normalDot * attenuation",
+      "native_light_rgb_consumed": false,
+      "later_base_blend": "GL_DST_COLOR,GL_SRC_COLOR at100627e0",
+      "contribution_on_final_frame": "2 * baseRGB * maskRGB * normalDot * attenuation",
+      "factor2_source": "later base blend, not spotlight RGB_SCALE"
+    }
+  },
+  "evidence": [
+    {
+      "evidence_id": "ev_d0c42babad9bff8bd193cf0a534667336775f4f2702f52ae8abe5bae7bf6d682",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005ad10"
+      },
+      "capture": "analysis/local/graphics-flashlight-followup/000-procedure_pseudo_code.json",
+      "capture_sha256": "f2255288c032f3522ca37318f7bba815f2ab469129f9f6283c66f980a7186ed5",
+      "pseudocode": "\r\nvoid FUN_1005ad10(void)\r\n\r\n{\r\n  (*DAT_101be688)(0xc60);\r\n  (*DAT_101be688)(0xc61);\r\n  (*DAT_101be688)(0xc62);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_243fd2347ad0e912ae0b2dd3d1b619559daa871f5ca73949550ae6aacd4ebf0c",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c700"
+      },
+      "capture": "analysis/local/graphics-flashlight-followup/001-procedure_pseudo_code.json",
+      "capture_sha256": "a9c95c31b032c99af0ef767583c8c722753824e5f1f2f9b03b8c913a44b0fc12",
+      "pseudocode": "\r\nvoid FUN_1005c6b0(void)\r\n\r\n{\r\n  undefined4 local_38;\r\n  undefined4 local_34;\r\n  float local_30;\r\n  float local_2c;\r\n  undefined4 local_28;\r\n  float local_24;\r\n  undefined4 local_20;\r\n  float local_1c;\r\n  float local_18 [4];\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_10190600 ^ (uint)&stack0xfffffffc;\r\n  local_18[1] = 0.0;\r\n  local_18[2] = 0.0;\r\n  local_28 = 0;\r\n  local_30 = 1.0 / (*(float *)(DAT_104cd4d0 + 0xc) + *(float *)(DAT_104cd4d0 + 0xc));\r\n  local_20 = 0;\r\n  local_38 = 0;\r\n  local_34 = 0;\r\n  local_18[3] = 0.5 - DAT_104cc4a0 * local_30;\r\n  local_1c = 0.5 - DAT_104cc4a4 * local_30;\r\n  local_2c = 0.5 - DAT_104cc4a8 * local_30;\r\n  local_24 = local_30;\r\n  local_18[0] = local_30;\r\n  (*DAT_101be72c)(0x2000,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2000,0x2502,local_18);\r\n  (*DAT_101be72c)(0x2001,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2001,0x2502,&local_28);\r\n  (*DAT_101be72c)(0x2002,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2002,0x2502,&local_38);\r\n  (*DAT_101be698)(0xc60);\r\n  (*DAT_101be698)(0xc61);\r\n  (*DAT_101be698)(0xc62);\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_47dc5d345f9702f9544e740529461d1b7964167da4e1e6cf62c88e0aeebe9825",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c3f0"
+      },
+      "capture": "analysis/local/graphics-flashlight-followup/002-procedure_pseudo_code.json",
+      "capture_sha256": "69ca557f941bf6042f0a307079bd4afdbb4a86619b7979dd757a1a405b11c5b5",
+      "pseudocode": "\r\n/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */\r\n\r\nvoid FUN_1005c3f0(void)\r\n\r\n{\r\n  DAT_104cc544 = *DAT_104cd4d0 - DAT_104cd4d0[3];\r\n  DAT_104cc548 = DAT_104cd4d0[1] - DAT_104cd4d0[3];\r\n  DAT_104cc54c = DAT_104cd4d0[2] - DAT_104cd4d0[3];\r\n  _DAT_104cc494 = *DAT_104cd4d0 + DAT_104cd4d0[3];\r\n  _DAT_104cc498 = DAT_104cd4d0[1] + DAT_104cd4d0[3];\r\n  _DAT_104cc49c = DAT_104cd4d0[2] + DAT_104cd4d0[3];\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_ebb5b5e7248cc4da8f75d6e960d0b32a48e60bb6e6754da38693fe7f2cade8b9",
+      "operation": "analyze_function",
+      "parameters": {
+        "procedure": "ram:0x1005b6d0"
+      },
+      "capture": "analysis/local/graphics-flashlight-refs/000-analyze_function.json",
+      "capture_sha256": "7c451c4348324aaedea1476199583f0128c8f448adb18f3f369f800c0fb603e2",
+      "pseudocode": "\r\nvoid FUN_1005b6d0(void)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  \r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be688)(0x8513);\r\n  (*DAT_101be6d4)(0x1702);\r\n  (*DAT_101be6cc)();\r\n  (*DAT_101be6d4)(0x1700);\r\n  if (DAT_104cd4d8 == 0) {\r\n    (*DAT_101be764)(0x84c2);\r\n    (*DAT_101be688)(0x806f);\r\n    FUN_1005ad10();\r\n    return;\r\n  }\r\n  FUN_10060e10(0x84c1,DAT_104cc480);\r\n  (*DAT_101be764)(0x84c1);\r\n  FUN_1005c5a0();\r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be688)(0xde1);\r\n  (*DAT_101be698)(0xde0);\r\n  (*DAT_101be64c)(0xde0,DAT_104cc484);\r\n  FUN_1005c4f0();\r\n  FUN_10062fe0(0,0);\r\n  FUN_10062fe0(1,0);\r\n  if (((DAT_101be77c != 0) && (1 < DAT_101be780)) && (*(float *)(DAT_104cd520 + 0xc) == 0.0)) {\r\n    (*DAT_101be650)(0x304,1);\r\n    (*DAT_101be66c)(1,1,1,0);\r\n    (*DAT_101be698)(0x8522);\r\n    (*DAT_101be784)(0x854e,1);\r\n    (*DAT_101be788)(0x852a,&DAT_104cc488);\r\n    (*DAT_101be78c)(0x8550,0x1907,0x8523,0x84c0,0x8536,0x1906);\r\n    (*DAT_101be78c)(0x8550,0x1907,0x8524,0,0x8537,0x1907);\r\n    (*DAT_101be78c)(0x8550,0x1907,0x8525,0x84c1,0x8536,0x1906);\r\n    (*DAT_101be78c)(0x8550,0x1907,0x8526,0,0x8537,0x1907);\r\n    (*DAT_101be790)(0x8550,0x1907,0x8530,0x8530,0x852e,0,0,0,0,0);\r\n    (*DAT_101be794)(0x8523,0x852e,0x8536,0x1907);\r\n    (*DAT_101be794)(0x8524,0,0x8536,0x1907);\r\n    (*DAT_101be794)(0x8525,0x852a,0x8536,0x1907);\r\n    (*DAT_101be794)(0x8526,0,0x8536,0x1907);\r\n    (*DAT_101be794)(0x8529,0,0x8537,0x1906);\r\n    for (puVar1 = DAT_104cd4d4; puVar1 != (undefined4 *)0x0; puVar1 = (undefined4 *)*puVar1) {\r\n      FUN_10061d50(puVar1);\r\n    }\r\n    (*DAT_101be688)(0x8522);\r\n    (*DAT_101be764)(0x84c0);\r\n    (*DAT_101be688)(0xde0);\r\n    (*DAT_101be698)(0xde1);\r\n    FUN_1005ace0();\r\n    (*DAT_101be764)(0x84c1);\r\n    FUN_1005acf0();\r\n    return;\r\n  }\r\n  (*DAT_101be650)(0,0x303);\r\n  FUN_10062f10(1,1,0,0);\r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n  (*DAT_101be724)(0x2300,0x8571,0x1e01);\r\n  (*DAT_101be724)(0x2300,0x8580,0x1702);\r\n  (*DAT_101be724)(0x2300,0x8573,1);\r\n  (*DAT_101be724)(0x2300,0x8572,0x1e01);\r\n  (*DAT_101be724)(0x2300,0x8588,0x1702);\r\n  (*DAT_101be724)(0x2300,0x8598,0x302);\r\n  (*DAT_101be724)(0x2300,0xd1c,1);\r\n  (*DAT_101be764)(0x84c1);\r\n  (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n  (*DAT_101be724)(0x2300,0x8571,0x1e01);\r\n  (*DAT_101be724)(0x2300,0x8580,0x1702);\r\n  (*DAT_101be724)(0x2300,0x8573,1);\r\n  (*DAT_101be724)(0x2300,0x8572,0x104);\r\n  (*DAT_101be724)(0x2300,0x8588,0x8578);\r\n  (*DAT_101be724)(0x2300,0x8598,0x302);\r\n  (*DAT_101be724)(0x2300,0x8589,0x1702);\r\n  (*DAT_101be724)(0x2300,0x8599,0x302);\r\n  (*DAT_101be724)(0x2300,0xd1c,1);\r\n  for (puVar1 = DAT_104cd4d4; puVar1 != (undefined4 *)0x0; puVar1 = (undefined4 *)*puVar1) {\r\n    FUN_10061d50(puVar1);\r\n  }\r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be688)(0xde0);\r\n  (*DAT_101be698)(0xde1);\r\n  FUN_1005ace0();\r\n  (*DAT_101be724)(0x2300,0x2200,0x1e01);\r\n  (*DAT_101be764)(0x84c1);\r\n  FUN_1005acf0();\r\n  (*DAT_101be724)(0x2300,0x2200,0x1e01);\r\n  (*DAT_101be650)(0x304,1);\r\n  (*DAT_101be66c)(1,1,1,0);\r\n  FUN_10062f10(0,0,0,0);\r\n  (*DAT_101be660)(DAT_104cc488,DAT_104cc48c,DAT_104cc490);\r\n  for (puVar1 = DAT_104cd4d4; puVar1 != (undefined4 *)0x0; puVar1 = (undefined4 *)*puVar1) {\r\n    FUN_10061d50(puVar1);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "References cover the complete Ghidra function-body AddressSet and exact entry. Dossier incoming edges omit sources owned by that function; procedure_references also retains those internal edges.",
+        "The dossier combines Ghidra FunctionManager, Listing, ReferenceManager, BasicBlockModel, and decompiler observations; provider-specific pseudocode and assembly are not cross-provider text invariants.",
+        "Resolved reference metadata identifies computed, indirect, external, call, jump, and data edges; unresolved targetless flows remain unknown, and function classifications distinguish thunks and externals.",
+        "Synthetic Ghidra entry-point references without actionable memory sources are omitted.",
+        "The Java bridge serializes one function request per Program. Decompilation runs until completion or caller cancellation unless REA_GHIDRA_DECOMPILE_TIMEOUT_SECONDS sets a per-function limit. That limit stops the requested decompile without requesting session closure; caller cancellation requests session closure.",
+        "Ghidra Listing reports a terminal call at 0x1005b97c to 0x1005acf0 FUN_1005acf0 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+        "Ghidra Listing reports a terminal call at 0x1005bc2a to 0x1005ad10 FUN_1005ad10 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_3db96f9a6201c4282a4cd85d9cf6bc884ead8f482c84f83f30dc975e65fe69a7",
+      "operation": "analyze_function",
+      "parameters": {
+        "procedure": "ram:0x1005ab50"
+      },
+      "capture": "analysis/local/graphics-flashlight-refs/001-analyze_function.json",
+      "capture_sha256": "6a944cb472376e0d27de18d69eda83fb7ccd3cb50d48026fb588297391f10824",
+      "pseudocode": "\r\nvoid FUN_1005ab50(void)\r\n\r\n{\r\n  undefined1 uVar1;\r\n  int iVar2;\r\n  undefined1 *puVar3;\r\n  float fVar4;\r\n  undefined1 local_308;\r\n  undefined1 local_307 [767];\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_10190600 ^ (uint)&stack0xfffffffc;\r\n  puVar3 = local_307;\r\n  iVar2 = 0;\r\n  do {\r\n    fVar4 = ((float)iVar2 * (float)iVar2 * 1.5258789e-05 - 1.0) * -255.0;\r\n    if ((iVar2 == 0xff) || (iVar2 == 0)) {\r\n      fVar4 = 0.0;\r\n    }\r\n    iVar2 = iVar2 + 1;\r\n    uVar1 = (undefined1)(int)fVar4;\r\n    puVar3[1] = uVar1;\r\n    *puVar3 = uVar1;\r\n    puVar3[-1] = uVar1;\r\n    puVar3 = puVar3 + 3;\r\n  } while (iVar2 < 0x100);\r\n  (*DAT_101be64c)(0xde0,DAT_1018fe8c);\r\n  (*DAT_101be730)(0xde0,0,3,0x100,0,0x1907,0x1401,&local_308);\r\n  (*DAT_101be73c)(0xde0,0x2801,0x46180000);\r\n  (*DAT_101be73c)(0xde0,0x2800,0x46180400);\r\n  (*DAT_101be738)(0xde0,0x2802,0x812f);\r\n  FUN_1007d4d0(\"Created spotlight attenuation texture\\n\");\r\n  DAT_1018fe8c = DAT_1018fe8c + 1;\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "References cover the complete Ghidra function-body AddressSet and exact entry. Dossier incoming edges omit sources owned by that function; procedure_references also retains those internal edges.",
+        "The dossier combines Ghidra FunctionManager, Listing, ReferenceManager, BasicBlockModel, and decompiler observations; provider-specific pseudocode and assembly are not cross-provider text invariants.",
+        "Resolved reference metadata identifies computed, indirect, external, call, jump, and data edges; unresolved targetless flows remain unknown, and function classifications distinguish thunks and externals.",
+        "Synthetic Ghidra entry-point references without actionable memory sources are omitted.",
+        "The Java bridge serializes one function request per Program. Decompilation runs until completion or caller cancellation unless REA_GHIDRA_DECOMPILE_TIMEOUT_SECONDS sets a per-function limit. That limit stops the requested decompile without requesting session closure; caller cancellation requests session closure.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_bc7dc637a98bef688028ea827c7dccd9ecc846cf48ba3f8644b1da8eb5e3fb42",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005ada0"
+      },
+      "capture": "analysis/local/graphics-flashlight-pass/000-procedure_pseudo_code.json",
+      "capture_sha256": "b4c64da54b1596b41774198ed1c177391282a6ae474e154021a2f2df476a427b",
+      "pseudocode": "\r\nvoid FUN_1005ada0(int param_1)\r\n\r\n{\r\n  int iVar1;\r\n  float *pfVar2;\r\n  float10 fVar3;\r\n  float fVar4;\r\n  float fVar5;\r\n  float fVar6;\r\n  float local_dc;\r\n  float local_d8;\r\n  float local_d4;\r\n  float local_d0;\r\n  float local_cc;\r\n  float local_c8;\r\n  float local_c4;\r\n  float local_c0;\r\n  float local_bc;\r\n  float local_b8;\r\n  float local_b4;\r\n  float local_b0;\r\n  float local_ac;\r\n  float local_a8;\r\n  float local_a4;\r\n  int local_a0;\r\n  int local_9c;\r\n  float local_98;\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_10190600 ^ (uint)&stack0xfffffffc;\r\n  if (((*(float *)(param_1 + 0xb54) == 0.0) && (*(float *)(param_1 + 0xb58) == 0.0)) &&\r\n     (*(float *)(param_1 + 0xb5c) == 0.0)) {\r\n    iVar1 = *(int *)(param_1 + 0xb94);\r\n    local_a0 = 0;\r\n    local_b0 = *(float *)(iVar1 + 0x54) + *(float *)(param_1 + 0xb48);\r\n    local_b4 = *(float *)(iVar1 + 0x58) + *(float *)(param_1 + 0xb4c);\r\n    fVar4 = *(float *)(param_1 + 0xb50);\r\n    local_b8 = *(float *)(iVar1 + 0x5c) + fVar4;\r\n    local_a4 = *(float *)(iVar1 + 0x60) + *(float *)(param_1 + 0xb48);\r\n    local_a8 = *(float *)(iVar1 + 100) + *(float *)(param_1 + 0xb4c);\r\n    local_ac = *(float *)(iVar1 + 0x68);\r\n  }\r\n  else {\r\n    local_a0 = 1;\r\n    fVar4 = *(float *)(*(int *)(param_1 + 0xb94) + 0x6c);\r\n    local_a4 = *(float *)(param_1 + 0xb48) + fVar4;\r\n    local_b0 = *(float *)(param_1 + 0xb48) - fVar4;\r\n    local_a8 = *(float *)(param_1 + 0xb4c) + fVar4;\r\n    local_b4 = *(float *)(param_1 + 0xb4c) - fVar4;\r\n    local_ac = *(float *)(param_1 + 0xb50);\r\n    local_b8 = local_ac - fVar4;\r\n  }\r\n  local_ac = local_ac + fVar4;\r\n  (*DAT_101be684)(0x202);\r\n  fVar3 = (float10)(*DAT_101b26e0)();\r\n  fVar4 = (float)fVar3;\r\n  pfVar2 = (float *)&DAT_104cc55c;\r\n  local_9c = 0x20;\r\n  local_98 = fVar4;\r\n  do {\r\n    if ((fVar4 < pfVar2[4] || fVar4 == pfVar2[4]) && (fVar4 = local_98, *pfVar2 != 0.0)) {\r\n      DAT_104cd4d0 = pfVar2 + -3;\r\n      DAT_104cc4a0 = *DAT_104cd4d0 - *(float *)(param_1 + 0xb48);\r\n      DAT_104cc4a4 = pfVar2[-2] - *(float *)(param_1 + 0xb4c);\r\n      DAT_104cc4a8 = pfVar2[-1] - *(float *)(param_1 + 0xb50);\r\n      if (local_a0 != 0) {\r\n        (*DAT_101b2668)(param_1 + 0xb54,&local_c4,&local_d0,&local_dc);\r\n        fVar4 = local_c0 * DAT_104cc4a4;\r\n        fVar5 = local_bc * DAT_104cc4a8;\r\n        fVar6 = local_d8 * DAT_104cc4a4;\r\n        DAT_104cc4a4 = -(local_d0 * DAT_104cc4a0 + local_cc * DAT_104cc4a4 + local_c8 * DAT_104cc4a8\r\n                        );\r\n        DAT_104cc4a8 = local_dc * DAT_104cc4a0 + fVar6 + local_d4 * DAT_104cc4a8;\r\n        DAT_104cc4a0 = local_c4 * DAT_104cc4a0 + fVar4 + fVar5;\r\n      }\r\n      if (*(char *)(DAT_104cd4d0 + 0xf) == '\\0') {\r\n        FUN_1005c3f0();\r\n        iVar1 = FUN_1005ac70(local_b0,local_b4,local_b8,local_a4,local_a8,local_ac);\r\n        fVar4 = local_98;\r\n        if (iVar1 == 0) {\r\n          iVar1 = FUN_1005c900();\r\n          goto LAB_1005b2a6;\r\n        }\r\n      }\r\n      else {\r\n        FUN_10084e40(DAT_104cd4d0[10],DAT_104cd4d0[0xb],DAT_104cd4d0[0xc],*DAT_104cd4d0,\r\n                     DAT_104cd4d0[1],DAT_104cd4d0[2],DAT_104cd4d0[0xd],DAT_104cd4d0[0xe],\r\n                     DAT_104cd4d0[3]);\r\n        iVar1 = FUN_10084b30(local_b0,local_b4,local_b8,local_a4,local_a8,local_ac);\r\n        fVar4 = local_98;\r\n        if (iVar1 == 0) {\r\n          (*DAT_101b2668)(DAT_104cd4d0 + 10,&DAT_104cc4ac,0,0);\r\n          if (local_a0 != 0) {\r\n            fVar4 = local_c0 * DAT_104cc4b0;\r\n            fVar5 = local_bc * DAT_104cc4b4;\r\n            fVar6 = local_d8 * DAT_104cc4b0;\r\n            DAT_104cc4b0 = -(local_d0 * DAT_104cc4ac + local_cc * DAT_104cc4b0 +\r\n                            local_c8 * DAT_104cc4b4);\r\n            DAT_104cc4b4 = local_dc * DAT_104cc4ac + fVar6 + local_d4 * DAT_104cc4b4;\r\n            DAT_104cc4ac = local_c4 * DAT_104cc4ac + fVar4 + fVar5;\r\n          }\r\n          iVar1 = FUN_1005ce60();\r\nLAB_1005b2a6:\r\n          fVar4 = local_98;\r\n          if (iVar1 != 0) {\r\n            FUN_1005b630(param_1);\r\n            if (*(char *)(DAT_104cd4d0 + 0xf) == '\\0') {\r\n              FUN_1005b6d0();\r\n              fVar4 = local_98;\r\n            }\r\n            else {\r\n              FUN_1005bc30();\r\n              fVar4 = local_98;\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n    pfVar2 = pfVar2 + 0x1f;\r\n    local_9c = local_9c + -1;\r\n    if (local_9c == 0) {\r\n      __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n      return;\r\n    }\r\n  } while( true );\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_4764cffec109bfbc1aede07ae5e8e20c4dccdee55dcf28a7359c7ac245a04955",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005b300"
+      },
+      "capture": "analysis/local/graphics-flashlight-pass/001-procedure_pseudo_code.json",
+      "capture_sha256": "6c331e5d562c0b3460610c8c3fce859c282747dbd99273e299e88a9355fc1e7f",
+      "pseudocode": "\r\n/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */\r\n\r\nvoid FUN_1005b300(void)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  undefined4 *puVar4;\r\n  float10 fVar5;\r\n  float fVar6;\r\n  float fVar7;\r\n  float fVar8;\r\n  float fVar9;\r\n  float fVar10;\r\n  float fVar11;\r\n  float local_18;\r\n  undefined4 local_14;\r\n  undefined4 local_10;\r\n  int local_c;\r\n  float local_8;\r\n  \r\n  (*DAT_101be684)(0x202);\r\n  fVar5 = (float10)(*DAT_101b26e0)();\r\n  fVar6 = (float)fVar5;\r\n  puVar4 = &DAT_104cc580;\r\n  local_c = 0x20;\r\n  local_8 = fVar6;\r\n  do {\r\n    iVar2 = local_c;\r\n    if ((fVar6 < (float)puVar4[-5] || fVar6 == (float)puVar4[-5]) && ((float)puVar4[-9] != 0.0)) {\r\n      DAT_104cd4d0 = (undefined8 *)(puVar4 + -0xc);\r\n      _DAT_104cc4a0 = *DAT_104cd4d0;\r\n      DAT_104cc4a8 = puVar4[-10];\r\n      if (*(char *)(puVar4 + 3) == '\\0') {\r\n        FUN_1005c3f0();\r\n        iVar1 = FUN_1005c900();\r\n        fVar6 = local_8;\r\n        if (iVar1 != 0) goto LAB_1005b4ae;\r\n      }\r\n      else {\r\n        FUN_10084e40(puVar4[-2],puVar4[-1],*puVar4,*(undefined4 *)DAT_104cd4d0,puVar4[-0xb],\r\n                     puVar4[-10],puVar4[1],puVar4[2],puVar4[-9]);\r\n        local_18 = *(float *)(DAT_104cd4d0 + 5);\r\n        local_14 = *(undefined4 *)((int)DAT_104cd4d0 + 0x2c);\r\n        local_10 = *(undefined4 *)(DAT_104cd4d0 + 6);\r\n        if (local_18 == -90.0) {\r\n          local_18 = -89.99;\r\n        }\r\n        else if (local_18 == 90.0) {\r\n          local_18 = 89.99;\r\n        }\r\n        (*DAT_101b2668)(&local_18,&DAT_104cc4ac,0,0);\r\n        if (*(int *)((int)DAT_104cd4d0 + 0x24) != -0x29a) {\r\n          FUN_10084150();\r\n        }\r\n        if (*(int *)((int)DAT_104cd4d0 + 0x24) != -0x299) {\r\n          FUN_10084150();\r\n        }\r\n        iVar1 = FUN_1005ce60();\r\n        if (iVar1 != 0) {\r\nLAB_1005b4ae:\r\n          iVar1 = (*DAT_101b26dc)(0);\r\n          FUN_1005c200(*(undefined4 *)(*(int *)(iVar1 + 0xb94) + 0xa4));\r\n          if ((*(float *)(DAT_104cdd7c + 0xc) != 0.0) &&\r\n             (iVar1 = 0, iVar2 = local_c, 0 < DAT_104cdd40)) {\r\n            do {\r\n              iVar2 = FUN_1005f070((&DAT_104cd540)[iVar1]);\r\n              if (iVar2 == 0) {\r\n                iVar2 = (&DAT_104cd540)[iVar1];\r\n                if ((*(int *)(iVar2 + 0x304) != 0x46) && (*(int *)(iVar2 + 0x304) != 0x89)) {\r\n                  iVar3 = *(int *)(iVar2 + 0xb94);\r\n                  fVar8 = *(float *)(iVar3 + 0x54) + *(float *)(iVar2 + 0xb48);\r\n                  fVar11 = *(float *)(iVar3 + 0x60) + *(float *)(iVar2 + 0xb48);\r\n                  fVar9 = *(float *)(iVar3 + 0x58) + *(float *)(iVar2 + 0xb4c);\r\n                  fVar7 = *(float *)(iVar3 + 100) + *(float *)(iVar2 + 0xb4c);\r\n                  fVar10 = *(float *)(iVar3 + 0x5c) + *(float *)(iVar2 + 0xb50);\r\n                  fVar6 = *(float *)(iVar3 + 0x68) + *(float *)(iVar2 + 0xb50);\r\n                  if (*(char *)((int)DAT_104cd4d0 + 0x3c) == '\\0') {\r\n                    iVar3 = FUN_1005ac70(fVar8,fVar9,fVar10,fVar11,fVar7,fVar6);\r\n                  }\r\n                  else {\r\n                    iVar3 = FUN_10084b30(fVar8,fVar9,fVar10,fVar11,fVar7,fVar6);\r\n                  }\r\n                  if (iVar3 == 0) {\r\n                    FUN_1005b630(iVar2);\r\n                  }\r\n                }\r\n              }\r\n              iVar1 = iVar1 + 1;\r\n              iVar2 = local_c;\r\n            } while (iVar1 < DAT_104cdd40);\r\n          }\r\n          if (*(char *)((int)DAT_104cd4d0 + 0x3c) == '\\0') {\r\n            FUN_1005b6d0();\r\n            fVar6 = local_8;\r\n            goto LAB_1005b612;\r\n          }\r\n          FUN_1005bc30();\r\n        }\r\n        if (*(int *)((int)DAT_104cd4d0 + 0x24) != -0x29a) {\r\n          FUN_10084100();\r\n        }\r\n        fVar6 = local_8;\r\n        if (*(int *)((int)DAT_104cd4d0 + 0x24) != -0x299) {\r\n          FUN_10084100();\r\n          fVar6 = local_8;\r\n        }\r\n      }\r\n    }\r\nLAB_1005b612:\r\n    puVar4 = puVar4 + 0x1f;\r\n    local_c = iVar2 + -1;\r\n    if (local_c == 0) {\r\n      return;\r\n    }\r\n  } while( true );\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_7d7bbf93d098ce667730ec230eaeb98838162a1b056f1fb5ed2439937383a720",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005ce60"
+      },
+      "capture": "analysis/local/graphics-flashlight-projected/000-procedure_pseudo_code.json",
+      "capture_sha256": "01bad53f6ac8f7027fc85e03a9096891fac1f3632f3f0b6dd69f616a2a17bc9f",
+      "pseudocode": "\r\nundefined4 FUN_1005ce60(void)\r\n\r\n{\r\n  DAT_104cd4dc = FUN_1006a1f0(DAT_104cd4d0 + 0x3c,1,1);\r\n  if (DAT_104cd4dc != 0) {\r\n    if ((*(float *)(DAT_104cdd84 + 0xc) == 0.0) && (3 < DAT_101be760)) {\r\n      (*DAT_101be698)(0xbe2);\r\n      (*DAT_101be650)(1,1);\r\n      (*DAT_101be67c)(0);\r\n      FUN_10062f10(1,7,4,4);\r\n      FUN_10062fe0(0,3);\r\n      FUN_10062fe0(1,1);\r\n      FUN_10062fe0(2,0);\r\n      FUN_10062fe0(3,0);\r\n      (*DAT_101be764)(0x84c0);\r\n      (*DAT_101be698)(0x8513);\r\n      (*DAT_101be64c)(0x8513,DAT_104cddc0);\r\n      (*DAT_101be764)(0x84c2);\r\n      FUN_10060e10(0x84c2,DAT_104cd4dc);\r\n      FUN_1005cb50();\r\n      (*DAT_101be764)(0x84c3);\r\n      (*DAT_101be688)(0xde1);\r\n      (*DAT_101be698)(0xde0);\r\n      (*DAT_101be64c)(0xde0,DAT_104cc478);\r\n      FUN_1005c820();\r\n      DAT_104cd4d8 = 0;\r\n      return 1;\r\n    }\r\n    if (DAT_101be800 != 0) {\r\n      DAT_104cd4d4 = 0;\r\n      (*DAT_101be698)(0xbe2);\r\n      (*DAT_101be650)(1,0);\r\n      (*DAT_101be67c)(0);\r\n      (*DAT_101be66c)(0,0,0,1);\r\n      FUN_10062f10(1,7,0,0);\r\n      FUN_10062fe0(0,3);\r\n      FUN_10062fe0(1,1);\r\n      (*DAT_101be764)(0x84c0);\r\n      (*DAT_101be698)(0x8513);\r\n      (*DAT_101be64c)(0x8513,DAT_104cddc0);\r\n      DAT_104cd4d8 = 1;\r\n      return 1;\r\n    }\r\n    if (DAT_104cd4e0 == 0) {\r\n      FUN_1007d400(\"WARNING: no alpha buffer, spotlights will not be drawn!\\n\");\r\n      DAT_104cd4e0 = 1;\r\n    }\r\n  }\r\n  return 0;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_f0f0d450abd65638cefde5be938cbd5e5d3ccf02c981f7a2c68bad849b269613",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005bc30"
+      },
+      "capture": "analysis/local/graphics-flashlight-projected/001-procedure_pseudo_code.json",
+      "capture_sha256": "b82f7a055fdc086ea9c6cd4ec0bf37924e6abaf17b4f2c8e882cf6e8db15958c",
+      "pseudocode": "\r\nvoid FUN_1005bc30(void)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  \r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be688)(0x8513);\r\n  (*DAT_101be6d4)(0x1702);\r\n  (*DAT_101be6cc)();\r\n  (*DAT_101be6d4)(0x1700);\r\n  if (DAT_104cd4d8 == 0) {\r\n    (*DAT_101be764)(0x84c2);\r\n    FUN_1005ad50();\r\n    (*DAT_101be764)(0x84c3);\r\n    (*DAT_101be688)(0xde0);\r\n    (*DAT_101be698)(0xde1);\r\n    FUN_1005ad40();\r\n    return;\r\n  }\r\n  FUN_10062f10(1,4,0,0);\r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be688)(0xde1);\r\n  (*DAT_101be698)(0xde0);\r\n  (*DAT_101be64c)(0xde0,DAT_104cc478);\r\n  FUN_1005c820();\r\n  (*DAT_101be764)(0x84c1);\r\n  FUN_10060e10(0x84c1,DAT_104cd4dc);\r\n  FUN_1005cb50();\r\n  (*DAT_101be650)(0x304,1);\r\n  (*DAT_101be66c)(1,1,1,0);\r\n  FUN_10062fe0(0,0);\r\n  FUN_10062fe0(1,0);\r\n  for (puVar1 = DAT_104cd4d4; puVar1 != (undefined4 *)0x0; puVar1 = (undefined4 *)*puVar1) {\r\n    FUN_10061d50(puVar1);\r\n  }\r\n  (*DAT_101be764)(0x84c0);\r\n  (*DAT_101be688)(0xde0);\r\n  (*DAT_101be698)(0xde1);\r\n  FUN_1005ad40();\r\n  (*DAT_101be764)(0x84c1);\r\n  FUN_1005ad50();\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Ghidra Listing reports a terminal call at 0x1005bd55 to 0x1005ad50 FUN_1005ad50 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+        "Ghidra Listing reports a terminal call at 0x1005bd8b to 0x1005ad40 FUN_1005ad40 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_8efc30b9b9738a590ff4e0006ab69840ddda0991004854aab0a50a18570ee20b",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10084e40"
+      },
+      "capture": "analysis/local/graphics-flashlight-projected/002-procedure_pseudo_code.json",
+      "capture_sha256": "cf091fa16e99b90ea3a9da9e06027521238b7a0159bb91f1725d0663e34c17af",
+      "pseudocode": "\r\nvoid FUN_10084e40(undefined4 param_1,undefined4 param_2,undefined4 param_3,float param_4,\r\n                 float param_5,float param_6,float param_7,float param_8,float param_9)\r\n\r\n{\r\n  undefined1 uVar1;\r\n  int in_ECX;\r\n  float *pfVar2;\r\n  int iVar3;\r\n  undefined1 local_30 [8];\r\n  float local_28;\r\n  undefined1 local_24 [12];\r\n  float local_18;\r\n  float local_14;\r\n  float local_10;\r\n  int local_c;\r\n  float local_8;\r\n  \r\n  local_c = in_ECX;\r\n  (*DAT_101b2668)(&param_1,&local_18,local_30,local_24);\r\n  local_8 = 90.0 - param_7 * 0.5;\r\n  FUN_10085320();\r\n  FUN_10085320(in_ECX + 0x14,local_24,&local_18,local_8);\r\n  local_8 = 90.0 - param_8 * 0.5;\r\n  FUN_10085320(in_ECX + 0x28,local_30,&local_18,local_8);\r\n  FUN_10085320(in_ECX + 0x3c,local_30,&local_18,-local_8);\r\n  iVar3 = 4;\r\n  pfVar2 = (float *)(in_ECX + 4);\r\n  do {\r\n    *(undefined1 *)(pfVar2 + 3) = 5;\r\n    pfVar2[2] = *pfVar2 * param_5 + param_4 * pfVar2[-1] + pfVar2[1] * param_6;\r\n    uVar1 = FUN_10085560(pfVar2 + -1);\r\n    *(undefined1 *)((int)pfVar2 + 0xd) = uVar1;\r\n    pfVar2 = pfVar2 + 5;\r\n    iVar3 = iVar3 + -1;\r\n  } while (iVar3 != 0);\r\n  local_28 = local_10 * -1.0;\r\n  pfVar2 = (float *)(local_c + 0x50);\r\n  *(undefined1 *)(local_c + 0x60) = 5;\r\n  *(ulonglong *)pfVar2 = CONCAT44(local_14 * -1.0,local_18 * -1.0);\r\n  *(float *)(local_c + 0x58) = local_28;\r\n  *(float *)(local_c + 0x5c) =\r\n       (local_14 * param_9 + param_5) * *(float *)(local_c + 0x54) +\r\n       (local_18 * param_9 + param_4) * *pfVar2 +\r\n       (local_10 * param_9 + param_6) * *(float *)(local_c + 0x58);\r\n  uVar1 = FUN_10085560(pfVar2);\r\n  *(float *)(local_c + 0x68) = param_4;\r\n  *(float *)(local_c + 0x6c) = param_5;\r\n  *(float *)(local_c + 0x70) = param_6;\r\n  *(undefined4 *)(local_c + 0x74) = param_1;\r\n  *(undefined4 *)(local_c + 0x78) = param_2;\r\n  *(undefined4 *)(local_c + 0x7c) = param_3;\r\n  *(float *)(local_c + 0x80) = param_7;\r\n  *(float *)(local_c + 0x84) = param_8;\r\n  *(undefined1 *)(local_c + 0x61) = uVar1;\r\n  *(undefined4 *)(local_c + 100) = 1;\r\n  *(float *)(local_c + 0x88) = param_9;\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_0e3d797f2e83648b5579486b9ebe5a367de6bb8626e6dc81442c5b7069a4937c",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005cb50"
+      },
+      "capture": "analysis/local/graphics-flashlight-texgen/000-procedure_pseudo_code.json",
+      "capture_sha256": "32153b137114a576f780573ab8916a304bf4bf0c5156374b29308b07b661ced2",
+      "pseudocode": "\r\nvoid FUN_1005cb50(void)\r\n\r\n{\r\n  int iVar1;\r\n  double dVar2;\r\n  double dVar3;\r\n  float fVar4;\r\n  float fVar5;\r\n  float fVar6;\r\n  undefined4 local_48;\r\n  undefined4 uStack_44;\r\n  undefined4 uStack_40;\r\n  undefined4 uStack_3c;\r\n  undefined4 local_38;\r\n  undefined4 uStack_34;\r\n  undefined4 uStack_30;\r\n  undefined4 uStack_2c;\r\n  undefined4 local_28;\r\n  undefined4 uStack_24;\r\n  undefined4 uStack_20;\r\n  undefined4 uStack_1c;\r\n  undefined4 local_18;\r\n  undefined4 uStack_14;\r\n  undefined4 uStack_10;\r\n  undefined4 uStack_c;\r\n  uint local_8;\r\n  \r\n  iVar1 = DAT_104cd4d0;\r\n  local_8 = DAT_10190600 ^ (uint)&stack0xfffffffc;\r\n  dVar2 = (double)*(float *)(DAT_104cd4d0 + 0x34) * 0.008726646259971648;\r\n  FUN_101000a0();\r\n  dVar3 = (double)*(float *)(iVar1 + 0x38) * 0.008726646259971648;\r\n  FUN_101000a0();\r\n  iVar1 = FUN_1005c040(*(undefined4 *)(iVar1 + 0x28));\r\n  fVar6 = DAT_104cc4ac * 256.0 + DAT_104cc4a0;\r\n  fVar5 = DAT_104cc4b0 * 256.0 + DAT_104cc4a4;\r\n  fVar4 = DAT_104cc4b4 * 256.0 + DAT_104cc4a8;\r\n  local_18 = 0x3f800000;\r\n  uStack_14 = 0;\r\n  uStack_10 = 0;\r\n  uStack_c = 0;\r\n  local_28 = 0;\r\n  uStack_24 = 0x3f800000;\r\n  uStack_20 = 0;\r\n  uStack_1c = 0;\r\n  local_38 = 0;\r\n  uStack_34 = 0;\r\n  uStack_30 = 0x3f800000;\r\n  uStack_2c = 0;\r\n  local_48 = 0;\r\n  uStack_44 = 0;\r\n  uStack_40 = 0;\r\n  uStack_3c = 0x3f800000;\r\n  (*DAT_101be72c)(0x2000,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2000,0x2502,&local_18);\r\n  (*DAT_101be72c)(0x2001,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2001,0x2502,&local_28);\r\n  (*DAT_101be72c)(0x2002,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2002,0x2502,&local_38);\r\n  (*DAT_101be72c)(0x2003,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2003,0x2502,&local_48);\r\n  (*DAT_101be698)(0xc60);\r\n  (*DAT_101be698)(0xc61);\r\n  (*DAT_101be698)(0xc62);\r\n  (*DAT_101be698)(0xc63);\r\n  (*DAT_101be6d4)(0x1702);\r\n  (*DAT_101be6cc)();\r\n  FUN_1005c460(0,0,0x3f800000,0x3f800000);\r\n  (*DAT_101be6a4)((double)-(float)dVar2,(double)(float)dVar2,(double)-(float)dVar3,\r\n                  (double)(float)dVar3,0x3ff0000000000000,(double)*(float *)(DAT_104cd4d0 + 0xc));\r\n  FUN_10055aa0((double)DAT_104cc4a0,(double)DAT_104cc4a4,(double)DAT_104cc4a8,(double)fVar6,\r\n               (double)fVar5,(double)fVar4,0,0,0,0,(double)(int)((uint)(iVar1 == 0) * 2 + -1));\r\n  (*DAT_101be6d4)();\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_736105af9a04984ee65040c57b079a77cd895eb6a702a023587e6d2f01255d45",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c820"
+      },
+      "capture": "analysis/local/graphics-flashlight-texgen/001-procedure_pseudo_code.json",
+      "capture_sha256": "31b7e5d3cd1a03023a7b5a1a29f863e7bea57dc3041678faa97f17b37233b9e5",
+      "pseudocode": "\r\nvoid FUN_1005c820(void)\r\n\r\n{\r\n  float local_18;\r\n  float local_14;\r\n  float local_10;\r\n  float local_c;\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_10190600 ^ (uint)&stack0xfffffffc;\r\n  local_c = *(float *)(DAT_104cd4d0 + 0xc);\r\n  local_18 = DAT_104cc4ac / local_c;\r\n  local_14 = DAT_104cc4b0 / local_c;\r\n  local_10 = DAT_104cc4b4 / local_c;\r\n  local_c = -(DAT_104cc4a4 * DAT_104cc4b0 + DAT_104cc4a0 * DAT_104cc4ac +\r\n             DAT_104cc4a8 * DAT_104cc4b4) / local_c;\r\n  (*DAT_101be72c)(0x2000,0x2500,0x2400);\r\n  (*DAT_101be728)(0x2000,0x2502,&local_18);\r\n  (*DAT_101be698)(0xc60);\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_7e0613e4fd77f3bd06731407e1c47ef83d162702f2a1f93b4d534d97767188df",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005b630"
+      },
+      "capture": "analysis/local/graphics-flashlight-texgen/002-procedure_pseudo_code.json",
+      "capture_sha256": "d4cd695d31eb641f5879af2b1469d13c080f3506357879b007a0858e848c155b",
+      "pseudocode": "\r\nvoid FUN_1005b630(int param_1)\r\n\r\n{\r\n  int iVar1;\r\n  float *pfVar2;\r\n  int *piVar3;\r\n  int iVar4;\r\n  float fVar5;\r\n  \r\n  iVar4 = 0;\r\n  iVar1 = *(int *)(param_1 + 0xb94);\r\n  piVar3 = (int *)(*(int *)(iVar1 + 0x70) * 0x5c + *(int *)(iVar1 + 0xb4));\r\n  if (0 < *(int *)(iVar1 + 0x74)) {\r\n    do {\r\n      if (*piVar3 == DAT_104cdd44) {\r\n        pfVar2 = (float *)piVar3[1];\r\n        fVar5 = (pfVar2[1] * DAT_104cc4a4 + *pfVar2 * DAT_104cc4a0 + pfVar2[2] * DAT_104cc4a8) -\r\n                pfVar2[3];\r\n        if ((*(byte *)(piVar3 + 2) & 2) == 0) {\r\n          if (0.01 < fVar5) goto LAB_1005b6b3;\r\n        }\r\n        else if (fVar5 < -0.01) {\r\nLAB_1005b6b3:\r\n          FUN_1005c080(piVar3);\r\n        }\r\n      }\r\n      iVar4 = iVar4 + 1;\r\n      piVar3 = piVar3 + 0x17;\r\n    } while (iVar4 < *(int *)(*(int *)(param_1 + 0xb94) + 0x74));\r\n  }\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_495c639ca2ccc20ea3412a09e675760ec579f4b37d542785e01604a50f1f8c23",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1006a1f0"
+      },
+      "capture": "analysis/local/graphics-flashlight-texgen/003-procedure_pseudo_code.json",
+      "capture_sha256": "7abcf536a6589410b59e17dee8af487481171b3f7b614f9a0df66feac8f4fe16",
+      "pseudocode": "\r\nundefined4 FUN_1006a1f0(byte *param_1,undefined4 param_2,int param_3)\r\n\r\n{\r\n  byte bVar1;\r\n  byte *pbVar2;\r\n  uint uVar3;\r\n  int iVar4;\r\n  byte *pbVar5;\r\n  byte *pbVar6;\r\n  int iVar7;\r\n  bool bVar8;\r\n  \r\n  iVar7 = 0;\r\n  if (0 < DAT_104e8154) {\r\n    pbVar5 = &DAT_104e8158;\r\n    pbVar2 = param_1;\r\n    pbVar6 = pbVar5;\r\nLAB_1006a214:\r\n    do {\r\n      bVar1 = *pbVar5;\r\n      bVar8 = bVar1 < *pbVar2;\r\n      if (bVar1 == *pbVar2) {\r\n        if (bVar1 != 0) {\r\n          bVar1 = pbVar5[1];\r\n          bVar8 = bVar1 < pbVar2[1];\r\n          if (bVar1 != pbVar2[1]) goto LAB_1006a234;\r\n          pbVar5 = pbVar5 + 2;\r\n          pbVar2 = pbVar2 + 2;\r\n          if (bVar1 != 0) goto LAB_1006a214;\r\n        }\r\n        uVar3 = 0;\r\n      }\r\n      else {\r\nLAB_1006a234:\r\n        uVar3 = -(uint)bVar8 | 1;\r\n      }\r\n      if (uVar3 == 0) {\r\n        return (&DAT_104e8198)[iVar7 * 0x11];\r\n      }\r\n      iVar7 = iVar7 + 1;\r\n      pbVar5 = pbVar6 + 0x44;\r\n      pbVar2 = param_1;\r\n      pbVar6 = pbVar5;\r\n    } while (iVar7 < DAT_104e8154);\r\n    if (iVar7 == 0x100) {\r\n      if (DAT_104ec558 != 0) {\r\n        return 0;\r\n      }\r\n      FUN_1007d400(\"Error: LoadCacheTexture failed: MAX_CACHED_TEXTURES exceeded!\\n\");\r\n      DAT_104ec558 = 1;\r\n      return 0;\r\n    }\r\n  }\r\n  iVar4 = FUN_10069630(param_1,param_2,0);\r\n  (&DAT_104e8198)[iVar7 * 0x11] = iVar4;\r\n  if (iVar4 == 0) {\r\n    return 0;\r\n  }\r\n  iVar4 = iVar7 * 0x44 - (int)param_1;\r\n  do {\r\n    bVar1 = *param_1;\r\n    param_1 = param_1 + 1;\r\n    param_1[iVar4 + 0x104e8157] = bVar1;\r\n  } while (bVar1 != 0);\r\n  DAT_104e8154 = DAT_104e8154 + 1;\r\n  if (param_3 != 0) {\r\n    (*DAT_101be738)(0xde1,0x2802,0x2900);\r\n    (*DAT_101be738)(0xde1,0x2803,0x2900);\r\n  }\r\n  return (&DAT_104e8198)[iVar7 * 0x11];\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_04eb7b9dcf2112c6077121044d2f50b14c3ee032af3079cf22c66a71b3be4b80",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10062f10"
+      },
+      "capture": "analysis/local/graphics-flashlight-material/000-procedure_pseudo_code.json",
+      "capture_sha256": "a9e552d674a2f22074b38705452ab7d76ca7487c86da777c22c8a1343f029a44",
+      "pseudocode": "\r\nvoid FUN_10062f10(int param_1,int param_2,int param_3,int param_4)\r\n\r\n{\r\n  if (DAT_104cdff0 != param_1) {\r\n    (*DAT_101be764)(0x84c0);\r\n    FUN_10062c10(param_1);\r\n    DAT_104cdff0 = param_1;\r\n  }\r\n  if (DAT_104cdff4 != param_2) {\r\n    (*DAT_101be764)(0x84c1);\r\n    FUN_10062c10(param_2);\r\n    DAT_104cdff4 = param_2;\r\n  }\r\n  if (2 < DAT_101be760) {\r\n    if (DAT_104cdff8 != param_3) {\r\n      (*DAT_101be764)(0x84c2);\r\n      FUN_10062c10(param_3);\r\n      DAT_104cdff8 = param_3;\r\n    }\r\n    if ((3 < DAT_101be760) && (DAT_104cdffc != param_4)) {\r\n      (*DAT_101be764)(0x84c3);\r\n      FUN_10062c10(param_4);\r\n      DAT_104cdffc = param_4;\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_48cd27a51391fadec48ba5dcf4c96ee2134d0e728ebbf429742564215917bea9",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10061d50"
+      },
+      "capture": "analysis/local/graphics-flashlight-material/001-procedure_pseudo_code.json",
+      "capture_sha256": "215ae6dcdfb6d5d76d1ae707e440a768fb22e82c80228f6e71d9e183f04381ea",
+      "pseudocode": "\r\nvoid FUN_10061d50(int param_1)\r\n\r\n{\r\n  (*DAT_101be690)(9,*(undefined4 *)(DAT_104cdf90 + (uint)*(ushort *)(param_1 + 0xe) * 0x28),\r\n                  *(undefined4 *)(param_1 + 8));\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_68b455faa091f5b183fa078aaf177d12cc32ac061c70d4998cd9cdedce2be47b",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c200"
+      },
+      "capture": "analysis/local/graphics-flashlight-material/002-procedure_pseudo_code.json",
+      "capture_sha256": "010c13dd6d0bbfe62113ae91e336bde7925e0c9224dc137d2d8106a396442973",
+      "pseudocode": "\r\nvoid FUN_1005c200(int *param_1)\r\n\r\n{\r\n  char cVar1;\r\n  float *pfVar2;\r\n  int *piVar3;\r\n  int iVar4;\r\n  int *piVar5;\r\n  uint uVar6;\r\n  float fVar7;\r\n  \r\n  iVar4 = *param_1;\r\n  piVar3 = param_1;\r\n  while( true ) {\r\n    if (((iVar4 == -2) || (piVar3[1] != DAT_104cdd6c)) || (iVar4 < 0)) {\r\n      return;\r\n    }\r\n    if (*(char *)(DAT_104cd4d0 + 0x3c) == '\\0') {\r\n      iVar4 = FUN_1005ac70(piVar3[2],piVar3[3],piVar3[4],piVar3[5],piVar3[6],piVar3[7]);\r\n    }\r\n    else {\r\n      iVar4 = FUN_10084b30(piVar3[2],piVar3[3],piVar3[4],piVar3[5],piVar3[6],piVar3[7]);\r\n    }\r\n    if (iVar4 != 0) break;\r\n    pfVar2 = (float *)piVar3[9];\r\n    cVar1 = *(char *)(pfVar2 + 4);\r\n    fVar7 = DAT_104cc4a0;\r\n    if (((cVar1 != '\\0') && (fVar7 = DAT_104cc4a4, cVar1 != '\\x01')) &&\r\n       (fVar7 = DAT_104cc4a8, cVar1 != '\\x02')) {\r\n      fVar7 = pfVar2[1] * DAT_104cc4a4 + *pfVar2 * DAT_104cc4a0 + pfVar2[2] * DAT_104cc4a8;\r\n    }\r\n    fVar7 = fVar7 - pfVar2[3];\r\n    param_1 = (int *)(uint)(fVar7 < 0.0);\r\n    FUN_1005c200(piVar3[(int)param_1 + 10]);\r\n    uVar6 = (uint)*(ushort *)((int)piVar3 + 0x32);\r\n    if (uVar6 != 0) {\r\n      iVar4 = (*DAT_101b26dc)(0);\r\n      piVar5 = (int *)((uint)*(ushort *)(piVar3 + 0xc) * 0x5c +\r\n                      *(int *)(*(int *)(iVar4 + 0xb94) + 0xb4));\r\n      if (-0.01 <= fVar7) {\r\n        if (0.01 < fVar7) {\r\n          param_1 = (int *)0x0;\r\n        }\r\n      }\r\n      else {\r\n        param_1 = (int *)0x2;\r\n      }\r\n      do {\r\n        if ((*piVar5 == DAT_104cdd44) &&\r\n           (((char)piVar5[2] < '\\0' || (((uint)piVar5[2] >> 1 & 1) == (uint)(fVar7 < 0.0))))) {\r\n          FUN_1005c080(piVar5);\r\n        }\r\n        piVar5 = piVar5 + 0x17;\r\n        uVar6 = uVar6 - 1;\r\n      } while (uVar6 != 0);\r\n    }\r\n    piVar3 = (int *)piVar3[(param_1 == (int *)0x0) + 10];\r\n    iVar4 = *piVar3;\r\n  }\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_4c8570a46677dcead032e5b87e8c9351e4e47a921a8018124c33e679fda1516e",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10062c10"
+      },
+      "capture": "analysis/local/graphics-flashlight-combine/000-procedure_pseudo_code.json",
+      "capture_sha256": "cd6449bbf1654cb097348b92411411aab701bcbc50e051cfc580c67110a204d0",
+      "pseudocode": "\r\nvoid FUN_10062c10(undefined4 param_1)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  switch(param_1) {\r\n  case 0:\r\n    (*DAT_101be688)(0xde1);\r\n    return;\r\n  case 1:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x1e01);\r\n    return;\r\n  case 2:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    uVar1 = 0x2100;\r\n    break;\r\n  case 3:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    (*DAT_101be724)(0x2300,0x8571,0x2100);\r\n    (*DAT_101be724)(0x2300,0x8580,0x8578);\r\n    uVar1 = 0x8577;\r\n    goto LAB_10062ca4;\r\n  case 4:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x2100);\r\n    return;\r\n  case 5:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    (*DAT_101be724)(0x2300,0x8571,0x2100);\r\n    (*DAT_101be724)(0x2300,0x8580,0x8578);\r\n    (*DAT_101be724)(0x2300,0x8581,0x1702);\r\n    (*DAT_101be724)(0x2300,0x8573,2);\r\n    return;\r\n  case 6:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    uVar1 = 0x104;\r\n    goto LAB_10062dd3;\r\n  case 7:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    uVar1 = 0x86af;\r\nLAB_10062dd3:\r\n    (*DAT_101be724)(0x2300,0x8571,uVar1);\r\n    uVar1 = 0x8578;\r\n    goto LAB_10062c8f;\r\n  case 8:\r\n    (*DAT_101be698)(0xde1);\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    uVar1 = 0x86af;\r\n    break;\r\n  case 9:\r\n    (*DAT_101be724)(0x2300,0x2200,0x8570);\r\n    (*DAT_101be724)(0x2300,0x8571,0x1e01);\r\n    (*DAT_101be724)(0x2300,0x8580,0x8578);\r\n    (*DAT_101be724)(0x2300,0x8573,1);\r\n    (*DAT_101be724)(0x2300,0x8572,0x1e01);\r\n    (*DAT_101be724)(0x2300,0x8588,0x1702);\r\n    (*DAT_101be724)(0x2300,0x8598,0x302);\r\n    (*DAT_101be724)(0x2300,0xd1c,1);\r\n  default:\r\n    return;\r\n  }\r\n  (*DAT_101be724)(0x2300,0x8571,uVar1);\r\n  uVar1 = 0x8576;\r\nLAB_10062c8f:\r\n  (*DAT_101be724)(0x2300,0x8580,uVar1);\r\n  uVar1 = 0x1702;\r\nLAB_10062ca4:\r\n  (*DAT_101be724)(0x2300,0x8581,uVar1);\r\n  (*DAT_101be724)(0x2300,0x8573,1);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_b96e7538c3e2cfc70ab9d5add9b40fb4f8b6e283b7b5f767500d58fd368f1bc0",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c080"
+      },
+      "capture": "analysis/local/graphics-flashlight-combine/001-procedure_pseudo_code.json",
+      "capture_sha256": "bc4d9400eeec3637e97d7fd9ff02e6c5996263a9ebf28909ff739d325492419d",
+      "pseudocode": "\r\nvoid FUN_1005c080(int param_1)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  \r\n  iVar2 = DAT_104cddc4;\r\n  iVar1 = FUN_100621d0(*(undefined4 *)(*(int *)(param_1 + 0x2c) + 0x24));\r\n  if ((iVar1 != 0) && (*(int *)(iVar1 + 0x10) != 0)) {\r\n    iVar2 = *(int *)(iVar1 + 0x10);\r\n  }\r\n  FUN_10060e10(0x84c1,iVar2);\r\n  FUN_10063150(param_1,&DAT_104cc4a0);\r\n  FUN_10061d80(param_1);\r\n  if (DAT_104cd4d8 != 0) {\r\n    **(undefined4 **)(param_1 + 0x24) = DAT_104cd4d4;\r\n    DAT_104cd4d4 = *(undefined4 *)(param_1 + 0x24);\r\n  }\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_f35ca73d8e3f4dbdc6a5ff241b8e85a45c715fd5bc720590ca88695b3fefa3d9",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c460"
+      },
+      "capture": "analysis/local/graphics-flashlight-combine/002-procedure_pseudo_code.json",
+      "capture_sha256": "c17b54322f1521966f9d7bbb9b7769899d0d190c8f45c23062b79837dcc0bc19",
+      "pseudocode": "\r\nvoid FUN_1005c460(float param_1,float param_2,float param_3,float param_4)\r\n\r\n{\r\n  float fVar1;\r\n  float fVar2;\r\n  \r\n  fVar1 = (param_4 - param_2) * 0.5;\r\n  fVar2 = (param_3 - param_1) * 0.5;\r\n  (*DAT_101be744)(fVar2 + param_1,fVar1 + param_2,0);\r\n  (*DAT_101be700)(fVar2,-fVar1,0x3f800000);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_497ede68a7bb9b2bdd8f399140c143f13334d487847baa758af8ca98a9735310",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005c040"
+      },
+      "capture": "analysis/local/graphics-flashlight-combine/003-procedure_pseudo_code.json",
+      "capture_sha256": "401771066956013799f8183370693b583799c5a1021852d78fc1d667cbd9ee45",
+      "pseudocode": "\r\nundefined4 FUN_1005c040(float param_1)\r\n\r\n{\r\n  uint uVar1;\r\n  \r\n  uVar1 = (int)(param_1 / 90.0) & 0x80000003;\r\n  if ((int)uVar1 < 0) {\r\n    uVar1 = (uVar1 - 1 | 0xfffffffc) + 1;\r\n  }\r\n  if ((uVar1 != 1) && (uVar1 != 2)) {\r\n    return 0;\r\n  }\r\n  return 1;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_d7408fb966b174a2f8c584f5835f51ce2f8fb916fe53c197dafcb73698358cd5",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10055aa0"
+      },
+      "capture": "analysis/local/graphics-flashlight-combine/004-procedure_pseudo_code.json",
+      "capture_sha256": "ebc64e5593ab77d305bbd21747b6d00221da70310f96f6886a5a7dc54004b19e",
+      "pseudocode": "\r\nvoid FUN_10055aa0(double param_1,double param_2,double param_3,double param_4,double param_5,\r\n                 double param_6,double param_7,double param_8,double param_9)\r\n\r\n{\r\n  int in_ECX;\r\n  double dVar1;\r\n  undefined1 auStack_dc [4];\r\n  double local_d8;\r\n  double local_d0;\r\n  double local_c8;\r\n  double local_c0;\r\n  double local_b8;\r\n  double local_b0;\r\n  double local_a8;\r\n  double local_a0;\r\n  double local_98;\r\n  double local_90;\r\n  double local_88;\r\n  double local_80;\r\n  undefined8 local_78;\r\n  double local_70;\r\n  double local_68;\r\n  double local_60;\r\n  undefined8 local_58;\r\n  double local_50;\r\n  double local_48;\r\n  double local_40;\r\n  undefined8 local_38;\r\n  undefined4 local_30;\r\n  undefined4 uStack_2c;\r\n  uint uStack_28;\r\n  undefined4 uStack_24;\r\n  undefined8 local_20;\r\n  undefined8 local_18;\r\n  uint local_c;\r\n  \r\n  local_c = DAT_10190600 ^ (uint)auStack_dc;\r\n  local_c8 = param_2 - param_5;\r\n  local_d0 = param_1 - param_4;\r\n  local_c0 = param_3 - param_6;\r\n  dVar1 = local_c8 * local_c8 + local_d0 * local_d0 + local_c0 * local_c0;\r\n  if (dVar1 < 0.0) {\r\n    __libm_sse2_sqrt_precise();\r\n  }\r\n  else {\r\n    dVar1 = SQRT(dVar1);\r\n  }\r\n  if (dVar1 != 0.0) {\r\n    local_d0 = local_d0 / dVar1;\r\n    local_c8 = local_c8 / dVar1;\r\n    local_c0 = local_c0 / dVar1;\r\n  }\r\n  local_a0 = local_c0 * param_8 - local_c8 * param_9;\r\n  local_98 = local_d0 * param_9 - local_c0 * param_7;\r\n  local_d8 = local_c8 * param_7 - local_d0 * param_8;\r\n  local_b8 = local_d8 * local_c8 - local_98 * local_c0;\r\n  local_b0 = local_a0 * local_c0 - local_d8 * local_d0;\r\n  local_a8 = local_98 * local_d0 - local_a0 * local_c8;\r\n  dVar1 = local_98 * local_98 + local_a0 * local_a0 + local_d8 * local_d8;\r\n  if (dVar1 < 0.0) {\r\n    __libm_sse2_sqrt_precise();\r\n  }\r\n  else {\r\n    dVar1 = SQRT(dVar1);\r\n  }\r\n  if (dVar1 != 0.0) {\r\n    local_a0 = local_a0 / dVar1;\r\n    local_98 = local_98 / dVar1;\r\n    local_d8 = local_d8 / dVar1;\r\n  }\r\n  dVar1 = local_b0 * local_b0 + local_b8 * local_b8 + local_a8 * local_a8;\r\n  if (dVar1 < 0.0) {\r\n    __libm_sse2_sqrt_precise();\r\n  }\r\n  else {\r\n    dVar1 = SQRT(dVar1);\r\n  }\r\n  local_88 = local_b8;\r\n  local_68 = local_b0;\r\n  local_48 = local_a8;\r\n  if (dVar1 != 0.0) {\r\n    local_88 = local_b8 / dVar1;\r\n    local_68 = local_b0 / dVar1;\r\n    local_48 = local_a8 / dVar1;\r\n  }\r\n  local_90 = local_a0;\r\n  local_70 = local_98;\r\n  local_50 = local_d8;\r\n  local_30 = 0;\r\n  uStack_2c = 0;\r\n  uStack_28 = 0;\r\n  uStack_24 = 0;\r\n  local_80 = local_d0;\r\n  local_60 = local_c8;\r\n  local_40 = local_c0;\r\n  local_20 = 0;\r\n  local_78 = 0;\r\n  local_58 = 0;\r\n  local_38 = 0;\r\n  local_18 = 0x3ff0000000000000;\r\n  (**(code **)(in_ECX + 0xe0))();\r\n  (**(code **)(in_ECX + 0x148))(-param_1);\r\n  __security_check_cookie(uStack_28 ^ (uint)&stack0xffffff08);\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    },
+    {
+      "evidence_id": "ev_9eb5d6b1eb0b323037aae976c45d95d226fee8758a638952834d1cf91332e947",
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x101000a0"
+      },
+      "capture": "analysis/local/graphics-flashlight-combine/005-procedure_pseudo_code.json",
+      "capture_sha256": "c7a15eec5e64b9d3dc2f0cda29af9df6b869c2391bc9a58c936e71f3eb44c18c",
+      "pseudocode": "\r\nvoid FUN_101000a0(void)\r\n\r\n{\r\n  ushort uVar1;\r\n  ushort in_FPUControlWord;\r\n  ushort in_XMM0_Wd;\r\n  \r\n  if ((MXCSR & 0x7f80) == 0x1f80 && (in_FPUControlWord & 0x7f) == 0x7f) {\r\n    uVar1 = (in_XMM0_Wd & 0x7fff) + 0xc7e0;\r\n    if (uVar1 < 0x8a9) {\r\n      return;\r\n    }\r\n    if ((short)uVar1 < 0x8a9) {\r\n      return;\r\n    }\r\n  }\r\n  FUN_1011d55f();\r\n  return;\r\n}\r\n\r\n",
+      "limitations": [
+        "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+        "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+        "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+        "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+        "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+        "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+        "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+        "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+        "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+        "The Ghidra Program references PDB client.pdb (GUID 059219d5-6a55-45be-8a52-bf70fe92b27d, age (hex) 3, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+      ]
+    }
+  ],
+  "remaining_unknowns": [
+    "Original runtime pixel comparison not performed",
+    "Enclosing fog interaction not derived by this subtask",
+    "Tangent basis construction pending separate shader inventory capture",
+    "Studio model lighting and shadow parity not covered",
+    "CRT tangent helper loses SIMD return in decompiler; mathematical interpretation corroborated by frustum interface but not instruction-level decoded here"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "source_capture": "analysis/local/shader-pass-tangent-constructor",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "b3d10e4f7f5078aa56eb5d15cb456fa5063ea3712914538aef9628093319dac9",
+      "procedure": "ram:0x10061e77",
+      "evidence_id": "ev_27f6045b4d569df67f1c933cd12671fc3f948a1d82bda8b349f3c3ca8d117c5c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

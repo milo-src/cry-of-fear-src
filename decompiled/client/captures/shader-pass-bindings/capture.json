@@ -1,0 +1,119 @@
+{
+  "source_capture": "analysis/local/shader-pass-bindings",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "75c7471cfb9ad154878017bdff6ce9132f4f48d86fb4c46d3f7bf5a2a30f92b2",
+      "procedure": "ram:0x100611a0",
+      "evidence_id": "ev_f6c71a234738152a49caae8dfd90c409b98095a717f7cbf6e6e8a3e7e19efde4",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "012ae3e3ec30f5ecb5142903d95922b4ca5cce417bb13a3efbc702a66ea482a8",
+      "procedure": "ram:0x10061290",
+      "evidence_id": "ev_c9a52ea6847abdc8bcb4039142c0118f363edcf8cd4130bc82395666de089fe7",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "10a85a00e5da7d72763b48e2116cb56557e15609adddfea00c078b9a2e54fdd4",
+      "procedure": "ram:0x10060b60",
+      "evidence_id": "ev_e81899bc369a0ae996763879706c10a92d65bbfd9b9798b9b9029284dbee67b9",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "20d4ea489b7b025291c9dacc3026df88e6ad966018c9b4918e714aff92b5206b",
+      "procedure": "ram:0x10063780",
+      "evidence_id": "ev_c2835d9b0c36dc6159bb51a79368dbea3bce4fce0258eb373376fc0395fa3056",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "004-pseudocode.c",
+      "sha256": "d89e79bae9830909bed7910450f9e6bbefa87f632724ac3e50810f0a28cc015b",
+      "procedure": "ram:0x1005eeb0",
+      "evidence_id": "ev_b50758f3bf0eb51c688086e90ef8db16378c6544ccacd7b4d635051838c4140c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "005-pseudocode.c",
+      "sha256": "1c851e2718605ad1af1804318baaee1ce402dc3cd53d63fe398127e772bb9889",
+      "procedure": "ram:0x10071df4",
+      "evidence_id": "ev_f021d4c6e6c70afbe3b0b695f867e880930658a6209d8f731e94b626da9a1915",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "006-pseudocode.c",
+      "sha256": "fe8c57022672db0f96c136675f2312aaba8548f469c77a79632a6a2c7bd10d02",
+      "procedure": "ram:0x100621f0",
+      "evidence_id": "ev_7b91f2f5c1cfca9e2e7e9e7ce972e8d4d2ced2b48dce29bbd74c4a3a0abf1e6b",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "007-pseudocode.c",
+      "sha256": "3d99aa36c470e690e9e8e544a962ff32c83d7cca002deae3341bdae088e0c673",
+      "procedure": "ram:0x10062280",
+      "evidence_id": "ev_a5177f222de47f50239058b629e797de8f2b49916996aa46a6b8a96a3cfa5e5e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "analyses": [
+    {
+      "file": "008-analyze_function.json",
+      "sha256": "516385ca03099249780fa07e3b5953d8f2bead19b3e1e847b2afb44ff737e089",
+      "procedure": "ram:0x100877d0",
+      "evidence_id": "ev_13a224187c6cc9b54b04b81f5664f27aa2283d5e1f5a50e914d189f91537d8d1",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "009-analyze_function.json",
+      "sha256": "53255878fc8605366b882ddb9eed6a372786c999bab1d387190c7fbea529bd9f",
+      "procedure": "ram:0x10062940",
+      "evidence_id": "ev_08b3113f726178f45cea33222dd4be2a0f5e9c22036808c37cb5c971b452a1e4",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

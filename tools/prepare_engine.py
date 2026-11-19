@@ -98,6 +98,8 @@ def prepare(raytracing=False):
         prepare_rtx_scene(target)
         from prepare_rtx_weapons import prepare as prepare_rtx_weapons
         prepare_rtx_weapons(target)
+        from prepare_attached_lights import prepare as prepare_attached_lights
+        prepare_attached_lights(target, True)
         # Observe actual per-frame parameters, rather than treating saved cvars
         # as proof that live upscaler transitions reached the tracing backend.
         main_render = target / 'ref/gl/gl_rmain.c'
@@ -147,6 +149,10 @@ def prepare(raytracing=False):
             text = text.replace(anchor, replacement)
         (target / 'ref/gl' / name).write_text(text)
     prepare_lighting(target)
+    from prepare_attached_lights import prepare as prepare_attached_lights
+    prepare_attached_lights(target)
+    from prepare_projected_lights import prepare_projected_lights
+    prepare_projected_lights(target)
     prepare_vgui(target)
     return target
 

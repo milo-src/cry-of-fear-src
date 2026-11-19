@@ -1,0 +1,287 @@
+{
+  "recorded_utc": "2026-11-19T19:55:34.044653+00:00",
+  "scope": "Typed handheld lights; normal production GLSL private-FBO pixels and renderer submissions; RTX submissions; weapon regression. Not original-game scene visual parity.",
+  "reports": [
+    {
+      "result": "pass",
+      "mode": "isolated-desktop",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "visual_checks": "not_run",
+      "report": "analysis/local/normal-c_sdkmap1-lighting-projected-isolated.json",
+      "report_sha256": "3a32dd0a548481277a36b2d0bfdc2987259bba428d8cc31fae3cedc364708fe4",
+      "log": "analysis/local/normal-c_sdkmap1-lighting-projected-isolated.log",
+      "log_sha256": "a157a84a6c2b945ef62be1a009d6bbbedc1fd7639c59f16b74d2d11b32a281ae",
+      "command": [
+        "D:\\github\\cry-of-fear-src\\out\\runtime\\xash3d.exe",
+        "-game",
+        "cryoffear",
+        "-windowed",
+        "-width",
+        "1280",
+        "-height",
+        "720",
+        "-log",
+        "-nosound",
+        "-dev",
+        "2",
+        "+map",
+        "c_sdkmap1",
+        "+cof_projected_test",
+        "1",
+        "+m_ignore",
+        "1"
+      ],
+      "shader_pixel_assertions": "private_FBO_passed",
+      "renderer_markers": [
+        "COF_ATTACHED_LIGHT kind=1 radius=700 fov=50 rgb=0.46,0.46,0.51",
+        "COF_PROJECTED_SHADER PASS GLSL120 native_masks=2",
+        "COF_PROJECTED_READBACK PASS quadratic_depth rgb=192,192,192",
+        "COF_PROJECTED_READBACK PASS behind rgb=0,0,0",
+        "COF_PROJECTED_READBACK PASS range rgb=0,0,0",
+        "COF_PROJECTED_READBACK PASS alpha_hole rgb=0,0,0",
+        "COF_PROJECTED_READBACK PASS mask_black rgb=0,0,0",
+        "COF_PROJECTED_READBACK PASS polygon_seam rgb=176,176,176",
+        "COF_PROJECTED_READBACK PASS light_backface rgb=0,0,0",
+        "COF_PROJECTED_READBACK PASS outside_projection rgb=0,0,0",
+        "COF_PROJECTED_READBACK PASS phone_cookie rgb=65,76,82",
+        "COF_PROJECTED_READBACK PASS torch_cookie rgb=124,121,105",
+        "COF_PROJECTED_READBACK PASS grazing_incidence rgb=96,96,96",
+        "COF_PROJECTED_READBACK PASS cookie_vertical_axis rgb=172,0,0",
+        "COF_PROJECTED_READBACK PASS normal_tilt rgb=96,96,96",
+        "COF_PROJECTED_READBACK PASS normal_length_preserved rgb=47,47,47",
+        "COF_PROJECTED_READBACK PASS native_skew_basis rgb=157,157,157",
+        "COF_PROJECTED_READBACK_COMPLETE failures=0",
+        "COF_PROJECTED_NORMALMAP material=c2_subccrete3 world=1",
+        "COF_PROJECTED_GEOMETRY kind=1 faces=80 world=1",
+        "COF_PROJECTED_GEOMETRY kind=1 faces=18 world=0",
+        "COF_ATTACHED_LIGHT kind=2 radius=700 fov=50 rgb=1.4,1.4,1.4",
+        "COF_PROJECTED_GEOMETRY kind=2 faces=32 world=1",
+        "COF_PROJECTED_GEOMETRY kind=2 faces=18 world=0",
+        "COF_ATTACHED_LIGHT kind=3 radius=700 fov=70 rgb=0.5,0.5,0.5",
+        "COF_PROJECTED_GEOMETRY kind=3 faces=32 world=1",
+        "COF_PROJECTED_GEOMETRY kind=3 faces=18 world=0"
+      ],
+      "fbo_cases": [
+        "quadratic_depth",
+        "behind",
+        "range",
+        "alpha_hole",
+        "mask_black",
+        "polygon_seam",
+        "light_backface",
+        "outside_projection",
+        "phone_cookie",
+        "torch_cookie",
+        "grazing_incidence",
+        "cookie_vertical_axis",
+        "normal_tilt",
+        "normal_length_preserved",
+        "native_skew_basis"
+      ]
+    },
+    {
+      "result": "pass",
+      "mode": "isolated-desktop",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "visual_checks": "not_run",
+      "report": "analysis/local/rtx-c_sdkmap1-lighting-projected-isolated.json",
+      "report_sha256": "800bc5bfe2e19e657b1c01ea2ef3a0bf44ed57a7db754d404834b0bb99dd3b37",
+      "log": "analysis/local/rtx-c_sdkmap1-lighting-projected-isolated.log",
+      "log_sha256": "4c5def3a6912c926500a40382f6672f2aefc0694f30831e9adca24b08a02d391",
+      "command": [
+        "D:\\github\\cry-of-fear-src\\out\\runtime-rtx-projected\\xash3d.exe",
+        "-game",
+        "cryoffear",
+        "-windowed",
+        "-width",
+        "1280",
+        "-height",
+        "720",
+        "-log",
+        "-nosound",
+        "-dev",
+        "2",
+        "+map",
+        "c_sdkmap1",
+        "+m_ignore",
+        "1"
+      ],
+      "shader_pixel_assertions": "not_run",
+      "renderer_markers": [
+        "COF_ATTACHED_LIGHT kind=1 radius=700 fov=50 rgb=0.46,0.46,0.51",
+        "COF_PROJECTED_RT kind=1 fov=50 intensity=829630",
+        "COF_ATTACHED_LIGHT kind=2 radius=700 fov=50 rgb=1.4,1.4,1.4",
+        "COF_PROJECTED_RT kind=2 fov=50 intensity=1.28e+06",
+        "COF_ATTACHED_LIGHT kind=3 radius=700 fov=70 rgb=0.5,0.5,0.5",
+        "COF_PROJECTED_RT kind=3 fov=70 intensity=1.28e+06"
+      ]
+    },
+    {
+      "result": "pass",
+      "mode": "isolated-desktop",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "visual_checks": "not_run",
+      "report": "analysis/local/normal-c_sdkmap1-weapons-isolated.json",
+      "report_sha256": "ba1b00d2654d92031e532c13f9ca408cd75f12d987af63466a958f4b8b189343",
+      "log": "analysis/local/normal-c_sdkmap1-weapons-isolated.log",
+      "log_sha256": "57117f119f4ee37fb5246b4a01c44b08bca7b7a81d2036023fef7761b3dc034c",
+      "command": [
+        "D:\\github\\cry-of-fear-src\\out\\runtime\\xash3d.exe",
+        "-game",
+        "cryoffear",
+        "-windowed",
+        "-width",
+        "1280",
+        "-height",
+        "720",
+        "-log",
+        "-nosound",
+        "-dev",
+        "2",
+        "+map",
+        "c_sdkmap1",
+        "+m_ignore",
+        "1"
+      ],
+      "unique_weapon_cases": 126,
+      "completion": [
+        "COF_WEAPON_CLIENT_COMPLETE failures=0",
+        "COF_SPECIAL_TEST_COMPLETE failures=0",
+        "COF_WEAPON_RANGED_COMPLETE failures=0",
+        "COF_WEAPON_SAVE_COMPLETE failures=0",
+        "COF_WEAPON_TEST_COMPLETE failures=0"
+      ]
+    },
+    {
+      "result": "pass",
+      "mode": "isolated-desktop",
+      "desktop_verified": true,
+      "audio": "disabled",
+      "visual_checks": "not_run",
+      "report": "analysis/local/rtx-c_sdkmap1-weapons-isolated.json",
+      "report_sha256": "d599250f018304c5b7392b97560e639ed676e05665faf3ae834c10feeaec0bb5",
+      "log": "analysis/local/rtx-c_sdkmap1-weapons-isolated.log",
+      "log_sha256": "f682157bbc87dc5bea9b39e476671526bfd30446c0d285b7a0e6531a1d7273b4",
+      "command": [
+        "D:\\github\\cry-of-fear-src\\out\\runtime-rtx-projected\\xash3d.exe",
+        "-game",
+        "cryoffear",
+        "-windowed",
+        "-width",
+        "1280",
+        "-height",
+        "720",
+        "-log",
+        "-nosound",
+        "-dev",
+        "2",
+        "+map",
+        "c_sdkmap1",
+        "+m_ignore",
+        "1"
+      ],
+      "unique_weapon_cases": 126,
+      "completion": [
+        "COF_WEAPON_CLIENT_COMPLETE failures=0",
+        "COF_SPECIAL_TEST_COMPLETE failures=0",
+        "COF_WEAPON_RANGED_COMPLETE failures=0",
+        "COF_WEAPON_SAVE_COMPLETE failures=0",
+        "COF_WEAPON_TEST_COMPLETE failures=0"
+      ]
+    }
+  ],
+  "runtime_audits": {
+    "runtime": {
+      "report": "out/runtime/runtime-audit.json",
+      "sha256": "8b244212d30347ec7f499f5d131f02173e40dd3fd86c7298eafb9b6a49c0b43d",
+      "result": "pass"
+    },
+    "runtime-rtx": {
+      "report": "out/runtime-rtx/runtime-audit.json",
+      "sha256": "1c52a7d180ecb4caab36ab84686d32447892d3be2c4963da12f5a51f7e16bf9c",
+      "result": "pass"
+    }
+  },
+  "rtx_installed_matches_tested_modules": {
+    "amd_fidelityfx_vk.dll": {
+      "installed_sha256": "efdb232a146bbc121e40a3e47b70c98dd96964fd1fb67574cef64e549a0f02c6",
+      "tested_sha256": "efdb232a146bbc121e40a3e47b70c98dd96964fd1fb67574cef64e549a0f02c6"
+    },
+    "filesystem_stdio.dll": {
+      "installed_sha256": "e69bf73947df2d51e3c3127407fac88f8b10db4b1940dac96fd0478950c22f30",
+      "tested_sha256": "e69bf73947df2d51e3c3127407fac88f8b10db4b1940dac96fd0478950c22f30"
+    },
+    "menu.dll": {
+      "installed_sha256": "dbdcacd6e9e3b0e8f5ce2fe7e3aac9ac66036bad3096c25f121f7e51c6d9cb2d",
+      "tested_sha256": "dbdcacd6e9e3b0e8f5ce2fe7e3aac9ac66036bad3096c25f121f7e51c6d9cb2d"
+    },
+    "NRI.dll": {
+      "installed_sha256": "96d604abe9129a269189a22287deb95098d7ea1531b96dd673bebb0d1e028898",
+      "tested_sha256": "96d604abe9129a269189a22287deb95098d7ea1531b96dd673bebb0d1e028898"
+    },
+    "nvngx_dlss.dll": {
+      "installed_sha256": "d00b5b0ab29c3ca101b70c3a5ecb3a01b7ef33766a3383a28a18623083e6123e",
+      "tested_sha256": "d00b5b0ab29c3ca101b70c3a5ecb3a01b7ef33766a3383a28a18623083e6123e"
+    },
+    "nvngx_dlssd.dll": {
+      "installed_sha256": "b49435ae346f227feafe7bbe937d88277ea0ee7323975ec06488f377fdb46cee",
+      "tested_sha256": "b49435ae346f227feafe7bbe937d88277ea0ee7323975ec06488f377fdb46cee"
+    },
+    "nvngx_dlssg.dll": {
+      "installed_sha256": "8d59d49b36410dd6b62fef2503a5871d347415bd85d943fa0848563a95dd50c7",
+      "tested_sha256": "8d59d49b36410dd6b62fef2503a5871d347415bd85d943fa0848563a95dd50c7"
+    },
+    "RayTracedGL1.dll": {
+      "installed_sha256": "e8095b7a664a8a295ea9dd313ddc3fcb46b08d3d674bd75d1e58b6d041f0bdd0",
+      "tested_sha256": "e8095b7a664a8a295ea9dd313ddc3fcb46b08d3d674bd75d1e58b6d041f0bdd0"
+    },
+    "ref_gl.dll": {
+      "installed_sha256": "5e6bf907cd8252cbc269a832610aedca2637106b2e054874dac669cb1119819b",
+      "tested_sha256": "5e6bf907cd8252cbc269a832610aedca2637106b2e054874dac669cb1119819b"
+    },
+    "SDL2.dll": {
+      "installed_sha256": "b37740a72a7a9706216df9f0134894bb7a850b356fd149398c67d874cbcfacb4",
+      "tested_sha256": "b37740a72a7a9706216df9f0134894bb7a850b356fd149398c67d874cbcfacb4"
+    },
+    "xash.dll": {
+      "installed_sha256": "061b91b2cd400de5e3163ccf77ec009077b3a18c220714dcfb2ef0ab1723066e",
+      "tested_sha256": "061b91b2cd400de5e3163ccf77ec009077b3a18c220714dcfb2ef0ab1723066e"
+    },
+    "xash3d.exe": {
+      "installed_sha256": "f1f729589dd6e01ca452b5e5768b967d9f5388e7882652cf300eef4107146337",
+      "tested_sha256": "f1f729589dd6e01ca452b5e5768b967d9f5388e7882652cf300eef4107146337"
+    },
+    "cryoffear/cl_dlls/client_amd64.dll": {
+      "installed_sha256": "c2ae056b1be46b710a23334c4ae81ea4d03b3bc74c7e3c59117d889802f499bb",
+      "tested_sha256": "c2ae056b1be46b710a23334c4ae81ea4d03b3bc74c7e3c59117d889802f499bb"
+    },
+    "cryoffear/dlls/hl_amd64.dll": {
+      "installed_sha256": "12e99fd79a23b701c13f6c81e0089760f4b965da60313f929b55d45ff0f0ee4c",
+      "tested_sha256": "12e99fd79a23b701c13f6c81e0089760f4b965da60313f929b55d45ff0f0ee4c"
+    }
+  },
+  "sources": {
+    "src/cof/render/cof_attached_lights.inc": "ace50f22808b3c572c25426323c56d3cab3fe658928b04676aae99b75757350e",
+    "src/cof/render/gl_cof_projected.c": "87c40dc1738cbeecfd05c15f2a7553fa0303dd6080bcc13df1b5dfc86206e1ab",
+    "src/cof/render/gl_cof_projected.h": "57012769fb40e190f19f9df159a8875401a1ddb9a193bb30bfceeb001a856578",
+    "src/cof/render/shaders/projected.vert": "9dd3d747051e832c3172d5c1565c0146bf266ed5f66458fd7b3aa6ab2099108d",
+    "src/cof/render/shaders/projected.frag": "34209f1308733c221c42e1b1c3b3bfd64eac5cec9976bb2c933ed6975c418316",
+    "src/cof/client/cof_weapons_client.cpp": "3fa48e0c48a813d7dcddacde2f2c6c5211f35c9e0001468a0230d4313afc8e08",
+    "src/cof/server/cof_special.cpp": "a1116a942455cc80318326667752ac2763241817066deb378a387444fa8d91dd",
+    "src/cof/server/cof_weapons.cpp": "9a807cae4bfe16e67efa0f05de3d1786e8a17700bbf2947c8f464c23157e9746",
+    "tools/prepare_attached_lights.py": "7870db5c27956b413fd465b6fa634cdcf23cd0b0689adc7eeaf57c6faa1d7b45",
+    "tools/prepare_projected_lights.py": "3ae111cdbc0115542ceb4a0735db91221d03f09c0374d27156f023e1270b5c3b",
+    "tools/prepare_engine.py": "7b540ab5e995a72bef64b4add498cc873dd9cb8ae72b88a7fa1f72be270065c9",
+    "tools/smoke_rtx.py": "b73e18aa9dc4c85340f32b6162ea48f2bad65406e11fc18617dcf6294f3ee5b1"
+  },
+  "limitations": [
+    "RTX spotlight uses cookie center color/relative peak; RTGL1 API has no projected cookie input.",
+    "No original-runtime image comparison.",
+    "Normal projected studio triangles, transparent blended brushes, native fog/detail interaction, conveyor UV and shadows remain unported.",
+    "Static bump atlases/specular and blur implementations are not completed by this change.",
+    "Normal-map lifetime cleanup reviewed in source; repeated level-transition stress not exercised by this fixture."
+  ]
+}

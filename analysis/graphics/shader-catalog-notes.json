@@ -1,0 +1,255 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10060e50",
+      "proposed_name": "Render_SelectLowSpecularBackend",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Выбирает NV one/two-pass, ARB fragment program либо alpha fallback; компилирует программу 1018f858.",
+      "confidence": "high",
+      "details_ru": [
+        "gl_nocombs, gl_noshaders, gl_twopassspecular и возможности GPU меняют backend; режимы 1..4 нельзя принимать за четыре материала.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-core/000-pseudocode.c",
+        "decompiled/client/captures/shader-pass-core/001-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10062940",
+      "proposed_name": "Render_DrawSpecularChains",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Загружает high-specular программу 1018faf0 и рисует low/high цепочки поверх освещения мира и brush entities.",
+      "confidence": "high",
+      "details_ru": [
+        "Условия gl_specular/gl_highspecular; GL_EQUAL, depth writes 0, additive passes. Вызывается из 1005eeb0 и 1005f570.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/004-pseudocode.c",
+        "decompiled/client/captures/shader-pass-core/001-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100611a0",
+      "proposed_name": "Render_DrawHighSpecular",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "High specular: normal map 0, direction atlas 1, diffuse atlas 2, glosshi 3; half-vector exponent 16.",
+      "confidence": "high",
+      "details_ru": [
+        "Unit 0 получает позицию через 10063150 как eye vector; normal UV берётся из texcoord 3. Sampler unit не равен индексу координат.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/000-pseudocode.c",
+        "decompiled/client/captures/shader-pass-core/001-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061290",
+      "proposed_name": "Render_DrawLowSpecular",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Low specular: normalization cubemap 0, direction 1, diffuse 2, gloss 3; exponent 4 и аппаратные fallback-проходы.",
+      "confidence": "high",
+      "details_ru": [
+        "Режим 1 — NV; 2 — NV alpha two-pass; 3 — ARB; 4 — fixed-function alpha. Различаются color masks и blend states.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/001-pseudocode.c",
+        "decompiled/client/captures/shader-pass-core/001-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061080",
+      "proposed_name": "Render_DrawDirectionalBump",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Diffuse normal lighting через texture stages: direction DOT3 normal, умножение на diffuse, сложение с ambient.",
+      "confidence": "high",
+      "details_ru": [
+        "При >=4 TMU tuple 1,7,4,6; при 3 TMU ambient отложен; при 2 TMU diffuse и ambient отложены. Затем выполняется умножение base/detail.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bump/000-pseudocode.c",
+        "decompiled/client/captures/shader-pass-inputs/003-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100627e0",
+      "proposed_name": "Render_ModulateLitBaseAndDetail",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Накладывает base/detail поверх накопленного статического и динамического освещения.",
+      "confidence": "high",
+      "details_ru": [
+        "Blend DST_COLOR,SRC_COLOR даёт 2*base*light; detail modulate имеет RGB scale 2. Это важно для точной яркости фонаря.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/004-pseudocode.c",
+        "decompiled/client/captures/shader-pass-inputs/005-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10062fe0",
+      "proposed_name": "Render_SetTextureCoordinateArray",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Выбирает координаты texture unit: disabled, base UV, lightmap UV или position.",
+      "confidence": "high",
+      "details_ru": [
+        "Stride 28; mode 1 offset 12 float2; mode 2 offset 20 float2; mode 3 offset 0 float3. В VBO режиме используется смещение.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/000-pseudocode.c",
+        "decompiled/client/captures/shader-pass-bindings/001-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10063150",
+      "proposed_name": "Render_SetTangentEyeMatrix",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Texture matrix unit 0 переводит eye-position в TBN для high specular и расчёта направления света.",
+      "confidence": "high",
+      "details_ru": [
+        "Surface polygon ushort +14 выбирает запись из таблицы с шагом 40 байт: normal +4, T +16, B +28.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/000-pseudocode.c",
+        "decompiled/client/captures/shader-pass-inputs/001-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100632e0",
+      "proposed_name": "Render_SetTangentReflectionMatrix",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Low-specular matrix имеет отражённое направление взгляда в tangent space.",
+      "confidence": "high",
+      "details_ru": [
+        "Строки T/B дают position-eye, строка N — eye-position; отличается от 10063150 знаками T/B.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/001-pseudocode.c",
+        "decompiled/client/captures/shader-pass-inputs/002-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10060d80",
+      "proposed_name": "Render_QueueSpecularSurface",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Распределяет поверхности по specular chains в зависимости от gloss/glosshi.",
+      "confidence": "high",
+      "details_ru": [
+        "Нет gloss → high 104cde74; оба → shared 104cde78; только gloss → low 104cde70. При отключении high общая цепочка переходит в low.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-inputs/005-pseudocode.c",
+        "decompiled/client/captures/shader-pass-routing/000-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10071df0",
+      "proposed_name": "HUD_DrawNativeScreenBlur",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Рисует fixed-function radial zoom blur: framebuffer capture и растущие центрованные quads.",
+      "confidence": "high",
+      "details_ru": [
+        "Требует gl_screenblur и gl_blurtest/native flags/deadline; opacity 0.5, steps 32/24 масштабируются от 640x480. Смысл трёх игровых условий ещё не установлен.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064c10",
+      "proposed_name": "Render_CaptureCenteredFramebuffer",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Выделяет RGB texture и копирует центрированный прямоугольник framebuffer через CopyTexImage2D.",
+      "confidence": "high",
+      "details_ru": [
+        "Начальный размер 256x256 затем заменяется размером запроса; linear filtering; после функции capture остаётся bound.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
+        "decompiled/client/captures/shader-pass-inputs/007-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100877d0",
+      "proposed_name": "Water_BindDormantBlackCg",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Связывает black Cg programs manager +30/+34 и MVP +38; активный вызов не обнаружен.",
+      "confidence": "high",
+      "details_ru": [
+        "REA typed callers=[] и incoming references=[] для этой DLL. Это ограниченный статический результат; BlackWhite использует другую формулу.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005eeb0",
+      "proposed_name": "Render_DrawNativeWorldMaterialPasses",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Оркестрирует world/brush lightmap, bump, dynamic light, base texture и specular passes.",
+      "confidence": "high",
+      "details_ru": [
+        "Порядок 100626e0 → 1005b300 → 100627e0 → 10062940; затем отдельные brush entities. Восстанавливает depth LEQUAL.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/004-pseudocode.c",
+        "decompiled/client/captures/shader-pass-core/002-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061eb0",
+      "proposed_name": "Render_BuildVertexArrayAndFaceTBN",
+      "subsystem": "graphics renderer shaders",
+      "summary_ru": "Создаёт массив вершин и per-face TBN из texinfo и плоскостей BSP.",
+      "confidence": "high",
+      "details_ru": [
+        "T и B — отдельно нормализованные vecs[0]/vecs[1] texinfo; N — plane normal с инверсией при PLANEBACK. Нет отдельной инверсии Y, cross product или Gram-Schmidt.",
+        "Stride вершины 28 байт; запись грани 40 байт: normal +4, T +16, B +28; сохраняет исходные base/lightmap UV."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-tangent-build/000-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    }
+  ]
+}

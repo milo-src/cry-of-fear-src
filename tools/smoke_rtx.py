@@ -111,6 +111,7 @@ def main():
     parser.add_argument('--lighting',action='store_true',help='Hold a fixed camera with flashlight off on the selected map')
     parser.add_argument('--lens',action='store_true',help='RTX real rain/stop/snow/disabled lens sequence; requires --lighting on an outdoor pose')
     parser.add_argument('--flashlight',action='store_true',help='Enable the real player flashlight with --lighting')
+    parser.add_argument('--projected',action='store_true',help='Isolated phone/torch/tactical light sequence; normal additionally checks pixels in a private shader FBO')
     parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
     parser.add_argument('--menu-optics',action='store_true',help='RTX menu glass and synthetic local pointer targets; no OS pointer movement')
     parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
@@ -129,6 +130,7 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.projected:args.lighting=True;args.flashlight=True
     if args.weapons and any((args.movement,args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
         parser.error('--weapons is a dedicated gameplay scenario')
     if args.movement and any((args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
@@ -190,6 +192,7 @@ def main():
     if args.weapons:tag+='-weapons'
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
+    if args.projected:tag+='-projected'
     if args.menu_cycle:tag+='-cycle'
     if args.label:tag+='-'+args.label
     if not args.interactive:tag+='-isolated'
@@ -220,6 +223,8 @@ def main():
     if args.menu_optics and (runtime/'cryoffear/rtx_menu/rain.crn').exists():env['COF_MENUFILMTEST']='1'
     env.pop('COF_CURSORTEST',None)
     env.pop('COF_RTX_FLASHLIGHTTEST',None)
+    env.pop('COF_PROJECTEDTEST',None)
+    if args.projected:env['COF_PROJECTEDTEST']='1'
     env.pop('COF_RTX_LENSTEST',None)
     if args.flashlight:env['COF_RTX_FLASHLIGHTTEST']='1'
     if args.cursor:env['COF_CURSORTEST']='1'
@@ -252,6 +257,7 @@ def main():
     command += ['+menu_main'] if args.ui else ['+map',args.map]
     if args.denoiser is not None:command += ['+rt_denoiser',args.denoiser]
     if args.menu_scene:command += ['+con_notifytime','0']
+    if args.projected and args.renderer=='normal':command += ['+cof_projected_test','1']
     if not args.interactive:command += ['+m_ignore','1']
     startup=subprocess.STARTUPINFO();startup.dwFlags=subprocess.STARTF_USESHOWWINDOW;startup.wShowWindow=0
     shots=[];modules=[];observed=set();desktop_verified=False
@@ -334,6 +340,13 @@ def main():
                         material_check=check_menu_night_materials(shots[2])
                         (report/(tag+'-materials.json')).write_text(json.dumps(material_check,indent=2))
             if marker not in text or 'COF_RTX_UI FAIL' in text:raise RuntimeError('Missing/failed assertions')
+            if args.projected:
+                for kind in (1,2,3):
+                    if f'COF_ATTACHED_LIGHT kind={kind} ' not in text:raise RuntimeError('Missing attached light type '+str(kind))
+                    required=(f'COF_PROJECTED_RT kind={kind} ' if args.renderer=='rtx' else f'COF_PROJECTED_GEOMETRY kind={kind} ')
+                    if required not in text:raise RuntimeError('Missing renderer submission: '+required)
+                if args.renderer=='normal' and ('COF_PROJECTED_READBACK_COMPLETE failures=0' not in text or 'COF_PROJECTED_READBACK FAIL' in text):
+                    raise RuntimeError('Projected-light private FBO pixel assertions failed or did not run')
             if args.cursor and 'COF_CURSOR_COMPLETE failures=0' not in text:
                 raise RuntimeError('Cursor/focus regression probe did not pass')
             geometry = None
@@ -491,8 +504,9 @@ def main():
                 if not movement:raise RuntimeError('Player movement not observed')
                 xyz=list(map(float,movement.groups()))
                 if sum((xyz[i]-xyz[i+3])**2 for i in range(3))<1:raise RuntimeError('Player did not move')
-            (report/(tag+'.json')).write_text(json.dumps(dict(result='pass',mode='interactive' if args.interactive else 'isolated-desktop',desktop_verified=desktop_verified,audio='disabled',visual_checks='passed' if args.interactive else 'readback_captured_for_review' if args.readback else 'not_run',command=command,screenshots=shots,modules=modules,geometry=geometry),indent=2))
-            print('PASS',tag,'Visual checks: passed' if args.interactive else 'Vulkan readback captured for review' if args.readback else 'Runtime assertions only; visual checks NOT RUN (isolated desktop)',*shots,sep='\n')
+            shader_pixels='private_FBO_passed' if args.projected and args.renderer=='normal' else 'not_run'
+            (report/(tag+'.json')).write_text(json.dumps(dict(result='pass',mode='interactive' if args.interactive else 'isolated-desktop',desktop_verified=desktop_verified,audio='disabled',visual_checks='passed' if args.interactive else 'readback_captured_for_review' if args.readback else 'not_run',shader_pixel_assertions=shader_pixels,command=command,screenshots=shots,modules=modules,geometry=geometry),indent=2))
+            print('PASS',tag,'Visual checks: passed' if args.interactive else 'Vulkan readback captured for review' if args.readback else 'Private FBO shader pixels passed; scene visual comparison NOT RUN' if shader_pixels!='not_run' else 'Runtime assertions only; visual checks NOT RUN (isolated desktop)',*shots,sep='\n')
         finally:
             if process.poll() is None:process.terminate();process.wait(timeout=5)
             if not args.interactive:process.close()

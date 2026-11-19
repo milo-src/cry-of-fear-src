@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/shader-pass-routing",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "7cb925c6c03a62e5fc42b0ce4ad64478eaaa079f0e6bcab8164df0ab4e79227f",
+      "procedure": "ram:0x10060d80",
+      "evidence_id": "ev_b86461f1dae35cb0f6a361d5e9668638b66bdd4b795350f6e41a889b619ebb4c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "82773ca7f96d87aaa6296c2f20493f7db83a38504d2599e26fc2a796091e25a5",
+      "procedure": "ram:0x10061b40",
+      "evidence_id": "ev_1e5514fcc6a20efd8716d004e26365cb14e0c1f89ba8165028ef6bdd3968eb54",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

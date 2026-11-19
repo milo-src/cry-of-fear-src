@@ -424,6 +424,8 @@ void CofWeaponsPrecache() {
         for (int i = 0; list[i]; ++i) UTIL_PrecacheOtherWeapon(list[i]);
 }
 void CofWeaponsHudSync(CBasePlayer* player) {
+    extern void CofSpecialLightSync(CBasePlayer*,bool);
+    CofSpecialLightSync(player,true);
     CCofWeapon* active=player?Weapon(player->m_pActiveItem):nullptr;
     if(active && active->Definition().kind!=COF_DUAL) {
         active->SetAim(active->m_aimed!=0,player->m_iFOV>0?float(player->m_iFOV):60.f);
