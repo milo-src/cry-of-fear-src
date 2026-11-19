@@ -195,8 +195,10 @@ class OptionsDialog: public Dialog {
         }
         if(resolution->choices.empty()){resolution->enabled=false;resolution->choices.push_back("-");}
         else {resolution->enabled=true;resolution->selected=selected>=0?selected:0;if(selected<0)selectedMode=videoModes[0];}
-        Control* window=Find("Windowed");if(window){window->kind=Kind::Combo;window->choices={"#UI_RunWindowed","#UI_RunFull"};window->selected=selectedFullscreen?1:0;}
+        Control* window=Find("Windowed");if(window){window->kind=Kind::Combo;window->choices={"#UI_RunWindowed","#UI_RunFull","Окно без рамки"};window->selected=selectedFullscreen;}
         Control* aspect=Find("AspectRatio");if(aspect){aspect->kind=Kind::Combo;aspect->choices={"#GameUI_AspectNormal","#GameUI_AspectWide"};aspect->selected=selectedAspect;aspect->enabled=hasWide;}
+        // SDL's borderless mode uses the desktop size, not a display-mode switch.
+        if(selectedFullscreen==2){resolution->enabled=false;if(aspect)aspect->enabled=false;}
     }
     void AdvancedPage() {
         LoadControls("resource/MultiplayerAdvancedPage.res");
@@ -273,6 +275,8 @@ class OptionsDialog: public Dialog {
             if(Find("Brightness"))Find("Brightness")->enabled=false;
             if(Find("Gamma"))Find("Gamma")->enabled=false;
             VideoChoices();
+            Control note;note.id="BorderlessInfo";note.text="Без рамки: используется разрешение рабочего стола.";
+            note.bounds={40,178,444,20};note.visible=selectedFullscreen==2;controls.push_back(note);
         }
         if(page==4) {
             Bind("VoiceReceive","voice_scale",Kind::Slider,0,1);Bind("voice_modenable","voice_enable",Kind::Check);
@@ -317,7 +321,7 @@ class OptionsDialog: public Dialog {
         for(int k=0;k<int(draftKeys.size());++k)if(draftKeys[k]!=originalKeys[k])EngFuncs::KEY_SetBinding(k,draftKeys[k].c_str());
         originalKeys=draftKeys;
         if(selectedFullscreen!=originalFullscreen)EngFuncs::CvarSetValue("fullscreen",float(selectedFullscreen));
-        if(selectedMode>=0&&selectedMode!=originalMode) {
+        if(selectedMode>=0&&(selectedMode!=originalMode||selectedFullscreen!=originalFullscreen)) {
             EngFuncs::CvarSetValue("vid_mode",float(selectedMode));
             std::string cmd="vid_setmode "+std::to_string(selectedMode)+"\n";EngFuncs::ClientCmd(false,cmd.c_str());
         }
@@ -331,9 +335,13 @@ public:
         page=0;advancedScroll=0;captureRow=-1;values.clear();status.clear();advanced=ReadAdvanced();ReadKeys();
         rendererOriginal=rendererDraft=ReadRendererSettings();
         originalMode=selectedMode=int(EngFuncs::GetCvarFloat("vid_mode"));
-        originalFullscreen=selectedFullscreen=EngFuncs::GetCvarFloat("fullscreen")!=0;
-        int w=ViewWidth(),h=ViewHeight();const char* mode=EngFuncs::GetModeString(selectedMode);
-        if(mode)sscanf(mode,"%dx%d",&w,&h);selectedAspect=(w*9==h*16||w*5==h*8)?1:0;
+        originalFullscreen=selectedFullscreen=std::max(0,std::min(2,int(EngFuncs::GetCvarFloat("fullscreen"))));
+        // vid_mode can be stale after command-line sizes or desktop borderless.
+        int w=int(EngFuncs::GetCvarFloat("width")),h=int(EngFuncs::GetCvarFloat("height"));
+        if(w<=0||h<=0){w=ViewWidth();h=ViewHeight();}
+        for(int i=0;i<1024;++i){const char* mode=EngFuncs::GetModeString(i);if(!mode)break;
+            int mw=0,mh=0;sscanf(mode,"%dx%d",&mw,&mh);if(mw==w&&mh==h){originalMode=selectedMode=i;break;}}
+        selectedAspect=(w*9==h*16||w*5==h*8)?1:0;
         BuildPage();
     }
     void Changed(Control& c) override {
@@ -350,7 +358,8 @@ public:
         if(c.id=="AdvancedScroll") {int value=int(c.number);if(value!=advancedScroll){advancedScroll=value;BuildPage();Focus("AdvancedScroll");}return;}
         if(c.id=="listpanel_keybindlist"){RefreshKeyList();return;}
         if(c.id=="Resolution"&&c.selected>=0&&c.selected<int(videoModes.size()))selectedMode=videoModes[c.selected];
-        if(c.id=="Windowed")selectedFullscreen=c.selected?1:0;
+        if(c.id=="Windowed"){selectedFullscreen=std::max(0,std::min(2,c.selected));VideoChoices();
+            if(Find("BorderlessInfo"))Find("BorderlessInfo")->visible=selectedFullscreen==2;}
         if(c.id=="AspectRatio"){selectedAspect=c.selected?1:0;VideoChoices();}
         auto found=associations.find(c.id);
         if(found!=associations.end()) {

@@ -15,12 +15,16 @@ def main():
     parser.add_argument('--map', default='c_game_menu1')
     parser.add_argument('--2d', dest='menu_2d', action='store_true', help='Start in the disconnected 2D menu')
     parser.add_argument('--renderer', choices=['normal','rtx'], help='Override saved choice for this launch only')
-    parser.add_argument('--borderless', action='store_true', help='Borderless desktop window (uses the monitor resolution)')
-    parser.add_argument('--width', type=int, default=1280, help='Window width (default: 1280)')
-    parser.add_argument('--height', type=int, default=720, help='Window height (default: 720)')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--borderless', action='store_true', help='Override saved mode: borderless desktop window')
+    mode.add_argument('--windowed', action='store_true', help='Override saved mode: framed window')
+    parser.add_argument('--width', type=int, help='Override saved window width; requires --height')
+    parser.add_argument('--height', type=int, help='Override saved window height; requires --width')
     parser.add_argument('--dry-run', action='store_true', help='Validate and print the selected runtime without starting')
     args = parser.parse_args()
-    if not (640 <= args.width <= 16384 and 480 <= args.height <= 16384):
+    if (args.width is None) != (args.height is None):
+        parser.error('Specify both --width and --height')
+    if args.width is not None and not (640 <= args.width <= 16384 and 480 <= args.height <= 16384):
         parser.error('Resolution must be between 640x480 and 16384x16384')
     enabled, profile = read_settings()
     if args.renderer: enabled = int(args.renderer == 'rtx')
@@ -38,9 +42,16 @@ def main():
     missing = [name for name in required if not (runtime / name).is_file()]
     if missing:
         raise SystemExit('Run build.bat first. Missing: ' + ', '.join(missing))
-    command = [str(runtime / 'xash3d.exe'), '-game', 'cryoffear',
-               '-borderless' if args.borderless else '-windowed',
-               '-width', str(args.width), '-height', str(args.height), '-log']
+    command = [str(runtime / 'xash3d.exe'), '-game', 'cryoffear', '-log']
+    # The engine loads video.cfg itself; default launches must not overwrite the
+    # mode and resolution applied through the in-game Graphics page.
+    if args.borderless: command += ['-borderless']
+    elif args.windowed or args.width is not None: command += ['-windowed']
+    if args.width is not None:
+        command += ['-width', str(args.width), '-height', str(args.height)]
+    elif not (runtime / 'cryoffear/video.cfg').is_file():
+        if not args.borderless and not args.windowed: command += ['-windowed']
+        command += ['-width', '1280', '-height', '720']
     if not args.menu_2d:
         command += ['+map', args.map]
     else:
