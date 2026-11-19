@@ -106,6 +106,7 @@ def main():
     parser.add_argument('--label',default='',help='Suffix for comparison artifacts')
     parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
     parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
+    parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
@@ -121,6 +122,8 @@ def main():
     if args.menu_scene:args.map='c_game_menu1'
     if args.arm_pose_check and (not args.lighting or args.renderer!='rtx'):
         parser.error('--arm-pose-check requires RTX --lighting')
+    if args.darkness_check and (not args.lighting or args.renderer!='rtx'):
+        parser.error('--darkness-check requires RTX --lighting')
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
         except ValueError: parser.error('--pose requires six finite numbers')
@@ -262,6 +265,20 @@ def main():
                 if args.graphics and (not fog or fog[-1][0]!='0'):
                     raise RuntimeError('SetFog fixture did not disable the RTX fog adapter')
                 filters=re.findall(r'COF_RTX_SHADOW_FILTER menu=(\d) denoiser=(\d)',text)
+                darkness=re.findall(r'COF_RTX_DARKNESS menu=(\d) sources=(\d+) radius=([\d.]+) strength=([\d.]+)',text)
+                if any(menu=='1' and int(count)!=0 for menu,count,radius,strength in darkness):
+                    raise RuntimeError('Local absorption was enabled in the cinematic menu')
+                if args.menu_scene and 'COF_RTX_DARKNESS_MASK' in text:
+                    raise RuntimeError('Cinematic menu received a procedural absorption mask')
+                if args.darkness_check:
+                    if 'COF_RTX_DARKNESS_GEOMETRY pass=1' not in text or 'COF_RTX_DARKNESS_GEOMETRY pass=0' in text:
+                        raise RuntimeError('Black polygon distance checks failed')
+                    if not darkness:raise RuntimeError('Missing absorption policy observation')
+                    if args.darkness_check=='enabled':
+                        if not any(menu=='0' and int(count)>0 for menu,count,radius,strength in darkness) or 'COF_RTX_DARKNESS_MASK' not in text:
+                            raise RuntimeError('No procedural absorption masks reached the renderer')
+                    elif any(int(count)!=0 or float(strength)!=0 for menu,count,radius,strength in darkness) or 'COF_RTX_DARKNESS_MASK' in text:
+                        raise RuntimeError('Disabled absorption still changed world materials')
                 arms=re.findall(r'COF_RTX_ARM side=(\d) blocked=(\d) corrected=(\d) clear=(\d) angle=([\d.]+) length_error=([\d.]+)',text)
                 for side,blocked,corrected,clear,angle,error in arms:
                     if corrected=='1' and (blocked!='1' or clear!='1' or float(error)>.002):

@@ -1,6 +1,14 @@
         /* Launcher-selected presets; reapplied after loading archived GL settings.
          * This is a new CoF reconstruction feature, not an original game setting. */
         {
+            // Register before config/command-line execution, without overriding
+            // the user's values when the selected quality profile is reapplied.
+            if (!gEngfuncs.pfnGetCvarPointer("rt_darkness_strength"))
+                gEngfuncs.Cvar_Get("rt_darkness_strength", "0.94", FCVAR_ARCHIVE,
+                    "Artistic absorption near black world faces, 0 disables; reload map");
+            if (!gEngfuncs.pfnGetCvarPointer("rt_darkness_radius"))
+                gEngfuncs.Cvar_Get("rt_darkness_radius", "192", FCVAR_ARCHIVE,
+                    "Black-face absorption falloff in map units, 16-512; reload map");
             const char *selected = getenv("COF_RTX_PROFILE");
             int profile = selected ? atoi(selected) : 1;
             if(profile < 0 || profile > 2) profile = 1;

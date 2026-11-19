@@ -7,6 +7,29 @@ ROOT = Path(__file__).resolve().parents[1]
 def prepare(target):
     path = target / 'ref/gl/gl_opengl.c'
     text = path.read_text()
+    anchor='static qboolean ArePrimitivesSame('
+    if text.count(anchor)!=1:raise ValueError('RTX darkness declaration hook changed')
+    text=text.replace(anchor,'#include "rtx_darkness.inc"\n\n'+anchor)
+    anchor='\tassert( a_primitive && b_primitive );'
+    if text.count(anchor)!=1:raise ValueError('RTX darkness batching hook changed')
+    text=text.replace(anchor,anchor+'''
+    // A procedural mask is indexed by world face, never by the current PVS.
+    if (a_type==RT_BATCH_TYPE_BRUSH && b_type==RT_BATCH_TYPE_BRUSH &&
+        CofDarkWorld(a_mesh) && CofDarkWorld(b_mesh) &&
+        a_primitive->primitiveIndexInMesh!=b_primitive->primitiveIndexInMesh) return false;
+''')
+    anchor='\t\t\tRgResult r = rgUploadMeshPrimitive( rg_instance, &rt_batch.mesh, &rt_batch.primitive );'
+    if text.count(anchor)!=1:raise ValueError('RTX darkness upload hook changed')
+    text=text.replace(anchor,'''            RgFloat2D *cofDarkUV=rt_batch.type==RT_BATCH_TYPE_BRUSH ?
+                CofRTDarknessAttach(&rt_batch.mesh,&rt_batch.primitive,&rt_batch.additional) : NULL;
+'''+anchor+'''
+            if (cofDarkUV) {
+                free(cofDarkUV);
+                rt_batch.additional.layer2Exists=false;
+                rt_batch.additional.layer2.pTexCoord=NULL;
+            }
+''')
+    shutil.copy2(ROOT/'src/cof/render/rtx_darkness.inc',target/'ref/gl/rtx_darkness.inc')
     anchor = 'static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology )\n{'
     if text.count(anchor) != 1: raise ValueError('RTX material declaration hook changed')
     text = text.replace(anchor, '#include "rtx_materials.inc"\n\n' + anchor)
@@ -39,6 +62,12 @@ def prepare(target):
 '''+anchor)
     text = text[:begin] + studio + text[end:]
     path.write_text(text)
+    context=target/'ref/gl/gl_context.c'
+    ctx=context.read_text()
+    anchor='\tRT_ParseStaticLightEntities();'
+    if ctx.count(anchor)!=1:raise ValueError('RTX darkness map reset hook changed')
+    ctx=ctx.replace(anchor,anchor+'\n\textern void CofRTDarknessReset(void);\n\tCofRTDarknessReset();')
+    context.write_text(ctx)
     shutil.copy2(ROOT/'src/cof/render/rtx_materials.inc', target/'ref/gl/rtx_materials.inc')
     shutil.copy2(ROOT/'src/cof/render/rtx_surface_types.inc', target/'ref/gl/rtx_surface_types.inc')
     path = target / 'ref/gl/gl_rmain.c'
