@@ -85,7 +85,7 @@ def prepare(target):
     anchor = '\t\trgUtilImScratchSetToPrimitive( rg_instance, &rt_batch.primitive );'
     if text.count(anchor) != 1: raise ValueError('RT cinematic UV hook changed')
     text = text.replace(anchor, anchor + '''
-        if (rt_batch.type == RT_BATCH_TYPE_BRUSH && rt_batch.additional.layer2Exists) {
+        if (cof_rt_menu_scene && rt_batch.type == RT_BATCH_TYPE_BRUSH && rt_batch.additional.layer2Exists) {
             // Scratch owns these UVs until upload returns; do not retain them.
             rt_batch.additional.layer2.pTexCoord = rt_batch.additional.layer1.pTexCoord;
             if (!rt_batch.additional.layer2.pTexCoord)

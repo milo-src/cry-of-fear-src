@@ -10,32 +10,29 @@ def prepare(target):
     anchor='static qboolean ArePrimitivesSame('
     if text.count(anchor)!=1:raise ValueError('RTX darkness declaration hook changed')
     text=text.replace(anchor,'#include "rtx_darkness.inc"\n\n'+anchor)
-    anchor='\tassert( a_primitive && b_primitive );'
-    if text.count(anchor)!=1:raise ValueError('RTX darkness batching hook changed')
-    text=text.replace(anchor,anchor+'''
-    // A procedural mask is indexed by world face, never by the current PVS.
-    if (a_type==RT_BATCH_TYPE_BRUSH && b_type==RT_BATCH_TYPE_BRUSH &&
-        CofDarkWorld(a_mesh) && CofDarkWorld(b_mesh) &&
-        a_primitive->primitiveIndexInMesh!=b_primitive->primitiveIndexInMesh) return false;
-''')
-    anchor='\t\t\tRgResult r = rgUploadMeshPrimitive( rg_instance, &rt_batch.mesh, &rt_batch.primitive );'
-    if text.count(anchor)!=1:raise ValueError('RTX darkness upload hook changed')
-    text=text.replace(anchor,'''            RgFloat2D *cofDarkUV=rt_batch.type==RT_BATCH_TYPE_BRUSH ?
-                CofRTDarknessAttach(&rt_batch.mesh,&rt_batch.primitive,&rt_batch.additional) : NULL;
-'''+anchor+'''
-            if (cofDarkUV) {
-                free(cofDarkUV);
-                rt_batch.additional.layer2Exists=false;
-                rt_batch.additional.layer2.pTexCoord=NULL;
-            }
-''')
+    anchor='\t\t\trt_perf.c_uploads++;'
+    if text.count(anchor)!=1:raise ValueError('RTX darkness atlas upload hook changed')
+    text=text.replace(anchor,anchor+'\n            CofRTDarknessFlush(&rt_batch.primitive,&rt_batch.additional);')
+    anchor='\trgUtilImScratchClear( rg_instance );'
+    if text.count(anchor)!=1:raise ValueError('RTX darkness atlas clear hook changed')
+    text=text.replace(anchor,anchor+'\n    cof_dark_uv_count=0; cof_dark_uv_failed=false;')
+    anchor='static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology );'
+    if text.count(anchor)!=1:raise ValueError('RTX darkness vertex declaration hook changed')
+    text=text.replace(anchor, 'void CofRTDarknessVertex(float x, float y, float z);\n'+anchor)
+    for vertex, coords in (
+        ('rgUtilImScratchVertex( rg_instance, x, y, z );', 'x,y,z'),
+        ('rgUtilImScratchVertex( rg_instance, v[ 0 ], v[ 1 ], v[ 2 ] );', 'v[0],v[1],v[2]'),
+        ('rgUtilImScratchVertex( rg_instance, x, y, 0.0f );', 'x,y,0'),
+    ):
+        if text.count(vertex)!=1:raise ValueError('RTX darkness vertex hook changed')
+        text=text.replace(vertex,'CofRTDarknessVertex('+coords+');\n\t'+vertex)
     shutil.copy2(ROOT/'src/cof/render/rtx_darkness.inc',target/'ref/gl/rtx_darkness.inc')
     anchor = 'static void TryBeginBatch( RgUtilImScratchTopology glbegin_topology )\n{'
     if text.count(anchor) != 1: raise ValueError('RTX material declaration hook changed')
-    text = text.replace(anchor, '#include "rtx_materials.inc"\n\n' + anchor)
+    text = text.replace(anchor, '#include "rtx_materials.inc"\n\n' + anchor + '\n    cof_dark_current=NULL;')
     anchor = '\t\tprim.pEditorInfo = &additional;'
     if text.count(anchor) != 1: raise ValueError('RTX brush material hook changed')
-    text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);')
+    text = text.replace(anchor, anchor + '\n\t\tCofRTBrushMaterial(&prim, &additional);\n\t\tCofRTDarknessBegin(&mesh,&prim,&additional);')
     # Studio additive glow meshes must not enter the opaque shadow geometry.
     begin = text.index('else if( curtype == RT_BATCH_TYPE_STUDIO )')
     end = text.index('else if( curtype == RT_BATCH_TYPE_BRUSH )', begin)
@@ -62,6 +59,15 @@ def prepare(target):
 '''+anchor)
     text = text[:begin] + studio + text[end:]
     path.write_text(text)
+    surfaces=target/'ref/gl/gl_rsurf.c'
+    surf=surfaces.read_text()
+    anchor='\t\trgUtilImScratchPushVertices( rg_instance, p->numverts,'
+    if surf.count(anchor)!=1:raise ValueError('RTX darkness bulk vertex hook changed')
+    surf=surf.replace(anchor,'''        extern void CofRTDarknessVertex(float x, float y, float z);
+        for (int i=0;i<p->numverts;++i)
+            CofRTDarknessVertex(p->verts[i][0],p->verts[i][1],p->verts[i][2]);
+'''+anchor)
+    surfaces.write_text(surf)
     context=target/'ref/gl/gl_context.c'
     ctx=context.read_text()
     anchor='\tRT_ParseStaticLightEntities();'

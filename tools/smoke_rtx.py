@@ -107,6 +107,7 @@ def main():
     parser.add_argument('--pose',help='Lighting camera: x y z pitch yaw roll')
     parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
     parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
+    parser.add_argument('--lamp-check',action='store_true',help='Require park lamp geometry at the actual RTX upload boundary')
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
@@ -124,6 +125,8 @@ def main():
         parser.error('--arm-pose-check requires RTX --lighting')
     if args.darkness_check and (not args.lighting or args.renderer!='rtx'):
         parser.error('--darkness-check requires RTX --lighting')
+    if args.lamp_check and (not args.lighting or args.renderer!='rtx'):
+        parser.error('--lamp-check requires RTX --lighting')
     if args.pose:
         try: pose=[float(v) for v in args.pose.split()]
         except ValueError: parser.error('--pose requires six finite numbers')
@@ -241,6 +244,14 @@ def main():
                 geometry=dict(frames=frames,samples=samples,unexpected_changes=changed)
             if args.interactive and not shots:raise RuntimeError('No window pixels captured')
             if args.renderer=='rtx':
+                if re.search(r'Too many (geometry infos|vertices|indices|textures)',text,re.I):
+                    raise RuntimeError('RTX capacity exceeded: scene geometry/resources were dropped')
+                if 'COF_RTX_DARKNESS_UV FAIL' in text:
+                    raise RuntimeError('Invalid or missing per-vertex darkness atlas coordinates')
+                if args.lamp_check:
+                    uploads=re.findall(r'COF_RTX_SCENE_UPLOADS frame=(\d+) primitives=(\d+) lamps=(\d+)',text)
+                    if not uploads or not any(int(lamps)>0 for _,_,lamps in uploads):
+                        raise RuntimeError('No park lamp geometry reached the RTX upload boundary')
                 # Runtime inputs only, not proof of pixel-level parity with
                 # GoldSrc. Protect authored darkness on every playable BSP.
                 policies=re.findall(r'COF_RTX_LIGHTING_POLICY menu=(\d) synthetic_night=(\d) sky_energy=([\d.]+) baked_fill=(\d+)',text)
