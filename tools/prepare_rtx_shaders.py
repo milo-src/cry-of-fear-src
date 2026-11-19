@@ -61,6 +61,23 @@ def prepare():
     if text.count(anchor)!=1:raise ValueError('Volume history hook changed')
     text=text.replace(anchor,'        // CoF: current-frame light only; no stale frustum-cell history.')
     volume.write_text(text)
+    # Preserve the normal-map footprint: the stock shader's 5x derivative
+    # multiplier destroys the medium/fine material response at gameplay distance.
+    hit=target/'Shaders/HitInfo.inl'
+    text=hit.read_text()
+    anchor='const float suppressDetails = 5.0;'
+    if text.count(anchor)!=1:raise ValueError('Normal footprint hook changed')
+    hit.write_text(text.replace(anchor,'const float suppressDetails = 1.0;'))
+    # Authored water should absorb light, not emit a constant colored fog.
+    # Keep the original menu's near-black transmission approximation unchanged.
+    media=target/'Shaders/Media.h'
+    text=media.read_text()
+    anchor='return inscattering;'
+    if text.count(anchor)!=1:raise ValueError('Water scattering hook changed')
+    media.write_text(text.replace(anchor,"return (perMatWaterColor.r > 0.001) ? vec3(0.0) : inscattering;"))
+    for name in ('RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen'):
+        entry=target/'Shaders'/name
+        entry.write_text(entry.read_text().replace('#version 460','#version 460\n#extension GL_GOOGLE_include_directive : require',1))
     shutil.copy2(ROOT/'src/cof/render/rtx_fog.glsl',shader.parent/'rtx_fog.glsl')
     shutil.copy2(ROOT/'src/cof/render/shaders.wscript',shader.parent/'wscript')
     shutil.copy2(ROOT/'external/xash-rt/waf',shader.parent/'waf')

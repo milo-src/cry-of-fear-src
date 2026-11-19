@@ -73,7 +73,7 @@ Masks can then be hand-edited without re-running the authoring command:
 The generator combines fine grain with medium-scale relief so normal-map mip
 filtering does not erase all detail at ordinary viewing distances. Automatic
 masks use contrast-normalized medium-scale detail and a bounded slope; their
-cache namespace is `cof_auto/v2_...`. Neither path increases scene exposure.
+cache namespace is `cof_auto/v3_...`. Neither path increases scene exposure.
 
 Commit profiles, manifest, PNGs and code together. KTX2 outputs and automatic
 masks belong in the ignored build/runtime folders. No automatic commit is made.
@@ -86,3 +86,36 @@ checks selection and loader failures. Its default isolated desktop tests are
 silent and do not verify the final pixels. Test menu exclusion with
 `--menu-scene` and geometry preservation with `--lighting --lamp-check` on a
 park map. Never use interactive tests without the user's permission.
+
+Automatic masks preserve the existing scalar material presets, including
+intentional metallic values, rather than resetting them to an acoustic fallback.
+The automatic fallback also recognizes `tile` / `kakel` names when the acoustic
+material table omits a wall. It keeps dark grooves rough and gives ceramic a
+broader highlight, without classifying paint as metal. Unrecognized textures
+retain conservative parameters; explicit authored masks are preferable to
+inferring physical properties from a color image.
+
+For background GPU image review (no desktop screenshots or input):
+
+```text
+python tools/build_readback.py
+python tools/smoke_rtx.py --water-view --readback --material-check auto
+python tools/smoke_rtx.py --menu-scene --readback
+```
+
+The opt-in layer copies the presented swapchain image to host memory. It lives
+only in the build directory, is enabled only for that child, and is not registered
+with Windows. Elevated test hosts use a restricted medium-integrity child token
+because Vulkan ignores layer environment paths in elevated applications. The
+isolated desktop and `-nosound` remain mandatory. Capture errors fail the test;
+there is no fallback to the user's desktop. Reports say `readback_captured_for_review`:
+nonblank image validation is not an artistic/visual pass. Review the PNGs separately.
+The default smoke path and the ordinary game launcher do not load this layer.
+
+The RTX light adapter also has a measured fixture profile for `hattlykta.mdl`.
+Its authored spot at local height 108 intersects the opaque hood. Matching
+downward spots are sampled at the lower diffuser aperture (height 96.5,
+radius 3.125 map units), preserving their power, color, cone and lightstyle.
+This removes the artificial black disk beneath the lantern without disabling
+geometry shadows or adding ambient light. Matching uses model, position and
+direction, not map names; other fixtures and the cinematic menu are unchanged.

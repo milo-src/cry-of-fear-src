@@ -1,0 +1,8 @@
+import os
+from pathlib import Path
+def options(opt):opt.load('compiler_cxx')
+def configure(conf):conf.load('compiler_cxx')
+def build(bld):
+    bld.shlib(target='cof_readback',source='layer.cpp',
+        includes=[str(Path(os.environ['COF_REPO_ROOT'])/'external/vulkan-headers/include')],
+        cxxflags=['/std:c++17','/EHsc'],defines=['_CRT_SECURE_NO_WARNINGS'])

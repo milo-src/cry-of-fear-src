@@ -89,7 +89,7 @@ def main():
     shaders=prepare_shaders()
     run_waf(shaders,ROOT/'build/rtx-shaders',[],env)
     shader_hashes={}
-    for name in ('CmPrepareFinal.comp.spv','RtVolumetric.rgen.spv'):
+    for name in ('CmPrepareFinal.comp.spv','RtVolumetric.rgen.spv','RtRaygenPrimary.rgen.spv','RtRaygenReflRefr.rgen.spv'):
         compiled=ROOT/'build/rtx-shaders'/name
         destination=RUNTIME/'rt/shaders'/name
         verify_shader(destination,compiled)

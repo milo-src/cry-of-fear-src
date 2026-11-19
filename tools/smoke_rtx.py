@@ -1,4 +1,4 @@
-"""Exercise maps/UI silently on an isolated desktop; pixel checks require --interactive."""
+"""Exercise maps/UI silently on an isolated desktop; optional --readback captures GPU images for review."""
 import argparse
 import ctypes as C
 from ctypes import wintypes as W
@@ -91,6 +91,7 @@ def check_menu_night_materials(path):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--interactive',action='store_true',help='Explicit opt-in: visible game on your desktop with passive pixel capture')
+    parser.add_argument('--readback',action='store_true',help='Opt-in Vulkan swapchain readback on the isolated desktop; build tools/build_readback.py first')
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
     parser.add_argument('--ui',action='store_true')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
@@ -114,6 +115,7 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.readback and (args.interactive or args.renderer!='rtx'):parser.error('--readback requires isolated RTX mode')
     if args.cursor and not args.interactive:parser.error('--cursor changes focus and requires an explicitly authorized --interactive session')
     if args.flashlight and not args.lighting:parser.error('--flashlight requires --lighting')
     if args.label and not re.fullmatch('[a-zA-Z0-9_-]+',args.label):parser.error('Invalid label')
@@ -155,6 +157,12 @@ def main():
     settings=ROOT/'build'/('test-'+tag+'-renderer.cfg');settings.unlink(missing_ok=True)
     env=dict(os.environ,COF_RENDERER_SETTINGS=str(settings),COF_RTX_AVAILABLE='1',
              COF_RTX_ACTIVE=str(int(args.renderer=='rtx')),COF_RTX_PROFILE='1')
+    request=ROOT/'build'/('readback-'+tag+'.request')
+    if args.readback:
+        layer=ROOT/'build/readback'
+        if not (layer/'cof_readback.json').exists():raise RuntimeError('Build tools/build_readback.py first')
+        request.unlink(missing_ok=True)
+        env.update(VK_LAYER_PATH=str(layer),VK_INSTANCE_LAYERS='VK_LAYER_COF_readback',COF_READBACK_REQUEST=str(request))
     for flag in ('COF_MENU2DTEST','COF_MENUTEST','COF_GRAPHICSTEST','COF_POINTERTEST','COF_VGUITEST','COF_SMOKETEST','COF_RTX_UITEST','COF_RTX_MOTIONTEST','COF_RTX_WATER_VIEW','COF_CONSOLE_OUTPUTTEST','COF_RTX_LIGHTINGTEST','COF_RTX_LIGHTING_POSE'):
         env.pop(flag,None)
     env.pop('COF_MENU_SCENETEST',None)
@@ -198,6 +206,18 @@ def main():
                 if args.menu_cycle:markers+=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (87,94)]
                 for marker in markers:
                     if marker in text and marker not in observed:
+                        if args.readback:
+                            ppm=report/(tag+'-'+str(len(shots))+'.ppm');ppm.unlink(missing_ok=True)
+                            pending=request.with_suffix('.pending');pending.write_text(str(ppm));pending.replace(request)
+                            deadline=time.monotonic()+10
+                            while not ppm.exists() and process.poll() is None and time.monotonic()<deadline:time.sleep(.05)
+                            if not ppm.exists():raise RuntimeError('Vulkan readback failed; no desktop capture fallback')
+                            shot=ppm.with_suffix('.png')
+                            with Image.open(ppm) as frame:
+                                if frame.size!=(1280,720) or frame.convert('L').getextrema()[1]-frame.convert('L').getextrema()[0]<8:
+                                    raise RuntimeError('Invalid or blank Vulkan readback')
+                                frame.save(shot)
+                            shots.append(str(shot));ppm.unlink()
                         if args.interactive:
                             shot=report/(tag+'-'+str(len(shots))+'.png');capture(process.pid,shot)
                             check_ui_pixels(shot,marker,args.graphics or args.motion)
@@ -339,12 +359,13 @@ def main():
                 if not movement:raise RuntimeError('Player movement not observed')
                 xyz=list(map(float,movement.groups()))
                 if sum((xyz[i]-xyz[i+3])**2 for i in range(3))<1:raise RuntimeError('Player did not move')
-            (report/(tag+'.json')).write_text(json.dumps(dict(result='pass',mode='interactive' if args.interactive else 'isolated-desktop',desktop_verified=desktop_verified,audio='disabled',visual_checks='passed' if args.interactive else 'not_run',command=command,screenshots=shots,modules=modules,geometry=geometry),indent=2))
-            print('PASS',tag,'Visual checks: passed' if args.interactive else 'Runtime assertions only; visual checks NOT RUN (isolated desktop)',*shots,sep='\n')
+            (report/(tag+'.json')).write_text(json.dumps(dict(result='pass',mode='interactive' if args.interactive else 'isolated-desktop',desktop_verified=desktop_verified,audio='disabled',visual_checks='passed' if args.interactive else 'readback_captured_for_review' if args.readback else 'not_run',command=command,screenshots=shots,modules=modules,geometry=geometry),indent=2))
+            print('PASS',tag,'Visual checks: passed' if args.interactive else 'Vulkan readback captured for review' if args.readback else 'Runtime assertions only; visual checks NOT RUN (isolated desktop)',*shots,sep='\n')
         finally:
             if process.poll() is None:process.terminate();process.wait(timeout=5)
             if not args.interactive:process.close()
             for path,data in configs.items():path.write_bytes(data)
             settings.unlink(missing_ok=True)
+            request.unlink(missing_ok=True)
 
 if __name__=='__main__':main()

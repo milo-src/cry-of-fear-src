@@ -4,7 +4,7 @@
 extern void CofRTTexlightMaterial(RgMeshPrimitiveInfo*, RgEditorInfo*, const char*);
 extern qboolean cof_rt_menu_scene;
 #include "rtx_surface_types.inc"
-static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor)
+static qboolean CofRTMaterialPreset(RgEditorInfo *editor,const char *name)
 {
     static struct { const char *name; float roughness, metallic; qboolean reported; } materials[] = {
         {"r_toalettkakel", .30f, 0}, {"c_koksgolv", .35f, 0},
@@ -25,6 +25,22 @@ static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *edi
         {"c2_hissf", .40f, .65f}, {"{c2_hissgaller", .40f, .70f},
         {"{c2_hogblafence", .45f, .45f},
     };
+    for (size_t i = 0; i < sizeof(materials)/sizeof(materials[0]); ++i) {
+        if (Q_stricmp(name, materials[i].name)) continue;
+        editor->pbrInfoExists = true;
+        editor->pbrInfo.roughnessDefault = materials[i].roughness;
+        editor->pbrInfo.metallicDefault = materials[i].metallic;
+        if (!materials[i].reported) {
+            materials[i].reported = true;
+            gEngfuncs.Con_DPrintf("COF_RTX_MATERIAL %s roughness=%.2f metallic=%.2f\n",
+                name, materials[i].roughness, materials[i].metallic);
+        }
+        return true;
+    }
+    return false;
+}
+static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor)
+{
     char name[256];
     const char *texture = primitive->pTextureName;
     if (!texture) return;
@@ -72,16 +88,5 @@ static void CofRTBrushMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *edi
     }
     if (!cof_rt_menu_scene && !(primitive->flags & (RG_MESH_PRIMITIVE_TRANSLUCENT|RG_MESH_PRIMITIVE_SKY_VISIBILITY)))
         CofRTSurfaceResponse(editor,name);
-    for (size_t i = 0; i < sizeof(materials)/sizeof(materials[0]); ++i) {
-        if (Q_stricmp(name, materials[i].name)) continue;
-        editor->pbrInfoExists = true;
-        editor->pbrInfo.roughnessDefault = materials[i].roughness;
-        editor->pbrInfo.metallicDefault = materials[i].metallic;
-        if (!materials[i].reported) {
-            materials[i].reported = true;
-            gEngfuncs.Con_DPrintf("COF_RTX_MATERIAL %s roughness=%.2f metallic=%.2f\n",
-                name, materials[i].roughness, materials[i].metallic);
-        }
-        return;
-    }
+    CofRTMaterialPreset(editor,name);
 }

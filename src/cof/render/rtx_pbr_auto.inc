@@ -111,11 +111,23 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
     if (!entry) return false;
     if (!cof_surface_count) CofRTLoadSurfaceTypes();
     char type=CofRTSurfaceTypeFor(name);
+    // Footstep tables usually omit walls. Common descriptive names provide
+    // a modest fallback for tiled walls on stock AND custom BSP/WAD content.
+    // Explicit acoustic types always win; this is not a map-name whitelist.
+    char lower[256];Q_strncpy(lower,name,sizeof(lower));
+    for (char *c=lower;*c;++c) if (*c>='A' && *c<='Z') *c+='a'-'A';
+    if (!type && (strstr(lower,"tile") || strstr(lower,"kakel"))) type='T';
     RgEditorInfo surface={0}; CofRTSurfaceResponse(&surface,name);
-    float roughness=surface.pbrInfo.roughnessDefault;
+    // Numeric masks replace scalar PBR in RTGL. Preserve the renderer's
+    // deliberately selected response instead of silently resetting it to the
+    // footstep fallback (which made ceramic matte and painted metal diffuse).
+    qboolean preset=CofRTMaterialPreset(&surface,name);
+    float roughness=!preset && type=='T' ? .38f : surface.pbrInfo.roughnessDefault;
+    float metallic=surface.pbrInfo.metallicDefault;
+    qboolean ceramic=type=='T' || (preset && metallic==0 && roughness<=.4f);
     // Unknown materials are matte dielectrics. Acoustic metal labels often
     // represent paint, so never infer metallic from color/name or brightness.
-    float relief=type=='M'||type=='G'||type=='V'||type=='Y' ? .07f : type=='W' ? .18f : .15f;
+    float relief=type=='M'||type=='G'||type=='V'||type=='Y' ? .07f : ceramic ? .32f : type=='W' ? .22f : .20f;
     unsigned w=original->size.width,h=original->size.height;
     while (w>256 || h>256) {w=w>1?w/2:1;h=h>1?h/2:1;}
     float *luma=malloc((size_t)w*h*sizeof(float)),*detail=malloc((size_t)w*h*sizeof(float));
@@ -143,13 +155,17 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
         unsigned i=y*w+x;
         float dx=detail[y*w+(x+3)%w]-detail[y*w+(x+3*w-3)%w];
         float dy=detail[((y+3)%h)*w+x]-detail[((y+3*h-3)%h)*w+x];
-        orm[i*4]=orm[i*4+3]=255;orm[i*4+2]=0;
-        orm[i*4+1]=(unsigned char)(255*bound(.25f,roughness-detail[i]*.12f,.99f));
-        normal[i*4]=(unsigned char)(255*(.5f-bound(-.30f,dx*relief,.30f)*.5f)+.5f);
-        normal[i*4+1]=(unsigned char)(255*(.5f-bound(-.30f,dy*relief,.30f)*.5f)+.5f);
+        orm[i*4]=orm[i*4+3]=255;orm[i*4+2]=(unsigned char)(255*bound(0,metallic,1));
+        // Dark grooves remain rough while raised ceramic catches broad,
+        // broken highlights. Do not turn the whole wall into a mirror.
+        float surfaceRoughness=roughness-detail[i]*.16f;
+        if (ceramic) surfaceRoughness+=.40f*bound(0,-detail[i]*2,1);
+        orm[i*4+1]=(unsigned char)(255*bound(.25f,surfaceRoughness,.99f));
+        normal[i*4]=(unsigned char)(255*(.5f-bound(-.48f,dx*relief,.48f)*.5f)+.5f);
+        normal[i*4+1]=(unsigned char)(255*(.5f-bound(-.48f,dy*relief,.48f)*.5f)+.5f);
         normal[i*4+2]=normal[i*4+3]=255;
     }
-    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v2_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
+    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v3_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
     _mkdir("rt/mat");_mkdir("rt/mat/cof_auto");
     qboolean ok=CofPbrWriteKtx(entry->alias,"orm",w,h,orm) && CofPbrWriteKtx(entry->alias,"n",w,h,normal);
     free(luma);free(detail);free(orm);free(normal);

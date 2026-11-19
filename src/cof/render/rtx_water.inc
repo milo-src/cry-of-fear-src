@@ -60,10 +60,12 @@ static qboolean CofRTWaterVolume(cl_entity_t *entity)
         .waterReflectivityExists = true,
         .waterReflectivity = 1.f,
         .waterColorExists = true,
-        .waterColor = {{.12f,.20f,.18f}},
+        .waterColor = {{.38f,.38f,.38f}},
         .waterDensityExists = true,
         .waterDensity = 1.4f,
     };
+    // Gameplay transmission is neutral: scene lighting and the original bottom
+    // supply its color. The primary-ray shader removes unlit colored scattering.
     // The native cinematic water has no authored green tint. RTGL couples
     // transmission to an unlit in-scattering term; bright transmission makes
     // the night river glow even with all lights disabled. For menu scenery,

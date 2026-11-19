@@ -106,6 +106,43 @@ void CofRTTexlightMaterial(RgMeshPrimitiveInfo *primitive, RgEditorInfo *editor,
         return;
     }
 }
+// Effective downward aperture for the original park lantern. The MDL's
+// luminous tube spans local Z 97.49..111.81; its opaque hood spans
+// 107.46..112.07. BSP light origins at Z 108 therefore sit inside the hood.
+// Sample the lower aperture instead of a tiny point inside opaque geometry.
+// This is a renderer-only fixture profile, shared by every map using the MDL.
+static int CofRTResolveFixtureLights(void)
+{
+    if (cof_rt_menu_scene) return 0;
+    int adjusted=0;
+    CofRTEntity entity;
+    char *text=WORLDMODEL->entities;
+    while ((text=CofRTReadEntity(text,&entity))!=NULL) {
+        const char *model=CofRTValue(&entity,"model");
+        const char *classname=CofRTValue(&entity,"classname");
+        if (!model || !classname || Q_stricmp(classname,"env_model") ||
+            Q_stricmp(model,"models/Props/UtomhusD/hattlykta.mdl")) continue;
+        vec3_t origin,angles={0,0,0},up,expected,aperture;
+        if (!CofRTVector(CofRTValue(&entity,"origin"),origin)) continue;
+        CofRTVector(CofRTValue(&entity,"angles"),angles);
+        AngleVectors(angles,NULL,NULL,up);
+        VectorMA(origin,108,up,expected);
+        VectorMA(origin,96.5f,up,aperture);
+        mleaf_t *leaf=gEngfuncs.Mod_PointInLeaf(aperture,WORLDMODEL->nodes,WORLDMODEL);
+        if (!leaf || leaf->contents!=CONTENTS_EMPTY) continue;
+        for (int i=0;i<g_lights.static_lights_count;++i) {
+            rt_static_light_t *light=&g_lights.static_lights[i];
+            vec3_t delta; VectorSubtract(light->abs_position,expected,delta);
+            if (!light->is_spot || DotProduct(delta,delta)>8*8 ||
+                DotProduct(light->dir,up)>-.85f) continue;
+            VectorCopy(aperture,light->abs_position);
+            // Radius in map units: measured tube half-width, not lamp power.
+            light->fill_radius=3.125f;
+            ++adjusted;
+        }
+    }
+    return adjusted;
+}
 // Preserve the separately calibrated cinematic menu only. Turning baked
 // gameplay lightmap samples into new emitters lights areas the author left
 // dark and double-counts indirect light already calculated by the path tracer.
@@ -260,6 +297,8 @@ void RT_ParseStaticLightEntities(void)
             light->fill_radius=METRIC_TO_QUAKEUNIT(.02f);
             light->intensity*=CofRTMapLightScale();
         }
+    const int fixtures=CofRTResolveFixtureLights();
+    gEngfuncs.Con_Printf("COF_RTX_FIXTURE_LIGHTS resolved=%d\n",fixtures);
     // RTGL supports one volumetric source. Pick a fixed authored spotlight at
     // map load, never the nearest light each frame (which makes fog flash).
     cof_rt_volume_light=-1;

@@ -41,11 +41,62 @@ class DesktopProcess:
             key + '=' + value for key, value in sorted(env.items(), key=lambda p:p[0].upper())) + '\0')
         flags = (subprocess.CREATE_NO_WINDOW | 0x400 |  # CREATE_UNICODE_ENVIRONMENT
                  subprocess.BELOW_NORMAL_PRIORITY_CLASS)
-        if not self.kernel.CreateProcessW(command[0],
+        linked = None
+        if env.get('COF_READBACK_REQUEST'):
+            # Vulkan deliberately ignores user layer paths in elevated apps.
+            # Use this account's existing UAC linked token for this test only;
+            # keep lpDesktop pointing at the isolated desktop. Fail closed.
+            adv=C.WinDLL('advapi32',use_last_error=True)
+            adv.OpenProcessToken.argtypes=[W.HANDLE,W.DWORD,C.POINTER(W.HANDLE)]
+            adv.GetTokenInformation.argtypes=[W.HANDLE,C.c_int,C.c_void_p,W.DWORD,C.POINTER(W.DWORD)]
+            adv.CreateProcessWithTokenW.argtypes=[W.HANDLE,W.DWORD,W.LPCWSTR,W.LPWSTR,W.DWORD,C.c_void_p,W.LPCWSTR,C.POINTER(STARTUPINFOW),C.POINTER(PROCESS_INFORMATION)]
+            token=W.HANDLE();size=W.DWORD();elevation=W.DWORD()
+            if not adv.OpenProcessToken(W.HANDLE(-1),8,C.byref(token)):raise C.WinError(C.get_last_error())
+            try:
+                if not adv.GetTokenInformation(token,18,C.byref(elevation),C.sizeof(elevation),C.byref(size)):raise C.WinError(C.get_last_error())
+                if elevation.value==2:
+                    linked=W.HANDLE()
+                    if not adv.GetTokenInformation(token,19,C.byref(linked),C.sizeof(linked),C.byref(size)):raise C.WinError(C.get_last_error())
+                elif C.windll.shell32.IsUserAnAdmin():
+                    # UAC may be disabled, leaving no linked token. SAFER's
+                    # NORMALUSER level removes administrator membership and
+                    # privileges only from this child process token.
+                    adv.SaferCreateLevel.argtypes=[W.DWORD,W.DWORD,W.DWORD,C.POINTER(W.HANDLE),C.c_void_p]
+                    adv.SaferComputeTokenFromLevel.argtypes=[W.HANDLE,W.HANDLE,C.POINTER(W.HANDLE),W.DWORD,C.c_void_p]
+                    adv.SaferCloseLevel.argtypes=[W.HANDLE]
+                    level=W.HANDLE();linked=W.HANDLE()
+                    if not adv.SaferCreateLevel(1,0x20000,1,C.byref(level),None):raise C.WinError(C.get_last_error())
+                    try:
+                        if not adv.SaferComputeTokenFromLevel(level,None,C.byref(linked),0,None):raise C.WinError(C.get_last_error())
+                    finally:adv.SaferCloseLevel(level)
+            finally:self.kernel.CloseHandle(token)
+        if linked:
+            # Restricted administrator tokens can retain high integrity even
+            # after their admin SID is disabled. Lower this test child to medium.
+            class Label(C.Structure):
+                _fields_=[('sid',C.c_void_p),('attributes',W.DWORD)]
+            adv.ConvertStringSidToSidW.argtypes=[W.LPCWSTR,C.POINTER(C.c_void_p)]
+            adv.GetLengthSid.argtypes=[C.c_void_p]
+            adv.SetTokenInformation.argtypes=[W.HANDLE,C.c_int,C.c_void_p,W.DWORD]
+            self.kernel.LocalFree.argtypes=[C.c_void_p]
+            sid=C.c_void_p()
+            if not adv.ConvertStringSidToSidW('S-1-16-8192',C.byref(sid)):raise C.WinError(C.get_last_error())
+            try:
+                label=Label(sid,0x20)
+                if not adv.SetTokenInformation(linked,25,C.byref(label),C.sizeof(label)+adv.GetLengthSid(sid)):raise C.WinError(C.get_last_error())
+            finally:self.kernel.LocalFree(sid)
+            try:
+                created=adv.CreateProcessWithTokenW(linked,0,command[0],C.create_unicode_buffer(subprocess.list2cmdline(command)),flags,environment,str(cwd),C.byref(startup),C.byref(info))
+                error=C.get_last_error()
+            finally:self.kernel.CloseHandle(linked)
+        else:
+            created=self.kernel.CreateProcessW(command[0],
                 C.create_unicode_buffer(subprocess.list2cmdline(command)),
                 None, None, False, flags, environment, str(cwd),
-                C.byref(startup), C.byref(info)):
-            raise C.WinError(C.get_last_error())
+                C.byref(startup), C.byref(info))
+            error=C.get_last_error()
+        if not created:
+            raise C.WinError(error)
         self.handle = info.hProcess
         self.pid = info.dwProcessId
         self.returncode = None
