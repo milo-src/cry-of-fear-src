@@ -1,6 +1,6 @@
 # Декомпил Cry of Fear
 
-Здесь собраны сохранённые результаты Ghidra: 8 497 файлов C-подобного
+Здесь собраны сохранённые результаты Ghidra: 8 526 файлов C-подобного
 псевдокода. Это частичный декомпил бинарников, а не исходники разработчиков
 и не готовый к сборке проект. Имена, типы и структуры могут быть восстановлены
 неточно; служебные типы Ghidra требуют дальнейшего разбора.
@@ -25,6 +25,9 @@
 python tools/catalog_decompiled.py --find inventory --limit 12
 python tools/catalog_decompiled.py --show server:0x100e4410
 python tools/catalog_decompiled.py --mechanic doors
+python tools/catalog_decompiled.py --mechanic movement
+python tools/catalog_decompiled.py --mechanic vitals
+python tools/catalog_decompiled.py --mechanic ladders
 python tools/catalog_decompiled.py --section workboard
 ```
 
@@ -39,7 +42,7 @@ python tools/catalog_decompiled.py --section workboard
 | --- | --- | ---: |
 | `server/captures/` | `hl.dll` — прежние выборки | 72 |
 | `server/partial-pass/functions/` | `hl.dll` — остановленный общий проход | 8 000 |
-| `client/captures/` | `client.dll` | 273 |
+| `client/captures/` | `client.dll` | 302 |
 | `gameui/captures/` | `GameUI.dll` | 128 |
 | `engine/captures/` | `hw.dll` | 14 |
 | `opengl/captures/` | `opengl32.dll` | 5 |
@@ -56,6 +59,9 @@ python tools/catalog_decompiled.py --section workboard
 уникальных функций. Общая сводка находится в `inventory.json`.
 
 Оригинальные DLL и игровые ресурсы сюда не включены и не изменены.
+Разбор движения, бега, прыжка, стамины, HP и двух видов лестниц собран в
+карточках справочника; краткий маршрут и доказательства —
+[`analysis/movement/overview.md`](../analysis/movement/overview.md).
 Рабочие базы, журналы и полные локальные свидетельства остаются в
 игнорируемой Git папке `analysis/local/`. Настройка инструментов описана в
 [`analysis/native-toolchain.md`](../analysis/native-toolchain.md).

@@ -1,0 +1,124 @@
+{
+  "source_capture": "analysis/local/movement-client-pass2",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "a9b76cd65d5d386cca68d91241bff0cf7f21667e6d8aae019014e24d76cc3756",
+      "procedure": "ram:0x10013b70",
+      "evidence_id": "ev_d98734f36aa2c42c386d1c94f565205a43d1094d286d68782546cc52fdfaab83",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "e18c74ae33832bac362df136a845fddd5da3b9a92b9e630196cd2a7592663561",
+      "procedure": "ram:0x10012e10",
+      "evidence_id": "ev_c5b7d88499afb13c781bfe32ecc474154684762768e699379754b5f82f8f9d2c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "b66befb880bba3450ba47bbbfdd9d2d681d452c816a4a8bbd3a7c143baca4171",
+      "procedure": "ram:0x10078070",
+      "evidence_id": "ev_095d25c6b4ce47b846eb72d4b8d354d8d8ea27ecf4772ed74126d402f1461559",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "2eccc50fd888f8977b9a223ab3345b4a585befde94f6a2649af309dbdd34e58b",
+      "procedure": "ram:0x1007ada0",
+      "evidence_id": "ev_cbf9bd2c9d4690466c0dbba4da0157a90be6427bde807e547eb6e2f07c93ca88",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "004-pseudocode.c",
+      "sha256": "61cfdbf00372d19468c1de8d182242a1b43a30cfc364c60d67213e481efe2dd2",
+      "procedure": "ram:0x1006bfe0",
+      "evidence_id": "ev_03baae4850c12a0ccecb82fc9f24d01c064267ea80700588e3387d86062fb127",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "005-pseudocode.c",
+      "sha256": "1b49ecdc4c4a9928186678cb16fb3d1d8fa52c45c5a4ff3dc3ac219c21720847",
+      "procedure": "ram:0x1006bf10",
+      "evidence_id": "ev_fba8ca57ec01232331cd849b26441ffcf0a50100d3fa6ffc17deeeac0566d18d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "006-pseudocode.c",
+      "sha256": "523dd932a2da08ca34101bcb097529da0d6e7deabeea129d4f12888dfb242e03",
+      "procedure": "ram:0x10070ac0",
+      "evidence_id": "ev_54991588df16d772282b6ecf70b06726a90ab2ba80440f3d2e9733654f74f17c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "007-pseudocode.c",
+      "sha256": "40fdb2912d82a9ba3a42eb3a6855a62e8ba7496e9912ab8d11015ceb4c85c209",
+      "procedure": "ram:0x1006fcc0",
+      "evidence_id": "ev_ef72039cf6889be3115d69c323defff9f2f4eb764eeece1d8f5ab5b986435b69",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "008-pseudocode.c",
+      "sha256": "5df0aff5710c7f93bed3d981e6bef68a5c333094dd04ed7666ec773603b44d8b",
+      "procedure": "ram:0x10071c90",
+      "evidence_id": "ev_67614162dfb5dd39167ac7f97287735ef7e23e8bb8246bb53b905c38e93c1de0",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "009-pseudocode.c",
+      "sha256": "5d26f441da16709c2caadb4ba1ddd2f510e972d51430ce7deb9a11fd6452f823",
+      "procedure": "ram:0x10078830",
+      "evidence_id": "ev_9533e3bcebf88f85f0deb7e0a6c6b75fb9c27863db9bca4c444dda9517410aa8",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "omitted_queries": [],
+  "verification": {
+    "input_unchanged": true,
+    "queries_succeeded": true,
+    "target_executed": false,
+    "rea_exit_code": 0
+  }
+}

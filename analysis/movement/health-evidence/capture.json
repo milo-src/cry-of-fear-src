@@ -1,0 +1,264 @@
+{
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "evidence_type": "Static read/disassembly only; game never executed",
+  "ranges": [
+    {
+      "name": "player_factory",
+      "start": "0x100fa160",
+      "end_exclusive": "0x100fa1c0",
+      "bytes_hex": "e97b84f1ffcccccccccccccccccccccce96bfffdffcccccccccccccccccccccce9bbfffdffcccccccccccccccccccccce96b00feffcccccccccccccccccccccc558bec568b750889750885f67513ff159c2f221085c074068db0800000008975",
+      "assembly_file": "player_factory.asm"
+    },
+    {
+      "name": "player_factory_body",
+      "start": "0x100125e0",
+      "end_exclusive": "0x10012670",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c07527681c28000051ff154430221083c40889450885c0740cc700a84d1a108970045e5dc333c08970045e5dc3cccccccc558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c0",
+      "assembly_file": "player_factory_body.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100125e0",
+        "--stop-address=0x10012670",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "c5f7f5e93c57999a1d5a9c193cde2cd10a3eaf498ddb897b17027f75339ef80c"
+    },
+    {
+      "name": "heal_queue",
+      "start": "0x100dca10",
+      "end_exclusive": "0x100dcae5",
+      "bytes_hex": "a188312210568bf1f30f10100f28ca660f6e86d02100000f5bc0f30f5cc8f20f1005f81d1a100f540d801f1a100f5ac9660f2fc10f87980000008b8ed4210000f30f2cc28986d021000085c90f8e800000008b4604f30f1080640100000f2f80b4010000720cc786d4210000000000005ec38d41fb8986d421000085c0790cc786d42100000000000033c0f30f1086f02100002bc88b066a0051660f6ec98bce0f5bc9f30f58c1f30f110c24f30f1186f0210000ff5068f30f1086f02100000f2f051c1f1a10760ac786f02100000000c8425ec3cc",
+      "assembly_file": "heal_queue.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100dca10",
+        "--stop-address=0x100dcae5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "46fcba627f869add89686fec753db26fdd29b984399cba7a38ff0e8d4aafd54f"
+    },
+    {
+      "name": "landing",
+      "start": "0x100eed77",
+      "end_exclusive": "0x100eef1d",
+      "bytes_hex": "8b47040f57c9f30f1015341f1a108bc88b90a8010000f7c2000200000f8473000000f30f1080640100000f2fc10f8662000000f30f1087c42200000f2f05ecda1d1076510f2fd0764c81ca000200008990a80100008b4f0483b9c8010000fd75348b81a001000085c07411f30f1080a80000000f2ec19ff6c4447a196a0157e8f5b402008b4f0483c408f30f1015341f1a100f57c9f781a8010000000200000f841a010000f30f1081640100000f2fc10f8609010000f30f1087c42200000f2fc20f82f800000083b9c8010000fd752f8b81a001000085c07415f30f1080a80000000f2ec19ff6c4440f8ab70000006a0157e882b4020083c408e9a70000000f2f05381f1a100f869a0000008b0de42e2210578b018b4044ffd08b4704d95c2408f30f104424080f2f806401000076316a646a0083ec08c7442404cdcc4c3fc704240000803f68dc901a106a03ffb00c020000e821db0000f30f1044242483c41c0f2f0570131a10763c8bcfe8b87b0000f30f104424088b376a2051f30f1104246a00e811a1000083c404506a00e806a1000083c4048bcf50ff56648b4704c7406800000000",
+      "assembly_file": "landing.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100eed77",
+        "--stop-address=0x100eef1d",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "6db8ac989c7d31b18becf6f49ca4559fe040318442c99409cd477af19e30350d"
+    },
+    {
+      "name": "fall_over",
+      "start": "0x100f6aa0",
+      "end_exclusive": "0x100f6c8e",
+      "bytes_hex": "566a036a008bf1ff15b030221083c40883f8030f878c000000ff2485906c0f106a5a6a0083ec08c7442404cdcc4c3fc704240000803f68a4cc1d10eb556a5a6a0083ec08c7442404cdcc4c3fc704240000803f68bccc1d10eb386a5a6a0083ec08c7442404cdcc4c3fc704240000803f683c501d10eb1b6a5a6a0083ec08c7442404cdcc4c3fc704240000803f6854501d108b46046a00ffb00c020000e8ae5e000083c41c8b4604f30f100dd81d1a10f30f104020f30f59c1f30f1140208b4604f30f104024f30f59c1f30f1140248b4604f30f104028f30f59c1f30f114028a188312210f30f10008b46040f5ac0c686d01e000001f20f5805681e1a10660f5ac0f30f1186cc1e0000c780600200000000803f8b4604ffb00c0200006a00ff35b46522106a01ff15003022106a01ff1508302210ff15043022106a236addff15b030221083c418660f6ec00f5bc0f30f1104246a236addff15b03022108bce660f6ec00f5bc0f30f11442404c704240000f0c1e8972500008bcee89032ffff8b460481a0a8010000fffffbff8b46048a8ec81e0000f780a801000000000800750e84c97518f30f1005b0682210eb1684c9750af30f1005b4682210eb08f30f1005bc682210f30f1180140200008b4604f30f1005f41e1a105e0f2f8014020000760ac780140200000000f041c3",
+      "assembly_file": "fall_over.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100f6aa0",
+        "--stop-address=0x100f6c8e",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "add0ff0f6a36675f1930d89dc20df2234fa210a27a16436e8129d216db145bb2"
+    },
+    {
+      "name": "single_rules_constructor",
+      "start": "0x100fc0f0",
+      "end_exclusive": "0x100fc135",
+      "bytes_hex": "568bf151c704240000000068c8b61c10c706b0e31d10c686dc00000000c786e400000000000000c786e000000000000000ff153430221083c4088bcee8df36fbff8bc65ec3",
+      "assembly_file": "single_rules_constructor.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100fc0f0",
+        "--stop-address=0x100fc135",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "2e99eecede376347891b959f7f62d48f24d7f53d55241b52d0704f246e138d39"
+    },
+    {
+      "name": "multi_rules_vtable_write",
+      "start": "0x100c5180",
+      "end_exclusive": "0x100c51a2",
+      "bytes_hex": "558bec81ec04010000a1f4ba211033c58945fc568bf1b98837221057c7068c601d10",
+      "assembly_file": "multi_rules_vtable_write.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c5180",
+        "--stop-address=0x100c51a2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "c9296f63b5016bae1b7412cd8347c4b83554bd76f18a11eca889e682d18d855a"
+    },
+    {
+      "name": "single_fall_damage",
+      "start": "0x100fc260",
+      "end_exclusive": "0x100fc29a",
+      "bytes_hex": "558bec8b4508f30f1080c4220000f30f5c05381f1a10f30f1180c4220000f30f59051c1f1a10f30f5e0518661d10f30f114508d945085dc20400",
+      "assembly_file": "single_fall_damage.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100fc260",
+        "--stop-address=0x100fc29a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "804fa7941019c0f6348347ef72d022ba5f9952a27d655f499523f940d6382c0d"
+    },
+    {
+      "name": "multi_fall_damage",
+      "start": "0x100c8800",
+      "end_exclusive": "0x100c883a",
+      "bytes_hex": "558bec8b4508f30f1080c4220000f30f5c05381f1a10f30f1180c4220000f30f59051c1f1a10f30f5e0518661d10f30f114508d945085dc20400",
+      "assembly_file": "multi_fall_damage.asm",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c8800",
+        "--stop-address=0x100c883a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "assembly_sha256": "93cf8ce2ce88063d2f0603fd526191ab8ec8be6fe97fadcc2dd15da618226441"
+    }
+  ],
+  "player_vtable": {
+    "address": "0x101a4da8",
+    "factory_write": "0x10012628",
+    "slots": {
+      "0x64": "0x100f6030",
+      "0x68": "0x100f64f0",
+      "0x6c": "0x100e59f0",
+      "0xbc": "0x10013560",
+      "0xd0": "0x100135b0",
+      "0x244": "0x100e5030"
+    }
+  },
+  "strings": {
+    "0x101de4a8": "%s%d",
+    "0x101a1234": "0",
+    "0x101be9f4": "1"
+  },
+  "skill_config": {
+    "path": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\skill.cfg",
+    "sha256": "721accaf0e3633a90e7c9592631b340b5aa554a77df8af068ca38cdf45529cc3",
+    "selected_lines": [
+      {
+        "line": 124,
+        "text": "sk_syringe_heal1        \"100\""
+      },
+      {
+        "line": 125,
+        "text": "sk_syringe_heal2        \"80\""
+      },
+      {
+        "line": 126,
+        "text": "sk_syringe_heal3        \"60\""
+      },
+      {
+        "line": 127,
+        "text": "sk_syringe_heal4        \"50\""
+      },
+      {
+        "line": 264,
+        "text": "sk_primary_speed1\t\t\"75\""
+      },
+      {
+        "line": 265,
+        "text": "sk_primary_speed2\t\t\"75\""
+      },
+      {
+        "line": 266,
+        "text": "sk_primary_speed3\t\t\"75\""
+      },
+      {
+        "line": 267,
+        "text": "sk_primary_speed4\t\t\"75\""
+      },
+      {
+        "line": 269,
+        "text": "sk_secondary_speed1\t\"45\""
+      },
+      {
+        "line": 270,
+        "text": "sk_secondary_speed2\t\"45\""
+      },
+      {
+        "line": 271,
+        "text": "sk_secondary_speed3\t\"45\""
+      },
+      {
+        "line": 272,
+        "text": "sk_secondary_speed4\t\"45\""
+      },
+      {
+        "line": 274,
+        "text": "sk_sprint_speed1\t\t\"125\""
+      },
+      {
+        "line": 275,
+        "text": "sk_sprint_speed2\t\t\"125\""
+      },
+      {
+        "line": 276,
+        "text": "sk_sprint_speed3\t\t\"125\""
+      },
+      {
+        "line": 277,
+        "text": "sk_sprint_speed4\t\t\"125\""
+      },
+      {
+        "line": 279,
+        "text": "sk_stair_speed1\t\t\"50\""
+      },
+      {
+        "line": 280,
+        "text": "sk_stair_speed2\t\t\"50\""
+      },
+      {
+        "line": 281,
+        "text": "sk_stair_speed3\t\t\"50\""
+      },
+      {
+        "line": 282,
+        "text": "sk_stair_speed4\t\t\"50\""
+      }
+    ]
+  },
+  "gamerules_vtables": [
+    {
+      "name": "CHalfLifeRules",
+      "address": "0x101de3b0",
+      "slot44": "0x100fc260"
+    },
+    {
+      "name": "CHalfLifeMultiplay",
+      "address": "0x101d608c",
+      "slot44": "0x100c8800"
+    }
+  ]
+}

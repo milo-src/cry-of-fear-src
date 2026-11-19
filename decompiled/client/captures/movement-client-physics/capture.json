@@ -1,0 +1,47 @@
+{
+  "source_capture": "analysis/local/movement-client-physics",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "7a29efd71a4e377a540d9d7550c9d9856b09a6f0c6aed1773ce36e9ed0211c5a",
+      "procedure": "ram:0x10013160",
+      "evidence_id": "ev_04d4dfcfbcd933004f8c34a84f969c94adb2a14f7c1771f990371216730c9759",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "e5523431feb7d15e9922203dbfb1f44e49e6583985350c690aed34b7a388d8b1",
+      "procedure": "ram:0x10010dc0",
+      "evidence_id": "ev_03004e61f9c620c2a0b41eb182c25a180b4bbafd107598c491c6bf151b9f1b18",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "bdcde9dd3c340a45a6f5b6009476093e2a0b21455f10ff4c37f4f09307d50ea5",
+      "procedure": "ram:0x10016ba0",
+      "evidence_id": "ev_0e86d96f9761332bc5ce1056be0cc7baffbfa76119cd7bbfdea7df80ad0b80b0",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "omitted_queries": [],
+  "verification": {
+    "input_unchanged": true,
+    "queries_succeeded": true,
+    "target_executed": false,
+    "rea_exit_code": 0
+  }
+}

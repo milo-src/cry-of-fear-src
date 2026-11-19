@@ -1,0 +1,142 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "ranges": [
+    {
+      "file": "sprint.asm",
+      "start": "0x100798d0",
+      "end_exclusive": "0x10079930",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100798d0",
+        "--stop-address=0x10079930",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "jump.asm",
+      "start": "0x10079200",
+      "end_exclusive": "0x10079290",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10079200",
+        "--stop-address=0x10079290",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "duck-dodge.asm",
+      "start": "0x10078ea0",
+      "end_exclusive": "0x10078f50",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10078ea0",
+        "--stop-address=0x10078f50",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "forward-up.asm",
+      "start": "0x10079050",
+      "end_exclusive": "0x10079080",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10079050",
+        "--stop-address=0x10079080",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "key-up.asm",
+      "start": "0x1007a7f0",
+      "end_exclusive": "0x1007a880",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1007a7f0",
+        "--stop-address=0x1007a880",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "wheelchair-wrapper.asm",
+      "start": "0x1006ed30",
+      "end_exclusive": "0x1006ed50",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1006ed30",
+        "--stop-address=0x1006ed50",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "health-registration.asm",
+      "start": "0x1006bd60",
+      "end_exclusive": "0x1006bda0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1006bd60",
+        "--stop-address=0x1006bda0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    },
+    {
+      "file": "health-wrapper.asm",
+      "start": "0x1006c330",
+      "end_exclusive": "0x1006c370",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1006c330",
+        "--stop-address=0x1006c370",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ]
+    }
+  ],
+  "note": "Bounded static x86 disassembly; no target execution. Each claimed callback entry is independently known from registration/calls. Padding and next function may be included.",
+  "literal_evidence": [
+    {
+      "address": "0x101467ec",
+      "type": "nul-terminated-ascii",
+      "value": "maps/c_nightmare.bsp"
+    },
+    {
+      "address": "0x1014f854",
+      "type": "nul-terminated-ascii",
+      "value": "tapgetup"
+    },
+    {
+      "address": "0x1014f7ac",
+      "type": "nul-terminated-ascii",
+      "value": "forwardreleased"
+    },
+    {
+      "address": "0x1013ee68",
+      "type": "little-endian-double",
+      "value": 0.25
+    }
+  ]
+}

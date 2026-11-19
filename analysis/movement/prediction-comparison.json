@@ -1,0 +1,41 @@
+{
+  "method": "Strip comments/whitespace, consistently rename FUN/DAT/LAB address labels in first-occurrence order. Constants, operators, strings and field offsets retained. Comparison of saved pseudocode, not machine-code equivalence or runtime parity.",
+  "pairs": [
+    {
+      "server": "0x10008a00",
+      "client": "0x10015650",
+      "server_file": "decompiled/server/partial-pass/functions/0x10008a00.c",
+      "client_file": "decompiled/client/captures/movement-client-pass3/000-pseudocode.c",
+      "server_sha256": "1d30c0624ab2ff44a0871ae685f633308054b92ecc41cb73d8478952a189426a",
+      "client_sha256": "dd9e48d6f6c341aa24b52c3f9664bc2c62c23a09a5d324a08151a47ad300ca13",
+      "normalized_equal": false
+    },
+    {
+      "server": "0x10006520",
+      "client": "0x10013160",
+      "server_file": "decompiled/server/partial-pass/functions/0x10006520.c",
+      "client_file": "decompiled/client/captures/movement-client-physics/000-pseudocode.c",
+      "server_sha256": "58a3e3338fef581aad2f03551e80a8f332a01f7f7b423562a00a3e726b16be8b",
+      "client_sha256": "7a29efd71a4e377a540d9d7550c9d9856b09a6f0c6aed1773ce36e9ed0211c5a",
+      "normalized_equal": true
+    },
+    {
+      "server": "0x10004170",
+      "client": "0x10010dc0",
+      "server_file": "decompiled/server/partial-pass/functions/0x10004170.c",
+      "client_file": "decompiled/client/captures/movement-client-physics/001-pseudocode.c",
+      "server_sha256": "6ac6c909e6e2e005d56dd105761fcd6dcf4f46aecfa3bcc14e888d3adea2cb2f",
+      "client_sha256": "e5523431feb7d15e9922203dbfb1f44e49e6583985350c690aed34b7a388d8b1",
+      "normalized_equal": true
+    },
+    {
+      "server": "0x10009e50",
+      "client": "0x10016ba0",
+      "server_file": "decompiled/server/partial-pass/functions/0x10009e50.c",
+      "client_file": "decompiled/client/captures/movement-client-physics/002-pseudocode.c",
+      "server_sha256": "23b36299c38c83fd458f7080ef169c9835e1a9640d595f4055df0d428674d284",
+      "client_sha256": "bdcde9dd3c340a45a6f5b6009476093e2a0b21455f10ff4c37f4f09307d50ea5",
+      "normalized_equal": true
+    }
+  ]
+}
