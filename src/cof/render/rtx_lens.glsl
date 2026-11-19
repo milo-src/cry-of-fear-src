@@ -34,10 +34,10 @@ float cofLensDirt(vec2 uv) {
 }
 // Elliptical water lens and a tapering trail. Coordinates measured in screen
 // heights, so water beads remain round on ultrawide and portrait displays.
-void cofLensDrops(vec2 uv,vec2 size,float t,float wet,float dryAge,out vec2 offset,out float film) {
+void cofLensDrops(vec2 uv,vec2 size,float t,float wet,float dryAge,bool menuGlass,out vec2 offset,out float film) {
     vec2 p=uv*vec2(size.x/size.y,1); offset=vec2(0); film=0;
     for (int layer=0;layer<2;++layer) {
-        float grid=layer==0?9.0:22.0;
+        float grid=layer==0?(menuGlass?6.0:9.0):22.0;
         vec2 cell=vec2(floor(p.x*grid),0);
         // Independent column speeds, descending heads with stable lifetimes.
         float seed=cofLensHash(cell+float(layer)*71.0);
@@ -48,7 +48,7 @@ void cofLensDrops(vec2 uv,vec2 size,float t,float wet,float dryAge,out vec2 offs
         for(int row=-1;row<=1;++row) {
             vec2 key=id+vec2(0,row);
             float h=cofLensHash(key+float(layer)*37.0);
-            float present=smoothstep(h-.08,h+.08,wet*(layer==0?.65:.25))*smoothstep(0.0,.08,wet);
+            float present=smoothstep(h-.08,h+.08,wet*(layer==0?(menuGlass?.28:.65):.25))*smoothstep(0.0,.08,wet);
             vec2 c=key+vec2(.22+.56*cofLensHash(key+13.0),.3+.4*h);
             c.y+=clock*grid;
             // Under cover, reject heads that would have entered from the top
@@ -64,7 +64,9 @@ void cofLensDrops(vec2 uv,vec2 size,float t,float wet,float dryAge,out vec2 offs
             film=max(film,body);
             if(layer==0) {
                 float trailLength=.025+.07*h;
-                float trail= (1.0-smoothstep(radius*.12,radius*.48,abs(d.x))) *
+                float trailX=d.x;
+                if(menuGlass) trailX-=radius*.28*(sin(d.y*90.0+h*19.0)-sin(h*19.0));
+                float trail= (1.0-smoothstep(radius*.12,radius*.48,abs(trailX))) *
                     smoothstep(-trailLength,-trailLength*.6,d.y)*(1.0-smoothstep(-radius*2.0,0.0,d.y));
                 offset.x+=sin(d.x/max(radius,.001)*3.0)*trail*radius*.22*present;
                 film=max(film,trail*.35*present);
@@ -73,18 +75,46 @@ void cofLensDrops(vec2 uv,vec2 size,float t,float wet,float dryAge,out vec2 offs
     }
     offset*=size.y;
 }
+// Menu-only condensation. Stable irregular centres and two scales avoid a
+// scrolling noise sheet; large moving drops above provide the draining layer.
+void cofMenuBeads(vec2 uv,vec2 size,out vec2 bend,out float body,out float glint) {
+    vec2 p=uv*vec2(size.x/size.y,1);
+    bend=vec2(0);body=0;glint=0;
+    float edge=smoothstep(.12,.48,abs(uv.x-.5));
+    for(int layer=0;layer<2;++layer) {
+        float grid=layer==0?38.0:73.0;
+        vec2 cell=floor(p*grid);
+        float seed=cofLensHash(cell+float(layer)*83.0);
+        vec2 centre=vec2(.28+.44*cofLensHash(cell+12.0),.28+.44*cofLensHash(cell+43.0));
+        vec2 n=(fract(p*grid)-centre)/vec2(.13+.12*seed,.18+.12*seed);
+        float r=length(n);
+        float present=step(seed,.14+edge*.50);
+        float bead=(1.0-smoothstep(.65,1.0,r))*present;
+        bend+=n*bead*(layer==0?1.6:.65)*size.y/720.0;
+        body=max(body,bead);
+        float rim=exp(-pow((r-.8)*10,2))*present;
+        glint+=rim*max(0.0,dot(n,vec2(-.45,-.8)));
+    }
+}
 vec3 cofLensRender(ivec2 pix) {
     vec2 size=vec2(effect_getFramebufSize());
     vec2 uv=(vec2(pix)+.5)/size;
-    float wet=clamp(push.custom.amplitude-.0001,0,1);
+    bool menuGlass=push.custom.amplitude>=2.0;
+    float wet=clamp(push.custom.amplitude-(menuGlass?2.0:.0001),0,1);
     float code=-push.custom.multX-1.0;
     float dirt=mod(code,512.0)/255.0;
     float dryAge=floor(code/512.0)/32.0;
     vec2 offset; float film;
     offset=vec2(0); film=0;
-    if(wet>.001) cofLensDrops(uv,size,push.custom.speed,wet,dryAge,offset,film);
+    if(wet>.001) cofLensDrops(uv,size,push.custom.speed,wet,dryAge,menuGlass,offset,film);
+    float beads=0, beadGlint=0;
+    if(menuGlass) {
+        vec2 bend;
+        cofMenuBeads(uv,size,bend,beads,beadGlint);
+        offset+=bend;
+    }
     vec3 original=effect_loadFromSource(pix);
-    vec3 color=film>.001 ? cofLensSample(vec2(pix)+offset) : original;
+    vec3 color=max(film,beads)>.001 ? cofLensSample(vec2(pix)+offset) : original;
     // Only highlights reveal oil/dust; no light positions shining through walls.
     // Tiny contiguous kernel avoids separate copies of the lamp silhouette.
     vec3 halo=vec3(0);
@@ -117,5 +147,14 @@ vec3 cofLensRender(ivec2 pix) {
         streak+=s*smoothstep(.72,1.0,max(s.r,max(s.g,s.b)))/6.0;
     }
     color+=streak*mask*dirt*.12;
+    if(menuGlass) {
+        // A faint reflected rim makes wet glass legible against the dark menu;
+        // this is screen optics, never additional illumination in the level.
+        float sceneLight=dot(original,vec3(.2126,.7152,.0722));
+        float movingRim=4.0*film*(1.0-film)*smoothstep(.4,.6,film)*clamp(.35-offset.y*.12,0.0,1.0);
+        color+=vec3(.78,.87,1.0)*(beadGlint+movingRim)*(.025+.16*sqrt(max(sceneLight,0.0)));
+        float edge=smoothstep(.25,.7,length((uv-.5)*vec2(1.25,1)));
+        color*=1.0-.12*edge;
+    }
     return mix(original,color,getProgress());
 }

@@ -52,7 +52,13 @@ def audit():
             raise RuntimeError('RTX numeric sidecar mismatch: '+name)
     actual_masks={p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'rt/mat/cof_pbr').rglob('*') if p.is_file()}
     if actual_masks!=set(materials):raise RuntimeError('Unexpected owned material files: '+str(actual_masks^set(materials)))
-    report=dict(result='pass',native_modules=expected,shaders=shaders,materials=materials,original_cof_native_modules='none',build='Waf x64',
+    optics=manifest.get('optics',{})
+    if set(optics)-{'cryoffear/rtx_menu/rain.crn'}:raise RuntimeError('Unknown optical sidecar')
+    for name,sha in optics.items():
+        meta=json.loads((ROOT/'build/rtx-menu-rain/source.json').read_text())
+        if sha!=meta['pixels_sha256'] or digest((RUNTIME/name).read_bytes())!=sha:
+            raise RuntimeError('Local menu rain provenance mismatch')
+    report=dict(result='pass',native_modules=expected,shaders=shaders,materials=materials,optics=optics,original_cof_native_modules='none',build='Waf x64',
                 external_binaries='Pinned RTGL1, FidelityFX, NVIDIA DLSS; official SDL2. NRI rebuilt with Waf.')
     (RUNTIME/'runtime-audit.json').write_text(json.dumps(report,indent=2)+'\n')
     print(f'PASS: {len(expected)} x64 modules; own engine/game/NRI, pinned tracing dependencies, no original game DLLs')

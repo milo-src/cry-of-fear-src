@@ -104,6 +104,7 @@ def main():
     parser.add_argument('--lens',action='store_true',help='RTX real rain/stop/snow/disabled lens sequence; requires --lighting on an outdoor pose')
     parser.add_argument('--flashlight',action='store_true',help='Enable the real player flashlight with --lighting')
     parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
+    parser.add_argument('--menu-optics',action='store_true',help='RTX menu glass and synthetic local pointer targets; no OS pointer movement')
     parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
     parser.add_argument('--cursor',action='store_true',help='Check RTX client-panel cursor, capture and focus transitions')
     parser.add_argument('--cvar',nargs=2,action='append',default=[],metavar=('NAME','VALUE'),help='Read-only comparison run with temporary runtime cvars')
@@ -127,6 +128,9 @@ def main():
     if args.label and not re.fullmatch('[a-zA-Z0-9_-]+',args.label):parser.error('Invalid label')
     for name,value in args.cvar:
         if not re.fullmatch('[a-zA-Z0-9_]+',name) or not re.fullmatch('[-+.0-9]+',value):parser.error('Invalid numeric cvar')
+    if args.menu_optics:
+        if args.renderer!='rtx':parser.error('--menu-optics requires RTX')
+        args.menu_scene=True
     if args.menu_cycle:args.menu_scene=True
     if args.cursor:
         if args.renderer!='rtx':parser.error('--cursor requires the RTX engine probe')
@@ -178,6 +182,10 @@ def main():
         env.pop(flag,None)
     env.pop('COF_MENU_SCENETEST',None)
     env.pop('COF_MENU_CYCLETEST',None)
+    env.pop('COF_MENUOPTICSTEST',None)
+    if args.menu_optics:env['COF_MENUOPTICSTEST']='1'
+    env.pop('COF_MENUFILMTEST',None)
+    if args.menu_optics and (runtime/'cryoffear/rtx_menu/rain.crn').exists():env['COF_MENUFILMTEST']='1'
     env.pop('COF_CURSORTEST',None)
     env.pop('COF_RTX_FLASHLIGHTTEST',None)
     env.pop('COF_RTX_LENSTEST',None)
@@ -257,6 +265,8 @@ def main():
                     raise RuntimeError('Rain lens state sequence failed')
             if args.console_output:marker='COF_CONSOLE_OUTPUT_COMPLETE failures=0'
             if args.menu_scene:
+                if args.menu_optics and 'COF_MENU_OPTICS_COMPLETE failures=0' not in text:
+                    raise RuntimeError('RTX menu optics/input assertions failed')
                 marker='COF_MENU_SCENE_COMPLETE failures=0'
                 if 'COF_WEATHER_DRAW' not in text:raise RuntimeError('No client precipitation drawn')
                 if args.renderer=='rtx':

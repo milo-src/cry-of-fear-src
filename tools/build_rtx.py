@@ -142,10 +142,12 @@ def main():
             if not destination.exists():shutil.copy2(source,destination)
         elif not destination.exists(): os.link(source,destination)
     native={p.relative_to(RUNTIME).as_posix():sha(p) for p in RUNTIME.rglob('*') if p.suffix.lower() in ('.dll','.exe')}
+    from import_menu_rain import stage as stage_menu_rain
+    optics=stage_menu_rain(RUNTIME)
     (RUNTIME/'rtx-build-manifest.json').write_text(json.dumps(dict(architecture='x64',build='Waf',
         xash_rt_commit='72234513ab02502f16a5fa7e0f4e6c6a5c52f5e8',package_url=PACKAGE_URL,
         package_sha256=PACKAGE_SHA,files=native,
-        shaders=shader_hashes,materials=materials),indent=2)+'\n')
+        shaders=shader_hashes,materials=materials,optics=optics),indent=2)+'\n')
     from audit_rtx import audit
     audit()
     print('Built optional Vulkan RT runtime:',RUNTIME)

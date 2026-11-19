@@ -15,4 +15,14 @@ if (cameramedia == RG_MEDIA_TYPE_VACUUM) {
     int dirtCode = (int)(dirt*255.0f+.5f);
     int dryCode = (int)(bound(0,gEngfuncs.pfnGetCvarFloat("cof_lens_drytime"),63)*32.0f+.5f);
     waves_effect.xMultiplier = -1.0f - (float)(dirtCode+512*dryCode);
+    // Separate menu presentation: independent of level weather and gameplay
+    // wetness. Amplitude >= 2 tags the menu glass without changing the ABI.
+    if (cof_rt_menu_scene) {
+        waves_effect.isActive=gEngfuncs.pfnGetCvarFloat("cof_menu_glass_visible")>0 &&
+            gEngfuncs.pfnGetCvarFloat("rt_menu_glass")>0 &&
+            gEngfuncs.pfnGetCvarFloat("cof_menu_rain_film")==0;
+        waves_effect.amplitude=3.0f;
+        waves_effect.speed=gEngfuncs.pfnGetCvarFloat("cof_menu_glass_time");
+        waves_effect.xMultiplier=-256.0f;
+    }
 }

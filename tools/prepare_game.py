@@ -132,7 +132,7 @@ def prepare(raytracing=False):
     text = path.read_text()
     anchor = '/*\n// Example of how to overlay the whole screen with red at 50 % alpha'
     if text.count(anchor) != 1: raise ValueError('Weather camera hook changed')
-    path.write_text('#include "weather.h"\n' + text.replace(anchor, '\tCofWeatherView(pparams);\n' + anchor))
+    path.write_text('#include "weather.h"\nextern void CofGameMenuView(struct ref_params_s*);\n' + text.replace(anchor, '\tCofGameMenuView(pparams);\n\tCofWeatherView(pparams);\n' + anchor))
     text = (original / 'cl_dll/tri.cpp').read_text()
     anchor = 'void DLLEXPORT HUD_DrawTransparentTriangles( void )\n{'
     if text.count(anchor) != 1: raise ValueError('Weather draw hook changed')
@@ -190,7 +190,7 @@ def prepare(raytracing=False):
                             'camera.cpp', 'graphics.cpp', 'graphics.h')),
         ('client', 'cl_dll', ('prototype_client.cpp', 'inventory_client.cpp', 'saytext.cpp',
                                 'ui_draw.cpp', 'ui_draw.h', 'ui_font.cpp', 'ui_font.h', 'status_hud.cpp',
-                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h', 'weather.cpp', 'weather.h', 'rain_lens.inc')),
+                                'game_menu.cpp', 'secondary_menus.cpp', 'save_load_menu.cpp', 'graphics.cpp', 'graphics.h', 'weather.cpp', 'weather.h', 'rain_lens.inc', 'menu_optics_test.inc', 'menu_rain_video.inc')),
     ]:
         for name in names:
             # Preserve the SDK's standard doors.cpp alongside CoF's custom doors.

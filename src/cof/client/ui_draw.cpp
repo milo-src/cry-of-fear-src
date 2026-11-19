@@ -26,7 +26,9 @@ extern "C" int DLLEXPORT HUD_GetRenderInterface(int version, render_api_t* api, 
     return 1;
 }
 
-void CofUiVidInit() { textures.clear(); }
+#include "menu_rain_video.inc"
+
+void CofUiVidInit() { textures.clear(); menuRainFilm.reset(); }
 
 void CofDrawRainLens(int x,int y,int width,int height,float alpha) {
     if (!renderer.GL_LoadTexture || alpha<=0) return;

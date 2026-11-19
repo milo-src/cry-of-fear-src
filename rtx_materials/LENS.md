@@ -22,9 +22,9 @@ uses emission 1.0 instead of the generic additive-effect value 0.35. Its hood,
 pole, BSP light power, aperture and shadow geometry are unchanged. This adapter
 is excluded from the cinematic menu, sky models and first-person weapons.
 
-The effect runs only in RTX gameplay, after upscaling and bloom and before
-HUD/menu composition. Inventory/menu visibility suppresses it; the cinematic
-3D menu retains its existing rendering. Underwater views use the backend's
+The gameplay effect runs only in RTX gameplay, after upscaling and bloom and before
+HUD/menu composition. Inventory/menu visibility suppresses it. The cinematic
+3D menu has a separate [rain film and parallax](MENU_RAIN.md). Underwater views use the backend's
 original wave pass. The ordinary OpenGL renderer has no lens pass.
 
 ## Local Crysis 3 Remastered mask

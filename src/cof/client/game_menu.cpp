@@ -4,6 +4,9 @@
 #include "cl_util.h"
 #include "keydefs.h"
 #include "ui_draw.h"
+#include "ref_params.h"
+#include <cmath>
+#include <cstdlib>
 #include <cstdio>
 #include <cstring>
 #include <string>
@@ -19,6 +22,7 @@ extern void CofSaveMenuOpen();
 extern void CofSaveLoadDraw();
 extern int CofSaveLoadKeyEvent(int, int, const char*);
 extern void CofSaveLoadReset();
+extern void CofMenuOpticsTestFrame();
 
 namespace {
 enum Panel { Closed, Main, Difficulty };
@@ -27,6 +31,17 @@ bool menuWorld;
 int hovered = -1;
 unsigned unlockFlags;
 std::string campaign;
+bool menuRTX;
+cvar_t *menuGlass, *menuParallax;
+float menuLookX, menuLookY, menuOpticsTime;
+int menuDrawX, menuDrawY;
+bool MenuMotionActive() {
+    return menuRTX && menuWorld && panel == Main &&
+        !CofSecondaryMenuVisible() && !CofSaveLoadVisible() &&
+        menuParallax && menuParallax->value > 0;
+}
+int MainRowX() { return ScreenWidth/2-140+menuDrawX; }
+int MainRowY(int row) { return ScreenHeight-(11-row)*38+menuDrawY; }
 const char* art[] = {"newgame", "loadgame", "customc", "jserver", "hserver",
                      "language", "unlockables", "extras", "options", "quit"};
 bool Inside(int x, int y, int bx, int by, int w, int h) {
@@ -108,7 +123,7 @@ void CancelDifficulty() {
 void Click(int x, int y) {
     if (panel == Main) {
         for (int i = 0; i < 10; ++i)
-            if (Inside(x, y, ScreenWidth / 2 - 140, ScreenHeight - (11-i)*38, 280, 38)) {
+            if (Inside(x, y, MainRowX(), MainRowY(i), 280, 38)) {
                 MainAction(i); return;
             }
     } else if (panel == Difficulty) {
@@ -151,8 +166,49 @@ void CofGameMenuCampaign(const char* firstMap) {
 }
 bool CofGameMenuVisible() { return panel != Closed || CofSecondaryMenuVisible() || CofSaveLoadVisible(); }
 bool CofGameMenuWorld() { return menuWorld; }
+// Applied to the finished cinematic camera, never to player input/viewangles.
+// Read the existing UI cursor only; no pointer warp, capture or focus changes.
+void CofGameMenuView(ref_params_s* view) {
+    if (!menuRTX || !menuWorld) return;
+    if (view->paused) {
+        gEngfuncs.Cvar_SetValue("cof_menu_glass_visible",0);
+        return; // do not add offsets again to a cached paused view
+    }
+    float dt = std::fmax(0.f,std::fmin(view->frametime,.1f));
+    menuOpticsTime += dt;
+    float x=0,y=0;
+    if (MenuMotionActive() && ScreenWidth>0 && ScreenHeight>0) {
+        int mx,my; gEngfuncs.GetMousePosition(&mx,&my);
+        if (mx>=0 && my>=0 && mx<ScreenWidth && my<ScreenHeight) {
+            x=2.f*mx/ScreenWidth-1;
+            y=2.f*my/ScreenHeight-1;
+        }
+    }
+    // Test injection is engine-local; it never moves the operating-system cursor.
+    if (std::getenv("COF_MENUOPTICSTEST") && MenuMotionActive()) {
+        x=menuOpticsTime<14 ? -.85f : menuOpticsTime<28 ? .85f : 0;
+        y=menuOpticsTime<14 ? -.65f : menuOpticsTime<28 ? .65f : 0;
+    }
+    float follow=1.f-std::exp(-dt*5.f);
+    menuLookX+=(x-menuLookX)*follow;
+    menuLookY+=(y-menuLookY)*follow;
+    view->viewangles[0]+=menuLookY*.8f;
+    view->viewangles[1]-=menuLookX*1.2f;
+    // Keep the view basis consistent for engine effects and weather.
+    gEngfuncs.pfnAngleVectors(view->viewangles,view->forward,view->right,view->up);
+    gEngfuncs.Cvar_SetValue("cof_menu_glass_visible",panel!=Closed && menuGlass && menuGlass->value>0 ? 1:0);
+    gEngfuncs.Cvar_SetValue("cof_menu_glass_time",menuOpticsTime);
+}
 void CofGameMenuInit() {
     panel = Closed; menuWorld = false; hovered = -1;
+    const char* active=std::getenv("COF_RTX_ACTIVE");
+    menuRTX=active && std::atoi(active)!=0;
+    menuGlass=CVAR_CREATE("rt_menu_glass","1",FCVAR_ARCHIVE);
+    menuParallax=CVAR_CREATE("rt_menu_parallax","1",FCVAR_ARCHIVE);
+    CVAR_CREATE("cof_menu_glass_visible","0",0);
+    CVAR_CREATE("cof_menu_glass_time","0",0);
+    CVAR_CREATE("cof_menu_rain_film","0",0);
+    CVAR_CREATE("cof_menu_rain_frame","-1",0);
     gEngfuncs.pfnHookUserMsg("GameMenu", GameMenuMessage);
     gEngfuncs.pfnHookUserMsg("Unlocks", UnlocksMessage);
     gEngfuncs.pfnHookUserMsg("VGUIMenu", VguiMenuMessage);
@@ -160,6 +216,11 @@ void CofGameMenuInit() {
     gEngfuncs.pfnAddCommand("cof_savemenu", CofSaveMenuOpen);
 }
 void CofGameMenuVidInit() {
+    menuLookX=menuLookY=menuOpticsTime=0;
+    menuDrawX=menuDrawY=0;
+    gEngfuncs.Cvar_SetValue("cof_menu_glass_visible",0);
+    gEngfuncs.Cvar_SetValue("cof_menu_rain_film",0);
+    gEngfuncs.Cvar_SetValue("cof_menu_rain_frame",-1);
     Show(Closed); CofSecondaryMenuReset(); CofSaveLoadReset();
     campaign.clear();
     const char* level = gEngfuncs.pfnGetLevelName();
@@ -186,6 +247,10 @@ int CofGameMenuKeyEvent(int down, int key, const char* binding) {
     return 0;
 }
 void CofGameMenuDraw() {
+    bool rainFilm=false;
+    if(menuRTX && menuWorld && panel!=Closed && menuGlass && menuGlass->value>0)
+        rainFilm=CofDrawMenuRain(menuOpticsTime,menuLookX,menuLookY);
+    gEngfuncs.Cvar_SetValue("cof_menu_rain_film",rainFilm?1:0);
     if (CofSaveLoadVisible()) { CofSaveLoadDraw(); return; }
     if (CofSecondaryMenuVisible()) { CofSecondaryMenuDraw(); return; }
     if (panel == Difficulty) {
@@ -194,24 +259,29 @@ void CofGameMenuDraw() {
         return;
     }
     if (panel != Main) return;
+    menuDrawX=MenuMotionActive() ? int(std::lround(-menuLookX*7.f)) : 0;
+    menuDrawY=MenuMotionActive() ? int(std::lround(-menuLookY*4.f)) : 0;
     int mx, my; gEngfuncs.GetMousePosition(&mx, &my);
     int nextHover = -1;
     for (int i = 0; i < 10; ++i)
-        if (Inside(mx, my, ScreenWidth/2-140, ScreenHeight-(11-i)*38, 280, 38)) nextHover=i;
+        if (Inside(mx, my, MainRowX(), MainRowY(i), 280, 38)) nextHover=i;
     if (nextHover != hovered && nextHover >= 0)
         gEngfuncs.pfnPlaySoundByName(const_cast<char*>("ui/3d_rollover.wav"), .5f);
     hovered = nextHover;
     // Keep the mean of the original 0..50 transparency range, without its
     // per-frame random flicker (requested presentation adjustment).
-    CofDrawImage("gfx/vgui/menu_logo.tga", ScreenWidth/2-256, ScreenHeight/2-198,
+    CofDrawImage("gfx/vgui/menu_logo.tga", ScreenWidth/2-256+menuDrawX*2, ScreenHeight/2-198+menuDrawY*2,
                  512, 66, 0, 0, 1, 1, 1, 1, 1, 1.f-25.f/255.f);
     CofDrawImage("gfx/vgui/menu_logo_ts.tga", ScreenWidth-120-15, ScreenHeight-102-15);
     for (int i = 0; i < 10; ++i) {
         char path[96];
         std::snprintf(path, sizeof(path), "gfx/vgui/menu/%s%s.tga", art[i], i==hovered ? "_mo" : "");
-        CofDrawImage(path, ScreenWidth/2-140 + (i==hovered ? gEngfuncs.pfnRandomLong(-3,3) : 0),
-                     ScreenHeight-(11-i)*38);
+        CofDrawImage(path, MainRowX() + (!menuRTX && i==hovered ? gEngfuncs.pfnRandomLong(-3,3) : 0),
+                     MainRowY(i));
     }
+    CofMenuOpticsTestFrame();
 }
 
 #include "menu_runtime_tests.inc"
+
+#include "menu_optics_test.inc"
