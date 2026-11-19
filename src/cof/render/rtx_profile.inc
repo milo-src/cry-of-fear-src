@@ -2,8 +2,8 @@
          * This is a new CoF reconstruction feature, not an original game setting. */
         {
             if (!gEngfuncs.pfnGetCvarPointer("rt_lens_flares"))
-                gEngfuncs.Cvar_Get("rt_lens_flares", "1", FCVAR_ARCHIVE,
-                    "RTX visible-highlight optical streaks and ghosts, 0-2; 0 disables");
+                gEngfuncs.Cvar_Get("rt_lens_flares", "0", FCVAR_ARCHIVE,
+                    "Legacy setting; gameplay streaks/ghosts replaced by traced emitters");
             if (!gEngfuncs.pfnGetCvarPointer("rt_lens_dirt"))
                 gEngfuncs.Cvar_Get("rt_lens_dirt", "1", FCVAR_ARCHIVE,
                     "RTX light-reactive lens smears, 0-2; independent of rain droplets");

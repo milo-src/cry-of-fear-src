@@ -5,8 +5,11 @@ if (cameramedia == RG_MEDIA_TYPE_VACUUM) {
     float visible = cof_rt_menu_scene ? 0 : gEngfuncs.pfnGetCvarFloat("cof_lens_visible");
     float wet = bound(0, gEngfuncs.pfnGetCvarFloat("cof_lens_wetness"), 1);
     float dirt = bound(0, gEngfuncs.pfnGetCvarFloat("rt_lens_dirt"), 2);
-    float flares = bound(0, gEngfuncs.pfnGetCvarFloat("rt_lens_flares"), 2);
-    waves_effect.isActive = visible > 0 && (wet > .001f || dirt > 0 || flares > 0);
+    // Legacy configs may still request streaks/ghosts. The scene emitter path
+    // replaces them; leave the packed field zero without mutating user config.
+    float flares = 0;
+    waves_effect.isActive = visible > 0 && (wet > .001f || dirt > 0 ||
+        gEngfuncs.pfnGetCvarFloat("rt_bloom") > 0);
     waves_effect.transitionDurationIn = 0;
     waves_effect.transitionDurationOut = 0;
     waves_effect.amplitude = .0001f + wet;

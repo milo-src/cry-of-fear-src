@@ -11,7 +11,9 @@ if (!cof_rt_menu_scene) {
     tnmp_params.ev100Max=2.001f;
     // Fog scatters actual light only; it does not glow in unlit rooms.
     volumetric_params.ambientColor=(RgFloat3D){{0,0,0}};
-    volumetric_params.scaterring *= .72f*bound(0,gEngfuncs.pfnGetCvarFloat("rt_light_shafts"),2);
+    // Preserve local light cones while reducing the overlapping grey veil in
+    // dry air. Rain retains its separate density response below.
+    volumetric_params.scaterring *= .52f*bound(0,gEngfuncs.pfnGetCvarFloat("rt_light_shafts"),2);
     // Keep local light shafts but do not introduce a sky light on indoor maps.
     volumetric_params.fallbackSourceColor=(RgFloat3D){{0,0,0}};
     // Weather comes from the original RainData message plus a client roof trace.

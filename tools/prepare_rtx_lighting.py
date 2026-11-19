@@ -69,14 +69,17 @@ def prepare(target):
     # Keep an opt-in runtime regression check at the actual geometry boundary.
     path = target/'ref/gl/gl_opengl.c'
     text = path.read_text()
-    text = text.replace('static void FlushBatch( void )', '#include "rtx_geometry_tests.inc"\n\nstatic void FlushBatch( void )')
+    text = text.replace('static void FlushBatch( void )', '#include "rtx_geometry_tests.inc"\n#include "rtx_emitter_checks.inc"\n\nstatic void FlushBatch( void )')
     text = text.replace('RgResult r = rgUploadMeshPrimitive( rg_instance, &rt_batch.mesh, &rt_batch.primitive );',
-        'CofRTCheckGeometry(&rt_batch.mesh, &rt_batch.primitive);\n\t\t\tRgResult r = rgUploadMeshPrimitive( rg_instance, &rt_batch.mesh, &rt_batch.primitive );')
+        'CofRTCheckGeometry(&rt_batch.mesh, &rt_batch.primitive);\n'
+        '\t\t\tCofRTCheckTracedEmitter(&rt_batch.mesh, &rt_batch.primitive);\n'
+        '\t\t\tRgResult r = rgUploadMeshPrimitive( rg_instance, &rt_batch.mesh, &rt_batch.primitive );')
     anchor = 'TryBeginBatch_Finalize( RT_BATCH_TYPE_NONE, NULL, NULL );\n\trt_2dstate_changed = true;'
     if text.count(anchor) != 1:raise ValueError('RTX frame-end geometry hook changed')
     text = text.replace(anchor,anchor+'\n\tCofRTCheckGeometryFrame();')
     path.write_text(text)
     shutil.copy2(ROOT/'tests/cof/render/rtx_geometry_tests.inc',target/'ref/gl/rtx_geometry_tests.inc')
+    shutil.copy2(ROOT/'src/cof/render/rtx_emitter_checks.inc',target/'ref/gl/rtx_emitter_checks.inc')
     # Camera-dependent BSP traversal reorders triangles in texture batches.
     # RTGL1 matches their previous-frame vertices by mesh/primitive/index, so a
     # static wall then appears to move and its lighting history is reprojected

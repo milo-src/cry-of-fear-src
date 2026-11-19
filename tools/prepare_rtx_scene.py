@@ -44,12 +44,28 @@ def prepare(target):
         // uses ADDITIVE rather than FULLBRIGHT; identify that verified diffuser
         // only, leaving its metal hood/pole and unrelated additive effects alone.
         extern int CofRTStudioFaceFlags(void);
+        RgEditorInfo diffuserMaterial = {0};
         if (!cof_rt_menu_scene && !CofRTIsSky(RI.currententity) &&
             !isviewmodel && !ishologram && !hasinvis) {
             qboolean tube = !Q_stricmp(RI.currentmodel->name,
                 "models/Props/UtomhusD/hattlykta.mdl") && rt_raster_additive &&
                 prim.pTextureName && strstr(prim.pTextureName,"tex_fullbright");
+            if (tube) {
+                // The original ADDITIVE tube was sent to RTGL's raster overlay:
+                // visible to the camera but missing from traced reflections/GI.
+                // This verified solid diffuser belongs in the tracing geometry.
+                // Keep the authored spotlight as the sampled direct source;
+                // adding another attached light would double its energy.
+                prim.flags &= ~RG_MESH_PRIMITIVE_TRANSLUCENT;
+                prim.color = rgUtilPackColorByte4D(255,255,255,255);
+                diffuserMaterial.pbrInfoExists = true;
+                diffuserMaterial.pbrInfo.roughnessDefault = .35f;
+                diffuserMaterial.pbrInfo.metallicDefault = 0;
+                prim.pEditorInfo = &diffuserMaterial;
+            }
             if (tube || (CofRTStudioFaceFlags() & STUDIO_NF_FULLBRIGHT)) {
+                // RTGL normalizes this channel to [0,1]; higher radiance is
+                // handled by its HDR emission/bloom pipeline, not values >1.
                 prim.emissive = Q_max(prim.emissive, 1.0f);
                 static qboolean reportedEmitter;
                 if (!reportedEmitter) {

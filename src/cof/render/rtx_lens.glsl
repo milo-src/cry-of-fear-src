@@ -32,70 +32,26 @@ float cofLensDirt(vec2 uv) {
     return .12+.35*pow(arcs,6.0)+.16*cofLensHash(floor(uv*vec2(640,360)));
 #endif
 }
-// Authored optical concepts recovered from the shipped LensOptics shader and
-// lamp_post_flare preset; our screen-image adaptation, not CryEngine bytecode.
-// Gather visible highlights from already filtered HDR bloom. No world-space
-// lamp proxy means fully hidden/offscreen lights cannot originate a new ghost.
+// Local highlight selection for rain and subtle wipe detail only. Gameplay
+// streaks and optical-axis ghosts are deliberately absent: fixture geometry
+// participates in the ray-traced scene instead of being imitated on screen.
 float cofOpticsEdge(vec2 uv) {
     vec2 edge=min(uv,vec2(1)-uv);
     return smoothstep(0.0,.035,min(edge.x,edge.y));
 }
 vec3 cofOpticsSource(vec2 uv) {
     if(any(lessThan(uv,vec2(0))) || any(greaterThan(uv,vec2(1))))return vec3(0);
-    vec3 c=max(textureLod(framebufBloom_Mip4_Sampler,uv,0).rgb,vec3(0));
+    // Upsampling ADDS the coarser levels into each finer bloom level. Isolate
+    // local highlight contrast before gathering: otherwise every tap gathers
+    // the same wide halo again and turns the lamp into a grey screen veil.
+    vec3 fine=textureLod(framebufBloom_Mip3_Sampler,uv,0).rgb;
+    vec3 wide=textureLod(framebufBloom_Mip5_Sampler,uv,0).rgb;
+    vec3 c=max(fine-wide,vec3(0));
     float peak=max(c.r,max(c.g,c.b));
     // Bloom has already isolated highlights; its coarse levels distribute a
     // small lamp's energy over many pixels. Do not apply an LDR-size threshold
     // again here or small luminous diffusers disappear from the optical layer.
-    return c*smoothstep(.002,.025,peak)*cofOpticsEdge(uv);
-}
-vec3 cofOptics(vec2 uv,vec2 size,float mask,float dirt) {
-    // Gaussian streak (Crysis StreaksPS uses exp(-8*x*x)). Gather the broad
-    // bloom level with overlapping taps, avoiding repeated lamp silhouettes.
-    vec3 streak=vec3(0);
-    float weightSum=0;
-    for(int i=-12;i<=12;++i) {
-        float x=float(i)/12.0;
-        float weight=exp(-8.0*x*x);
-        streak+=cofOpticsSource(uv+vec2(x*.18*size.y/size.x,0))*weight;
-        weightSum+=weight;
-    }
-    streak/=weightSum;
-    // Internal reflections lie on the optical axis through the image centre.
-    // Independent scales model several lens surfaces. No wrapping at edges.
-    vec3 ghosts=vec3(0);
-    for(int i=0;i<4;++i) {
-        float scale=.38+float(i)*.29;
-        vec2 sourceUV=.5-(uv-.5)/scale;
-        if(all(greaterThanEqual(sourceUV,vec2(0)))&&all(lessThanEqual(sourceUV,vec2(1)))) {
-            vec3 c=max(textureLod(framebufBloom_Mip4_Sampler,sourceUV,0).rgb,vec3(0));
-            float peak=max(c.r,max(c.g,c.b));
-            float axisFade=1.0-smoothstep(.42,.72,length((sourceUV-.5)*vec2(size.x/size.y,1)));
-            ghosts+=c*smoothstep(.002,.025,peak)*axisFade*cofOpticsEdge(sourceUV)/float(i+2);
-        }
-    }
-    // Raised wipe detail catches light differently as the bright source moves.
-    // Recover the light direction from the bloom gradient rather than putting
-    // a synthetic illuminator behind occluding geometry.
-    vec3 scatter=vec3(0);
-    if(dirt>0.0) {
-    vec2 texel=1.0/vec2(textureSize(framebufBloom_Mip4_Sampler,0));
-    const vec3 luma=vec3(.2126,.7152,.0722);
-    float bx=dot(textureLod(framebufBloom_Mip4_Sampler,uv+vec2(texel.x,0),0).rgb-
-                 textureLod(framebufBloom_Mip4_Sampler,uv-vec2(texel.x,0),0).rgb,luma);
-    float by=dot(textureLod(framebufBloom_Mip4_Sampler,uv+vec2(0,texel.y),0).rgb-
-                 textureLod(framebufBloom_Mip4_Sampler,uv-vec2(0,texel.y),0).rgb,luma);
-    vec2 slope=vec2(cofLensDirt(clamp(uv+vec2(1.0/128.0,0),0,1))-mask,
-                    cofLensDirt(clamp(uv+vec2(0,1.0/64.0),0,1))-mask);
-    vec3 n=normalize(vec3(-slope*2.0,1));
-    vec3 l=normalize(vec3(vec2(bx,by)*6.0,1));
-    float detail=pow(max(0.0,dot(reflect(-l,n),vec3(0,0,1))-.05),7.0);
-    vec3 local=max(textureLod(framebufBloom_Mip4_Sampler,uv,0).rgb,vec3(0));
-    scatter=local*detail*mask*dirt*.24;
-    }
-    vec3 energy=streak*6.0+ghosts*.65+scatter;
-    // Bounded neutral optical layer. Light colour is inherited from the scene.
-    return vec3(1)-exp(-energy);
+    return c*smoothstep(.004,.04,peak)*cofOpticsEdge(uv);
 }
 // Elliptical water lens and a tapering trail. Coordinates measured in screen
 // heights, so water beads remain round on ultrawide and portrait displays.
@@ -169,7 +125,6 @@ vec3 cofLensRender(ivec2 pix) {
     float code=-push.custom.multX-1.0;
     float dirt=mod(code,512.0)/255.0;
     float dryAge=mod(floor(code/512.0),2048.0)/32.0;
-    float flares=floor(code/1048576.0)*.25;
     vec2 offset; float film;
     offset=vec2(0); film=0;
     if(wet>.001) cofLensDrops(uv,size,push.custom.speed,wet,dryAge,menuGlass,offset,film);
@@ -181,6 +136,14 @@ vec3 cofLensRender(ivec2 pix) {
     }
     vec3 original=effect_loadFromSource(pix);
     vec3 color=max(film,beads)>.001 ? cofLensSample(vec2(pix)+offset) : original;
+    if(!menuGlass && globalUniform.bloomIntensity>0.0) {
+        // Compact radiance bloom, not an optical streak or a light-position
+        // sprite. The traced HDR image supplies its shape, colour and occlusion.
+        // Remove the coarse accumulated tail so nearby lamps do not fog the view.
+        vec3 core=cofOpticsSource(uv);
+        vec3 glow=vec3(1)-exp(-core*globalUniform.bloomIntensity*12.0);
+        color+=glow*(vec3(1)-clamp(color,0,1));
+    }
     // Only highlights reveal oil/dust; no light positions shining through walls.
     // Tiny contiguous kernel avoids separate copies of the lamp silhouette.
     vec3 halo=vec3(0);
@@ -198,19 +161,16 @@ vec3 cofLensRender(ivec2 pix) {
         vec3 broad=max(textureLod(framebufBloom_Mip6_Sampler,uv,0).rgb,vec3(0));
         // Integrated, filtered source energy: no lamp-shaped duplicates from
         // sparse full-resolution taps, and no off-screen/occluded light proxy.
-        vec3 scatter=nearGlow*1.5+broad*5.0;
+        // Preserve the separate menu glass treatment. Gameplay dirt should
+        // reveal wipe detail near highlights, never add another broad fog bank.
+        vec3 scatter=menuGlass ? nearGlow*1.5+broad*5.0 : cofOpticsSource(uv)*.5;
         halo+=vec3(1)-exp(-scatter);
     }
     float mask=cofLensDirt(uv);
-    color+=halo*(dirt*mask*.65+wet*film*.38);
+    vec3 dirtGlow=halo*(dirt*mask*(menuGlass?.65:.22)+wet*film*.38);
+    color+=menuGlass ? dirtGlow : (vec3(1)-exp(-dirtGlow))*(vec3(1)-clamp(color,0,1));
     // Curved meniscus: a restrained dark rim and scene-coloured highlight.
     color*=1.0-.075*film*(1.0-film);
-    if(!menuGlass && flares>0 && globalUniform.bloomIntensity>0.0) {
-        vec3 optical=clamp(cofOptics(uv,size,mask,dirt)*flares,vec3(0),vec3(.72));
-        // Screen blend, as in the shipped LensOptics techniques, preserves the
-        // bright lamp core and avoids adding another full white layer over it.
-        color+=optical*(vec3(1)-clamp(color,vec3(0),vec3(1)));
-    }
     if(menuGlass) {
         // A faint reflected rim makes wet glass legible against the dark menu;
         // this is screen optics, never additional illumination in the level.
