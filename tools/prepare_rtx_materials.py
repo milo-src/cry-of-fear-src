@@ -107,6 +107,10 @@ def prepare(target):
     anchor = '\t\tRgDrawFrameTexturesParams texture_params = {'
     if text.count(anchor) != 1: raise ValueError('RTX atmosphere hook changed')
     text = text.replace(anchor, '#include "rtx_atmosphere.inc"\n'+anchor)
+    anchor = '\t\tRgPostEffectTeleport teleport_effect = {'
+    if text.count(anchor) != 1: raise ValueError('RTX lens effect hook changed')
+    text = text.replace(anchor, '#include "rtx_lens.inc"\n'+anchor)
+    shutil.copy2(ROOT/'src/cof/render/rtx_lens.inc', target/'ref/gl/rtx_lens.inc')
     shutil.copy2(ROOT/'src/cof/render/rtx_atmosphere.inc', target/'ref/gl/rtx_atmosphere.inc')
     shutil.copy2(ROOT/'src/cof/render/rtx_fog.inc', target/'ref/gl/rtx_fog.inc')
     for old, new in (

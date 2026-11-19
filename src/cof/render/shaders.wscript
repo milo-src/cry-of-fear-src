@@ -20,7 +20,7 @@ def build(bld):
     # Make includes explicit inputs so changes to HitInfo / owned GLSL really
     # invalidate SPIR-V. Only input 0 is passed to glslang as a translation unit.
     includes=bld.path.ant_glob('**/*.h **/*.glsl **/*.inl')+bld.path.parent.find_dir('Generated').ant_glob('**/*.h')
-    for shader in ('CmPrepareFinal.comp','RtVolumetric.rgen','RtRaygenDirect.rgen','RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen','RtRaygenIndirectInit.rgen','RtRaygenIndirectFinal.rgen'):
+    for shader in ('EfWaves.comp','CmPrepareFinal.comp','RtVolumetric.rgen','RtRaygenDirect.rgen','RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen','RtRaygenIndirectInit.rgen','RtRaygenIndirectFinal.rgen'):
         bld(rule=compile_shader, vars=['GLSLANG','COF_SHADER_INCLUDES'],
             source=[bld.path.find_resource(shader)]+includes,target=shader+'.spv',
             name='cof_'+shader)

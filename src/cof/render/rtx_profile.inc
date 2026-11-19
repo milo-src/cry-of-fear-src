@@ -1,6 +1,15 @@
         /* Launcher-selected presets; reapplied after loading archived GL settings.
          * This is a new CoF reconstruction feature, not an original game setting. */
         {
+            if (!gEngfuncs.pfnGetCvarPointer("rt_lens_dirt"))
+                gEngfuncs.Cvar_Get("rt_lens_dirt", "1", FCVAR_ARCHIVE,
+                    "RTX light-reactive lens smears, 0-2; independent of rain droplets");
+            if (!gEngfuncs.pfnGetCvarPointer("rt_outdoor_wetness"))
+                gEngfuncs.Cvar_Get("rt_outdoor_wetness", "1", FCVAR_ARCHIVE,
+                    "RTX damp outdoor surfaces exposed to BSP sky, 0-1; reload map");
+            if (!gEngfuncs.pfnGetCvarPointer("rt_light_shafts"))
+                gEngfuncs.Cvar_Get("rt_light_shafts", "1.4", FCVAR_ARCHIVE,
+                    "RTX local fog scattering strength, 0-2; menu unchanged");
             if (!gEngfuncs.pfnGetCvarPointer("rt_shore_wetness"))
                 gEngfuncs.Cvar_Get("rt_shore_wetness", "1", FCVAR_ARCHIVE,
                     "RTX static water contact film on world surfaces; reload map");

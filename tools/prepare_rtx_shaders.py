@@ -28,6 +28,20 @@ def prepare():
             dest.parent.mkdir(parents=True,exist_ok=True)
             shutil.copy2(p,dest)
     shutil.copy2(cache/'LICENSE',target/'LICENSE')
+    lens=target/'Shaders/EfWaves.comp'
+    text=lens.read_text().replace('#version 460','#version 460\n#extension GL_GOOGLE_include_directive : require',1)
+    text=text.replace('void main()', '#include "rtx_lens.glsl"\n\nvoid main()',1)
+    anchor='    float tx = getMult(pix, push.custom.speed, push.custom.multX);'
+    if text.count(anchor)!=1:raise ValueError('Lens shader entry hook changed')
+    text=text.replace(anchor,'''    if (push.custom.multX < 0.0) {
+        effect_storeToTarget(cofLensRender(pix),pix);
+        return;
+    }
+'''+anchor)
+    lens.write_text(text)
+    shutil.copy2(ROOT/'src/cof/render/rtx_lens.glsl',lens.parent/'rtx_lens.glsl')
+    from import_lens_mask import prepare_include
+    prepare_include(lens.parent/'rtx_lens_mask.glsl')
     shader=target/'Shaders/CmPrepareFinal.comp'
     text=shader.read_text()
     text=text.replace('#version 460', '#version 460\n#extension GL_GOOGLE_include_directive : require', 1)
@@ -60,7 +74,47 @@ def prepare():
     anchor='        radiance = mix( radiance_Prev, radiance, 0.05 );'
     if text.count(anchor)!=1:raise ValueError('Volume history hook changed')
     text=text.replace(anchor,'        // CoF: current-frame light only; no stale frustum-cell history.')
+    start=text.index('        vec3 tolight = vec3( 0, 1, 0 );')
+    end=text.index('\n    }\n    else',start)
+    text=text[:start]+'''        // Two independent light reservoirs per froxel. Evaluate each phase
+        // separately: averaging directions first erases crossing light shafts.
+        for (uint sampleIndex=0; sampleIndex<2; ++sampleIndex) {
+            uint sampleSeed=seed ^ (sampleIndex*0x9e3779b9u);
+            vec3 propagation=vec3(0,1,0);
+            vec3 incoming=processDirectIllumination(sampleSeed,s,0,propagation)*4*M_PI;
+            radiance+=incoming*0.5;
+            lighting+=globalUniform.volumeLightMult*incoming*0.5*
+                phaseFunction_Schlick(-propagation,toviewer,globalUniform.volumeAsymmetry);
+        }
+'''+text[end:]
     volume.write_text(text)
+    common=target/'Shaders/RaygenCommon.h'
+    text=common.read_text()
+    anchor='void shade(const Surface surf, const LightSample light, float oneOverPdf, out vec3 diffuse, out vec3 specular)\n{'
+    if text.count(anchor)!=1:raise ValueError('Volume scattering hook changed')
+    text=text.replace(anchor,anchor+'''
+#if LIGHT_SAMPLE_METHOD == LIGHT_SAMPLE_METHOD_VOLUME
+    // A volume has no surface normal or Lambertian hemisphere. Normalize by
+    // 4*pi here to match RtVolumetric's radiance conversion; phase comes later.
+    diffuse=light.dw*light.color*oneOverPdf/(4*M_PI);
+    specular=vec3(0);
+    return;
+#endif
+''')
+    anchor='    const vec3 start = surf.position + surf.toViewerDir * RAY_ORIGIN_LEAK_BIAS;'
+    if text.count(anchor)!=1:raise ValueError('Volume shadow origin hook changed')
+    text=text.replace(anchor,'''#if LIGHT_SAMPLE_METHOD == LIGHT_SAMPLE_METHOD_VOLUME
+    const vec3 start=surf.position;
+#else
+'''+anchor+'\n#endif')
+    anchor='    const LightSample light = sampleLight(lightSources[reservoir.selected], surf.position, pointRnd);'
+    if text.count(anchor)!=1:raise ValueError('Volume light direction hook changed')
+    text=text.replace(anchor,anchor+'''
+#if LIGHT_SAMPLE_METHOD == LIGHT_SAMPLE_METHOD_VOLUME
+    out_lightdirection=safeNormalize(surf.position-light.position);
+#endif
+''')
+    common.write_text(text)
     # Preserve the normal-map footprint: the stock shader's 5x derivative
     # multiplier destroys the medium/fine material response at gameplay distance.
     hit=target/'Shaders/HitInfo.inl'
@@ -86,7 +140,7 @@ def prepare():
 #else
             float wet=getTextureSampleLod(layerColorTextures[3],texCoords[3],lod).a;
 #endif
-            dst *= 1.0 - 0.16 * clamp(wet,0.0,1.0);
+            dst *= 1.0 - 0.23 * clamp(wet,0.0,1.0);
             continue;
         }
 """
@@ -102,7 +156,10 @@ def prepare():
 #else
         float wet=getTextureSampleLod(tr.layerColorTextures[3],texCoords[3],lod).a;
 #endif
-        h.roughness=mix(h.roughness,min(h.roughness,0.24),clamp(wet,0.0,1.0)*0.85);
+        // A patchy dielectric film, not metal: retain the material F0 and the
+        // existing normals. Porous/partly sheltered areas keep broad highlights.
+        float film=smoothstep(0.12,0.92,clamp(wet,0.0,1.0));
+        h.roughness=mix(h.roughness,min(h.roughness,0.13),film);
     }
 """
     if text.count(anchor)!=1:raise ValueError('Wet roughness hook changed')
@@ -197,6 +254,7 @@ def interface(path):
     for var,(t,storage) in variables.items():
         d=dict((x[0],x[1:]) for x in decor.get(var,[]))
         if 33 in d and 34 in d:result[(d[34][0],d[33][0])]=signature(t)
+        elif storage==9:result[('push_constant',0)]=signature(t)
     return result
 
 def verify(original,compiled):

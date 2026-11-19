@@ -1,11 +1,11 @@
-/* RTX-only shoreline film. World-space masks share one atlas, preserving
+/* RTX-only shoreline and exposed outdoor film. World-space masks share one atlas, preserving
  * brush batching. Layer 3 is a numeric/appearance overlay, not source albedo.
  * RGBA tag 0x00492511 identifies this contract in our hit shaders. Its zero
  * alpha makes it a no-op in stock shaders if this optional extension is absent. */
 extern float CofRTShoreWetness(const vec3_t point);
 extern qboolean CofRTShoreMayReach(const vec3_t lo,const vec3_t hi);
-typedef struct { int u,v,tile,w,h; float lo[2],span[2]; } CofWetFace;
-enum { COF_WET_SIZE=2048, COF_WET_TILE=66, COF_WET_COLS=31 };
+typedef struct { int u,v,tile,w,h,x,y; float lo[2],span[2]; } CofWetFace;
+enum { COF_WET_SIZE=2048 };
 static CofWetFace *cof_wet_faces;
 static int cof_wet_count,cof_wet_used;
 static qboolean cof_wet_ready,cof_wet_failed,cof_wet_reported;
@@ -15,6 +15,42 @@ static const CofWetFace *cof_wet_current;
 static RgFloat2D *cof_wet_uv;
 static size_t cof_wet_uv_count,cof_wet_uv_capacity;
 
+/* Walk the render BSP front-to-back. Unlike fixed-distance point sampling this
+ * cannot step through a thin roof. Only an actual sky leaf admits rainfall;
+ * unsealed void, water and solid all fail closed. No camera/map-name heuristic. */
+static int CofWetTraceSky(const mnode_t *node,const vec3_t a,const vec3_t b,int depth)
+{
+    if (!node || depth>128) return CONTENTS_SOLID;
+    if (node->contents<0) return node->contents;
+    const float da=DotProduct(a,node->plane->normal)-node->plane->dist;
+    const float db=DotProduct(b,node->plane->normal)-node->plane->dist;
+    if (da>=0 && db>=0) return CofWetTraceSky(node_child(node,0,WORLDMODEL),a,b,depth+1);
+    if (da<0 && db<0) return CofWetTraceSky(node_child(node,1,WORLDMODEL),a,b,depth+1);
+    const int side=da<0;const float t=bound(0,da/(da-db),1);
+    vec3_t mid;for(int j=0;j<3;++j)mid[j]=a[j]+t*(b[j]-a[j]);
+    int first=CofWetTraceSky(node_child(node,side,WORLDMODEL),a,mid,depth+1);
+    return first==CONTENTS_EMPTY ? CofWetTraceSky(node_child(node,!side,WORLDMODEL),mid,b,depth+1) : first;
+}
+static void CofWetPoint(const msurface_t *f,const CofWetFace *m,int drop,const vec3_t n,float u,float v,vec3_t p)
+{
+    p[m->u]=m->lo[0]+m->span[0]*u;p[m->v]=m->lo[1]+m->span[1]*v;
+    const float *pn=f->plane->normal;
+    p[drop]=(f->plane->dist-pn[m->u]*p[m->u]-pn[m->v]*p[m->v])/pn[drop];
+    VectorMA(p,.5f,n,p);
+}
+static float CofWetNoise(float x,float y)
+{
+    const int ix=(int)floorf(x),iy=(int)floorf(y);
+    float u=x-ix,v=y-iy;u=u*u*(3-2*u);v=v*v*(3-2*v);
+    float h[4];
+    for(int i=0;i<4;++i) {
+        unsigned k=(unsigned)(ix+(i&1))*1597334677u^(unsigned)(iy+(i>>1))*3812015801u;
+        k^=k>>16;k*=2246822519u;k^=k>>13;
+        h[i]=(k&65535)/65535.f;
+    }
+    return (h[0]+u*(h[1]-h[0]))*(1-v)+(h[2]+u*(h[3]-h[2]))*v;
+}
+
 void CofRTWetnessReset(void)
 {
     if (cof_wet_ready) rgMarkOriginalTextureAsDeleted(rg_instance,cof_wet_name);
@@ -23,12 +59,18 @@ void CofRTWetnessReset(void)
     cof_wet_count=cof_wet_used=0;cof_wet_uv_count=cof_wet_uv_capacity=0;
     cof_wet_ready=cof_wet_failed=cof_wet_reported=false;
     ++cof_wet_generation;
-    if (cof_rt_menu_scene || !WORLDMODEL || gEngfuncs.pfnGetCvarFloat("rt_shore_wetness")<=0) return;
+    const float outdoor=bound(0,gEngfuncs.pfnGetCvarFloat("rt_outdoor_wetness"),1);
+    const qboolean shore=gEngfuncs.pfnGetCvarFloat("rt_shore_wetness")>0;
+    if (cof_rt_menu_scene || !WORLDMODEL || (!shore && outdoor<=0)) return;
+    int exposedFaces=0,dropped=0;
+    // Variable-size shelves retain one batched atlas without the old 960-face
+    // limit. Most BSP subdivisions need much less than a fixed 66x66 tile.
+    int packX=2,packY=2,rowHeight=0;
     cof_wet_count=WORLDMODEL->nummodelsurfaces;
     cof_wet_faces=calloc(cof_wet_count,sizeof(*cof_wet_faces));
     byte *atlas=calloc(COF_WET_SIZE*COF_WET_SIZE,4);
     if (!cof_wet_faces || !atlas) {free(atlas);free(cof_wet_faces);cof_wet_faces=NULL;cof_wet_count=0;return;}
-    for (int i=0;i<cof_wet_count && cof_wet_used+1<COF_WET_COLS*COF_WET_COLS;++i) {
+    for (int i=0;i<cof_wet_count;++i) {
         const msurface_t *f=&WORLDMODEL->surfaces[WORLDMODEL->firstmodelsurface+i];
         if (!f->plane || !f->polys || f->polys->numverts<3 || !f->texinfo || !f->texinfo->texture ||
             (f->flags&(SURF_DRAWSKY|SURF_DRAWTURB|SURF_TRANSPARENT|SURF_DRAWTILED))) continue;
@@ -45,24 +87,46 @@ void CofRTWetnessReset(void)
         vec3_t lo,hi;VectorCopy(f->polys->verts[0],lo);VectorCopy(lo,hi);
         for(const glpoly2_t *p=f->polys;p;p=p->next) for(int j=0;j<p->numverts;++j)
             for(int a=0;a<3;++a) {lo[a]=Q_min(lo[a],p->verts[j][a]);hi[a]=Q_max(hi[a],p->verts[j][a]);}
-        if(!CofRTShoreMayReach(lo,hi))continue;
+        const qboolean nearWater=shore && CofRTShoreMayReach(lo,hi);
+        if(!nearWater && outdoor<=0)continue;
         m->lo[0]=lo[m->u];m->lo[1]=lo[m->v];
         m->span[0]=Q_max(hi[m->u]-lo[m->u],1);m->span[1]=Q_max(hi[m->v]-lo[m->v],1);
         m->w=bound(4,(int)ceilf(m->span[0]/6)+1,64);m->h=bound(4,(int)ceilf(m->span[1]/6)+1,64);
+        float exposure[25]={0};qboolean exposed=false;
+        if(outdoor>0) for(int y=0;y<5;++y)for(int x=0;x<5;++x) {
+            vec3_t p,end;CofWetPoint(f,m,drop,n,x*.25f,y*.25f,p);
+            VectorCopy(p,end);end[2]+=65536.f;
+            exposure[y*5+x]=CofWetTraceSky(WORLDMODEL->nodes,p,end,0)==CONTENTS_SKY ? 1.f : 0.f;
+            if(exposure[y*5+x]>0)exposed=true;
+        }
+        if(!nearWater && !exposed)continue;
+        float retention=n[2]>.5f ? 1.f : .80f;
+        // Porous earth/wood darkens when wet, but does not become polished glass.
+        if(Q_stristr(name,"jord") || Q_stristr(name,"dirt") || Q_stristr(name,"grass") ||
+           Q_stristr(name,"wood") || Q_stristr(name,"bark")) retention*=.70f;
         byte pixels[64*64*4];int peak=0;
         for(int y=0;y<m->h;++y) for(int x=0;x<m->w;++x) {
-            vec3_t p;p[m->u]=m->lo[0]+m->span[0]*x/(m->w-1);p[m->v]=m->lo[1]+m->span[1]*y/(m->h-1);
-            const float *pn=f->plane->normal;
-            p[drop]=(f->plane->dist-pn[m->u]*p[m->u]-pn[m->v]*p[m->v])/pn[drop];
-            VectorMA(p,.5f,n,p); // evaluate just outside the receiving solid
-            float wet=CofRTShoreWetness(p);
-            float patch=.85f+.15f*sinf(p[0]*.071f+p[1]*.039f)*sinf(p[1]*.113f-p[2]*.053f);
+            const float u=(float)x/(m->w-1),v=(float)y/(m->h-1);
+            vec3_t p;CofWetPoint(f,m,drop,n,u,v,p);
+            const int ex=Q_min((int)(u*4),3),ey=Q_min((int)(v*4),3);
+            const float eu=u*4-ex,ev=v*4-ey;
+            const float e0=exposure[ey*5+ex]*(1-eu)+exposure[ey*5+ex+1]*eu;
+            const float e1=exposure[(ey+1)*5+ex]*(1-eu)+exposure[(ey+1)*5+ex+1]*eu;
+            float sky=e0*(1-ev)+e1*ev;
+            // Erode the sparse exposure mask at roofs instead of spreading film indoors.
+            sky=bound(0,(sky-.75f)*4,1);
+            float wet=Q_max(nearWater ? CofRTShoreWetness(p) : 0,outdoor*sky*retention);
+            float patch=.72f+.28f*CofWetNoise(p[m->u]/70.f,p[m->v]/70.f);
             int alpha=(int)(255*bound(0,wet*patch,1));peak=Q_max(peak,alpha);
             int k=4*(y*m->w+x);pixels[k]=pixels[k+1]=pixels[k+2]=235;pixels[k+3]=(byte)alpha;
         }
         if (!peak) continue;
+        if(packX+m->w+2>COF_WET_SIZE) {packX=2;packY+=rowHeight;rowHeight=0;}
+        if(packY+m->h+2>COF_WET_SIZE) {++dropped;continue;}
+        if(exposed)++exposedFaces;
         m->tile=++cof_wet_used;
-        int tx=(m->tile%COF_WET_COLS)*COF_WET_TILE,ty=(m->tile/COF_WET_COLS)*COF_WET_TILE;
+        const int tx=packX,ty=packY;m->x=tx;m->y=ty;
+        packX+=m->w+2;rowHeight=Q_max(rowHeight,m->h+2);
         for(int y=0;y<m->h+2;++y) for(int x=0;x<m->w+2;++x)
             memcpy(atlas+4*((ty+y)*COF_WET_SIZE+tx+x),pixels+4*(bound(0,y-1,m->h-1)*m->w+bound(0,x-1,m->w-1)),4);
     }
@@ -73,7 +137,7 @@ void CofRTWetnessReset(void)
         RgResult r=rgProvideOriginalTexture(rg_instance,&info);cof_wet_ready=r==RG_RESULT_SUCCESS;RG_CHECK(r);
     }
     free(atlas);
-    gEngfuncs.Con_Printf("COF_RTX_WETNESS masks=%d ready=%d menu=0\n",cof_wet_used,cof_wet_ready);
+    gEngfuncs.Con_Printf("COF_RTX_WETNESS masks=%d ready=%d menu=0 outdoor=%d strength=%.2f dropped=%d\n",cof_wet_used,cof_wet_ready,exposedFaces,outdoor,dropped);
 }
 static void CofRTWetnessBegin(const RgMeshInfo *mesh,const RgMeshPrimitiveInfo *prim,RgEditorInfo *editor)
 {
@@ -95,8 +159,8 @@ void CofRTWetnessVertex(float x,float y,float z)
         rt_batch.additional.layer3.pTextureName!=cof_wet_name || cof_wet_failed) return;
     float u=.5f/COF_WET_SIZE,v=u;const CofWetFace *m=cof_wet_current;
     if(m) {const float p[3]={x,y,z};
-        u=((m->tile%COF_WET_COLS)*COF_WET_TILE+1.5f+(m->w-1)*bound(0,(p[m->u]-m->lo[0])/m->span[0],1))/COF_WET_SIZE;
-        v=((m->tile/COF_WET_COLS)*COF_WET_TILE+1.5f+(m->h-1)*bound(0,(p[m->v]-m->lo[1])/m->span[1],1))/COF_WET_SIZE;
+        u=(m->x+1.5f+(m->w-1)*bound(0,(p[m->u]-m->lo[0])/m->span[0],1))/COF_WET_SIZE;
+        v=(m->y+1.5f+(m->h-1)*bound(0,(p[m->v]-m->lo[1])/m->span[1],1))/COF_WET_SIZE;
     }
     if(cof_wet_uv_count==cof_wet_uv_capacity) {
         size_t capacity=cof_wet_uv_capacity?cof_wet_uv_capacity*2:1024;

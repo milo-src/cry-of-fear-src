@@ -142,6 +142,21 @@ masks belong in the ignored build/runtime folders. No automatic commit is made.
 
 ## Verification
 
+Gameplay RTX now applies a static damp-weather finish to world surfaces that
+see BSP sky. `rt_outdoor_wetness` (0–1, default 1, reload map) controls it;
+`rt_shore_wetness` independently controls the water-contact film. Turn both off
+to disable the film entirely. Ground receives stronger film than vertical
+surfaces; recognized earth/wood stays rougher. Metalness is unchanged. Masks
+are generated in memory from the BSP, including custom maps, without editing
+the map or original color textures. This is a static appearance setting, not
+yet a rain accumulation/drying simulation. Moving roofs/props are not part of
+the static exposure test.
+
+`rt_light_shafts` (0–2, default 1.4) scales gameplay scattering, with two
+shadow-tested light samples per volume cell. It does not raise exposure,
+ambient light or lamp power. Authored scripted distance fog retains priority;
+the 3D menu retains its separate atmosphere and material policy.
+
 The runtime audit checks sidecar checksums and rejects unexpected files in the
 owned authored namespace. `tools/smoke_rtx.py --material-check authored|auto|disabled`
 checks selection and loader failures. Its default isolated desktop tests are
@@ -181,3 +196,7 @@ radius 3.125 map units), preserving their power, color, cone and lightstyle.
 This removes the artificial black disk beneath the lantern without disabling
 geometry shadows or adding ambient light. Matching uses model, position and
 direction, not map names; other fixtures and the cinematic menu are unchanged.
+
+RTX rain refraction and light-reactive visor smears are described in
+[LENS.md](LENS.md), including controls, optional local Crysis mask import,
+fallback behavior and isolated-desktop verification.

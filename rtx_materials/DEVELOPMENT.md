@@ -162,16 +162,59 @@ desktops and `-nosound`. The exact staged binaries/shaders/masks were installed
 to `out/runtime-rtx` with checksums and rollback, then the installed runtime
 audit passed. No original map/color/model/audio files were modified.
 
+## Outdoor wet film and volumetric correction (2026-11-19)
+
+The shoreline-only atlas now also receives static sky-exposed weathering.
+Front-to-back render-BSP traversal checks 25 exposure probes per face; solid,
+water and unsealed void fail closed. The exposure interpolation is eroded at
+roof boundaries. This is approximate per-face exposure, not animated weather
+or moving-model occlusion. A world-space smooth noise field varies film coverage;
+walls and recognized porous earth/wood retain more roughness. The shader keeps
+metalness and normal relief, reduces roughness toward 0.13 in fully wet patches,
+and modestly darkens diffuse response. Menu/material assets remain untouched.
+
+Fixed 66-square slots exhausted the old atlas at 960 faces in the first test.
+Variable-size shelf packing fits 3184 park faces into the same 2048-square
+allocation, with `dropped=0`. Upload diagnostics and smoke checks now reject
+omitted receivers. A larger custom level can still hit the bounded atlas budget;
+its original geometry/material remains present if no wet-mask slot fits.
+
+The volume shader previously used a camera-facing surface BRDF: lights on the
+wrong hemisphere disappeared and scattering varied with an invented normal.
+Volume-only sampling now uses incident radiance, two independent reservoirs,
+per-sample Schlick phase with the correct light direction, and shadow rays from
+the froxel position. Reprojected volume filtering remains bounded; stale cell
+history remains disabled. Default gameplay scattering is 1.4 times the previous
+coefficient. Lamp power, exposure and ambient illumination are unchanged.
+Scripted linear fog and the menu retain their separate paths. Two samples cost
+more GPU work; per-pass GPU timings have not yet been collected.
+
+Reviewed readbacks: `wet-before` / `wet-park-after` and `wet-alley-before` /
+`wet-alley-packed`; the latter clearly shows lamp reflections on exposed paths.
+The initial fixed-slot experiment is retained as `wet-alley-after`, not the final
+build. `wet-menu` passed menu assertions and frame 2 was reviewed. The normal
+renderer passed runtime assertions only. A native Waf contract test exercises
+the production BSP trace with a 0.01-unit roof, open sky, solid, void and depth
+guard. All game runs use isolated desktops, GPU readback where requested, and
+`-nosound`.
+
+Final checks also passed: `wet-motion` (automatic materials, six readbacks,
+frame 3 reviewed, stable static triangle identity), `wet-disabled` (both film
+cvars zero, no atlas upload), and the staged 14-module runtime audit. The exact
+reviewed files are queued for checksum-verified installation when the user's
+currently running game exits; that process is not interrupted.
+
 ## Remaining work
 
 1. Improve close-range and moving-camera shoreline validation; address exact volume boundaries and irregular or
    moving water. Current bounds are a conservative first-stage approximation,
-   not a complete water topology implementation. No weather wetness yet.
+   not a complete water topology implementation. Static outdoor wetness exists;
+   dynamic rain accumulation/drying remains future work.
 2. Material scale and model material profiles;
    foliage alpha/shadow stability. Avoid guessing metal from brightness.
 3. Water continuity, depth/absorption, bank damping, event-driven ripples.
-4. Multilight volumetric backend with proper buffers, reprojection, occlusion
-   and measured GPU cost (not just an additional cvar or brighter fog).
+4. Multilight volumetric quality/performance measurements, denser/adaptive
+   sampling and integration with authored linear fog without losing its look.
 5. Weather exposure, accumulation/drying, restrained screen droplets.
 6. Reflection visibility outside camera frustum, temporal stability, GPU timings.
 

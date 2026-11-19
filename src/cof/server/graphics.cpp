@@ -310,8 +310,10 @@ void CofGraphicsPlayerInit(CBasePlayer* player) {
 }
 
 void CofGraphicsServerTestFrame(CBasePlayer* player);
+#include "lens_test.inc"
 void CofGraphicsPlayerFrame(CBasePlayer* player) {
     CofGraphicsServerTestFrame(player);
+    CofLensServerTest(player);
     if (!player || player->m_cofRainEnd <= 0) return;
     if (player->m_cofRainEnd <= gpGlobals->time) {
         player->m_cofRainDrips = player->m_cofRainIdealDrips;

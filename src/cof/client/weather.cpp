@@ -35,6 +35,10 @@ void CofWeatherInit() {
     ripples = CVAR_CREATE("cl_ripples", "1", FCVAR_ARCHIVE);
     lensEnabled = CVAR_CREATE("rt_rain_lens", "1", FCVAR_ARCHIVE);
     CVAR_CREATE("cof_rain_exposure", "0", 0);
+    CVAR_CREATE("cof_lens_wetness", "0", 0);
+    CVAR_CREATE("cof_lens_time", "0", 0);
+    CVAR_CREATE("cof_lens_visible", "0", 0);
+    CVAR_CREATE("cof_lens_drytime", "0", 0);
     const char* active=std::getenv("COF_RTX_ACTIVE");
     lensRTX=active && std::atoi(active)!=0;
 }

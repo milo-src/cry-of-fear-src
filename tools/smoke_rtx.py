@@ -101,6 +101,7 @@ def main():
     parser.add_argument('--water-view',action='store_true',help='Inspect water reflections from a low camera angle')
     parser.add_argument('--motion',action='store_true',help='Walk past the water and capture settling light')
     parser.add_argument('--lighting',action='store_true',help='Hold a fixed camera with flashlight off on the selected map')
+    parser.add_argument('--lens',action='store_true',help='RTX real rain/stop/snow/disabled lens sequence; requires --lighting on an outdoor pose')
     parser.add_argument('--flashlight',action='store_true',help='Enable the real player flashlight with --lighting')
     parser.add_argument('--menu-scene',action='store_true',help='Observe both trains for 38 seconds on the authored menu camera')
     parser.add_argument('--menu-cycle',action='store_true',help='Also observe the authored train retrigger at 84/85 seconds')
@@ -111,7 +112,7 @@ def main():
     parser.add_argument('--arm-pose-check',choices=['contact','clear'],help='Assert arm collision correction or unchanged open-space pose (requires RTX --lighting)')
     parser.add_argument('--darkness-check',choices=['enabled','disabled'],help='Check procedural RTX world absorption masks (requires --lighting)')
     parser.add_argument('--lamp-check',action='store_true',help='Require park lamp geometry at the actual RTX upload boundary')
-    parser.add_argument('--wetness-check',choices=['enabled','disabled'],help='Check shoreline atlas and complete per-vertex UV uploads')
+    parser.add_argument('--wetness-check',choices=['enabled','disabled'],help='Check wet-film atlas and complete per-vertex UV uploads; disable both wetness cvars for disabled check')
     parser.add_argument('--material-check',choices=['authored','auto','disabled'],help='Check RTX numeric mask selection and KTX loading')
     parser.add_argument('--water-check',choices=['zero-alpha','disabled'],help='Require native alpha-zero water at the RT upload boundary, or no replacement water')
     parser.add_argument('--volume-check',choices=['enabled','disabled'],help='Assert local-light volumetric path selection (not pixel visibility)')
@@ -121,6 +122,8 @@ def main():
     if args.readback and (args.interactive or args.renderer!='rtx'):parser.error('--readback requires isolated RTX mode')
     if args.cursor and not args.interactive:parser.error('--cursor changes focus and requires an explicitly authorized --interactive session')
     if args.flashlight and not args.lighting:parser.error('--flashlight requires --lighting')
+    if args.lens and (not args.lighting or args.renderer!='rtx' or args.graphics or args.motion or args.ui or args.menu_scene):
+        parser.error('--lens requires RTX --lighting without other scene drivers')
     if args.label and not re.fullmatch('[a-zA-Z0-9_-]+',args.label):parser.error('Invalid label')
     for name,value in args.cvar:
         if not re.fullmatch('[a-zA-Z0-9_]+',name) or not re.fullmatch('[-+.0-9]+',value):parser.error('Invalid numeric cvar')
@@ -177,12 +180,16 @@ def main():
     env.pop('COF_MENU_CYCLETEST',None)
     env.pop('COF_CURSORTEST',None)
     env.pop('COF_RTX_FLASHLIGHTTEST',None)
+    env.pop('COF_RTX_LENSTEST',None)
     if args.flashlight:env['COF_RTX_FLASHLIGHTTEST']='1'
     if args.cursor:env['COF_CURSORTEST']='1'
     if args.water_view:env['COF_RTX_WATER_VIEW']='1'
     if args.lighting:env['COF_RTX_LIGHTINGTEST']='1'
     if args.pose:env['COF_RTX_LIGHTING_POSE']=args.pose
     env['COF_RTX_UITEST' if args.ui else 'COF_RTX_MOTIONTEST' if args.motion else 'COF_GRAPHICSTEST' if args.graphics else 'COF_SMOKETEST']='1'
+    if args.lens:
+        env.pop('COF_SMOKETEST',None)
+        env['COF_RTX_LENSTEST']='1'
     if args.menu_scene:
         env.pop('COF_SMOKETEST',None)
         env['COF_MENU_SCENETEST']='1'
@@ -209,6 +216,7 @@ def main():
                 text=logpath.read_text(errors='replace') if logpath.exists() else ''
                 markers=['balanced default','enable confirmation','disable and restore balance','keyboard window visible','advanced scrollbar visible','console window visible'] if args.ui else ['COF_GRAPHICS_CAPTURE stage=0','COF_GRAPHICS_CAPTURE stage=3'] if args.graphics else ['COF_SMOKE_CLIENT_RENDERED']
                 if args.motion:markers=['COF_RTX_MOTION_CAPTURE '+str(i)+' ' for i in (4,7,10,12,14,16)]
+                if args.lens:markers=['COF_LENS_CAPTURE '+str(i)+' ' for i in range(7)]
                 if args.console_output:markers=['COF_CONSOLE_OUTPUT_CAPTURE','COF_CONSOLE_MAP_CAPTURE']
                 if args.menu_scene:markers=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (10,18,24,36)]
                 if args.menu_cycle:markers+=['COF_MENU_SCENE_TRAIN t='+str(i)+'.' for i in (87,94)]
@@ -243,6 +251,10 @@ def main():
             if 'Audio: Disabled' not in text:raise RuntimeError('Test audio was not disabled')
             marker='COF_RTX_UI_COMPLETE failures=0' if args.ui else 'COF_GRAPHICS_CLIENT_COMPLETE failures=0' if args.graphics else 'COF_SMOKE_CLIENT_RENDERED'
             if args.motion:marker='COF_RTX_MOTION_COMPLETE'
+            if args.lens:
+                marker='COF_LENS_COMPLETE failures=0'
+                if len(observed)!=7 or 'COF_LENS_CAPTURE' not in text or re.search(r'COF_LENS_CAPTURE \d+ FAIL',text):
+                    raise RuntimeError('Rain lens state sequence failed')
             if args.console_output:marker='COF_CONSOLE_OUTPUT_COMPLETE failures=0'
             if args.menu_scene:
                 marker='COF_MENU_SCENE_COMPLETE failures=0'
@@ -302,14 +314,16 @@ def main():
                 if 'COF_RTX_WETNESS_UV FAIL' in text:
                     raise RuntimeError('Invalid or missing per-vertex wetness atlas coordinates')
                 wetness=re.findall(r'COF_RTX_WETNESS masks=(\d+) ready=(\d) menu=0',text)
+                if re.search(r'COF_RTX_WETNESS .*dropped=[1-9]\d*',text):
+                    raise RuntimeError('Wet-film atlas exhausted: some receiving surfaces were omitted')
                 if args.menu_scene and wetness:
                     raise RuntimeError('Gameplay wetness leaked into cinematic menu')
                 if args.wetness_check=='enabled' and not any(int(count)>0 and ready=='1' for count,ready in wetness):
-                    raise RuntimeError('No shoreline wetness atlas uploaded')
+                    raise RuntimeError('No wet-film atlas uploaded')
                 if args.wetness_check=='enabled' and not re.search(r'COF_RTX_WETNESS_UPLOAD vertices=\d+ mapped=[1-9]\d*',text):
                     raise RuntimeError('No wet receiver UVs reached the mesh upload boundary')
                 if args.wetness_check=='disabled' and any(ready=='1' for count,ready in wetness):
-                    raise RuntimeError('Disabled shoreline wetness still uploaded')
+                    raise RuntimeError('Disabled wet film still uploaded')
                 if args.lamp_check:
                     uploads=re.findall(r'COF_RTX_SCENE_UPLOADS frame=(\d+) primitives=(\d+) lamps=(\d+)',text)
                     if not uploads or not any(int(lamps)>0 for _,_,lamps in uploads):

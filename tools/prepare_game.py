@@ -160,6 +160,8 @@ def prepare(raytracing=False):
     end = text.index('/*\n===========\nClientCommand', begin)
     text = text[:begin] + '#include "chat.inc"\n\n' + text[end:]
     shutil.copy2(ROOT / 'src/cof/server/chat.inc', target / 'dlls/chat.inc')
+    shutil.copy2(ROOT / 'src/cof/server/lens_test.inc', target / 'dlls/lens_test.inc')
+    shutil.copy2(ROOT / 'src/cof/client/lens_test.inc', target / 'cl_dll/lens_test.inc')
     anchor = 'void StartFrame( void )\n{'
     if anchor not in text:
         raise ValueError('Unexpected StartFrame source revision')
