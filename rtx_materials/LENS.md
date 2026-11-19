@@ -10,6 +10,18 @@ freezes on pause. There is no map-name whitelist.
 in dry weather. Range 0–2; 0 disables it independently of rain. Both controls
 default to 1. The effect does not change lights, exposure, materials or maps.
 
+Dry-light scatter combines the filtered fourth and sixth bloom levels. The
+sixth level reveals broad wipe marks outside the lamp silhouette, while a
+bounded exponential response avoids unbounded additive glare. The imported
+mask's low-contrast range is expanded before composition. No projected light
+position is used, so an occluded source cannot produce a synthetic flare.
+
+The RTX studio adapter separately preserves authored FULLBRIGHT meshes as
+visible emitters. The verified `hattlykta.mdl` additive `tex_fullbright` diffuser
+uses emission 1.0 instead of the generic additive-effect value 0.35. Its hood,
+pole, BSP light power, aperture and shadow geometry are unchanged. This adapter
+is excluded from the cinematic menu, sky models and first-person weapons.
+
 The effect runs only in RTX gameplay, after upscaling and bloom and before
 HUD/menu composition. Inventory/menu visibility suppresses it; the cinematic
 3D menu retains its existing rendering. Underwater views use the backend's

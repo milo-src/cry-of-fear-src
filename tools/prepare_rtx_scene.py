@@ -18,6 +18,8 @@ def prepare(target):
     anchor = '\tm_pPlayerInfo = pfnPlayerInfo( m_nPlayerIndex );\n\tR_StudioSetupBones( RI.currententity );'
     if text.count(anchor) != 1: raise ValueError('RT player pose hook changed')
     text = text.replace(anchor, anchor+'\n\tCofRTPlayerPose();')
+    # Expose authored per-mesh flags while a studio batch is submitted.
+    text += '\nint CofRTStudioFaceFlags(void) { return g_nFaceFlags; }\n'
     path.write_text(text)
     path = target / 'ref/gl/gl_opengl.c'
     text = path.read_text().replace('#include "gl_local.h"','#include "gl_local.h"\n#include "rtx_sky.h"')
@@ -36,6 +38,25 @@ def prepare(target):
             if (!reportedSky) {
                 reportedSky = true;
                 gEngfuncs.Con_DPrintf("COF_RTX_SKY_MODEL %s speed=%.1f\\n",RI.currentmodel->name,cof_rt_sky_speed);
+            }
+        }
+        // Preserve authored unlit meshes as visible emitters. The park tube
+        // uses ADDITIVE rather than FULLBRIGHT; identify that verified diffuser
+        // only, leaving its metal hood/pole and unrelated additive effects alone.
+        extern int CofRTStudioFaceFlags(void);
+        if (!cof_rt_menu_scene && !CofRTIsSky(RI.currententity) &&
+            !isviewmodel && !ishologram && !hasinvis) {
+            qboolean tube = !Q_stricmp(RI.currentmodel->name,
+                "models/Props/UtomhusD/hattlykta.mdl") && rt_raster_additive &&
+                prim.pTextureName && strstr(prim.pTextureName,"tex_fullbright");
+            if (tube || (CofRTStudioFaceFlags() & STUDIO_NF_FULLBRIGHT)) {
+                prim.emissive = Q_max(prim.emissive, 1.0f);
+                static qboolean reportedEmitter;
+                if (!reportedEmitter) {
+                    reportedEmitter=true;
+                    gEngfuncs.Con_Printf("COF_RTX_VISIBLE_EMITTER %s texture=%s emission=%.2f\\n",
+                        RI.currentmodel->name,prim.pTextureName,prim.emissive);
+                }
             }
         }
 '''+anchor)

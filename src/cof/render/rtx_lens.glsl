@@ -22,7 +22,9 @@ float cofLensDirt(vec2 uv) {
     vec2 p=uv*vec2(127,63); ivec2 i=ivec2(floor(p)); vec2 f=fract(p);
     float m=mix(mix(cofVisorTexel(i),cofVisorTexel(i+ivec2(1,0)),f.x),
                 mix(cofVisorTexel(i+ivec2(0,1)),cofVisorTexel(i+ivec2(1,1)),f.x),f.y);
-    return smoothstep(.10,.70,m);
+    // The source is a low-contrast scatter mask (median about .22), not an
+    // opacity mask. Preserve wipe marks instead of crushing most of it to zero.
+    return smoothstep(.09,.40,m);
 #else
     // Owned deterministic fallback: soft wipe arcs and sparse fine grain.
     vec2 p=uv-vec2(.31,.8);
@@ -96,11 +98,15 @@ vec3 cofLensRender(ivec2 pix) {
     // when bloom is disabled. Compress very bright lamps instead of whitening
     // the entire view. Descriptor layout remains the pinned framebuffer set.
     if(globalUniform.bloomIntensity>0.0) {
-        vec3 broad=max(textureLod(framebufBloom_Mip4_Sampler,uv,0).rgb,vec3(0));
-        halo+=.4*broad/(vec3(1)+broad);
+        vec3 nearGlow=max(textureLod(framebufBloom_Mip4_Sampler,uv,0).rgb,vec3(0));
+        vec3 broad=max(textureLod(framebufBloom_Mip6_Sampler,uv,0).rgb,vec3(0));
+        // Integrated, filtered source energy: no lamp-shaped duplicates from
+        // sparse full-resolution taps, and no off-screen/occluded light proxy.
+        vec3 scatter=nearGlow*1.5+broad*5.0;
+        halo+=vec3(1)-exp(-scatter);
     }
     float mask=cofLensDirt(uv);
-    color+=halo*(dirt*mask*.75+wet*film*.38);
+    color+=halo*(dirt*mask*.65+wet*film*.38);
     // Curved meniscus: a restrained dark rim and scene-coloured highlight.
     color*=1.0-.075*film*(1.0-film);
     // A short horizontal oily glint, local to bright light, not a giant flare.
