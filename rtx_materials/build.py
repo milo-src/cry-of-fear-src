@@ -97,10 +97,14 @@ def build(source, output):
                     raise ValueError('Invalid mask dimensions/mode: ' + name)
                 channels = image.getextrema()
                 valid_alpha = ((255,255),(254,254),(253,253)) if suffix=='n' else ((255,255),)
-                if channels[3] not in valid_alpha or (suffix == 'orm' and channels[0] != (255, 255)):
+                vehicle = bool(entry.get('studio_texture'))
+                if ((not (suffix == 'orm' and vehicle) and channels[3] not in valid_alpha) or
+                    (suffix == 'orm' and channels[0] != (255, 255))):
                     raise ValueError('Unexpected opacity/AO in numeric mask: ' + name)
                 if suffix == 'orm':
                     with Image.open(source/'masks'/f'{name}_n.png') as normal:
+                        if vehicle and normal.getextrema()[3] != (253,253):
+                            raise ValueError('Vehicle glass requires the vehicle normal tag: '+name)
                         data = ktx2(image, normal)
                 else:
                     data = ktx2(image)

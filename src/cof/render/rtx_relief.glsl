@@ -18,6 +18,10 @@ vec2 cofReliefUV(ShTriangle tr, vec2 uv, vec2 dx, vec2 dy, vec3 normal, vec3 toE
     vec4 sample0=getTextureSampleLod(tr.normalTexture,uv,lod);
     bool vehicle=abs(sample0.a-253.0/255.0)<.001;
     if(!vehicle && abs(sample0.a-254.0/255.0)>.001)return uv;
+    // Flat coated glass must not shift its mask across the atlas into the
+    // painted cabin or pillars when viewed at a shallow angle.
+    if(vehicle && tr.occlusionRougnessMetallicTexture!=MATERIAL_NO_TEXTURE &&
+       getTextureSampleLod(tr.occlusionRougnessMetallicTexture,uv,lod).a<.05)return uv;
     vec2 t1=tr.layerTexCoord[0][1]-tr.layerTexCoord[0][0];
     vec2 t2=tr.layerTexCoord[0][2]-tr.layerTexCoord[0][0];
     float det=t1.x*t2.y-t1.y*t2.x;

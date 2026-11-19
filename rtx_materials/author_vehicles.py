@@ -139,10 +139,10 @@ def masks(image,layout):
     rng=np.random.default_rng(7231)
     grain=rng.uniform(-1,1,(h,w))
     rough=.31+.06*(1-lum)+detail*.13+grain*.012
-    rough=rough*(1-glass)+(.13+.035*(1-lum))*glass
+    rough=rough*(1-glass)+.055*glass
     rough=rough*(1-rubber)+(.85+detail*.15)*rubber
     rough=rough*(1-rim)+(.29+detail*.2)*rim
-    metal=.65*rim  # painted body and glass stay dielectric
+    metal=.65*rim  # glass coating is applied by the tagged hit shader
     seam=Image.new('L',(w,h));draw=ImageDraw.Draw(seam)
     for line in layout['seams']:
         draw.line([(x*w/1024,y*h/1024) for x,y in line],fill=255,width=max(1,round(w/512)))
@@ -156,13 +156,16 @@ def masks(image,layout):
     normal=np.ones((h,w,4));normal[...,0]=.5-np.clip(gx*3.2,-.65,.65)*.5
     normal[...,1]=.5-np.clip(gy*3.2,-.65,.65)*.5
     normal[...,2]=height;normal[...,3]=253/255  # shallow vehicle relief, no porous world grain
-    orm=np.ones((h,w,4));orm[...,1]=np.clip(rough,.10,.94);orm[...,2]=metal
+    # ORM alpha survives the renderer's NULL_ROUGHNESS_METALLIC swizzle (R
+    # does not). It is coverage metadata, never opacity, for tagged vehicles.
+    orm=np.ones((h,w,4));orm[...,3]=1-glass
+    orm[...,1]=np.clip(rough,.045,.94);orm[...,2]=metal
     return [Image.fromarray(np.rint(np.clip(a,0,1)*255).astype('uint8'),'RGBA') for a in (orm,normal)]
 
 
 def author(game,output):
     path=output/'manifest.json';manifest=json.loads(path.read_text())
-    manifest['channels']='ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 world relief / 253 vehicle relief (255 legacy)'
+    manifest['channels']='ORM: G=perceptual roughness, B=metallic, A=inverse glass coverage for tagged vehicles (255 otherwise); N: RG=tangent slopes, B=height, A=254 world relief / 253 vehicle relief (255 legacy)'
     entries=[e for e in manifest['materials'] if not e['name'].startswith('vehicle_')]
     for model in sorted((game/'models/Props/Fordon').glob('*.mdl')):
         family=model.stem.split('_')[0]

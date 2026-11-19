@@ -29,8 +29,11 @@ material identification from a single color image.
 
 The `aud`, `vari`, `polisbil` and `foretag` families (including shipped color
 variants) have content-verified atlas masks for glass, painted panels, rubber
-and wheels. Windows reflect the traced scene with dielectric Fresnel response;
-the original painted cabin remains behind that surface. Door seams and handles
+and wheels. Windows use a dark, nearly mirror-smooth reflective coating. The
+RTX shader replaces the painted cabin's diffuse response only inside the glass
+mask, leaving window pillars and seals intact. This uses the existing metallic
+BRDF as an artistic coated-tint approximation, not a physical transparent cabin.
+Primary, reflected and indirect hits share that material. Door seams and handles
 receive shallow normal/parallax relief. No new interior, silhouette or collision
 geometry is reconstructed.
 
@@ -47,7 +50,11 @@ Only numeric PNGs and manifest fingerprints are exported. Original MDLs,
 palettes and color textures are read-only. The 30 vehicle PNGs occupy about
 20 MiB; building them does not require the original resources. Normal alpha
 253 marks shallow vehicle relief and excludes porous world grain; world masks
-retain alpha 254. Glass stays opaque because the models lack full interiors.
+retain alpha 254. Vehicle ORM.A stores inverse glass coverage (0=glass,
+255=body); it is metadata, not opacity. ORM.R stays 255: the renderer's default
+ORM swizzle forces R to one but preserves A. Glass uses flat shading normals, roughness
+0.055 and a dark neutral reflection tint. It does not borrow relief from the
+painted cabin. Glass stays opaque because the models lack full interiors.
 `rt_material_masks 0` plus map reload disables vehicle masks and mirror overrides.
 
 Verification: `python -m unittest discover -s rtx_materials`, native mip tests,
