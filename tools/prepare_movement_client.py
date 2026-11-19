@@ -39,6 +39,13 @@ def prepare(target):
     text = replace_once(text, anchor, '\tCofMovementCreateMove(cmd, active);\n' + anchor, 'CreateMove before overlay suppression')
     path.write_text(text)
 
+    path = target / 'cl_dll/hud_update.cpp'
+    text = '#include "movement.h"\n' + path.read_text()
+    text = replace_once(text, '\tcdata->fov = m_iFOV;',
+                        '\tcdata->fov = CofMovementFov(static_cast<float>(m_iFOV), time);',
+                        'float FOV output before engine projection')
+    path.write_text(text)
+
     path = target / 'cl_dll/hl/hl_weapons.cpp'
     text = path.read_text()
     # CoF owns every axis of vuser3 as predicted camera spring velocity. Reserve

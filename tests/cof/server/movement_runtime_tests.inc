@@ -152,13 +152,40 @@ void CofMovementTestFrame() {
     p->m_cofStamina = 100; CofMovementCommand(p, "dodgetoggle");
     MovementCheck(p->m_cofDisableDodge && !CofMovementDodge(p, 1), "dodge_toggle_command_disables_handler");
     CofMovementCommand(p, "dodgetoggle");
+    p->m_afButtonPressed = IN_JUMP; p->pev->button = IN_JUMP;
+    p->pev->vuser3 = g_vecZero; p->pev->velocity = g_vecZero;
+    bool depletedBlocked = true;
+    const float depleted[] = {0, 0.1f, 0.99f};
+    for (float amount : depleted) {
+        p->m_cofStamina = amount; CofMovementPreThink(p); p->Jump();
+        depletedBlocked = depletedBlocked && MovementNear(p->m_cofStamina, amount) &&
+            p->pev->vuser3 == g_vecZero &&
+            !std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), "1");
+    }
+    MovementCheck(depletedBlocked, "depleted_jump_no_charge_no_camera_and_prediction_blocked");
+    p->m_cofUnlimitedStamina = 1; p->m_cofStamina = 0;
+    CofMovementPreThink(p); p->Jump();
+    MovementCheck(p->m_cofStamina == 0 && p->pev->vuser3 == Vector(120,20,20) &&
+        !std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), "0"),
+        "unlimited_stamina_jump_bypasses_empty_gate");
+    p->m_cofDisableJump = 1; CofMovementPreThink(p);
+    MovementCheck(!std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), "1"),
+        "explicit_jump_disable_still_blocks_unlimited");
+    p->m_cofDisableJump = p->m_cofUnlimitedStamina = 0;
+    p->m_cofStamina = 1; CofMovementPreThink(p);
+    MovementCheck(!std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), "0"),
+        "jump_readmitted_at_one_visible_point");
     p->m_cofStamina = 5; p->m_afButtonPressed = IN_JUMP; p->pev->button = IN_JUMP;
     p->pev->velocity = g_vecZero; p->pev->vuser3 = g_vecZero; p->Jump();
     MovementCheck(MovementNear(p->m_cofStamina, -10), "jump_uses_original_no_fifteen_threshold");
+    MovementCheck(!std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), "0"),
+        "accepted_jump_gate_survives_last_stamina_debit_until_pm");
     MovementCheck(p->pev->vuser3 == Vector(120, 20, 20) && p->pev->punchangle == g_vecZero,
         "jump_adds_native_spring_velocity_not_view_angle");
     clientdata_t cameraPacket = {};
     UpdateClientData(p->edict(), 1, &cameraPacket);
+    MovementCheck(std::strstr(cameraPacket.physinfo, "\\cof_jb\\0") != nullptr,
+        "accepted_jump_admission_transported_to_client_physics");
     MovementCheck(cameraPacket.vuser3 == p->pev->vuser3,
         "prediction_packet_camera_spring_survives_weapon_export");
     p->m_afButtonPressed = 0; p->Jump();
@@ -166,6 +193,11 @@ void CofMovementTestFrame() {
     p->m_cofStaminaNext = 99; p->pev->button = 0;
     CofMovementPostThink(p);
     MovementCheck(MovementNear(p->m_cofStamina, 0) && !(p->pev->flags & Exhausted), "negative_stamina_clamps_after_exhaustion_gate");
+    MovementCheck(!std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), "1"),
+        "postthink_blocks_following_jump_after_last_stamina_debit");
+    UpdateClientData(p->edict(), 0, &cameraPacket);
+    MovementCheck(std::strstr(cameraPacket.physinfo, "\\cof_jb\\1") != nullptr,
+        "depleted_jump_block_transported_to_client_physics");
     gpGlobals->time = 30.5f; p->pev->health = 50; p->m_cofStamina = 20; p->m_cofHealLast = 30;
     CofMovementQueueHeal(p, 12); CofMovementPreThink(p);
     MovementCheck(MovementNear(p->pev->health, 55) && p->m_cofHealQueue == 7 &&

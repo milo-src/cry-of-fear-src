@@ -39,17 +39,18 @@ namespace {
 constexpr unsigned SprintBit = 0x1000, DodgeBit = 0x80;
 kbutton_t sprintKey = {}, dodgeKey = {};
 cvar_t* noDoubleTap;
+cvar_t* defaultZoomSpeed;
 float directionDeadline[4] = {};
 int fallOver, getupRequired, getupTaps, cameraEntity, ladderState, holdBreath;
 float ladderVector[3] = {}, damageUntil;
-float zoomRate = 50, zoomFov;
-bool zoomActive;
+float zoomRate, zoomFov = -1, zoomTime = -1, completedZoomFov;
 bool clientTestsComplete;
 bool cameraViewLogged;
 bool cameraNetworkEyeLogged;
 bool ladderInputBlocked;
 bool dodgeGrounded;
 int cameraAttachCount;
+int fovUpdateCount;
 const char* dodgeCommands[] = {"dodgeforward", "dodgebackward", "dodgeleft", "dodgeright"};
 
 bool OverlayOpen() { return CofInventoryVisible() || CofGameMenuVisible() || CofGameMenuWorld(); }
@@ -140,12 +141,11 @@ int HoldBreathMessage(const char*, int size, void* data) {
 int CameraZoomMessage(const char*, int size, void* data) {
     if (size != 4 || !data) return 0;
     BEGIN_READ(data, size);
-    // COORD50 is a transition parameter, not a target FOV. The server sends its
-    // actual target through normal SetFOV/clientdata (90 walking, 95 sprinting).
+    // 100393d0 stores a persistent rate. 10073610 consumes it when the separately
+    // transported target changes; receiving this before SetFOV must not cancel it.
     const float rate = READ_COORD();
     READ_BYTE(); READ_BYTE();
-    zoomRate = std::max(1.0f, std::min(1000.0f, std::fabs(rate)));
-    zoomActive = true;
+    zoomRate = std::max(0.0f, std::min(1000.0f, rate));
     return 1;
 }
 }
@@ -160,7 +160,7 @@ bool CofMovementDirectionDown(int direction) {
     }
     const float now = gEngfuncs.GetClientTime();
     if ((noDoubleTap && noDoubleTap->value == 0 && now < directionDeadline[direction]) ||
-        (dodgeKey.state & 1)) SendDodge(direction);
+        (dodgeKey.state & 3)) SendDodge(direction);
     directionDeadline[direction] = now + 0.18f;
     return true;
 }
@@ -190,7 +190,7 @@ void CofMovementCreateMove(usercmd_s* cmd, int active) {
     }
     if (!Nightmare() && (sprintKey.state & 3)) cmd->buttons |= SprintBit;
     if (dodgeKey.state & 3) cmd->buttons |= DodgeBit;
-    if (dodgeKey.state & 1) {
+    if (dodgeKey.state & 3) {
         if (in_forward.state & 1) SendDodge(0);
         else if (in_back.state & 1) SendDodge(1);
         else if (in_moveright.state & 1) SendDodge(3);
@@ -233,21 +233,30 @@ void CofMovementView(ref_params_s* view) {
             if (weapon) weapon->model = nullptr; // SDK rebuilds viewmodel next frame.
         }
     }
-    float desired = gHUD.m_iFOV > 0 ? static_cast<float>(gHUD.m_iFOV) : 90.0f;
-    desired = std::max(10.0f, std::min(150.0f, desired));
-    if (zoomFov <= 0) zoomFov = desired;
-    if (zoomActive) {
-        const float step = zoomRate * std::max(0.0f, std::min(0.1f, view->frametime));
-        zoomFov += std::max(-step, std::min(step, desired - zoomFov));
-        if (std::fabs(zoomFov - desired) < 0.01f) zoomActive = false;
-        // Preserve the engine's aspect ratio while smoothing only this view.
-        if (view->fov_x > 0 && view->fov_y > 0) {
-            const double ratio = std::tan(view->fov_y * 3.141592653589793 / 360.0) /
-                                 std::tan(view->fov_x * 3.141592653589793 / 360.0);
-            view->fov_x = zoomFov;
-            view->fov_y = static_cast<float>(std::atan(std::tan(zoomFov * 3.141592653589793 / 360.0) * ratio) * 360.0 / 3.141592653589793);
-        }
-    } else zoomFov = desired;
+}
+
+float CofMovementFov(float target, float time) {
+    ++fovUpdateCount;
+    // Original 10078070 outputs a FLOAT in client_data_t. Xash computes the
+    // actual projection/widescreen FOV afterward; ref_params.fov_x/y do not
+    // override its ordinary view. Keep HUD's integer target separate.
+    target = std::max(10.0f, std::min(150.0f, target > 0 ? target : 90.0f));
+    if (zoomFov < 0 || zoomTime < 0 || time < zoomTime) {
+        zoomFov = completedZoomFov = target;
+        zoomTime = time;
+        return zoomFov;
+    }
+    const float elapsed = time - zoomTime;
+    zoomTime = time;
+    const float rate = zoomRate != 0 ? zoomRate : defaultZoomSpeed ? defaultZoomSpeed->value : 100.0f;
+    const float distance = target - zoomFov;
+    float scale = std::max(30.0f, std::fabs(distance)) / 30.0f;
+    if (target == 30 || completedZoomFov == 30) scale *= 2;
+    const float step = std::max(0.0f, rate * elapsed * scale);
+    if (rate == 666 || std::fabs(distance) <= step) {
+        zoomFov = completedZoomFov = target;
+    } else zoomFov += distance < 0 ? -step : step;
+    return zoomFov;
 }
 
 void CofMovementReset() {
@@ -257,7 +266,7 @@ void CofMovementReset() {
     cameraNetworkEyeLogged = false;
     std::fill(directionDeadline, directionDeadline + 4, 0.0f);
     std::fill(ladderVector, ladderVector + 3, 0.0f);
-    zoomFov = damageUntil = 0; zoomRate = 50; zoomActive = false;
+    zoomFov = zoomTime = -1; damageUntil = zoomRate = completedZoomFov = 0;
     ladderInputBlocked = false;
     dodgeGrounded = false;
     CofStatusHudReset();
@@ -266,7 +275,9 @@ void CofMovementInit() {
     CofMovementReset();
     clientTestsComplete = false;
     cameraAttachCount = 0;
+    fovUpdateCount = 0;
     noDoubleTap = gEngfuncs.pfnRegisterVariable("cl_nodoubletapdodge", "0", FCVAR_ARCHIVE);
+    defaultZoomSpeed = gEngfuncs.pfnRegisterVariable("cl_zoomspeed", "100", 0);
     gEngfuncs.pfnAddCommand("+sprint", SprintDown);
     gEngfuncs.pfnAddCommand("-sprint", SprintUp);
     // Existing HL-style configs can keep their shift binding in the native port.
@@ -290,8 +301,11 @@ int CaptureLadderCommand(const char* command) {
     if (!std::strcmp(command, "backreleased")) ladderCommandMask |= 2;
     if (!std::strcmp(command, "forwardpressed")) ladderCommandMask |= 4;
     if (!std::strcmp(command, "backpressed")) ladderCommandMask |= 8;
+    for (int i = 0; i < 4; ++i)
+        if (!std::strcmp(command, dodgeCommands[i])) ladderCommandMask |= 16 << i;
     return 1;
 }
+int TestNoClipOff() { return 0; }
 }
 void CofMovementTestFrame(float time) {
     if (!std::getenv("COF_MOVEMENTTEST") || clientTestsComplete || time < 0.5f ||
@@ -305,14 +319,19 @@ void CofMovementTestFrame(float time) {
     const kbutton_t oldSprint = sprintKey, oldDodge = dodgeKey;
     const kbutton_t oldJump = in_jump, oldDuck = in_duck;
     const kbutton_t oldForward = in_forward, oldBack = in_back;
+    const kbutton_t oldLeft = in_moveleft, oldRight = in_moveright;
     const bool oldLadderBlocked = ladderInputBlocked;
     const bool oldDodgeGrounded = dodgeGrounded;
     const int oldFall = fallOver, oldRequired = getupRequired, oldTaps = getupTaps;
     const int oldCamera = cameraEntity, oldLadder = ladderState, oldAttachCount = cameraAttachCount;
     const int oldHealth = gHUD.m_Health.m_iHealth, oldFlags = gHUD.m_Health.m_iFlags;
     const float oldFade = gHUD.m_Health.m_fFade, oldDamage = damageUntil;
+    const float oldZoomRate = zoomRate, oldZoomFov = zoomFov, oldZoomTime = zoomTime;
+    const float oldCompletedZoomFov = completedZoomFov;
+    const int oldFovUpdateCount = fovUpdateCount;
     float oldVector[3]; std::copy(ladderVector, ladderVector + 3, oldVector);
     fallOver = 0; gHUD.m_Health.m_iHealth = 100;
+    in_forward = {}; in_back = {}; in_moveleft = {}; in_moveright = {};
     struct GuardedCommand { usercmd_t cmd; unsigned guard; } packet = {};
     packet.guard = 0x13572468u;
     sprintKey.state = 3; dodgeKey.state = 0;
@@ -358,6 +377,37 @@ void CofMovementTestFrame(float time) {
     check(!gHUD.m_Health.MsgFunc_Damage("Damage", 11, damage), "damage_short_packet_rejected");
     failures += CofStatusHudProtocolTest();
     failures += CofPMRunTests();
+    check(fovUpdateCount > 0, "fov_float_hud_output_hook_invoked");
+    zoomFov = zoomTime = -1; zoomRate = 0;
+    check(CofMovementFov(90, 0) == 90, "fov_initialization");
+    unsigned char zoom[] = {0x90, 1, 0, 0}; // COORD50 then two flags.
+    check(CameraZoomMessage("CameraZoom", 4, zoom) && zoomRate == 50 &&
+          !CameraZoomMessage("CameraZoom", 3, zoom), "camera_zoom_rate_and_length");
+    check(CofMovementFov(90, 0.01f) == 90, "fov_message_before_target_preserved");
+    const float firstZoom = CofMovementFov(95, 0.02f);
+    check(std::fabs(firstZoom - 90.5f) < 0.001f, "fov_sprint_first_step_half_degree");
+    float previousFov = firstZoom;
+    bool smoothOnset = true;
+    for (int i = 3; i <= 12; ++i) {
+        const float fov = CofMovementFov(95, i * 0.01f);
+        smoothOnset = smoothOnset && std::isfinite(fov) && fov >= previousFov &&
+                      fov - previousFov <= 0.501f && fov <= 95;
+        previousFov = fov;
+    }
+    check(smoothOnset && previousFov == 95, "fov_sprint_monotonic_clamped_endpoint");
+    CameraZoomMessage("CameraZoom", 4, zoom);
+    check(CofMovementFov(95, 0.13f) == 95 &&
+          std::fabs(CofMovementFov(90, 0.14f) - 94.5f) < 0.001f,
+          "fov_stop_delayed_target_smooth_return");
+    // Engine V_AdjustFov performs this 4:3-base -> 16:9 projection AFTER HUD.
+    const auto wideFov = [](float base) {
+        return std::atan(std::tan(base * 3.141592653589793 / 360.0) * (4.0 / 3.0)) * 360.0 / 3.141592653589793;
+    };
+    check(wideFov(firstZoom) > 106 && wideFov(firstZoom) < 107 &&
+          wideFov(firstZoom) - wideFov(90) < 0.51,
+          "fov_base_output_preserves_widescreen_projection");
+    zoomRate = oldZoomRate; zoomFov = oldZoomFov; zoomTime = oldZoomTime;
+    completedZoomFov = oldCompletedZoomFov; fovUpdateCount = oldFovUpdateCount;
     // Capture the real transition's network commands, without sending fixture
     // input to the server or touching the user's desktop.
     auto oldServerCommand = gEngfuncs.pfnServerCmd;
@@ -369,6 +419,28 @@ void CofMovementTestFrame(float time) {
     dodgeGrounded = true;
     SendDodge(0);
     check(ladderCommandCount == (gEngfuncs.IsNoClipping() ? 0 : 1), "grounded_dodge_noclip_gate");
+    auto oldNoClip = gEngfuncs.IsNoClipping;
+    gEngfuncs.IsNoClipping = TestNoClipOff;
+    in_forward = {}; in_back = {}; in_moveleft = {}; in_moveright = {};
+    bool tapDirections = true, heldDirections = true;
+    kbutton_t* directions[] = {&in_forward, &in_back, &in_moveleft, &in_moveright};
+    for (int i = 0; i < 4; ++i) {
+        directions[i]->state = 1;
+        dodgeKey.state = 6; // Alt down/up before the next CreateMove.
+        ladderCommandCount = ladderCommandMask = 0;
+        CofMovementCreateMove(&packet.cmd, 1);
+        CofMovementCreateMove(&packet.cmd, 1);
+        tapDirections = tapDirections && ladderCommandCount == 1 && ladderCommandMask == (16 << i);
+        dodgeKey.state = 1;
+        ladderCommandCount = ladderCommandMask = 0;
+        CofMovementCreateMove(&packet.cmd, 1);
+        CofMovementCreateMove(&packet.cmd, 1);
+        heldDirections = heldDirections && ladderCommandCount == 2 && ladderCommandMask == (16 << i);
+        directions[i]->state = 0;
+    }
+    check(tapDirections, "alt_tap_each_direction_sends_once");
+    check(heldDirections, "alt_hold_each_direction_retries_server_cooldown");
+    gEngfuncs.IsNoClipping = oldNoClip;
     cameraEntity = 1; ladderInputBlocked = false;
     ladderCommandCount = ladderCommandMask = 0;
     in_forward.state = 1; in_back.state = 0;
@@ -378,6 +450,7 @@ void CofMovementTestFrame(float time) {
     check(ladderCommandCount == 3 && ladderCommandMask == 7, "ladder_overlay_restores_only_held_direction");
     gEngfuncs.pfnServerCmd = oldServerCommand;
     in_forward = oldForward; in_back = oldBack; ladderInputBlocked = oldLadderBlocked;
+    in_moveleft = oldLeft; in_moveright = oldRight;
     dodgeGrounded = oldDodgeGrounded;
     sprintKey = oldSprint; dodgeKey = oldDodge; in_jump = oldJump; in_duck = oldDuck;
     fallOver = oldFall; getupRequired = oldRequired; getupTaps = oldTaps;

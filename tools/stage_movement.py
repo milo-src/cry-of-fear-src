@@ -28,6 +28,19 @@ def stage(runtime, source_game=None):
         temporary.write_text(text, encoding='latin1')
         temporary.replace(config)
         marker.write_text('CoF shipped config forward speed 300; percent movement\n')
+    dodge_marker = game / '.cof-movement-alt-v1'
+    if not dodge_marker.exists() and config.exists():
+        text = config.read_text(encoding='latin1')
+        # Restore the requested original Alt dodge binding in existing runtimes.
+        binding = r'(?im)^bind\s+"?ALT"?\s+[^\r\n]*'
+        if re.search(binding, text):
+            text = re.sub(binding, 'bind "ALT" "+dodge"', text)
+        else:
+            text = text.rstrip() + '\nbind "ALT" "+dodge"\n'
+        temporary = config.with_name('.cof-config.tmp')
+        temporary.write_text(text, encoding='latin1')
+        temporary.replace(config)
+        dodge_marker.write_text('Original Alt +dodge binding restored\n')
 
 
 if __name__ == '__main__':

@@ -2,10 +2,12 @@
  * Only called by COF_MOVEMENTTEST. Synthetic fixtures never touch engine state.
  */
 static int cof_pm_test_low;
+static int cof_pm_test_jump_blocked;
 static const char *CofPMTestInfo(const char *s, const char *key)
 {
     if (!strcmp(key, "jh")) return "100";
     if (!strcmp(key, "low")) return cof_pm_test_low ? "1" : "0";
+    if (!strcmp(key, "cof_jb")) return cof_pm_test_jump_blocked ? "1" : "0";
     if (!strcmp(key, "asd")) return "450";
     if (!strcmp(key, "bsd")) return "350";
     if (!strcmp(key, "csd")) return "250";
@@ -104,10 +106,20 @@ int CofPMRunTests(void)
     PM_WalkMove(); PM_Jump();
     COF_PM_CHECK(Length(pmove->velocity) == 0 && pmove->onground == 0);
     pmove->fuser3 = 0; pmove->flags = FL_FROZEN;
+    cof_pm_test_jump_blocked = 1; pmove->oldbuttons = 0;
+    PM_Jump();
+    COF_PM_CHECK(pmove->onground == 0 && pmove->velocity[2] == 0 && (pmove->oldbuttons & IN_JUMP));
+    cof_pm_test_jump_blocked = 0; PM_Jump();
+    COF_PM_CHECK(pmove->onground == 0 && pmove->velocity[2] == 0); // no free jump on recovery while held
+    pmove->oldbuttons &= ~IN_JUMP;
     PM_Jump();
     COF_PM_CHECK(pmove->onground == -1 && fabs(pmove->velocity[2] - (sqrt(72000.0) - 40)) < .01);
     pmove->onground = 0; pmove->velocity[2] = 0; PM_Jump();
     COF_PM_CHECK(pmove->onground == 0 && pmove->velocity[2] == 0);
+    cof_pm_test_jump_blocked = 1; pmove->waterlevel = 2; pmove->watertype = CONTENTS_WATER;
+    pmove->flSwimTime = 1; PM_Jump(); // positive timer avoids sound/RNG in this fixture
+    COF_PM_CHECK(pmove->onground == -1 && pmove->velocity[2] == 100);
+    cof_pm_test_jump_blocked = 0; pmove->waterlevel = 0; pmove->onground = 0;
     pmove->flags = 0; pmove->oldbuttons = IN_DUCK; pmove->cmd.buttons = IN_DUCK;
     pmove->bInDuck = true; pmove->flDuckTime = 500;
     PM_Duck();

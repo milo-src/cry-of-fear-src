@@ -85,6 +85,11 @@ def prepare(root: Path, target: Path):
         b = b.replace('\tqboolean bunnyjump = false;\n', '')
         b = b.replace('\tif( pmove->dead )', '\tif( pmove->fuser3 != 0 ) return;\n\n\tif( pmove->dead )', 1)
         b = b.replace('if( pmove->waterlevel >= 2 )', 'if( pmove->waterlevel >= 2 && pmove->watertype != -19 )', 1)
+        # Project admission bit, sampled before the server's jump stamina debit.
+        # Keep swimming/ladder exit independent from ground-jump stamina.
+        b = b.replace('\tif( pmove->onground == -1 )',
+            '\tif( atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "cof_jb")) )\n'
+            '\t{ pmove->oldbuttons |= IN_JUMP; return; }\n\n\tif( pmove->onground == -1 )', 1)
         a = b.index('\t\t\t// Don\'t play sound again')
         z = b.index('\n\t\t}\n', a)
         b = b[:a] + '\t\t\tpmove->flSwimTime = 5000;\n\t\t\tpmove->PM_PlaySound(CHAN_BODY, "player/vocal/water_breathe.wav", 1, ATTN_NORM, 0, pmove->RandomLong(90,110));' + b[z:]

@@ -1,5 +1,5 @@
 {
-  "date_utc": "2026-11-19T17:33:17.449006+00:00",
+  "date_utc": "2026-11-19T17:45:00.111490+00:00",
   "build_system": "Waf",
   "visual_verification": false,
   "original_runtime_parity": false,
@@ -8,7 +8,7 @@
       "renderer": "normal",
       "result": "pass",
       "report": "analysis/local/normal-c_sdkmap1-movement-isolated.json",
-      "log_sha256": "074b5210ff422b14e4309a94990bbbd35645de4446c29a880cf98c3d30700e93",
+      "log_sha256": "2ee0d42fc222b3f6b4eb0a737b24a1d795a9e92256ca35ac91fc979a348abbe1",
       "assertions": [
         "COF_PM_TEST PASS failures=0 side=server",
         "COF_PM_TEST PASS failures=0 side=client",
@@ -16,11 +16,11 @@
         "COF_MOVEMENT_CLIENT_COMPLETE failures=0",
         "COF_LADDER_TEST_COMPLETE failures=0"
       ],
-      "unique_named_checks": 100,
+      "unique_named_checks": 118,
       "camera_network_eye": true,
       "modules": {
-        "out/runtime/cryoffear/dlls/hl.dll": "ee833df3f6cc9170cc47d030d960d5b816d13d178bb5f9edea6b19904123344d",
-        "out/runtime/cryoffear/cl_dlls/client.dll": "9c6ed6b0ac0f4efff0a3d48c534bbf8122fad8fdb4d2816610057cad50e46b02"
+        "out/runtime/cryoffear/dlls/hl.dll": "544dd33791adc576cd311f0b74adbd67cc88db0f14c51fe14a76e2d6f943ee5f",
+        "out/runtime/cryoffear/cl_dlls/client.dll": "8c05fc074b97926b552cc93392b2597daebe790bdbcbb064a97e3f453be57a25"
       },
       "original_delta_sha256": "f5e56639204dac9323bc8c9df08ea25a16514785061b2946f9777fec60c4c4de",
       "runtime_delta_sha256": "862998458a428c3e822ade8db9ecda441f8bb5200f966e1b5ea2a974773c819c",
@@ -32,13 +32,31 @@
         "jump_adds_native_spring_velocity_not_view_angle",
         "prediction_packet_camera_spring_survives_weapon_export"
       ],
-      "pm_numeric_regressions": "water percent/sprint, step cadence/low-health, spring integration/death and landing threshold/cap; both client and server"
+      "pm_numeric_regressions": "water percent/sprint, step cadence/low-health, spring integration/death and landing threshold/cap; both client and server; depleted jump blocks impulse and latches held input, release restores jumping, swimming remains available",
+      "input_correction_checks": [
+        "accepted_jump_gate_survives_last_stamina_debit_until_pm",
+        "alt_hold_each_direction_retries_server_cooldown",
+        "alt_tap_each_direction_sends_once",
+        "camera_zoom_rate_and_length",
+        "depleted_jump_block_transported_to_client_physics",
+        "depleted_jump_no_charge_no_camera_and_prediction_blocked",
+        "empty_control_disables_brush",
+        "explicit_jump_disable_still_blocks_unlimited",
+        "fov_base_output_preserves_widescreen_projection",
+        "fov_float_hud_output_hook_invoked",
+        "fov_initialization",
+        "fov_message_before_target_preserved",
+        "fov_sprint_first_step_half_degree",
+        "fov_sprint_monotonic_clamped_endpoint",
+        "fov_stop_delayed_target_smooth_return",
+        "unlimited_stamina_jump_bypasses_empty_gate"
+      ]
     },
     {
       "renderer": "rtx",
       "result": "pass",
       "report": "analysis/local/rtx-c_sdkmap1-movement-isolated.json",
-      "log_sha256": "1894a73dc95645301d8a35f294ed034df2be1a901d7770a93beb9594df976532",
+      "log_sha256": "9d3a3fa693fda916eaa073150cb35bc5113e94545167738b9d835b84847be9d9",
       "assertions": [
         "COF_PM_TEST PASS failures=0 side=server",
         "COF_PM_TEST PASS failures=0 side=client",
@@ -46,11 +64,11 @@
         "COF_MOVEMENT_CLIENT_COMPLETE failures=0",
         "COF_LADDER_TEST_COMPLETE failures=0"
       ],
-      "unique_named_checks": 100,
+      "unique_named_checks": 118,
       "camera_network_eye": true,
       "modules": {
-        "out/runtime-rtx/cryoffear/dlls/hl_amd64.dll": "eac8f5b54b01cc712c5edd12931d9e5257f387b2a66fff46aa21a9acf0970d50",
-        "out/runtime-rtx/cryoffear/cl_dlls/client_amd64.dll": "34a713c94a1182effb803d0a26871071266766a0356a8fbe9549eee918858bd8"
+        "out/runtime-rtx/cryoffear/dlls/hl_amd64.dll": "83b40ae126e3ca6687a02d9df04279828eb901ee9e952fa9c0bda5f7e9dca833",
+        "out/runtime-rtx/cryoffear/cl_dlls/client_amd64.dll": "118e3a5e45b11a7ad30c52565db4623ee0e8ad17e2cfce7fc40b0480673feb05"
       },
       "original_delta_sha256": "f5e56639204dac9323bc8c9df08ea25a16514785061b2946f9777fec60c4c4de",
       "runtime_delta_sha256": "862998458a428c3e822ade8db9ecda441f8bb5200f966e1b5ea2a974773c819c",
@@ -62,30 +80,48 @@
         "jump_adds_native_spring_velocity_not_view_angle",
         "prediction_packet_camera_spring_survives_weapon_export"
       ],
-      "pm_numeric_regressions": "water percent/sprint, step cadence/low-health, spring integration/death and landing threshold/cap; both client and server"
+      "pm_numeric_regressions": "water percent/sprint, step cadence/low-health, spring integration/death and landing threshold/cap; both client and server; depleted jump blocks impulse and latches held input, release restores jumping, swimming remains available",
+      "input_correction_checks": [
+        "accepted_jump_gate_survives_last_stamina_debit_until_pm",
+        "alt_hold_each_direction_retries_server_cooldown",
+        "alt_tap_each_direction_sends_once",
+        "camera_zoom_rate_and_length",
+        "depleted_jump_block_transported_to_client_physics",
+        "depleted_jump_no_charge_no_camera_and_prediction_blocked",
+        "empty_control_disables_brush",
+        "explicit_jump_disable_still_blocks_unlimited",
+        "fov_base_output_preserves_widescreen_projection",
+        "fov_float_hud_output_hook_invoked",
+        "fov_initialization",
+        "fov_message_before_target_preserved",
+        "fov_sprint_first_step_half_degree",
+        "fov_sprint_monotonic_clamped_endpoint",
+        "fov_stop_delayed_target_smooth_return",
+        "unlimited_stamina_jump_bypasses_empty_gate"
+      ]
     }
   ],
   "source_sha256": {
-    "src/cof/client/movement.cpp": "babd2766bcc198ffc14e5e7adfad95f1973ed901f453c6ce97bf224772a3ab57",
-    "src/cof/client/movement.h": "c9fd9505bc3a9f4b9f80c7fde26dd687146ae9d05ae95b2cdf8df8e35fb50161",
+    "src/cof/client/movement.cpp": "a988951f839aecbf7302259939bdbc659e4e78a7db6f98f74259bfa8d81a9500",
+    "src/cof/client/movement.h": "f7a9c30af18f87bd8560a16a550810c9e92c14a39ecbe795c3f98f3b515a793d",
     "src/cof/client/prototype_client.cpp": "08fe233d53e38de1731308b7a666e43786a4b39b1d7d697afefc4a1efcefb2ea",
     "src/cof/client/status_hud.cpp": "854074c0dcbe3ab1b1d193bf1ed0ef40dded6dd9ad41b98610f9138d032cdb93",
     "src/cof/server/ladders.cpp": "2649daca57265b68386936d41e885929c8f734cc38b7e85fa57750da4834d59e",
     "src/cof/server/ladders.h": "6f57ba40f55293dc614c9b7ec484ab11db1737970cea2f4d78b8a5454e1e497f",
-    "src/cof/server/movement.cpp": "9af84d3c814a182243a733aeba0f9917b2c427deeb28971129cc46afdbd01985",
+    "src/cof/server/movement.cpp": "16be859d80378b628c2075b8f6900d8f0a7fb17c6a9b0413f6f0f6a4b73beb39",
     "src/cof/server/movement.h": "8d01134e234959441c5a869d0506d278bfb3144b3777e4e62a89779ee4823fbc",
     "tests/cof/server/ladder_runtime_tests.inc": "fbb4a4d995e7e4b1a575d94f6992b098c1dbf922f6f2140de7a4fcdeef5ebcfc",
-    "tests/cof/server/movement_runtime_tests.inc": "d10b3d32334f239e5d3154a7ef54cfe64c59f4c9a9be4759c5c7fc72f8c84588",
-    "tests/cof/shared/movement_pm_tests.inc": "4e256156254ee2ab046442b4ad561058bae03efa3d20ca48442d17f8461b52a2",
+    "tests/cof/server/movement_runtime_tests.inc": "09620a5392ad2b40b851c142a65147c7ecc4b5b750370d410ae0bc897b83f98d",
+    "tests/cof/shared/movement_pm_tests.inc": "f9dcdd3b6c055280f83618dec736d5c4ec9e4f97437e85e3429f8defbb98ae1a",
     "tools/prepare_game.py": "ee2eb895a778142195d0fb767a4f115ac31de41c82b9e6c9b361c85db0b5c51f",
-    "tools/prepare_movement_client.py": "07ab826378b1598f06fbaf56f8bc361a784526b317f448c2bf870f6495683ec8",
+    "tools/prepare_movement_client.py": "78aba51cc54cb76d63b024da5f4c39a3ca00437f6ef5bbfa8d6a8def6abe4b7b",
     "tools/prepare_movement_ladders.py": "c1933dcbf042a935a1ca5874e395cb6d5cfe1039d4d809d4a7ed19f959940a5f",
-    "tools/prepare_movement_physics.py": "ee8a552d2eeffd3786f3cacb47a0b8d3347aa39df226de4e6afcd19c0deae18a",
+    "tools/prepare_movement_physics.py": "d58b8e14c98eb2d6df7e9f727bf67cd21e15f9af47bfe8b4bb38a7bd479e1c5d",
     "tools/prepare_movement_protocol.py": "fbb76b3380f81c96fdbfd9cfcc1556e6f778a03a718327aa0b3e64d8f46889fd",
     "tools/prepare_movement_server.py": "64105abdebd2589a9806bb3a0d5a3633f99a299d0feda62440a01bbd6f2732db",
     "tools/smoke_rtx.py": "61088c29922b9d314877cf88c0364c1069f7175dda7c6abef53063271665b2a2",
-    "tools/stage_movement.py": "522aaed8adf84eaf0503b66cb893532a30448ef2408658599b2593ce94792660",
-    "runtime/config.cfg": "01366702adbfc11808e513aaa2d5a524cc019eaf28d123c331da976dd4c300ff"
+    "tools/stage_movement.py": "fbefbdaf3115425927e39fe937a83515add23f88cd0d17e234d335f13646ae9b",
+    "runtime/config.cfg": "62088b7cdfa6cb0e797b7849491eb193b0a3be1373ac1e758e59959f92d5d8a7"
   },
   "resource_policy": "Original installed game resources and vendor source checkouts unchanged by this correction; deployment confined to out/"
 }

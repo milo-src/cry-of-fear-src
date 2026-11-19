@@ -46,6 +46,16 @@ bool MenuMap() {
 void Physics(CBasePlayer* p, const char* key, const char* value) {
     g_engfuncs.pfnSetPhysicsKeyValue(p->edict(), const_cast<char*>(key), const_cast<char*>(value));
 }
+bool JumpBlocked(CBasePlayer* p) {
+    // User-required depleted-stamina rule. Native Jump itself has no proven
+    // 15-point entry threshold; the 0.1 exhaustion reserve still displays zero.
+    return p->m_cofDisableJump || (!p->m_cofUnlimitedStamina && p->m_cofStamina < 1);
+}
+void SyncJumpGate(CBasePlayer* p) {
+    const char* value = JumpBlocked(p) ? "1" : "0";
+    if (std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "cof_jb"), value))
+        Physics(p, "cof_jb", value);
+}
 void CameraImpulse(CBasePlayer* p, const Vector& impulse) {
     // Native 100f91b0 writes angular velocity, not an immediate view angle.
     // SDK vuser3 is the engine-transported PM +234 spring velocity (10005260).
@@ -154,6 +164,7 @@ void CofMovementRestore(CBasePlayer* p) {
     Physics(p, "asd", CVAR_GET_STRING("cof_walksteptime"));
     Physics(p, "bsd", CVAR_GET_STRING("cof_runsteptime"));
     Physics(p, "csd", CVAR_GET_STRING("cof_sprintsteptime"));
+    SyncJumpGate(p);
     // SDK clientmaxspeed transport is filled by UpdateClientData (client.cpp).
     p->m_cofStaminaLast = -1;
 }
@@ -228,6 +239,9 @@ void CofMovementPreThink(CBasePlayer* p) {
     }
     // 100ef2d0 evaluates low-health/hold-breath before its 100dca10 heal step.
     ApplyQueuedHeal(p);
+    // Freeze admission after healing but before Jump charges stamina, so
+    // spending the last points cannot cancel the accepted PM jump this frame.
+    SyncJumpGate(p);
 }
 void CofMovementPostThink(CBasePlayer* p) {
     if (!p->IsAlive()) return;
@@ -283,6 +297,7 @@ void CofMovementPostThink(CBasePlayer* p) {
     }
     if ((flags & Exhausted) && p->m_cofStamina >= 1) flags &= ~Exhausted;
     p->m_cofStamina = Q_max(0.0f, Q_min(100.0f, p->m_cofStamina));
+    SyncJumpGate(p);
     if (p->m_cofStaminaLast != p->m_cofStamina) Stamina(p);
     const bool runFov = (flags & Sprint) && p->pev->waterlevel <= 2;
     if ((runFov && p->m_iFOV == 90) || (!runFov && p->m_iFOV == 95)) {
@@ -300,7 +315,7 @@ void CofMovementPostThink(CBasePlayer* p) {
     p->pev->maxspeed = Q_max(30.0f, p->pev->maxspeed);
 }
 void CofMovementJump(CBasePlayer* p) {
-    if (p->m_cofDisableJump || (p->pev->flags & FL_WATERJUMP) ||
+    if (JumpBlocked(p) || (p->pev->flags & FL_WATERJUMP) ||
         (p->pev->waterlevel >= 2 && p->pev->watertype != -19) || !(p->m_afButtonPressed & IN_JUMP) ||
         !(p->pev->flags & FL_ONGROUND) || !p->pev->groundentity) return;
     UTIL_MakeVectors(p->pev->angles); p->SetAnimation(PLAYER_JUMP);

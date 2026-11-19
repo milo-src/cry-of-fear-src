@@ -1,0 +1,37 @@
+{
+  "source_capture": "analysis/local/movement-client-fov-audit",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "bbe3517a68f01f03430f627536f0d60bbf14a2c91f8824d85f650a884db400b1",
+      "procedure": "ram:0x100393d0",
+      "actual_function": "100393d0",
+      "evidence_id": "ev_bc6f44d0c5606e00e62e6978e0244943440ecc10ac8663556540d9e7ab267f42",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "c69c4ba4d8769b495d60028d65d023dbed8eca9d77a9c010ec93b087616443ff",
+      "procedure": "ram:0x1007cac6",
+      "actual_function": "1007c9f0",
+      "evidence_id": "ev_5badfb22a78b2c07c713ea77b1d09ce398081f42ec4e3c1195f83f778cacb93a",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "verification": {
+    "input_unchanged": true,
+    "queries_succeeded": true,
+    "target_executed": false,
+    "rea_exit_code": 0
+  }
+}

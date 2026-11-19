@@ -1,0 +1,24 @@
+{
+  "method": "Read-only PE cvar data-reference inspection; no original binary execution",
+  "claim": "Compiled default sv_accelerate=10 matches both Xash builds; current original runtime value not measured",
+  "binaries": [
+    {
+      "name": "hw.dll",
+      "sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+      "cvar_va": "0x01ece538",
+      "name_va": "0x01ece7cc",
+      "default_va": "0x01ece7dc",
+      "default": "10",
+      "flags": 4
+    },
+    {
+      "name": "swds.dll",
+      "sha256": "074a99bb50d570fbddc49b0a8e3a04fe69136573a3fdfa3b74324fb67aa94385",
+      "cvar_va": "0x01e664d4",
+      "name_va": "0x01e664c0",
+      "default_va": "0x01e664d0",
+      "default": "10",
+      "flags": 4
+    }
+  ]
+}

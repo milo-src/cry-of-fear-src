@@ -1,0 +1,38 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x100393d0",
+      "proposed_name": "MsgFunc_CameraZoom",
+      "subsystem": "movement",
+      "summary_ru": "Приём скорости сглаживания FOV и двух флагов камеры.",
+      "confidence": "high",
+      "details_ru": [
+        "COORD сохраняется в CHud+3144 как постоянная скорость; два BYTE сохраняются отдельно. Второй флаг при ненулевом значении отмечает время. Обычный sprint передаёт rate50 и оба флага0.",
+        "Скорость должна переживать задержку отдельного SetFOV. Реализация src/cof/client/movement.cpp; проверено в normal/RTX isolated smoke."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-fov-audit/000-pseudocode.c",
+        "analysis/movement/client.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10073610",
+      "proposed_name": "CHud_Think_WithFovInterpolation",
+      "subsystem": "movement",
+      "summary_ru": "HUD Think: сглаживание float FOV, цель и режимы zoom.",
+      "confidence": "high",
+      "details_ru": [
+        "Разобрана FOV-ветка: step=dt*rate*max(30,abs(target-current))/30; clamp без overshoot. Rate0 использует cl_zoomspeed100, rate666 мгновенный. Target30 или завершённый предыдущий30 удваивает коэффициент. Это не полный разбор всех обязанностей HUD Think.",
+        "Накопленный float CHud+3124 экспортируется через10078070 в client_data_t+1c. Порт вызывает CofMovementFov через HUD_UpdateClientData: Xash игнорирует прежнее изменение ref_params.fov_x/y и строит widescreen-проекцию позднее из float HUD output.",
+        "Sprint90→95 при rate50 занимает0.1с; проверены ранний CameraZoom, отложенный SetFOV, монотонность, возврат95→90, widescreen. Native mode target2→60/3→30 не смешиваются с абсолютным SetFOV нашего SDK."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-fov-think/000-pseudocode.c",
+        "analysis/movement/client.md",
+        "analysis/movement/runtime-verification.json"
+      ]
+    }
+  ]
+}
