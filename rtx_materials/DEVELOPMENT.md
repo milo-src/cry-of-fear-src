@@ -84,6 +84,43 @@ commits. This is a close-surface improvement, not completion of the full graphic
 plan: old albedo resolution remains visible, models are unchanged, relief does
 not cast geometric microshadows, and GPU pass cost is not yet measured.
 
+## Grazing wall correction — 2026-11-19
+
+User review still rejected the visible flatness. The earlier buffer probes
+proved shader inputs, not the requested artistic result.
+
+- Reproduced the alley at `-642 692 39 5 15 0` in `c_park`. Read-only BSP ray
+  intersections identify the left slab wall as `c_hogmur2B`.
+- Replaced the max-axis height footprint with the minor axis of its UV ellipse;
+  nearby oblique surfaces no longer lose height solely from anisotropic stretch.
+  Height sampling uses 16–64 bounded steps and a narrower tangent fade.
+- Height scale and generated tangent slopes are consistent at the new strength;
+  automatic sidecar cache is v6. The separate `c_hogmur2b` numeric profile models
+  its joint/moulding, with grime assigned to roughness rather than raised veins.
+  Profile matching remains source-content checked, not map-name checked.
+- Added a pinned seventh shader, `RtRaygenDirect.rgen`, with 16-sample local
+  height-field visibility for the selected light. Both diffuse and specular
+  are attenuated; emission/indirect/refraction are excluded. This is a shading
+  approximation, not displaced geometry or geometric shadow rays.
+- Staged Waf build and seven shader ABI checks pass. Native/Python mip tests
+  and final authored pack checksum comparison pass. Reviewed `grazing-before`,
+  `grazing-after`, `grazing-no-relief-shadow`, and `slab-final` GPU readbacks.
+  The A/B light-visibility effect is visible, but stochastic noise means raw
+  pixel difference is not a performance or physical-accuracy metric.
+- Staircase motion assertions pass; selected `relief-shadow-motion` frames
+  reviewed, not continuous video. `relief-shadow-menu` exclusion checks pass
+  and menu frame reviewed. Non-RTX `relief-shadow-normal` runtime checks pass
+  without a visual claim. No original resources were modified.
+- Tests used a separate `out/runtime-rtx-material-review` while the user's
+  `out/runtime-rtx` process remained running. `smoke_rtx.py --runtime-dir` now
+  supports this without changing the isolated desktop/audio requirements.
+
+The silhouette remains the original flat BSP. These improvements do not meet
+an expectation of actual protruding stone geometry; displacement/topology and
+better authored material reconstruction remain separate work. GPU pass cost
+and arbitrary-map artistic quality are not yet established. Do not describe
+this checkpoint as completion of the full visual upgrade.
+
 ## Remaining work
 
 1. Improve close-range and moving-camera shoreline validation; address exact volume boundaries and irregular or

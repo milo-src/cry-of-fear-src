@@ -11,7 +11,7 @@ The ordinary renderer and cinematic 3D menu retain their existing materials.
   custom maps work without a material pack. The existing `sound/materials.txt`
   supplies surface classes where available; unknown surfaces stay matte and
   nonmetallic. Color/brightness alone cannot identify a physical substance.
-* **Authored:** the first pack has 18 materials / 36 PNG masks, covering paving,
+* **Authored:** the pack has 19 materials / 38 PNG masks, covering paving,
   masonry, concrete, asphalt, gravel, earth, painted and rusted metal. Matching
   raw texture content selects these more carefully tuned masks. A different
   custom texture with the same name receives the automatic treatment instead.
@@ -75,16 +75,25 @@ Masks can then be hand-edited without re-running the authoring command:
 The generator combines fine grain with medium-scale relief so normal-map mip
 filtering does not erase all detail at ordinary viewing distances. Automatic
 masks use contrast-normalized medium-scale detail and a bounded slope; their
-cache namespace is `cof_auto/v5_...`. Neither path increases scene exposure.
+cache namespace is `cof_auto/v6_...`. Neither path increases scene exposure.
 
 Height-enabled masks use bounded parallax occlusion mapping on primary and
 reflection hits. It shifts albedo, normal and ORM lookup coordinates together,
-with 12–24 height samples, distance/footprint filtering and a grazing-angle
+with 16–64 height samples, minor-axis footprint filtering and a near-tangent
 fade. Indirect lighting retains the macro surface. This gives close surfaces
 view-dependent relief, but does not add geometry, silhouettes, collision or
-ray-traced microshadows. Height inferred from color is an artistic approximation;
+geometric microshadows. A separate 16-sample height-field visibility check
+attenuates the selected direct light's diffuse and specular contribution at
+primary opaque hits. It leaves indirect lighting, emission and refracted hits
+alone. Height inferred from color is an artistic approximation;
 hand-authored height fields are preferable when the source contains painted
 decals or shadows that cannot be separated automatically.
+
+The content-verified `c_hogmur2b` profile has a dedicated height layout for its
+slab joint and upper moulding. Its grime changes roughness rather than becoming
+raised veins. `height_layout: cof_hogmur2b` is specific to that source image;
+do not copy it onto arbitrary custom textures. Other surfaces use the generic
+fallback or their own authored masks.
 
 Numeric mipmaps preserve unresolved normal-slope variation as additional
 roughness. Both authored and automatic masks use the same bounded response;

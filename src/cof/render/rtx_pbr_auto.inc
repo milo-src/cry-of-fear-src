@@ -179,8 +179,8 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
     const float amplitude=Q_min(.48f,relief*1.5f);
     for (unsigned y=0;y<h;++y) for (unsigned x=0;x<w;++x) {
         unsigned i=y*w+x;
-        float dx=(detail[y*w+(x+1)%w]-detail[y*w+(x+w-1)%w])*amplitude*w*.006f;
-        float dy=(detail[((y+1)%h)*w+x]-detail[((y+h-1)%h)*w+x])*amplitude*h*.006f;
+        float dx=(detail[y*w+(x+1)%w]-detail[y*w+(x+w-1)%w])*amplitude*w*.012f;
+        float dy=(detail[((y+1)%h)*w+x]-detail[((y+h-1)%h)*w+x])*amplitude*h*.012f;
         orm[i*4]=orm[i*4+3]=255;orm[i*4+2]=(unsigned char)(255*bound(0,metallic,1));
         // Dark grooves remain rough while raised ceramic catches broad,
         // broken highlights. Do not turn the whole wall into a mirror.
@@ -192,7 +192,7 @@ static qboolean CofAutoPbrRegister(const RgOriginalTextureInfo *original)
         normal[i*4+2]=(unsigned char)(255*(.5f+amplitude*detail[i])+.5f);
         normal[i*4+3]=254; // source-owned height contract, never albedo opacity
     }
-    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v5_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
+    Q_snprintf(entry->alias,sizeof(entry->alias),"cof_auto/v6_%016llx_%ux%u_%u",(unsigned long long)hash,w,h,(unsigned char)type);
     _mkdir("rt/mat");_mkdir("rt/mat/cof_auto");
     qboolean ok=CofPbrWriteKtx(entry->alias,"orm",w,h,orm,normal) && CofPbrWriteKtx(entry->alias,"n",w,h,normal,NULL);
     free(luma);free(detail);free(orm);free(normal);

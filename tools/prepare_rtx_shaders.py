@@ -121,6 +121,21 @@ def prepare():
     text=text.replace(anchor,'    texCoords[0]=cofReliefUV(tr,texCoords[0],vec2(derivSet.u[0],0),vec2(0,derivSet.u[0]),h.normal,rayOrigin-h.hitPosition);\n\n'+anchor)
     hit.write_text(text)
     shutil.copy2(ROOT/'src/cof/render/rtx_relief.glsl',hit.parent/'rtx_relief.glsl')
+    direct=target/'Shaders/RtRaygenDirect.rgen'
+    text=direct.read_text().replace('#version 460','#version 460\n#extension GL_GOOGLE_include_directive : require',1)
+    text=text.replace('#define MATERIAL_MAX_ALBEDO_LAYERS 0','#define MATERIAL_MAX_ALBEDO_LAYERS 4')
+    text=text.replace('#include "RaygenCommon.h"','#include "RaygenCommon.h"\n#include "rtx_relief_shadow.glsl"')
+    anchor='    // demodulate for denoising'
+    if text.count(anchor)!=1:raise ValueError('Direct relief shadow hook changed')
+    text=text.replace(anchor,'''    if (isReservoirValid(r)) {
+        LightSample chosen=sampleLight(lightSources[r.selected],surf.position,getLightPointRnd(seed));
+        float visible=cofReliefLightVisibility(pix,surf,chosen.position);
+        diffuse*=visible; specular*=visible;
+    }
+
+'''+anchor)
+    direct.write_text(text)
+    shutil.copy2(ROOT/'src/cof/render/rtx_relief_shadow.glsl',hit.parent/'rtx_relief_shadow.glsl')
     # Authored water should absorb light, not emit a constant colored fog.
     # Keep the original menu's near-black transmission approximation unchanged.
     media=target/'Shaders/Media.h'

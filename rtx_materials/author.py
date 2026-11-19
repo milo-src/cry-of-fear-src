@@ -71,8 +71,18 @@ def masks(image, profile):
     height = (0.35 * np.clip(detail / max(float(np.std(detail)) * 3, 0.06), -1, 1)
               + 0.65 * np.clip(medium / max(float(np.std(medium)) * 3, 0.06), -1, 1))
     relief_height = np.clip(.5 + height * min(.48, profile['relief'] * 1.5), .02, .98)
-    gx = (np.roll(relief_height, -1, 1) - np.roll(relief_height, 1, 1)) * image.width * .006
-    gy = (np.roll(relief_height, -1, 0) - np.roll(relief_height, 1, 0)) * image.height * .006
+    if profile.get('height_layout') == 'cof_hogmur2b':
+        # c_hogmur2B evidence: horizontal slab joint at y=101/192, top moulding
+        # in the first 16 rows. Streaks are grime, not displaced stone veins.
+        y, x = np.mgrid[:image.height, :image.width]
+        row = y / image.height
+        joint = np.exp(-((row-101/192)/(1.3/192))**2)
+        edge = np.exp(-((row-16/192)/(1.2/192))**2)
+        moulding = np.exp(-((row-7/192)/(4.5/192))**2)
+        relief_height = np.clip(.53 - .32*joint - .16*edge + .20*moulding
+                               + .015*np.clip(detail/.06,-1,1), .02,.98)
+    gx = (np.roll(relief_height, -1, 1) - np.roll(relief_height, 1, 1)) * image.width * .012
+    gy = (np.roll(relief_height, -1, 0) - np.roll(relief_height, 1, 0)) * image.height * .012
     normal = np.ones((*lum.shape, 4), dtype=np.float64)
     # RTGL uses tangent XY slopes (not a conventional normalized XYZ normal).
     normal[..., 0] = 0.5 - np.clip(gx, -0.95, 0.95) * 0.5
@@ -80,6 +90,10 @@ def masks(image, profile):
     normal[..., 2] = relief_height
     normal[..., 3] = 254/255
     rough = profile['roughness'] - profile['variation'] * height
+    if profile.get('height_layout') == 'cof_hogmur2b':
+        # Grime broadens the reflection while the smoother stone remains visible.
+        grime=np.clip((blur(lum,2)-blur(lum,14)) / -.12,0,1)
+        rough=np.clip(profile['roughness']+.23*grime+.25*joint,.38,.88)
     metallic = np.zeros_like(lum)
     if profile['kind'] == 'rust':
         rust = np.clip((rgb[..., 0] - rgb[..., 2]) * 5 + (rgb[..., 0] - rgb[..., 1]) * 2, 0, 1)

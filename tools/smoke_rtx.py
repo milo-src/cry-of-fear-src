@@ -92,6 +92,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--interactive',action='store_true',help='Explicit opt-in: visible game on your desktop with passive pixel capture')
     parser.add_argument('--readback',action='store_true',help='Opt-in Vulkan swapchain readback on the isolated desktop; build tools/build_readback.py first')
+    parser.add_argument('--runtime-dir',type=Path,help='Separate staged runtime under out/; keeps an active user build untouched')
     parser.add_argument('--timeout',type=int,default=0,help='Bounded startup/runtime allowance for a cold shader cache (seconds, 1-600)')
     parser.add_argument('--renderer',choices=['normal','rtx'],default='rtx')
     parser.add_argument('--ui',action='store_true')
@@ -148,6 +149,10 @@ def main():
     if args.graphics or args.motion:args.map='cof_graphics_test'
     if not re.fullmatch('[a-zA-Z0-9_]+',args.map):parser.error('Invalid map')
     runtime=ROOT/('out/runtime-rtx' if args.renderer=='rtx' else 'out/runtime')
+    if args.runtime_dir:
+        runtime=args.runtime_dir.resolve()
+        if not runtime.is_relative_to((ROOT/'out').resolve()) or not (runtime/'xash3d.exe').is_file():
+            parser.error('--runtime-dir must be an existing runtime under out/')
     report=ROOT/'analysis/local';report.mkdir(parents=True,exist_ok=True)
     tag=args.renderer+('-settings' if args.ui else '-'+args.map)
     if args.console_output:tag=args.renderer+'-console-output'

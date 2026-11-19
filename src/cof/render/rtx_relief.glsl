@@ -1,12 +1,17 @@
 // Numeric normal sidecar contract: RG=tangent slopes, B=height, A=254/255.
 // Bounded parallax on generated gameplay materials only. This changes shading
 // coordinates, not collision, silhouettes, ray-hit depth or shadow geometry.
-#if defined(HITINFO_INL_PRIM) || defined(HITINFO_INL_RFL)
+#ifndef COF_RELIEF_GLSL
+#define COF_RELIEF_GLSL
 vec2 cofReliefUV(ShTriangle tr, vec2 uv, vec2 dx, vec2 dy, vec3 normal, vec3 toEye)
 {
     if(tr.normalTexture==MATERIAL_NO_TEXTURE || globalUniform.normalMapStrength<=0.0)return uv;
     vec2 size=vec2(textureSize(getTexture(tr.normalTexture),0));
-    float footprint=max(length(dx*size),length(dy*size));
+    // Use the minor footprint axis: the long axis grows at grazing angles
+    // even for a nearby wall. Isotropic max-axis LOD erased that wall relief.
+    vec2 px=dx*size, py=dy*size;
+    float xx=dot(px,px), yy=dot(py,py), xy=dot(px,py);
+    float footprint=sqrt(max(0.0,.5*(xx+yy-sqrt((xx-yy)*(xx-yy)+4.0*xy*xy))));
     float fade=1.0-smoothstep(1.5,5.0,footprint);
     if(fade<=0.0)return uv;
     float lod=max(0.0,log2(max(footprint,1.0)));
@@ -22,17 +27,17 @@ vec2 cofReliefUV(ShTriangle tr, vec2 uv, vec2 dx, vec2 dy, vec3 normal, vec3 toE
     if(gram<1e-12)return uv;
     vec3 eye=normalize(toEye);
     float facing=abs(dot(normal,eye));
-    fade*=smoothstep(.08,.25,facing);
-    float heightRange=min(length(u),length(v))*.012*fade;
+    fade*=smoothstep(.015,.06,facing);
+    float heightRange=min(length(u),length(v))*.024*fade;
     vec2 direction=vec2(dot(eye,u)*c-dot(eye,v)*b,dot(eye,v)*a-dot(eye,u)*b)/gram;
-    vec2 delta=direction*heightRange/max(facing,.16);
-    delta*=min(1.0,.045/max(length(delta),1e-6));
-    int steps=int(mix(24.0,12.0,facing));
+    vec2 delta=direction*heightRange/max(facing,.04);
+    delta*=min(1.0,.12/max(length(delta),1e-6));
+    int steps=int(clamp(length(delta*size)*1.5,16.0,64.0));
     vec2 p=uv+delta*.5,stepUV=delta/float(steps);
     float depth=0.0,stepDepth=1.0/float(steps);
     float surface=1.0-getTextureSampleLod(tr.normalTexture,p,lod).b;
     float before=surface;
-    for(int i=0;i<24;++i) {
+    for(int i=0;i<64;++i) {
         if(i>=steps || depth>=surface)break;
         before=surface-depth;
         p-=stepUV;depth+=stepDepth;

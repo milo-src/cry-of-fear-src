@@ -11,7 +11,7 @@ def configure(conf):
     conf.env.COF_SHADER_INCLUDES=['-I'+conf.path.abspath(), '-I'+conf.path.parent.find_dir('Generated').abspath(), '-I'+conf.path.find_dir('LPM').abspath()]
 
 def build(bld):
-    for shader in ('CmPrepareFinal.comp','RtVolumetric.rgen','RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen','RtRaygenIndirectInit.rgen','RtRaygenIndirectFinal.rgen'):
+    for shader in ('CmPrepareFinal.comp','RtVolumetric.rgen','RtRaygenDirect.rgen','RtRaygenPrimary.rgen','RtRaygenReflRefr.rgen','RtRaygenIndirectInit.rgen','RtRaygenIndirectFinal.rgen'):
         bld(rule='${GLSLANG} -V --target-env vulkan1.2 ${COF_SHADER_INCLUDES} ${SRC} -o ${TGT}',
             source=shader,target=shader+'.spv',
             dep_nodes=bld.path.ant_glob('**/*.h **/*.glsl **/*.inl')+bld.path.parent.find_dir('Generated').ant_glob('**/*.h'),
