@@ -66,17 +66,19 @@ def masks(image, profile):
     # a height field. Strength is bounded even on contrasty low-res textures.
     detail = blur(lum, 0.65) - blur(lum, 3.5)
     medium = blur(lum, 2.0) - blur(lum, 12.0)
-    # RTGL deliberately widens normal-map mip footprints. One-pixel slopes
-    # disappeared at normal viewing distances. Retain bounded, broader relief
-    # as well as fine grain, still rejecting large baked lighting gradients.
+    # Retain medium-scale relief as well as fine grain, while rejecting broad
+    # baked lighting. Slopes and parallax now derive from this same height field.
     height = (0.35 * np.clip(detail / max(float(np.std(detail)) * 3, 0.06), -1, 1)
               + 0.65 * np.clip(medium / max(float(np.std(medium)) * 3, 0.06), -1, 1))
-    gx = (np.roll(height, -3, 1) - np.roll(height, 3, 1)) * profile['relief']
-    gy = (np.roll(height, -3, 0) - np.roll(height, 3, 0)) * profile['relief']
+    relief_height = np.clip(.5 + height * min(.48, profile['relief'] * 1.5), .02, .98)
+    gx = (np.roll(relief_height, -1, 1) - np.roll(relief_height, 1, 1)) * image.width * .006
+    gy = (np.roll(relief_height, -1, 0) - np.roll(relief_height, 1, 0)) * image.height * .006
     normal = np.ones((*lum.shape, 4), dtype=np.float64)
     # RTGL uses tangent XY slopes (not a conventional normalized XYZ normal).
-    normal[..., 0] = 0.5 - np.clip(gx, -0.30, 0.30) * 0.5
-    normal[..., 1] = 0.5 - np.clip(gy, -0.30, 0.30) * 0.5
+    normal[..., 0] = 0.5 - np.clip(gx, -0.95, 0.95) * 0.5
+    normal[..., 1] = 0.5 - np.clip(gy, -0.95, 0.95) * 0.5
+    normal[..., 2] = relief_height
+    normal[..., 3] = 254/255
     rough = profile['roughness'] - profile['variation'] * height
     metallic = np.zeros_like(lum)
     if profile['kind'] == 'rust':
@@ -109,7 +111,7 @@ def main():
     sources = wad_images(args.wad_dir, set(profiles))
     output = ROOT/'masks'
     output.mkdir(exist_ok=True)
-    manifest = dict(version=1, channels='ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes', materials=[])
+    manifest = dict(version=1, channels='ORM: G=perceptual roughness, B=metallic; N: RG=tangent slopes, B=height, A=254 height marker (255 legacy)', materials=[])
     if args.only and (ROOT/'manifest.json').exists():
         manifest['materials'] = [e for e in json.loads((ROOT/'manifest.json').read_text())['materials'] if e['name'] not in profiles]
     for name, profile in profiles.items():

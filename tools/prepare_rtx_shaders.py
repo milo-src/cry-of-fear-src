@@ -64,6 +64,12 @@ def prepare():
     # Preserve the normal-map footprint: the stock shader's 5x derivative
     # multiplier destroys the medium/fine material response at gameplay distance.
     hit=target/'Shaders/HitInfo.inl'
+    # Layer 3 carries wetness. Reflection cone derivatives must have the same
+    # capacity as the four-layer triangle data; the upstream array has only 3.
+    raycone=target/'Shaders/RayCone.h'
+    cone=raycone.read_text()
+    if cone.count('float u[3];')!=1:raise ValueError('Ray-cone layer capacity hook changed')
+    raycone.write_text(cone.replace('float u[3];','float u[4];'))
     text=hit.read_text()
     anchor='const float suppressDetails = 5.0;'
     if text.count(anchor)!=1:raise ValueError('Normal footprint hook changed')
@@ -101,6 +107,20 @@ def prepare():
 """
     if text.count(anchor)!=1:raise ValueError('Wet roughness hook changed')
     hit.write_text(text.replace(anchor,wet_response+anchor))
+    text=hit.read_text()
+    anchor='#if defined( HITINFO_INL_PRIM )\n// "Ray Traced Reflections'
+    if text.count(anchor)!=1:raise ValueError('Relief helper hook changed')
+    text=text.replace(anchor,'#include "rtx_relief.glsl"\n\n'+anchor)
+    if text.count('const vec2 texCoords[] = {')!=2:raise ValueError('Relief UV layouts changed')
+    text=text.replace('const vec2 texCoords[] = {','vec2 texCoords[] = {')
+    anchor='    h.albedo = processAlbedoGrad( tr.geometryInstanceFlags,'
+    if text.count(anchor)!=1:raise ValueError('Primary relief hook changed')
+    text=text.replace(anchor,'    texCoords[0]=cofReliefUV(tr,texCoords[0],dTdx[0],dTdy[0],h.normal,rayOrigin-h.hitPosition);\n\n'+anchor)
+    anchor='    h.albedo = processAlbedoRayConeDeriv( tr.geometryInstanceFlags,'
+    if text.count(anchor)!=1:raise ValueError('Reflection relief hook changed')
+    text=text.replace(anchor,'    texCoords[0]=cofReliefUV(tr,texCoords[0],vec2(derivSet.u[0],0),vec2(0,derivSet.u[0]),h.normal,rayOrigin-h.hitPosition);\n\n'+anchor)
+    hit.write_text(text)
+    shutil.copy2(ROOT/'src/cof/render/rtx_relief.glsl',hit.parent/'rtx_relief.glsl')
     # Authored water should absorb light, not emit a constant colored fog.
     # Keep the original menu's near-black transmission approximation unchanged.
     media=target/'Shaders/Media.h'

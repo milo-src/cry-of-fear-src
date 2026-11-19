@@ -92,7 +92,8 @@ def build(source, output):
                 if image.mode != 'RGBA' or image.size != (entry['width'], entry['height']):
                     raise ValueError('Invalid mask dimensions/mode: ' + name)
                 channels = image.getextrema()
-                if channels[3] != (255, 255) or (suffix == 'orm' and channels[0] != (255, 255)):
+                valid_alpha = ((255,255),(254,254)) if suffix=='n' else ((255,255),)
+                if channels[3] not in valid_alpha or (suffix == 'orm' and channels[0] != (255, 255)):
                     raise ValueError('Unexpected opacity/AO in numeric mask: ' + name)
                 if suffix == 'orm':
                     with Image.open(source/'masks'/f'{name}_n.png') as normal:

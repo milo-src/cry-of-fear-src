@@ -63,7 +63,9 @@ Masks can then be hand-edited without re-running the authoring command:
 * `<name>_orm.png`: RGBA8. R=255 (unused), G=perceptual roughness,
   B=metallic, A=255. Dirt/paint are dielectric even when covering metal.
 * `<name>_n.png`: RGBA8. R/G encode bounded tangent slopes around 128;
-  B=A=255. RTGL uses XY as slopes, not conventional normalized XYZ normals.
+  B encodes height and A=254 marks the height-enabled contract. Legacy A=255
+  remains valid and disables parallax. RTGL uses XY as slopes, not conventional
+  normalized XYZ normals. This alpha is metadata, never surface opacity.
 * Keep the source dimensions and UV orientation. Large painted shadows are
   **not** height: the generator subtracts broad shading before deriving slopes.
   Filters wrap periodically for tiled surfaces. Avoid strong relief and mirror
@@ -73,7 +75,16 @@ Masks can then be hand-edited without re-running the authoring command:
 The generator combines fine grain with medium-scale relief so normal-map mip
 filtering does not erase all detail at ordinary viewing distances. Automatic
 masks use contrast-normalized medium-scale detail and a bounded slope; their
-cache namespace is `cof_auto/v4_...`. Neither path increases scene exposure.
+cache namespace is `cof_auto/v5_...`. Neither path increases scene exposure.
+
+Height-enabled masks use bounded parallax occlusion mapping on primary and
+reflection hits. It shifts albedo, normal and ORM lookup coordinates together,
+with 12–24 height samples, distance/footprint filtering and a grazing-angle
+fade. Indirect lighting retains the macro surface. This gives close surfaces
+view-dependent relief, but does not add geometry, silhouettes, collision or
+ray-traced microshadows. Height inferred from color is an artistic approximation;
+hand-authored height fields are preferable when the source contains painted
+decals or shadows that cannot be separated automatically.
 
 Numeric mipmaps preserve unresolved normal-slope variation as additional
 roughness. Both authored and automatic masks use the same bounded response;

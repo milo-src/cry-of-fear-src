@@ -49,6 +49,41 @@ Readbacks/logs are under ignored `analysis/local/`, including `shore-fixed`,
 `shore-dry`, `materials-final`, `filtered-materials` and `shoreline-regression`.
 Original game maps/assets remain untouched; no commits made.
 
+## Visible relief correction — 2026-11-19
+
+The previous pack changed shading but had no view-dependent depth. A successful
+alias/loader check did not establish a convincing material result. This increment
+adds bounded parallax occlusion mapping, not displaced geometry:
+
+- Authored and automatic normal sidecars share RG tangent slopes, B height,
+  A=254 marker. Legacy A=255 normals remain compatible without parallax.
+- Slopes derive from the same height field instead of coarse six-pixel
+  differences. Three authored stone profiles have wider roughness variation.
+- Primary and reflection hits move albedo/normal/ORM coordinates together;
+  indirect hits retain macro shading. Distant and grazing detail fades out.
+  Automatic cache v5 avoids reusing old normal sidecars on custom textures.
+- Fixed an out-of-bounds reflection derivative array: four material layers
+  were enabled but `DerivativeSet.u` still had three entries.
+- Waf rebuild, six shader ABI checks and installed 14-module audit pass.
+  Local native/Python mip fixtures now also verify height filtering and A=254
+  preservation, including NPOT and single-pixel-wide textures.
+- Reviewed matching close park captures (`relief-before`, `relief-after`,
+  `relief-disabled`) and GPU normal/roughness buffer probes. Both buffers have
+  spatial material detail. Probe final shaders were temporary and restored;
+  the installed production shader hashes pass the runtime audit.
+- Automatic tiled-wall/water capture (`relief-auto`) and selected staircase
+  motion frames (`relief-motion`) reviewed. Motion geometry assertions pass;
+  sparse frames do not prove absence of all temporal shimmer.
+- Menu (`relief-menu`) passes exclusion assertions; reviewed night scene,
+  train, water and interface. Non-RTX `relief-normal` passes runtime assertions
+  only, with no visual verification claimed.
+
+All tests used isolated desktops and disabled game audio. Captures are in
+ignored `analysis/local`. Original maps/albedo/models remain untouched. No
+commits. This is a close-surface improvement, not completion of the full graphics
+plan: old albedo resolution remains visible, models are unchanged, relief does
+not cast geometric microshadows, and GPU pass cost is not yet measured.
+
 ## Remaining work
 
 1. Improve close-range and moving-camera shoreline validation; address exact volume boundaries and irregular or
