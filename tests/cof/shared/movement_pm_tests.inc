@@ -6,6 +6,9 @@ static const char *CofPMTestInfo(const char *s, const char *key)
 {
     if (!strcmp(key, "jh")) return "100";
     if (!strcmp(key, "low")) return cof_pm_test_low ? "1" : "0";
+    if (!strcmp(key, "asd")) return "450";
+    if (!strcmp(key, "bsd")) return "350";
+    if (!strcmp(key, "csd")) return "250";
     return "0";
 }
 static pmtrace_t CofPMTestTrace(float *start, float *end, int flags, int ignore)
@@ -15,6 +18,9 @@ static pmtrace_t CofPMTestTrace(float *start, float *end, int flags, int ignore)
     VectorCopy(end, tr.endpos); return tr;
 }
 static int CofPMTestContents(float *p, int *contents) { return CONTENTS_EMPTY; }
+static const char *CofPMTestTexture(int ground, float *start, float *end) { return NULL; }
+static float CofPMTestRandom(float low, float high) { return (low + high) * .5f; }
+static void CofPMTestSound(int channel, const char *sample, float volume, float attenuation, int flags, int pitch) {}
 static void CofPMTestBounds(struct model_s *model, float *mins, float *maxs)
 { VectorClear(mins); VectorClear(maxs); maxs[2] = 128; }
 static float CofPMTestModelTrace(physent_t *ent, float *start, float *end, trace_t *tr)
@@ -37,6 +43,9 @@ int CofPMRunTests(void)
     pmove->PM_Info_ValueForKey = CofPMTestInfo;
     pmove->PM_PlayerTrace = CofPMTestTrace;
     pmove->PM_PointContents = CofPMTestContents;
+    pmove->PM_TraceTexture = CofPMTestTexture;
+    pmove->RandomFloat = CofPMTestRandom;
+    pmove->PM_PlaySound = CofPMTestSound;
     pmove->PM_GetModelBounds = CofPMTestBounds;
     pmove->PM_TraceModel = CofPMTestModelTrace;
 #define COF_PM_CHECK(expr) do { if (!(expr)) { failures++; if (saved && saved->Con_Printf) saved->Con_Printf("COF_PM_FAIL line=%d %s\n", __LINE__, #expr); } } while (0)
@@ -63,6 +72,34 @@ int CofPMRunTests(void)
     PM_WalkMove();
     COF_PM_CHECK(fabs(pmove->velocity[0] - 135) < .01f);
     cof_pm_test_low = 0; pmove->iStepLeft = 0;
+    // 1000a630: 300 command * 75% player speed * 80% water drag.
+    VectorClear(pmove->velocity); pmove->cmd.forwardmove = 300;
+    pmove->cmd.buttons = 0; pmove->flags = 0; pmove->watertype = CONTENTS_WATER;
+    PM_WaterMove();
+    COF_PM_CHECK(fabs(pmove->velocity[0] - 180) < .01f);
+    VectorClear(pmove->velocity); pmove->cmd.buttons = 0x1000; pmove->flags = 0x40000;
+    PM_WaterMove();
+    COF_PM_CHECK(fabs(pmove->velocity[0] - 225) < .01f);
+    VectorClear(pmove->velocity); pmove->cmd.forwardmove = 0; pmove->cmd.buttons = 0; pmove->flags = 0;
+    pmove->watertype = -17; PM_WaterMove();
+    COF_PM_CHECK(Length(pmove->velocity) == 0);
+    pmove->waterlevel = 2; pmove->watertype = -19;
+    COF_PM_CHECK(!PM_InWater());
+    pmove->watertype = CONTENTS_WATER;
+    COF_PM_CHECK(PM_InWater());
+    pmove->waterlevel = 0; pmove->cmd.forwardmove = 320;
+    VectorClear(pmove->velocity); pmove->velocity[0] = 225; pmove->movetype = MOVETYPE_WALK;
+    pmove->flTimeStepSound = 0; PM_UpdateStepSound();
+    COF_PM_CHECK(pmove->flTimeStepSound == 350);
+    pmove->cmd.buttons = 0x1000; pmove->flags = 0x40000;
+    pmove->flTimeStepSound = 0; PM_UpdateStepSound();
+    COF_PM_CHECK(pmove->flTimeStepSound == 250);
+    cof_pm_test_low = 1; pmove->iStepLeft = 1;
+    pmove->flTimeStepSound = 0; PM_UpdateStepSound();
+    COF_PM_CHECK(pmove->flTimeStepSound == 312);
+    pmove->flags |= 0x80000; pmove->flTimeStepSound = 0; PM_UpdateStepSound();
+    COF_PM_CHECK(pmove->flTimeStepSound == 450);
+    pmove->flags = 0; pmove->cmd.buttons = 0; cof_pm_test_low = 0; pmove->iStepLeft = 0;
     VectorClear(pmove->velocity); pmove->fuser3 = 1;
     PM_WalkMove(); PM_Jump();
     COF_PM_CHECK(Length(pmove->velocity) == 0 && pmove->onground == 0);
@@ -85,6 +122,21 @@ int CofPMRunTests(void)
     COF_PM_CHECK(pmove->movetype == MOVETYPE_FLY && fabs(pmove->velocity[2] - 90) < .01);
     pmove->cmd.buttons = IN_JUMP; PM_LadderMove(&ladder);
     COF_PM_CHECK(pmove->movetype == MOVETYPE_WALK && fabs(pmove->velocity[0] + 270) < .01);
+    // Independent numeric example of 10005260, dt10ms / input velocity120.
+    VectorClear(pmove->punchangle); VectorClear(pmove->vuser3);
+    pmove->vuser3[0] = 120; pmove->frametime = .01f;
+    PM_DropPunchAngle(pmove->punchangle);
+    COF_PM_CHECK(fabs(pmove->punchangle[0] - 1.2f) < .001f && fabs(pmove->vuser3[0] - 108.42f) < .001f);
+    VectorClear(pmove->punchangle); VectorClear(pmove->vuser3);
+    VectorClear(pmove->velocity); pmove->onground = 0; pmove->flFallVelocity = 800;
+    pmove->waterlevel = 0; pmove->flags = 0;
+    PM_CheckFalling();
+    COF_PM_CHECK(fabs(pmove->vuser3[0] - 294) < .001f && Length(pmove->punchangle) == 0 && pmove->flFallVelocity == 0);
+    VectorClear(pmove->vuser3); pmove->flFallVelocity = 349; PM_CheckFalling();
+    COF_PM_CHECK(Length(pmove->vuser3) == 0 && pmove->flFallVelocity == 0);
+    pmove->dead = 1; pmove->frametime = .01f;
+    PM_DropPunchAngle(pmove->punchangle);
+    COF_PM_CHECK(fabs(pmove->punchangle[2] - 6.7f) < .001f);
 #undef COF_PM_CHECK
     pmove = saved; free(fixture);
     if (saved && saved->Con_Printf) saved->Con_Printf("COF_PM_TEST %s failures=%d side=%s\n", failures ? "FAIL" : "PASS", failures, saved->server ? "server" : "client");

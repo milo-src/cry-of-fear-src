@@ -309,8 +309,11 @@ LINK_ENTITY_TO_CLASS(cof_ladderclimb,CCofLadderPoint);
 
 class CCofLadderManagerUse : public CBaseToggle {
 public:
-    void Spawn() override {
+    void Precache() override { // Original vtable +0x30 -> 0x1004f170: sound only.
         if (pev->noise) PRECACHE_SOUND(const_cast<char*>(STRING(pev->noise)));
+    }
+    void Spawn() override {
+        Precache();
         pev->solid=SOLID_BSP; pev->movetype=MOVETYPE_PUSH;
         if (pev->model) SET_MODEL(edict(),STRING(pev->model));
         UTIL_SetOrigin(pev,pev->origin); m_nextUse=0;
@@ -350,9 +353,13 @@ LINK_ENTITY_TO_CLASS(func_ladder,CCofBrushLadder);
 
 class CCofLadderControl : public CBaseToggle {
 public:
-    void Spawn() override {
-        pev->solid=SOLID_TRIGGER; pev->movetype=MOVETYPE_PUSH;
+    void Precache() override { // CLadderControl vtable +0x30 -> 0x1010efc0.
+        pev->solid=SOLID_TRIGGER;
         if (CVAR_GET_FLOAT("showtriggers")==0) pev->effects|=EF_NODRAW;
+        else pev->effects&=~EF_NODRAW;
+    }
+    void Spawn() override {
+        Precache(); pev->movetype=MOVETYPE_PUSH;
         if (pev->model) SET_MODEL(edict(),STRING(pev->model));
         SetThink(&CCofLadderControl::LadderThink); SetTouch(&CCofLadderControl::LadderTouch);
         pev->nextthink=gpGlobals->time+.1f;

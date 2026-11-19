@@ -1,0 +1,49 @@
+{
+  "source_capture": "analysis/local/movement-client-spring-audit",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "0c92e71a5dcffe02dbe4382b2094fb8256ba5d6904ec65d1e0cd6ad308fc8c2f",
+      "procedure": "ram:0x100ad9d0",
+      "actual_function": "100ad9d0",
+      "evidence_id": "ev_a927af847a569f822b4355a18d105d400cd5ea15e13f280798118553498ed965",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "e21c25ef26bd740e64309073c53fe9685789045731d4b406a82eb7972bce6296",
+      "procedure": "ram:0x100adec0",
+      "actual_function": "100adec0",
+      "evidence_id": "ev_0e86c23e4234a66c6b5f819f2f027587bdae3358fc75e90536237d05617becb0",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "9e09fffbd68fb3637a6232a005a6f246f605d903465745af2c5453e78f2fa50d",
+      "procedure": "ram:0x100af400",
+      "actual_function": "100af400",
+      "evidence_id": "ev_9a9f13057b877aa920db314a14d8deb0f3baf884b517b12a4f61d9f41236a227",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "verification": {
+    "input_unchanged": true,
+    "queries_succeeded": true,
+    "target_executed": false,
+    "rea_exit_code": 0
+  }
+}

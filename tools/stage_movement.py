@@ -17,15 +17,17 @@ def stage(runtime, source_game=None):
     from prepare_movement_protocol import stage as stage_protocol
     stage_protocol(runtime, source_game)
     shutil.copy2(ROOT / 'runtime/autoexec.cfg', game / 'autoexec.cfg')
-    marker = game / '.cof-movement-v1'
+    marker = game / '.cof-movement-v2'
     config = game / 'config.cfg'
     if not marker.exists() and config.exists():
         text = config.read_text(encoding='latin1')
         # Only replace the previous reconstruction's stock forward speed.
         # Retain independently changed speeds, key bindings, graphics and audio.
-        text = re.sub(r'(?m)^cl_forwardspeed\s+"?200"?\s*$', 'cl_forwardspeed "230"', text)
-        config.write_text(text, encoding='latin1')
-        marker.write_text('CoF percent movement and recovered forward default\n')
+        text = re.sub(r'(?m)^cl_forwardspeed\s+"?(?:200|230)"?\s*$', 'cl_forwardspeed "300"', text)
+        temporary = config.with_name('.cof-config.tmp')
+        temporary.write_text(text, encoding='latin1')
+        temporary.replace(config)
+        marker.write_text('CoF shipped config forward speed 300; percent movement\n')
 
 
 if __name__ == '__main__':

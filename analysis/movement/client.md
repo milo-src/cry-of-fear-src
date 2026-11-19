@@ -212,9 +212,9 @@ helper100788f0. Назначение всех полей HUD think не уста
 
 ## Что остаётся неизвестным
 
-Серверные расходы/регенерация stamina, HP cap и cooldown dodge; источник gate
-10559515 и custom vuser4.x; camera smoothing Ladder и направление COORD-вектора;
-физика `10013680`/`10013570`; полный mouse/joystick input bodies;
+Серверные расходы/регенерация stamina, HP cap и cooldown dodge описаны в соседнем
+серверном анализе. Оставшиеся вопросы клиентской части: custom vuser4.x; точный
+CameraZoom интерполятор; дополнительные режимы mouse/joystick input;
 смысл extra DWORD usercmd+34 и точный расширенный layout weapon_data/clientdata.
 Следующие адреса для целевого чтения: `10013680`, `10013570`, `10012050`,
 `10010670`, `1007b580`, `1007b0e0`, `10076a20`, `10076bc0`.
@@ -239,8 +239,10 @@ clamp удалены: CoF использует clientmaxspeed как проце�
 Существующая привязка `+speed` стала совместимым alias для `+sprint`.
 
 Передаются обычные поля `usercmd_t` SDK; оригинальное расширение0x38 и скрытые
-flags в roll/impact_position не копируются. Client gate10559515 не выдуман:
-ограничения dodge делегированы серверу. Исправлено залипание короткого dodge
+flags в roll/impact_position не копируются. Повторный аудит восстановил
+client gate10559515: отправка dodge требует onground и выключенного noclip;
+кнопка dodge при этом может удерживаться в воздухе. Stamina/cooldown остаются
+серверными проверками. Исправлено залипание короткого dodge
 tap: его pressed-bit после сборки команды очищается. Health принимает3байта
 CoF и legacy1байт, Damage —12 или13, FallOver —1 или2; остальные обработчики
 отклоняют неверную длину до чтения. Health с mode!=0 проверяет message index,
@@ -270,3 +272,62 @@ signed COORD, HP index, stamina deadline, sprint/dodge bits, FallOver блоки
 или потеря active ввода посылает release обоих направлений один раз; возврат
 посылает press только ещё удерживаемых кнопок. Тест вызывает настоящий обработчик
 перехода с перехватом сетевых команд и проверяет отсутствие повторных отправок.
+
+
+## Повторный аудит ощущения движения (2026-11-19)
+
+Прочитаны ещё 12 тел из того же неизменённого client.dll; сохранены точные C и
+capture metadata в `decompiled/client/captures/movement-client-view-audit`,
+`movement-client-spring-audit` и `movement-client-spring-core`. Это статическое
+чтение, оригинальный DLL не исполнялся. Выборки последних двух core-функций
+запрашивали внутренние адреса100ae875/100b21d2, реальные начала100ae850/100b2140.
+`analysis/movement/client-view-audit/capture.json` также фиксирует ограниченную
+ассемблерную выборку10011eb0 и прочитанные PE-литералы.
+
+**Подтверждённые расхождения и исправления.** В100af790 поле ref_params+50
+проверяется вместе с callback101b26d0. Позиция callback в engine table соответствует
+IsNoClipping; ref_params+50 — onground. Xash выдаёт здесь bool, не номер ground
+physent. Глобальный10559515 включается только на земле вне noclip. Клиентская
+реализация теперь не отправляет airborne dodge; сохранено удержание +dodge в
+воздухе, чтобы после приземления сработала обычная проверка. Runtime suite
+перехватывает настоящий SendDodge и проверяет отсутствие сетевой команды в
+воздухе и прохождение наземного/noclip gate. Интеграционный isolated smoke после
+исправлений прошёл в ordinary x86 и RTX x64; см. runtime-verification.json.
+
+PE-default forward/back/side230 не означает настройки установленной игры:
+оригинальные config.cfg/autoexec.cfg задают forward300, back200, side200 и
+sv_maxspeed300. Это важное различие default строки и фактического gameplay;
+runtime migration выполняет основной prepare_game, а не клиентский reader.
+
+**Spring и prediction.**10011eb0 (парная серверная10005260) интегрирует
+pmove.punchangle из pmove+234..23c, то есть SDK vuser3. Формула:
+`punch += dt*velocity; velocity *= max(0,1-9*dt);
+velocity -= clamp(65*dt,0,2)*punch`, затем pitch/roll ограничены±89, yaw±179.
+Порог длины обоих векторов0.001; death присваивает velocity.z670. Это shared-PM
+состояние, которое стандартный Xash уже переносит между pmove и clientdata,
+а HUD_TxferPredictionData уже копирует все четыре vuser. Обычный view получает
+предсказанный punchangle через ref_params. Дополнительная клиентская пружина
+или CofPunch message для singleplayer поэтому не нужны.
+
+100ae9a0 — отдельный local impulse helper: velocity +=(-pitch,+yaw,+roll)*20.
+100b2140 имеет **разные** ветви: singleplayer использует старое уменьшение
+длины локального punch, multiplayer — локальную пружину с коэффициентами9/65.
+Нельзя переносить MP-ветку поверх SP-PM и удваивать движение камеры.
+
+Для будущего включения SDK CLIENT_WEAPONS необходимо освободить все оси vuser3:
+старый hl_weapons.cpp использует vuser3.z как secondary ammo TYPE. Disposable
+transform переносит только TYPE в client.fuser4, согласованно с сервером,
+и добавляет fuser4 в HUD_TxferPredictionData. vuser4.z — secondary ammo COUNT,
+он остаётся на месте. Сейчас CLIENT_WEAPONS=OFF, поэтому этот конфликт был
+латентным; перенос защищает выбранный ABI от будущего включения prediction.
+Обновление clientdata delta и серверного UpdateClientData выполняет сервер/PM
+часть интеграции. Не следует переносить expanded entvars+280 буквально в SDK.
+
+**Что не заменено без необходимости.**100af250 воспроизводит SDK bob: горизонтальная
+скорость, cl_bob, период cl_bobcycle/cl_bobup, смесь0.3+0.7*sin и clamp[-7,4].
+100af160 — привычный idle sine;100b1f60 — velocity roll. Ступени в100af790
+сглаживаются150 units/s с18-unit пределом, как в SDK. Это не доказательство
+визуального тождества всего view: оружейный sway100ad9d0/100adec0 и расширенные
+камерные режимы отдельны. Найденные дополнительные отличия keyboard-only
++left/+right/+lookup/+lookdown от SDK в этой правке не изменены; основной
+восстановленный вклад в jump/landing feel находится в shared-PM spring.

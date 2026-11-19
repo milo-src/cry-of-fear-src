@@ -1,0 +1,61 @@
+{
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "static_only": true,
+  "assembly_command": [
+    "objdump",
+    "-d",
+    "-M",
+    "intel",
+    "--start-address=0x10011eb0",
+    "--stop-address=0x10012041",
+    "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+  ],
+  "assembly_sha256": "17c3081d60bf0ed7b321694e2849d2c4bd6e029d79456d04f1d3828e037e64dc",
+  "literals": [
+    {
+      "address": "0x1013ee30",
+      "type": "d",
+      "value": 0.001
+    },
+    {
+      "address": "0x1013ef24",
+      "type": "f",
+      "value": 9.0
+    },
+    {
+      "address": "0x1013ef50",
+      "type": "f",
+      "value": 65.0
+    },
+    {
+      "address": "0x1013e3e0",
+      "type": "f",
+      "value": 2.0
+    },
+    {
+      "address": "0x1013efb4",
+      "type": "f",
+      "value": -89.0
+    },
+    {
+      "address": "0x1013ef60",
+      "type": "f",
+      "value": 89.0
+    },
+    {
+      "address": "0x1013efbc",
+      "type": "f",
+      "value": -179.0
+    },
+    {
+      "address": "0x1013ef68",
+      "type": "f",
+      "value": 179.0
+    }
+  ],
+  "ghidra_batches": [
+    "analysis/local/movement-client-view-audit",
+    "analysis/local/movement-client-spring-audit",
+    "analysis/local/movement-client-spring-core"
+  ]
+}

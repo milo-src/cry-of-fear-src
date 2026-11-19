@@ -1,0 +1,74 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10110760",
+      "proposed_name": "CFuncStairs::Spawn",
+      "subsystem": "movement",
+      "summary_ru": "Spawn невидимого объёма ступеней.",
+      "confidence": "high",
+      "details_ru": [
+        "Виртуальный Precache vtable+0x30 ведёт в1010eed0: SOLID_TRIGGER; showtriggers0 ставит EF_NODRAW, ненулевой снимает. Прежний перенос пропускал этот вызов, показывая розовые объёмы.",
+        "Затем SetModel/MOVETYPE_PUSH, проверка multiplayer через gamerules и периодический Think0.1. Собственный порт проверяет occupancy объединением объёмов; полного эквивалента native per-entity Think не заявляем.",
+        "src/cof/server/movement.cpp реализует исправление; тест BSP-модели проверяет обе ветки AddToFullPack."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10110760.c",
+        "analysis/movement/stairs-visibility-static.json",
+        "analysis/movement/trigger-visibility-audit.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100099e0",
+      "proposed_name": "PM_UpdateStepSound",
+      "subsystem": "movement",
+      "summary_ru": "Частота шагов по physinfo и состоянию движения.",
+      "confidence": "high",
+      "details_ru": [
+        "Ключи asd/bsd/csd/low разрешены из PE. Default cvar410/375/300 для walk/run/sprint; server Spawn и Restore заполняют physinfo.",
+        "Обычная земля bsd; IN_RUN+Sprint выбирает csd; Exhausted выбирает asd. low+iStepLeft увеличивает bsd/csd на1.25 с int усечением. Duck/ladder добавляет100. Ladder350, knee-water600, feet-water400/300.",
+        "Перенесено в tools/prepare_movement_physics.py, числовые тесты выполняются в actualPM обеих DLL."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100099e0.c",
+        "analysis/movement/health-evidence/step-keys.json",
+        "analysis/movement/physics.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000a630",
+      "proposed_name": "PM_WaterMove",
+      "subsystem": "movement",
+      "summary_ru": "Ускорение и движение в воде.",
+      "confidence": "high",
+      "details_ru": [
+        "Wishspeed = длина ввода * clientmaxspeed/100, затем cap maxspeed. Множитель0.8 только без комбинации IN_RUN+Sprint. Без ввода sink60, кроме watertype−17.",
+        "Использует обычные movevars.friction и accelerate, не waterfriction/wateraccelerate. Реализация tools/prepare_movement_physics.py; actualPM regression tests."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000a630.c",
+        "analysis/movement/physics.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10005260",
+      "proposed_name": "PM_DropPunchAngleSpring",
+      "subsystem": "movement",
+      "summary_ru": "Интеграция упругого толчка камеры в sharedPM.",
+      "confidence": "high",
+      "details_ru": [
+        "punch += dt*vuser3; vuser3 *= max(0,1−9dt); vuser3 -= clamp(65dt,0,2)*punch; pitch/roll clamp±89, yaw±179.",
+        "Если обе длины<=0.001, раннийвыход. Dead задаёт vuser3.z670; physinfo chr==2 задаёт vuser3.x670. Field+234 = vuser3. Клиентский10011eb0 подтверждён disassembly.",
+        "Реализация tools/prepare_movement_physics.py. Server jump/dodge/stumble добавляют импульсы(-pitch,+yaw,+roll)*20. SDK vuser3 передаётся как signed24scale128 через runtime delta; legacy ammo TYPE перенесён вfuser4, COUNT остаётсяvuser4.z."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10005260.c",
+        "analysis/movement/physics.md",
+        "analysis/movement/client-view-audit/capture.json"
+      ]
+    }
+  ]
+}

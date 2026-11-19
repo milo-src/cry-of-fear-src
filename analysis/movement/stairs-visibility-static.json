@@ -1,0 +1,37 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll",
+  "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "class_name": "CFuncStairs",
+  "rtti_name_va": "0x1021fb98",
+  "type_descriptor": "0x1021fb90",
+  "vtables": [
+    {
+      "vtable": "0x101e2bd0",
+      "complete_object_locator": "0x10201c24",
+      "slots": {
+        "0x2c": "0x10110760",
+        "0x30": "0x1010eed0",
+        "0x34": "0x1010c3f0",
+        "0x38": "0x1010fb50",
+        "0x3c": "0x1010f4b0"
+      }
+    }
+  ],
+  "method": "Read-only PE section mapping, RTTI type descriptor -> complete object locator -> vtable pointers, direct 32-bit slot reads",
+  "dll_functions": {
+    "table_va": "0x102119f8",
+    "source": "decompiled/server/partial-pass/functions/0x100183d0.c",
+    "pfnAddToFullPack": {
+      "slot": 39,
+      "address": "0x10018870",
+      "slot_bytes": "70880110"
+    }
+  },
+  "precache_slot_bytes": "d0ee1010",
+  "evidence_paths": [
+    "decompiled/server/partial-pass/functions/0x10110760.c",
+    "decompiled/server/partial-pass/functions/0x1010eed0.c",
+    "decompiled/server/partial-pass/functions/0x10018870.c",
+    "external/hlsdk-portable/engine/eiface.h"
+  ]
+}

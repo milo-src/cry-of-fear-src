@@ -1,0 +1,37 @@
+{
+  "source_capture": "analysis/local/movement-client-spring-core",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "f13c626b2fc17f180eef5c249591a3ce0d5e1a1279143595528c0aa6f068da7d",
+      "procedure": "ram:0x100ae875",
+      "actual_function": "100ae850",
+      "evidence_id": "ev_d861be3993dc5f2cd7240a2e412965fac18f0bfc0a9390c819a2be4f2e15dc1f",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "adcd61a46fc85b820c76fb6199003629d31b12b813d8e5744a72429ae6db4ebf",
+      "procedure": "ram:0x100b21d2",
+      "actual_function": "100b2140",
+      "evidence_id": "ev_27bb81b5071538dd18a3908c5bd93ea42dbc8d914f243f9f1f14fa9052555d2d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "verification": {
+    "input_unchanged": true,
+    "queries_succeeded": true,
+    "target_executed": false,
+    "rea_exit_code": 0
+  }
+}

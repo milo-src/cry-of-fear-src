@@ -49,6 +49,14 @@ def apply(target):
     begin = text.index('int AddToFullPack(')
     end = text.index('// defaults for clientinfo messages', begin)
     block = text[begin:end]
+    # Unlike visible render entities, hidden ladder hulls must still reach client
+    # PM prediction. Keep EF_NODRAW in the packet: both engines' CL_LinkPacketEntities
+    # skip drawing it, while CL_AddLinksToPmove accepts SOLID_NOT/CONTENTS_LADDER.
+    # Do not exempt trigger brushes or manager entities from the ordinary visibility gate.
+    block = replace_once(block, 'if( ( ent->v.effects & EF_NODRAW ) && ( ent != host ) )',
+        'if( ( ent->v.effects & EF_NODRAW ) && ( ent != host ) &&\n'
+        '\t    !( ent->v.solid == SOLID_NOT && ent->v.skin == CONTENTS_LADDER ) )',
+        'hidden ladder prediction visibility')
     block = replace_once(block, '\treturn 1;\n}', '\tCofLadderPackCamera(state, ent);\n\treturn 1;\n}', 'camera network state')
     text = text[:begin] + block + text[end:]
     path.write_text(text)

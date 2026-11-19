@@ -124,6 +124,22 @@ edgefriction. Новая скорость `max(speed-drop,0)/speed` масшта
 `movevars.gravity * (player.gravity или 1 при нуле) * dt`.
 Первая половина также прибавляет `basevelocity.z*dt` и обнуляет basevelocity.z.
 
+`1000a630` (WaterMove) масштабирует wishspeed через clientmaxspeed/100 перед
+maxspeed cap. Множитель0.8 применяется, если нет одновременно IN_RUN и Sprint.
+Без ввода дрейфует вниз60, кроме watertype−17. `100061b0` (InWater) требует
+waterlevel>1 и watertype!=−19; тот же special-content guard используется в
+swimming-ветке10008a00. Его oldwaterlevel=0 для contents<−16. Эти правила
+перенесены в общий PM; SDK повторный duck/unstick pass удалён по10008a00.
+
+`100099e0` (UpdateStepSound): asd/bsd/csd прочитаны из PE как физические ключи
+интервалов walk/run/sprint. Spawn/Restore задают их из cof_walksteptime410,
+cof_runsteptime375, cof_sprintsteptime300 (default table см. health-evidence/step-keys.json).
+Для обычной земли интервал bsd, для IN_RUN+Sprint csd, Exhausted переопределяет
+на asd. При low!=0 и iStepLeft!=0 bsd/csd умножаются на1.25 с усечением int.
+Duck/ladder добавляет100ms; ladder350, knee-water600, feet-water400/300.
+Ранее перенос оставлял частоту шагов SDK; теперь cadence перенесён и проверяется
+в actual PM на клиенте и сервере.
+
 `10005880` — ядро swept collision / скольжения по плоскостям: накапливает
 touches, уменьшает оставшееся dt, клипует velocity к normal; floor criterion
 normal.z > 0.7, wall criterion normal.z == 0. Детальная ABI возвращаемого
@@ -177,6 +193,16 @@ trace и всех collision flags ещё требует отдельного к�
 `min(fallVelocity,700)*0.42`. Это **не** расчёт потери HP: damage находится
 на серверной стороне игрока.
 
+Повторная сверка установила поле импульса: pmove+234 = vuser3, а не прямое
+изменение punchangle. `10005260` (клиент10011eb0) выполняет
+`punch += dt*vuser3; vuser3 *= max(0,1−9dt); vuser3 -= clamp(65dt,0,2)*punch`;
+pitch/roll ограничивает±89, yaw±179. При dead задаёт velocity.z670,
+physinfo chr==2 задаёт velocity.x670. Общий PM теперь реализует именно этот
+порядок; тест dt0.01, velocity120 даёт punch1.2 и velocity108.42.
+Landing800 даёт импульс294 и не меняет угол напрямую. Серверные jump/dodge
+пишут в ту же пружину. Сетевой адаптер повышает точность vuser3 и отделяет
+stock SDK weapon ammo type; оригинальный delta.lst остаётся неизменным.
+
 ## Проверка при последующем переносе
 
 Сопоставлены сервер и клиент: Jump `10006520 ↔ 10013160`, CheckParameters
@@ -188,7 +214,9 @@ trace и всех collision flags ещё требует отдельного к�
 всех адресованных globals. Dispatcher не совпал: клиент дополнительно
 зеркалирует состояние duck в отдельный global; см. `client.md`.
 
-Пока ни одного игрового запуска для этого разбора не было. Проверить позже:
+Первоначальный разбор был статическим. Перенос и исправления проверены в обеих
+собственных DLL/runtime; hashes и границы проверки в runtime-verification.json.
+Это не запуск оригинального DLL и не доказательство полного паритета. Проверить позже:
 одинаковые последовательности usercmd при разных msec; диагональ; начало и
 конец sprint; airborne control; jump held/released; jh=100 и изменённый jh;
 низкий потолок, duck-jump и выход из duck; лестница и прыжок с неё;

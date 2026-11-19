@@ -1,6 +1,7 @@
 // Opt-in handler integration. Run only through the isolated -nosound smoke runner.
 #include "entity_state.h"
 extern void UpdateClientData(const struct edict_s*, int, struct clientdata_s*);
+extern int AddToFullPack(struct entity_state_s*, int, edict_t*, edict_t*, int, int, unsigned char*);
 extern "C" int CofPMRunTests(void);
 namespace {
 int movementFailures;
@@ -23,6 +24,10 @@ void CofMovementTestFrame() {
     const int savedFov = p->m_iFOV;
     gpGlobals->time = 20.5f;
     CofMovementSpawn(p);
+    MovementCheck(!std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "asd"), CVAR_GET_STRING("cof_walksteptime")) &&
+        !std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "bsd"), CVAR_GET_STRING("cof_runsteptime")) &&
+        !std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "csd"), CVAR_GET_STRING("cof_sprintsteptime")),
+        "spawn_transports_native_step_cadence");
     p->m_cofNightmare = 0;
     // Keep authored stair volumes out of deterministic handler cases.
     UTIL_SetOrigin(p->pev, saved.origin + Vector(0, 0, 4096));
@@ -47,9 +52,45 @@ void CofMovementTestFrame() {
     p->pev->flags |= FL_DUCKING; p->m_cofStaminaNext = 20;
     CofMovementPostThink(p);
     MovementCheck(!(p->pev->flags & Sprint) && MovementNear(p->m_cofStamina, 93), "crouch_regenerates_two");
+    // Exercise both showtriggers branches via the engine setter. Xash reads
+    // CVAR_GET_FLOAT from the string, so changing cvar.value alone is invalid.
+    cvar_t* showTriggers = CVAR_GET_POINTER("showtriggers");
+    MovementCheck(showTriggers != nullptr, "stairs_debug_cvar_registered");
+    const float savedShowTriggers = showTriggers ? showTriggers->value : 0;
+    CVAR_SET_FLOAT("showtriggers", 0);
     CBaseEntity* stairs = CBaseEntity::Create("func_stairs", p->pev->origin, g_vecZero);
     MovementCheck(stairs != nullptr, "stairs_brush_factory");
     if (stairs) {
+        MovementCheck(stairs->pev->solid == SOLID_TRIGGER && (stairs->pev->effects & EF_NODRAW),
+            "stairs_factory_calls_hidden_trigger_precache");
+        // Bind a real authored brush, so a missing model cannot make the
+        // AddToFullPack NODRAW assertion pass for the wrong reason.
+        CBaseEntity* authored = nullptr;
+        for (int index = 1; index < gpGlobals->maxEntities; ++index) {
+            edict_t* candidate = INDEXENT(index);
+            if (!candidate || candidate->free || !candidate->v.modelindex || !candidate->v.model) continue;
+            if ((STRING(candidate->v.model))[0] != '*' || candidate == stairs->edict()) continue;
+            authored = CBaseEntity::Instance(candidate);
+            if (authored) break;
+        }
+        MovementCheck(authored != nullptr, "stairs_test_has_authored_brush_model");
+        if (authored) {
+            SET_MODEL(stairs->edict(), STRING(authored->pev->model));
+            entity_state_t packet = {};
+            CVAR_SET_FLOAT("showtriggers", 0);
+            stairs->Precache();
+            MovementCheck(stairs->pev->modelindex != 0 && stairs->pev->solid == SOLID_TRIGGER &&
+                (stairs->pev->effects & EF_NODRAW) &&
+                AddToFullPack(&packet, stairs->entindex(), stairs->edict(), p->edict(), 0, 0, nullptr) == 0,
+                "stairs_hidden_brush_excluded_from_network");
+            CVAR_SET_FLOAT("showtriggers", 1);
+            stairs->Precache();
+            MovementCheck(!(stairs->pev->effects & EF_NODRAW) &&
+                AddToFullPack(&packet, stairs->entindex(), stairs->edict(), p->edict(), 0, 0, nullptr) == 1,
+                "stairs_debug_brush_included_in_network");
+            CVAR_SET_FLOAT("showtriggers", 0);
+            stairs->Precache();
+        }
         UTIL_SetSize(stairs->pev, Vector(-64, -64, -64), Vector(64, 64, 64));
         UTIL_SetOrigin(stairs->pev, p->pev->origin);
         p->pev->flags &= ~FL_DUCKING; p->m_cofStairsNext = 0;
@@ -63,9 +104,33 @@ void CofMovementTestFrame() {
         UpdateClientData(p->edict(), 0, &packet);
         MovementCheck(packet.fuser3 == 1 && packet.maxspeed == p->pev->maxspeed &&
             packet.flags == p->pev->flags, "prediction_packet_carries_stumble_speed_flags");
+        // 100f4d70 evaluates stairs before cancelling a newly crouched sprint.
+        p->pev->fuser3 = 0; p->m_cofFallUntil = 0;
+        p->pev->flags |= Sprint | FL_DUCKING; p->pev->velocity = Vector(100, 0, 0);
+        CofMovementPostThink(p);
+        MovementCheck(p->pev->fuser3 == 1 && MovementNear(p->pev->velocity.x, 50),
+            "stairs_stumble_precedes_crouch_cancellation");
         UTIL_Remove(stairs); p->m_cofStairsNext = 0;
         p->pev->fuser3 = 0; p->m_cofFallUntil = 0; p->pev->velocity = g_vecZero;
     }
+    CVAR_SET_FLOAT("showtriggers", savedShowTriggers);
+    p->pev->flags = FL_CLIENT | FL_ONGROUND;
+    p->pev->button = RunButton; p->pev->velocity = Vector(100, 0, 0);
+    p->pev->fuser3 = 1; p->m_cofFallUntil = 20; p->m_cofStamina = 100;
+    p->m_cofStaminaNext = 99;
+    CofMovementPreThink(p);
+    MovementCheck(p->pev->fuser3 == 1 && p->m_cofFallUntil == 20,
+        "stumble_does_not_release_before_pm_step");
+    CofMovementPostThink(p);
+    MovementCheck(p->pev->fuser3 == 0 && p->m_cofFallUntil == 0 && (p->pev->flags & Sprint),
+        "stumble_releases_in_postthink_before_sprint");
+    p->pev->flags &= ~Sprint; p->pev->fuser3 = 1; p->m_cofFallUntil = 22;
+    p->m_cofStamina = 100;
+    CofMovementPostThink(p);
+    MovementCheck((p->pev->flags & Sprint) && p->pev->fuser3 == 1 && MovementNear(p->m_cofStamina, 95),
+        "native_sprint_flag_can_start_during_pm_stumble_lock");
+    p->pev->fuser3 = 0; p->m_cofFallUntil = 0;
+    p->pev->flags &= ~Sprint; p->pev->button = 0; p->pev->velocity = g_vecZero;
     p->pev->flags &= ~FL_DUCKING; p->m_cofStamina = 0; p->m_cofStaminaNext = 20;
     CofMovementPostThink(p);
     MovementCheck((p->pev->flags & Exhausted) && MovementNear(p->m_cofStamina, 0.1f) &&
@@ -74,9 +139,12 @@ void CofMovementTestFrame() {
     CofMovementPostThink(p);
     MovementCheck(!(p->pev->flags & Exhausted) && MovementNear(p->m_cofStamina, 1.1f), "exhaustion_clears_after_recovery");
     p->m_cofStamina = 15; p->m_cofDodgeNext = 0; p->pev->velocity = Vector(0, 0, -33);
+    p->pev->vuser3 = g_vecZero; p->pev->punchangle = g_vecZero;
     p->pev->v_angle = g_vecZero;
     MovementCheck(CofMovementCommand(p, "dodgeforward") && MovementNear(p->m_cofStamina, 0) &&
         MovementNear(p->pev->velocity.x, 600) && MovementNear(p->pev->velocity.z, -33), "dodge_command_cost_direction_preserves_z");
+    MovementCheck(p->pev->vuser3 == Vector(-80, 40, 40) && p->pev->punchangle == g_vecZero,
+        "dodge_adds_native_spring_velocity_not_view_angle");
     p->m_cofStamina = 100;
     MovementCheck(!CofMovementDodge(p, 2) && MovementNear(p->m_cofStamina, 100), "dodge_cooldown_blocks_repeat");
     p->m_cofDodgeNext = 0; p->m_cofStamina = 14.99f;
@@ -85,8 +153,14 @@ void CofMovementTestFrame() {
     MovementCheck(p->m_cofDisableDodge && !CofMovementDodge(p, 1), "dodge_toggle_command_disables_handler");
     CofMovementCommand(p, "dodgetoggle");
     p->m_cofStamina = 5; p->m_afButtonPressed = IN_JUMP; p->pev->button = IN_JUMP;
-    p->pev->velocity = g_vecZero; p->Jump();
+    p->pev->velocity = g_vecZero; p->pev->vuser3 = g_vecZero; p->Jump();
     MovementCheck(MovementNear(p->m_cofStamina, -10), "jump_uses_original_no_fifteen_threshold");
+    MovementCheck(p->pev->vuser3 == Vector(120, 20, 20) && p->pev->punchangle == g_vecZero,
+        "jump_adds_native_spring_velocity_not_view_angle");
+    clientdata_t cameraPacket = {};
+    UpdateClientData(p->edict(), 1, &cameraPacket);
+    MovementCheck(cameraPacket.vuser3 == p->pev->vuser3,
+        "prediction_packet_camera_spring_survives_weapon_export");
     p->m_afButtonPressed = 0; p->Jump();
     MovementCheck(MovementNear(p->m_cofStamina, -10), "jump_held_does_not_charge_twice");
     p->m_cofStaminaNext = 99; p->pev->button = 0;
@@ -110,6 +184,11 @@ void CofMovementTestFrame() {
     MovementCheck(p->m_cofLowHealth && !std::strcmp(g_engfuncs.pfnGetPhysicsKeyValue(p->edict(), "low"), "1"), "low_health_physics_key");
     p->pev->health = 25; CofMovementPreThink(p);
     MovementCheck(!p->m_cofLowHealth, "low_health_exact_twentyfive_boundary");
+    p->pev->health = 24; CofMovementQueueHeal(p, 5); CofMovementPreThink(p);
+    MovementCheck(p->m_cofLowHealth && MovementNear(p->pev->health, 29),
+        "low_health_evaluated_before_queued_heal");
+    CofMovementPreThink(p);
+    MovementCheck(!p->m_cofLowHealth, "low_health_recovers_next_prethink_after_heal");
     p->pev->health = 100; p->pev->armorvalue = 100; p->m_flFallVelocity = 624.4f;
     p->pev->watertype = CONTENT_EMPTY; p->pev->flags = FL_CLIENT | FL_ONGROUND;
     CofMovementLand(p);

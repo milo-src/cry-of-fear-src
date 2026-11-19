@@ -18,6 +18,10 @@ int staminaMessage, breathMessage, fallMessage, zoomMessage, healthCapMessage;
 cvar_t movementDifficulty = {"difficulty", "1", FCVAR_SERVER};
 // Register before skill.cfg executes; values remain configurable by that file.
 cvar_t movementSkills[] = {
+    // Native table 102148e0/102148f4/10214908; sent via physinfo on spawn/restore.
+    {"cof_walksteptime", "410", FCVAR_SERVER},
+    {"cof_runsteptime", "375", FCVAR_SERVER},
+    {"cof_sprintsteptime", "300", FCVAR_SERVER},
     {"sk_primary_speed1", "75", FCVAR_SERVER}, {"sk_primary_speed2", "75", FCVAR_SERVER},
     {"sk_primary_speed3", "75", FCVAR_SERVER}, {"sk_primary_speed4", "75", FCVAR_SERVER},
     {"sk_secondary_speed1", "45", FCVAR_SERVER}, {"sk_secondary_speed2", "45", FCVAR_SERVER},
@@ -41,6 +45,11 @@ bool MenuMap() {
 }
 void Physics(CBasePlayer* p, const char* key, const char* value) {
     g_engfuncs.pfnSetPhysicsKeyValue(p->edict(), const_cast<char*>(key), const_cast<char*>(value));
+}
+void CameraImpulse(CBasePlayer* p, const Vector& impulse) {
+    // Native 100f91b0 writes angular velocity, not an immediate view angle.
+    // SDK vuser3 is the engine-transported PM +234 spring velocity (10005260).
+    p->pev->vuser3 = p->pev->vuser3 + Vector(-impulse.x, impulse.y, impulse.z) * 20;
 }
 void Stamina(CBasePlayer* p) {
     if (!staminaMessage) return;
@@ -99,8 +108,15 @@ void UpdateStairs(CBasePlayer* p) {
 
 class CCofStairs : public CBaseEntity {
 public:
+    void Precache() override {
+        // CFuncStairs vtable +0x30 -> 1010eed0, called by Spawn 10110760.
+        // SOLID_NOT alone does not hide a brush from AddToFullPack/rendering.
+        pev->solid = SOLID_TRIGGER;
+        if (CVAR_GET_FLOAT("showtriggers") == 0) pev->effects |= EF_NODRAW;
+        else pev->effects &= ~EF_NODRAW;
+    }
     void Spawn() override {
-        pev->solid = SOLID_NOT; pev->movetype = MOVETYPE_PUSH;
+        Precache(); pev->movetype = MOVETYPE_PUSH;
         if (pev->model) SET_MODEL(edict(), STRING(pev->model));
     }
 };
@@ -134,7 +150,10 @@ void CofMovementRestore(CBasePlayer* p) {
     }
     char value[24]; std::snprintf(value, sizeof(value), "%d", p->m_cofJumpHeight);
     Physics(p, "jh", value); Physics(p, "slj", p->m_fLongJump ? "1" : "0");
-    Physics(p, "low", p->m_cofLowHealth ? "1" : "0");
+    Physics(p, "low", p->m_cofLowHealth && !g_pGameRules->IsMultiplayer() ? "1" : "0");
+    Physics(p, "asd", CVAR_GET_STRING("cof_walksteptime"));
+    Physics(p, "bsd", CVAR_GET_STRING("cof_runsteptime"));
+    Physics(p, "csd", CVAR_GET_STRING("cof_sprintsteptime"));
     // SDK clientmaxspeed transport is filled by UpdateClientData (client.cpp).
     p->m_cofStaminaLast = -1;
 }
@@ -153,6 +172,7 @@ void CofMovementSpawn(CBasePlayer* p) {
     p->pev->health = p->pev->max_health = 100; p->pev->armorvalue = 0;
     p->pev->maxspeed = Skill("sk_primary_speed");
     p->pev->fov = p->m_iFOV = 90; p->pev->fuser3 = 0;
+    p->pev->vuser3 = g_vecZero;
     CofMovementRestore(p);
 }
 void CofMovementSync(CBasePlayer* p) {
@@ -186,17 +206,15 @@ void CofMovementWeaponState(CBasePlayer* p, bool blocksSprint, bool scopedRifle)
     p->m_cofWeaponSprintBlocked = blocksSprint; p->m_cofScopedRifle = scopedRifle;
 }
 void CofMovementPreThink(CBasePlayer* p) {
-    ApplyQueuedHeal(p); // original ordering precedes the player's death branch
     const int low = p->pev->health < 25;
     if (low != p->m_cofLowHealth) {
         p->m_cofLowHealth = low;
         Physics(p, "low", low && !g_pGameRules->IsMultiplayer() ? "1" : "0");
     }
-    if (!p->IsAlive()) { HoldBreath(p, false); p->pev->flags &= ~Sprint; return; }
-    if (p->m_cofFallUntil > 0 && p->m_cofFallUntil < gpGlobals->time) {
-        p->m_cofFallUntil = 0;
-        if (p->pev->fuser3 == 1) p->pev->fuser3 = 0;
-        FallMessage(p, 0);
+    if (!p->IsAlive()) {
+        HoldBreath(p, false); p->pev->flags &= ~Sprint;
+        ApplyQueuedHeal(p); // native queue still runs before the death-think branch
+        return;
     }
     if (p->m_cofHoldBreath && (!(p->pev->button & RunButton) || !p->m_cofScopedRifle ||
         p->m_cofStamina <= 0)) HoldBreath(p, false);
@@ -208,24 +226,37 @@ void CofMovementPreThink(CBasePlayer* p) {
         EMIT_SOUND(p->edict(), CHAN_AUTO, "player/heartbeat1.wav", 0.25f, 0.8f);
         p->m_cofHeartbeatNext = gpGlobals->time + 1;
     }
+    // 100ef2d0 evaluates low-health/hold-breath before its 100dca10 heal step.
+    ApplyQueuedHeal(p);
 }
 void CofMovementPostThink(CBasePlayer* p) {
-    if (!p->IsAlive() || MenuMap()) return;
+    if (!p->IsAlive()) return;
+    // 100ead70 clears stumble in PostThink, after this frame's PM move and
+    // before 100f4d70. Clearing it in PreThink releases movement one step early.
+    if (p->m_cofFallUntil > 0 && p->m_cofFallUntil < gpGlobals->time) {
+        p->m_cofFallUntil = 0;
+        if (p->pev->fuser3 == 1) p->pev->fuser3 = 0;
+        FallMessage(p, 0);
+    }
+    if (MenuMap()) return;
     UpdateStairs(p);
     const float now = gpGlobals->time, speed = p->pev->velocity.Length2D();
     int& flags = p->pev->flags;
-    const bool blocked = p->pev->movetype == MOVETYPE_FLY || p->pev->fuser3 != 0 ||
-        p->m_cofWeaponSprintBlocked || p->m_cofScopedRifle || (p->pev->button & IN_BACK) ||
-        (flags & FL_DUCKING);
-    if (blocked) flags &= ~Sprint;
+    const bool blockedEarly = p->pev->movetype == MOVETYPE_FLY ||
+        p->m_cofWeaponSprintBlocked || p->m_cofScopedRifle || (p->pev->button & IN_BACK);
+    if (blockedEarly) flags &= ~Sprint;
     if ((flags & FL_ONGROUND) && p->m_cofInStairs && (flags & (Sprint | FL_FROZEN)) == Sprint)
         CofMovementFallOver(p);
+    // Native stair stumble precedes the crouch cancellation, including a frame
+    // which arrives on stairs with both Sprint and FL_DUCKING set.
+    const bool blocked = blockedEarly || (flags & FL_DUCKING);
+    if (flags & FL_DUCKING) flags &= ~Sprint;
     p->pev->maxspeed = WalkSpeed(p);
     if (!(flags & Exhausted) && !p->m_cofInStairs && (flags & Sprint))
         p->pev->maxspeed = Skill("sk_sprint_speed");
     if (!(flags & Sprint) && !p->m_cofInStairs && !blocked &&
         (p->pev->button & (RunButton | IN_BACK)) == RunButton && p->m_cofStamina >= 1 &&
-        speed != 0 && p->pev->waterlevel != 2 && !(flags & FL_FROZEN)) {
+        speed != 0 && p->pev->waterlevel != 2) {
         flags |= Sprint; p->pev->maxspeed = Skill("sk_sprint_speed");
         if (!p->m_cofUnlimitedStamina) p->m_cofStamina -= 5;
     }
@@ -274,7 +305,7 @@ void CofMovementJump(CBasePlayer* p) {
         !(p->pev->flags & FL_ONGROUND) || !p->pev->groundentity) return;
     UTIL_MakeVectors(p->pev->angles); p->SetAnimation(PLAYER_JUMP);
     if (!p->m_cofUnlimitedStamina) p->m_cofStamina -= 15;
-    p->pev->punchangle = p->pev->punchangle + Vector(-6, 1, 1);
+    CameraImpulse(p, Vector(-6, 1, 1));
     if (p->m_fLongJump && (p->pev->button & IN_DUCK) && p->pev->flDuckTime > 0 &&
         p->pev->velocity.Length() > 50) p->SetAnimation(PLAYER_SUPERJUMP);
     entvars_t* ground = VARS(p->pev->groundentity);
@@ -283,7 +314,7 @@ void CofMovementJump(CBasePlayer* p) {
 bool CofMovementDodge(CBasePlayer* p, int direction) {
     if (!p || !p->IsAlive() || p->m_cofDisableDodge || (p->pev->flags & (FL_FROZEN | FL_DUCKING)) ||
         (p->pev->button & IN_DUCK) || p->pev->waterlevel > 2 || p->pev->flDuckTime != 0 ||
-        p->m_cofStamina < 15 || p->m_cofDodgeNext > gpGlobals->time || p->pev->fuser3 != 0) return false;
+        p->m_cofStamina < 15 || p->m_cofDodgeNext > gpGlobals->time) return false;
     UTIL_MakeVectors(p->pev->v_angle);
     if (!p->m_cofUnlimitedStamina) p->m_cofStamina -= 15;
     const float z = p->pev->velocity.z;
@@ -294,7 +325,7 @@ bool CofMovementDodge(CBasePlayer* p, int direction) {
     case 3: p->pev->velocity = gpGlobals->v_right * -600; kick = Vector(2, 4, 2); break;
     case 4: p->pev->velocity = gpGlobals->v_right * 600; kick = Vector(2, -4, 2); break;
     }
-    p->pev->punchangle = p->pev->punchangle + kick;
+    CameraImpulse(p, kick);
     p->pev->velocity.z = z; p->m_cofStaminaImpulse = 1; p->m_cofDodgeNext = gpGlobals->time + 1;
     return true;
 }
@@ -313,7 +344,7 @@ void CofMovementFallOver(CBasePlayer* p) {
     EMIT_SOUND_DYN(p->edict(), CHAN_AUTO, sound, 1, 0.8f, 0, 90);
     p->pev->velocity = p->pev->velocity * 0.5f; p->m_cofFallUntil = gpGlobals->time + 0.8f;
     p->pev->fuser3 = 1; FallMessage(p, 1);
-    p->pev->punchangle = p->pev->punchangle + Vector(-30, RANDOM_LONG(-35, 35), RANDOM_LONG(-35, 35));
+    CameraImpulse(p, Vector(-30, RANDOM_LONG(-35, 35), RANDOM_LONG(-35, 35)));
     p->pev->flags &= ~Sprint; p->pev->maxspeed = Q_max(30.0f, WalkSpeed(p));
 }
 float CofMovementFallDamage(CBasePlayer* p) {

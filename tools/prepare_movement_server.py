@@ -76,7 +76,10 @@ def prepare_server_movement(root: Path, target: Path):
     anchor = '\t// check to see if player landed hard enough to make a sound'
     end = '\t// select the proper animation for the player character'
     start, stop = text.index(anchor), text.index(end)
-    text = text[:start] + '\tCofMovementPostThink(this);\n\tCofMovementLand(this);\n\n' + text[stop:]
+    text = text[:start] + '\tCofMovementLand(this);\n\n' + text[stop:]
+    # 100ead70 invokes 100f4d70 BEFORE ItemPostFrame (100e4f80), then landing.
+    # The vendor has no weapon ResetMaxSpeed writer requiring reversed order.
+    text = replace_once(text, '\tItemPostFrame();', '\tCofMovementPostThink(this);\n\tItemPostFrame();', 'postthink order')
     text = replace_body(text, 'void CBasePlayer::Jump()', '\tCofMovementJump(this);')
     anchor = '\t\tCofInventorySync(this);'
     text = replace_once(text, anchor, '\t\tCofMovementSync(this);\n' + anchor, 'HUD initialization')
@@ -111,6 +114,20 @@ def prepare_server_movement(root: Path, target: Path):
     anchor = '\tcd->maxspeed\t\t= pev->maxspeed;'
     text = replace_once(text, anchor, anchor + '\n\tcd->fuser3 = pev->fuser3; // shared PM stumble/climb state', 'prediction movement state')
     text = text.replace('cd->fuser3 = pl->m_flAmmoStartCharge;', 'cd->fuser3 = pev->fuser3;')
+    text = replace_once(text, 'cd->vuser3.z = gun->m_iSecondaryAmmoType;',
+                        'cd->fuser4 = gun->m_iSecondaryAmmoType;', 'secondary ammo adapter')
+    # CoF PM uses vuser3 for angular spring velocity. Export after the SDK's
+    # weapon fields. Optional SDK prediction uses fuser4 for secondary ammo type
+    # (matched by the client preparer); vuser4.z still holds secondary ammo count.
+    signature = 'void UpdateClientData('
+    begin = text.index(signature)
+    opening = text.index('{', begin)
+    closing, depth = opening + 1, 1
+    while depth:
+        if text[closing] == '{': depth += 1
+        elif text[closing] == '}': depth -= 1
+        closing += 1
+    text = text[:closing - 1] + '\tcd->vuser3 = pev->vuser3; // CoF camera spring, after weapon overrides\n' + text[closing - 1:]
     path.write_text(text)
     # SP already has the linear formula. MP's SDK option incorrectly substitutes fixed10 damage.
     path = target / 'dlls/multiplay_gamerules.cpp'

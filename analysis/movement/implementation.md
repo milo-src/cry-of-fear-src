@@ -14,11 +14,12 @@ DLL. Оригинальные BSP/MDL/WAD и установленная игра
 | Обычные и анимированные лестницы | `src/cof/server/ladders.cpp`, `.h` | `ladders.md`, `ladder-port.md` |
 | SDK hooks и save fields | `tools/prepare_movement_server.py`, `prepare_movement_client.py`, `prepare_movement_ladders.py` | вызываются в конце `prepare_game.prepare()` |
 | Сетевой адаптер камеры / ladder gate | `tools/prepare_movement_protocol.py` | генерирует отдельный runtime `delta.lst`, сохраняет hashes в `movement-protocol.json` |
-| Настройки и установка | `tools/stage_movement.py`; `runtime/autoexec.cfg`, `runtime/config.cfg` | только `out/`; старый forward200 мигрирует в230 один раз, остальные настройки сохраняются |
+| Настройки и установка | `tools/stage_movement.py`; `runtime/autoexec.cfg`, `runtime/config.cfg` | только `out/`; прежние forward200/230 мигрируют в300 один раз, остальные настройки сохраняются |
 
 В собственной конфигурации `sv_maxspeed=300`, как в установленном CoF autoexec.
-Из бинарника восстановлен default `cl_forwardspeed=230`; back/side200 сохранены
-по игровому autoexec. `pev.maxspeed` — процент: primary75, secondary45,
+Рабочий `cl_forwardspeed=300`, back/side200 взяты из установленного CoF config.cfg.
+Бинарный default230 не является скоростью после загрузки конфигурации; прежний
+перенос ошибочно использовал его. `pev.maxspeed` — процент: primary75, secondary45,
 sprint125, stairs50. Старое ограничение client usercmd этим процентом удалено.
 Shift через существующий `+speed` теперь является алиасом `+sprint`.
 
@@ -27,13 +28,30 @@ Shift через существующий `+speed` теперь является
 - Общая физика: асимметричная диагональ, sprint без sidemove, процент wishspeed,
   low-HP замедление, air acceleration, `jh`-прыжок, crouch600ms, ladder90 и
   отпрыгивание270. SDK collision/slide/step остаётся общей основой обеих сторон.
+  Вода также использует процент скорости, sprint снимает множитель0.8;
+  contents−19 исключён из swimming. Cadence шагов получает asd/bsd/csd из
+  серверных cof_*steptime, включая асимметрию low-health.
 - Сервер: onset бега−5, расход2 по tick, восстановление1/2, задержка истощения,
   Nightmare интервалы, FOV90/95, jump−15, dodge−15 и cooldown, HP100, low<25,
   queued heal с подтверждённым целочисленным временем, fall damage и stumble.
+  Jump/dodge/stumble и приземление используют восстановленную PM-пружину камеры,
+  а не прямой скачок punchangle. Клиентский dodge разрешён только на земле вне noclip.
 - Лестницы: `func_ladder`, `func_laddercontrol`, `cof_ladder_manager`, endpoints,
   `camera_model`, штатные анимации вверх/вниз, команды направления, возврат камеры,
   cleanup при отмене/смерти/невалидной последовательности. Сетевой глаз вычисляется
   по attachment модели на сервере и передаётся клиенту.
+
+## Исправление видимых служебных объёмов
+
+`func_stairs::Spawn` ранее пропускал виртуальный Precache оригинала1010eed0:
+SOLID_NOT не скрывал его модель. Восстановлены SOLID_TRIGGER и EF_NODRAW при
+showtriggers=0, включая Precache после восстановления сохранения. Для
+func_laddercontrol восстановлены обе ветки showtriggers. Скрытые обычные
+лестницы отправляются клиентской физике с сохранением EF_NODRAW; их отбрасывание
+stock AddToFullPack раньше разъединяло серверное и предсказанное лазание.
+Доказательства: `trigger-visibility-audit.md`, `stairs-visibility-static.json`.
+Runtime-тесты используют реальную BSP-модель и обе ветки AddToFullPack, чтобы
+невидимость не оказалась ложноположительной из-за отсутствующей модели.
 
 ## Сборка и проверка
 
@@ -65,6 +83,9 @@ python tools/smoke_rtx.py --renderer rtx --movement --timeout 100
 Итоговый прогон обеих Waf-сборок прошёл: PM server/client PASS, movement server,
 movement client и ladder COMPLETE failures=0; network_eye=1 и реальное движение
 игрока подтверждены. Проверены также передача fuser3 и переход ввода через меню.
+Повторный прогон после регрессии прошёл в обоих режимах: скрытие/отладочная
+видимость stairs с BSP-моделью, скрытая ladder в prediction, spring impulse
+и clientdata, cadence, water wishspeed и grounded dodge. Аудиты модулей также PASS.
 Переносимая сводка с SHA-256 установленных DLL: `runtime-verification.json`.
 Проверка не является визуальной оценкой и не сравнивает кадры/траектории с
 оригинальным CoF. Эталон — восстановленные числовые контракты.

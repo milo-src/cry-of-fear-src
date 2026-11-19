@@ -1,5 +1,5 @@
 {
-  "date_utc": "2026-11-19T17:15:23.486549+00:00",
+  "date_utc": "2026-11-19T17:33:17.449006+00:00",
   "build_system": "Waf",
   "visual_verification": false,
   "original_runtime_parity": false,
@@ -8,7 +8,7 @@
       "renderer": "normal",
       "result": "pass",
       "report": "analysis/local/normal-c_sdkmap1-movement-isolated.json",
-      "log_sha256": "b96b37ba5e68e9a3bf4113ba5f8bbbf544f7a2a3a686cfb6d87edeb5c8416413",
+      "log_sha256": "074b5210ff422b14e4309a94990bbbd35645de4446c29a880cf98c3d30700e93",
       "assertions": [
         "COF_PM_TEST PASS failures=0 side=server",
         "COF_PM_TEST PASS failures=0 side=client",
@@ -16,20 +16,29 @@
         "COF_MOVEMENT_CLIENT_COMPLETE failures=0",
         "COF_LADDER_TEST_COMPLETE failures=0"
       ],
-      "unique_named_checks": 78,
+      "unique_named_checks": 100,
       "camera_network_eye": true,
       "modules": {
-        "out/runtime/cryoffear/dlls/hl.dll": "cf818cc887ef492f395bc58e88344b0ca645a7f87f9976ca3710f747cecdf24f",
-        "out/runtime/cryoffear/cl_dlls/client.dll": "18ddd0a7d8f751c5ab66b1575256225c8a4c568e648c4c55e6b54a9c6dcb9069"
+        "out/runtime/cryoffear/dlls/hl.dll": "ee833df3f6cc9170cc47d030d960d5b816d13d178bb5f9edea6b19904123344d",
+        "out/runtime/cryoffear/cl_dlls/client.dll": "9c6ed6b0ac0f4efff0a3d48c534bbf8122fad8fdb4d2816610057cad50e46b02"
       },
       "original_delta_sha256": "f5e56639204dac9323bc8c9df08ea25a16514785061b2946f9777fec60c4c4de",
-      "runtime_delta_sha256": "48fa4bba70194586a2010348e732ea4d2d287d7af1e44b0bf1b2e4f493004e3f"
+      "runtime_delta_sha256": "862998458a428c3e822ade8db9ecda441f8bb5200f966e1b5ea2a974773c819c",
+      "correction_checks": [
+        "stairs_hidden_brush_excluded_from_network",
+        "stairs_debug_brush_included_in_network",
+        "hidden_ladder_packets_preserve_prediction_and_nodraw",
+        "dodge_adds_native_spring_velocity_not_view_angle",
+        "jump_adds_native_spring_velocity_not_view_angle",
+        "prediction_packet_camera_spring_survives_weapon_export"
+      ],
+      "pm_numeric_regressions": "water percent/sprint, step cadence/low-health, spring integration/death and landing threshold/cap; both client and server"
     },
     {
       "renderer": "rtx",
       "result": "pass",
       "report": "analysis/local/rtx-c_sdkmap1-movement-isolated.json",
-      "log_sha256": "58affd5ac08dd9e441958ee729be73fa054bc375db05211ac886e819c817db24",
+      "log_sha256": "1894a73dc95645301d8a35f294ed034df2be1a901d7770a93beb9594df976532",
       "assertions": [
         "COF_PM_TEST PASS failures=0 side=server",
         "COF_PM_TEST PASS failures=0 side=client",
@@ -37,35 +46,46 @@
         "COF_MOVEMENT_CLIENT_COMPLETE failures=0",
         "COF_LADDER_TEST_COMPLETE failures=0"
       ],
-      "unique_named_checks": 78,
+      "unique_named_checks": 100,
       "camera_network_eye": true,
       "modules": {
-        "out/runtime-rtx/cryoffear/dlls/hl_amd64.dll": "451ea32af5486a989e83ee80ce47fecc61205ceb4c7fbe2a3c557d830e23d824",
-        "out/runtime-rtx/cryoffear/cl_dlls/client_amd64.dll": "067e9d311a0fcf1e737139cabbad65001e54d34607520f1081b5f008b8bf3b43"
+        "out/runtime-rtx/cryoffear/dlls/hl_amd64.dll": "eac8f5b54b01cc712c5edd12931d9e5257f387b2a66fff46aa21a9acf0970d50",
+        "out/runtime-rtx/cryoffear/cl_dlls/client_amd64.dll": "34a713c94a1182effb803d0a26871071266766a0356a8fbe9549eee918858bd8"
       },
       "original_delta_sha256": "f5e56639204dac9323bc8c9df08ea25a16514785061b2946f9777fec60c4c4de",
-      "runtime_delta_sha256": "48fa4bba70194586a2010348e732ea4d2d287d7af1e44b0bf1b2e4f493004e3f"
+      "runtime_delta_sha256": "862998458a428c3e822ade8db9ecda441f8bb5200f966e1b5ea2a974773c819c",
+      "correction_checks": [
+        "stairs_hidden_brush_excluded_from_network",
+        "stairs_debug_brush_included_in_network",
+        "hidden_ladder_packets_preserve_prediction_and_nodraw",
+        "dodge_adds_native_spring_velocity_not_view_angle",
+        "jump_adds_native_spring_velocity_not_view_angle",
+        "prediction_packet_camera_spring_survives_weapon_export"
+      ],
+      "pm_numeric_regressions": "water percent/sprint, step cadence/low-health, spring integration/death and landing threshold/cap; both client and server"
     }
   ],
   "source_sha256": {
-    "src/cof/client/movement.cpp": "92c5a471c21d8dd3eee6786a2f7b90b31ab72de0af177392239d59b17522d7a8",
+    "src/cof/client/movement.cpp": "babd2766bcc198ffc14e5e7adfad95f1973ed901f453c6ce97bf224772a3ab57",
     "src/cof/client/movement.h": "c9fd9505bc3a9f4b9f80c7fde26dd687146ae9d05ae95b2cdf8df8e35fb50161",
     "src/cof/client/prototype_client.cpp": "08fe233d53e38de1731308b7a666e43786a4b39b1d7d697afefc4a1efcefb2ea",
     "src/cof/client/status_hud.cpp": "854074c0dcbe3ab1b1d193bf1ed0ef40dded6dd9ad41b98610f9138d032cdb93",
-    "src/cof/server/ladders.cpp": "ba4c4c3457b5fbde91513b978d581461bc4eeff5c7fc14dc80c4a4886586c267",
+    "src/cof/server/ladders.cpp": "2649daca57265b68386936d41e885929c8f734cc38b7e85fa57750da4834d59e",
     "src/cof/server/ladders.h": "6f57ba40f55293dc614c9b7ec484ab11db1737970cea2f4d78b8a5454e1e497f",
-    "src/cof/server/movement.cpp": "0c7a3fc950a5934d5b739207b3ac0b1517325db3cf705ebf17c66c2f40e92294",
+    "src/cof/server/movement.cpp": "9af84d3c814a182243a733aeba0f9917b2c427deeb28971129cc46afdbd01985",
     "src/cof/server/movement.h": "8d01134e234959441c5a869d0506d278bfb3144b3777e4e62a89779ee4823fbc",
-    "tests/cof/server/ladder_runtime_tests.inc": "075a40fb62c33777751a57255c3e855c6c2faf910f5f816ec6ba96ec87298ffc",
-    "tests/cof/server/movement_runtime_tests.inc": "c9a848681a02e3f109808736c79a63dee30ac42aaee03426cfdc4b1c53d83fe6",
-    "tests/cof/shared/movement_pm_tests.inc": "37634b4c8ebd162efa58b04c3436a5a14484cf74739a4cd1a84779cefe60483e",
+    "tests/cof/server/ladder_runtime_tests.inc": "fbb4a4d995e7e4b1a575d94f6992b098c1dbf922f6f2140de7a4fcdeef5ebcfc",
+    "tests/cof/server/movement_runtime_tests.inc": "d10b3d32334f239e5d3154a7ef54cfe64c59f4c9a9be4759c5c7fc72f8c84588",
+    "tests/cof/shared/movement_pm_tests.inc": "4e256156254ee2ab046442b4ad561058bae03efa3d20ca48442d17f8461b52a2",
     "tools/prepare_game.py": "ee2eb895a778142195d0fb767a4f115ac31de41c82b9e6c9b361c85db0b5c51f",
-    "tools/prepare_movement_client.py": "64424b4aa0ea2c18df81789b392f989ccad8e9ddb2414b884f25376a3c28c95d",
-    "tools/prepare_movement_ladders.py": "2de3ca5410ce66f594a5d10f84a0eb7e90e41eb9fda8cf8044c1cce387a8ae5d",
-    "tools/prepare_movement_physics.py": "b9ead7de98b32024ed5d82869ad1b22e0b6080a58bc246c851d67ddd14dcfe46",
-    "tools/prepare_movement_protocol.py": "8163718e193d19eb325c8d14d4f72753bfd1f8e81965253fdb8aedb1a97e745a",
-    "tools/prepare_movement_server.py": "652020b37e124abe3b109f0c18721efb5720d21814e369c7126a22d9306ad5d1",
+    "tools/prepare_movement_client.py": "07ab826378b1598f06fbaf56f8bc361a784526b317f448c2bf870f6495683ec8",
+    "tools/prepare_movement_ladders.py": "c1933dcbf042a935a1ca5874e395cb6d5cfe1039d4d809d4a7ed19f959940a5f",
+    "tools/prepare_movement_physics.py": "ee8a552d2eeffd3786f3cacb47a0b8d3347aa39df226de4e6afcd19c0deae18a",
+    "tools/prepare_movement_protocol.py": "fbb76b3380f81c96fdbfd9cfcc1556e6f778a03a718327aa0b3e64d8f46889fd",
+    "tools/prepare_movement_server.py": "64105abdebd2589a9806bb3a0d5a3633f99a299d0feda62440a01bbd6f2732db",
     "tools/smoke_rtx.py": "61088c29922b9d314877cf88c0364c1069f7175dda7c6abef53063271665b2a2",
-    "tools/stage_movement.py": "cd8ec71b73da5ff1c2e3aab5387078b96d392d4017cf3c340d0cd78cb6b67cc9"
-  }
+    "tools/stage_movement.py": "522aaed8adf84eaf0503b66cb893532a30448ef2408658599b2593ce94792660",
+    "runtime/config.cfg": "01366702adbfc11808e513aaa2d5a524cc019eaf28d123c331da976dd4c300ff"
+  },
+  "resource_policy": "Original installed game resources and vendor source checkouts unchanged by this correction; deployment confined to out/"
 }

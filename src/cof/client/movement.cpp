@@ -48,6 +48,7 @@ bool clientTestsComplete;
 bool cameraViewLogged;
 bool cameraNetworkEyeLogged;
 bool ladderInputBlocked;
+bool dodgeGrounded;
 int cameraAttachCount;
 const char* dodgeCommands[] = {"dodgeforward", "dodgebackward", "dodgeleft", "dodgeright"};
 
@@ -69,9 +70,10 @@ bool Nightmare() {
     return map && !std::strcmp(map, "maps/c_nightmare.bsp");
 }
 bool CanDodge() {
-    // The original client gate 10559515 is unresolved. The server is authoritative
-    // for water, duck, stamina and cooldown; do not invent a client ground gate.
-    return !fallOver && !cameraEntity && !OverlayOpen() && gHUD.m_Health.m_iHealth > 0;
+    // 100af790 sets 10559515 from ref_params.onground and IsNoClipping().
+    // Xash exposes ref_params.onground as a boolean (unlike pmove's entity index).
+    return dodgeGrounded && !gEngfuncs.IsNoClipping() && !fallOver && !cameraEntity &&
+        !OverlayOpen() && gHUD.m_Health.m_iHealth > 0;
 }
 void SendDodge(int direction) {
     if (direction >= 0 && direction < 4 && CanDodge())
@@ -81,7 +83,8 @@ void SprintDown() {
     if (!Nightmare() && !fallOver && !cameraEntity && !OverlayOpen()) KeyDown(&sprintKey);
 }
 void SprintUp() { KeyUp(&sprintKey); }
-void DodgeDown() { if (CanDodge()) KeyDown(&dodgeKey); }
+// Holding dodge in the air still latches the key; only sending a dodge is gated.
+void DodgeDown() { if (!fallOver && !cameraEntity && !OverlayOpen()) KeyDown(&dodgeKey); }
 void DodgeUp() { KeyUp(&dodgeKey); }
 
 void ClearActionKeys() {
@@ -204,6 +207,7 @@ void CofMovementDamageFlash(int enabled) {
 }
 
 void CofMovementView(ref_params_s* view) {
+    dodgeGrounded = view && view->onground != 0;
     if (!view || view->intermission || view->spectator || CofGameMenuWorld()) return;
     if (cameraEntity) {
         cl_entity_t* camera = gEngfuncs.GetEntityByIndex(cameraEntity);
@@ -255,6 +259,7 @@ void CofMovementReset() {
     std::fill(ladderVector, ladderVector + 3, 0.0f);
     zoomFov = damageUntil = 0; zoomRate = 50; zoomActive = false;
     ladderInputBlocked = false;
+    dodgeGrounded = false;
     CofStatusHudReset();
 }
 void CofMovementInit() {
@@ -301,6 +306,7 @@ void CofMovementTestFrame(float time) {
     const kbutton_t oldJump = in_jump, oldDuck = in_duck;
     const kbutton_t oldForward = in_forward, oldBack = in_back;
     const bool oldLadderBlocked = ladderInputBlocked;
+    const bool oldDodgeGrounded = dodgeGrounded;
     const int oldFall = fallOver, oldRequired = getupRequired, oldTaps = getupTaps;
     const int oldCamera = cameraEntity, oldLadder = ladderState, oldAttachCount = cameraAttachCount;
     const int oldHealth = gHUD.m_Health.m_iHealth, oldFlags = gHUD.m_Health.m_iFlags;
@@ -356,6 +362,13 @@ void CofMovementTestFrame(float time) {
     // input to the server or touching the user's desktop.
     auto oldServerCommand = gEngfuncs.pfnServerCmd;
     gEngfuncs.pfnServerCmd = CaptureLadderCommand;
+    cameraEntity = 0; dodgeGrounded = false;
+    ladderCommandCount = 0;
+    SendDodge(0);
+    check(ladderCommandCount == 0, "airborne_dodge_not_sent");
+    dodgeGrounded = true;
+    SendDodge(0);
+    check(ladderCommandCount == (gEngfuncs.IsNoClipping() ? 0 : 1), "grounded_dodge_noclip_gate");
     cameraEntity = 1; ladderInputBlocked = false;
     ladderCommandCount = ladderCommandMask = 0;
     in_forward.state = 1; in_back.state = 0;
@@ -365,6 +378,7 @@ void CofMovementTestFrame(float time) {
     check(ladderCommandCount == 3 && ladderCommandMask == 7, "ladder_overlay_restores_only_held_direction");
     gEngfuncs.pfnServerCmd = oldServerCommand;
     in_forward = oldForward; in_back = oldBack; ladderInputBlocked = oldLadderBlocked;
+    dodgeGrounded = oldDodgeGrounded;
     sprintKey = oldSprint; dodgeKey = oldDodge; in_jump = oldJump; in_duck = oldDuck;
     fallOver = oldFall; getupRequired = oldRequired; getupTaps = oldTaps;
     cameraEntity = oldCamera; ladderState = oldLadder; cameraAttachCount = oldAttachCount;

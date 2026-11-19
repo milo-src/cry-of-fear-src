@@ -39,6 +39,25 @@ def prepare(target):
     text = replace_once(text, anchor, '\tCofMovementCreateMove(cmd, active);\n' + anchor, 'CreateMove before overlay suppression')
     path.write_text(text)
 
+    path = target / 'cl_dll/hl/hl_weapons.cpp'
+    text = path.read_text()
+    # CoF owns every axis of vuser3 as predicted camera spring velocity. Reserve
+    # fuser4 for the SDK's secondary ammo type, matching the server adapter.
+    # vuser4.z remains the secondary ammo COUNT and must not be overwritten.
+    # CLIENT_WEAPONS is currently off; keep the optional prediction path safe too.
+    for state in ('from', 'to'):
+        text = replace_once(text, f'{state}->client.vuser3[2]',
+                            f'{state}->client.fuser4', state+' secondary ammo transport')
+    path.write_text(text)
+
+    path = target / 'cl_dll/entity.cpp'
+    text = path.read_text()
+    anchor = '\tpcd->fuser3\t\t\t\t\t= ppcd->fuser3;'
+    text = replace_once(text, anchor, anchor +
+                        '\n\t// Native CoF adapter: preserve remapped secondary ammo type.\n'
+                        '\tpcd->fuser4 = ppcd->fuser4;', 'prediction secondary ammo type')
+    path.write_text(text)
+
     path = target / 'cl_dll/health.cpp'
     text = '#include "movement.h"\n' + path.read_text()
     text = replace_once(text, '#include "hud.h"', '#include "hud.h"\n#include "cl_entity.h"', 'Health entity header order')

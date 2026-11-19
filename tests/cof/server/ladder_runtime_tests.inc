@@ -1,4 +1,5 @@
 // Opt-in engine assertions. No desktop input or original DLL execution.
+#include "client.h"
 static int ladderTestFailures;
 static void LadderCheck(bool pass,const char* name) {
     ALERT(at_console,"COF_LADDER_TEST %s %s\n",pass?"PASS":"FAIL",name);
@@ -36,6 +37,32 @@ void CofLadderTestFrame() {
         bottom->pev->targetname=ALLOC_STRING("cof_test_ladder_bottom");
         brush->pev->targetname=ALLOC_STRING("cof_test_brush_ladder");
         control->pev->target=brush->pev->targetname;
+        const float savedShowTriggers=CVAR_GET_FLOAT("showtriggers");
+        CVAR_SET_FLOAT("showtriggers",0);
+        brush->Precache(); control->Precache();
+        LadderCheck((brush->pev->effects&EF_NODRAW) && (control->pev->effects&EF_NODRAW) &&
+            control->pev->solid==SOLID_TRIGGER,"precache_hides_ladder_and_controller");
+        CVAR_SET_FLOAT("showtriggers",1);
+        brush->Precache(); control->Precache();
+        LadderCheck(!(brush->pev->effects&EF_NODRAW) && !(control->pev->effects&EF_NODRAW),
+            "precache_debug_visibility_clears_nodraw");
+        CVAR_SET_FLOAT("showtriggers",0);
+        brush->pev->spawnflags=1; brush->Precache();
+        LadderCheck(!(brush->pev->effects&EF_NODRAW),"brush_show_spawnflag_overrides_hidden");
+        brush->pev->spawnflags=0; brush->Precache(); control->Precache();
+        // Exercise the actual AddToFullPack gate with an existing precached model.
+        // No entity is relinked or moved; temporary packet inputs are restored here.
+        entvars_t savedBrush=*brush->pev, savedControl=*control->pev;
+        brush->pev->model=control->pev->model=player->pev->model;
+        brush->pev->modelindex=control->pev->modelindex=player->pev->modelindex;
+        entity_state_t hiddenState={};
+        int packed=AddToFullPack(&hiddenState,brush->entindex(),brush->edict(),player->edict(),0,0,nullptr);
+        LadderCheck(packed && (hiddenState.effects&EF_NODRAW) && hiddenState.skin==CONTENTS_LADDER &&
+            hiddenState.iuser1==1,"hidden_ladder_packets_preserve_prediction_and_nodraw");
+        LadderCheck(!AddToFullPack(&hiddenState,control->entindex(),control->edict(),player->edict(),0,0,nullptr),
+            "hidden_controller_not_sent_for_rendering");
+        *brush->pev=savedBrush; *control->pev=savedControl;
+        CVAR_SET_FLOAT("showtriggers",savedShowTriggers);
         LadderCheck(brush->pev->skin==CONTENTS_LADDER && brush->pev->iuser1==1,"brush_starts_disabled");
         static_cast<CCofLadderControl*>(control)->LadderTouch(player);
         LadderCheck(brush->pev->iuser1==0,"control_touch_enables_brush");
