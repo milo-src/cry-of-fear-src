@@ -1,7 +1,7 @@
 """Build committed PNG masks into linear RGBA8 KTX2 sidecars for RTGL1.
 
 Uncompressed KTX2 layout follows the bundled Khronos KTX headers/createdfd.c.
-No original game files or numpy required to build the authored pack.
+No original game files required to build the authored pack. Requires Pillow/numpy.
 """
 import argparse
 import hashlib
@@ -10,6 +10,7 @@ from pathlib import Path
 import struct
 
 from PIL import Image
+import numpy as np
 
 
 def material_levels(image, normal=None):
@@ -21,35 +22,28 @@ def material_levels(image, normal=None):
     not a reconstruction of the source material's physical microgeometry.
     """
     levels = [image.convert('RGBA')]
+    pixels = np.asarray(levels[0], dtype=np.uint8)
     moments = None
     if normal is not None:
         if normal.size != image.size or normal.mode != 'RGBA':
             raise ValueError('Normal/ORM dimensions or mode mismatch')
-        moments = []
-        for orm, n in zip(levels[0].getdata(), normal.getdata()):
-            sx, sy = n[0]/127.5-1, n[1]/127.5-1
-            moments.append(((orm[1]/255)**4, sx, sy, sx*sx+sy*sy))
+        n = np.asarray(normal, dtype=np.float64)
+        sx, sy = n[..., 0]/127.5-1, n[..., 1]/127.5-1
+        moments = np.stack(((pixels[..., 1]/255.)**4, sx, sy, sx*sx+sy*sy), axis=-1)
     while levels[-1].size != (1, 1):
         w, h = levels[-1].size
         nw, nh = max(1, w//2), max(1, h//2)
-        source = list(levels[-1].getdata())
-        pixels, next_moments = [], []
-        for y in range(nh):
-            for x in range(nw):
-                indices = [sy*w+sx for sy in range(y*h//nh, (y+1)*h//nh)
-                           for sx in range(x*w//nw, (x+1)*w//nw)]
-                count = len(indices)
-                pixel = [(sum(source[i][c] for i in indices)+count//2)//count for c in range(4)]
-                if moments is not None:
-                    mean = tuple(sum(moments[i][c] for i in indices)/count for c in range(4))
-                    next_moments.append(mean)
-                    variance = max(0, mean[3]-mean[1]**2-mean[2]**2)
-                    pixel[1] = int(255*min(1, mean[0]+.25*variance)**.25+.5)
-                pixels.append(tuple(pixel))
-        mip = Image.new('RGBA', (nw, nh))
-        mip.putdata(pixels)
-        levels.append(mip)
-        moments = next_moments if moments is not None else None
+        # Same integer box partitions as the scalar writer, including NPOT
+        # border texels; bounded arrays replace millions of Python tuples.
+        xs, ys = np.arange(nw)*w//nw, np.arange(nh)*h//nh
+        counts = np.diff(np.append(ys,h))[:,None]*np.diff(np.append(xs,w))[None,:]
+        sums = np.add.reduceat(np.add.reduceat(pixels.astype(np.uint32),ys,axis=0),xs,axis=1)
+        pixels = ((sums+counts[...,None]//2)//counts[...,None]).astype(np.uint8)
+        if moments is not None:
+            moments = np.add.reduceat(np.add.reduceat(moments,ys,axis=0),xs,axis=1)/counts[...,None]
+            variance = np.maximum(0, moments[...,3]-moments[...,1]**2-moments[...,2]**2)
+            pixels[...,1] = (255*np.minimum(1, moments[...,0]+.25*variance)**.25+.5).astype(np.uint8)
+        levels.append(Image.fromarray(pixels, 'RGBA'))
     return levels
 
 

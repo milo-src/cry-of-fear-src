@@ -11,7 +11,7 @@ The ordinary renderer and cinematic 3D menu retain their existing materials.
   custom maps work without a material pack. The existing `sound/materials.txt`
   supplies surface classes where available; unknown surfaces stay matte and
   nonmetallic. Color/brightness alone cannot identify a physical substance.
-* **Authored:** the pack has 20 materials / 40 PNG masks, covering paving,
+* **Authored:** the pack has 25 materials / 50 PNG masks, covering paving,
   masonry, concrete, asphalt, gravel, earth, painted and rusted metal. Matching
   raw texture content selects these more carefully tuned masks. A different
   custom texture with the same name receives the automatic treatment instead.
@@ -27,8 +27,8 @@ material identification from a single color image.
 
 Run `python tools/build_rtx.py` from the repository root. Waf compiles the
 committed PNGs to linear RGBA8 KTX2 with mipmaps and installs them only in
-`out/runtime-rtx/rt/mat/cof_pbr/`. Python needs Pillow. The regular build does
-not need the source WADs or numpy to compile these masks.
+`out/runtime-rtx/rt/mat/cof_pbr/`. Python needs Pillow and numpy. The regular build
+does not need the source WADs to compile these masks.
 
 Runtime-generated masks go to `out/runtime-rtx/rt/mat/cof_auto/`, which is
 disposable and not committed. Their names include content, dimensions and
@@ -66,7 +66,7 @@ Masks can then be hand-edited without re-running the authoring command:
   B encodes height and A=254 marks the height-enabled contract. Legacy A=255
   remains valid and disables parallax. RTGL uses XY as slopes, not conventional
   normalized XYZ normals. This alpha is metadata, never surface opacity.
-* Keep the source UV orientation and aspect ratio. Optional `mask_scale: 2|4`
+* Keep the source UV orientation and aspect ratio. Optional `mask_scale: 2|4|8|16`
   authors higher-resolution numeric sidecars; manifest `mask_width/height`
   describe these independently of the original identity dimensions (maximum
   2048 per axis). This never enlarges or replaces the color texture.
@@ -102,7 +102,7 @@ do not copy it onto arbitrary custom textures. Other surfaces use the generic
 fallback or their own authored masks.
 
 `c_obbsowa` additionally has a content-verified three-course masonry layout.
-Its 896x640 numeric masks model recessed mortar and bevels; stains remain color
+Its 1792x1280 numeric masks model recessed mortar and bevels; stains remain color
 detail, not large bumps. This layout is source-specific, not a generic brick
 detector for mod textures.
 
@@ -139,6 +139,34 @@ excluded. Allocation/atlas limits retain the ordinary dry surface and geometry.
 
 Commit profiles, manifest, PNGs and code together. KTX2 outputs and automatic
 masks belong in the ignored build/runtime folders. No automatic commit is made.
+
+### High-resolution committed pack
+
+All 50 PNG masks in `rtx_materials/masks/` now contain separately generated
+periodic microstructure. Six wall materials use 1536â€“2048 px on their long edge;
+the remaining materials use 1024–1152 px. Aspect ratios stay unchanged: the slab wall
+`c_hogmur2b` is 1792x1536, while `c_concrete1` is 2048x2048. The plaster/window panels `c_obbsobwin1/2` have 2048x2048 masks with
+separate plaster, frame and recessed glass responses. The source color
+textures and content fingerprints retain their original dimensions and bytes.
+
+Stone/concrete receive shallow pores and mineral grain, earth a coarser grain,
+rust small pits and stronger roughness variation, and paint a gentler coating.
+Seeds derive from texture names, so authoring is reproducible. Grain radii and
+source-detail filters use original texel units; increasing output resolution does
+not shrink the original joints or reinterpret broad painted shadows as relief.
+Height and normal slopes share one field, with correlated roughness. These are
+authored material approximations, not recovered high-resolution color detail.
+
+The PNG sources occupy about 78 MiB. Linear uncompressed runtime masks plus mips
+are larger; only matched materials are selected. Numpy box reductions keep the
+2K mip build bounded without Python objects per texel and preserve the existing
+normal-variance/roughness contract, including non-power-of-two tile edges.
+
+Regressions: `python -m unittest discover -s rtx_materials` and
+`python tests/rtx_material_mips/check.py`. Keep `author.py`, `profiles.json`,
+`manifest.json`, `masks/`, `build.py`, and `wscript` together in Git. The automatic
+custom-map fallback remains available; these source-specific layouts are never
+applied to a different image just because its texture name matches.
 
 ## Verification
 

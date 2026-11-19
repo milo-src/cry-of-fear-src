@@ -59,20 +59,49 @@ def fnv(data):
     return value
 
 
+def microstructure(shape, scale, profile):
+    """Deterministic periodic material detail, independent of baked color.
+
+    Radii are in original texture texels, so changing mask resolution never
+    changes the size of pores. FFT filters wrap at tile edges. The same height
+    drives slopes and parallax; pore interiors have a broader roughness lobe.
+    """
+    seed = profile.get('detail_seed', 0)
+    rng = np.random.default_rng(seed)
+    noise = rng.standard_normal(shape)
+    fine = blur(noise, max(.55, .12*scale)) - blur(noise, .45*scale)
+    grain = blur(noise, .48*scale) - blur(noise, 1.4*scale)
+    pores = blur(noise, .28*scale)
+    def normalized(field):
+        return np.clip(field/max(float(np.std(field)), 1e-6), -3, 3)/3
+    fine, grain = normalized(fine), normalized(grain)
+    # Soft, sparse depressions, not black albedo dots or random metallic specks.
+    pores = np.clip((pores/max(float(np.std(pores)), 1e-6)-1.1)/1.6, 0, 1)
+    pores = pores*pores*(3-2*pores)
+    kind = profile['kind']
+    amplitude, roughness = {
+        'stone': (.012, .12), 'earth': (.018, .10),
+        'rust': (.009, .15), 'paint': (.0035, .065),
+    }[kind]
+    height = amplitude*(.45*fine + grain - 1.35*pores)
+    rough = roughness*(.5*fine + .6*grain + pores)
+    return height, rough
+
+
 def masks(image, profile):
     # Increase only numeric sidecar resolution. Source identity and the game's
     # color texture remain at their original resolution.
     scale = profile.get('mask_scale', 1)
-    if scale not in (1, 2, 4):
-        raise ValueError('mask_scale must be 1, 2 or 4')
+    if scale not in (1, 2, 4, 8, 16) or max(image.size)*scale>2048:
+        raise ValueError('mask_scale must be 1/2/4/8/16, at most 2048 px per axis')
     if scale != 1:
         image = image.resize((image.width*scale, image.height*scale), Image.Resampling.BICUBIC)
     rgb = np.asarray(image, dtype=np.float64)[..., :3] / 255
     lum = rgb @ [0.2126, 0.7152, 0.0722]
     # Local detail only: never interpret the original broad painted shadows as
     # a height field. Strength is bounded even on contrasty low-res textures.
-    detail = blur(lum, 0.65) - blur(lum, 3.5)
-    medium = blur(lum, 2.0) - blur(lum, 12.0)
+    detail = blur(lum, 0.65*scale) - blur(lum, 3.5*scale)
+    medium = blur(lum, 2.0*scale) - blur(lum, 12.0*scale)
     # Retain medium-scale relief as well as fine grain, while rejecting broad
     # baked lighting. Slopes and parallax now derive from this same height field.
     height = (0.35 * np.clip(detail / max(float(np.std(detail)) * 3, 0.06), -1, 1)
@@ -102,6 +131,25 @@ def masks(image, profile):
         moulding = np.exp(-((row-7/192)/(4.5/192))**2)
         relief_height = np.clip(.53 - .32*joint - .16*edge + .20*moulding
                                + .015*np.clip(detail/.06,-1,1), .02,.98)
+    window_layout=profile.get('height_layout') in ('cof_obbsobwin1','cof_obbsobwin2')
+    if window_layout:
+        # Verified 128x128 plaster panels. Baked window shadows are not bumps.
+        y,x=np.mgrid[:image.height,:image.width]
+        x,y=x*128/image.width,y*128/image.height
+        low,high=(45,82) if profile['height_layout']=='cof_obbsobwin1' else (32,99)
+        distance=np.minimum.reduce((x-45,82-x,y-low,high-y))
+        window=np.clip(distance/.7,0,1)
+        # Glass blocks have narrow raised joints and a recessed pane surface.
+        cols=(x-46)%12
+        rows=(y-low-1)%13
+        joints=np.minimum.reduce((cols,12-cols,rows,13-rows))
+        pane=np.clip((distance-1.4)/.7,0,1)*np.clip((joints-.6)/.6,0,1)
+        relief_height=.50+.035*window-.10*pane
+    micro_height, micro_rough = microstructure(lum.shape, scale, profile)
+    # Keep dressed-stone joints recessed; fine grain belongs on the stone face.
+    detail_mask = (.3+.7*bevel) if profile.get('height_layout')=='cof_obbsowa' else 1
+    if window_layout:detail_mask=1-.95*window
+    relief_height = np.clip(relief_height + micro_height*detail_mask, .02, .98)
     gx = (np.roll(relief_height, -1, 1) - np.roll(relief_height, 1, 1)) * image.width * .012
     gy = (np.roll(relief_height, -1, 0) - np.roll(relief_height, 1, 0)) * image.height * .012
     normal = np.ones((*lum.shape, 4), dtype=np.float64)
@@ -115,8 +163,11 @@ def masks(image, profile):
         rough = .53 + .29*(1-bevel) + .10*np.clip(-detail/.06,-1,1)
     if profile.get('height_layout') == 'cof_hogmur2b':
         # Grime broadens the reflection while the smoother stone remains visible.
-        grime=np.clip((blur(lum,2)-blur(lum,14)) / -.12,0,1)
+        grime=np.clip((blur(lum,2*scale)-blur(lum,14*scale)) / -.12,0,1)
         rough=np.clip(profile['roughness']+.23*grime+.25*joint,.38,.88)
+    if window_layout:
+        rough=profile['roughness']*(1-window)+.46*window-.24*pane
+        micro_rough*=detail_mask
     metallic = np.zeros_like(lum)
     if profile['kind'] == 'rust':
         rust = np.clip((rgb[..., 0] - rgb[..., 2]) * 5 + (rgb[..., 0] - rgb[..., 1]) * 2, 0, 1)
@@ -130,7 +181,8 @@ def masks(image, profile):
         patch = np.sin(2*np.pi*x/w + 0.7*np.sin(2*np.pi*y/h)) * np.cos(2*np.pi*y/h)
         rough -= profile['damp'] * np.clip(patch, 0, 1)**2
     orm = np.ones((*lum.shape, 4), dtype=np.float64)
-    orm[..., 1] = np.clip(rough, 0.40 if profile['kind'] in ('earth', 'stone') else 0.32, 0.99)
+    orm[..., 1] = np.clip(rough+micro_rough, profile.get('min_roughness',
+                         0.40 if profile['kind'] in ('earth', 'stone') else 0.32), 0.99)
     orm[..., 2] = metallic
     return [Image.fromarray(np.rint(a*255).astype(np.uint8)) for a in (orm, normal)]
 
@@ -153,6 +205,7 @@ def main():
         manifest['materials'] = [e for e in json.loads((ROOT/'manifest.json').read_text())['materials'] if e['name'] not in profiles]
     for name, profile in profiles.items():
         original, wad = sources[name]
+        profile = dict(profile, detail_seed=int.from_bytes(hashlib.sha256(name.encode('ascii')).digest()[:4], 'little'))
         orm, normal = masks(original, profile)
         for suffix, mask in (('orm', orm), ('n', normal)):
             mask.save(output/f'{name}_{suffix}.png', optimize=True)

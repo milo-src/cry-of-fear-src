@@ -7,6 +7,7 @@ def options(opt):
 def configure(conf):
     conf.env.PYTHON = [sys.executable]
     from PIL import Image
+    import numpy
 
 def build(bld):
     entries = json.loads(bld.path.find_resource('manifest.json').read())['materials']

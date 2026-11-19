@@ -1,25 +1,193 @@
 {
   "version": 1,
   "materials": {
-    "c_obbsowa": {"kind": "stone", "height_layout": "cof_obbsowa", "mask_scale": 4, "roughness": 0.57, "variation": 0.12, "relief": 0.20},
-    "c_hogmur2b": {"kind": "stone", "height_layout": "cof_hogmur2b", "roughness": 0.48, "variation": 0.20, "relief": 0.20},
-    "c_stenmark": {"kind": "stone", "roughness": 0.58, "variation": 0.28, "relief": 0.32, "damp": 0.13},
-    "c_stenmur": {"kind": "stone", "roughness": 0.72, "variation": 0.22, "relief": 0.32},
-    "c_stenmur2": {"kind": "stone", "roughness": 0.70, "variation": 0.24, "relief": 0.32},
-    "c_stengrass": {"kind": "earth", "roughness": 0.94, "variation": 0.05, "relief": 0.15},
-    "c_concrete1": {"kind": "stone", "roughness": 0.86, "variation": 0.09, "relief": 0.12},
-    "c_cretemur1": {"kind": "stone", "roughness": 0.85, "variation": 0.10, "relief": 0.10},
-    "c_asfaltpl2": {"kind": "stone", "roughness": 0.72, "variation": 0.18, "relief": 0.20, "damp": 0.13},
-    "c_asfaltvag1": {"kind": "stone", "roughness": 0.78, "variation": 0.16, "relief": 0.12, "damp": 0.10},
-    "c_obbsswalk": {"kind": "stone", "roughness": 0.79, "variation": 0.14, "relief": 0.12, "damp": 0.10},
-    "c_stair": {"kind": "stone", "roughness": 0.80, "variation": 0.13, "relief": 0.13},
-    "c_stairfront": {"kind": "stone", "roughness": 0.87, "variation": 0.08, "relief": 0.10},
-    "c_rstpipe": {"kind": "rust", "roughness": 0.53, "variation": 0.18, "relief": 0.10, "metallic": 0.65},
-    "c_rstblpipe": {"kind": "rust", "roughness": 0.60, "variation": 0.18, "relief": 0.11, "metallic": 0.50},
-    "c_metallist": {"kind": "paint", "roughness": 0.57, "variation": 0.12, "relief": 0.07},
-    "c_sdlyktstolps": {"kind": "rust", "roughness": 0.54, "variation": 0.15, "relief": 0.08, "metallic": 0.60},
-    "c_grus1": {"kind": "earth", "roughness": 0.94, "variation": 0.05, "relief": 0.17},
-    "c_jord": {"kind": "earth", "roughness": 0.96, "variation": 0.03, "relief": 0.12},
-    "c_roof2": {"kind": "paint", "roughness": 0.58, "variation": 0.14, "relief": 0.09}
+    "c_obbsowa": {
+      "kind": "stone",
+      "height_layout": "cof_obbsowa",
+      "mask_scale": 8,
+      "roughness": 0.57,
+      "variation": 0.12,
+      "relief": 0.2
+    },
+    "c_hogmur2b": {
+      "kind": "stone",
+      "height_layout": "cof_hogmur2b",
+      "roughness": 0.48,
+      "variation": 0.2,
+      "relief": 0.2,
+      "mask_scale": 8
+    },
+    "c_stenmark": {
+      "kind": "stone",
+      "roughness": 0.58,
+      "variation": 0.28,
+      "relief": 0.32,
+      "damp": 0.13,
+      "mask_scale": 4
+    },
+    "c_stenmur": {
+      "kind": "stone",
+      "roughness": 0.72,
+      "variation": 0.22,
+      "relief": 0.32,
+      "mask_scale": 8
+    },
+    "c_stenmur2": {
+      "kind": "stone",
+      "roughness": 0.7,
+      "variation": 0.24,
+      "relief": 0.32,
+      "mask_scale": 8
+    },
+    "c_stengrass": {
+      "kind": "earth",
+      "roughness": 0.94,
+      "variation": 0.05,
+      "relief": 0.15,
+      "mask_scale": 4
+    },
+    "c_concrete1": {
+      "kind": "stone",
+      "roughness": 0.86,
+      "variation": 0.09,
+      "relief": 0.12,
+      "mask_scale": 8
+    },
+    "c_cretemur1": {
+      "kind": "stone",
+      "roughness": 0.85,
+      "variation": 0.1,
+      "relief": 0.1,
+      "mask_scale": 8
+    },
+    "c_asfaltpl2": {
+      "kind": "stone",
+      "roughness": 0.72,
+      "variation": 0.18,
+      "relief": 0.2,
+      "damp": 0.13,
+      "mask_scale": 4
+    },
+    "c_asfaltvag1": {
+      "kind": "stone",
+      "roughness": 0.78,
+      "variation": 0.16,
+      "relief": 0.12,
+      "damp": 0.1,
+      "mask_scale": 4
+    },
+    "c_obbsswalk": {
+      "kind": "stone",
+      "roughness": 0.79,
+      "variation": 0.14,
+      "relief": 0.12,
+      "damp": 0.1,
+      "mask_scale": 2
+    },
+    "c_stair": {
+      "kind": "stone",
+      "roughness": 0.8,
+      "variation": 0.13,
+      "relief": 0.13,
+      "mask_scale": 8
+    },
+    "c_stairfront": {
+      "kind": "stone",
+      "roughness": 0.87,
+      "variation": 0.08,
+      "relief": 0.1,
+      "mask_scale": 4
+    },
+    "c_rstpipe": {
+      "kind": "rust",
+      "roughness": 0.53,
+      "variation": 0.18,
+      "relief": 0.1,
+      "metallic": 0.65,
+      "mask_scale": 4
+    },
+    "c_rstblpipe": {
+      "kind": "rust",
+      "roughness": 0.6,
+      "variation": 0.18,
+      "relief": 0.11,
+      "metallic": 0.5,
+      "mask_scale": 8
+    },
+    "c_metallist": {
+      "kind": "paint",
+      "roughness": 0.57,
+      "variation": 0.12,
+      "relief": 0.07,
+      "mask_scale": 8
+    },
+    "c_sdlyktstolps": {
+      "kind": "rust",
+      "roughness": 0.54,
+      "variation": 0.15,
+      "relief": 0.08,
+      "metallic": 0.6,
+      "mask_scale": 8
+    },
+    "c_grus1": {
+      "kind": "earth",
+      "roughness": 0.94,
+      "variation": 0.05,
+      "relief": 0.17,
+      "mask_scale": 4
+    },
+    "c_jord": {
+      "kind": "earth",
+      "roughness": 0.96,
+      "variation": 0.03,
+      "relief": 0.12,
+      "mask_scale": 4
+    },
+    "c_roof2": {
+      "kind": "paint",
+      "roughness": 0.58,
+      "variation": 0.14,
+      "relief": 0.09,
+      "mask_scale": 4
+    },
+    "c_obbsobwin1": {
+      "kind": "stone",
+      "height_layout": "cof_obbsobwin1",
+      "mask_scale": 16,
+      "roughness": 0.68,
+      "min_roughness": 0.16,
+      "variation": 0.07,
+      "relief": 0.04
+    },
+    "c_obbsobwin2": {
+      "kind": "stone",
+      "height_layout": "cof_obbsobwin2",
+      "mask_scale": 16,
+      "roughness": 0.68,
+      "min_roughness": 0.16,
+      "variation": 0.07,
+      "relief": 0.04
+    },
+    "c_buildcrete1": {
+      "kind": "stone",
+      "mask_scale": 8,
+      "roughness": 0.76,
+      "variation": 0.09,
+      "relief": 0.025
+    },
+    "c_cretewastkl1": {
+      "kind": "stone",
+      "mask_scale": 4,
+      "roughness": 0.76,
+      "variation": 0.09,
+      "relief": 0.025
+    },
+    "c_cretewastkl2": {
+      "kind": "stone",
+      "mask_scale": 4,
+      "roughness": 0.76,
+      "variation": 0.09,
+      "relief": 0.025
+    }
   }
 }
