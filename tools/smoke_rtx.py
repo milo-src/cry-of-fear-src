@@ -374,8 +374,8 @@ def main():
                         raise RuntimeError('Park diffuser did not reach the RTX visible-emission adapter')
                     if not re.search(r'COF_RTX_TRACED_DIFFUSER traced=1 emission=1\.00 attached=0 vertices=[1-9]\d*',text):
                         raise RuntimeError('Park diffuser missing from traced geometry or has duplicate attached light')
-                    if re.search(r'COF_RTX_OPTICS .*flares=(?!0\.00)[\d.]+',text):
-                        raise RuntimeError('Legacy gameplay lens flares are still enabled')
+                    if not re.search(r'COF_RTX_OPTICS .*wide_streaks=0',text):
+                        raise RuntimeError('Missing selective optics policy: wide lamp streaks disabled')
                 # Runtime inputs only, not proof of pixel-level parity with
                 # GoldSrc. Protect authored darkness on every playable BSP.
                 policies=re.findall(r'COF_RTX_LIGHTING_POLICY menu=(\d) synthetic_night=(\d) sky_energy=([\d.]+) baked_fill=(\d+)',text)

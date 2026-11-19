@@ -2,15 +2,12 @@
 
 ## Current gameplay presentation
 
-Gameplay streaks and optical-axis ghosts have been removed. `rt_lens_flares`
-is retained as an ignored legacy setting, defaulting to zero; old archived
-values cannot restore the white streak layer. Rain refraction and restrained
-light-reactive wipe detail remain. Menu glass uses its separate existing path.
-Compact HDR bloom (levels 3 minus 5) makes the visible luminous surface read
-as bright, without horizontal streaks or a broad optical veil. This small
-post-process glow is not ray tracing itself: the emitter's geometry, reflected
-radiance and indirect transport are the traced parts. It also works with dirt
-disabled and follows the bloom toggle.
+Only the wide horizontal lamp streak gather is removed. The light-reactive
+wipe mask, optical-axis reflections, rain refraction and existing menu glass
+remain active. `rt_lens_flares` defaults to 1 and controls lens reflections and
+raised wipe detail; 0 disables that component. `rt_lens_dirt` independently
+controls the illuminated smear mask. These screen-space effects supplement
+the traced emitters; they are not ray tracing themselves.
 
 The verified `hattlykta.mdl` luminous `tex_fullbright` diffuser is now opaque
 emissive tracing geometry, rather than an additive raster overlay. It is
@@ -19,28 +16,23 @@ spotlight remains in use; no duplicate attached light is added. This fixture
 profile applies on any map using that model, not arbitrary additive sprites.
 Original models, textures and BSP files are unchanged.
 
-Gameplay wipe illumination uses local contrast between bloom levels 3 and 5,
-instead of amplifying the already accumulated wide halo. Dry-air scattering
-was reduced from the `.72` to `.52` multiplier; local light cones and the
-separate rain density response remain. Exposure and direct-light power did
-not change.
+Wipe illumination and gameplay volumetric scattering are restored to their
+previous strengths (including the `.72` scattering multiplier). The separate
+rain density response, exposure and direct-light power are unchanged. No
+additional compact-bloom layer is stacked over the restored optics.
 
 RTGL clamps the per-primitive emissive channel to 0..1. The diffuser uses 1;
 increasing that input beyond 1 would not increase its radiance. The existing
 HDR emission boost remains in place.
 
-Waf and shader ABI checks pass. Isolated, silent `c_park` captures at native
-1920x1080 compare the alley before/after. The broad horizontal lamp smear is
-gone and the underside of the hood receives light. `--lamp-check` now asserts
-emission, non-translucent geometry and absence of a duplicate attached light
-at the actual upload boundary. A legacy `rt_lens_flares 2` run verifies zero
-active flares. These are targeted checks, not proof of parity on every map.
-The rain/stop/snow/disabled-rain sequence passed with final GPU readbacks;
-menu-optics runtime assertions passed independently. Neither automated menu
-assertions nor geometry upload logs alone establish visual quality.
+`--lamp-check` asserts emission, non-translucent diffuser geometry and absence
+of a duplicate attached light at the upload boundary. The optics diagnostic
+records `wide_streaks=0` independently of the remaining optical intensity.
+Runtime assertions alone do not establish visual quality; compare GPU
+readbacks at a fixed pose to inspect the mask and lighting.
 
 The following sections record the earlier optical experiment and its evidence;
-its gameplay streak/ghost implementation is superseded by the above.
+only its horizontal streak implementation is superseded by the above.
 
 The installed **Crysis 3 Remastered** was inspected read-only. This is not
 evidence about the original 2013 executable, nor a complete CryEngine port.
