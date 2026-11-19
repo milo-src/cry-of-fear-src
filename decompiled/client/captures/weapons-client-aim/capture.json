@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/weapons-client-aim",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "9e9c27287391d22e2ccb3ea2867735e0a9700b737f3d97e4a86de5da7d2548ab",
+      "procedure": "ram:0x100709a0",
+      "evidence_id": "ev_c2d433306c0a819a5764dfe369e3f51d674a29303f33b44b9396bfed2a868376",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "30fadda13709ac311082e6b2eb79f9b8734dfb73656e7d5b00fbdbab19041984",
+      "procedure": "ram:0x10032bf0",
+      "evidence_id": "ev_5dfa008496f989f3f5e5f5b38df9af4a8ef5dda5f18b4e1ac9cd25b21a0d9a52",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

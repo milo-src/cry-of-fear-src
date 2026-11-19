@@ -1,0 +1,52 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "unchanged": true,
+  "target_executed": false,
+  "records": [
+    {
+      "file": "message-registration.asm",
+      "command": [
+        "objdump",
+        "-d",
+        "--start-address=0x1001a2f0",
+        "--stop-address=0x1001a3b1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ],
+      "sha256": "ecb1e7be25abd9ce3f9429ffa6b8cfbc99935abee3e1b738cdebec8a0ec7a601"
+    },
+    {
+      "file": "message-thunks.asm",
+      "command": [
+        "objdump",
+        "-d",
+        "--start-address=0x1001c070",
+        "--stop-address=0x1001c1c8",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ],
+      "sha256": "8ecf547e18ea2a58f7e2b9a7d1bc94a7ccee83a058440d50b9a77543910959e9"
+    },
+    {
+      "file": "attack2-attack3.asm",
+      "command": [
+        "objdump",
+        "-d",
+        "--start-address=0x10078920",
+        "--stop-address=0x10078adc",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ],
+      "sha256": "db9f78f698d4db2aeaf994814011eaec54a6970257060fedf722fc95bac9aebc"
+    },
+    {
+      "file": "read-long.asm",
+      "command": [
+        "objdump",
+        "-d",
+        "--start-address=0x100809b0",
+        "--stop-address=0x10080a03",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ],
+      "sha256": "9429aa8c6f0dbaf3681269fb52548b5916a8d6463705d0f4c9248332c0e2380c"
+    }
+  ]
+}

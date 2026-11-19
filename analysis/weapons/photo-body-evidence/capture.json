@@ -1,0 +1,30 @@
+{
+  "binary_path": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "tool": "GNU objdump bounded Intel disassembly",
+  "ranges": [
+    [
+      "0x1006eb10",
+      "0x1006eb2b"
+    ],
+    [
+      "0x100719f0",
+      "0x100719fd"
+    ],
+    [
+      "0x10066bc3",
+      "0x10066c04"
+    ],
+    [
+      "0x10064ac0",
+      "0x10064c07"
+    ],
+    [
+      "0x10071c50",
+      "0x10071c81"
+    ]
+  ],
+  "target_executed": false,
+  "photo_contract": "TakePhoto sets104ce4a1; texture-name diffusegay branch invokes10064ac0 then resets. glCopyTexImage2D RGB centered crop into retained camera texture, not a HUD flash.",
+  "body_contract": "WeaponBody BYTE updates GetViewModel curstate.body (native extended entity offset314)."
+}

@@ -1,0 +1,10 @@
+{
+  "binary_path": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "tool": "GNU objdump Intel disassembly",
+  "ranges": [
+    "1006ecb0..1006ecca",
+    "10071b20..10071b9d"
+  ],
+  "contract": "ViewKnock wrapper calls10071b20; READ_BYTE subtracts pitch from GetViewAngles, SetViewAngles unless byte1018d27c; alternate10542bb8 updates105594fc too. Global flags not semantically identified."
+}

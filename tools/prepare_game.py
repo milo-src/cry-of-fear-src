@@ -218,6 +218,8 @@ def prepare(raytracing=False):
     prepare_server_movement(ROOT, target)
     prepare_client_movement(target)
     prepare_ladders(target)
+    from prepare_weapons import prepare as prepare_weapons
+    prepare_weapons(target)
     return target
 
 

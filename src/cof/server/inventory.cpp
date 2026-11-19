@@ -4,6 +4,7 @@
 #include "util.h"
 #include "cbase.h"
 #include "player.h"
+#include "cof_weapons.h"
 #include "inventory.h"
 #include <string>
 #include "item_descriptor.h"
@@ -11,6 +12,7 @@
 
 namespace {
 int inventoryMessage;
+int quickSlotsMessage;
 cvar_t difficulty = {"difficulty", "1", FCVAR_SERVER};
 using cof::Descriptor;
 using cof::ParseDescriptor;
@@ -53,6 +55,7 @@ bool AddKey(CBasePlayer* player, string_t description) { // 0x100dad40, non-weap
 
 void CofInventoryPrecache() {
     if (!inventoryMessage) inventoryMessage = REG_USER_MSG("Inventory", -1);
+    if (!quickSlotsMessage) quickSlotsMessage = REG_USER_MSG("CofQuickSlots", 3);
     if (!CVAR_GET_POINTER("difficulty")) CVAR_REGISTER(&difficulty);
     PRECACHE_SOUND("weapons/item_get.wav");
     PRECACHE_SOUND("inventory/inventory_no.wav");
@@ -73,10 +76,16 @@ void CofInventorySync(CBasePlayer* player) {
         WRITE_BYTE(0); WRITE_BYTE(0); WRITE_BYTE(0);
         MESSAGE_END();
     }
+    if (quickSlotsMessage) {
+        MESSAGE_BEGIN(MSG_ONE, quickSlotsMessage, nullptr, player->pev);
+        for (int i = 0; i < 3; ++i) WRITE_BYTE(player->m_cofQuickSlots[i]);
+        MESSAGE_END();
+    }
 }
 
 void CofInventoryRemove(CBasePlayer* player, int slot) { // 0x100dd990 subset
     if (slot < 1 || slot > 6) return;
+    for (int i = 0; i < 3; ++i) if (player->m_cofQuickSlots[i] == slot) player->m_cofQuickSlots[i] = 0;
     player->m_cofInventory[slot] = 0;
     CofInventorySync(player);
 }
@@ -124,6 +133,7 @@ bool CofInventoryCommand(CBasePlayer* player, const char* command) {
         // Six slots, no atoi overflow or accidental negative array index.
         if (argument[0] >= '1' && argument[0] <= '6' && argument[1] == '\0') {
             const int slot = argument[0] - '0';
+            if (CofWeaponsInventoryUse(player, slot)) return true;
             Descriptor item;
             // Original inventoryequip routes item_key to inventoryuse (0x100e4231).
             if (!equip || (player && player->m_cofInventory[slot] &&

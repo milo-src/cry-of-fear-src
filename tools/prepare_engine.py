@@ -96,6 +96,8 @@ def prepare(raytracing=False):
         prepare_rtx_materials(target)
         from prepare_rtx_scene import prepare as prepare_rtx_scene
         prepare_rtx_scene(target)
+        from prepare_rtx_weapons import prepare as prepare_rtx_weapons
+        prepare_rtx_weapons(target)
         # Observe actual per-frame parameters, rather than treating saved cvars
         # as proof that live upscaler transitions reached the tracing backend.
         main_render = target / 'ref/gl/gl_rmain.c'

@@ -1,0 +1,29 @@
+{
+  "source_capture": "analysis/local/weapons-client-effects",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "a0443f8b5b14abf95920395fbdae0f2f435bc00e4728f278a18dae79906c38d4",
+      "procedure": "ram:0x10080410",
+      "evidence_id": "ev_2e01900a2d7ce9f625df632048567eedefb2f65999e9e20a7e011230f0bfa3a2",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "af7e24ee63f53773b5c10816a262a75f995cfea9d388c6540dc8cd5b8fefa891",
+      "procedure": "ram:0x1004bb80",
+      "evidence_id": "ev_5e83f731cc86b2fa3e5580876fb476e488344532c7bf7decad4426a2ba7a2d31",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ]
+}

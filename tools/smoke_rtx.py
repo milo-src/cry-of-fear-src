@@ -101,6 +101,7 @@ def main():
     parser.add_argument('--height',type=int,default=720)
     parser.add_argument('--ui',action='store_true')
     parser.add_argument('--movement',action='store_true',help='Run recovered movement, vitals and animated ladder assertions without desktop input')
+    parser.add_argument('--weapons',action='store_true',help='Run arsenal, inventory, ammo and weapon animation protocol assertions')
     parser.add_argument('--upscaling',action='store_true',help='Live upscaler menu transactions in one process')
     parser.add_argument('--upscaling-native-start',action='store_true',help='Start the upscaling test from a saved native-resolution preference')
     parser.add_argument('--console-output',action='store_true',help='Verify real command replies without -dev or -console')
@@ -128,6 +129,8 @@ def main():
     parser.add_argument('--denoiser',choices=['0','1'],help='Override the gameplay denoiser; otherwise test the shipped preset')
     parser.add_argument('--map',default='c_sdkmap1')
     args=parser.parse_args()
+    if args.weapons and any((args.movement,args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
+        parser.error('--weapons is a dedicated gameplay scenario')
     if args.movement and any((args.ui,args.graphics,args.motion,args.lighting,args.menu_scene,args.console_output,args.upscaling)):
         parser.error('--movement is a dedicated gameplay scenario')
     if args.upscaling_native_start:args.upscaling=True
@@ -184,6 +187,7 @@ def main():
     if args.upscaling:tag=args.renderer+'-upscaling'
     if args.motion:tag+='-motion-'+(args.denoiser or 'default')
     if args.movement:tag+='-movement'
+    if args.weapons:tag+='-weapons'
     if args.water_view:tag+='-water-view'
     if args.lighting:tag+='-lighting'
     if args.menu_cycle:tag+='-cycle'
@@ -204,6 +208,8 @@ def main():
     env.pop('COF_MENU_SCENETEST',None)
     env.pop('COF_MOVEMENTTEST',None)
     env.pop('COF_LADDERTEST',None)
+    env.pop('COF_WEAPONTEST',None)
+    if args.weapons:env['COF_WEAPONTEST']='1'
     if args.movement:env.update(COF_MOVEMENTTEST='1',COF_LADDERTEST='1')
     env.pop('COF_UPSCALERTEST',None)
     env.pop('COF_UPSCALER_NATIVE_START',None)
@@ -453,6 +459,13 @@ def main():
                     if not any(Path(p).name.lower()==name.lower() for p in modules):raise RuntimeError('Module not observed: '+name)
                 if not args.console_output and 'COF_RTX profile=1' not in text:raise RuntimeError('Balanced preset not applied')
             if any('steamapps' in p.lower() for p in modules):raise RuntimeError('Original game binary loaded')
+            if args.weapons:
+                for marker in ('COF_WEAPON_TEST_COMPLETE failures=0','COF_WEAPON_SAVE_COMPLETE failures=0','COF_SPECIAL_TEST_COMPLETE failures=0','COF_WEAPON_RANGED_COMPLETE failures=0','COF_WEAPON_CLIENT_COMPLETE failures=0','COF_WEAPON_HAND_RENDER hand=1','COF_WEAPON_HAND_RENDER hand=2','COF_WEAPON_DUAL_RESYNC'):
+                    if marker not in text:raise RuntimeError('Missing weapon assertion: '+marker)
+                if re.search(r'COF_(?:WEAPON|SPECIAL|RANGED).*\bFAIL\b',text):raise RuntimeError('Recovered weapon assertion failed')
+                if args.renderer=='rtx':
+                    for hand in (1,2):
+                        if f'COF_RTX_HAND_SUBMIT hand={hand}' not in text:raise RuntimeError('RTX hand mesh submission missing')
             if args.movement:
                 for marker in ('COF_PM_TEST PASS failures=0 side=server', 'COF_PM_TEST PASS failures=0 side=client', 'COF_MOVEMENT_TEST_COMPLETE failures=0',
                                'COF_MOVEMENT_CLIENT_COMPLETE failures=0', 'COF_LADDER_TEST_COMPLETE failures=0'):
@@ -474,7 +487,7 @@ def main():
                 if observed != expected:
                     raise RuntimeError(f'Ladder sound event mismatch: missing={expected-observed}, extra={observed-expected}')
             movement=re.search(r'COF_SMOKE_MOVEMENT ([\d.-]+) ([\d.-]+) ([\d.-]+) -> ([\d.-]+) ([\d.-]+) ([\d.-]+)',text)
-            if not args.ui and not args.lighting and args.map=='c_sdkmap1':
+            if not args.ui and not args.lighting and not args.weapons and args.map=='c_sdkmap1':
                 if not movement:raise RuntimeError('Player movement not observed')
                 xyz=list(map(float,movement.groups()))
                 if sum((xyz[i]-xyz[i+3])**2 for i in range(3))<1:raise RuntimeError('Player did not move')

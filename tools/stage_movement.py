@@ -14,6 +14,8 @@ def stage(runtime, source_game=None):
     if not runtime.is_relative_to((ROOT / 'out').resolve()):
         raise ValueError('Gameplay deployment must stay under out/')
     game = runtime / 'cryoffear'
+    from stage_weapons import stage as stage_weapons
+    stage_weapons(runtime)
     from prepare_movement_protocol import stage as stage_protocol
     stage_protocol(runtime, source_game)
     shutil.copy2(ROOT / 'runtime/autoexec.cfg', game / 'autoexec.cfg')

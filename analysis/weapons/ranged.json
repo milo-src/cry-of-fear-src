@@ -1,0 +1,4792 @@
+{
+  "schema": 1,
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "scope": "Static original contracts, not a claim of complete reconstruction",
+  "common": {
+    "sequence_duration": "(frames-1)/fps, native1000f390; seqdesc stride176. Deploy1011c1a0 and Reload1011c560 call10120210; extra delay arguments in callsite are ignored.",
+    "native_offsets": {
+      "owner": "0x160",
+      "id": "0x168",
+      "aimed": "0x178",
+      "spread_vector": "0x18c..194",
+      "spread_increment": "0x198",
+      "spread_state": "0x19c",
+      "spread_decay_deadline": "0x1a0",
+      "next_primary": "0x1cc",
+      "next_secondary": "0x1d0",
+      "next_aim": "0x1d4",
+      "idle_time": "0x1d8",
+      "ammo_index": "0x1dc",
+      "clip": "0x1e4",
+      "in_reload": "0x1f0",
+      "default_ammo": "0x1f4"
+    },
+    "spread_evidence": "0x1011bb50",
+    "spread_note": "Movement/crouch/air/sprint transition modifiers; integer state0..10 selects cone constants; decay1 every.1 after weapon recovery. Original transition latches global; per-instance port adaptation avoids cross-player contamination. Stationary initial spread0.",
+    "spring": "100f91b0: vuser3 +=(-pitch,yaw,roll)*20; not direct viewangles",
+    "reload_note": "Magazine Reload clears old clip before replacement;1011d560 fills min(capacity,reserve), FAMAS ID23 refills without consuming reserve.",
+    "unknowns": [
+      "Full dual-weapon state machine and scripted variants",
+      "Browning alternate-origin helper10017780 condition",
+      "Exact G43 random sequence selection and uncommon doctor/police branches"
+    ],
+    "skill_config": {
+      "path": "skill.cfg",
+      "sha256": "721accaf0e3633a90e7c9592631b340b5aa554a77df8af068ca38cdf45529cc3",
+      "mapping_function": "0x100af810",
+      "defaults": [
+        13,
+        20,
+        40,
+        70,
+        50,
+        5,
+        16,
+        13,
+        15,
+        7,
+        15,
+        10
+      ],
+      "order": [
+        "weapon_glock",
+        "weapon_p345",
+        "weapon_revolver",
+        "weapon_rifle",
+        "weapon_g43",
+        "weapon_shotgun",
+        "weapon_m16",
+        "weapon_mp5",
+        "weapon_famas",
+        "weapon_tmp",
+        "weapon_vp70",
+        "weapon_browning_wheelchair"
+      ]
+    },
+    "reconstruction_limits": [
+      "First-draw latch is per weapon instance; native stores per-player unlock bits.",
+      "Revolver special-player damage35 branch is not reproduced.",
+      "Browning alternate-origin scripted shots are not reproduced.",
+      "Native shoot-loop routing is adapted to SDK CHAN_WEAPON; original alternate loop-end helper paths are not claimed equivalent.",
+      "Localized ammo names use stable ASCII; multiplayer ammo caps do not yet replace SP values."
+    ],
+    "view_knock": {
+      "sender": "0x100f9100",
+      "registration": "0x100e5fc0",
+      "name": "ViewKnock",
+      "payload": "BYTE(int magnitude)",
+      "client_wrapper": "0x1006ecb0",
+      "client_handler": "0x10071b20",
+      "semantics": "GetViewAngles; pitch -= magnitude; SetViewAngles unless byte1018d27c. Separate optional10542bb8 updates105594fc. Independent of transient spring.",
+      "evidence": "analysis/weapons/viewknock-evidence/capture.json",
+      "adapter_limit": "Native scripted flags unresolved; client adapter guards reconstructed scripted camera and dead state."
+    }
+  },
+  "weapons": [
+    {
+      "classname": "weapon_glock",
+      "aliases": [
+        "weapon_beretta"
+      ],
+      "damage": "int(sk_cof_glock)",
+      "cycle": 0.1,
+      "edge_trigger": true,
+      "deploy": [
+        6,
+        7,
+        29
+      ],
+      "idle": [
+        0,
+        1,
+        32,
+        33
+      ],
+      "fire": [
+        2,
+        3,
+        34,
+        38
+      ],
+      "reload": [
+        4,
+        5
+      ],
+      "spread_recovery": 0.55,
+      "functions": {
+        "spawn": "0x10047780",
+        "precache": "0x10046cb0",
+        "info": "0x10045ac0",
+        "deploy": "0x100457d0",
+        "primary": "0x10046dc0",
+        "secondary": "0x100476b0",
+        "aim": "0x10047c00",
+        "extra": "0x10047db0",
+        "reload": "0x100475b0",
+        "idle": "0x10047cf0"
+      },
+      "vtable": "0x101b0524",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10047780.c",
+        "decompiled/server/partial-pass/functions/0x10046cb0.c",
+        "decompiled/server/partial-pass/functions/0x10045ac0.c",
+        "decompiled/server/partial-pass/functions/0x100457d0.c",
+        "decompiled/server/partial-pass/functions/0x10046dc0.c",
+        "decompiled/server/partial-pass/functions/0x100476b0.c",
+        "decompiled/server/partial-pass/functions/0x10047c00.c",
+        "decompiled/server/partial-pass/functions/0x10047db0.c",
+        "decompiled/server/partial-pass/functions/0x100475b0.c",
+        "decompiled/server/partial-pass/functions/0x10047cf0.c",
+        "decompiled/server/partial-pass/functions/0x10045f20.c",
+        "decompiled/server/partial-pass/functions/0x10045c40.c"
+      ],
+      "native_id": 3,
+      "max_ammo": 150,
+      "clip": 15,
+      "native_ammo": "glock",
+      "runtime_ammo": "glock",
+      "default_ammo": 15,
+      "spread_increment": 1.25,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/glock/v_glock.mdl",
+        "models/weapons/glock/w_glock.mdl",
+        "police/models/weapons/glock/p_glock.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/glock/glock_fire.wav",
+        "weapons/glock/glock_magin.wav",
+        "weapons/glock/glock_magout.wav",
+        "weapons/glock/glock_magplace.wav",
+        "weapons/glock/glock_rackback.wav",
+        "weapons/glock/glock_slide.wav",
+        "weapons/glock/glock_switch.wav",
+        "weapons/item_get.wav",
+        "weapons/rifle/rifle_insert.wav",
+        "weapons_new/glock/glock_fire.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/glock/v_glock.mdl",
+        "sha256": "80cc917866e61fbb23337f6a990dc72f42277f2bd3d5a1d77201d1d57a406ffe",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle1",
+            "frames": 101,
+            "fps": 30.0,
+            "duration": 3.3333333333333335,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "idle1_noshot",
+            "frames": 101,
+            "fps": 30.0,
+            "duration": 3.3333333333333335,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "shoot_1",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "shoot_empty_1",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "reload",
+            "frames": 80,
+            "fps": 30.0,
+            "duration": 2.6333333333333333,
+            "events": [
+              {
+                "frame": 7,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_magout.wav"
+              },
+              {
+                "frame": 40,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_magplace.wav"
+              },
+              {
+                "frame": 52,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "reload_noshot",
+            "frames": 105,
+            "fps": 30.0,
+            "duration": 3.466666666666667,
+            "events": [
+              {
+                "frame": 7,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_magout.wav"
+              },
+              {
+                "frame": 40,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_magplace.wav"
+              },
+              {
+                "frame": 52,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_magin.wav"
+              },
+              {
+                "frame": 77,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_rackback.wav"
+              },
+              {
+                "frame": 82,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_slide.wav"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 7,
+            "name": "draw_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "holster_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "sprint_to_noshot",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "sprint_idle_noshot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "sprint_from_noshot",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "suicide",
+            "frames": 115,
+            "fps": 30.0,
+            "duration": 3.8,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "switch",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 9,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 18,
+            "name": "switch_noshot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 9,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 19,
+            "name": "suicide_noshot",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "fidget1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 22,
+            "name": "fidget1_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 23,
+            "name": "fidget2",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 24,
+            "name": "fidget2_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 25,
+            "name": "fidget3",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 26,
+            "name": "fidget3_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 27,
+            "name": "melee",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 28,
+            "name": "melee_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 29,
+            "name": "draw_first",
+            "frames": 70,
+            "fps": 30.0,
+            "duration": 2.3,
+            "events": [
+              {
+                "frame": 35,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_rackback.wav"
+              },
+              {
+                "frame": 44,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/glock/glock_slide.wav"
+              }
+            ]
+          },
+          {
+            "index": 30,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 31,
+            "name": "iron_to_noshot",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 32,
+            "name": "iron_idle",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 33,
+            "name": "iron_idle_noshot",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 34,
+            "name": "iron_shoot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 35,
+            "name": "iron_shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 36,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 37,
+            "name": "iron_from_noshot",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 38,
+            "name": "iron_shoot_empty",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 39,
+            "name": "jump_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 40,
+            "name": "jump_to_noshot",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 41,
+            "name": "jump_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 42,
+            "name": "jump_from_noshot",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Glock 19 9мм\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_glock\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/glock/640_glock_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/glock/640_glock_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/glock/640_glock_check.tga\"\n}\n\n\"combined_sound\"\n{\n\tdata\t\"buttons/lighterpickup.wav\"\n}\n\n\"combined_with\"\n{\n\tdata\t\"Glock Tactical Light\"\n}\n\n\"combined_result\"\n{\n\tdata\t\"glockwithtaclight\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-20\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"13.75\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "aim_contract": {
+        "enter_sequences": [
+          30,
+          31
+        ],
+        "exit_sequences": [
+          36,
+          37
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x10045f20",
+          "0x10045c40"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 3,
+      "taclight": {
+        "combine_source": "0x100e3020",
+        "pending_field": "weapon+0x1f8",
+        "installed_field": "weapon+0x200",
+        "light_flag": "player+0x5d0 bit4",
+        "pending_consumer": "0x10046220",
+        "attach_begin": {
+          "sequences_loaded_empty": [
+            8,
+            9
+          ],
+          "sound": "weapons/sleeve_generic2.wav",
+          "callback_after": 1,
+          "attack_lock": 5
+        },
+        "mid_attach": {
+          "function": "0x10046c30",
+          "sound": "weapons/rifle/rifle_insert.wav",
+          "callback_after": 1,
+          "attack_lock": 5
+        },
+        "finish_attach": {
+          "function": "0x100456c0",
+          "sound": "weapons/sleeve_generic3.wav",
+          "body_off_on": [
+            1,
+            2
+          ],
+          "draw_loaded_empty": [
+            6,
+            7
+          ],
+          "attack_lock": 1
+        },
+        "toggle": {
+          "dispatch": "0x10047db0",
+          "callback": "0x10047cc0",
+          "sequences_loaded_empty": [
+            17,
+            18
+          ],
+          "callback_after": 0.3,
+          "lock": 0.66,
+          "guard": "installed,notaimed,noaction/reload,timersready"
+        },
+        "body_message": {
+          "sender": "0x1011f640",
+          "registration": "0x100e5fc0",
+          "name": "WeaponBody",
+          "payload": "BYTE body"
+        },
+        "port_adapter": "Saved perweapon pending/installed/on; native playerbit maps to EF_DIMLIGHT; dual aggregates child lights. No original resources modified."
+      }
+    },
+    {
+      "classname": "weapon_p345",
+      "aliases": [
+        "weapon_P228"
+      ],
+      "damage": "int(sk_cof_p345)",
+      "cycle": 0.2,
+      "edge_trigger": true,
+      "deploy": [
+        6,
+        7
+      ],
+      "idle": [
+        0,
+        1,
+        21,
+        22
+      ],
+      "fire": [
+        2,
+        3,
+        25,
+        26
+      ],
+      "reload": [
+        4,
+        5
+      ],
+      "spread_recovery": 0.75,
+      "functions": {
+        "spawn": "0x1005f510",
+        "precache": "0x1005eb90",
+        "info": "0x1005db80",
+        "deploy": "0x1005d990",
+        "primary": "0x1005ec90",
+        "secondary": "0x1005f440",
+        "aim": "0x1005f980",
+        "extra": "0x1001f070",
+        "reload": "0x1005f340",
+        "idle": "0x1005fa40"
+      },
+      "vtable": "0x101b5464",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005f510.c",
+        "decompiled/server/partial-pass/functions/0x1005eb90.c",
+        "decompiled/server/partial-pass/functions/0x1005db80.c",
+        "decompiled/server/partial-pass/functions/0x1005d990.c",
+        "decompiled/server/partial-pass/functions/0x1005ec90.c",
+        "decompiled/server/partial-pass/functions/0x1005f440.c",
+        "decompiled/server/partial-pass/functions/0x1005f980.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x1005f340.c",
+        "decompiled/server/partial-pass/functions/0x1005fa40.c",
+        "decompiled/server/partial-pass/functions/0x1005e090.c",
+        "decompiled/server/partial-pass/functions/0x1005ddb0.c"
+      ],
+      "native_id": 7,
+      "max_ammo": 80,
+      "clip": 8,
+      "native_ammo": "p345",
+      "runtime_ammo": "p345",
+      "default_ammo": 8,
+      "spread_increment": 0.8500000238418579,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/p345/v_p345.mdl",
+        "models/weapons/p345/w_p345.mdl",
+        "police/models/weapons/p345/p_p345.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/p345/p345_click.wav",
+        "weapons/p345/p345_fire.wav",
+        "weapons/p345/p345_magin.wav",
+        "weapons/p345/p345_magout.wav",
+        "weapons/p345/p345_magplace.wav",
+        "weapons/p345/p345_rackback.wav",
+        "weapons/p345/p345_slide.wav",
+        "weapons_new/p345/p345_fire.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/p345/v_p345.mdl",
+        "sha256": "d3ca4e13236be0b84759641454b85439e278429ca4f4ee8b09e4c853b6fcf85b",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idletest",
+            "frames": 180,
+            "fps": 30.0,
+            "duration": 5.966666666666667,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "idle1_noshot",
+            "frames": 101,
+            "fps": 30.0,
+            "duration": 3.3333333333333335,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "shoot_1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "shoot_empty_1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "reload",
+            "frames": 80,
+            "fps": 30.0,
+            "duration": 2.6333333333333333,
+            "events": [
+              {
+                "frame": 19,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_magout.wav"
+              },
+              {
+                "frame": 57,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_magplace.wav"
+              },
+              {
+                "frame": 63,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "reload_noshot",
+            "frames": 95,
+            "fps": 30.0,
+            "duration": 3.1333333333333333,
+            "events": [
+              {
+                "frame": 19,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_magout.wav"
+              },
+              {
+                "frame": 57,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_magplace.wav"
+              },
+              {
+                "frame": 63,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_magin.wav"
+              },
+              {
+                "frame": 81,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/p345/p345_slide.wav"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 7,
+            "name": "draw_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "holster_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "sprint_to_noshot",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "sprint_idle_noshot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "sprint_from_noshot",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "melee",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "melee_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "iron_to_noshot",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "iron_idle",
+            "frames": 1,
+            "fps": 30.0,
+            "duration": 0,
+            "events": []
+          },
+          {
+            "index": 22,
+            "name": "iron_idle_noshot",
+            "frames": 1,
+            "fps": 30.0,
+            "duration": 0,
+            "events": []
+          },
+          {
+            "index": 23,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 24,
+            "name": "iron_from_noshot",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 25,
+            "name": "iron_shoot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 26,
+            "name": "iron_shoot_empty",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 27,
+            "name": "iron_shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 28,
+            "name": "fidget1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 29,
+            "name": "fidget1_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 30,
+            "name": "fidget2",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 31,
+            "name": "fidget2_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 32,
+            "name": "fidget3",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 33,
+            "name": "fidget3_noshot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 34,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          },
+          {
+            "index": 35,
+            "name": "suicide_noshot",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"P345 .45\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_p345\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/p345/640_p345_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/p345/640_p345_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/p345/640_p345_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-6\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"4.5\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "aim_contract": {
+        "enter_sequences": [
+          19,
+          20
+        ],
+        "exit_sequences": [
+          23,
+          24
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x1005e090",
+          "0x1005ddb0"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 3
+    },
+    {
+      "classname": "weapon_revolver",
+      "aliases": [],
+      "damage": "int(sk_cof_revolver); player+680 special branch35",
+      "cycle": 0.65,
+      "edge_trigger": true,
+      "deploy": [
+        1
+      ],
+      "idle": [
+        0,
+        16
+      ],
+      "fire": [
+        3,
+        18
+      ],
+      "reload": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "spread_recovery": 0.35,
+      "functions": {
+        "spawn": "0x100657a0",
+        "precache": "0x10064b90",
+        "info": "0x10063c90",
+        "deploy": "0x10063bc0",
+        "primary": "0x10064c60",
+        "secondary": "0x100656a0",
+        "aim": "0x10065c10",
+        "extra": "0x1001f070",
+        "reload": "0x10065270",
+        "idle": "0x10065ce0"
+      },
+      "vtable": "0x101b703c",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100657a0.c",
+        "decompiled/server/partial-pass/functions/0x10064b90.c",
+        "decompiled/server/partial-pass/functions/0x10063c90.c",
+        "decompiled/server/partial-pass/functions/0x10063bc0.c",
+        "decompiled/server/partial-pass/functions/0x10064c60.c",
+        "decompiled/server/partial-pass/functions/0x100656a0.c",
+        "decompiled/server/partial-pass/functions/0x10065c10.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x10065270.c",
+        "decompiled/server/partial-pass/functions/0x10065ce0.c",
+        "decompiled/server/partial-pass/functions/0x10064070.c",
+        "decompiled/server/partial-pass/functions/0x10063de0.c"
+      ],
+      "native_id": 21,
+      "max_ammo": 50,
+      "clip": 5,
+      "native_ammo": "револьвера",
+      "runtime_ammo": "revolver",
+      "default_ammo": 5,
+      "spread_increment": 3.1500000953674316,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/revolver/v_revolver.mdl",
+        "models/weapons/revolver/v_revolver_doctor.mdl",
+        "models/weapons/revolver/w_revolver.mdl",
+        "police/models/weapons/revolver/p_revolver.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/revolver/revolver_fire.wav",
+        "weapons_new/revolver/revolver_fire.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/revolver/v_revolver.mdl",
+        "sha256": "27ea82a1bf22e9538a57b1f71180b0d58685b02ed8245420400951051af6fe1b",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle1",
+            "frames": 60,
+            "fps": 30.0,
+            "duration": 1.9666666666666666,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 3,
+            "name": "shoot1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "reload_start",
+            "frames": 40,
+            "fps": 30.0,
+            "duration": 1.3,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_cylinder_open.wav"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "reload_insert1",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 13,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_insert.wav"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "reload_insert2",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 13,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_insert.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "reload_insert3",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 13,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_insert.wav"
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "name": "reload_insert4",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 13,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_insert.wav"
+              }
+            ]
+          },
+          {
+            "index": 9,
+            "name": "reload_insert5",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 13,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_insert.wav"
+              }
+            ]
+          },
+          {
+            "index": 10,
+            "name": "reload_end",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 9,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/revolver/revolver_cylinder_close.wav"
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "name": "shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "iron_idle",
+            "frames": 60,
+            "fps": 30.0,
+            "duration": 1.9666666666666666,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "iron_shoot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 19,
+            "name": "iron_shoot_empty",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "melee",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Taurus .357 MAG\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_revolver\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/revolver/640_revolver_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/revolver/640_revolver_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/revolver/640_revolver_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-6\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"4.5\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "reload_contract": "10065270 clears clip,seq4. ResetCylinder10065660 resets body at.2 and schedules insertion1.3later. ReloadInsert10065430 transfer at.5,next iteration.83;seq5..9,seq10 close.83/full or1.0/interrupted.",
+      "aim_contract": {
+        "enter_sequences": [
+          15
+        ],
+        "exit_sequences": [
+          17
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x10064070",
+          "0x10063de0"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 4
+    },
+    {
+      "classname": "weapon_rifle",
+      "aliases": [],
+      "damage": "int(sk_cof_rifle)",
+      "cycle": 1.66,
+      "edge_trigger": true,
+      "deploy": [
+        1,
+        19
+      ],
+      "idle": [
+        0
+      ],
+      "fire": [
+        3
+      ],
+      "reload": [
+        4,
+        5,
+        6
+      ],
+      "spread_recovery": 1.8,
+      "functions": {
+        "spawn": "0x10067e50",
+        "precache": "0x10067160",
+        "info": "0x10066260",
+        "deploy": "0x10065ef0",
+        "primary": "0x10067260",
+        "secondary": "0x10067d80",
+        "aim": "0x100682a0",
+        "extra": "0x1001f070",
+        "reload": "0x100678b0",
+        "idle": "0x10068490"
+      },
+      "vtable": "0x101b7470",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10067e50.c",
+        "decompiled/server/partial-pass/functions/0x10067160.c",
+        "decompiled/server/partial-pass/functions/0x10066260.c",
+        "decompiled/server/partial-pass/functions/0x10065ef0.c",
+        "decompiled/server/partial-pass/functions/0x10067260.c",
+        "decompiled/server/partial-pass/functions/0x10067d80.c",
+        "decompiled/server/partial-pass/functions/0x100682a0.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x100678b0.c",
+        "decompiled/server/partial-pass/functions/0x10068490.c"
+      ],
+      "native_id": 11,
+      "max_ammo": 50,
+      "clip": 5,
+      "native_ammo": "rifle",
+      "runtime_ammo": "rifle",
+      "default_ammo": 5,
+      "spread_increment": 5.0,
+      "models_referenced": [
+        "models/556shell.mdl",
+        "models/null.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/rifle/v_rifle.mdl",
+        "models/weapons/rifle/v_rifle_scope.mdl",
+        "models/weapons/rifle/w_rifle.mdl",
+        "police/models/weapons/rifle/p_rifle.mdl"
+      ],
+      "sounds_referenced": [
+        "player/vocal/breathing/hold_breath.wav",
+        "player/vocal/breathing/release_breath.wav",
+        "weapons/item_get.wav",
+        "weapons/rifle/rifle_cock_back.wav",
+        "weapons/rifle/rifle_cock_forward.wav",
+        "weapons/rifle/rifle_fire.wav",
+        "weapons/rifle/rifle_insert.wav",
+        "weapons_new/rifle/rifle_fire.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/rifle/v_rifle.mdl",
+        "sha256": "6cf821bac8b35b5b750f3a2e01fa96e15f20069bfc20473a196a7defb827e3ab",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle",
+            "frames": 1,
+            "fps": 30.0,
+            "duration": 0,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 3,
+            "name": "shoot1",
+            "frames": 50,
+            "fps": 30.0,
+            "duration": 1.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              },
+              {
+                "frame": 18,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/rifle/rifle_cock_back.wav"
+              },
+              {
+                "frame": 28,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/rifle/rifle_cock_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "reload_start",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 8,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/rifle/rifle_cock_back.wav"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "reload_insert",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": []
+          },
+          {
+            "index": 6,
+            "name": "reload_end",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 1,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/rifle/rifle_cock_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "scope_to",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "scope_from",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "melee",
+            "frames": 35,
+            "fps": 30.0,
+            "duration": 1.1333333333333333,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "align",
+            "frames": 1,
+            "fps": 30.0,
+            "duration": 0,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "fidget1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "fidget2",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "fidget3",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "draw_first",
+            "frames": 66,
+            "fps": 30.0,
+            "duration": 2.1666666666666665,
+            "events": [
+              {
+                "frame": 22,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/rifle/rifle_cock_back.wav"
+              },
+              {
+                "frame": 33,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/rifle/rifle_cock_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 20,
+            "name": "jump_to",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "jump_from",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Снайперская винтовка\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_rifle\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/rifle/640_rifle_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/rifle/640_rifle_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/rifle/640_rifle_check.tga\"\n}\n\n\"combined_sound\"\n{\n\tdata\t\"buttons/lighterpickup.wav\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "reload_contract": "100678b0 seq4 start->DoReload10065fe0 after.66;seq5->InsertBullet100664b0 after.3 adds1/reserve-1;nextDoReload after.5;endseq6 lock.66. Scoped reload first unscopes.",
+      "attack_range": 8192,
+      "pellets": 1,
+      "scope_contract": {
+        "enter_sequence": 7,
+        "first_delay": 0.1,
+        "first_zoom": 85,
+        "second_delay": 0.15,
+        "scope_zoom": 30,
+        "scope_model": "models/weapons/rifle/v_rifle_scope.mdl",
+        "exit_sequence": 8,
+        "fire_sequence": 0,
+        "functions": [
+          "0x100682a0",
+          "0x10068520",
+          "0x10066f60"
+        ],
+        "scope_spread": 0.00873,
+        "bolt_cycle": {
+          "back_after_shot": 0.66,
+          "back_roll_impulse": 15,
+          "forward_after_back": 0.33,
+          "forward_roll_impulse": -15,
+          "eject_after_shot": 0.76,
+          "evidence": [
+            "0x10066540",
+            "0x10067260",
+            "0x10067b90",
+            "0x1011cf70"
+          ],
+          "note": "Scope stays active; no unzoom/rezoom in native shot cycle."
+        },
+        "breath": "While scoped, RunButton0x1000 with stamina>=1 and player hold timer<now starts HoldBreath. Movement integration drains1 per native cadence, stops on release/unscoping/exhaustion, exhaustion cooldown4."
+      },
+      "view_knock_byte": 5,
+      "view_knock_scoped_byte": 3
+    },
+    {
+      "classname": "weapon_g43",
+      "aliases": [],
+      "damage": "int(sk_cof_g43)",
+      "cycle": 0.9,
+      "edge_trigger": true,
+      "deploy": [
+        0,
+        1
+      ],
+      "idle": [
+        9,
+        10,
+        18,
+        19
+      ],
+      "fire": [
+        3,
+        4,
+        5,
+        6,
+        11,
+        13,
+        14,
+        15
+      ],
+      "reload": [
+        29,
+        28
+      ],
+      "spread_recovery": 0.95,
+      "functions": {
+        "spawn": "0x10044f40",
+        "precache": "0x100445d0",
+        "info": "0x100435c0",
+        "deploy": "0x100434d0",
+        "primary": "0x10044690",
+        "secondary": "0x10044e60",
+        "aim": "0x100453b0",
+        "extra": "0x1001f070",
+        "reload": "0x10044d60",
+        "idle": "0x10045470"
+      },
+      "vtable": "0x101b00e8",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10044f40.c",
+        "decompiled/server/partial-pass/functions/0x100445d0.c",
+        "decompiled/server/partial-pass/functions/0x100435c0.c",
+        "decompiled/server/partial-pass/functions/0x100434d0.c",
+        "decompiled/server/partial-pass/functions/0x10044690.c",
+        "decompiled/server/partial-pass/functions/0x10044e60.c",
+        "decompiled/server/partial-pass/functions/0x100453b0.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x10044d60.c",
+        "decompiled/server/partial-pass/functions/0x10045470.c",
+        "decompiled/server/partial-pass/functions/0x10043ad0.c",
+        "decompiled/server/partial-pass/functions/0x100437f0.c"
+      ],
+      "native_id": 26,
+      "max_ammo": 40,
+      "clip": 10,
+      "native_ammo": "g43",
+      "runtime_ammo": "g43",
+      "default_ammo": 10,
+      "spread_increment": 2.4000000953674316,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/g43/v_g43.mdl",
+        "models/weapons/g43/w_g43.mdl",
+        "police/models/weapons/g43/p_g43.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/g43/g43_fire.wav",
+        "weapons/item_get.wav",
+        "weapons_new/g43/g43_fire.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/g43/v_g43.mdl",
+        "sha256": "bb14a6182a47e36fe89973aa6a78a6a65caac6529141b8e2287605b32f249031",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "draw",
+            "frames": 34,
+            "fps": 30.0,
+            "duration": 1.1,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "draw_empty",
+            "frames": 34,
+            "fps": 30.0,
+            "duration": 1.1,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "fire_empty",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 3,
+            "name": "fire_last",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "fire1",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "fire2",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "fire3",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "holster",
+            "frames": 34,
+            "fps": 30.0,
+            "duration": 1.1,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "holster_empty",
+            "frames": 34,
+            "fps": 30.0,
+            "duration": 1.1,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "idle",
+            "frames": 101,
+            "fps": 30.0,
+            "duration": 3.3333333333333335,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "idle_empty",
+            "frames": 101,
+            "fps": 30.0,
+            "duration": 3.3333333333333335,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "iron-fire_empty",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "iron-fire_last",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 13,
+            "name": "iron-fire1",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "name": "iron-fire2",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 15,
+            "name": "iron-fire3",
+            "frames": 24,
+            "fps": 30.0,
+            "duration": 0.7666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 16,
+            "name": "iron-from",
+            "frames": 9,
+            "fps": 30.0,
+            "duration": 0.26666666666666666,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "iron-from_empty",
+            "frames": 9,
+            "fps": 30.0,
+            "duration": 0.26666666666666666,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "iron-idle",
+            "frames": 2,
+            "fps": 1.0,
+            "duration": 1.0,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "iron-idle_empty",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "iron-to",
+            "frames": 9,
+            "fps": 30.0,
+            "duration": 0.26666666666666666,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "iron-to_empty",
+            "frames": 9,
+            "fps": 30.0,
+            "duration": 0.26666666666666666,
+            "events": []
+          },
+          {
+            "index": 22,
+            "name": "jump-from",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 23,
+            "name": "jump-from_empty",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 24,
+            "name": "jump-to",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 25,
+            "name": "jump-to_empty",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 26,
+            "name": "melee",
+            "frames": 34,
+            "fps": 30.0,
+            "duration": 1.1,
+            "events": []
+          },
+          {
+            "index": 27,
+            "name": "melee_empty",
+            "frames": 34,
+            "fps": 30.0,
+            "duration": 1.1,
+            "events": []
+          },
+          {
+            "index": 28,
+            "name": "reload",
+            "frames": 176,
+            "fps": 30.0,
+            "duration": 5.833333333333333,
+            "events": [
+              {
+                "frame": 40,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/g43/g43_magout.wav"
+              },
+              {
+                "frame": 98,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/g43/g43_magin.wav"
+              },
+              {
+                "frame": 135,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/g43/g43_cock.wav"
+              }
+            ]
+          },
+          {
+            "index": 29,
+            "name": "reload_mid",
+            "frames": 149,
+            "fps": 30.0,
+            "duration": 4.933333333333334,
+            "events": [
+              {
+                "frame": 40,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/g43/g43_magout.wav"
+              },
+              {
+                "frame": 98,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/g43/g43_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 30,
+            "name": "sprint",
+            "frames": 21,
+            "fps": 30.0,
+            "duration": 0.6666666666666666,
+            "events": []
+          },
+          {
+            "index": 31,
+            "name": "sprint_empty",
+            "frames": 21,
+            "fps": 30.0,
+            "duration": 0.6666666666666666,
+            "events": []
+          },
+          {
+            "index": 32,
+            "name": "sprint-from",
+            "frames": 11,
+            "fps": 30.0,
+            "duration": 0.3333333333333333,
+            "events": []
+          },
+          {
+            "index": 33,
+            "name": "sprint-from_empty",
+            "frames": 11,
+            "fps": 30.0,
+            "duration": 0.3333333333333333,
+            "events": []
+          },
+          {
+            "index": 34,
+            "name": "sprint-to",
+            "frames": 11,
+            "fps": 30.0,
+            "duration": 0.3333333333333333,
+            "events": []
+          },
+          {
+            "index": 35,
+            "name": "sprint-to_empty",
+            "frames": 11,
+            "fps": 30.0,
+            "duration": 0.3333333333333333,
+            "events": []
+          },
+          {
+            "index": 36,
+            "name": "suicide",
+            "frames": 91,
+            "fps": 30.0,
+            "duration": 3.0,
+            "events": []
+          },
+          {
+            "index": 37,
+            "name": "suicide_empty",
+            "frames": 91,
+            "fps": 30.0,
+            "duration": 3.0,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Винтовка G43\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_g43\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/g43/640_g43_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/g43/640_g43_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/g43/640_g43_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.00\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-4.25\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"2.00\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "aim_contract": {
+        "enter_sequences": [
+          20,
+          21
+        ],
+        "exit_sequences": [
+          16,
+          17
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x10043ad0",
+          "0x100437f0"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 6,
+      "fire_selection": "hip last3 else RANDOM_LONG(0,2)+4; aimed last11 else RANDOM_LONG(0,2)+13"
+    },
+    {
+      "classname": "weapon_shotgun",
+      "aliases": [],
+      "damage": "int(sk_cof_shotgun) per pellet;8 pellets",
+      "cycle": 1.0,
+      "edge_trigger": true,
+      "deploy": [
+        6
+      ],
+      "idle": [
+        0,
+        15
+      ],
+      "fire": [
+        1,
+        16
+      ],
+      "reload": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "spread_recovery": null,
+      "functions": {
+        "spawn": "0x1006e720",
+        "precache": "0x1006de40",
+        "info": "0x1006ccc0",
+        "deploy": "0x1006cb70",
+        "primary": "0x1006df20",
+        "secondary": "0x1006e620",
+        "aim": "0x1006eb70",
+        "extra": "0x1001f070",
+        "reload": "0x1006e3e0",
+        "idle": "0x1006ec30"
+      },
+      "vtable": "0x101b8e9c",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1006e720.c",
+        "decompiled/server/partial-pass/functions/0x1006de40.c",
+        "decompiled/server/partial-pass/functions/0x1006ccc0.c",
+        "decompiled/server/partial-pass/functions/0x1006cb70.c",
+        "decompiled/server/partial-pass/functions/0x1006df20.c",
+        "decompiled/server/partial-pass/functions/0x1006e620.c",
+        "decompiled/server/partial-pass/functions/0x1006eb70.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x1006e3e0.c",
+        "decompiled/server/partial-pass/functions/0x1006ec30.c",
+        "decompiled/server/partial-pass/functions/0x1006d0f0.c",
+        "decompiled/server/partial-pass/functions/0x1006ce20.c"
+      ],
+      "native_id": 4,
+      "max_ammo": 50,
+      "clip": 5,
+      "native_ammo": "дробовика",
+      "runtime_ammo": "shotgun",
+      "default_ammo": 5,
+      "spread_increment": null,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shotgunshell.mdl",
+        "models/weapons/shotgun/v_shotgun.mdl",
+        "models/weapons/shotgun/w_shotgun.mdl",
+        "police/models/weapons/shotgun/p_shotgun.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/shotgun/insert.wav",
+        "weapons/shotgun/pump_back.wav",
+        "weapons/shotgun/pump_forward.wav",
+        "weapons/shotgun/pump_seq.wav",
+        "weapons/shotgun/shoot.wav",
+        "weapons_new/shotgun/shoot.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/shotgun/v_shotgun.mdl",
+        "sha256": "08ad6ab4a5fe3156b2577a795aa00a9b1e3afe5c6c96ae3558f41b5f5e6f15f6",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle1",
+            "frames": 101,
+            "fps": 30.0,
+            "duration": 3.3333333333333335,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "shoot1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              },
+              {
+                "frame": 11,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/shotgun/pump_back.wav"
+              },
+              {
+                "frame": 18,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/shotgun/pump_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "name": "rel_start",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 3,
+            "name": "rel_insert",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 3,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/shotgun/insert.wav"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "rel_end",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 5,
+            "name": "rel_end_noshot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/shotgun/pump_seq.wav"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 1,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/syringe/syringe_sleeve.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "fidget1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "fidget2",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "fidget3",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "iron_idle",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "iron_shoot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              },
+              {
+                "frame": 11,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/shotgun/pump_back.wav"
+              },
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/shotgun/pump_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 17,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "melee",
+            "frames": 35,
+            "fps": 30.0,
+            "duration": 1.1333333333333333,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Remington 870\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_shotgun\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/shotgun/640_shotgun_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/shotgun/640_shotgun_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/shotgun/640_shotgun_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-3.5\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"2.75\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "reload_contract": "1006e3e0 seq2 start.5,nextprimary.51;seq3 insert.65;ShellInsert1006e6f0 transfers1 after.33;ItemPostFrame1006d3e0 endsseq4/5 depending initiallyempty.",
+      "aim_contract": {
+        "enter_sequences": [
+          14
+        ],
+        "exit_sequences": [
+          17
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x1006d0f0",
+          "0x1006ce20"
+        ]
+      },
+      "attack_range": 2048,
+      "pellets": 8,
+      "fixed_spread": 0.06976,
+      "view_knock_byte": 5
+    },
+    {
+      "classname": "weapon_m16",
+      "aliases": [
+        "weapon_mp5k"
+      ],
+      "damage": "int(sk_cof_m16)",
+      "cycle": 0.1,
+      "edge_trigger": true,
+      "deploy": [
+        0,
+        7
+      ],
+      "idle": [
+        1,
+        8,
+        19
+      ],
+      "fire": [
+        2,
+        9,
+        21
+      ],
+      "reload": [
+        3,
+        4,
+        10,
+        11
+      ],
+      "spread_recovery": 0.35,
+      "functions": {
+        "spawn": "0x100527e0",
+        "precache": "0x10051c70",
+        "info": "0x10050e40",
+        "deploy": "0x10050c20",
+        "primary": "0x10051d50",
+        "secondary": "0x10052050",
+        "aim": "0x10052c50",
+        "extra": "0x10052d20",
+        "reload": "0x10051ed0",
+        "idle": "0x10052d10"
+      },
+      "vtable": "0x101b2264",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100527e0.c",
+        "decompiled/server/partial-pass/functions/0x10051c70.c",
+        "decompiled/server/partial-pass/functions/0x10050e40.c",
+        "decompiled/server/partial-pass/functions/0x10050c20.c",
+        "decompiled/server/partial-pass/functions/0x10051d50.c",
+        "decompiled/server/partial-pass/functions/0x10052050.c",
+        "decompiled/server/partial-pass/functions/0x10052c50.c",
+        "decompiled/server/partial-pass/functions/0x10052d20.c",
+        "decompiled/server/partial-pass/functions/0x10051ed0.c",
+        "decompiled/server/partial-pass/functions/0x10052d10.c",
+        "decompiled/server/partial-pass/functions/0x10051250.c",
+        "decompiled/server/partial-pass/functions/0x10050f80.c"
+      ],
+      "native_id": 9,
+      "max_ammo": 200,
+      "clip": 20,
+      "native_ammo": "m16",
+      "runtime_ammo": "m16",
+      "default_ammo": 20,
+      "spread_increment": 0.75,
+      "models_referenced": [
+        "models/556shell.mdl",
+        "models/null.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/m16/v_m16.mdl",
+        "models/weapons/m16/w_m16.mdl",
+        "police/models/weapons/m16/p_m16.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/m16/m16_cock.wav",
+        "weapons/m16/m16_fire.wav",
+        "weapons/m16/m16_magin.wav",
+        "weapons/m16/m16_magout.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/m16/v_m16.mdl",
+        "sha256": "8aaa8cc0ce4badc51b2f176752f8a858cddf95b113e011eff97ad912b7aa467b",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "draw_single",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "idle_single",
+            "frames": 2,
+            "fps": 20.0,
+            "duration": 0.05,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "shoot_single",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "reload_single",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magout.wav"
+              },
+              {
+                "frame": 49,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magin.wav"
+              },
+              {
+                "frame": 66,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magtap.wav"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "reload_empty_single",
+            "frames": 120,
+            "fps": 30.0,
+            "duration": 3.966666666666667,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magout.wav"
+              },
+              {
+                "frame": 49,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magin.wav"
+              },
+              {
+                "frame": 66,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magtap.wav"
+              },
+              {
+                "frame": 90,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_cock1.wav"
+              },
+              {
+                "frame": 97,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_cock2.wav"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "holster_single",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 6,
+            "name": "single_to_burst",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 8,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "draw_burst",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "idle_burst",
+            "frames": 2,
+            "fps": 20.0,
+            "duration": 0.05,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "shoot_burst",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 10,
+            "name": "reload_burst",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magout.wav"
+              },
+              {
+                "frame": 49,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magin.wav"
+              },
+              {
+                "frame": 66,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magtap.wav"
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "name": "reload_empty_burst",
+            "frames": 120,
+            "fps": 30.0,
+            "duration": 3.966666666666667,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magout.wav"
+              },
+              {
+                "frame": 49,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magin.wav"
+              },
+              {
+                "frame": 66,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_magtap.wav"
+              },
+              {
+                "frame": 90,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_cock1.wav"
+              },
+              {
+                "frame": 97,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_cock2.wav"
+              }
+            ]
+          },
+          {
+            "index": 12,
+            "name": "holster_burst",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "burst_to_single",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 7,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "iron_idle",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "iron_shoot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 22,
+            "name": "melee",
+            "frames": 35,
+            "fps": 30.0,
+            "duration": 1.1333333333333333,
+            "events": []
+          },
+          {
+            "index": 23,
+            "name": "shoot_noshot_single",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 24,
+            "name": "shoot_noshot_burst",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 25,
+            "name": "iron_shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 26,
+            "name": "fidget1_single",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 27,
+            "name": "fidget2_single",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 28,
+            "name": "fidget3_single",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 29,
+            "name": "fidget1_burst",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 30,
+            "name": "fidget2_burst",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 31,
+            "name": "fidget3_burst",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 32,
+            "name": "iron_singletoburst",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 7,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 33,
+            "name": "iron_bursttosingle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 7,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 34,
+            "name": "jump_to_single",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 35,
+            "name": "jump_from_single",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 36,
+            "name": "jump_to",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 37,
+            "name": "jump_from",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Штурмовая винтовка M16\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_m16\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/m16/640_m16_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/m16/640_m16_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/m16/640_m16_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.000000\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-4.250000\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"2.000000\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "burst": {
+        "shots": 3,
+        "spacing": 0.05,
+        "trigger_cooldown": 0.75,
+        "toggle": "10052d20 byte200;seq6/13 hip32/33 aimed lock1s",
+        "shoot": "0x10052120"
+      },
+      "aim_contract": {
+        "enter_sequences": [
+          18
+        ],
+        "exit_sequences": [
+          20
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x10051250",
+          "0x10050f80"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 3
+    },
+    {
+      "classname": "weapon_mp5",
+      "aliases": [],
+      "damage": "int(sk_cof_glock)",
+      "cycle": 0.06,
+      "edge_trigger": false,
+      "deploy": [
+        0
+      ],
+      "idle": [
+        1,
+        9
+      ],
+      "fire": [
+        4,
+        5,
+        6,
+        10
+      ],
+      "reload": [
+        2,
+        3
+      ],
+      "spread_recovery": 0.35,
+      "functions": {
+        "spawn": "0x1005be20",
+        "precache": "0x1005b2e0",
+        "info": "0x1005a490",
+        "deploy": "0x1005a400",
+        "primary": "0x1005b400",
+        "secondary": "0x1005bc60",
+        "aim": "0x1005c240",
+        "extra": "0x1001f070",
+        "reload": "0x1005bb60",
+        "idle": "0x1005c300"
+      },
+      "vtable": "0x101b4288",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005be20.c",
+        "decompiled/server/partial-pass/functions/0x1005b2e0.c",
+        "decompiled/server/partial-pass/functions/0x1005a490.c",
+        "decompiled/server/partial-pass/functions/0x1005a400.c",
+        "decompiled/server/partial-pass/functions/0x1005b400.c",
+        "decompiled/server/partial-pass/functions/0x1005bc60.c",
+        "decompiled/server/partial-pass/functions/0x1005c240.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x1005bb60.c",
+        "decompiled/server/partial-pass/functions/0x1005c300.c",
+        "decompiled/server/partial-pass/functions/0x1005a820.c",
+        "decompiled/server/partial-pass/functions/0x1005a550.c"
+      ],
+      "native_id": 27,
+      "max_ammo": 300,
+      "clip": 30,
+      "native_ammo": "mp5",
+      "runtime_ammo": "mp5",
+      "default_ammo": 300,
+      "spread_increment": 0.3499999940395355,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/mp5/v_mp5.mdl",
+        "models/weapons/mp5/w_mp5.mdl",
+        "police/models/weapons/tmp/p_tmp.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/mp5/mp5_charger_back.wav",
+        "weapons/mp5/mp5_charger_forward.wav",
+        "weapons/mp5/mp5_magin.wav",
+        "weapons/mp5/mp5_magout.wav",
+        "weapons/mp5/mp5_shoot_end.wav",
+        "weapons/mp5/mp5_shoot_loop.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/mp5/v_mp5.mdl",
+        "sha256": "d76dcbc785acba0d82535fdec24ed0dd2995cd2e19ba1290d06a30e365389cd4",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "deploy",
+            "frames": 31,
+            "fps": 30.0,
+            "duration": 1.0,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "idle",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "reload_regular",
+            "frames": 108,
+            "fps": 30.0,
+            "duration": 3.566666666666667,
+            "events": [
+              {
+                "frame": 30,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/mp5/mp5_magout.wav"
+              },
+              {
+                "frame": 67,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/mp5/mp5_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "reload_empty",
+            "frames": 144,
+            "fps": 30.0,
+            "duration": 4.766666666666667,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/mp5/mp5_charger_back.wav"
+              },
+              {
+                "frame": 53,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/mp5/mp5_magout.wav"
+              },
+              {
+                "frame": 88,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/mp5/mp5_magin.wav"
+              },
+              {
+                "frame": 108,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/mp5/mp5_charger_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "name": "shoot1",
+            "frames": 26,
+            "fps": 30.0,
+            "duration": 0.8333333333333334,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "shoot2",
+            "frames": 28,
+            "fps": 30.0,
+            "duration": 0.9,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "shoot3",
+            "frames": 55,
+            "fps": 30.0,
+            "duration": 1.8,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "shoot_empty",
+            "frames": 14,
+            "fps": 30.0,
+            "duration": 0.43333333333333335,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "to_ironsights",
+            "frames": 8,
+            "fps": 30.0,
+            "duration": 0.23333333333333334,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "ironsights_idle",
+            "frames": 2,
+            "fps": 5.0,
+            "duration": 0.2,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "ironsights_shoot",
+            "frames": 17,
+            "fps": 30.0,
+            "duration": 0.5333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "name": "from_ironsights",
+            "frames": 8,
+            "fps": 30.0,
+            "duration": 0.23333333333333334,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "suicide",
+            "frames": 91,
+            "fps": 30.0,
+            "duration": 3.0,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "sprint_to",
+            "frames": 11,
+            "fps": 30.0,
+            "duration": 0.3333333333333333,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "sprint_idle",
+            "frames": 21,
+            "fps": 30.0,
+            "duration": 0.6666666666666666,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "sprint_end",
+            "frames": 11,
+            "fps": 30.0,
+            "duration": 0.3333333333333333,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "jump",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "land",
+            "frames": 22,
+            "fps": 30.0,
+            "duration": 0.7,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "melee",
+            "frames": 39,
+            "fps": 30.0,
+            "duration": 1.2666666666666666,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "holster",
+            "frames": 19,
+            "fps": 30.0,
+            "duration": 0.6,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"MP5A3\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_mp5\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/mp5/640_mp5_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/mp5/640_mp5_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/mp5/640_mp5_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.00\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-4.25\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"2.00\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "aim_contract": {
+        "enter_sequences": [
+          8
+        ],
+        "exit_sequences": [
+          11
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x1005a820",
+          "0x1005a550"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 1,
+      "fire_selection": "hip RANDOM_LONG(0,2)+4; aimed10",
+      "secondary_lock_after_shot": 1
+    },
+    {
+      "classname": "weapon_famas",
+      "aliases": [],
+      "damage": "15 constant",
+      "cycle": 0.06,
+      "edge_trigger": false,
+      "deploy": [
+        1,
+        2
+      ],
+      "idle": [
+        0,
+        16
+      ],
+      "fire": [
+        4,
+        17
+      ],
+      "reload": [
+        5,
+        6
+      ],
+      "spread_recovery": 0.25,
+      "functions": {
+        "spawn": "0x1003c460",
+        "precache": "0x1003bb40",
+        "info": "0x1003ada0",
+        "deploy": "0x1003ac00",
+        "primary": "0x1003bbd0",
+        "secondary": "0x1003c370",
+        "aim": "0x1003c880",
+        "extra": "0x1001f070",
+        "reload": "0x1003c2c0",
+        "idle": "0x1003c940"
+      },
+      "vtable": "0x101ae8dc",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1003c460.c",
+        "decompiled/server/partial-pass/functions/0x1003bb40.c",
+        "decompiled/server/partial-pass/functions/0x1003ada0.c",
+        "decompiled/server/partial-pass/functions/0x1003ac00.c",
+        "decompiled/server/partial-pass/functions/0x1003bbd0.c",
+        "decompiled/server/partial-pass/functions/0x1003c370.c",
+        "decompiled/server/partial-pass/functions/0x1003c880.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x1003c2c0.c",
+        "decompiled/server/partial-pass/functions/0x1003c940.c",
+        "decompiled/server/partial-pass/functions/0x1003b130.c",
+        "decompiled/server/partial-pass/functions/0x1003ae60.c"
+      ],
+      "native_id": 23,
+      "max_ammo": 150,
+      "clip": 30,
+      "native_ammo": "famas",
+      "runtime_ammo": "famas",
+      "default_ammo": 30,
+      "spread_increment": 0.15000000596046448,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/famas/v_famas.mdl",
+        "models/weapons/famas/w_famas.mdl"
+      ],
+      "sounds_referenced": [
+        "subtitles/french4.wav",
+        "weapons/famas/famas_shoot.wav",
+        "weapons/item_get.wav",
+        "weapons_new/famas/famas_shoot.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/famas/v_famas.mdl",
+        "sha256": "175cb022365adf25dc333b14b63dc7c1d6119817ea65f43f817acc6a7c631e54",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "draw_first",
+            "frames": 155,
+            "fps": 30.0,
+            "duration": 5.133333333333334,
+            "events": []
+          },
+          {
+            "index": 3,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 4,
+            "name": "shoot1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "reload",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/famas/famas_magout.wav"
+              },
+              {
+                "frame": 58,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/famas/famas_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "reload_empty",
+            "frames": 110,
+            "fps": 30.0,
+            "duration": 3.6333333333333333,
+            "events": [
+              {
+                "frame": 17,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/famas/famas_magout.wav"
+              },
+              {
+                "frame": 58,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/famas/famas_magin.wav"
+              },
+              {
+                "frame": 86,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/famas/famas_cock.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "switch",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 12,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/m16/m16_switch.wav"
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "melee",
+            "frames": 35,
+            "fps": 30.0,
+            "duration": 1.1333333333333333,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "fidget1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "fidget2",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "fidget3",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "is_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "is_idle",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "is_shoot",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 18,
+            "name": "is_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "shoot_nah",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "is_shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 22,
+            "name": "jump_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 23,
+            "name": "jump_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"FAMAS G2\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_famas\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/famas/640_famas_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/famas/640_famas_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/famas/640_famas_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-5\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"2.5\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "aim_contract": {
+        "enter_sequences": [
+          15
+        ],
+        "exit_sequences": [
+          18
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x1003b130",
+          "0x1003ae60"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 1
+    },
+    {
+      "classname": "weapon_tmp",
+      "aliases": [
+        "weapon_uzi"
+      ],
+      "damage": "int(sk_cof_glock/1.65)",
+      "cycle": 0.07,
+      "edge_trigger": false,
+      "deploy": [
+        1,
+        2
+      ],
+      "idle": [
+        0,
+        11
+      ],
+      "fire": [
+        4,
+        13
+      ],
+      "reload": [
+        5,
+        6
+      ],
+      "spread_recovery": 0.25,
+      "functions": {
+        "spawn": "0x1007fc10",
+        "precache": "0x1007f070",
+        "info": "0x1007e220",
+        "deploy": "0x1007e130",
+        "primary": "0x1007f1a0",
+        "secondary": "0x1007f9e0",
+        "aim": "0x10080030",
+        "extra": "0x1001f070",
+        "reload": "0x1007f8d0",
+        "idle": "0x100800f0"
+      },
+      "vtable": "0x101bcb7c",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1007fc10.c",
+        "decompiled/server/partial-pass/functions/0x1007f070.c",
+        "decompiled/server/partial-pass/functions/0x1007e220.c",
+        "decompiled/server/partial-pass/functions/0x1007e130.c",
+        "decompiled/server/partial-pass/functions/0x1007f1a0.c",
+        "decompiled/server/partial-pass/functions/0x1007f9e0.c",
+        "decompiled/server/partial-pass/functions/0x10080030.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x1007f8d0.c",
+        "decompiled/server/partial-pass/functions/0x100800f0.c",
+        "decompiled/server/partial-pass/functions/0x1007e5b0.c",
+        "decompiled/server/partial-pass/functions/0x1007e2e0.c"
+      ],
+      "native_id": 14,
+      "max_ammo": 300,
+      "clip": 30,
+      "native_ammo": "tmp",
+      "runtime_ammo": "tmp",
+      "default_ammo": 30,
+      "spread_increment": 0.25,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/tmp/v_tmp.mdl",
+        "models/weapons/tmp/w_tmp.mdl",
+        "police/models/weapons/tmp/p_tmp.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/tmp/tmp_charger_back.wav",
+        "weapons/tmp/tmp_charger_forward.wav",
+        "weapons/tmp/tmp_magin.wav",
+        "weapons/tmp/tmp_magout.wav",
+        "weapons/tmp/tmp_shoot_end.wav",
+        "weapons/tmp/tmp_shoot_loop.wav",
+        "weapons/tmp/tmp_stock.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/tmp/v_tmp.mdl",
+        "sha256": "66a2cf7a084ccbcb7ab5b1c0dfa599b302e750f6599be204c092ae075af6c7a4",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "draw_first",
+            "frames": 45,
+            "fps": 30.0,
+            "duration": 1.4666666666666666,
+            "events": [
+              {
+                "frame": 20,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_stock.wav"
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 4,
+            "name": "shoot",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "reload",
+            "frames": 75,
+            "fps": 30.0,
+            "duration": 2.466666666666667,
+            "events": [
+              {
+                "frame": 21,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_magout.wav"
+              },
+              {
+                "frame": 51,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 6,
+            "name": "reload_empty",
+            "frames": 110,
+            "fps": 30.0,
+            "duration": 3.6333333333333333,
+            "events": [
+              {
+                "frame": 21,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_magout.wav"
+              },
+              {
+                "frame": 51,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_magin.wav"
+              },
+              {
+                "frame": 75,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_charger_back.wav"
+              },
+              {
+                "frame": 83,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/tmp/tmp_charger_forward.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 8,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 11,
+            "name": "iron_idle",
+            "frames": 1,
+            "fps": 30.0,
+            "duration": 0,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "iron_shoot",
+            "frames": 25,
+            "fps": 30.0,
+            "duration": 0.8,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 14,
+            "name": "melee",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"MP9\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_tmp\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/mp9/640_mp9_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/mp9/640_mp9_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/mp9/640_mp9_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-4.75\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"3\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "aim_contract": {
+        "enter_sequences": [
+          10
+        ],
+        "exit_sequences": [
+          12
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x1007e5b0",
+          "0x1007e2e0"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 1
+    },
+    {
+      "classname": "weapon_vp70",
+      "aliases": [],
+      "damage": "int(sk_cof_VP70)",
+      "cycle": 0.55,
+      "edge_trigger": false,
+      "deploy": [
+        1,
+        2
+      ],
+      "idle": [
+        0,
+        9
+      ],
+      "fire": [
+        4,
+        10
+      ],
+      "reload": [
+        6,
+        7
+      ],
+      "spread_recovery": 0.35,
+      "functions": {
+        "spawn": "0x100852a0",
+        "precache": "0x10084790",
+        "info": "0x10083940",
+        "deploy": "0x10083740",
+        "primary": "0x10084880",
+        "secondary": "0x10084c20",
+        "aim": "0x10085700",
+        "extra": "0x1001f070",
+        "reload": "0x10084ad0",
+        "idle": "0x100857c0"
+      },
+      "vtable": "0x101be1a4",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100852a0.c",
+        "decompiled/server/partial-pass/functions/0x10084790.c",
+        "decompiled/server/partial-pass/functions/0x10083940.c",
+        "decompiled/server/partial-pass/functions/0x10083740.c",
+        "decompiled/server/partial-pass/functions/0x10084880.c",
+        "decompiled/server/partial-pass/functions/0x10084c20.c",
+        "decompiled/server/partial-pass/functions/0x10085700.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x10084ad0.c",
+        "decompiled/server/partial-pass/functions/0x100857c0.c",
+        "decompiled/server/partial-pass/functions/0x10083cd0.c",
+        "decompiled/server/partial-pass/functions/0x10083a00.c"
+      ],
+      "native_id": 19,
+      "max_ammo": 180,
+      "clip": 18,
+      "native_ammo": "vp70",
+      "runtime_ammo": "vp70",
+      "default_ammo": 18,
+      "spread_increment": 0.75,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/w_9mmclip.mdl",
+        "models/weapons/vp70/v_vp70.mdl",
+        "models/weapons/vp70/w_vp70.mdl",
+        "police/models/weapons/vp70/p_vp70.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/item_get.wav",
+        "weapons/vp70/vp70_cock.wav",
+        "weapons/vp70/vp70_draw_first_seq.wav",
+        "weapons/vp70/vp70_fire.wav",
+        "weapons/vp70/vp70_magin.wav",
+        "weapons/vp70/vp70_magout.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/vp70/v_vp70.mdl",
+        "sha256": "30af770987dc0430ff48bd6631d955e5e3b63c9dc486e02ef707b27fb4370a77",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "draw",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "draw_first",
+            "frames": 105,
+            "fps": 30.0,
+            "duration": 3.466666666666667,
+            "events": []
+          },
+          {
+            "index": 3,
+            "name": "holster",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 4,
+            "name": "shoot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 5,
+            "name": "shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 6,
+            "name": "reload",
+            "frames": 76,
+            "fps": 30.0,
+            "duration": 2.5,
+            "events": [
+              {
+                "frame": 10,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/vp70/vp70_magout.wav"
+              },
+              {
+                "frame": 51,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/vp70/vp70_magin.wav"
+              }
+            ]
+          },
+          {
+            "index": 7,
+            "name": "reload_noshot",
+            "frames": 110,
+            "fps": 30.0,
+            "duration": 3.6333333333333333,
+            "events": [
+              {
+                "frame": 10,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/vp70/vp70_magout.wav"
+              },
+              {
+                "frame": 51,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/vp70/vp70_magin.wav"
+              },
+              {
+                "frame": 76,
+                "event": 5004,
+                "type": 0,
+                "options": "weapons/vp70/vp70_cock.wav"
+              }
+            ]
+          },
+          {
+            "index": 8,
+            "name": "iron_to",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 9,
+            "name": "iron_idle",
+            "frames": 2,
+            "fps": 30.0,
+            "duration": 0.03333333333333333,
+            "events": []
+          },
+          {
+            "index": 10,
+            "name": "iron_shoot",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": [
+              {
+                "frame": 0,
+                "event": 5001,
+                "type": 0,
+                "options": "1"
+              }
+            ]
+          },
+          {
+            "index": 11,
+            "name": "iron_shoot_noshot",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 12,
+            "name": "iron_from",
+            "frames": 6,
+            "fps": 30.0,
+            "duration": 0.16666666666666666,
+            "events": []
+          },
+          {
+            "index": 13,
+            "name": "sprint_to",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 14,
+            "name": "sprint_idle",
+            "frames": 20,
+            "fps": 30.0,
+            "duration": 0.6333333333333333,
+            "events": []
+          },
+          {
+            "index": 15,
+            "name": "sprint_from",
+            "frames": 10,
+            "fps": 30.0,
+            "duration": 0.3,
+            "events": []
+          },
+          {
+            "index": 16,
+            "name": "jump_to",
+            "frames": 15,
+            "fps": 30.0,
+            "duration": 0.4666666666666667,
+            "events": []
+          },
+          {
+            "index": 17,
+            "name": "jump_from",
+            "frames": 16,
+            "fps": 30.0,
+            "duration": 0.5,
+            "events": []
+          },
+          {
+            "index": 18,
+            "name": "fidget1",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 19,
+            "name": "fidget2",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 20,
+            "name": "fidget3",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 21,
+            "name": "melee",
+            "frames": 30,
+            "fps": 30.0,
+            "duration": 0.9666666666666667,
+            "events": []
+          },
+          {
+            "index": 22,
+            "name": "suicide",
+            "frames": 90,
+            "fps": 30.0,
+            "duration": 2.966666666666667,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"VP70\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_vp70\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/vp70/640_vp70_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/vp70/640_vp70_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/vp70/640_vp70_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-3.6\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"3.1\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "burst": {
+        "shots": 3,
+        "spacing": 0.027000000700354576,
+        "trigger_cooldown": 0.55,
+        "shoot": "0x10084ce0"
+      },
+      "aim_contract": {
+        "enter_sequences": [
+          8
+        ],
+        "exit_sequences": [
+          12
+        ],
+        "attack_lock": 0.3,
+        "idle_wait": "model duration, revolver constant.3",
+        "functions": [
+          "0x10083cd0",
+          "0x10083a00"
+        ]
+      },
+      "attack_range": 8192,
+      "pellets": 1,
+      "view_knock_byte": 3
+    },
+    {
+      "classname": "weapon_browning_wheelchair",
+      "aliases": [],
+      "damage": "10 constant",
+      "cycle": 0.25,
+      "edge_trigger": true,
+      "deploy": [
+        0
+      ],
+      "idle": [
+        1
+      ],
+      "fire": [
+        2
+      ],
+      "reload": [
+        3
+      ],
+      "spread_recovery": null,
+      "functions": {
+        "spawn": "0x100269b0",
+        "precache": "0x100260f0",
+        "info": "0x10025f40",
+        "deploy": "0x10025ef0",
+        "primary": "0x10026180",
+        "secondary": "0x100269a0",
+        "aim": "0x10026ad0",
+        "extra": "0x1001f070",
+        "reload": "0x10026880",
+        "idle": "0x10026ae0"
+      },
+      "vtable": "0x101a79e0",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100269b0.c",
+        "decompiled/server/partial-pass/functions/0x100260f0.c",
+        "decompiled/server/partial-pass/functions/0x10025f40.c",
+        "decompiled/server/partial-pass/functions/0x10025ef0.c",
+        "decompiled/server/partial-pass/functions/0x10026180.c",
+        "decompiled/server/partial-pass/functions/0x100269a0.c",
+        "decompiled/server/partial-pass/functions/0x10026ad0.c",
+        "decompiled/server/partial-pass/functions/0x1001f070.c",
+        "decompiled/server/partial-pass/functions/0x10026880.c",
+        "decompiled/server/partial-pass/functions/0x10026ae0.c"
+      ],
+      "native_id": 20,
+      "max_ammo": 130,
+      "clip": 13,
+      "native_ammo": "пистолета Браунинг",
+      "runtime_ammo": "browning",
+      "default_ammo": 13,
+      "spread_increment": null,
+      "models_referenced": [
+        "models/null.mdl",
+        "models/shell.mdl",
+        "models/weapons/browning/v_wheelchair_browning.mdl"
+      ],
+      "sounds_referenced": [
+        "weapons/browning/browning_fire.wav",
+        "weapons/browning/browning_magin.wav",
+        "weapons/browning/browning_magout.wav",
+        "weapons/item_get.wav",
+        "weapons_new/browning/browning_fire.wav"
+      ],
+      "view_model_capture": {
+        "path": "models/weapons/browning/v_wheelchair_browning.mdl",
+        "sha256": "416cf398a3204001afa1f21609e906e0dbc6166e81127f9f2de8ba0f40ad714c",
+        "sequences": [
+          {
+            "index": 0,
+            "name": "draw",
+            "frames": 36,
+            "fps": 30.0,
+            "duration": 1.1666666666666667,
+            "events": []
+          },
+          {
+            "index": 1,
+            "name": "idle",
+            "frames": 101,
+            "fps": 20.0,
+            "duration": 5.0,
+            "events": []
+          },
+          {
+            "index": 2,
+            "name": "shoot",
+            "frames": 19,
+            "fps": 30.0,
+            "duration": 0.6,
+            "events": [
+              {
+                "frame": 1,
+                "event": 5001,
+                "type": 0,
+                "options": ""
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "name": "holster",
+            "frames": 31,
+            "fps": 30.0,
+            "duration": 1.0,
+            "events": []
+          }
+        ]
+      },
+      "descriptor_text": "\"nice_name\"\n{\n\tdata\t\"Browning HP 9мм\"\n}\n\n\"classname\"\n{\n\tdata\t\"weapon_browning_wheelchair\"\n}\n\n\"inventory_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/browning/640_browning_slot.tga\"\n}\n\n\"quick_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/browning/640_browning_slot.tga\"\n}\n\n\"check_picture\"\n{\n\tdata\t\"gfx/vgui/weapons/browning/640_browning_check.tga\"\n}\n\n\"ironsight_forward\"\n{\n\tdata\t\"0.05\"\n}\n\n\"ironsight_right\"\n{\n\tdata\t\"-20\"\n}\n\n\"ironsight_up\"\n{\n\tdata\t\"13.75\"\n}\n\n\"ironsight_zoom\"\n{\n\tdata\t\"50\"\n}",
+      "limitations": [
+        "Runtime skill overrides and custom model sequences may alter defaults. Localized native ammo names mapped to stable ASCII runtime names."
+      ],
+      "attack_range": 8192,
+      "pellets": 1,
+      "edge_trigger_note": "Normal origin branch requires pressed bit; helper10017780 can supply alternate origin bypass.",
+      "view_knock_byte": 3
+    }
+  ],
+  "ammo_pickups": [
+    {
+      "classname": "ammo_glock",
+      "amount": 15,
+      "max_reserve_singleplayer": 150,
+      "model": "models/ammo/clip.mdl",
+      "add_ammo": "0x10045640",
+      "spawn": "0x100478b0",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10045640.c",
+        "decompiled/server/partial-pass/functions/0x100478b0.c"
+      ]
+    },
+    {
+      "classname": "ammo_p345",
+      "amount": 8,
+      "max_reserve_singleplayer": 80,
+      "model": "models/ammo/p345_clip.mdl",
+      "add_ammo": "0x1005d910",
+      "spawn": "0x1005f630",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005d910.c",
+        "decompiled/server/partial-pass/functions/0x1005f630.c"
+      ]
+    },
+    {
+      "classname": "ammo_revolver",
+      "amount": 5,
+      "max_reserve_singleplayer": 50,
+      "model": "models/ammo/ammo_revolver.mdl",
+      "add_ammo": "0x10063b40",
+      "spawn": "0x100658e0",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10063b40.c",
+        "decompiled/server/partial-pass/functions/0x100658e0.c"
+      ]
+    },
+    {
+      "classname": "ammo_rifle",
+      "amount": 5,
+      "max_reserve_singleplayer": 50,
+      "model": "models/ammo/ammo_rifle.mdl",
+      "add_ammo": "0x10065e70",
+      "spawn": "0x10067f70",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10065e70.c",
+        "decompiled/server/partial-pass/functions/0x10067f70.c"
+      ]
+    },
+    {
+      "classname": "ammo_g43",
+      "amount": 10,
+      "max_reserve_singleplayer": 40,
+      "model": "models/ammo/ammo_g43.mdl",
+      "add_ammo": "0x10043450",
+      "spawn": "0x10045060",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10043450.c",
+        "decompiled/server/partial-pass/functions/0x10045060.c"
+      ]
+    },
+    {
+      "classname": "ammo_shells",
+      "amount": 9,
+      "max_reserve_singleplayer": 50,
+      "model": "models/ammo/ammo_shotshells.mdl",
+      "add_ammo": "0x1006cac0",
+      "spawn": "0x1006e830",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1006cac0.c",
+        "decompiled/server/partial-pass/functions/0x1006e830.c"
+      ]
+    },
+    {
+      "classname": "ammo_m16",
+      "amount": 20,
+      "max_reserve_singleplayer": 200,
+      "model": "models/ammo/ammo_m16.mdl",
+      "add_ammo": "0x10050ba0",
+      "spawn": "0x10052910",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10050ba0.c",
+        "decompiled/server/partial-pass/functions/0x10052910.c"
+      ]
+    },
+    {
+      "classname": "ammo_mp5",
+      "amount": 30,
+      "max_reserve_singleplayer": 300,
+      "model": "models/ammo/ammo_mp5.mdl",
+      "add_ammo": "0x1005a380",
+      "spawn": "0x1005bdf0",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005a380.c",
+        "decompiled/server/partial-pass/functions/0x1005bdf0.c"
+      ]
+    },
+    {
+      "classname": "ammo_tmp",
+      "amount": 30,
+      "max_reserve_singleplayer": 300,
+      "model": "models/ammo/ammo_tmp.mdl",
+      "add_ammo": "0x1007e0b0",
+      "spawn": "0x1007fbe0",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1007e0b0.c",
+        "decompiled/server/partial-pass/functions/0x1007fbe0.c"
+      ]
+    },
+    {
+      "classname": "ammo_vp70",
+      "amount": 18,
+      "max_reserve_singleplayer": 180,
+      "model": "models/ammo/vp70_clip.mdl",
+      "add_ammo": "0x100836c0",
+      "spawn": "0x100853c0",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100836c0.c",
+        "decompiled/server/partial-pass/functions/0x100853c0.c"
+      ]
+    }
+  ]
+}

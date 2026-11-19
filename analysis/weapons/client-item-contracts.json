@@ -1,0 +1,655 @@
+[
+  {
+    "path": "inventoryitems/ammo/ammo_glock.txt",
+    "fields": {
+      "nice_name": "Патроны для Glock'а",
+      "classname": "ammo_glock",
+      "inventory_picture": "gfx/vgui/ammo/glock_slot.tga",
+      "check_picture": "gfx/vgui/ammo/glock_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/ammo/ammo_m16.txt",
+    "fields": {
+      "nice_name": "Патроны для M16",
+      "classname": "ammo_m16",
+      "inventory_picture": "gfx/vgui/ammo/m16_slot.tga",
+      "check_picture": "gfx/vgui/ammo/m16_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/ammo/ammo_p345.txt",
+    "fields": {
+      "nice_name": "Патроны для P345",
+      "classname": "ammo_p345",
+      "inventory_picture": "gfx/vgui/ammo/p345_slot.tga",
+      "check_picture": "gfx/vgui/ammo/p345_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/ammo/ammo_shells.txt",
+    "fields": {
+      "nice_name": "Патроны для дробовика",
+      "classname": "ammo_shells",
+      "inventory_picture": "gfx/vgui/ammo/shotgun_slot.tga",
+      "check_picture": "gfx/vgui/ammo/shotgun_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/ammo/ammo_tmp.txt",
+    "fields": {
+      "nice_name": "Патроны для TMP",
+      "classname": "ammo_tmp",
+      "inventory_picture": "gfx/vgui/ammo/tmp_slot.tga",
+      "check_picture": "gfx/vgui/ammo/tmp_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/outofit/ak47/ammo_ooi_ak47.txt",
+    "fields": {
+      "nice_name": "Рожок к AK47",
+      "classname": "ammo_m16",
+      "inventory_picture": "gfx/vgui/items/outofit/ak47/ak47_ammo_slot.tga",
+      "check_picture": "gfx/vgui/items/outofit/ak47/ak47_ammo_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/outofit/ak47/weapon_ooi_ak47.txt",
+    "fields": {
+      "nice_name": "Автомат Калашникова",
+      "classname": "weapon_m16",
+      "inventory_picture": "gfx/vgui/items/outofit/ak47/640_ak47_slot.tga",
+      "quick_picture": "gfx/vgui/items/outofit/ak47/640_ak47_slot.tga",
+      "check_picture": "gfx/vgui/items/outofit/ak47/640_ak47_check.tga",
+      "ironsight_forward": "0.000000",
+      "ironsight_right": "-4.250000",
+      "ironsight_up": "2.000000",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_ak47.txt",
+    "fields": {
+      "nice_name": "Автомат Калашникова KF-7",
+      "classname": "weapon_m16",
+      "inventory_picture": "gfx/vgui/weapons/ak47/640_ak47_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/ak47/640_ak47_slot.tga",
+      "check_picture": "gfx/vgui/weapons/ak47/640_ak47_check.tga",
+      "ironsight_forward": "0.000000",
+      "ironsight_right": "-4.250000",
+      "ironsight_up": "2.000000",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_axe.txt",
+    "fields": {
+      "nice_name": "Топор AoMDC",
+      "classname": "weapon_axe",
+      "inventory_picture": "gfx/vgui/weapons/axe/640_axe_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/axe/640_axe_slot.tga",
+      "check_picture": "gfx/vgui/weapons/axe/640_axe_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_battleaxe.txt",
+    "fields": {
+      "nice_name": "Боевой топор",
+      "classname": "weapon_nightstick",
+      "inventory_picture": "gfx/vgui/weapons/battleaxe/640_battleaxe_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/battleaxe/640_battleaxe_slot.tga",
+      "check_picture": "gfx/vgui/weapons/battleaxe/640_battleaxe_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_booklaser.txt",
+    "fields": {
+      "nice_name": "Книга Саймона",
+      "classname": "weapon_booklaser",
+      "inventory_picture": "gfx/vgui/weapons/booklaser/640_booklaser_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/booklaser/640_booklaser_slot.tga",
+      "check_picture": "gfx/vgui/weapons/booklaser/640_booklaser_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_branch.txt",
+    "fields": {
+      "nice_name": "Ветка",
+      "classname": "weapon_branch",
+      "inventory_picture": "gfx/vgui/weapons/branch/640_branch_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/branch/640_branch_slot.tga",
+      "check_picture": "gfx/vgui/weapons/branch/640_branch_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_browning.txt",
+    "fields": {
+      "nice_name": "Browning HP 9мм",
+      "classname": "weapon_glock",
+      "inventory_picture": "gfx/vgui/weapons/browning/640_browning_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/browning/640_browning_slot.tga",
+      "check_picture": "gfx/vgui/weapons/browning/640_browning_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-20",
+      "ironsight_up": "13.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_browning_wheelchair.txt",
+    "fields": {
+      "nice_name": "Browning HP 9мм",
+      "classname": "weapon_browning_wheelchair",
+      "inventory_picture": "gfx/vgui/weapons/browning/640_browning_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/browning/640_browning_slot.tga",
+      "check_picture": "gfx/vgui/weapons/browning/640_browning_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-20",
+      "ironsight_up": "13.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_camera.txt",
+    "fields": {
+      "nice_name": "Камера Смерти",
+      "classname": "weapon_camera",
+      "inventory_picture": "gfx/vgui/weapons/camera/640_camera_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/camera/640_camera_slot.tga",
+      "check_picture": "gfx/vgui/weapons/camera/640_camera_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_coldmeal.txt",
+    "fields": {
+      "nice_name": "Остывшая пища",
+      "classname": "weapon_syringe",
+      "inventory_picture": "gfx/vgui/weapons/coldmeal/640_coldmeal_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/coldmeal/640_coldmeal_slot.tga",
+      "check_picture": "gfx/vgui/weapons/coldmeal/640_coldmeal_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_cougarmagnum.txt",
+    "fields": {
+      "nice_name": "Магнум Пума",
+      "classname": "weapon_revolver",
+      "inventory_picture": "gfx/vgui/weapons/cougarmagnum/640_cougarmagnum_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/cougarmagnum/640_cougarmagnum_slot.tga",
+      "check_picture": "gfx/vgui/weapons/cougarmagnum/640_cougarmagnum_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-6",
+      "ironsight_up": "4.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_cutlass.txt",
+    "fields": {
+      "nice_name": "Абордажная сабля",
+      "classname": "weapon_switchblade",
+      "inventory_picture": "gfx/vgui/weapons/cutlass/640_cutlass_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/cutlass/640_cutlass_slot.tga",
+      "check_picture": "gfx/vgui/weapons/cutlass/640_cutlass_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_famas.txt",
+    "fields": {
+      "nice_name": "FAMAS G2",
+      "classname": "weapon_famas",
+      "inventory_picture": "gfx/vgui/weapons/famas/640_famas_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/famas/640_famas_slot.tga",
+      "check_picture": "gfx/vgui/weapons/famas/640_famas_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-5",
+      "ironsight_up": "2.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_flare.txt",
+    "fields": {
+      "nice_name": "Сигнальная вспышка",
+      "classname": "weapon_flare",
+      "inventory_picture": "gfx/vgui/weapons/flare/640_flare_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/flare/640_flare_slot.tga",
+      "check_picture": "gfx/vgui/weapons/flare/640_flare_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_flashlight.txt",
+    "fields": {
+      "nice_name": "Фонарик",
+      "classname": "weapon_flashlight",
+      "inventory_picture": "gfx/vgui/weapons/flashlight/640_flashlight_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/flashlight/640_flashlight_slot.tga",
+      "check_picture": "gfx/vgui/weapons/flashlight/640_flashlight_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_flintlock.txt",
+    "fields": {
+      "nice_name": "Кремниевый пистолет",
+      "classname": "weapon_revolver",
+      "inventory_picture": "gfx/vgui/weapons/flintlock/640_flintlock_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/flintlock/640_flintlock_slot.tga",
+      "check_picture": "gfx/vgui/weapons/flintlock/640_flintlock_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-6",
+      "ironsight_up": "4.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_g43.txt",
+    "fields": {
+      "nice_name": "Винтовка G43",
+      "classname": "weapon_g43",
+      "inventory_picture": "gfx/vgui/weapons/g43/640_g43_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/g43/640_g43_slot.tga",
+      "check_picture": "gfx/vgui/weapons/g43/640_g43_check.tga",
+      "ironsight_forward": "0.00",
+      "ironsight_right": "-4.25",
+      "ironsight_up": "2.00",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_glock.txt",
+    "fields": {
+      "nice_name": "Glock 19 9мм",
+      "classname": "weapon_glock",
+      "inventory_picture": "gfx/vgui/weapons/glock/640_glock_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/glock/640_glock_slot.tga",
+      "check_picture": "gfx/vgui/weapons/glock/640_glock_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav",
+      "combined_with": "Glock Tactical Light",
+      "combined_result": "glockwithtaclight",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-20",
+      "ironsight_up": "13.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_glocktac.txt",
+    "fields": {
+      "nice_name": "Glock 19 9мм с фонариком",
+      "classname": "weapon_glock",
+      "inventory_picture": "gfx/vgui/weapons/glocktac/640_glock_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/glocktac/640_glock_slot.tga",
+      "check_picture": "gfx/vgui/weapons/glocktac/640_glock_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-20",
+      "ironsight_up": "13.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_instituteglock.txt",
+    "fields": {
+      "nice_name": "Игрушечный Глок",
+      "classname": "weapon_glock",
+      "inventory_picture": "gfx/vgui/weapons/instituteglock/640_glock_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/instituteglock/640_glock_slot.tga",
+      "check_picture": "gfx/vgui/weapons/instituteglock/640_glock_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav",
+      "combined_with": "Glock Tactical Light",
+      "combined_result": "glockwithtaclight",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-20",
+      "ironsight_up": "13.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_instituterifle.txt",
+    "fields": {
+      "nice_name": "Садистская винтовка",
+      "classname": "weapon_rifle",
+      "inventory_picture": "gfx/vgui/weapons/instituterifle/640_rifle_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/instituterifle/640_rifle_slot.tga",
+      "check_picture": "gfx/vgui/weapons/instituterifle/640_rifle_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_lantern.txt",
+    "fields": {
+      "nice_name": "Лампа",
+      "classname": "weapon_lantern",
+      "inventory_picture": "gfx/vgui/weapons/lantern/640_lantern_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/lantern/640_lantern_slot.tga",
+      "check_picture": "gfx/vgui/weapons/lantern/640_lantern_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_luger.txt",
+    "fields": {
+      "nice_name": "Люгер 9-мм",
+      "classname": "weapon_glock",
+      "inventory_picture": "gfx/vgui/weapons/luger/640_luger_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/luger/640_luger_slot.tga",
+      "check_picture": "gfx/vgui/weapons/luger/640_luger_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav",
+      "combined_with": "Glock Tactical Light",
+      "combined_result": "glockwithtaclight",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-20",
+      "ironsight_up": "13.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_m16.txt",
+    "fields": {
+      "nice_name": "Штурмовая винтовка M16",
+      "classname": "weapon_m16",
+      "inventory_picture": "gfx/vgui/weapons/m16/640_m16_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/m16/640_m16_slot.tga",
+      "check_picture": "gfx/vgui/weapons/m16/640_m16_check.tga",
+      "ironsight_forward": "0.000000",
+      "ironsight_right": "-4.250000",
+      "ironsight_up": "2.000000",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_mobile.txt",
+    "fields": {
+      "nice_name": "Мобильный телефон",
+      "classname": "weapon_mobile",
+      "inventory_picture": "gfx/vgui/weapons/mobile/640_mobile_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/mobile/640_mobile_slot.tga",
+      "check_picture": "gfx/vgui/weapons/mobile/640_mobile_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav",
+      "combined_with": "Mobile Phone Battery",
+      "combined_result": "phonewithbattery"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_mobile_lostecho.txt",
+    "fields": {
+      "nice_name": "Сотовый телефон",
+      "classname": "weapon_mobile",
+      "inventory_picture": "gfx/vgui/weapons/mobile/640_mobile_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/mobile/640_mobile_slot.tga",
+      "check_picture": "gfx/vgui/weapons/mobile_lostecho/640_mobile_lostecho_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav",
+      "combined_with": "Mobile Phone Battery",
+      "combined_result": "phonewithbattery"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_mp5.txt",
+    "fields": {
+      "nice_name": "MP5A3",
+      "classname": "weapon_mp5",
+      "inventory_picture": "gfx/vgui/weapons/mp5/640_mp5_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/mp5/640_mp5_slot.tga",
+      "check_picture": "gfx/vgui/weapons/mp5/640_mp5_check.tga",
+      "ironsight_forward": "0.00",
+      "ironsight_right": "-4.25",
+      "ironsight_up": "2.00",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_nightstick.txt",
+    "fields": {
+      "nice_name": "Полицейская дубинка",
+      "classname": "weapon_nightstick",
+      "inventory_picture": "gfx/vgui/weapons/nightstick/640_nightstick_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/nightstick/640_nightstick_slot.tga",
+      "check_picture": "gfx/vgui/weapons/nightstick/640_nightstick_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_oldflashlight.txt",
+    "fields": {
+      "nice_name": "Старый фонарик",
+      "classname": "weapon_flashlight",
+      "inventory_picture": "gfx/vgui/weapons/oldflashlight/640_oldflashlight_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/oldflashlight/640_oldflashlight_slot.tga",
+      "check_picture": "gfx/vgui/weapons/oldflashlight/640_oldflashlight_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_p345.txt",
+    "fields": {
+      "nice_name": "P345 .45",
+      "classname": "weapon_p345",
+      "inventory_picture": "gfx/vgui/weapons/p345/640_p345_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/p345/640_p345_slot.tga",
+      "check_picture": "gfx/vgui/weapons/p345/640_p345_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-6",
+      "ironsight_up": "4.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_p345blackslide.txt",
+    "fields": {
+      "nice_name": "Новый P345 .45 с чёрным затвором",
+      "classname": "weapon_p345",
+      "inventory_picture": "gfx/vgui/weapons/p345_blackslide/640_p345_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/p345_blackslide/640_p345_slot.tga",
+      "check_picture": "gfx/vgui/weapons/p345_blackslide/640_p345_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-6",
+      "ironsight_up": "4.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_pickaxe.txt",
+    "fields": {
+      "nice_name": "Кирка",
+      "classname": "weapon_sledgehammer",
+      "inventory_picture": "gfx/vgui/weapons/sledgehammer/640_e3cc3_pickaxe_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/sledgehammer/640_e3cc3_pickaxe_slot.tga",
+      "check_picture": "gfx/vgui/weapons/sledgehammer/640_e3cc3_pickaxe_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_radio.txt",
+    "fields": {
+      "nice_name": "Полицейская рация",
+      "classname": "weapon_radio",
+      "inventory_picture": "gfx/vgui/weapons/radio/640_radio_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/radio/640_radio_slot.tga",
+      "check_picture": "gfx/vgui/weapons/radio/640_radio_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_ration.txt",
+    "fields": {
+      "nice_name": "Солдатский паёк",
+      "classname": "weapon_syringe",
+      "inventory_picture": "gfx/vgui/weapons/ration/640_ration_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/ration/640_ration_slot.tga",
+      "check_picture": "gfx/vgui/weapons/ration/640_ration_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_revolver.txt",
+    "fields": {
+      "nice_name": "Taurus .357 MAG",
+      "classname": "weapon_revolver",
+      "inventory_picture": "gfx/vgui/weapons/revolver/640_revolver_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/revolver/640_revolver_slot.tga",
+      "check_picture": "gfx/vgui/weapons/revolver/640_revolver_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-6",
+      "ironsight_up": "4.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_rifle.txt",
+    "fields": {
+      "nice_name": "Снайперская винтовка",
+      "classname": "weapon_rifle",
+      "inventory_picture": "gfx/vgui/weapons/rifle/640_rifle_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/rifle/640_rifle_slot.tga",
+      "check_picture": "gfx/vgui/weapons/rifle/640_rifle_check.tga",
+      "combined_sound": "buttons/lighterpickup.wav"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_scimitar.txt",
+    "fields": {
+      "nice_name": "Ятаган",
+      "classname": "weapon_switchblade",
+      "inventory_picture": "gfx/vgui/weapons/scimitar/640_scimitar_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/scimitar/640_scimitar_slot.tga",
+      "check_picture": "gfx/vgui/weapons/scimitar/640_scimitar_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_shotgun.txt",
+    "fields": {
+      "nice_name": "Remington 870",
+      "classname": "weapon_shotgun",
+      "inventory_picture": "gfx/vgui/weapons/shotgun/640_shotgun_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/shotgun/640_shotgun_slot.tga",
+      "check_picture": "gfx/vgui/weapons/shotgun/640_shotgun_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-3.5",
+      "ironsight_up": "2.75",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_sledgehammer.txt",
+    "fields": {
+      "nice_name": "Кувалда",
+      "classname": "weapon_sledgehammer",
+      "inventory_picture": "gfx/vgui/weapons/sledgehammer/640_sledgehammer_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/sledgehammer/640_sledgehammer_slot.tga",
+      "check_picture": "gfx/vgui/weapons/sledgehammer/640_sledgehammer_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_sledgeshovel.txt",
+    "fields": {
+      "nice_name": "Лопата",
+      "classname": "weapon_sledgehammer",
+      "inventory_picture": "gfx/vgui/weapons/sledgeshovel/640_sledgeshovel_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/sledgeshovel/640_sledgeshovel_slot.tga",
+      "check_picture": "gfx/vgui/weapons/sledgeshovel/640_sledgeshovel_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_stone.txt",
+    "fields": {
+      "nice_name": "Каменная дубина",
+      "classname": "weapon_branch",
+      "inventory_picture": "gfx/vgui/weapons/stone/640_stone_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/stone/640_stone_slot.tga",
+      "check_picture": "gfx/vgui/weapons/stone/640_stone_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_switchblade.txt",
+    "fields": {
+      "nice_name": "Раскладной нож",
+      "classname": "weapon_switchblade",
+      "inventory_picture": "gfx/vgui/weapons/switchblade/640_switchblade_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/switchblade/640_switchblade_slot.tga",
+      "check_picture": "gfx/vgui/weapons/switchblade/640_switchblade_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_syringe.txt",
+    "fields": {
+      "nice_name": "Шприц с морфином",
+      "classname": "weapon_syringe",
+      "inventory_picture": "gfx/vgui/weapons/syringe/640_syringe_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/syringe/640_syringe_slot.tga",
+      "check_picture": "gfx/vgui/weapons/syringe/640_syringe_check.tga"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_thompson.txt",
+    "fields": {
+      "nice_name": "Пистолет-пулемёт MP 40",
+      "classname": "weapon_m16",
+      "inventory_picture": "gfx/vgui/weapons/thompson/640_thompson_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/thompson/640_thompson_slot.tga",
+      "check_picture": "gfx/vgui/weapons/thompson/640_thompson_check.tga",
+      "ironsight_forward": "-45.000000",
+      "ironsight_right": "-4.250000",
+      "ironsight_up": "-45.000000",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_thompson_1.06.txt",
+    "fields": {
+      "nice_name": "Автомат Томпсона",
+      "classname": "weapon_m16",
+      "inventory_picture": "gfx/vgui/weapons/thompson/640_thompson_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/thompson/640_thompson_slot.tga",
+      "check_picture": "gfx/vgui/weapons/thompson/640_thompson_check.tga",
+      "ironsight_forward": "-45.000000",
+      "ironsight_right": "-4.250000",
+      "ironsight_up": "-45.000000",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_tmp.txt",
+    "fields": {
+      "nice_name": "MP9",
+      "classname": "weapon_tmp",
+      "inventory_picture": "gfx/vgui/weapons/mp9/640_mp9_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/mp9/640_mp9_slot.tga",
+      "check_picture": "gfx/vgui/weapons/mp9/640_mp9_check.tga",
+      "ironsight_forward": "0",
+      "ironsight_right": "-4.75",
+      "ironsight_up": "3",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_vp70.txt",
+    "fields": {
+      "nice_name": "VP70",
+      "classname": "weapon_vp70",
+      "inventory_picture": "gfx/vgui/weapons/vp70/640_vp70_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/vp70/640_vp70_slot.tga",
+      "check_picture": "gfx/vgui/weapons/vp70/640_vp70_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-3.6",
+      "ironsight_up": "3.1",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_waltherppk.txt",
+    "fields": {
+      "nice_name": "Вальтер PPK",
+      "classname": "weapon_p345",
+      "inventory_picture": "gfx/vgui/weapons/waltherppk/640_waltherppk_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/waltherppk/640_waltherppk_slot.tga",
+      "check_picture": "gfx/vgui/weapons/waltherppk/640_waltherppk_check.tga",
+      "ironsight_forward": "0.05",
+      "ironsight_right": "-6",
+      "ironsight_up": "4.5",
+      "ironsight_zoom": "50"
+    }
+  },
+  {
+    "path": "inventoryitems/weapons/weapon_ww2knife.txt",
+    "fields": {
+      "nice_name": "Шпионский нож",
+      "classname": "weapon_switchblade",
+      "inventory_picture": "gfx/vgui/weapons/ww2knife/640_ww2knife_slot.tga",
+      "quick_picture": "gfx/vgui/weapons/ww2knife/640_ww2knife_slot.tga",
+      "check_picture": "gfx/vgui/weapons/ww2knife/640_ww2knife_check.tga"
+    }
+  }
+]

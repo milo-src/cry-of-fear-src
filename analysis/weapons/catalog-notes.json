@@ -1,0 +1,412 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10046dc0",
+      "proposed_name": "weapon_glock_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_glock; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_glock); цикл: 0.1 с; fire sequences: [2, 3, 34, 38]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10046dc0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100475b0",
+      "proposed_name": "weapon_glock_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_glock; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100475b0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005ec90",
+      "proposed_name": "weapon_p345_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_p345; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_p345); цикл: 0.2 с; fire sequences: [2, 3, 25, 26]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005ec90.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005f340",
+      "proposed_name": "weapon_p345_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_p345; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005f340.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10064c60",
+      "proposed_name": "weapon_revolver_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_revolver; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_revolver); player+680 special branch35; цикл: 0.65 с; fire sequences: [3, 18]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10064c60.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10065270",
+      "proposed_name": "weapon_revolver_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_revolver; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10065270.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10067260",
+      "proposed_name": "weapon_rifle_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_rifle; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_rifle); цикл: 1.66 с; fire sequences: [3]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10067260.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100678b0",
+      "proposed_name": "weapon_rifle_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_rifle; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100678b0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10044690",
+      "proposed_name": "weapon_g43_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_g43; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_g43); цикл: 0.9 с; fire sequences: [3, 4, 5, 6, 11, 13, 14, 15]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10044690.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10044d60",
+      "proposed_name": "weapon_g43_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_g43; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10044d60.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1006df20",
+      "proposed_name": "weapon_shotgun_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_shotgun; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_shotgun) per pellet;8 pellets; цикл: 1.0 с; fire sequences: [1, 16]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1006df20.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1006e3e0",
+      "proposed_name": "weapon_shotgun_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_shotgun; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1006e3e0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10051d50",
+      "proposed_name": "weapon_m16_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_m16; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_m16); цикл: 0.1 с; fire sequences: [2, 9, 21]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10051d50.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10051ed0",
+      "proposed_name": "weapon_m16_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_m16; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10051ed0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005b400",
+      "proposed_name": "weapon_mp5_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_mp5; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_glock); цикл: 0.06 с; fire sequences: [4, 5, 6, 10]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005b400.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005bb60",
+      "proposed_name": "weapon_mp5_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_mp5; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005bb60.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1003bbd0",
+      "proposed_name": "weapon_famas_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_famas; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: 15 constant; цикл: 0.06 с; fire sequences: [4, 17]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1003bbd0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1003c2c0",
+      "proposed_name": "weapon_famas_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_famas; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1003c2c0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1007f1a0",
+      "proposed_name": "weapon_tmp_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_tmp; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_glock/1.65); цикл: 0.07 с; fire sequences: [4, 13]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1007f1a0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1007f8d0",
+      "proposed_name": "weapon_tmp_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_tmp; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1007f8d0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10084880",
+      "proposed_name": "weapon_vp70_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_vp70; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_VP70); цикл: 0.55 с; fire sequences: [4, 10]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10084880.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10084ad0",
+      "proposed_name": "weapon_vp70_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_vp70; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10084ad0.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10026180",
+      "proposed_name": "weapon_browning_wheelchair_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_browning_wheelchair; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "high",
+      "details_ru": [
+        "Базовый урон: 10 constant; цикл: 0.25 с; fire sequences: [2]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10026180.c",
+        "analysis/weapons/ranged.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10026880",
+      "proposed_name": "weapon_browning_wheelchair_reload",
+      "subsystem": "combat weapon",
+      "summary_ru": "Вход перезарядки weapon_browning_wheelchair; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "confidence": "high",
+      "details_ru": [
+        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10026880.c",
+        "analysis/weapons/ranged.json"
+      ]
+    }
+  ]
+}

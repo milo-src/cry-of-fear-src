@@ -34,7 +34,7 @@ void CofPrototypeFrame(float time) {
         CofInventoryDraw();
     }
     CofGameMenuDraw();
-    if (smoke && smoke->value != 0 && !std::getenv("COF_DOORTEST") && !std::getenv("COF_INVENTORYTEST")) {
+    if (smoke && smoke->value != 0 && !std::getenv("COF_DOORTEST") && !std::getenv("COF_INVENTORYTEST") && !std::getenv("COF_WEAPONTEST")) {
         // Let the full ladder fixture release its player before this walk probe.
         const float elapsed = time - first - (std::getenv("COF_MOVEMENTTEST") ? 16.0f : 0.0f);
         cl_entity_t* player = gEngfuncs.GetLocalPlayer();
