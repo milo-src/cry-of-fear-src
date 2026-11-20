@@ -1,0 +1,167 @@
+{
+  "scope": "Static RE pass10; no target execution or game implementation",
+  "result": "PASS",
+  "new_reviewed": 48,
+  "updated_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-spread-application",
+      "primary_count": 10,
+      "author": "client_catalog",
+      "reviewer": "root",
+      "result": "PASS",
+      "checked": "All10 primary native bodies and C, contracts; primary/secondary seed order, ST0 rounding, signed/unsigned range conversion, equality/NaN, accumulator old return and upper-only clamp, z output overwrite, duplicate body, timer copy. ASM-only diagnostic is support, not a C REVIEW; actual expand-to-shot linkage remains open.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "3a70efc1a846ab399ebc560ba11197e5f5ed07d503aee090ed31c6480fefd092",
+        "notes.json": "bbf04936935979e7ff1c62bbff71c59b351c46297ca20c6f0aef605a4180747f",
+        "evidence.json": "47e1f2cec2449e1585cd1c03ca1c7979237577bea6634cd7382f4482bfca23cd",
+        "capture.py": "76bc605258a0dbe3a065306a257ba5a2629edcfe910a28621e802f1274ba3079",
+        "verify.py": "2ba0680216c1375c97c021011cc653f7f8eff1e568127a207c965ce219fd84f1"
+      }
+    },
+    {
+      "package": "analysis/server-player-equipment",
+      "primary_count": 13,
+      "author": "server_catalog",
+      "reviewer": "root",
+      "result": "PASS",
+      "checked": "All13 primary native bodies against contract; factory null-write and EAX, export JMP, KeyValue32/copy boundary, Touch versus Use, live counts, classname gates, AL-only RTTI predicate, item max_health/frags/iuser markers and Spawn-to-Touch. Selected C/native support: copy, dynamic cast, rule Save/Restore, predicates/constructor. Full unlock parser and marker consumers remain open.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "2d638847248c495d8be5597ab4ec3caa0a49af1d3385766222498f53ddf77b63",
+        "notes.json": "c3a471c0d0117b1f7525101322072368b4aaf4fb70225af42924a312e82cf1f7",
+        "evidence.json": "2d2eac344adccf86301b56cdcf2586e52a1baa1f72dcb02365c7dea28898de55",
+        "capture.py": "ad0762029a6d2266a96e9f0378520379797f9f8dce57e2ffc002e430d26eb7ff",
+        "verify.py": "7a4936d77d5b60529c783a96b2f6f08717f51b718c9feef27b391886e034d042"
+      }
+    },
+    {
+      "package": "analysis/server-grenade-lifecycle",
+      "primary_count": 15,
+      "author": "shader_inventory",
+      "reviewer": "root",
+      "result": "PASS",
+      "checked": "All15 primary native bodies against contract; Vector by value and cleanup, no-op slot244, one-shot latch, NaN comparisons, owner clear before damage, discarded RNG draw, inverted contact RNG bounds, remote bypasses Spawn, smoke re-queries contents, owner dispatch only schedules. Selected C/native support: trace result, angle return, radius wrapper; full damage core/physics/weapon callers remain open.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "95f562ca9c336148a6bd29d6ef4885035234542336eb48b8c9e5adc2d1f0495e",
+        "notes.json": "5282a2252a3c888b572701034010263b101ff500240cab0768286082ad56545e",
+        "evidence.json": "97c0b3b09fb80a7efe3a54775de464c5d9da5cedd97416c73092e0e97d13c396",
+        "capture.py": "1971253e63dd12ad87a8ca37def1f1b47d2ea6bf6711534687b9c898f4341e52",
+        "verify.py": "20ca130d51ff2ee298a4404761c02e22262eec3238bf33ae010eae9b6b98ad4c"
+      }
+    },
+    {
+      "package": "analysis/server-monster-decisions",
+      "primary_count": 10,
+      "author": "root",
+      "reviewer": "client_catalog",
+      "result": "PASS",
+      "checked": "All10 primary C/native ASM and contracts; unsigned hint versus signed activity, IDIV cursor, NaN cover gate, first-hole duplicates/reverse nonremoving history, owner current-LKP and enemy backlink receiver, vector operation order, nonzero/NaN health code, stride19 without total capacity claim, loot thresholds and reward-before-predicate, single >=59 subtraction, TimerPlus branch before MessageBegin. Independent PE check26C26ASM1147rows212raw151savefields15strings/matrix361/four vtable slots reported PASS.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "444ad138fcdb66315082f4d086fd8920f7131af2977bfc0ba1589fadbe0f926e",
+        "notes.json": "ebd2cabc962bdd723ffc22b29032695c0628e9eacacc9a0db00f3f38eed359b8",
+        "evidence.json": "4270317d11c8247a0197d6548e324a8b7f05cb571001f1ca7fb05b7e142bdc48",
+        "capture.py": "92c8bbee9ab691da32cd446d491ebe1df053659f0f20b8662c430ecfb0631c45",
+        "verify.py": "8c632b0f8cbd1c522bf47c2fea0642d3635bf85bb719e5e9e2e42a03ea61cf20"
+      }
+    }
+  ],
+  "review_assignment_note": "Equipment/grenade cross-agent reviews could not complete after agent usage-limit errors. Root independently reviewed those authored packages; they are not attributed to the interrupted reviewers.",
+  "navigation_cleanup": "Removed closed grenade/equipment/lateral-cover/local-spread items from next queue; updated current pass header, old contract follow-up boundaries and generator topic routes. Preserved all1657 prior REVIEW blocks. Retained historical verification reports as snapshots. Supporting documentation hash refresh is explicit below; binary/source pins were not refreshed.",
+  "notes_contract_parity": true,
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-cinematic-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "d27b7be75d86375647b094e64b6fd34d87a2e07a79e533cf090b3d890f7e8731",
+          "new": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-grenade-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-senses/contract.md",
+          "old": "44a1c46961d8cff13158680e3ee3604e48d22d3e593e59a5ecbcb5d7365267c9",
+          "new": "668edd7a3ed538b0f14c5ecac5a35e68c267bf37648e71878af3bf7006ea6678"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-decisions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "d27b7be75d86375647b094e64b6fd34d87a2e07a79e533cf090b3d890f7e8731",
+          "new": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d"
+        },
+        {
+          "path": "analysis/server-multiplayer-flow/contract.md",
+          "old": "3507f6c7aed7460cfe4cae36a506893cace7938b58db95d00cd9327618536d56",
+          "new": "9f56e4afe5802204b41ecc159a412f24c0b55fd77aa9f1cd34f4262b961c0a58"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-events/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "d27b7be75d86375647b094e64b6fd34d87a2e07a79e533cf090b3d890f7e8731",
+          "new": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-senses/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sound-entity/contract.md",
+          "old": "23dbe94446e86ccbd05264854d365ccafdf36eebb21ce205c9af9fae335550e2",
+          "new": "44947e0a5b1370765a7e1d09bdb3d9f73c40960f13f538230df83fa1a018b920"
+        },
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "d27b7be75d86375647b094e64b6fd34d87a2e07a79e533cf090b3d890f7e8731",
+          "new": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-player-equipment/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-multiplayer-flow/contract.md",
+          "old": "3507f6c7aed7460cfe4cae36a506893cace7938b58db95d00cd9327618536d56",
+          "new": "9f56e4afe5802204b41ecc159a412f24c0b55fd77aa9f1cd34f4262b961c0a58"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sound-entity/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "d27b7be75d86375647b094e64b6fd34d87a2e07a79e533cf090b3d890f7e8731",
+          "new": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-spread-application/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-spread-settings/contract.md",
+          "old": "6826eeade142a91533ccd19ad5567093298eb2a1c83c004b25094965dcb75184",
+          "new": "92cc6a9a3a4c77e50de12f0c81506ad65fe96bc0466143001eb3b2fe361cbd4a"
+        }
+      ]
+    }
+  ]
+}

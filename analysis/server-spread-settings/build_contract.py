@@ -36,7 +36,7 @@ Array base `10225a30`, stride `a4` (164 bytes), signed count `10225980`. Fallbac
 | 98/9c | primary/secondary jump -1/-1 | не записано |
 | a0 | returntime 1.5 | 1.5 |
 
-Weapon: `160` owner; `1d8` deadline; `1f8` table pointer; `1fc` return multiplier; `200` anchor; `204` amplitude; `208` mode. Recovery names установлены по readers, но все ненулевые writers ещё не охвачены. Player `pev+214` maxspeed и physics key `jh` связаны с отдельным movement контрактом. Classname `pev+0` подтверждён native save descriptor.
+Weapon: `160` owner; `1d8` deadline; `1f8` table pointer; `1fc` return multiplier; `200` anchor; `204` amplitude; `208` mode. Локальный accumulator100d0410, equalization, cone output и punch описаны в [spread-application](../server-spread-application/contract.md). Все writers и связь expand с конкретным выстрелом этим ещё не исчерпаны. Player `pev+214` maxspeed и physics key `jh` связаны с отдельным movement контрактом. Classname `pev+0` подтверждён native save descriptor.
 
 ## Табличные cone constants
 

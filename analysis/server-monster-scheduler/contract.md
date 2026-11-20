@@ -243,7 +243,7 @@ viewOffset=sharedVector,min=float(signed sound+10),maxvirtual1d0.
 сmin0/maxvirtual1d0.4c self origin/viewOffset итежеmin/max. Failure→taskfail,
 успех46/47/4c ещё moveWaitFinished=time+data,complete. Generic cover search100be5e0
 разобран в [navigation](../server-monster-navigation/contract.md); отдельный helper
-100bea60 и derived virtual1c8 overrides остаются за границей этого разбора.
+Локальный100bea60 теперь разобран в [monster-decisions](../server-monster-decisions/contract.md): пять пар боковых кандидатов, trace/validation/route gates. Derived virtual1c8 overrides остаются отдельными зависимостями.
 
 Script idle4f: пока script+3a8>0 либоtime<script+3ac, проверяетclassname.
 Не scripted_action и idleSequence+36c!=0→virtual248(monster,idleSequence,0);
@@ -288,7 +288,7 @@ next-hop/hash/cost, activity/reset/persistence wrappers и верхний studio
 уже не являются неразобранной очередью. Исторические карточки и evidence этого пакета
 сохранены без расширения их исходного объёма.
 
-Graph helpers/lifecycle/precompute теперь имеют самостоятельные контракты в server-graph-helpers, server-graph-lifecycle и server-graph-precompute. Нижние studio helpers перечислены в server-studio-events, их очередь закрыта локальными REVIEW. Graph builder/reorder/entity lifecycle теперь разобраны в server-graph-builder, server-graph-ordering и server-graph-entities. Generic/base event handler virtual11c, setter virtual248, cleanup100fa530/100fa4b0 и SequenceDone имеют локальные контракты в server-monster-events. Остаются monster-specific overrides, helper100bea60, engine dispatch и внешние CRT гарантии. Engine model/trace/RNG lifetime и runtime
+Graph helpers/lifecycle/precompute теперь имеют самостоятельные контракты в server-graph-helpers, server-graph-lifecycle и server-graph-precompute. Нижние studio helpers перечислены в server-studio-events, их очередь закрыта локальными REVIEW. Graph builder/reorder/entity lifecycle теперь разобраны в server-graph-builder, server-graph-ordering и server-graph-entities. Generic/base event handler virtual11c, setter virtual248, cleanup100fa530/100fa4b0 и SequenceDone имеют локальные контракты в server-monster-events. Helper100bea60, hint/enemy/history/reward helpers продолжены в server-monster-decisions. Остаются monster-specific overrides, engine dispatch и внешние CRT гарантии. Engine model/trace/RNG lifetime и runtime
 поведение этими статическими пакетами не проверялись.
 
 ## Разобранное продолжение адресной очереди
