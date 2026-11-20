@@ -1,0 +1,139 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1007f9e0",
+      "proposed_name": "Audio_CreateLocalContextAndIrrKlangEngine",
+      "subsystem": "audio",
+      "summary_ru": "Освобождает прежнее звуковое состояние, выделяет локальный контекст размером 224 байта и создаёт движок irrKlang через импорт.",
+      "confidence": "high",
+      "details_ru": [
+        "HUD_Init1001d4a0 ->1006cf00 calls this only if CheckParm(\"-nomusic\",0)==0. This is proven route, not exhaustive engine callback lifetime.",
+        "Calls1007fa40 first; allocation100b44cb(0xe0). Null allocation storesa4=0 and returns. Nonnull pointer passed in ECX to1007f6e0, whose EAX identity result becomesa4; byte0=0; createIrrKlangDevice(0,0x3d,NULL,\"1.6.0\") result storeda8 without success test.",
+        "a8 interface identity supported by decorated import and actual factory-result assignment; concrete backend class/destructor and option-bit semantics are not assumed. Cleanup does not nulla8, so failure/repeated-call behavior requires caller/backend lifetime evidence."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-producers/000-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "decompiled/client/captures/hud-entry/000-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007f9e0.asm",
+        "analysis/graphics/hud-lifetime-assembly/1007f6e0.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007f6e0",
+      "proposed_name": "Audio_InitializeLocalContextFields",
+      "subsystem": "audio",
+      "summary_ru": "Зануляет девять 32-битных полей контекста по смещениям +8..+28 и возвращает исходный указатель this.",
+      "confidence": "high",
+      "details_ru": [
+        "Writes offsets8,c,10,14,18,1c,20,24,28 only. No full224-byte memset, vtable write, activation byte write, old engine/handle read or external factory call.",
+        "Bounded assembly MOV EAX,ECX proves identity return; producer loads ECX from allocator EAX and stores constructor EAX intoa4. Ghidra void signature is incomplete ABI recovery."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-owners/000-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/000-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007f6e0.asm",
+        "analysis/graphics/hud-lifetime-assembly/1007f9e0.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fa90",
+      "proposed_name": "Audio_ActivateIfDisabledThenUpdate",
+      "subsystem": "audio",
+      "summary_ru": "При наличии контекста активирует его, если byte0 равен нулю, затем вызывает обновление независимо от результата активации.",
+      "confidence": "high",
+      "details_ru": [
+        "If a4==0 returns. If a4.byte0==0 calls1007f940, then1007f740 regardless of activation return. Assembly loads ESI=a4 and ECX=ESI before both call/tail-jump; both helpers act on local context. Activation sets byte0=1 even when backend is null.",
+        "Exact caller timing remains separate from this resolved dispatch body."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-owners/001-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fa40",
+      "proposed_name": "Audio_ReleaseEngineReferenceAndFreeLocalContext",
+      "subsystem": "audio",
+      "summary_ru": "Уменьшает счётчик ссылок движка и освобождает локальный контекст; указатели backend и сохранённых звуков не обнуляет.",
+      "confidence": "high",
+      "details_ru": [
+        "Ifa8!=0 computes p=a8+4+*(int*)(*(int*)(a8+4)+4), decrements int(p+4), and calls subobject virtualslot0 withargument1 only when newcount==0. Pointer adjustment and count are observed; concrete deleting-destructor target is external/unresolved.",
+        "Ifa4!=0 calls100b42a4(a4,0xe0) thena4=0. Helper body forwards pointer tothunk100f7be4 and ignores extra0xe0; no local class destructor is proved. Does not cleara8/ac or show GL cleanup.",
+        "HUD_Shutdown calls input1007a870 then this release;1007f9e0 also releases before creation. Do not claim idempotence or a measured leak/UAF from these static bodies."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/000-pseudocode.c",
+        "analysis/graphics/sound-lifecycle-contract.md",
+        "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
+        "decompiled/client/captures/weapons-client-core/007-pseudocode.c",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fb10",
+      "proposed_name": "Audio_DispatchSoundIfLocalContextExists",
+      "subsystem": "audio",
+      "summary_ru": "Загружает локальный звуковой контекст в ECX и при ненулевом указателе передаёт параметры воспроизведения обработчику.",
+      "confidence": "high",
+      "details_ru": [
+        "Bounded assembly loadsECX=105440a4, null-checks it, marshals six stack arguments and calls10080410. Therefore10080410 first-byte activation test reads a4.byte0; a4 is not merely an unrelated global presence flag."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/007-pseudocode.c",
+        "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fb10.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007f940",
+      "proposed_name": "Audio_EnableLocalContextAndResetFields",
+      "subsystem": "audio",
+      "summary_ru": "Включает byte0 контекста даже без backend; остальные перечисленные поля сбрасывает только при наличии движка.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=a4 is proved by wrapper assembly. Writes byte0=1 unconditionally. If engine105440a8==0 returns0 without resetting other fields; otherwise resets dwords4,2c,30,b8,bc,c0,c8,cc,d0,d4,d8; words34,dc; bytes36,c4 and returns1.",
+        "No backend creation/retry, complete context memset or ac/b0 reset. Wrapper ignores return and will not retry activation while byte0 remains1; update/playback still independently reject null backend."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-audio-activation/000-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007f740",
+      "proposed_name": "Audio_UpdateRetainedSoundAndMusicVolume",
+      "subsystem": "audio",
+      "summary_ru": "Обновляет громкость сохранённого звука и музыки, вычисляет квантованное затухание и применяет локальное переопределение громкости.",
+      "confidence": "high",
+      "details_ru": [
+        "Requires engine a8 and context.byte0. Lazily stores GetLocalPlayer101b26d4 in context+4. Retained ac virtual20 receives clamp(volume,0,1); separate b0 virtual20 first receives clamp(MP3Volume,0,1).",
+        "If GetClientTime()<cc+d0, reads time again; f=(time-cc)/d0. f>=.95 calls b0 virtual18 and returns. Otherwise q=int(MP3Volume*255-int(f*255)), v=clamp(q,0,255)/255; v<=.05 invokes virtual18, else virtual20(v). First stop returns; second does not.",
+        "After fade, c4!=0 and b0!=null applies virtual20(clamp(int(c0)/255.0,0,1)), overriding earlier volume. No clear/drop of ac/b0 and no fade-field reset. Fade only runs strictly before cc+d0, with no positive-duration guard in body.",
+        "Producer of b0, nonzero fade/override field writers and update caller scheduling remain unresolved; exact x87/exceptional float-to-int semantics not claimed."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-audio-activation/001-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    }
+  ]
+}

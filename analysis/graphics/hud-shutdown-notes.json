@@ -1,0 +1,200 @@
+{
+  "scope": "Static RE ownership and call relationships only; no port implementation, target execution or shared catalog edits.",
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1007a750",
+      "proposed_name": "KB_ShutdownReleaseRegistryNodes",
+      "subsystem": "input",
+      "summary_ru": "Обходит nodes списка10543540 по первому dword, освобождает каждый через100f7be4 и обнуляет head.",
+      "confidence": "high",
+      "details_ru": [
+        "Сохраняет next=*node перед release100f7be4(node); затемnode=next. Завершив цикл,10543540=0. При начальномNULL release не вызывается.",
+        "Новые producers1007a540/1007a710 и lookup1007ad20 доказывают node0x28,next+0,payload+4,name+8(32байта). Payloads in_graph10543504/in_mlook105433fc/in_jlook10543414 — внешние globals; функция освобождает nodes, но не payloads и не key state."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
+        "external/hlsdk-portable/cl_dll/input.cpp",
+        "analysis/graphics/hud-shutdown-followup.md",
+        "decompiled/client/captures/graphics-hud-lifetime-owners/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-owners/003-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-owners/004-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100b42a4",
+      "proposed_name": "Allocation_ReleasePointerForwarder",
+      "subsystem": "runtime",
+      "summary_ru": "Передаёт pointer вthunk100f7be4; второй size argument callers этим wrapper не используется.",
+      "confidence": "high",
+      "details_ru": [
+        "Полное тело содержит толькоthunk_FUN_100f7be4(param1),return. Нет обращения к size, payload,object vtable или global renderer state.",
+        "1007fa40 передаёт(a4,0xe0), VGUI reader100a3560 — прежнийobject+cc и0x30. Эти лишние callerarguments не читаются. Callee100f7be4 напрямую вызывает FID_conflict__free(pointer), без object destructor или memset."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c",
+        "decompiled/client/captures/vgui-menu-protocol/003-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007a870",
+      "proposed_name": "Input_ShutdownMouseAndLinkedList",
+      "subsystem": "input",
+      "summary_ru": "Вызывает IN_DeactivateMouse1007c1d0, затем освобождает input linked list через1007a750.",
+      "confidence": "high",
+      "details_ru": [
+        "Порядок строгоIN_DeactivateMouse(),1007a750(),return. List callee освобождает nodes10543540 сnext+0 и зануляетhead.",
+        "Mouse callee1007c1d0 приgate10543588!=0 условно вызывает SystemParametersInfoA(4,0,&10543644,0) подgate10543640, затемclears10543650. Приoutergate0 состояние не меняет. После mousecaller освобождаетlist; прямого GL manager call нет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "analysis/exports/client.csv",
+        "analysis/graphics/hud-shutdown-followup.md",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/002-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "analysis/graphics/renderer-teardown-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100f7be4",
+      "proposed_name": "CRT_FreePointerForwarder",
+      "subsystem": "runtime",
+      "summary_ru": "Передаёт pointer в library function с Ghidra labelFID_conflict__free и возвращается.",
+      "confidence": "high",
+      "details_ru": [
+        "Полное тело: FID_conflict__free(param1);return. Никаких обращений к size, payload vtable, referencecount или renderer globals. Внутренний CRT heap implementation этим wrapper не раскрыт.",
+        "100b42a4 передаёт сюда лишь pointer. Input list1007a750 вызывает helper для каждогоnode; эти записи подтверждают общий allocation cleanup, а не audio-specific destructor."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/001-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007c1d0",
+      "proposed_name": "IN_DeactivateMouse",
+      "subsystem": "input",
+      "summary_ru": "Под outer gate10543588 применяет сохранённый набор OS mouse parameters при10543640 и обнуляет10543650.",
+      "confidence": "high",
+      "details_ru": [
+        "Если10543588==0,return без изменения10543650. Иначе при10543640!=0 вызывает SystemParametersInfoA(4,0,&10543644,0), затемвсегда10543650=0. Return API не проверяется.",
+        "Нет SetCursorPos/SetCapture/focus API или GL calls в данном теле. Исследование функцию не выполняло. Native producers10543644/10543588/10543640 здесь не раскрыты; SDK comparison не заменяет их."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-producers/002-pseudocode.c",
+        "analysis/exports/client.csv",
+        "analysis/graphics/hud-shutdown-followup.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007a540",
+      "proposed_name": "KB_AddNamedPayload",
+      "subsystem": "input",
+      "summary_ru": "Добавляет40-байтный node с inline name и внешним payload в registry10543540, если KB_Find вернул0.",
+      "confidence": "high",
+      "details_ru": [
+        "KB_Find(name)!=0 → return без изменений. Иначе allocation100f7bff(0x28), zero40bytes, copyNULterminatedname→node+8, payload→+4,next→старыйhead,head→node. Name copy не имеет видимого bounds check; allocationNULL в этом теле не проверяется.",
+        "Lookup возвращает payload, а не bool nodefound. Поэтому уже существующая запись с payload0 не препятствует повторному добавлению того же имени. Node owns inline name; payload остаётся внешним pointer.",
+        "Wrapper100f7bff вызывает __malloc_base; bounded assembly подтверждает tail forwarding исходного stack argument и callee return. Ghidra void(void) не является настоящим ABI: caller передаёт size0x28 и использует pointer result."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-owners/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md",
+        "decompiled/client/captures/graphics-audio-activation/002-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/100f7bff.asm",
+        "analysis/graphics/hud-lifetime-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007a710",
+      "proposed_name": "KB_InitNamedRegistry",
+      "subsystem": "input",
+      "summary_ru": "Обнуляет registryhead10543540 и регистрирует in_graph,in_mlook,in_jlook с тремя static payload globals.",
+      "confidence": "high",
+      "details_ru": [
+        "Точный порядок вызовов1007a540:in_graph→10543504,in_mlook→105433fc,in_jlook→10543414. При успешной вставке каждогоnode вголову итоговый traversal порядокjlook,mlook,graph.",
+        "Передhead=0 не освобождает старый список. Нельзя считать initializer идемпотентным без caller lifecycle evidence; shutdown1007a750 выполняет освобождение отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-owners/003-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007ad20",
+      "proposed_name": "KB_Find",
+      "subsystem": "input",
+      "summary_ru": "Export ищет имя key registry без учёта регистра и возвращает внешний payload pointer либо0.",
+      "confidence": "high",
+      "details_ru": [
+        "Обходит10543540 поnode+0; __stricmp(request,node+8)==0 возвращаетnode+4. Нет совпадения→0. Возвращает первый match в текущем head order.",
+        "Node allocation/layout подтверждены1007a540; payload0 неотличим от notfound для caller. Эта функция не создаёт и не освобождает nodes, не меняет key state."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-owners/004-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100f7bff",
+      "proposed_name": "CRT_MallocBaseForwarder",
+      "subsystem": "runtime",
+      "summary_ru": "Tail wrapper __malloc_base сохраняет стек аргументов и передаёт callee return caller; Ghidra void(void) не отражает ABI.",
+      "confidence": "high",
+      "details_ru": [
+        "Сохранённое C связывает callee с __malloc_base. Bounded assembly100f7bff..100f7c0a: MOV EDI,EDI;PUSH EBP;MOV EBP,ESP;POP EBP;JMP10111a79. Стек восстановлен перед tail jump, argument/return forwarding подтверждён.",
+        "Native caller1007a540 вызывает100f7bff(0x28), преобразует результат в pointer и записывает40байт node. Псевдосигнатура void(void) неполна; wrapper не отбрасывает аргумент или результат callee.",
+        "Внутренности __malloc_base, политика allocation failure и CRT heap ownership не раскрыты этим wrapper. Cleanup nodes идёт100f7be4→FID_conflict__free отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-audio-activation/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-owners/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md",
+        "analysis/graphics/hud-lifetime-assembly/100f7bff.asm",
+        "analysis/graphics/hud-lifetime-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007ad10",
+      "proposed_name": "HUD_Shutdown",
+      "subsystem": "runtime",
+      "summary_ru": "Engine export последовательно вызывает1007a870 и1007fa40; прямого GL manager cleanup в этом теле нет.",
+      "confidence": "high",
+      "details_ru": [
+        "Порядок:1007a870(), затем1007fa40(), return. Export table подтверждает address1007ad10/nameHUD_Shutdown.",
+        "1007a870 условно восстанавливает OS mouse parameters черезIN_DeactivateMouse и освобождает key registry nodes10543540 через1007a750.1007fa40 отдельно уменьшает audio shared object refcount сvirtual release при0, затемfree-forwarder100b42a4 для105440a4 и обнуляетa4.",
+        "Прямого вызоваGL manager10139320/10053b40 в этой input/free цепи нет. Нативные тела1007a750/100b42a4 иmouse1007c1d0 теперь закрыты; audio virtual target и CRT/context lifetime — отдельные границы. Engine export не равнозначен полному CRT atexit."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "analysis/exports/client.csv",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/002-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
+      ]
+    }
+  ]
+}

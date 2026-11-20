@@ -85,23 +85,29 @@ Export1007ad10 выполняет1007a870(), затем1007fa40(). В самом
 вызова10139320/10053b40 или FreeLibrary. Новые тела ограничивают цепь:
 
 - **1007a870**: IN_DeactivateMouse(), затем1007a750(). Последний helper в
-  этом проходе не снят. Это input shutdown route, не подтверждённая GL очистка.
+  новом проходе раскрыт: освобождает nodes key registry10543540 поnext+0 и
+  зануляетhead. Native producers/lookup закрыли node0x28, payload+4 иinline
+  name+8; button-state payload globals не освобождаются.
 - **1007fa40**: при105440a8!=0 вычисляет subobject через
   `p=a8+4+*(int*)(*(int*)(a8+4)+4)`, уменьшает `*(int*)(p+4)` и лишь при
   результате0 вызывает первый virtual callback `vtable[0](1)` этого
   subobject. Затем при105440a4!=0 вызывает100b42a4(a4,0xe0) и обнуляетa4.
   Pointer a8 этим телом не обнуляется.
 
-Это точный наблюдаемый reference-count release. Имена конкретного класса,
-virtual destructor implementation и внутренности100b42a4 не восстановлены
-этими телами. Связь с sound subsystem поддержана существующим10080410:
+Это точный наблюдаемый reference-count release. Producer1007f9e0 уже связываетa8 с результатом createIrrKlangDevice,
+аa4 — с отдельным224-байтным local context. Конкретный backend class и
+virtual destructor implementation остаются внешней границей. Полная
+локальная цепь описана в [sound-lifecycle-contract.md](sound-lifecycle-contract.md). Wrapper
+100b42a4 теперь раскрыт: передаёт лишьpointer в100f7be4→FID_conflict__free,
+не использует caller size и не вызывает C++ destructor сам. Связь с sound subsystem поддержана существующим10080410:
 он проверяетa8 и вызывает его virtual method+8 с сформированными weapon
 sound paths;1007fb10 разрешает этот путь только приa4!=0. Импорт
 createIrrKlangDevice есть, но одного импорта недостаточно для полного
 восстановления layout всех аудиообъектов.
 
 На прочитанной части engine HUD_Shutdown имеет отдельную input/shared-object
-цепь. Косвенный destructor и1007a750 остаются границей покрытия, поэтому
+цепь. Input helper1007a750 иmouse1007c1d0 теперь прочитаны; косвенный audio destructor
+остаётся отдельной границей, поэтому
 нельзя доказать отсутствие любых вложенных GL действий. Также нельзя
 приравнивать HUD_Shutdown к выполнению всех CRT atexit callbacks или считать
 1007fa40 идемпотентным: второй pointer a8 и его referencecount требуют
@@ -127,8 +133,9 @@ paths/active flags и вызываются init/reset helpers. Reset10060b10 в�
 
 - Точный CRT exit timing и остальные registrations: callback/body закрыты,
   но порядок teardown других объектов относительно GL context не восстановлен.
-- Непрочитанный input helper **1007a750**, virtual target release-object
-  из1007fa40 и helper100b42a4: точная граница косвенного shutdown поведения.
+- Audio virtual target release-object из1007fa40 ведётся отдельным аудитом.
+  Input1007a750,mouse1007c1d0 иfree-forwarders100b42a4/100f7be4 закрыты в
+  [hud-shutdown-followup.md](hud-shutdown-followup.md).
 - Exact writes module101be808/status101be80c и pointer-based owner methods:
   установить bounded перечень retry/reset transitions.
 - Дальнейшая проверка ownership textures/context требует engine teardown
@@ -158,3 +165,7 @@ paths/active flags и вызываются init/reset helpers. Reset10060b10 в�
 - `decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c`, `002-pseudocode.c` —input/shared-object cleanup.
 - `decompiled/client/captures/weapons-client-effects/000-pseudocode.c`, `weapons-client-core/007-pseudocode.c` —проверенные sound-path consumers105440a8/a4.
 - `analysis/exports/client-imports.csv` —импортcreateIrrKlangDevice, без предположения полного object ABI.
+
+Последующее закрытие input/allocator boundary и native key registry owners:
+[hud-shutdown-followup.md](hud-shutdown-followup.md); соответствующие captures
+`graphics-hud-lifetime`, `graphics-hud-lifetime-producers`, `graphics-hud-lifetime-owners`.

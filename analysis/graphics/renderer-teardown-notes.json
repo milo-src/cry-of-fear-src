@@ -71,30 +71,37 @@
       "confidence": "high",
       "details_ru": [
         "Порядок:1007a870(), затем1007fa40(), return. Export table подтверждает address1007ad10/nameHUD_Shutdown.",
-        "1007a870 деактивирует mouse input и вызывает непрочитанный1007a750.1007fa40 уменьшает refcount shared object105440a8 с virtual release при0, затем helper100b42a4 для105440a4,size0xe0 и обнуляетa4.",
-        "Прямого вызова10139320/10053b40 здесь и в двух прочитанных helpers нет. Но1007a750 и virtual release не раскрыты, поэтому отсутствие любых вложенных GL действий не доказано; engine export не равнозначен полному CRT atexit."
+        "1007a870 условно восстанавливает OS mouse parameters черезIN_DeactivateMouse и освобождает key registry nodes10543540 через1007a750.1007fa40 отдельно уменьшает audio shared object refcount сvirtual release при0, затемfree-forwarder100b42a4 для105440a4 и обнуляетa4.",
+        "Прямого вызоваGL manager10139320/10053b40 в этой input/free цепи нет. Нативные тела1007a750/100b42a4 иmouse1007c1d0 теперь закрыты; audio virtual target и CRT/context lifetime — отдельные границы. Engine export не равнозначен полному CRT atexit."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
         "analysis/exports/client.csv",
         "analysis/graphics/renderer-teardown-contract.md",
         "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
-        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c"
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/002-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
       ]
     },
     {
       "module": "client",
       "address": "0x1007a870",
-      "proposed_name": "Input_ShutdownDeactivateMouse",
+      "proposed_name": "Input_ShutdownMouseAndLinkedList",
       "subsystem": "input",
-      "summary_ru": "Отключает mouse input через IN_DeactivateMouse и вызывает1007a750.",
+      "summary_ru": "Вызывает IN_DeactivateMouse1007c1d0, затем освобождает input linked list через1007a750.",
       "confidence": "high",
       "details_ru": [
-        "Полное тело содержит строго IN_DeactivateMouse(),1007a750(),return. Вызывается первым из HUD_Shutdown1007ad10.",
-        "В теле нет прямой GL manager операции; действия1007a750 остаются непрочитанной границей. Не объявлять callback global renderer destructor по одному shutdown caller."
+        "Порядок строгоIN_DeactivateMouse(),1007a750(),return. List callee освобождает nodes10543540 сnext+0 и зануляетhead.",
+        "Mouse callee1007c1d0 приgate10543588!=0 условно вызывает SystemParametersInfoA(4,0,&10543644,0) подgate10543640, затемclears10543650. Приoutergate0 состояние не меняет. После mousecaller освобождаетlist; прямого GL manager call нет."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/000-pseudocode.c",
+        "analysis/exports/client.csv",
+        "analysis/graphics/hud-shutdown-followup.md",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/002-pseudocode.c",
         "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
         "analysis/graphics/renderer-teardown-contract.md"
       ]
@@ -102,21 +109,26 @@
     {
       "module": "client",
       "address": "0x1007fa40",
-      "proposed_name": "ClientSound_ReleaseSharedObjects",
+      "proposed_name": "Audio_ReleaseEngineReferenceAndFreeLocalContext",
       "subsystem": "audio",
-      "summary_ru": "Уменьшает refcount shared object105440a8, вызывает virtual release при0 и освобождает/обнуляет105440a4 через helper100b42a4.",
+      "summary_ru": "Уменьшает счётчик ссылок движка и освобождает локальный контекст; указатели backend и сохранённых звуков не обнуляет.",
       "confidence": "high",
       "details_ru": [
-        "Приa8!=0:p=a8+4+*(int*)(*(int*)(a8+4)+4); refcount=*(int*)(p+4) уменьшается1. При результате0 выполняется virtual slot0 с аргументом1. Точный concrete destructor не идентифицирован.",
-        "Приa4!=0 вызывает100b42a4(a4,0xe0), затемa4=0. Pointer105440a8 не обнуляет; нельзя предполагать повторный вызов безопасным без lifetime evidence. Точное тело deallocation helper100b42a4 этим проходом не снято.",
-        "Sound-path связь подтверждают10080410 (проверкаa8, virtual+8 с weapon sound paths) и1007fb10 (gatea4). Это не полное восстановление класса из одного irrKlang import. Прямого GL cleanup нет, но косвенный virtual target остаётся границей."
+        "Ifa8!=0 computes p=a8+4+*(int*)(*(int*)(a8+4)+4), decrements int(p+4), and calls subobject virtualslot0 withargument1 only when newcount==0. Pointer adjustment and count are observed; concrete deleting-destructor target is external/unresolved.",
+        "Ifa4!=0 calls100b42a4(a4,0xe0) thena4=0. Helper body forwards pointer tothunk100f7be4 and ignores extra0xe0; no local class destructor is proved. Does not cleara8/ac or show GL cleanup.",
+        "HUD_Shutdown calls input1007a870 then this release;1007f9e0 also releases before creation. Do not claim idempotence or a measured leak/UAF from these static bodies."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/000-pseudocode.c",
+        "analysis/graphics/sound-lifecycle-contract.md",
         "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
         "decompiled/client/captures/weapons-client-core/007-pseudocode.c",
-        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
-        "analysis/graphics/renderer-teardown-contract.md"
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c",
+        "analysis/graphics/hud-shutdown-followup.md"
       ]
     }
   ]

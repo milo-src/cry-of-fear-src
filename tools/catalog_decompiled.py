@@ -137,12 +137,19 @@ SUBSYSTEM_TOPIC = {
     "controls": "input", "input": "input", "hud": "hud", "graphics": "graphics", "client-renderer": "graphics",
     "lighting": "lighting", "lights": "lighting", "fog": "weather", "rain": "weather", "weather": "weather",
     "models": "models", "camera": "camera", "player-view": "camera", "assets": "assets", "fonts": "assets",
-    "music": "audio",
+    "music": "audio", "audio": "audio",
 }
 NON_CALLS = set("if while for switch return sizeof alignof defined catch __except __try "
                 "int uint long ulong short ushort char uchar float double void bool "
                 "undefined undefined1 undefined2 undefined4 undefined8 code CONCAT11 "
                 "CONCAT22 CONCAT44 SUB41 SUB42 SUB81 SUB82 SUB84 ZEXT48 SEXT48".split())
+
+
+STATUS_KEYS = {
+    "разобрана статически": "reviewed", "шаблон": "structural_template",
+    "метка Ghidra": "ghidra_library_label", "символ": "symbol_only",
+    "не разобрана": "unreviewed_unknown",
+}
 
 
 def sha(path):
@@ -350,7 +357,87 @@ def line_ref(kind, key):
     return f"@LINE({kind} {key})"
 
 
-def organize_catalog(old_lines, blocks):
+def corpus_progress(sources, groups, classification, blocks, identities, partial):
+    """Count saved address records, not game completeness or inferred semantics."""
+    modules = {}
+    for module in sorted(identities):
+        keys = [key for key in groups if key[0] == module]
+        files = [source for source in sources if source["module"] == module]
+        statuses = Counter(STATUS_KEYS[classification[key][0]] for key in keys)
+        reviewed = sum(module + ":" + address in blocks for _, address in keys)
+        assert statuses["reviewed"] == reviewed
+        modules[module] = {
+            "binary_sha256": next(iter(identities[module])),
+            "c_files": len(files), "unique_address_records": len(keys),
+            "reviewed": reviewed, "unreviewed": len(keys) - reviewed,
+            "status_counts": {key: statuses[key] for key in STATUS_KEYS.values()},
+            "additional_c_files_for_existing_addresses": len(files) - len(keys),
+            "addresses_with_multiple_c_files": sum(len(groups[key]) > 1 for key in keys),
+            "selector_mismatch_files": sum(s["entry"] != s["requested"] for s in files),
+            "unconfirmed_entry_records": sum(
+                all("не подтверждено" in s["address_basis"] for s in groups[key]) for key in keys),
+            "discovered_function_total": None,
+            "not_captured_function_total": None,
+        }
+    total_fields = ("c_files", "unique_address_records", "reviewed", "unreviewed",
+                    "additional_c_files_for_existing_addresses", "addresses_with_multiple_c_files",
+                    "selector_mismatch_files", "unconfirmed_entry_records")
+    totals = {field: sum(row[field] for row in modules.values()) for field in total_fields}
+    totals["status_counts"] = {status: sum(row["status_counts"][status] for row in modules.values())
+                               for status in STATUS_KEYS.values()}
+    pass_files = [s for s in sources if s["module"] == "server" and "partial-pass" in s["path"].parts]
+    assert len(pass_files) == partial["exported_function_count"], "Partial pass metadata count changed"
+    selected = partial["selected_function_count"]
+    assert selected >= len(pass_files)
+    return {
+        "schema_version": 1,
+        "scope": "saved_decompiled_c_corpus",
+        "definitions": {
+            "unique_address_records": "Grouped by module and resolved entry; unconfirmed selectors are counted explicitly.",
+            "reviewed": "Has a REVIEW, possibly partial; not necessarily fully understood, implemented or runtime verified.",
+            "unreviewed": "Saved address record without REVIEW, including structural templates and symbol/library labels.",
+            "additional_c_files_for_existing_addresses": "Repeated captures or typing variants; not additional functions and not necessarily byte-identical files.",
+            "discovered_function_total": "null: no authoritative complete function inventory for this module in the generator inputs.",
+            "not_captured_function_total": "null: unknown; saved C counts cannot measure all absent functions.",
+        },
+        "totals": totals, "modules": modules,
+        "server_partial_pass": {
+            "source": "decompiled/server/partial-pass/index.json",
+            "binary_sha256": partial["target_sha256"],
+            "selected_functions": selected, "exported_c_files": len(pass_files),
+            "not_exported_in_this_pass": selected - len(pass_files),
+            "scope": "Historical selection only; not all server/game functions. Missing entries may have later individual captures; their full selected address list is unavailable.",
+        },
+        "limitations": [
+            "No whole-game completion percentage or remaining implementation effort is inferred.",
+            "Assembly-only evidence and other uncaptured functions are outside this C corpus count.",
+            "Reviews vary in depth; reviewed functions may retain unresolved branches, ABI or fields.",
+            "Discovered != captured != reviewed != implemented != verified original behavior.",
+            "decompiled/inventory.json is a historical file-count snapshot, not the current denominator.",
+        ],
+    }
+
+
+def progress_lines(progress):
+    total = progress["totals"]
+    lines = ["[SECTION progress]", "ПРОГРЕСС СОХРАНЁННОГО КОРПУСА — не процент восстановления всей игры.",
+             f"  C-файлов: {total['c_files']}; адресных записей: {total['unique_address_records']}; с REVIEW: {total['reviewed']}; без REVIEW: {total['unreviewed']}.",
+             "  Модуль | C-файлы | адресные записи | REVIEW | без REVIEW | дополнительные C того же адреса"]
+    for module, row in progress["modules"].items():
+        lines.append(f"  {module} | {row['c_files']} | {row['unique_address_records']} | {row['reviewed']} | {row['unreviewed']} | {row['additional_c_files_for_existing_addresses']}")
+        lines.append("    Статусы: " + "; ".join(f"{label}={row['status_counts'][key]}" for label, key in STATUS_KEYS.items()))
+    partial = progress["server_partial_pass"]
+    lines += [f"  В старом server partial-pass: {partial['exported_c_files']} C из {partial['selected_functions']} выбранных; {partial['not_exported_in_this_pass']} не выгружены именно тем проходом.",
+              "  Это не число отсутствующих сегодня функций: отдельные captures могут закрывать часть старой выборки, полного списка выбранных адресов нет.",
+              f"  Повторные captures/варианты: {total['additional_c_files_for_existing_addresses']} дополнительных C; {total['unconfirmed_entry_records']} записей имеют только неподтверждённый selector как вход.",
+              "  Полное число обнаруженных/ещё не снятых функций по DLL неизвестно. Assembly-only доказательства сюда не входят.",
+              "  REVIEW может быть частичным. Шаблон, символ и метка Ghidra не считаются ручным разбором; реализация и runtime-паритет здесь не измеряются.",
+              "  Машинная сводка: decompiled/PROGRESS.json; catalog_sha256 связывает её с точной версией этого файла.",
+              "[/SECTION progress]", ""]
+    return lines
+
+
+def organize_catalog(old_lines, blocks, progress):
     """Three reading levels: task map, reviewed cards, full technical inventory.
 
     REVIEW contents remain verbatim. Line references are resolved only after
@@ -378,13 +465,16 @@ def organize_catalog(old_lines, blocks):
             board = boards[0][1].rstrip("\n")
 
     lines = ["CRY OF FEAR — РАБОЧИЙ АТЛАС ВОССТАНОВЛЕНИЯ",
-             "Формат 2 | UTF-8 | Срез декомпила: 2026-11-19", "",
+             "Формат 2 | UTF-8 | Срез: сохранённые captures текущей генерации", "",
              "НАЧАТЬ ЗДЕСЬ: этот файл читается выборочно, а не целиком.",
              f"Объём: {len(records)} адресных записей; {len(blocks)} с заметками аналитика; {text.count('  Файл: ')} исходных C-файлов.",
              "Разбор ≠ готовый перенос ≠ проверенное совпадение с оригиналом. Реализации здесь автоматически не аттестуются.",
-             "Найти механику → взять функцию → прочитать REVIEW и исходный C → восстановить контракт → переносить → проверять.", "",
-             "ОГЛАВЛЕНИЕ — номера строк начинаются с 1; в редакторе используйте переход к строке."]
-    sections = [("mechanics", "Механики и короткий индекс функций"), ("workflow", "Как восстановить одну функцию"),
+             "Текущий режим: только реверс, доказательства и навигация; перенос в игру отложен.",
+             "Найти механику → прочитать REVIEW и исходный C → проследить вызовы/владельцев данных → уточнить контракт и остаточные вопросы.", ""]
+    lines += progress_lines(progress)
+    lines += ["ОГЛАВЛЕНИЕ — номера строк начинаются с 1; в редакторе используйте переход к строке."]
+    sections = [("progress", "Сколько сохранено, разобрано и осталось в корпусе"),
+                ("mechanics", "Механики и короткий индекс функций"), ("workflow", "Как разобрать одну функцию"),
                 ("workboard", "Рабочая задача и сохранённый прогресс"), ("coverage", "Покрытие, достоверность и SHA модулей"),
                 ("reviewed", "Карточки с разбором — читать в первую очередь"),
                 ("pending", "Неразобранные функции и структурные шаблоны"),
@@ -417,15 +507,16 @@ def organize_catalog(old_lines, blocks):
             short = summary if len(summary) <= 150 else summary[:147] + "..."
             lines += [f"    {key} | {name} | L={line_ref('FUNCTION', key)}", "      " + short]
         lines.append(f"[/MECHANIC {topic}]")
-    lines += ["[/SECTION mechanics]", "", "[SECTION workflow]", "ВОССТАНОВЛЕНИЕ ОДНОЙ ФУНКЦИИ",
+    lines += ["[/SECTION mechanics]", "", "[SECTION workflow]", "СТАТИЧЕСКИЙ РАЗБОР ОДНОЙ ФУНКЦИИ",
+              "Текущий этап — только реверс. Исторические маршруты переноса и runtime-проверки в картах механик относятся к будущей реализации, не к текущему поручению.",
               "1. Выбрать одну точку входа по механике и её FUNCTION ID, сверить модуль и хеш исходника.",
               "2. Прочитать REVIEW, затем перечисленный C; при расхождении доверять доказательству, а заметку уточнить.",
               "3. Выписать контракт: входы/ABI → прочитанное состояние → условия отказа → изменения/эффекты → return.",
               "4. Проследить вызываемые helpers и виртуальные слоты; не переносить неизвестное поле как будто оно уже типизировано.",
               "5. Для сообщения сверить отправителя и получателя: ID, длину, порядок/типы полей и reset состояния.",
-              "6. Найти существующую реализацию в src/ и прежний analysis/; переносить только установленную часть поведения.",
-              "7. Записать проверяемые сценарии: обычный путь, границы, отказ, повторное действие и смена жизненного цикла.",
-              "8. После каждого этапа обновить REVIEW и WORKBOARD: что установлено, что перенесено в код, что проверено и что осталось неизвестным.",
+              "6. Сверить прежний analysis/ и соседние REVIEW; для поля найти writer/reader/owner и lifecycle. Код реконструкции не считать доказательством бинарника.",
+              "7. Для каждого пробела записать точный адрес/поле/ветвь, недостающее доказательство и следующий ограниченный запрос; не оставлять расплывчатое «изучить всё».",
+              "8. После каждого этапа обновить REVIEW и WORKBOARD: что доказано, какие связи прослежены и что конкретно осталось неизвестным. Игру и код порта на этом этапе не менять.",
               "9. Удалить закрытые вопросы из текущих пробелов, заменить опровергнутые выводы; синхронизировать дублирующиеся notes JSON, чтобы повторный импорт не вернул старую версию.",
               "10. Сохранить исходные Evidence и исторические отчёты отдельно; пересобрать каталог и проверить ссылки, уникальность REVIEW и сохранность посторонних заметок.", "",
               "ШАБЛОН КОНТРАКТА (скопировать в WORKBOARD для текущей задачи или дополнить REVIEW):",
@@ -438,8 +529,8 @@ def organize_catalog(old_lines, blocks):
               "  Зависимости: module:address, virtual slot, сообщения, ресурсы ...",
               "  Доказательство: C + адрес/ветвь + evidence ID ...",
               "  Неизвестное и как проверить: ...",
-              "  Реализация: путь и объём переноса / не сверена",
-              "  Проверка: сценарий + наблюдение / не выполнялась", "",
+              "  Следующий RE-запрос: конкретный entry/global/vtable slot и ожидаемое доказательство ...",
+              "  Проверка доказательств: hash, ABI, прямые/косвенные ссылки, ветви и ограничения ...", "",
               "ЛЕГЕНДА: статический разбор = заметка аналитика; шаблон = узкое структурное наблюдение;",
               "символ/метка Ghidra = зацепка, не установленная семантика; не разобрана = назначение неизвестно.",
               "Уверенность REVIEW относится к описанному поведению, а не ко всей механике и не к runtime-паритету.",
@@ -580,7 +671,7 @@ def build(notes):
     ambiguous = [s for s in sources if "не подтверждено" in s["address_basis"]]
     lines = [
         "CRY OF FEAR — КАТАЛОГ ФУНКЦИЙ И ПЛАН ВОССТАНОВЛЕНИЯ",
-        "Срез сохранённого декомпила: 2026-11-19. Формат: UTF-8.", "",
+        "Срез сохранённого декомпила текущей генерации. Формат: UTF-8.", "",
         "ОБЛАСТЬ И ДОСТОВЕРНОСТЬ",
         f"Проверено по SHA-256 и включено файлов .c: {len(sources)}; записей модуль:адрес: {len(groups)}.",
         f"Статических разборов с описанием назначения: {len(blocks)}. Остальные записи — структурная опись, не готовая реконструкция.",
@@ -699,28 +790,36 @@ def build(notes):
         if s["returns"]:
             lines.append("  Выражения return (Ghidra): " + "; ".join(x or "void" for x in s["returns"]))
         lines += ["[/FUNCTION]", ""]
-    result = organize_catalog(lines, blocks)
+    partial = json.loads((ROOT / "decompiled/server/partial-pass/index.json").read_text(encoding="utf-8"))
+    progress = corpus_progress(sources, groups, classification, blocks, identities, partial)
+    result = organize_catalog(lines, blocks, progress)
     # Ensure every source is accounted for and every human review survived.
     assert result.count("  Файл: ") == len(sources)
     assert len(REVIEW.findall(result)) == len(blocks)
-    # Reviews exist only in this text file: never truncate it before a complete
-    # replacement is safely written. A failed run leaves the previous ledger.
-    temporary = None
-    try:
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n",
-                                         dir=CATALOG.parent, prefix=".catalog-", suffix=".tmp",
-                                         delete=False) as f:
-            temporary = Path(f.name)
-            f.write(result)
-            f.flush()
-            os.fsync(f.fileno())
-        temporary.replace(CATALOG)
-    finally:
-        if temporary is not None and temporary.exists():
-            temporary.unlink()
+    progress["catalog_sha256"] = hashlib.sha256(result.encode("utf-8")).hexdigest()
+    # Each file is replaced atomically. The hash detects a stale JSON if the
+    # process stops between publications; neither file is truncated in place.
+    atomic_write(CATALOG, result)
+    atomic_write(CATALOG.with_name("PROGRESS.json"), json.dumps(progress, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"files": len(sources), "entries": len(groups), "reviews": len(blocks),
                       "selector_mismatches": len(aliases), "unconfirmed_entries": len(ambiguous),
                       "status": dict(counts), "output_bytes": CATALOG.stat().st_size}, ensure_ascii=False))
+
+
+def atomic_write(path, text):
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n",
+                                         dir=path.parent, prefix=".catalog-", suffix=".tmp",
+                                         delete=False) as f:
+            temporary = Path(f.name)
+            f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
+        temporary.replace(path)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
 
 
 if __name__ == "__main__":
