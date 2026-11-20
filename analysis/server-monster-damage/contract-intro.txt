@@ -1,0 +1,23 @@
+# Оригинальный server: полный локальный путь повреждения монстра
+
+Статический разбор оригинального `hl.dll`, SHA256 `751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641`. DLL/игра не запускались. Saved C — результат Ghidra, не исходники; ABI, floating comparisons, jump tables и field widths сверены с bounded native ASM и исходными PE bytes.
+
+Пакет содержит **6 новых карточек** в `notes.json` и **1 расширение существующей** `1008bc50` в `notes-updated.json`. Старую REVIEW сохраняет `prior-review-1008bc50.txt`; прежние доказательства player-пути не заменены предположениями. `capture.py` воспроизводит C/ASM/raw provenance, `verify.py` проверяет файлы/байты/карточки без target execution. `write_notes.py` генерирует этот контракт и обе группы карточек.
+
+| Точка входа | Роль | Главная связь |
+|---|---|---|
+|1008c390|Базовый TraceAttack|AddMultiDamage → blood → TraceBleed|
+|1008c4d0|Monster TraceAttack|TraceBleed → hitgroup scaling → gore/blood → AddMultiDamage|
+|10089f30|Gore flags|Два точных classname; raw pev+210|
+|1008bc50|TakeDamage|dead delegate / freeze / impulse / HP / Killed / AI|
+|10087da0|DamageForce|size volume → ST0 force|
+|10087e10|DeadTakeDamage|mask261h → reduced health либо Killed(attacker,2)|
+|1008a2e0|Разрешение private object|entvars→edict→private, NULL-edict fallback|
+
+Связи с предыдущими пакетами: [radius/accumulator](../server-radius-damage/contract.md), [grenade lifecycle](../server-grenade-lifecycle/contract.md), [effect wire](../server-event-effects/contract.md), [player health](../movement/health-stamina.md), [AI scheduler](../server-monster-scheduler/contract.md). Эти ссылки задают переходы по справочнику; не означают, что все derived callbacks уже разобраны.
+
+Native RTTI и vtables: Generic `101ce36c`, Grenade `101ce8e0`, Player prefix `101a4da8`. В captured Generic/Grenade `+60=1008c4d0`, `+64=1008bc50`; Player имеет собственные TraceAttack/TakeDamage. `+6c` различается у всех трёх. `+fc` у этих классов — midpoint helper `1000d4a0`, output Vector* на stack, EAX возвращает output pointer. Generic `+70=10012910` читает `object+31c` blood color. Helpers в evidence не получают автоматическую REVIEW.
+
+Native field provenance: ENTVARS table `1021aae0`, MONSTER `10216e08`, BASE `10211760`. Object и pev offsets — разные адресные пространства. Ключевые object offsets: `+9 frozen BYTE`, `+a boss BYTE`, `+78 Think`, `+180 conditions`, `+184 enemy EHANDLE`, `+1fc waiting-to-die BYTE`, `+21c last hitgroup`, `+224 monster state`, `+2ec memory`, `+2f4 enemy LKP`, `+30c damage bits`, `+34c cine`, `+354 player reaction`. Здесь ширина BYTE доказана инструкциями; serializer type12 отдельно пишет DWORD. Native ENTVARS `+268` — `vuser1.x`, не fuser; raw gore `pev+210` таблицей не назван.
+
+Границы полноты: локальные тела семи функций разобраны целиком, включая native ветви NaN и скрытые/потерянные Ghidra arguments. Не объявляются завершёнными все derived Killed/TraceAttack/TraceBleed, setters hitgroup multipliers `10226884..94`, consumers gore bits `pev+210`, camera unfreeze lifecycle, libm exceptional path и поведение engine callbacks. Floating-point сравнения описаны для обычного режима masked exceptions; окружение MXCSR/x87 и signaling-NaN exception policy здесь не устанавливаются.

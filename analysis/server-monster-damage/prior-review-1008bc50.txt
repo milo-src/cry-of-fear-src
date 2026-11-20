@@ -1,0 +1,9 @@
+[REVIEW server:0x1008bc50]
+  Предлагаемое имя: CBaseMonster_TakeDamage
+  Подсистема: health
+  Назначение: Общий обработчик повреждения, вызываемый player TakeDamage после брони.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Разобран player-путь: takedamage guard, IsAlive/dead delegate, bookkeeping, иммунитет flags40 либо byte21e9, HP-=damage, Killed virtual6c приHP<=0. Режим gib2 для2000,1 для1004, иначе0. HP не clamp0. Monster-specific ветви и AI не исчерпаны.
+  Основание: decompiled/server/partial-pass/functions/0x1008bc50.c
+  Основание: analysis/movement/health-stamina.md
+[/REVIEW]

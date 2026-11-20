@@ -1,0 +1,236 @@
+{
+  "scope": "Static RE pass12; no target execution or game implementation",
+  "result": "PASS",
+  "new_reviewed": 25,
+  "updated_existing": [
+    "server:0x1008bc50"
+  ],
+  "packages": [
+    {
+      "package": "analysis/server-bullet-traces",
+      "primary_count": 3,
+      "new_reviewed": 3,
+      "updated_existing": 0,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All3 primary C/native bodies and complete contract/notes. Independent peer PE PASS24C/24ASM/2575byte rows/215raw/151descriptors/286vslots/144API. Checked RET3c/44 and hidden Vector out; cached right+40/up+34; random rejection versus seeded four calls; three aliasing retraces and virtual78 returning this; trace.inWater+c; zero-shot uninitialized locals; final Apply before/after stats; x,z,y output; signed bubble cap and NaN guards.",
+      "corrections": [
+        "Root self-review corrected right/up global offsets and TraceResult inWater offset before freeze.",
+        "Peer corrected retrace1: kind17 repeats target.IsPlayer regardless of first result; only second zero consults virtual78, followed by another virtual78 after retrace. Writer, notes and contract synchronized; peer re-read final paragraph and confirmed PASS."
+      ],
+      "final_hashes": {
+        "contract.md": "6a7767d211bb34df13930e6b15b0b77e4cadf48183031141e6d285229add482d",
+        "notes.json": "705ec19aee5a8e689d2455b42992dc22166037fd6ce4d6f5a4b13326ca6b9629",
+        "evidence.json": "f92ddae2061a2d85637257fdd8dea26caf6e5a157374dc9d74fc38102397d79e",
+        "capture.py": "86dafac58eb5f55cb9929b781d26aa8d8445b5e271f12a31947743b374c82a04",
+        "verify.py": "55a95da787927c3f4dfd74242623eb981871b62862c8a283febbc37df24fb897",
+        "write_notes.py": "dd3fe0da20cc8ff81fcac6ff6c0731a66e1e8966ed118c4707857e0db8e3b304"
+      }
+    },
+    {
+      "package": "analysis/server-monster-damage",
+      "primary_count": 7,
+      "new_reviewed": 6,
+      "updated_existing": 1,
+      "author": "shader_inventory",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All7 primary C/native bodies and complete contract/notes. Independent peer PASS34C/34ASM/2063byte rows/284raw/38hitgroup cases. Checked NaN gates; victim handle written into source player+1f0c; double normalize; state6 return after HP before Killed; DeadTakeDamage mask261h and damage*0.1; TraceAttack Vector12/RET1c; bleed/blood/Add order; hitgroup9 fixed replacement; group12 gore mask0c. Native RTTI and save tables qualify object/pev fields.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "84a02306e72b6b18315e44324e2bad301ee8329f53e0c7ac19766bc3558c89a4",
+        "notes.json": "d4036f409f4bee8752cc670c80e3b025b0b0b910ee6318eb7a198958ebbd9e53",
+        "evidence.json": "6a0a59eabfb512c4496b4983156b4a968baa9ff55fb777bd3ccdb27d40e276ff",
+        "capture.py": "898fdc23ec67257ae61a6c5d4ffedf709c756345ba697c6bb81734ca18e4ebb6",
+        "verify.py": "56abde917265f0e79ad6833f8eeff6161991150c6f87e49dd4e4b88225f9f09a",
+        "notes-updated.json": "519a89c3659ba1cfd50fc8ceb54a90ccaef49f586fcdb398bc635a9cfbbeb91a",
+        "prior-review-1008bc50.txt": "6849c1f40d8058987f073c28855e3c66b3ae42da39e5f9aa321615881c1d18a5",
+        "write_notes.py": "728f88a4940a087e6495be4ca18c51512c17e1a68b1490556a690316bb5bbc36"
+      }
+    },
+    {
+      "package": "analysis/server-item-lifecycle",
+      "primary_count": 12,
+      "new_reviewed": 12,
+      "updated_existing": 0,
+      "author": "client_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "All12 primary C/native bodies and full contract/notes. Root independently checked PE hashes/raw/descriptors/vtable; standalone PASS29C/29ASM/2099byte rows/195raw. Owner assignment versus engine attachment; BTS modulo32 versus unmasked ammo row; factory plus18c forwarding ECX and stack item; axe AL reader and flare iuser1 distinction; Destroy owner callback and tail dispatch; Fall schedule before ground test; Materialize old Touch retention; Attempt NaN/nonzero delay; single x87 rounding for two deadlines; Save/Restore parent returns, rotating duplicate158 and type12 DWORD overlaps. Selected serializer/timebase/ammo/SUB_Remove native support read.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "fa6f15478b52874bbe484b4d2226cc2c9e31ca9990d8ca0562090f7f572b6fda",
+        "notes.json": "1cb23da9161406a42235b86747ded5ad79992a128fc850a706b365bd834b8304",
+        "evidence.json": "0b386e4706f09f61ac61ebcc98b111e5df166e10793501a0e8aea96895040778",
+        "capture.py": "5a5ea199ebc588acf0507feb24b0732ff35c3065aad05f9133cb8068fd40969d",
+        "verify.py": "37a52816955c5c1d1ad3f7d9a89ee43b42f3106ae9d10cc572984d1d6c1eea02"
+      }
+    },
+    {
+      "package": "analysis/server-unlock-callers",
+      "primary_count": 4,
+      "new_reviewed": 4,
+      "updated_existing": 0,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All4 primary C/native bodies and complete notes/contract. Independent peer PASS37C/37ASM/11227byte rows/404raw/236instruction-aligned direct E8/E9 edges/4RTTI-vtables. Checked reward order and shared L47/L48 across player iteration, SP rank9..12=>0, U=1000000 overwrite, RET10/AL reader/ST0 ratio,32 Credits fields and repeated broadcasts/scheduler. Other16 direct owners checked as byte/navigation support, not full semantic contracts.",
+      "corrections": [
+        "Corrected WriteString address101c2d70 from empty string to original literal nah.",
+        "Clarified score ratio zero numerator returns0 only when denominator>0; denominator<=0 returns100 even for zero numerator."
+      ],
+      "final_hashes": {
+        "contract.md": "74d6ec7ec6799a5f0ae9671a213625e5ea6ae760ccde83dba15006e4e812e260",
+        "notes.json": "e39388ac77b75c76aeecd945dd130f7da2cfdaea4ec27d0b7faf8720773013ed",
+        "evidence.json": "3c3c7d916734a695d86503121df598526c37edc2485fc52952adb6b47b3ebb83",
+        "capture.py": "aafe6b9563d941203cb484423ff2109a8d3dc74a2d122640e850e051f763368d",
+        "verify.py": "289aa1e59c55b4377f5e3b48ff64f3ac8445840142911df8402eda3f4c1c1319",
+        "write_notes.py": "97c12dfbc65be65b49c2a197a283b3b9543065bb9d417cd2eae67796c870a595"
+      }
+    }
+  ],
+  "navigation_cleanup": "Current queue removes newly reviewed25 and expanded1008bc50; links bullet→damage, item lifecycle/persistence and four unlock Use. Remaining derived callbacks, Item pickup/Respawn, other16 direct unlock owners/indirect callers, stats producers and corpus gaps remain open. Historical reports unchanged. Only documentation pins refreshed, never binary/saved C pins.",
+  "prior_reviews": {
+    "unrelated_preserved_exactly": 1731,
+    "expanded": "server:0x1008bc50",
+    "prior_snapshot": "analysis/server-monster-damage/prior-review-1008bc50.txt",
+    "player_facts_preserved": "Caller armour/truncation remains100f6030; takedamage/IsAlive/dead delegate, pre-HP bookkeeping, flags40/byte21e9 immunity, HP subtraction/no clamp, Killed+6c and gib2000→2/1004→1/otherwise0 all retained. Expansion qualifies state6, NaN and other monster branches instead of falsely counting old partial REVIEW again."
+  },
+  "notes_contract_parity": true,
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-bullet-traces/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-radius-damage/contract.md",
+          "old": "aa53bc60d47337be354f7135cdb3733dc04529acd043181e29cc0c33db6b0bd3",
+          "new": "dee17981700f6da2cebd4d4235b61e90e6dc68483492ca3a5e5d295b9866da7f"
+        },
+        {
+          "path": "analysis/server-spread-callers/contract.md",
+          "old": "1803b51f8e8db6c77c7a7887fb792a5a8c308e6020d9b9a393cc4babed6900ed",
+          "new": "8f27e956a4512d152685d3547518e328097260a6f7ee0fa7decbbe9fb5b55961"
+        },
+        {
+          "path": "analysis/movement/health-stamina.md",
+          "old": "0c690e401d402d3e15111bb7b8bcc1cd1d68f69a273303cb7745e916bb53642b",
+          "new": "c2c0f4932b3ae484ac70c4cc5e5bd22b27b6329ee08fffed7ab2406bb7faf32d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-item-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-spread-callers/contract.md",
+          "old": "1803b51f8e8db6c77c7a7887fb792a5a8c308e6020d9b9a393cc4babed6900ed",
+          "new": "8f27e956a4512d152685d3547518e328097260a6f7ee0fa7decbbe9fb5b55961"
+        },
+        {
+          "path": "analysis/server-unlock-settings/contract.md",
+          "old": "ff08f76b5cfb28770d2dda75645c4752e8e5bcdef6b8a132ee5fdad7bd85b684",
+          "new": "4d5de08b5fa4812c20cf40d5bdf31bb798fb076f5ab3c94c8e8f99ab75bd36a2"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-damage/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-radius-damage/contract.md",
+          "old": "aa53bc60d47337be354f7135cdb3733dc04529acd043181e29cc0c33db6b0bd3",
+          "new": "dee17981700f6da2cebd4d4235b61e90e6dc68483492ca3a5e5d295b9866da7f"
+        },
+        {
+          "path": "analysis/movement/health-stamina.md",
+          "old": "0c690e401d402d3e15111bb7b8bcc1cd1d68f69a273303cb7745e916bb53642b",
+          "new": "c2c0f4932b3ae484ac70c4cc5e5bd22b27b6329ee08fffed7ab2406bb7faf32d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-radius-damage/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-grenade-lifecycle/contract.md",
+          "old": "c91b2aa91f598f249aea3b4c622d8c32d85177ba2d0fffb5b9b680a527e933e9",
+          "new": "3a10d7bf1d95c6b2edb576ae274ccf1a50323bc7a1a350381305c07a2cf7f421"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-spread-application/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/movement/health-stamina.md",
+          "old": "0c690e401d402d3e15111bb7b8bcc1cd1d68f69a273303cb7745e916bb53642b",
+          "new": "c2c0f4932b3ae484ac70c4cc5e5bd22b27b6329ee08fffed7ab2406bb7faf32d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-spread-settings/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/movement/health-stamina.md",
+          "old": "0c690e401d402d3e15111bb7b8bcc1cd1d68f69a273303cb7745e916bb53642b",
+          "new": "c2c0f4932b3ae484ac70c4cc5e5bd22b27b6329ee08fffed7ab2406bb7faf32d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-callers/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-settings/contract.md",
+          "old": "ff08f76b5cfb28770d2dda75645c4752e8e5bcdef6b8a132ee5fdad7bd85b684",
+          "new": "4d5de08b5fa4812c20cf40d5bdf31bb798fb076f5ab3c94c8e8f99ab75bd36a2"
+        },
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "0230f3e52cd68607d5000a55df44e7c1ebae300bea063c8dddf69370f98bd50d",
+          "new": "8c094888c7a5d7b84305427afb0cc74d2adf8454bda533164b97c9c068163664"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-settings/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "0230f3e52cd68607d5000a55df44e7c1ebae300bea063c8dddf69370f98bd50d",
+          "new": "8c094888c7a5d7b84305427afb0cc74d2adf8454bda533164b97c9c068163664"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-callers/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-settings/evidence.json",
+          "old": "4653e55aa6a77cb79dce223fc8f51947446f4f6616667fe54a6faf216165fa56",
+          "new": "6d2d6cf58a5c56abc6df4615fa24619d0ecee36817c1fa8662a8113f23f19437"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "server-radius-damage": "PASS 18 C, 18 ASM, 1266 byte rows, 196 raw, 4 cards",
+    "server-spread-application": "PASS 10 cards, 19 C, 20 ASM, 733 byte rows, 25 raw; pointer scan, duplicate body and numeric constants; no cache dependency",
+    "server-spread-settings": "PASS 9 cards, 15 C, 15 ASM, 2064 byte rows, 162 raw; cone table/default stores/descriptor decoded",
+    "server-unlock-settings": "INDEPENDENT PASS 18 C 24 ASM 4082 rows 369 raw;128selector,64reader dispatch,128writer polarity paths,34token pairs\nPASS 18 C, 24 ASM, 4082 byte rows, 369 raw, 4 cards",
+    "server-spread-callers": "PASS 9 cards, 22 C, 23 ASM, 931 byte rows, 144 raw, 57 descriptors, 67 direct edges; fresh scan without cache",
+    "server-grenade-lifecycle": "PASS 47 C, 47 ASM, 3014 byte rows, 737 raw, 15 cards",
+    "server-player-equipment": "PASS 34 C, 35 ASM, 2510 byte rows, 457 raw, 13 cards"
+  },
+  "verification_report_sha256": "03644c64029887fe7e67cbcdaff3cdcebd51f1a56e0f6ee20d536a15a7c6d526"
+}

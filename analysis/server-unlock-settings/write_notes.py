@@ -79,7 +79,7 @@ for n in rows:
 intro+='''
 ## Оставшиеся границы
 
-- В этих четырёх телах нет идентификатора игрока/Steam, player-field storage, сообщений клиенту или файловой блокировки. Конкретные gameplay причины установки остальных masks и special47/48 следует раскрывать в callers. Подтверждённые Famas/Axe gates: [equipment contract](../server-player-equipment/contract.md).
+- В этих четырёх телах нет идентификатора игрока/Steam, player-field storage, сообщений клиенту или файловой блокировки. Четыре Use для одежды, coop stats, титров и итоговой статистики, включая special47/48, разобраны в [unlock callers](../server-unlock-callers/contract.md). Остаются16 других владельцев прямых ссылок, косвенные callers и полные producers playerstats. Подтверждённые Famas/Axe gates: [equipment contract](../server-player-equipment/contract.md).
 - Engine LoadFileForMe использует относительное имя; writer строит путь GetGameDir. Совпадение физического файла во всех engine search-path конфигурациях здесь не доказано.
 - CRT constructors, close и output helpers сохранены как support; полный codecvt/text-mode/sharing, errno, path-conversion/errno helper и SEH unwind — отдельные зависимости. По native writer code можно доказать порядок вызовов и отсутствие проверки, но не гарантию успешного/атомарного сохранения.
 - `1002f49f` — сохранённая Ghidra identity общего эпилога getline; native1002f350 переходит туда JMP с тем же EBP. Не воспроизводить её как обычную самостоятельную C-функцию с нулём аргументов. Аналогично tokenizer101743ff использует contextgetter1017e87d+1ch; конкретная модель хранения context отдельно не раскрыта.

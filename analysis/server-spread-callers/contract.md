@@ -101,7 +101,7 @@ Raw prefix vtable101a7804 получает factory10018440 (CBasePlayerWeapon в
 | 0x118 | m_Accuracy | 0 | 1 | 0 |
 | 0x107 | m_bCanDualWield | 12 | 1 | 0 |
 
-`CBasePlayerItem_support` содержит две записи с одинаковым native name `m_iSprintIdleAnim1` и offset158, но types10 и15. Это сохранено буквально, не исправлено как предполагаемая опечатка. Вопрос duplicate-name matching и смысла этого descriptor относится к отдельному анализу Item lifecycle; новый REVIEW здесь его не заявляет.
+`CBasePlayerItem_support` содержит две записи с одинаковым native name `m_iSprintIdleAnim1` и offset158, но types10 и15. Это сохранено буквально, не исправлено как предполагаемая опечатка. Rotating duplicate-name matching и повторная запись +158 разобраны в [item lifecycle](../server-item-lifecycle/contract.md). Авторский смысл ошибочного или намеренного duplicate по одному descriptor не устанавливается; исходные данные сохранены.
 
 ## Локальные контракты
 
@@ -202,5 +202,9 @@ cdecl(seed DWORD,float low,float high), plain RET, ST0 result. Native сумми
 - Не найдена конкретная derived таблица, связывающая Spread/Toggle callbacks с доступным оружием. Есть bounded negative results двух scans, но нет whole-program absence claim.
 - 100d1930 подтверждён ASM, но отсутствует saved C и потому не увеличивает число REVIEW. Expand table consumers остаются не закрытыми.
 - Constructors и writers владельческого seed2288, lifetime table pointer1f8, внешние writers общей RNG table/state и ISA featureglobal не разобраны этим пакетом.
-- Parent Item persistence wrappers1011e760/1011ed80 и factory10018440/10020010 — support, не новые карточки; дальнейший проход может дать им полные самостоятельные контракты.
+- Parent Item persistence1011e760/1011ed80 теперь имеет самостоятельные REVIEW в [item lifecycle](../server-item-lifecycle/contract.md). Factories10018440/10020010 остаются support; им новый REVIEW этим продолжением не присвоен.
 - Runtime save/load, реальное распределение случайных значений, пользовательское ощущение отдачи и достижимость необычных inputs не проверялись.
+
+## Продолжение разбора: pass12
+
+Четыре RNG callsites10088dd6/10088df7/10088e17/10088e36 принадлежат теперь разобранному10088ca0: [bullet traces](../server-bullet-traces/contract.md). Вместе с100884f0 он фиксирует random/seeded spread, повторные traces и порядок damage callbacks. Связь конкретного derived weapon/table.expand с этим выстрелом всё ещё требует доказательства. Родительская сериализация предметов, owner/attachment, Fall/Materialize и отложенное удаление: [item lifecycle](../server-item-lifecycle/contract.md).

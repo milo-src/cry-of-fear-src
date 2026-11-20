@@ -203,6 +203,10 @@ armorCost = (damage - hpDamage) * bonus
 1. Все источники writes byte21e8/21e9, включая save/restore и конфигурацию, не доказаны; названы только наблюдаемые эффекты.
 2. Семантика всех weapon-byte104/106/178 и state140 зависит от типа оружия; общие guards сохранены численно.
 3. PM и сервер имеют разные структуры. Связь `V+260` с PM special-state требует ABI-copy evidence; равенство названий SDK недостаточно.
-4. Полный damage bit enum, hitgroup trace pipeline, drowning/time damage, сюжетные HP overrides и revive требуют продолжения. Базовый landing damage разобран выше.
+4. Полный damage bit enum, derived hitgroup/TraceBleed/Killed pipeline, drowning/time damage, сюжетные HP overrides и revive требуют продолжения; общие TraceAttack/TakeDamage/DeadTakeDamage/DamageForce закрыты локальными контрактами server-monster-damage (продолжение ниже). Базовый landing damage разобран выше.
 5. Таймеры spawn, save/restore и клиентское отображение требуют дополнительных точечных asm проверок, если псевдокод даёт спорные преобразования.
 6. Динамические cvar overrides, реальная частота callbacks и runtime поведение оригинала не измерены; тесты собственного порта описаны в runtime-verification.json.
+
+## Продолжение разбора: pass12
+
+Общий1008bc50 теперь разобран полностью в пределах его локального тела: [monster damage](../server-monster-damage/contract.md). Player armour/truncation остаются в100f6030; core добавляет monster freeze, source victim handle, двойную нормализацию, импульс и AI reaction. В частности state6 возвращается после HP subtraction до Killed, а unordered HP идёт в surviving branch: краткое описание player-пути выше не заменяет эти ветви. Базовый и monster TraceAttack1008c390/1008c4d0, DeadTakeDamage10087e10 и DamageForce10087da0 тоже имеют самостоятельные карточки. Прочие derived TraceAttack/TraceBleed/Killed, setters hitgroup scale, time damage, drowning и revive остаются открытыми. Доставка bullet damage: [bullet traces](../server-bullet-traces/contract.md).

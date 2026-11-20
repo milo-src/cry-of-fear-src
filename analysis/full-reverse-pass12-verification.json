@@ -1,0 +1,50 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1732,
+  "new_reviewed": 25,
+  "updated_existing": [
+    "server:0x1008bc50"
+  ],
+  "after_reviewed": 1757,
+  "remaining_unreviewed": 6898,
+  "server_reviewed": 1102,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 128,
+    "assembly_ranges": 124,
+    "verified_assembly_byte_rows": 17964,
+    "raw_records": 1383,
+    "decoded_save_fields": 763,
+    "review_evidence_references": 316,
+    "synchronized_note_occurrences": 26
+  },
+  "checks": {
+    "prior_unrelated_reviews_preserved": true,
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.004s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-bullet-traces": "PASS 24 C, 24 ASM, 2575 byte rows, 215 raw, 3 cards",
+      "server-monster-damage": "PASS 34 C, 34 ASM, 2063 byte rows, 284 raw, 7 cards",
+      "server-item-lifecycle": "PASS 12 cards 29 C 29 ASM 2099 byte rows 195 raw; descriptor/ABI/rotating-match assertions",
+      "server-unlock-callers": "PASS 37 C, 37 ASM, 11227 byte rows, 404 raw, 4 cards"
+    }
+  },
+  "artifacts": [
+    "analysis/server-bullet-traces/contract.md",
+    "analysis/server-monster-damage/contract.md",
+    "analysis/server-item-lifecycle/contract.md",
+    "analysis/server-unlock-callers/contract.md"
+  ],
+  "catalog_sha256": "07d13c66841c34403ff318d3f49cbdd0211a5de219f2a72f8f01d1bc3719415f",
+  "progress_sha256": "f71549a5dbd6312049ea69fa83dc108b53ddd40d5ae1e9ef36ccf06eab56a874"
+}
