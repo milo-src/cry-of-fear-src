@@ -1,0 +1,270 @@
+{
+  "scope": "Static captures only, including parent-provided graphics-blur-material-state and graphics-surface-flags; no runtime/pixel comparison. Addresses belong to client.dll.",
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10086670",
+      "proposed_name": "Cg_CreateContextAndSelectLatestProfiles",
+      "subsystem": "graphics",
+      "summary_ru": "Создаёт Cg context, выбирает vertex/fragment profiles и выставляет ready-byte.",
+      "confidence": "high",
+      "details_ru": [
+        "Context+0, latest(8)→+4, latest(9)→+8; каждый profile сравнивается с sentinel0x1801.",
+        "cgGLSetOptimalOptions вызывается для каждого принятого профиля; +0x10 BYTE=1 только после успеха обоих. Алгоритм аппаратного выбора внутри Cg не восстановлен.",
+        "cgCreateContext, latest profiles8/9, SetOptimalOptions; при невалидном0x1801 или ошибке context readiness byte+0x10=0, иначе1."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-blackwhite/003-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10086560",
+      "proposed_name": "Cg_GetFragmentProfile",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает поле fragment profile Cg manager+8.",
+      "confidence": "high",
+      "details_ru": [
+        "Результат используется water initializer для точного сравнения с0x1803; это не GL extension probe.",
+        "Возвращает this+8, без проверок. Используется для выбора fp20 shader family."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-second/001-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10089830",
+      "proposed_name": "Render_IsApiModeOne",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает результат сравнения engine render API mode с1.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственное действие: (*DAT_10545850)()==1. Функция не проверяет готовность Cg/context, profiles или extensions.",
+        "Вызывает callback DAT_10545850 и возвращает result==1. Смысл остальных кодов в этом теле не установлен."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-second/008-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10086580",
+      "proposed_name": "Cg_TrialCompileProgramFile",
+      "subsystem": "graphics",
+      "summary_ru": "Пробует cgCreateProgramFromFile с профилем по типу и печатает Cg error при неудаче.",
+      "confidence": "high",
+      "details_ru": [
+        "type1 использует fragment+8, type2 vertex+4; возвращает1 при ненулевом program, иначе0.",
+        "Пробная программа не загружается через cgGLLoadProgram здесь; уничтожение handle в прочитанном теле отсутствует. Loader после успеха компилирует повторно.",
+        "По типу1/2 выбирает fragment/vertex profile, компилирует from file entry main. Ненулевой handle даёт1, иначе cgGetError/String и diagnostic,0. Жизненный цикл пробного handle не виден, не объявлять отсутствие утечки доказанным."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-blackwhite/004-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100863f0",
+      "proposed_name": "Cg_FindOrLoadProgramFile",
+      "subsystem": "graphics",
+      "summary_ru": "При render API mode1 ищет программу по имени, создаёт context при необходимости, компилирует и связывает запись списка.",
+      "confidence": "high",
+      "details_ru": [
+        "Lookup10086520(name) происходит до проверки context; отдельный capture подтвердил __stricmp(name,record), голову manager+0xc и обход record+0x28. Type/profile не входят в ключ.",
+        "Путь game-dir/cgshaders/name. После trial compile создаётся record0x30, type+20, handle+24, links+28/+2c; cgGLLoadProgram.",
+        "Нет чтения ready-byte и retry modern→fp20. Декомпилированная void-сигнатура противоречит callers, использующим returned record.",
+        "Проверяет mode1, ищет по имени, создаёт context при отсутствии, путь gameDir/cgshaders/name, компиляция entry main. Тип1 fragment, тип2 vertex; record0x30 содержит handle+0x24 и связи+0x28/+0x2c, загрузка cgGLLoadProgram. Декомпил потерял возвращаемый handle, хотя callers его используют."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-second/000-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "decompiled/client/captures/graphics-blur-material-state/007-pseudocode.c",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10086890",
+      "proposed_name": "Water_InitCapturesAndSelectCgFiles",
+      "subsystem": "graphics",
+      "summary_ru": "Создаёт water captures/LUT и выбирает fp20 fragment filenames исключительно при profile==0x1803.",
+      "confidence": "high",
+      "details_ru": [
+        "Water manager отличается от Cg manager. int(cg_water)==0 сбрасывает enabled+9.",
+        "GL_NV_texture_shader probe меняет только LUT upload: DSDT8_NV/DSDT_NV либо LUMINANCE/LUMINANCE. Данные заполнены парами[x,y].",
+        "Общий water_vp.cg загружается type2; fragment getter10086560==0x1803 выбирает fp20_water_fp.cg/fp20_black_fp.cg, иначе water_fp.cg/black_fp.cg; общий black_vp.cg.",
+        "Ошибки печатаются, но fallback на другой filename/profile не виден.",
+        "Проверяет OpenGL-mode и cg_water, разрешает multitexture entrypoints; выбирает pow2 размеры, создаёт screen textures и256² XY LUT, noise.tga, water/black программы и named parameters. Для профиля0x1803 выбирает fp20 fragment-файлы; fallback LUT формата LUMINANCE нельзя автоматически считать RG."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-first/000-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "decompiled/client/captures/graphics-client-first/001-pseudocode.c",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10086d10",
+      "proposed_name": "Water_DrawCapturedSceneCgComposite",
+      "subsystem": "graphics",
+      "summary_ru": "Создаёт scene/noise/mask captures и выполняет выбранный water Cg composite.",
+      "confidence": "high",
+      "details_ru": [
+        "Повторного ветвления по profile0x1803 нет; units0=noise-water,1=Identity LUT,2=scene,3=mask.",
+        "TexOffset=(0,.05,0,.05), flScreen≈.965; blend SRC_ALPHA/ONE_MINUS_SRC_ALPHA.",
+        "Разница modern/fp20 находится в выбранном Cg: modern noise.rg+uv1, fp20 noise.gb→LUT→offsettex2D сuv2.y+=flScreen. Pixel equivalence не проверялась.",
+        "Сохраняет scene; рисует noise на верхних плоскостях skin==-3 entities, снимает capture, рисует белую маску, восстанавливает scene; связывает noise/LUT/scene/mask на4 units и Cg; TexOffset=(0,.05,0,.05), flScreen=.965. Это не отражённая камера и не ray tracing."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-first/002-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100877d0",
+      "proposed_name": "Water_BindSelectedBlackCgPrograms",
+      "subsystem": "graphics",
+      "summary_ru": "Включает Cg profiles и связывает сохранённые black vertex/fragment programs и matrix.",
+      "confidence": "high",
+      "details_ru": [
+        "Handles Water+30/+34, ModelViewProj+38. Само тело не содержит draw.",
+        "Существующий анализ не нашёл прямых callers; загрузка и binder не доказывают активный видимый black pass.",
+        "REA typed callers=[] и incoming references=[] для этой DLL. Это ограниченный статический результат; BlackWhite использует другую формулу.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-blackwhite/002-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10087860",
+      "proposed_name": "Water_SuppressOriginalEntityRendering",
+      "subsystem": "graphics",
+      "summary_ru": "При разрешённой custom water меняет render fields найденных water entities.",
+      "confidence": "high",
+      "details_ru": [
+        "int(cg_water)==0 очищает enabled+9; иначе при enabled обходит0..1023 и skin/contents==-3.",
+        "Записывает три набора fields: offsets44/198/2ec=0x80,54/1a8/2fc=0,50/1a4/2f8=5. Точная структура требует клиентского ABI.",
+        "Сканирует1024 entities, skin==-3; в трёх копиях state пишет effects128, renderamt0, rendermode5. При cg_water==0 выключает внутренний флаг. Порт предпочтительно фильтрует draw без постоянной мутации сетевых state."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-first/003-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10093d10",
+      "proposed_name": "HUD_DrawTransparentTriangles",
+      "subsystem": "graphics",
+      "summary_ru": "Среди transparent passes вызывает water save/draw/restore при render guard0 и cg_water!=0.",
+      "confidence": "high",
+      "details_ru": [
+        "DAT10556b48==0; проверка float cg_water, затем10086cb0→10086d10→10086c40.",
+        "Profile и GL_NV_texture_shader в этом callback не выбираются. Значение0.5 проходит outer check, но отключает water в int-based init.",
+        "Сначала применяет GL/TriangleAPI fog. При DAT_10556b48==0 обновляет time delta с clamp0..0.5 и промежуточные effects, затем при r_weather запускает expire/update/drop-draw/impact-draw. При cg_water выполняет save-bindings,compose,restore-bindings. Поэтому вода входит после weather в этот callback."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-first/004-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10093cf0",
+      "proposed_name": "HUD_DrawNormalTriangles",
+      "subsystem": "graphics",
+      "summary_ru": "Маршрутизирует normal triangle callback и предварительную обработку water entities.",
+      "confidence": "high",
+      "details_ru": [
+        "При DAT10556b48==0 вызывает1005ff50 затем10087860; иначе1008c7e0. Название глобального guard не доказано.",
+        "При DAT_10556b48==0 вызывает1005ff50 и подавление Cg-water10087860; иначе1008c7e0. Название режима у этого флага не установлено."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-second/009-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1008a280",
+      "proposed_name": "String_ContainsCaseInsensitiveAdvancingScan",
+      "subsystem": "graphics",
+      "summary_ru": "Проверяет подстроку без учёта регистра, без проверки границ extension tokens.",
+      "confidence": "high",
+      "details_ru": [
+        "Оба входа обходятся до NUL без null guards; сравнение символов через _tolower.",
+        "Внешний индекс i<strlen(haystack)-1; partial match продвигает тот же индекс без отката при несовпадении, поэтому это не полный эквивалент strcasestr и возможен пропуск перекрывающихся начал.",
+        "Результат значим в младшем байте:0/1, верхние биты не нормализуются; water caller читает char.",
+        "В water init применяется к GL_NV_texture_shader и определяет только LUT upload format."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-state/006-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10086520",
+      "proposed_name": "Cg_FindProgramByCaseInsensitiveName",
+      "subsystem": "graphics",
+      "summary_ru": "Ищет Cg program record в списке по имени без учёта регистра.",
+      "confidence": "high",
+      "details_ru": [
+        "Начало списка manager+0xc; сравнение __stricmp(requestedName,recordName), переход по record+0x28, возврат найденной записи или null.",
+        "Type и profile не входят в ключ. Cache hit не подтверждает совместимость с новым type/profile."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-state/007-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1010d34b",
+      "proposed_name": "String_DuplicateWithCheckedCopy",
+      "subsystem": "graphics",
+      "summary_ru": "Дублирует NUL-terminated строку через allocation len+1 и strcpy_s.",
+      "confidence": "high",
+      "details_ru": [
+        "Null input возвращает null; allocation через100f7bff размером strlen+1, null allocation также возвращает null.",
+        "strcpy_s failure вызывает __invoke_watson; успех возвращает выделенную копию. Преобразования регистра или токенизации нет.",
+        "Water init передаёт копию GL_EXTENSIONS в1008a280 без null check; освобождения копии в сохранённом теле init не видно. Runtime memory usage не измерялся."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-surface-flags/002-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md"
+      ]
+    }
+  ],
+  "unresolved": [],
+  "runtime_limits_ru": [
+    "Возвращаемые Cg profiles на конкретных драйверах не измерены.",
+    "Равенство modern/fp20 пикселей не доказано; исходные формулы различаются.",
+    "Автоматический modern→fp20 retry в прочитанных телах отсутствует."
+  ],
+  "external_unknowns": [
+    {
+      "symbol": "cgGLGetLatestProfile",
+      "question_ru": "Алгоритм выбора профиля внутри Cg/драйвера, фактические результаты на GPU; клиентский caller этого не раскрывает."
+    }
+  ]
+}

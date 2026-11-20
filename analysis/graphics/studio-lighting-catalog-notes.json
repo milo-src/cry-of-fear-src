@@ -1,0 +1,162 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10068d70",
+      "proposed_name": "Studio_ComputeNormalRgbAndUpdateAttachments",
+      "subsystem": "graphics",
+      "summary_ru": "Вычисляет RGB нормали из ambient/directional и до4 per-bone lights, нормирует по максимальному каналу и выполняет отложенные side effects attachment entity.",
+      "confidence": "high",
+      "details_ru": [
+        "При flags&STUDIO_NF_FLATSHADE(1):color=A+.8D, без dynamic lights и без base negative clamp. Иначе L=max(1,gl_lambert), q=(min(dot(mainBoneDir,N),1)+L-1)/L; color=max(0,A+D-max(q,0)*D).",
+        "Dynamic:для каждого light добавляет max(0,-dot(preparedVector[light][bone],N))*preparedColor. Вектор уже содержит radial/cone attenuation; повторно его применять нельзя. Финальный color/=maxChannel только если maxChannel>1; это не RGB saturate по отдельным каналам.",
+        "gl_lambert default2 доказан строкой10142318. Нет дополнительной gamma, multiply2, нормализации нормали/вектора или negative clamp после dynamic addition.",
+        "После записи12байт RGB при flags/globals105458bc,1018d1dc,10545860 временно подменяет current entity, вызывает virtual+0x1c и StudioClientEvents10545830, копирует attachment-like поля+0xb60..0xb8c, обновляет globals10550318/30, сбрасывает pending flag и восстанавливает entity. Полный контракт virtual target и времени жизни ещё требует разбора.",
+        "10065ef0 вызывает по normal/bone/material flags только при texture header и effect!=60. Это замыкает preparation100678d0 ->composition10068d70; остальные material passes отдельны.",
+        "Engine studio API base105457b0 +0x80 identifies10545830 as StudioClientEvents; virtual+0x1c candidate target1008bd20 still needs its own body/lifetime analysis."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-normal-lighting/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-math-abi/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-math-abi/006-read_bytes.json",
+        "decompiled/client/captures/graphics-lighting-entry/000-pseudocode.c",
+        "external/hlsdk-portable/engine/studio.h",
+        "analysis/graphics/studio-lighting-contract.md",
+        "decompiled/client/captures/graphics-studio-light-selection/000-pseudocode.c",
+        "external/hlsdk-portable/common/r_studioint.h"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10065890",
+      "proposed_name": "Studio_RecursiveSampleBspLightTriplet",
+      "subsystem": "graphics",
+      "summary_ru": "Near-first BSP ray traversal выбирает первый luxel и декодирует style0 либо разделённые61/62/63 в ambient RGB, directional RGB и world direction.",
+      "confidence": "high",
+      "details_ru": [
+        "Отрицательный contents возвращает0; node plane split, near recursion -> node surfaces ->far. Surface flags&0x24 исключаются, требуются texinfo bounds и samples+0x54; sample RGB выбирается integer(S/T)>>4 без bilinear.",
+        "До4 styles,255 terminator.0=ordinary,61=ambient B,62=directional C,63=direction Q; остальные игнорируются. Decode3 helper100690a0 подтверждён: каждый byte/255.",
+        "Direction=(2Q.x-1)*normalize(S)+(2Q.y-1)*normalize(T)+(2Q.z-1)*planeNormal, с PLANEBACK инверсией normal; финальной нормализации нет.",
+        "Без61:A=.5*Gamma(ordinary), D/direction остаются нулевыми из wrapper. При61:ref=2*(B+C*q.z), gain=ref!=0?Gamma(ref)/ref:0 по каналам, A=B*gain,D=C*gain.",
+        "Полный triplet явно не проверяется: missing63 не имеет доказанного безопасного fallback. Producer surface flags проверяет triplet отдельно; sampler его flags не читает."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-light-selection/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-draw-routing/007-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-lighting/000-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005bd90",
+      "proposed_name": "Studio_CollectVisibleDynamicLightsInPoolOrder",
+      "subsystem": "graphics",
+      "summary_ru": "Обходит32 lights в порядке pool, фильтрует expiration/radius, origin distance, spotlight frustum и visibility trace; special entity keys-666/-665 обходят spatial checks.",
+      "confidence": "high",
+      "details_ru": [
+        "Pool base104cc550, stride0x7c. now<=light+0x1c и radius+0xc!=0 обязательны даже для forced keys. Ближайшие/ярчайшие не сортируются.",
+        "Обычный путь: squared distance entity origin-light origin<=R²; spot AABB reject через10084e40/10084b30; event trace hull2, flags8, ignore-1 от entity origin к light origin; result+4==0 и fraction+0x10>=1.",
+        "При param11!=0 и key-666/-665 сразу append послеalive/radius, без radius/frustum/trace. Не перемещает forced lights в начало.100678d0 потребляет первые максимум4.",
+        "Assembly1005bfe0 MOV EAX,EDI подтверждает возврат integer count; void declaration ошибочно."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-light-selection/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-draw-routing/010-procedure_assembly.json",
+        "decompiled/client/captures/menu-sky-functions/001-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10065710",
+      "proposed_name": "Studio_SampleWorldLightAtPosition",
+      "subsystem": "graphics",
+      "summary_ru": "Обнуляет9 float освещения, трассирует BSP на256 единиц по вертикали и применяет fallback от отсутствующих lightdata или skycolor.",
+      "confidence": "high",
+      "details_ru": [
+        "Без world lightdata A=.5,D=0,direction=0. С lightdata вызывает10065890: вниз256 при flag==0, вверх256 иначе; caller передаёт entity+0x2ec &0x10.",
+        "Если BSP helper возвращает0, A=D=.25*Gamma(sv_skycolor/255), direction=(0,0,1). Три вектора подряд в output; точная BSP выборка вынесена10065890."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-lighting/000-pseudocode.c",
+        "decompiled/client/captures/menu-sky-functions/001-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100690f0",
+      "proposed_name": "Studio_RotateDirectionByBoneTranspose",
+      "subsystem": "graphics",
+      "summary_ru": "Умножает vec3 на транспонированный rotation block матрицы3x4 без translation и без нормализации.",
+      "confidence": "high",
+      "details_ru": [
+        "out=(M0*x+M4*y+M8*z, M1*x+M5*y+M9*z, M2*x+M6*y+M10*z). Для orthonormal matrix это inverse rotation, но не общий inverse.",
+        "В100678d0 применяется к main direction и нормализованному light-to-bone вектору, после чего dynamic vector масштабируется attenuation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-lighting/002-pseudocode.c",
+        "decompiled/client/captures/menu-sky-functions/001-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10065210",
+      "proposed_name": "Studio_PointDistance",
+      "subsystem": "graphics",
+      "summary_ru": "Returns Euclidean distance between two 3D points through vector-length helper10094510; the decompiled void return is inaccurate.",
+      "confidence": "high",
+      "details_ru": [
+        "Forms secondPoint-firstPoint, then10094510 returns float sqrt(x*x+y*y+z*z).100678d0 consumes the floating result for near-view brightness effects."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-lighting/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-draw-routing/008-pseudocode.c",
+        "decompiled/client/captures/menu-sky-functions/001-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10068c80",
+      "proposed_name": "Studio_SelectEmbeddedOrExternalTextureHeader",
+      "subsystem": "graphics",
+      "summary_ru": "Выбирает texture header: текущий studiohdr при встроенных текстурах, иначе загружает внешний NAMET.mdl и сохраняет header в context+0x40b0.",
+      "confidence": "high",
+      "details_ru": [
+        "Встроенный путь требует ненулевых header+0xb4 и+0xb8. Внешний путь использует callbacks105457bc/105457c0, ошибки Mod_ForName/Mod_Extradata обнуляют output.",
+        "Это выбор текстур модели, а не consumer/compositor освещения; не выводить shader формулы из его расположения в draw chain."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-lighting/003-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100678d0",
+      "proposed_name": "Studio_PrepareModelAndBoneLighting",
+      "subsystem": "graphics",
+      "summary_ru": "Сэмплирует освещение в центре bounds модели, применяет model/renderfx overrides, готовит основное направление и до четырёх динамических lights для каждой кости.",
+      "confidence": "high",
+      "details_ru": [
+        "Контекст ECX: entity+0x30, model+0x34, studiohdr+0x44, bone matrices+0x40a8. Основное направление пишется104dff18+bone*12; dynamic vectors104de718+(light*128+bone)*12; light RGB104e0518+light*12.",
+        "Dynamic radial=max(0,1-distanceSquared/radiusSquared), кодируется длиной преобразованного нормализованного light-to-bone вектора. RGB отдельно:0.5*100595f0(color). Первые максимум4 кандидата1005bd90 расходуют слот даже при нулевом вкладе всех костей.",
+        "Spotlight при непустом light+0x3c: множитель(dot-threshold)/(1-threshold), либо ноль вне конуса. Threshold=cos((angleX+angleY)*0.3*pi/180);100f8160 принимает/возвращает double через XMM0, fallback10119a6f содержит FCOS.",
+        "Special models сохраняют знак основного направления и пропускают dynamic lights; обычные инвертируют его. Effect60 возвращается до сброса счётчика. Полная таблица model/effect brightness overrides в studio-lighting-contract.md.",
+        "Actual consumer10068d70 восстановлен отдельно: normal RGB composition, flatshade bypass dynamic, peak normalization.10068c80 является выбором texture header; он не вычисляет свет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/menu-sky-functions/001-pseudocode.c",
+        "decompiled/client/captures/graphics-lightmap-formulas/000-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md",
+        "decompiled/client/captures/graphics-studio-draw-routing/009-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-mesh-materials/007-procedure_assembly.json",
+        "analysis/graphics/client-renderer.md"
+      ]
+    }
+  ]
+}

@@ -35,7 +35,10 @@ Use a new output directory for every capture; existing evidence is never replace
 The helper creates a **private REA MCP subprocess**, sets provider paths in that
 process environment only, inventories the required tool schemas, opens the DLL,
 and queries each selector against the same Ghidra import. It exports a canonical
-`evidence.json`, closes the owned session, and verifies the original file hash.
+`evidence.json`, closes the owned session, then calls `reset_investigation` with
+`final-evidence.json` as a checkpoint before stopping its private process.
+`reset.json` records cleared evidence and confirms no retained target. It also
+verifies the original file hash. Cleanup failures are reported as failures.
 The live Codex REA server is unaffected. First analysis took about one minute for
 this `hl.dll`; subsequent queries in the same session took under 100 ms in the
 initial verification. Those timings are individual observations.

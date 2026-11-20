@@ -1,0 +1,97 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10065050",
+      "proposed_name": "Studio_ComputeCachedChromeTexcoords",
+      "subsystem": "graphics",
+      "confidence": "high",
+      "summary_ru": "Вычисляет chrome UV по нормали кости и двум кешированным направлениям; не отражает сцену.",
+      "details_ru": [
+        "Кеш per bone сверяется с model counter через S+0x4098. v=normalize(bonePosition-entityOrigin), a=normalize(cross(v,viewRight)), b=normalize(cross(v,a)); оба направления преобразуются transpose bone rotation.",
+        "s=int((dot(b,normal)+1)*32), t=int((dot(a,normal)+1)*32), без clamp. Caller делит на ширину/высоту текстуры. Нулевые нормализуемые векторы сохраняются; позиции камеры вместо entityOrigin в теле нет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-normal-lighting/001-pseudocode.c",
+        "analysis/graphics/studio-chrome-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10094770",
+      "proposed_name": "Vector_MultiplyAdd",
+      "subsystem": "graphics",
+      "confidence": "high",
+      "summary_ru": "Записывает трёхкомпонентный результат A+scale*B; используется для смешивания studio lighting.",
+      "details_ru": [
+        "Аргументы: A, float scale, B, out; три явных умножения и сложения. Это не нормализация и не покомпонентный clamp."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-math-abi/000-pseudocode.c",
+        "analysis/graphics/studio-chrome-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10091130",
+      "proposed_name": "Vector_CrossProduct",
+      "subsystem": "graphics",
+      "confidence": "high",
+      "summary_ru": "Векторное произведение A×B, используемое для базиса chrome.",
+      "details_ru": [
+        "out=(Ay*Bz-Az*By,Az*Bx-Ax*Bz,Ax*By-Ay*Bx). Нормализации и обработки вырожденного базиса внутри нет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-math-abi/001-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10094880",
+      "proposed_name": "Vector_Scale",
+      "subsystem": "graphics",
+      "confidence": "high",
+      "summary_ru": "Умножает три компоненты входного вектора на скаляр.",
+      "details_ru": [
+        "Аргументы: input, float scale, output; используется для ослабленных bone light directions и отрицания entity origin в chrome."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-math-abi/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100f8160",
+      "proposed_name": "Math_CosineSSE2",
+      "subsystem": "graphics",
+      "confidence": "high",
+      "summary_ru": "Вычисляет cosine для spotlight threshold; double передаётся и возвращается через XMM0.",
+      "details_ru": [
+        "Assembly показывает SIMD range reduction/table polynomial и fallback10119a6f со stack double→x87 result→XMM0. Fallback явно использует FCOS.",
+        "Псевдо-C ошибочно трактует EAX/table address как результат. Не переносить такую сигнатуру. Полное побитовое совпадение rounding/error paths не проверено."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-light-selection/002-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-draw-routing/009-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-mesh-materials/007-procedure_assembly.json",
+        "analysis/graphics/studio-chrome-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10119a6f",
+      "proposed_name": "Math_CosineX87Fallback",
+      "subsystem": "graphics",
+      "confidence": "high",
+      "summary_ru": "Fallback cosine через FCOS, reduction и общие CRT error helpers.",
+      "details_ru": [
+        "Семантика подтверждена FCOS и переходом из100f8160; объявленный Ghidra uint return не описывает x87 ST0. Все CRT exceptional cases отдельно не восстановлены."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/005-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-mesh-materials/007-procedure_assembly.json",
+        "analysis/graphics/studio-chrome-contract.md"
+      ]
+    }
+  ]
+}

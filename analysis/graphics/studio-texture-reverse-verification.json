@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-20",
+  "scope": "Static studio texture replacement/cache/TGA/mip/capture and lightmap gamma/upload reverse engineering",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "runtime_or_visual_validation": false,
+  "renderer_implementation_changed": false,
+  "original_resources_changed": false,
+  "captures": [
+    {
+      "path": "decompiled/client/captures/graphics-studio-texture-replacements",
+      "successful_queries": 17,
+      "failed_queries": 0,
+      "cleanup_reset": true
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-texture-lifecycle",
+      "successful_queries": 23,
+      "failed_queries": 0,
+      "cleanup_reset": true
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-texture-loader",
+      "successful_queries": 14,
+      "failed_queries": 0,
+      "cleanup_reset": true
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-texture-final",
+      "successful_queries": 5,
+      "failed_queries": 1,
+      "cleanup_reset": true
+    }
+  ],
+  "failed_queries": [
+    {
+      "capture": "decompiled/client/captures/graphics-studio-texture-final",
+      "file": "002-procedure_pseudo_code.json",
+      "sha256": "0c51550ec5ac5063826bfdfbe30e7f09270a5cd4cf119cfe9ba4df6a12e09f80",
+      "query": {
+        "name": "procedure_pseudo_code",
+        "arguments": {
+          "procedure": "ram:0x1003a170",
+          "detail": "complete"
+        }
+      },
+      "reason": "Provider could not resolve procedure; not accepted as function evidence"
+    }
+  ],
+  "checks": {
+    "new_C_files": 25,
+    "retained_REA_records": 59,
+    "capture_file_hash_checks": 85,
+    "original_DLL_hash_unchanged": true,
+    "replacement_resource_hashes_unchanged": 35,
+    "unique_review_updates": 35,
+    "newly_reviewed": 24,
+    "existing_reviews_updated": 11,
+    "unrelated_existing_reviews_preserved": 753,
+    "evidence_paths_exist": true,
+    "git_diff_check": "passed; LF/CRLF notices only",
+    "private_session_reset_verified": true
+  },
+  "catalog": {
+    "path": "decompiled/FUNCTION_CATALOG.txt",
+    "files": 8659,
+    "entries": 8548,
+    "reviewed": 788,
+    "selector_mismatches": 146,
+    "unconfirmed_entries": 11,
+    "workboard_updated": true
+  },
+  "remaining": [
+    "Containing function of direct writer1003a170 not resolved by provider; no function card invented",
+    "Custom message wrapper-to-reader identity and indexed/bulk cache reset coverage",
+    "Complete framebuffer scheduling, screen-info writers and GL dispatch initialization",
+    "CRT exceptional floating-point details and bit-exact equivalence",
+    "Native renderer port integration and original-game/readback comparison"
+  ],
+  "artifact_sha256": {
+    "analysis/graphics/studio-texture-replacement-notes.json": "9ac26961fb61b15ddd0f2411c0585f9a68cf63bf26fa820d3339f9fcf5e346b4",
+    "analysis/graphics/studio-texture-loader-notes.json": "dccb3ee9456a496323921df11f2072317cf54f202ea7933f4b32eacaa4742371",
+    "analysis/graphics/studio-texture-lifecycle-catalog-notes.json": "0c18a46243980c5d063d5dba92237878ac8a4d7fb524ca49b335e0e8d88915f8",
+    "analysis/graphics/lightmap-gamma-catalog-notes.json": "599d271a0159dc18f3d8b892f66931eb84c86efe992d81e95c953b64a26ba5ff",
+    "analysis/graphics/studio-material-catalog-notes.json": "5dc2ca648c5aec9c1c6909fbad2c61af904e8653fdb67a49893872df53bbc73d",
+    "decompiled/FUNCTION_CATALOG.txt": "b3f5cd0002e5c7543569658df38a75eeae0d5efd3c8fadd8f2e2af49f672d761",
+    "tools/rea_ghidra.py": "d114ebfd4792cd94b450e8120303885111185cf691f3412965da187726c9d007",
+    "analysis/native-toolchain.md": "2aa38d42a5a4d369abff7e7e1fb91b67fa5898d0f166edca5367ba9ab2fb0351",
+    "analysis/graphics/studio-texture-replacements.md": "f51ac8a62c4a0af5029872916fba02824d4231484a3f9e812841b3a1a6a37bf5",
+    "analysis/graphics/studio-texture-loader-contract.md": "a957bdd47eec82134064b61e69bd4e53b16504e5e34c19cc6c62e51b0541fa14",
+    "analysis/graphics/studio-texture-lifecycle-audit.md": "2cd2bc96b993e8b189ee04aadac9f8069365344d05c4b45ba2facfbd1f7aadd5",
+    "analysis/graphics/studio-replacement-resource-inventory.json": "bda3039eb69cd1150e23ff2648deeea693be82199951f484975bbacaac555e17",
+    "analysis/graphics/lightmap-gamma-contract.md": "69f06845039660669c9465535385c8d50893573216c1e1430b6d49ef523cfc7d",
+    "analysis/graphics/studio-lighting-contract.md": "e218442d1b921c14c7bde2478285db5988d5740b2ca213c7658cfcea0dd9e4c7",
+    "analysis/graphics/studio-material-contract.md": "6e0729ae1f0ccc54ae8060e653871649d3d6a083e025f9019cc13cffc0f6102a"
+  }
+}

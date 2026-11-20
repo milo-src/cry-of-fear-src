@@ -1,0 +1,131 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1006e510",
+      "proposed_name": "MsgFunc_Blur_ForwardToHUD",
+      "subsystem": "graphics",
+      "summary_ru": "Обработчик сетевого Blur: передаёт сообщение методу HUD 1006fa20 с объектом1018a0c0.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-routing/000-pseudocode.c",
+        "analysis/graphics/blur-triggers.md"
+      ],
+      "details_ru": []
+    },
+    {
+      "module": "client",
+      "address": "0x1006fa20",
+      "proposed_name": "CHud_MsgFunc_Blur",
+      "subsystem": "graphics",
+      "summary_ru": "Читает один BYTE и сохраняет постоянное состояние размытия в HUD+31b0 (1018d270).",
+      "confidence": "high",
+      "details_ru": [
+        "BEGIN_READ(param4,param3); READ_BYTE; запись DWORD; return1. Длительность и интенсивность в этом сообщении отсутствуют.",
+        "При нормальном сообщении 0 отключает этот источник, любой ненулевой byte включает; общий renderer также учитывает waterlevel и Damage timer."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-state/000-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-material-state/001-analyze_function.json",
+        "analysis/graphics/blur-triggers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10071df0",
+      "proposed_name": "HUD_DrawNativeScreenBlur",
+      "subsystem": "graphics",
+      "summary_ru": "Native radial blur с тремя игровыми причинами: server Blur, полное погружение и Damage deadline.",
+      "confidence": "high",
+      "details_ru": [
+        "2026-11-20: DAT1018d270 = HUD+31b0 = полученный byte Blur; DAT1054506c = integer waterlevel (не счётчик); HUD+328 = абсолютный срок повреждения.",
+        "gl_screenblur AND (gl_blurtest OR serverBlur OR waterlevel>2 OR clientTime<damageUntil) AND frameDelta!=0 AND validcapture. Delta не масштабирует силу эффекта.",
+        "Подробности источников, времени и ограничений reset: analysis/graphics/blur-triggers.md. Это статический контракт, не готовый интегрированный проход.",
+        "Требует gl_screenblur и gl_blurtest/native flags/deadline; opacity 0.5, steps 32/24 масштабируются от 640x480. Смысл трёх игровых условий ещё не установлен.",
+        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md.",
+        "Framebuffer capture и expanding centered quads; opacity0.5, steps32/24 масштабируются по640x480. См. shader-pass-contracts.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-triggers/002-analyze_function.json",
+        "analysis/graphics/blur-triggers.md",
+        "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006bf10",
+      "proposed_name": "CHudHealth_MsgFunc_Damage_COF",
+      "subsystem": "health",
+      "summary_ru": "Парсит Damage и запускает 150мс native blur по дополнительному последнему BYTE.",
+      "confidence": "high",
+      "details_ru": [
+        "1018a3e8 разрешён как HUDbase1018a0c0+328, потребитель10071df0. Nonzero extra задаёт now+.15; повторный message перезапускает срок, zeroextra не очищает старый срок. Не зависит от положительности первых двух bytes.",
+        "Поиск абсолютных xrefs видит WRITE1006bf7e, но пропускает объектный renderer READ[ESI+328]; отсутствие directref не доказывает отсутствия доступа.",
+        "BYTE,BYTE,LONG bits,3READ_COORD,BYTE extra.1006c130(time,bits);extra!=0→1018a3e8=now+.15;любой из первых bytes>0→1006ba00(source). Первые bytes предположительно armor/blood по SDK, порядок семантически не доказан. HP здесь не вычитается."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-message/001-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-message/002-analyze_function.json",
+        "analysis/graphics/blur-triggers.md",
+        "decompiled/client/captures/movement-client-pass2/005-pseudocode.c",
+        "analysis/movement/client.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100714b0",
+      "proposed_name": "CHud_MsgFunc_ResetHUD",
+      "subsystem": "graphics",
+      "summary_ru": "Вызывает Reset callbacks HUD-элементов и сбрасывает ряд HUD/камерных полей; специальные настройки stress-test карты.",
+      "confidence": "high",
+      "details_ru": [
+        "Обход списка HUD с vcall+14; записи просмотрены по полному телу. Прямого сброса HUD+328 и+31b0 нет; побочные эффекты всех виртуальных callbacks этим разбором не доказаны.",
+        "maps/video_stress_test.bsp принудительно задаёт r_weather,cg_water,gl_bump,gl_dynlight=0.",
+        "Вызывает reset каждого HUD-element, очищает многочисленные поля и fog start/end, выставляет временные метки; очищает6 descriptor-строк и картинки инвентаря. На maps/video_stress_test.bsp выключает r_weather,cg_water,gl_bump,gl_dynlight."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-state/002-pseudocode.c",
+        "analysis/graphics/blur-triggers.md",
+        "decompiled/client/captures/graphics-client-first/006-pseudocode.c",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fe00",
+      "proposed_name": "CHud_MsgFunc_InitHUD",
+      "subsystem": "graphics",
+      "summary_ru": "Инициализирует клиентское HUD-состояние и запускает инициализацию Cg/воды в аппаратном режиме.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает HUD callbacks через vtable+18. Прямого сброса blurfields+328/+31b0 в теле нет; callbacks отдельно не исчерпаны.",
+        "После10089830(mode==1) выполняет10089840,1008a210,10086640,10086670,10086890. ПроверкаAPI-mode не равна доказательству успешного Cg context."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-state/003-pseudocode.c",
+        "analysis/graphics/blur-triggers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006cf00",
+      "proposed_name": "CHud_InitSubsystemsAndMessages",
+      "subsystem": "hud",
+      "summary_ru": "Инициализация HUD, графических подсистем и регистрация сетевых обработчиков.",
+      "confidence": "high",
+      "details_ru": [
+        "Blur lifecycle: initial init обнуляет wordindex0xca (damage deadline+328) и0xc6c (serverblur+31b0). Hook строки1014e944='Blur' указывает1006e510. Это отдельный путь от сообщений ResetHUD/InitHUD.",
+        "Сбрасывает состояние, вызывает renderer/post/weather и VGUI init-функции; регистрирует ResetHUD/SetFog/SetSky/Inventory/FlashFlags/BlackWhite и десятки других messages через DAT_101b2650, commands через DAT_101b264c. Регистрирует hud_draw, hud_takesshots, brightvalue, skybrightcolour*, fmod_volume. Освобождает старый связный HUD-list, вызывает виртуальные Init элементов; музыка инициализируется только без -nomusic. Это не описание полного поведения всех зарегистрированных обработчиков."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-material-routing/006-read_bytes.json",
+        "analysis/graphics/blur-triggers.md",
+        "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+        "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+        "analysis/ui/hud.md"
+      ]
+    }
+  ]
+}

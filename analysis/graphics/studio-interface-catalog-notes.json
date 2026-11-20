@@ -1,0 +1,201 @@
+{
+  "scope": "Static client captures; original x86 ABI. No runtime or pixel-parity verification.",
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10053820",
+      "proposed_name": "HUD_GetStudioModelInterface",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает studio interface version1 и копирует43engine-studio callbacks.",
+      "confidence": "high",
+      "details_ru": [
+        "Версия!=1→return0. Returned table1018f830; PE words{1,10053750,10053730} определяют DrawModel/DrawPlayer wrappers.",
+        "Copy0x2b dwords→105457b0, затем10053810 иreturn1. SDK studio ABI slots22/23/24→cells10545808/0c/10:DynamicLight/EntityLight/SetupLighting."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-light-selection/000-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md",
+        "analysis/graphics/studio-interface-pe.json",
+        "external/hlsdk-portable/common/r_studioint.h"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053810",
+      "proposed_name": "Studio_InitWrapper",
+      "subsystem": "graphics",
+      "summary_ru": "Пересылает инициализацию studio renderer в1008bb70.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственный callee1008bb70; новое телоcallee получаетcvars,chrome sprite иматрицы engine studio API. Самwrapper не раскрываетECX."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/000-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md",
+        "decompiled/client/captures/graphics-studio-mesh-materials/004-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053750",
+      "proposed_name": "Studio_InterfaceDrawModel",
+      "subsystem": "graphics",
+      "summary_ru": "DrawModel callback returned interface; подготавливает world state для некоторых entities и вызывает1008cee0.",
+      "confidence": "high",
+      "details_ru": [
+        "GetCurrentEntity105457c8 сравнивается с GetViewEntity105457d4; при различии и entity effect!=0xa1 вызывает1005ff50.",
+        "Затем1008cee0(flags). Assembly10053781 явно MOV ECX,0x101ba540 перед CALL1008cee0: renderer instance доказан. Current entity null check вwrapper не виден.",
+        "Read_bytes исходногообраза101ba540=00000000: это неготовыйvtable pointer. Constructor assignment иruntime initialization отдельно незафиксированы; wrapper ECX приэтом доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/001-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md",
+        "decompiled/client/captures/graphics-studio-mesh-materials/006-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-math-abi/003-read_bytes.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053730",
+      "proposed_name": "Studio_InterfaceDrawPlayer",
+      "subsystem": "graphics",
+      "summary_ru": "DrawPlayer callback returned interface: world preparation и player renderer.",
+      "confidence": "high",
+      "details_ru": [
+        "Всегда1005ff50, затем1008dad0(flags,playerState). Полная player draw semantics внутриcallee не разобрана здесь."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/002-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001d5a0",
+      "proposed_name": "Initialize",
+      "subsystem": "runtime",
+      "summary_ru": "Копирует101engine API pointers в101b2608 и проверяет version7.",
+      "confidence": "high",
+      "details_ru": [
+        "Первая копия0x65dwords выполняется ДО проверки версии; неверная версия возвращает0 после этой записи.",
+        "При version7 копирует таблицу повторно, вызываетthunk1006c390 иreturn1.",
+        "SDK cl_enginefuncs slot52/offset0xd0 + base101b2608 строго доказывает DAT101b26d8=GetViewModel; соседний slot51=GetLocalPlayer,53=GetEntityByIndex."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/003-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md",
+        "external/hlsdk-portable/engine/cdll_int.h"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1008f0b0",
+      "proposed_name": "Studio_RenderModelWithChromeOverlay",
+      "subsystem": "graphics",
+      "summary_ru": "Устанавливает chrome origin и forced flags; effect19 рисует дополнительный forced-chrome проход.",
+      "confidence": "high",
+      "details_ru": [
+        "SetChromeOrigin1054584c и SetForceFaceFlags10545838(0), далееvirtual+4c.",
+        "Effect0x13: временноeffect0→первыйпроход; flags2, triangleAPI SpriteTexture(this[0x16],0), restoreeffect19→второйпроход. Software mode временноrendermode5.",
+        "Это routing chrome overlay, не доказательство custom chrome UV формулы."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/004-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1008edd0",
+      "proposed_name": "Studio_RenderFinalBackendDispatch",
+      "subsystem": "graphics",
+      "summary_ru": "Выбирает hardware или software virtual render callback по IsHardware.",
+      "confidence": "high",
+      "details_ru": [
+        "DAT10545850()!=0→vtable+54; ==0→+50. Проверяется ненулевое значение, а не строгоmode1.",
+        "Статические таблицы имеют +54=1008edf0,+50=1008efe0; втораятаблица101515ec подтверждена прямымread_bytes. Присваиваниеvtable активномуinstance ещёнепоказаноconstructor evidence."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/005-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md",
+        "analysis/graphics/studio-interface-pe.json",
+        "external/hlsdk-portable/common/r_studioint.h",
+        "decompiled/client/captures/graphics-studio-math-abi/004-read_bytes.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1008edf0",
+      "proposed_name": "Studio_RenderFinalHardware",
+      "subsystem": "graphics",
+      "summary_ru": "Выполняет setup/bodypart/draw/restore через custom или engine путь, включая debug geometry.",
+      "confidence": "high",
+      "details_ru": [
+        "GetForceFaceFlags!=0 выбираетrendermode5, иначеentity+2f8.",
+        "gl_renderer&&gl_modelrenderer:100687d0(mode), накаждыйbodypart10068770(index) и10065ef0(), затем10067850.",
+        "Engine counterparts:SetupRenderer10545844,StudioSetupModel10545800,StudioDrawPoints10545814,RestoreRenderer10545848. GL_SetRenderMode10545858 вызываетсяпередdraw.",
+        "Bodyparts count header+cc. Init1008bb70 подтверждает this+2c=r_drawentities:2bones,3hulls,4дополнительныйhull overlay,5absbbox.",
+        "Подробностиcustomhelpers теперьустановленывstudio-material-contract.md; normal lighting10068d70 иchrome10065050 имеютотдельныеконтракты. Routing-карточка неутверждаетpixel parity."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/006-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md",
+        "decompiled/client/captures/graphics-studio-mesh-materials/004-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "analysis/graphics/studio-lighting-contract.md",
+        "analysis/graphics/studio-chrome-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100690a0",
+      "proposed_name": "Studio_ByteRgbToFloat",
+      "subsystem": "graphics",
+      "summary_ru": "Преобразует три unsigned byte RGB вfloat диапазона0..1.",
+      "confidence": "high",
+      "details_ru": [
+        "out[i]=in[i]/255.0 дляi0..2. Gamma/clamp/alpha в теле отсутствуют."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/007-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10094510",
+      "proposed_name": "Vector_Length",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает длину трёхкомпонентного float-вектора.",
+      "confidence": "high",
+      "details_ru": [
+        "sqrt(x²+y²+z²) сfloat-round передfloat10return; веткаnegative operand вызываетlibm precise sqrt.",
+        "Подтверждаетfloat-result helper10065210(second-first), несмотрянаегоошибочнуюvoidдекларацию."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-draw-routing/008-pseudocode.c",
+        "analysis/graphics/studio-existing-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1008bb70",
+      "proposed_name": "Studio_InitEngineBindings",
+      "subsystem": "graphics",
+      "summary_ru": "Получает cvars, chrome sprite, счётчики и engine matrix pointers для studio renderer.",
+      "confidence": "high",
+      "details_ru": [
+        "GetCvar:cl_himodels→this+24,developer→+28,r_drawentities→+2c. GetChromeSprite→+58;GetModelCounters записывает+4098/+409c.",
+        "StudioGetBoneTransform→+40a8;StudioGetLightTransform→+40ac;StudioGetAliasTransform→+40a4;StudioGetRotationMatrix→+40a0. Значит main custom lighting100678d0 использует bone transforms.",
+        "Сбрасываетglobals10545864/10545868 в-1. Записиvtable в этом init нет; активныйDrawModel instance101ba540 подтверждается отдельно wrapper assembly.",
+        "Read_bytes исходногообраза101ba540=00000000: это неготовыйvtable pointer. Constructor assignment иruntime initialization отдельно незафиксированы; wrapper ECX приэтом доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/004-pseudocode.c",
+        "external/hlsdk-portable/common/r_studioint.h",
+        "analysis/graphics/studio-existing-audit.md",
+        "decompiled/client/captures/graphics-studio-math-abi/003-read_bytes.json"
+      ]
+    }
+  ]
+}

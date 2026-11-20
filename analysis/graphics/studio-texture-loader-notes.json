@@ -1,0 +1,95 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10069630",
+      "proposed_name": "Texture_LoadRgbTgaWithMipMode",
+      "subsystem": "graphics",
+      "summary_ru": "Загружает 24-битный TGA, преобразует BGR в RGB и создаёт либо обновляет GL-текстуру.",
+      "confidence": "high",
+      "details_ru": [
+        "COM_LoadFile mode5; type2/depth24; каждая сторона16..1024 из степеней двойки, не выше GL_MAX_TEXTURE_SIZE, максимум262144 пикселя. Offset18+IDLength; descriptor bit0x20 управляет переворотом строк.",
+        "Mode0: min NEAREST, mag LINEAR. Mode1/2: min LINEAR_MIPMAP_NEAREST; level0 без нормализации. Mode2 нормализует RGB-векторы только после уменьшения каждого mip.",
+        "Assembly подтверждает return EAX=0 при отказе, existingID при успешном обновлении, новый ID при выделении. Нет доказанной проверки полной длины файла или поддержки alpha/RLE; контракт не является безопасным универсальным TGA-декодером.",
+        "Оригинальная ошибка rectangular mip tail описана в studio-texture-loader-contract.md; GL upload ошибки отдельно не проверяются."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/005-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-loader/008-procedure_assembly.json",
+        "analysis/graphics/studio-texture-loader-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10069f50",
+      "proposed_name": "Texture_ReduceRgbMip2x2InPlace",
+      "subsystem": "graphics",
+      "summary_ru": "Усредняет блоки2x2 RGB в начало того же буфера с целочисленным округлением вниз.",
+      "confidence": "high",
+      "details_ru": [
+        "Каждый канал=(a+b+c+d)>>2; входной stride=width*3. Нет gamma correction или alpha.",
+        "Циклы floor(height/2) и floor(width/2); если любая сторона1, записей нет. Caller всё равно уменьшает другую сторону и загружает прежний префикс буфера: важное отличие от правильного одномерного mip filter."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-loader/008-procedure_assembly.json",
+        "analysis/graphics/studio-texture-loader-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006a310",
+      "proposed_name": "Texture_NormalizeRgbMipVectors",
+      "subsystem": "graphics",
+      "summary_ru": "Декодирует RGB как нормали, нормализует вектор и кодирует обратно с масштабом127.",
+      "confidence": "high",
+      "details_ru": [
+        "v=byte/127.0-1;100947c0 нормализует ненулевой вектор; output=byte(int((v+1)*127)). Нулевой вектор превращается в127,127,127.",
+        "Вызывается loader mode2 после уменьшения mip; это не обработка level0. Делитель127, а не127.5/128."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/002-pseudocode.c",
+        "decompiled/client/captures/shader-pass-vector-helpers/000-pseudocode.c",
+        "analysis/graphics/studio-texture-loader-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064c10",
+      "proposed_name": "Studio_CopyFramebufferToViewfinderTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Копирует центральный прямоугольник текущего framebuffer в текстуру cam_vfind.",
+      "confidence": "high for mechanics; dispatch name signature-derived",
+      "details_ru": [
+        "Lazy id104d26e8: резервирует1018fe8c, создаёт256x256 RGB с LINEAR фильтрами и освобождает временный CPU buffer. Готовность104d26e5.",
+        "glCopyTexImage2D signature: RGB level0, x=screenWidth/2-width/2,y=screenHeight/2-height/2. Реальные размеры заменяют initial256x256; отдельного рендера сцены или отражения здесь нет.",
+        "Предыдущее binding сохраняет в общем104d26ec, оставляет destination bound. Post-mesh restore зависит от flag в10065ef0. Полная scheduling/viewport ownership не восстановлена."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/008-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-loader/012-inspect_native_instruction.json",
+        "analysis/graphics/studio-texture-loader-contract.md",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064ac0",
+      "proposed_name": "Studio_CopyFramebufferToRetainedPhotoTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Копирует центральный framebuffer в отдельную текстуру diffusegay по отложенному TakePhoto.",
+      "confidence": "high for mechanics; dispatch name signature-derived",
+      "details_ru": [
+        "Lazy id104d26f0, ready104d26e6; механика RGB allocation и CopyTexImage2D аналогична10064c10. Общий previous binding104d26ec.",
+        "Условие pending104ce4a1 проверяет mesh caller, сам helper его не проверяет. Ветка diffusegay самостоятельно не устанавливает post-mesh restore flag; не обобщать её до симметричного GL push/pop.",
+        "Нет доказанного внешнего direct reset ready104d26e6 в сохранённых references; это не исключает bulk/indexed writes."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/009-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-loader/013-inspect_native_instruction.json",
+        "analysis/graphics/studio-texture-loader-contract.md",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x100595f0",
+      "proposed_name": "Lighting_ApplyCachedGammaContrastBrightness",
+      "subsystem": "graphics",
+      "summary_ru": "Shared scalar transfer G(x)=contrast*pow(x,gamma)+brightness; direct exponent and branch-specific rounding.",
+      "confidence": "high",
+      "details_ru": [
+        "Cached gamma101cc084, brightness101cc088, contrast101cc08c. For gamma==1, x87 computes contrast*x+brightness. Otherwise converts input float and gamma float directly to doubles XMM0/XMM1, calls100ff550, multiplies contrast, adds brightness, explicitly rounds to float and returns through x87 ST0.",
+        "For ordinary positive inputs: contrast*pow(x,gamma)+brightness. Direct exponent, not reciprocal; no input/output clamp. Fallback1010e84d FYL2X then10122e20 F2XM1/FSCALE proves power. Native CRT special values/error policy and optimized SSE bitwise parity remain separate from the formula.",
+        "Defaults gl_gamma=1, gl_contrast=1, gl_brightness=0 proven read bytes; initial cached parameters are zero. Call sites independently apply half, quarter or per-channel ratio scaling."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-lightmap-formulas/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-replacements/011-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-replacements/012-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/009-read_bytes.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/010-read_bytes.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/011-read_bytes.json",
+        "analysis/graphics/lightmap-gamma-contract.md",
+        "decompiled/client/captures/graphics-studio-texture-final/004-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-final/005-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-loader/000-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005a000",
+      "proposed_name": "Lightmap_IsRefreshRequired",
+      "subsystem": "graphics",
+      "summary_ru": "Checks initialized state, cached transfer/bump values and case-insensitive level name.",
+      "confidence": "high",
+      "details_ru": [
+        "If initialized101cbf7c==0: clears104cc464/104cc465 and returns1. Otherwise exact float equality for gamma/brightness/contrast, bool comparison for gl_bump, then stricmp current level name against101cbf80; returns0 only if all match.",
+        "No material/style hash. Negative live gamma repeatedly differs from repaired cached1, forcing subsequent rebuilds; no epsilon comparisons.",
+        "Typed refs101cbf7c show only direct read1005a000 and direct write1005a17c (sets1). Same-name reload via indirect/global reset is not established; no direct reset found."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/000-pseudocode.c",
+        "decompiled/client/captures/graphics-lighting-entry/006-pseudocode.c",
+        "analysis/graphics/lightmap-gamma-contract.md",
+        "decompiled/client/captures/graphics-studio-texture-final/003-inspect_native_instruction.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005a110",
+      "proposed_name": "Lightmap_RebuildCachedColorAtlasesWhenDirty",
+      "subsystem": "graphics",
+      "summary_ru": "Refreshes gamma/brightness/contrast cache and rebuilds ordinary or separated lightmaps.",
+      "confidence": "high",
+      "details_ru": [
+        "Requires world model and initialized GL manager, then1005a000 dirty. Caps live contrast above2 and brightness above0.3; caches them; gamma<0 repairs cached gamma to1 only. Copies level name, caches bump bool, clears3MiB atlasRGB101cc098.",
+        "Ignores surface flags0x14 and atlas>=64. No style61:10059d20; style61 without enabled flag200 bump:10059880 if missing62/63 else10059660; enabled separated surface:10059990. Tracks largest atlas index from-1.",
+        "Initial separated call10059990(surface,61,1) uploads base101cbf70. Extra flags&600 layers call(surface,62,1) ->base101cbf74 then(surface,63,0) ->base101cbf78. Direction bytes bypass gamma and quantization. Same CPU buffer reused without new clear; further layers require at least one eligible surface but not live gl_bump."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-lighting-entry/006-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/003-pseudocode.c",
+        "analysis/graphics/lightmap-gamma-contract.md",
+        "decompiled/client/captures/graphics-studio-texture-final/000-procedure_assembly.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10059fe0",
+      "proposed_name": "Lightmap_CountSurfaceLuxels",
+      "subsystem": "graphics",
+      "summary_ru": "Computes sample count from signed surface extents in16-unit steps.",
+      "confidence": "high",
+      "details_ru": [
+        "Returns ((signedShort(surface+0x1a)>>4)+1)*((signedShort(surface+0x18)>>4)+1). No clamp/validation. Builders accept count<325 and require nonnull samples+0x54."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/001-pseudocode.c",
+        "decompiled/client/captures/graphics-lightmap-formulas/001-pseudocode.c",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005a4f0",
+      "proposed_name": "Lightmap_CopyScratchRgbIntoAtlas",
+      "subsystem": "graphics",
+      "summary_ru": "Copies contiguous scratchRGB into packed128x128 atlas slab at surface light_s/light_t.",
+      "confidence": "high",
+      "details_ru": [
+        "Source104cc098; destination101cc098 +3*(atlas*16384+light_t*128+light_s). Width=(signed extentS>>4)+1, height=(signed extentT>>4)+1; source advances3 per sample, destination row advances384bytes.",
+        "No gamma, filtering, padding or bounds check in helper. Caller/model packing supplies validity. Atlas+0x38, light_s+0x1c, light_t+0x20, extents+0x18/+0x1a."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/002-pseudocode.c",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005a570",
+      "proposed_name": "Lightmap_UploadRgbAtlasRange",
+      "subsystem": "graphics",
+      "summary_ru": "Uploads RGB8-compatible128x128 slabs to consecutive texture names base+atlas.",
+      "confidence": "high",
+      "details_ru": [
+        "For atlas0..maxAtlas101cc094 inclusive: glBindTexture2D(base+atlas), glTexParameterf MIN_FILTER9728=NEAREST and MAG_FILTER9729=LINEAR, glTexImage2D level0 internalComponents3 size128x128 border0 GL_RGB GL_UNSIGNED_BYTE.",
+        "Source101cc098 advances0xc000 per atlas. maxAtlas==-1 does nothing. No mipmaps, sRGB format, wrap change, allocation or gamma transform in helper. Caller limits positive atlas IDs to<64."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/003-pseudocode.c",
+        "decompiled/client/captures/graphics-lighting-entry/006-pseudocode.c",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10059f30",
+      "proposed_name": "Lightmap_PeakNormalizeAndQuantizeRgb",
+      "subsystem": "graphics",
+      "summary_ru": "Scales float RGB by255, peak-normalizes bright colors, clips negatives and truncates to bytes.",
+      "confidence": "high",
+      "details_ru": [
+        "For finite input: rgb*=255; if maxChannel>255 rgb*=255/maxChannel; then componentwise max(rgb,0); convert toward zero to bytes. Shared peak factor preserves positive ratios, not per-channel saturate.",
+        "No alpha/gamma. Negative clamp occurs after peak normalization. Domain/NaN/overflow ABI behavior must not be inferred from finite formula."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-lightmap-formulas/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-math-abi/002-pseudocode.c",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100ff550",
+      "proposed_name": "Math_PowDoubleSseWithX87Fallback",
+      "subsystem": "graphics",
+      "summary_ru": "Double power implementation consumed by native lighting gamma helper.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI: XMM0 low double base, XMM1 low double exponent, returns double XMM0. Optimized SSE table path; fallback1010e844 receives two stack doubles and returns x87 ST0 which is copied back to XMM0.",
+        "Finite ordinary mathematical operation x^g proven by fallback FYL2X then exp2 helper10122e20. This naming does not claim a particular CRT version or bitwise parity with another libm."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/010-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-replacements/012-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-final/004-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-final/005-procedure_assembly.json",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1010e844",
+      "proposed_name": "Math_PowDoubleX87Fallback",
+      "subsystem": "graphics",
+      "summary_ru": "x87 power fallback with exponent/base classification and special cases.",
+      "confidence": "high",
+      "details_ru": [
+        "Ordinary positive branch continuation1010e84d: argument loads, FYL2X1010e89a computes exponent*log2(base), call10122e20 reconstructs2^t. Accepts two stack doubles, returns ST0; ushort decompiler signature is not the caller ABI.",
+        "Handles negative-base integer-exponent classification, zero/NaN/infinity and dispatches CRT policy helpers. Formula proof does not fully specify every exceptional result/errno/control-word side effect.",
+        "Helper10122e20: Duplicates input, FRNDINT splits integer n and fraction t-n, F2XM1 plus1 forms2^(t-n), FSCALE multiplies2^n, discards saved integer and returns ST0. Called by power fallback after FYL2X."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-loader/007-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-final/004-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-final/005-procedure_assembly.json",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    }
+  ]
+}

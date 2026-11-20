@@ -1,12 +1,18 @@
 # Native shader/pass contracts: material lighting, specular, blur, black
 
-Static investigation, 2026-11-19. Original client SHA-256:
+Static investigation, 2026-11-19; trigger/material/profile follow-up 2026-11-20.
+Original client SHA-256:
 `e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360`.
 No original code was executed. `shader-coverage.json` retains the literal Cg
 and embedded ARB source; this document follows the actual upload and draw paths.
 Own captures: `decompiled/client/captures/shader-pass-{core,bindings,inputs,bump}`.
 Each `capture.json` retains source hash, selector, provider and Evidence ID.
 The JSON companion links these observations and keeps unresolved facts explicit.
+
+Follow-up navigation: `blur-triggers.md` and `blur-server.md` resolve the Blur
+message, waterlevel and Damage timer; `surface-flag-producers.md` resolves face
+classification and lifecycle; `cg-profile-routing.md` resolves client-side
+modern/fp20 selection, program cache and extension-string handling.
 
 ## Entry points and pass order
 
@@ -248,12 +254,19 @@ to the algebraically different black Cg program.
 These native contracts are **reverse-engineering results, not newly installed
 rendering passes**. Exact remaining native questions:
 
-1. Setters and semantic names for blur flag `1018d270`, counter `1054506c`,
-   and HUD deadline +0x328; entry/exit behavior on map and HUD reset.
-2. Full producer conditions for surface flags `0x200` (bump) and `0x400`
-   (specular). Consumers and map-name bindings are recovered.
-3. Complete modern-vs-fp20 capability selection and identity-LUT legacy
-   sampling behavior. Only modern water is implemented in the normal port.
+1. Full indirect HUD-reset effects and alternate-view waterlevel transitions.
+   The three blur sources are resolved: server Blur at `1018d270`, integer
+   waterlevel at `1054506c` (not a counter), Damage deadline at HUD+0x328.
+   The shared server map/dream state is recovered; save/restore field binding
+   and every initial-zeroing route remain unconfirmed.
+2. Runtime integration and parity of the recovered `10059e30` surface producer:
+   clears 0x600, requires styles61/62/63 and material tag -666; normal enables
+   0x200, gloss OR (glosshi AND normal) enables 0x400. Lifecycle and consumer
+   predicates are in `surface-flag-producers.md`.
+3. External Cg/driver capability choice and identity-LUT legacy sampling
+   equivalence. The client selection is resolved: fragment profile0x1803
+   selects fp20; other profiles select modern. Only modern water is implemented
+   in the normal port.
 4. Potential computed reachability of black helper `100877d0`: no incoming
    typed references/direct calls exist, so no active trigger is established.
 5. Original texture gamma/normal decode and all NV/fixed-function fallback
@@ -262,6 +275,9 @@ rendering passes**. Exact remaining native questions:
 
 Integration still required for separated bump atlases, tangent data, material
 texture associations, diffuse/specular draw chains and native blur triggers.
-Studio lighting is outside these world/brush shader contracts. Projected
-handheld lights are a separate parallel investigation. No all-graphics or
+Studio lighting is outside these world/brush shader contracts. Its native
+interface, BSP sampling, per-bone light preparation and material draw path are
+tracked in `studio-existing-audit.md`, `studio-lighting-contract.md` and
+`studio-material-contract.md`. Projected handheld lights also have a separate
+contract. No all-graphics or
 pixel-parity completion claim follows from these static captures.

@@ -1,0 +1,197 @@
+{
+  "scope": "Static lifecycle supplement: writer/reset functions; no runtime or memory-leak verification.",
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1001f9d0",
+      "proposed_name": "ClothesMenu_ActionInvalidateCostumeTextures",
+      "subsystem": "menu",
+      "summary_ru": "Обрабатывает действия гардероба и сбрасывает готовность hoodie, SP sleeve, jeans и face после выбора костюма.",
+      "confidence": "high",
+      "details_ru": [
+        "Разрешённые unlockmask actions1..11 выбирают DAT1018ca20=N, очищают104d26c5/c6/d1/d2 и отправляют setclothes N; action66 выбирает default0 с тем же набором сбросов.",
+        "GL names104d26b8/bc/d4/d8 сохраняются: это invalidation для последующей загрузки в существующие IDs, а не deletion. Page/fingers/glove/MP sleeve здесь не сбрасываются.",
+        "Action50 закрывает меню; action12 при unlockbit0x800 вызывает10020230 и задаёт debounce currenttime+.5. Новое тело callee подтверждает custom hoodie file probe, выбор12 и сброс тех же четырёх ready при успехе."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/vgui-menu-actions/005-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/013-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/014-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/017-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/018-inspect_native_instruction.json",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-texture-final/001-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100294c0",
+      "proposed_name": "Menu_UpdateUnlockPreviewAndCostumeCache",
+      "subsystem": "menu",
+      "summary_ru": "Обновляет UI состояния разблокировок; показ costume preview сбрасывает готовность hoodie, jeans и face.",
+      "confidence": "high",
+      "details_ru": [
+        "Функция шире одного costume preview. В исследованных ветках101b27b8==0 создаётся preview models/costumes/unfolded_clothes.mdl через10029180, selector101b27bc получает1..11.",
+        "Общий label10029a23 очищает104d26c5/d1/d2, затем ставит101b27b8=1. SP sleeve104d26c6 здесь не очищается; IDs также не обнуляются.",
+        "Видимая close-ветка возвращает preview selector101b27bc=0 без симметричного reset в той же ветке. Это не доказывает отсутствие invalidation другими callbacks."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/vgui-menu-actions/006-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/013-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/017-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/018-inspect_native_instruction.json",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100640a0",
+      "proposed_name": "Sky_ResetLightingOverrides",
+      "subsystem": "graphics",
+      "summary_ru": "Сбрасывает sky marker и lighting override globals; studio texture cache не затрагивает.",
+      "confidence": "high",
+      "details_ru": [
+        "Пишет0 в104ce480/484/488/48c/490/494 и104ce06c; пишет-1 в104ce070 и104ce074.",
+        "Вызывается10060b10 вместе с другими renderer reset helpers. В полном теле нет GL deletion, записи ready/handles104d26b8..f0 либо pending photograph104ce4a1. Название texture reset для этой функции ошибочно.",
+        "Назначение globals подтверждают readers SkyMarker10063fb0 (три координаты и optional ambient/direct bytes) и WorldMarker10064040 (три координаты и scale/speed). Defaults-1 отключают light overrides."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/004-pseudocode.c",
+        "decompiled/client/captures/graphics-material-reset/000-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/menu-sky-functions/000-pseudocode.c",
+        "decompiled/client/captures/menu-sky-transform-discovery/003-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10060b10",
+      "proposed_name": "Renderer_ResetSubsystemStateAndRequestRebuild",
+      "subsystem": "graphics",
+      "summary_ru": "Последовательно сбрасывает renderer подсистемы и запрашивает повторное построение renderer состояния.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает100586a0,10059110,1005c3d0,100640a0; затем DAT1018f848=1 и DAT104cdd44=0. Если10053c70()!=0 и DAT101be7f8!=0, DAT104cdd68=1.",
+        "Новый разбор100640a0 подтверждает sky state reset, а не studio replacement readiness reset. Сам10060b10 не пишет104d26b8..f0; полное косвенное воздействие остальных callees нужно оценивать по их телам.",
+        "Из этого тела нельзя установить события запуска reset (карта, video context, команда): необходимы callers. Вызов не доказывает освобождение всех GL textures."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-material-reset/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/004-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100719f0",
+      "proposed_name": "HUD_TakePhotoQueueFramebufferCapture",
+      "subsystem": "graphics",
+      "summary_ru": "Обработчик TakePhoto ставит pending flag для снимка при последующей отрисовке camera-screen mesh.",
+      "confidence": "high",
+      "details_ru": [
+        "Полное тело и bounded asm: byte[104ce4a1]=1; return1. Здесь нет чтения payload, GL copy, сохранения файла или fullscreen flash.",
+        "Registration1006cf00 ведёт TakePhoto в wrapper1006eb10, затем100719f0. Consumer10065ef0 на texture branch diffusegay вызывает10064ac0 при pending!=0 и очищает pending.",
+        "Retained capture получает texture104d26f0 и ready104d26e6, который consumer не очищает после draw. Без подходящего mesh draw pending сам по себе не выполняет capture. Новое standalone C тело подтверждает прежнее bounded assembly."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/weapons/photo-body-evidence/1006eb10.asm",
+        "analysis/weapons/photo-body-evidence/100719f0.asm",
+        "analysis/weapons/photo-body-evidence/capture.json",
+        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/022-inspect_native_instruction.json",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-texture-loader/003-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fb40",
+      "proposed_name": "HUD_ReadCustomFingersPath",
+      "subsystem": "graphics",
+      "summary_ru": "Читает custom texture path в object+0x11c и инвалидирует готовность 104d26c7.",
+      "confidence": "high",
+      "details_ru": [
+        "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x11c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
+        "Ставит active flag10542bb0=1; при длине<3 очищает его вместе со строкой.",
+        "Безусловно очищает ready 104d26c7, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
+        "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
+        "Registration1006cf00 содержит CustomFng/CustomGlv/CustomSlv wrappers1006e5c0/1006e5e0/1006e600; точный wrapper→reader и this base ещё не сняты, поэтому имя packet не используется как единственное доказательство назначения."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/004-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fbb0",
+      "proposed_name": "HUD_ReadCustomGlovePath",
+      "subsystem": "graphics",
+      "summary_ru": "Читает custom texture path в object+0x21c и инвалидирует готовность 104d26d0.",
+      "confidence": "high",
+      "details_ru": [
+        "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x21c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
+        "Ставит active flag10542bb1=1; при длине<3 очищает его вместе со строкой.",
+        "Безусловно очищает ready 104d26d0, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
+        "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
+        "Registration1006cf00 содержит CustomFng/CustomGlv/CustomSlv wrappers1006e5c0/1006e5e0/1006e600; точный wrapper→reader и this base ещё не сняты, поэтому имя packet не используется как единственное доказательство назначения."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/005-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fc20",
+      "proposed_name": "HUD_ReadCustomSleevePath",
+      "subsystem": "graphics",
+      "summary_ru": "Читает custom texture path в object+0x1c и инвалидирует готовность 104d26c6 и104d26d3.",
+      "confidence": "high",
+      "details_ru": [
+        "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x1c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
+        "Безусловно очищает ready 104d26c6 и104d26d3, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
+        "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
+        "Registration1006cf00 содержит CustomFng/CustomGlv/CustomSlv wrappers1006e5c0/1006e5e0/1006e600; точный wrapper→reader и this base ещё не сняты, поэтому имя packet не используется как единственное доказательство назначения."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/006-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10020230",
+      "proposed_name": "ClothesMenu_SelectCustomHoodieIfPresent",
+      "subsystem": "menu",
+      "summary_ru": "Проверяет custom_hoodie.tga и при успехе выбирает costume12 с invalidation четырёх текстур одежды.",
+      "confidence": "high",
+      "details_ru": [
+        "Engine COM_LoadFile через101b2744(models/costumes/custom_hoodie.tga,5,0); ненулевой результат устанавливает1018ca20=12, очищает104d26c5/d1/c6/d2 и отправляет setclothes 12 custom_hoodie.tga.",
+        "Это containing function для exact writes10020274/7b/82/89. GL handles не обнуляются; функция не вызывает texture upload10069630. Последующая отрисовка использует lazy loaders.",
+        "При отсутствии файла selector и ready сохраняются. Копирует90байт из10140a78 в UI object(101b2600→+142c)+d4, задаёт f18=255.0,f1c/f1d=0,f20=0,bc=5. Точный текст и полный смысл этого UI состояния не определены данным телом."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-final/001-pseudocode.c",
+        "decompiled/client/captures/vgui-menu-actions/005-pseudocode.c",
+        "analysis/graphics/studio-texture-loader-contract.md",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
+      ]
+    }
+  ],
+  "open_gaps": [
+    {
+      "address": "0x1003a170",
+      "kind": "instruction-write-not-function",
+      "summary_ru": "Exact WRITE к104d26c7; Ghidra interior query не разрешил содержащую procedure. Нет function card без entry evidence.",
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/015-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-final/capture.json"
+      ]
+    }
+  ]
+}

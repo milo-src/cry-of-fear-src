@@ -1,0 +1,121 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10090520",
+      "proposed_name": "CCofBlur_CreatePrivateData",
+      "subsystem": "graphics",
+      "summary_ru": "Фабрика CCofBlur: выделяет 220 байт private data, устанавливает vtable и связь с entvars; поведение blur не находится в этой функции.",
+      "confidence": "high",
+      "details_ru": [
+        "Нулевой аргумент получает объект через DAT_10222f9c и указатель result+0x80; путь выделения вызывает DAT_10223044 с размером 0xdc.",
+        "Успешное выделение записывает CCofBlur::vftable в private+0 и переданный указатель в private+4.",
+        "Сырые байты и независимый capture assembly10090568 подтверждают vtable101c3a70; слоты+2c/+34/+e8 указывают на1009d5f0/1000dba0/100a5bb0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10090520.c",
+        "analysis/graphics/blur-server.md",
+        "analysis/graphics/blur-server-pe-candidates.json",
+        "decompiled/server/captures/graphics-blur-server/000-procedure_assembly.json",
+        "decompiled/server/captures/graphics-blur-server/001-read_bytes.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100aa130",
+      "proposed_name": "cof_blur_EntityFactoryExport",
+      "subsystem": "graphics",
+      "summary_ru": "Экспорт сущности cof_blur; короткий вход в фабрику CCofBlur, которую Ghidra показывает развёрнутой в псевдокоде.",
+      "confidence": "high",
+      "details_ru": [
+        "Физический диапазон 100aa130..100aa134 содержит лишь 5 байт; развёрнутый псевдокод совпадает с фабрикой 10090520, выделяющей 0xdc байт.",
+        "Сам экспорт не отправляет Blur; Use100a5bb0 переключает player+1ebc, а сообщение приходит через синхронизацию игрока."
+      ],
+      "evidence_paths": [
+        "analysis/exports/hl.csv",
+        "decompiled/server/partial-pass/functions/0x100aa130.c",
+        "decompiled/server/partial-pass/functions/0x10090520.c",
+        "analysis/graphics/blur-server.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1009d5f0",
+      "proposed_name": "CCofBlur_Spawn",
+      "subsystem": "graphics",
+      "summary_ru": "Скрывает cof_blur, делает неподвижной и несолидной точкой.",
+      "confidence": "high",
+      "details_ru": [
+        "entvars+10c=0 (SOLID_NOT), +118=0x80 (EF_NODRAW), +108=0 (MOVETYPE_NONE); effects присваивается, не дополняется через OR.",
+        "Привязка к CCofBlur через raw PE vtable101c3a70 слот+2c; в теле нет Think или таймера."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/graphics-blur-server/002-pseudocode.c",
+        "analysis/graphics/blur-server.md",
+        "analysis/graphics/blur-server-pe-candidates.json",
+        "decompiled/server/captures/graphics-blur-server/001-read_bytes.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100a5bb0",
+      "proposed_name": "CCofBlur_UseToggleActivatorBlur",
+      "subsystem": "graphics",
+      "summary_ru": "Переключает blur только у игрока-активатора, без таймера и непосредственной отправки сообщения.",
+      "confidence": "high",
+      "details_ru": [
+        "Нулевой activator или ноль из его vcall+0xd0 (IsPlayer по восстановленному ABI) прекращает обработку.",
+        "Получает player private data через100125e0 и пишет DWORD+1ebc=(старое значение==0). UseType/value не читаются.",
+        "100ead70 отдельно синхронизирует поле через MSG_ONE Blur BYTE; dream морфина использует тот же флаг."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/graphics-blur-server/003-pseudocode.c",
+        "analysis/graphics/blur-server.md",
+        "analysis/graphics/blur-server-pe-candidates.json",
+        "decompiled/server/partial-pass/functions/0x100ead70.c",
+        "decompiled/server/captures/graphics-blur-server/004-analyze_function.json",
+        "decompiled/server/captures/graphics-blur-server/001-read_bytes.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100e8d70",
+      "proposed_name": "CBasePlayer_StartMorphineDream",
+      "subsystem": "graphics",
+      "summary_ru": "Начинает dream с blur на30 секунд, если dream и blur ещё выключены.",
+      "confidence": "high",
+      "details_ru": [
+        "Guards BYTE+2278==0 и DWORD+1ebc==0; ставит+2278=1,+227c=time+30,+1ebc=1.",
+        "Random ветка0..2 задаёт+2280 либо+2270=time+random(5,20); обновляет+440, сохраняет room_type в+2284 и ставит room_type=16.",
+        "Сообщение102265e8 BYTE10,BYTE1 отдельно от Blur; имя здесь не установлено. Blur доставляет100ead70 по сравнению кеша+1eb8 с+1ebc.",
+        "100ead70 завершает dream вызовом100f5c90 при time>deadline; map cof_blur таймер30 секунд не использует.",
+        "Guards target+0x2278==0 и +0x1ebc==0; ставит active flag и таймер30с, случайную подветвь либо дополнительный таймер5..20с. Сохраняет room_type, меняет его на16, отправляет Concuss(10,1). Восстановление и весь визуальный эффект требуют consumer/update-кода."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e8d70.c",
+        "analysis/graphics/blur-server.md",
+        "decompiled/server/partial-pass/functions/0x100ead70.c",
+        "decompiled/server/partial-pass/functions/0x100e5fc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100f5c90",
+      "proposed_name": "CBasePlayer_StopMorphineDream",
+      "subsystem": "graphics",
+      "summary_ru": "Завершает активный dream: останавливает звук, убирает blur и восстанавливает room_type.",
+      "confidence": "high",
+      "details_ru": [
+        "Только при BYTE+2278!=0 очищает+2278,+2280,+227c,+2274 и DWORD+1ebc; таймер+2270 здесь не очищается.",
+        "Останавливает player/morphine_dream.wav, восстанавливает room_type из+2284, посылает отдельное сообщение102265e8 с байтами0,0.",
+        "Не отправляет Blur напрямую:100ead70 обнаруживает смену+1ebc и доставляет MSG_ONE BYTE. Общий флаг не имеет счётчика владельцев map/dream."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100f5c90.c",
+        "analysis/graphics/blur-server.md",
+        "decompiled/server/partial-pass/functions/0x100ead70.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}

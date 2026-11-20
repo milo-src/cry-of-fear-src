@@ -1,0 +1,148 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10064340",
+      "proposed_name": "Studio_EnsureCostumeHoodieTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Кеширует hoodie TGA по costume selector; аргумент выбирает основной либо preview selector, не принуждает перезагрузку.",
+      "confidence": "high",
+      "details_ru": [
+        "При id104d26b8==0 резервирует1018fe8c++; ready104d26c5!=0 выходит до проверки параметра.",
+        "param==0 или101b27bc==0 выбирает1018ca20; иначе101b27bc. Основные1..11 имеют конкретные costume paths,12 использует models/costumes/%s из sv_custom_hoodie.",
+        "Alternate selector имеет1..11, отличается регистром black_metal/Twitcher_hoodie. Неизвестный selector либо12/nullcvar достигает loader с не назначенным в C local path; fallback не доказан.",
+        "10069630(path,0,id) ненулевой→ready1; неудача сохраняет id и ready0 для повторной попытки."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/000-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064ec0",
+      "proposed_name": "Studio_EnsureCostumeJeansTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Загружает jeans для выбранных костюмов, с alternate preview selector и общим ready кешем.",
+      "confidence": "high",
+      "details_ru": [
+        "Gate1018ca1c!=0 либо101b27bc!=0 перед allocation id104d26d4; ready104d26d1.",
+        "Selector101b27bc при ненуле иначе1018ca20. Cases1,3,4,7,9,10,11 грузят costume jeans;2,5,6,8 выходят без загрузки.",
+        "Unknown default вызывает loader без назначения локального пути в видимом C; не заменять его выдуманным default jeans.",
+        "После успеха не замечает смену selector без внешнего сброса ready."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/001-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100641d0",
+      "proposed_name": "Studio_EnsureCostumeFaceTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Загружает face TGA только для Black Metal, Sick Simon и Twitcher; использует основной selector.",
+      "confidence": "high",
+      "details_ru": [
+        "Требует1018ca1c!=0; id104d26d8/ready104d26d2. Selector1018ca20, alternate101b27bc не читается.",
+        "Cases7,10,11→Black_Metal_Face,Sick_Simon_Face,Twitcher_Face;1..6,8,9 выходят без loader.",
+        "Unknown default достигает loader с не назначенным local path, безопасный fallback здесь не доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/002-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064870",
+      "proposed_name": "Studio_EnsureLockedPageTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Лениво загружает единый models/page_locked.tga; выбор конкретных заблокированных страниц находится у mesh consumer.",
+      "confidence": "high",
+      "details_ru": [
+        "id104d26c0 выделяется из1018fe8c; ready104d26c4 пропускает повторную загрузку.",
+        "10069630(models/page_locked.tga,0,id) устанавливает ready только при ненулевом результате; собственного page index/bitmask нет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/003-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064d60",
+      "proposed_name": "Studio_EnsureSinglePlayerSleeveTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Выбирает рукав по costume и custom path, сохраняя отдельный SP texture кеш.",
+      "confidence": "high",
+      "details_ru": [
+        "Entrygate1018ca1c!=0 либоstrlen1018a1dc>=3; id104d26bc/ready104d26c6.",
+        "Cases4,7,8,9 совместно выбирают Awesome_Sleeve. Case12 сразу выходит до custom override, несмотря на наличие строки.",
+        "После других cases/default строка1018a0dc длиной>=3 заменяет путь. Это другой адрес, чем entrygate1018a1dc.",
+        "Default без длинного custom path оставляет локальный путь не назначенным в C; явный цикл копирования не содержит bounds256."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/004-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10064a40",
+      "proposed_name": "Studio_EnsureMultiplayerSleeveTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Кеширует custom sleeve1018a0dc либо police/police_sleeve.tga при короткой строке.",
+      "confidence": "high",
+      "details_ru": [
+        "id104d26dc/ready104d26d3; custom string выбирается приstrlen>=3, префикс models/ здесь не добавляется.",
+        "Готовый кеш не обновляется при смене строки без внешнего сброса. В теле нет чтения force-параметра; caller spelling(0) его не доказывает."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/005-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/008-procedure_assembly.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100648d0",
+      "proposed_name": "Studio_EnsurePlayerFingerTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Сначала загружает police hands variant, затем optional custom override в тот же GLid; ready определяется последней загрузкой.",
+      "confidence": "high",
+      "details_ru": [
+        "id104d26c8/ready104d26c7. Nullparam предотвращает loader, но id уже может быть выделен. Param используется как строка match police3.",
+        "Базовые police/police3_hands.tga либо police/police_hands.tga. Custom1018a1dc длиной>=3 вызывает второйloader, его результат полностью заменяет первый.",
+        "Assembly100649a0 подтверждает копирование из1018a1d8 (на4байта до custom path1018a1dc), затем append11bytes suffix_black.tga; это не стандартное удаление расширения.",
+        "Неудачный override после успешного base оставляет ready0: base не гарантированно доступен mesh consumer как fallback."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/006-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/007-procedure_assembly.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100642b0",
+      "proposed_name": "Studio_EnsureCustomGloveTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Загружает custom glove по1018a2dc; короткая строка на подтверждённом mesh caller пути ставит ready без загрузки через сохранённый renderer ECX.",
+      "confidence": "high",
+      "details_ru": [
+        "id104d26cc выделяется из1018fe8c, ready104d26d0!=0 пропускает загрузку.",
+        "Приstrlen1018a2dc>=3 вызывает10069630(path,0,id); ненулевой результат устанавливаетready1.",
+        "Assembly сохраняет incomingECX на entry PUSH ECX; shortpath10064318 читает его и при ненуле ставитready1. Caller10066afb передаёт rendererthis вECX, отдельно PUSH0; stackarg не читается. На этом пути shortcustom→ready1 без loader.",
+        "Нет доказанной проверки force reload; готовый кеш защищён ready early-out."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/007-pseudocode.c",
+        "analysis/graphics/studio-texture-replacements.md",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/006-procedure_assembly.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/008-procedure_assembly.json"
+      ]
+    }
+  ],
+  "subsystems": []
+}

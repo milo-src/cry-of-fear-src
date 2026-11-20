@@ -1,0 +1,87 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10065ef0",
+      "proposed_name": "Studio_DrawMeshesWithMaterialOverrides",
+      "subsystem": "graphics",
+      "summary_ru": "Обрабатывает skin/mesh texture flags, UV и RGB arrays, именованные fullbright и динамические texture bindings; emission triangle strips/fans.",
+      "confidence": "high",
+      "details_ru": [
+        "Texture table+0xb8 и skin table+0xc8 из renderer+0x40b0; mesh.skinref индексирует выбранную skin family. Vertex transforms10091790, lighting10068d70 и chrome10065050 вызываются до emission.",
+        "flags&2 выбирает chrome UV. При entityBlendFlag104ce4b4==0 flags&20 включает SRC_ALPHA/ONE, flags&40 alpha-test GREATER0.5, оба состояния выключаются после mesh.",
+        "Прямой consumer cof_fullbrighttextures104cddbc: name fullbright/corona_/fullbright_mess и timed sleeve/glove shading. Chrome и nonchrome имеют разные условия; fullbright-name не тождественен flag4.",
+        "cof_fullbrighttextures default0.5 доказан raw1014cc24; setupRGBscale2 делает множитель0.5*2=1 для обычного именованного fullbright до blending. Chrome formula вынесена вstudio-chrome-contract.md.",
+        "Replacement helpers выбираются по hoodie/jeans/head_face/sleeve/fingers/glove/cam_vfind/pages/diffusegay с исключениями моделей; helper bodies и raw strings теперь вынесены вstudio-texture-replacements.md.",
+        "Частичный контракт: bone mask/culling, GL pointer initializer и replacement lifecycle исследуются отдельно вstudio-texture-lifecycle-audit.md. Не считать всю функцию или renderer полностью восстановленными."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "external/hlsdk-portable/engine/studio.h",
+        "decompiled/client/captures/graphics-lighting-entry/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-math-abi/005-read_bytes.json",
+        "analysis/graphics/studio-texture-replacements.md",
+        "decompiled/client/captures/graphics-studio-texture-replacements/013-read_bytes.json",
+        "decompiled/client/captures/graphics-studio-texture-replacements/014-read_bytes.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100687d0",
+      "proposed_name": "Studio_SetupMaterialRenderState",
+      "subsystem": "graphics",
+      "summary_ru": "Настраивает studio blending, alpha и doubled RGB texture combine; содержит отдельные alpha0.7 исключения моделей.",
+      "confidence": "high",
+      "details_ru": [
+        "Назначает transformed vertex/RGB buffers104d8718/104d2718, SMOOTH shading, alpha1, entityBlendFlag0.",
+        "Mode5: depth writes0, SRC_ALPHA/ONE; mode2/4: depth writes0, SRC_ALPHA/ONE_MINUS_SRC_ALPHA. Alpha=entity renderamt/255 и entityBlendFlag1.",
+        "Fallback texture-env COMBINE MODULATE(TEXTURE,PREVIOUS),RGB_SCALE2; NV register combiners альтернативно удваивают textureRGB*primaryRGB и перемножают alpha без удвоения.",
+        "Selector105458b0 и точное имя nv_goggles/gasmask/tv_frame/death/telescope/динамическое имя могут поставить alpha0.7; сама коррекция не включает blending.",
+        "GL названия восстановлены по сигнатурам/enums локальных headers, initializer cells отдельно не подтверждён; числовые вызовы сохранены."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/001-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "external/hlsdk-portable/engine/studio.h"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10068770",
+      "proposed_name": "Studio_SelectBodypartSubmodel",
+      "subsystem": "graphics",
+      "summary_ru": "Выбирает bodypart и submodel по packed entity body, base и nummodels.",
+      "confidence": "high",
+      "details_ru": [
+        "Сохранённый guard строго numbodies<requestedIndex, а не <=; ошибка печатает SetupModel: no such bodypart и сбрасывает index0.",
+        "Renderer+48=bodypart, renderer+4c=header+modelindex+((entity.body/base)%nummodels)*0x70.",
+        "Отрицательные индексы, нулевые base/nummodels и equality boundary в данном теле отдельно не проверяются."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/002-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "external/hlsdk-portable/engine/studio.h"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10067850",
+      "proposed_name": "Studio_RestoreMaterialRenderState",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает стандартные texture combine/shading состояния после studio draw; при entity blending включает запись глубины и выключает blend.",
+      "confidence": "high",
+      "details_ru": [
+        "Fallback RGB_SCALE1 либо выключение REGISTER_COMBINERS_NV; TexEnvf mode7681.0 (REPLACE), FLAT shading.",
+        "Если104ce4b4!=0: DepthMask1 и DisableBLEND. Не восстанавливает произвольный snapshot GLstate, current texture/cull mode/blend factors здесь не возвращаются.",
+        "Связь с setup100687d0 и cleanup per-mesh10065ef0 необходима; это не универсальный renderer reset."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/003-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "external/hlsdk-portable/engine/studio.h"
+      ]
+    }
+  ],
+  "subsystems": []
+}

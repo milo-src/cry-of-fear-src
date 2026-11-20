@@ -371,12 +371,14 @@
         "gl_opacity": 0.5,
         "gl_blurtest": 0
       },
-      "trigger_unknowns": [
-        "1018d270 !=0",
-        "1054506c >2",
-        "client time < HUD+0x328"
-      ],
-      "algorithm": "full viewport current-frame RGB capture; centered expanding quads, alpha blend"
+      "algorithm": "full viewport current-frame RGB capture; centered expanding quads, alpha blend",
+      "triggers": {
+        "server": "HUD+31b0 (1018d270), READ_BYTE Blur ->1006fa20",
+        "water": "1054506c = ref_params.waterlevel; signed integer >2",
+        "damage": "HUD+328 (1018a3e8), Damage trailing byte !=0 -> clientTime+.15",
+        "gate": "gl_screenblur && (gl_blurtest || server || water || clientTime<damageUntil) && delta!=0 && captureValid",
+        "reference": "analysis/graphics/blur-triggers.md"
+      }
     },
     "black": {
       "bind": "0x100877d0",
@@ -398,11 +400,35 @@
     }
   },
   "unresolved": [
-    "blur native flag/counter/deadline setters and reset",
-    "producer conditions of surface flags0x200/0x400",
-    "fp20 hardware selection and LUT sampling equivalence",
+    "complete indirect HUD reset and all alternate-view waterlevel transition behavior",
+    "server Blur save/restore field binding and all initial zeroing paths",
+    "Cg/driver hardware profile decision and fp20/LUT runtime sampling equivalence",
     "computed reachability black helper",
     "GPU normal/gamma decode and fallback rounding/clamping parity",
     "world/brush implementation integration; original GPU pixels not tested"
-  ]
+  ],
+  "followup_2026_11_20": {
+    "documents": [
+      "blur-triggers.md",
+      "blur-server.md",
+      "surface-flag-producers.md",
+      "cg-profile-routing.md"
+    ],
+    "target_executed": false,
+    "surface_flags": {
+      "producer": "0x10059e30",
+      "clear_mask": "0xfffff9ff",
+      "eligibility": "!(flags&0x14) && styles61/62/63 present && texture+24 == -666",
+      "bump_0x200": "normal handle !=0",
+      "specular_0x400": "gloss !=0 || (glosshi !=0 && normal !=0)",
+      "cvars_gate_consumers_not_producer": true,
+      "caller": "0x1005f3a0"
+    },
+    "cg": {
+      "fp20_profile": "0x1803",
+      "other_profiles": "modern fragment filenames",
+      "lookup": "case-insensitive name only",
+      "nv_extension_controls": "LUT format, not filename branch"
+    }
+  }
 }

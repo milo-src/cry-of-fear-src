@@ -1,0 +1,188 @@
+{
+  "source_capture": "analysis/local/graphics-studio-mesh-materials",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "6b7f0fd4f05846c8d0ae854ea18ed09572ac3656b63569f0d3442134b44531d9",
+      "procedure": "ram:0x10065ef0",
+      "evidence_id": "ev_0aea55881d6e4fec722a60ec76a590820f4b5a4dd6aa521ac491fe2a62c21b81",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "cce3216c1380436eca31358dfa8b726b0d455599594f885877490c7be93e598e",
+      "procedure": "ram:0x100687d0",
+      "evidence_id": "ev_e8c94fe8b221d770b110aa126169ab0372c8f5b9ad0682f8b071b008fdac5766",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "a99f771f1a42119c8cfb588161b9f9aeb82cc6ec7822058a8d7ee7827b392aae",
+      "procedure": "ram:0x10068770",
+      "evidence_id": "ev_73e5d9d01f25a8e91eb6a78f007cb52ac3bacb16006373d1e8d7c5a372ca4c13",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "3f130c66f2c2e9ae573a884c05de20c57e74635c01c486422466fc2e00ae1b0c",
+      "procedure": "ram:0x10067850",
+      "evidence_id": "ev_d46d945a4a6b89cc3985be67f293a276ecbb01a30adb7586e6ac2a8f47a4e5af",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "004-pseudocode.c",
+      "sha256": "890882e193dee5116438c848d48000f8a314e44aa3b31fc0c9fe8cd34f3b3649",
+      "procedure": "ram:0x1008bb70",
+      "evidence_id": "ev_4dbf4cfeada5998a76986583673530fc72e741b8a599d1677616c585f9a80c6c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "005-pseudocode.c",
+      "sha256": "cec57ca19bcbf018cb3bbbcdaeba9880f7949a160e7f167142b909fb16c2abbd",
+      "procedure": "ram:0x10119a6f",
+      "evidence_id": "ev_631eb4fae55a82a424551e33bf992340c6dbcda6c877ef3d75434307e195cf4b",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "analyses": [
+    {
+      "file": "000-procedure_pseudo_code.json",
+      "sha256": "4c38c0e8e1c81af0b28976c5801e6b6cb5388190c96fca272ae0fa0d08b1e131",
+      "evidence_id": "ev_0aea55881d6e4fec722a60ec76a590820f4b5a4dd6aa521ac491fe2a62c21b81",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10065ef0"
+      }
+    },
+    {
+      "file": "001-procedure_pseudo_code.json",
+      "sha256": "32bbef9a09be866f97564fa0c6b4ec66fc709182a119be4a7d6622a4dd8501d5",
+      "evidence_id": "ev_e8c94fe8b221d770b110aa126169ab0372c8f5b9ad0682f8b071b008fdac5766",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x100687d0"
+      }
+    },
+    {
+      "file": "002-procedure_pseudo_code.json",
+      "sha256": "ee109733f8f20fd594a196aded9de0d34f51513a23fef685a32a7bac09b840ce",
+      "evidence_id": "ev_73e5d9d01f25a8e91eb6a78f007cb52ac3bacb16006373d1e8d7c5a372ca4c13",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10068770"
+      }
+    },
+    {
+      "file": "003-procedure_pseudo_code.json",
+      "sha256": "95a39923021bd29fc478b80d67986eeb88e3dbaaf9f0fab979394d21f1892cb2",
+      "evidence_id": "ev_d46d945a4a6b89cc3985be67f293a276ecbb01a30adb7586e6ac2a8f47a4e5af",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10067850"
+      }
+    },
+    {
+      "file": "004-procedure_pseudo_code.json",
+      "sha256": "81a1c804f2acc5aa033a057e08229f27ba3aa2156c3d92ae22ee7b768ed354cd",
+      "evidence_id": "ev_4dbf4cfeada5998a76986583673530fc72e741b8a599d1677616c585f9a80c6c",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1008bb70"
+      }
+    },
+    {
+      "file": "005-procedure_pseudo_code.json",
+      "sha256": "5844c655ba8a8ab6bdd7827ca43ca9c2b47bce49f4ae70de3bd1f17047cb1be5",
+      "evidence_id": "ev_631eb4fae55a82a424551e33bf992340c6dbcda6c877ef3d75434307e195cf4b",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10119a6f"
+      }
+    },
+    {
+      "file": "006-procedure_assembly.json",
+      "sha256": "7d97d336f3f6f43f3497355eb92511e8f3cf2b75bb8b008f002feab37075d493",
+      "evidence_id": "ev_2f5b18f85cac6585d6c24c05e9603cde0d2fd0f2f16e2afbb3685541099272df",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_assembly",
+      "parameters": {
+        "procedure": "ram:0x10053750"
+      }
+    },
+    {
+      "file": "007-procedure_assembly.json",
+      "sha256": "36aed1b9f50f295abec0c99c75d582a556db2d94188547dea4daa7ce9d8b725e",
+      "evidence_id": "ev_a62348f0d63464efbd807f57b0859345b200355ca6f4e05e65bdd763ed24c8d4",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_assembly",
+      "parameters": {
+        "procedure": "ram:0x10119a6f"
+      }
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-20",
+  "scope": "Static native studio renderer: interface, BSP sampling, bone/normal lighting, mesh materials, chrome and math ABI",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "runtime_or_visual_validation": false,
+  "renderer_implementation_changed": false,
+  "original_resources_changed": false,
+  "captures": [
+    "decompiled/client/captures/graphics-studio-lighting",
+    "decompiled/client/captures/graphics-studio-light-selection",
+    "decompiled/client/captures/graphics-studio-draw-routing",
+    "decompiled/client/captures/graphics-studio-mesh-materials",
+    "decompiled/client/captures/graphics-studio-normal-lighting",
+    "decompiled/client/captures/graphics-studio-math-abi"
+  ],
+  "checks": {
+    "private_REA_batches_succeeded": 6,
+    "new_C_files": 28,
+    "retained_REA_records": 41,
+    "capture_file_hash_checks_passed": 69,
+    "original_DLL_hash_unchanged": true,
+    "notes_unique_and_all_evidence_paths_exist": true,
+    "review_cards_updated_or_added": 29,
+    "unrelated_existing_reviews_preserved": 735,
+    "updated_existing_review": "client:0x100678d0 expanded with exact formulas; previous evidence retained",
+    "interface_PE_words_matched_REA_reads": true,
+    "git_diff_check": "passed; LF/CRLF normalization notices only",
+    "final_catalog_notes_and_workboard_verified": true
+  },
+  "catalog": {
+    "path": "decompiled/FUNCTION_CATALOG.txt",
+    "files": 8634,
+    "entries": 8524,
+    "reviewed": 764,
+    "selector_mismatches": 143,
+    "unconfirmed_entries": 11,
+    "workboard_updated": true
+  },
+  "remaining": [
+    "Texture replacement helper bodies and lifecycle; texture/bone name semantics",
+    "Nonunit gamma100595f0 math thunk100ff550",
+    "Constructor assignment of the studio vtable, full player draw path and private attachment lifetime",
+    "GL dispatch pointer initialization and all exceptional FP paths",
+    "Port integration and renderer readback/original-game parity comparison"
+  ],
+  "artifact_sha256": {
+    "decompiled/FUNCTION_CATALOG.txt": "60108334f52a8479db2095c0ad6cc14253a8f88b0debf6cd4d4afc887449559d",
+    "analysis/graphics/studio-chrome-contract.md": "579ebcc756ded0e941ac881f437653e6111c3fbfa9ae41e12700cc3074b6948f",
+    "analysis/graphics/studio-existing-audit.md": "1ef8714b53e410f7ea68c5fb20e30ed4b49ca9dcad02a1e3de946ae2998b254c",
+    "analysis/graphics/studio-lighting-contract.md": "72feda8f4c1608534d7a96420ee65cffc9a7183ae1dadc2caaad5b211f88f7d1",
+    "analysis/graphics/studio-material-contract.md": "90679c2e7fe0dc8b49aa326eb46f7289309693cb743c9c846d8c3ce082e330c7",
+    "analysis/graphics/studio-helper-catalog-notes.json": "021b7c5b5f95b3940860dbbfc4f9acceff34864bc80af2228c87bdccd3578ede",
+    "analysis/graphics/studio-interface-catalog-notes.json": "f0f52dc119960a846a5891f75f6f26ac6ec5e9eb212eea0d61d33ae6117666b1",
+    "analysis/graphics/studio-lighting-catalog-notes.json": "8060a6f91dfedfa12980a4ef44df5b415329ac1a42d3bfed9200fedfe21e372c",
+    "analysis/graphics/studio-material-catalog-notes.json": "d62ac6a9a63037f4d080a68dd728a30da048984f5599a6eddfd081693c5da89a"
+  }
+}

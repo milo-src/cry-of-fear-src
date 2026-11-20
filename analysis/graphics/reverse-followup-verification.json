@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-20",
+  "scope": "Static graphics reverse engineering: blur protocol/triggers, surface classification/lifecycle, Cg profile routing",
+  "target_executed": false,
+  "runtime_or_visual_validation": false,
+  "renderer_implementation_changed": false,
+  "original_resources_changed": false,
+  "captures": [
+    "decompiled/client/captures/graphics-blur-triggers",
+    "decompiled/client/captures/graphics-blur-message",
+    "decompiled/client/captures/graphics-blur-material-routing",
+    "decompiled/client/captures/graphics-blur-material-state",
+    "decompiled/server/captures/graphics-blur-server",
+    "decompiled/client/captures/graphics-surface-flags",
+    "decompiled/client/captures/graphics-material-lifecycle",
+    "decompiled/client/captures/graphics-material-reset"
+  ],
+  "checks": {
+    "private_REA_batches_succeeded": 8,
+    "private_REA_process_exit_codes_all_zero": true,
+    "before_after_original_DLL_hashes_equal": true,
+    "new_C_files": 19,
+    "retained_REA_records": 41,
+    "capture_file_hash_checks_passed": 60,
+    "notes_unique_and_all_evidence_paths_exist": true,
+    "review_cards_updated_or_added": 34,
+    "git_diff_check": "passed; repository LF/CRLF normalization notices only"
+  },
+  "catalog": {
+    "path": "decompiled/FUNCTION_CATALOG.txt",
+    "files": 8606,
+    "entries": 8496,
+    "reviewed": 736,
+    "selector_mismatches": 143,
+    "unconfirmed_entries": 11,
+    "workboard_updated": true,
+    "existing_review_details_preserved_except_superseded_blur_unknown_sentence": true
+  },
+  "remaining": [
+    "Integrate native static bump/specular and blur contracts into the port",
+    "Original GPU comparison, legacy fp20/LUT sampling and driver-dependent rounding",
+    "Complete indirect HUD reset and alternate-view waterlevel lifecycle",
+    "Server Blur save/restore binding and all initial-zeroing paths",
+    "Studio lighting/projection and remaining world fog/detail parity"
+  ]
+}

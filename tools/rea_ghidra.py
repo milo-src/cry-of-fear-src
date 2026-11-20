@@ -126,7 +126,7 @@ def main():
                 capabilities={}, clientInfo=dict(name='cof-static-analysis', version='1.0'))))
             client.notify('notifications/initialized', {})
             available = client.request('tools/list', {})
-            wanted = {'open_binary', 'close_binary', 'export_evidence_bundle'} | {q['name'] for q in queries}
+            wanted = {'open_binary', 'close_binary', 'export_evidence_bundle', 'reset_investigation'} | {q['name'] for q in queries}
             selected = [t for t in available['tools'] if t['name'] in wanted]
             save(output / 'tool-schemas.json', selected)
             missing = wanted - {t['name'] for t in selected}
@@ -153,6 +153,9 @@ def main():
                 closed = client.tool('close_binary', {})
                 save(output / 'close.json', closed)
                 success = success and not closed.get('isError', False)
+                reset = client.tool('reset_investigation', dict(save_path=str(output / 'final-evidence.json')))
+                save(output / 'reset.json', reset)
+                success = success and not reset.get('isError', False)
             finally:
                 client.stop()
     unchanged = hashlib.sha256(binary.read_bytes()).hexdigest() == digest

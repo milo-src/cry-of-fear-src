@@ -1,0 +1,51 @@
+{
+  "source_capture": "analysis/local/graphics-blur-triggers",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [],
+  "analyses": [
+    {
+      "file": "000-inspect_native_instruction.json",
+      "sha256": "73dd14283b4b79ed2faafeb4c84e7d0969d3b15d01934fe92c4339ec62f1f1f7",
+      "evidence_id": "ev_825aa147c4a629022331c97da8da725d8ebb462de802386f1f2d889cddd16286",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "0x1018d270"
+      }
+    },
+    {
+      "file": "001-inspect_native_instruction.json",
+      "sha256": "3005a45671a8f8a663c6fcf4deda87eee15b46ff57908c2b6550d4967dad655c",
+      "evidence_id": "ev_ab824a7b8a0fa907e9492495344afc87f755d1626cd9be04ca472f9f15526eff",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "0x1054506c"
+      }
+    },
+    {
+      "file": "002-analyze_function.json",
+      "sha256": "844140214e1350ba56a014011f811de82d0884bcf117f6ef0c8730c0f8e92de7",
+      "evidence_id": "ev_7e3c2c97e0b13469bdf7d63b83683a53ca0e93e8b7dace50eac689f13eaa2b86",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "parameters": {
+        "procedure": "0x10071df0"
+      }
+    }
+  ]
+}

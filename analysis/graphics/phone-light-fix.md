@@ -21,6 +21,12 @@ Waf x86/x64 и компиляция шейдеров прошли; все 8 SPIR
 
 Все тесты: отдельный Windows desktop, `-nosound`, без ввода и desktop capture. Обычный режим проверен по runtime-состоянию, а не по изображению. Это исправление дефекта порта, не подтверждение пиксельного совпадения с оригинальной игрой.
 
+Статический реверс2026-11-20 уточнил поведение оригинала: `10065ef0` проверяет
+имена `fullbright`, использует `cof_fullbrighttextures` (default0.5) и RGB_SCALE2,
+но содержит отдельное условие для `fullbright_mess` и отличия chrome-ветки.
+Точные правила: `studio-material-contract.md`. Текущий FULLBRIGHT-adapter
+исправляет видимость телефона, но эти новые native условия ещё не переносит.
+
 ```
 python tools/smoke_rtx.py --renderer normal --phone-light --timeout 100
 python tools/smoke_rtx.py --renderer rtx --phone-light --readback --map c_apartment3 --pose "182 605 100 0 180 0" --timeout 100

@@ -1,0 +1,74 @@
+{
+  "source_capture": "analysis/local/graphics-material-lifecycle",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "407925ace93e0982f83375a3d3e976c218b122fb9ac2f8ce3d42acb62b4ed5ee",
+      "procedure": "ram:0x1005f3a0",
+      "evidence_id": "ev_f1eab26dcfceb533f3dfba6fa190d474d7d0139e540fdde282aa4b299d53a6cd",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "046bb4324c3b1a8507484c1655864a5c71fececdf58120019798fe329f86e39a",
+      "procedure": "ram:0x100693d0",
+      "evidence_id": "ev_2ab7414c483e32881a8398c892ccdb0251713c893f76dadc5cfde472730c6441",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "analyses": [
+    {
+      "file": "000-procedure_pseudo_code.json",
+      "sha256": "9759c467156a149c4e12d37b0624227be1936b4fdbca1bd75e42e3575b5e2ff7",
+      "evidence_id": "ev_f1eab26dcfceb533f3dfba6fa190d474d7d0139e540fdde282aa4b299d53a6cd",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1005f3a0"
+      }
+    },
+    {
+      "file": "001-analyze_function.json",
+      "sha256": "8c8376875468b9b257094a75d2ee92ca145333c4a6240f5bcf0808a5fce82789",
+      "evidence_id": "ev_ea30e0d6f18bf2a9b925cce46c99c625dc93bb63769381db175713541774470e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "analyze_function",
+      "parameters": {
+        "procedure": "ram:0x1005f3a0"
+      }
+    },
+    {
+      "file": "002-procedure_pseudo_code.json",
+      "sha256": "1faf9053293cbddded9bd749ca050b479e4cf74140c093ae0cdc5345a2fb1e50",
+      "evidence_id": "ev_2ab7414c483e32881a8398c892ccdb0251713c893f76dadc5cfde472730c6441",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x100693d0"
+      }
+    }
+  ]
+}

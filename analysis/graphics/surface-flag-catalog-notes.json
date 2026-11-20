@@ -1,0 +1,134 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10060b10",
+      "proposed_name": "Render_ResetAndInvalidateMaterialState",
+      "subsystem": "graphics",
+      "summary_ru": "Вызывает четыре helper сброса, устанавливает dirty1018f848=1 и обнуляет frame counter104cdd44; готовит отложенное восстановление материалов/flags/TBN.",
+      "confidence": "high",
+      "details_ru": [
+        "Selector10060b2b попал внутрь функции; реальный entry10060b10. Helpers:100586a0,10059110,1005c3d0,100640a0. При valid GLmanager и101be7f8!=0 ставит104cdd68=1.",
+        "Доказанная цепь HUD_VidInit1001d560 ->1006d9e0 ->10060b10 (call1006dd4a). Тело промежуточного1006d9e0 не сохранено; его условия и смысл new-map не утверждаются.",
+        "Dirty write10060b29; единственные другие наблюдаемые refs: read1005f47a и clear1005f492 внутри1005f3a0."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-material-reset/000-pseudocode.c",
+        "decompiled/client/captures/graphics-material-reset/001-analyze_function.json",
+        "decompiled/client/captures/graphics-material-reset/004-inspect_native_instruction.json",
+        "decompiled/client/captures/hud-entry/002-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005fe90",
+      "proposed_name": "Render_BeginCustomViewPreparation",
+      "subsystem": "graphics",
+      "summary_ru": "Инкрементирует104cdd44, очищает104cdd70, ставит104cdd64=1 и вызывает подготовку custom renderer1005f3a0.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывается из V_CalcRefdef100b3340 по адресу100b33f9; вызов подготовки расположен1005feae.",
+        "Декомпилятор показывает parameterless signature, но1005f3a0 использует параметр; сигнатура не является доказательством полного ABI.",
+        "MarkFaces выполняется внутри подготовки только при dirty1018f848; это не безусловная перемаркировка каждого кадра."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-material-reset/002-pseudocode.c",
+        "decompiled/client/captures/graphics-material-reset/003-analyze_function.json",
+        "decompiled/client/captures/graphics-material-lifecycle/000-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10059e30",
+      "proposed_name": "Materials_MarkSurfaceBumpSpecularCapabilities",
+      "subsystem": "graphics",
+      "summary_ru": "Обходит все world surfaces, сначала очищает flags&~0x600, затем вычисляет bump0x200/specular0x400 по lightstyles и material handles.",
+      "confidence": "high",
+      "details_ru": [
+        "Общие условия: !(старые flags&0x14), наличие всех styles61/62/63, texture+0x24==-666. Флаги surface+8, stride0x5c; материал texture+0x2c.",
+        "Normal+0x10!=0 устанавливает0x200. Gloss+0x18!=0 ИЛИ (glosshi+0x1c!=0 И normal!=0) устанавливает0x400. Остальные биты сохраняются; непрошедшие поверхности остаются без0x600.",
+        "gl_bump/gl_specular/gl_highspecular, atlas<64, GPU caps и samples не являются предикатами этой функции. Cvars проверяются потребителями.",
+        "Вызывается1005f3a0 при dirty1018f848 после10069410 и перед10061eb0; затем dirty сбрасывается."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-surface-flags/000-pseudocode.c",
+        "decompiled/client/captures/graphics-surface-flags/001-analyze_function.json",
+        "decompiled/client/captures/graphics-material-lifecycle/000-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005f3a0",
+      "proposed_name": "Render_PrepareCustomWorldFrame",
+      "subsystem": "graphics",
+      "summary_ru": "Проверяет возможность custom renderer; при dirty1018f848 выполняет material association, surface marking и TBN build, затем сбрасывает dirty и обновляет lightmaps.",
+      "confidence": "high",
+      "details_ru": [
+        "Внешние gates: gl_renderer, GLmanager, hacked OpenGL flag101be7f8, world lightdata+0x17c, caps101be75c/778/7cc и TMU count>1; param[0x39]!=0 возвращает до инициализации.",
+        "Порядок dirty ветки10069410 ->10059e30 ->10061eb0 ->dirty=0;1005a110 вызывается после неё и при dirty==0 тоже.",
+        "Без stencil устанавливает gl_clipplanes=1. После lightmaps создаёт недостающие default textures104cddc0/c4, подготавливает остальные данные и ставит104cdd60=1. Неподдерживаемый renderer выключает gl_renderer."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-material-lifecycle/000-pseudocode.c",
+        "decompiled/client/captures/graphics-material-lifecycle/001-analyze_function.json",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100693d0",
+      "proposed_name": "Materials_CompareDetailTextureIdGreater",
+      "subsystem": "graphics",
+      "summary_ru": "Сравнивает detail texture id двух текстур, возвращая key(second)<key(first); для отсутствующего external material ключ0.",
+      "confidence": "high",
+      "details_ru": [
+        "Ключ читается из material+0x14 только при texture+0x24==-666 и texture+0x2c!=0; сравнение signed int.",
+        "Вместе с insertion sort1006a6f0 даёт стабильный возрастающий порядок ключей: равные элементы не сдвигаются. Поверхности и их flags не изменяет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-material-lifecycle/002-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-material-routing/002-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006a420",
+      "proposed_name": "Materials_ParseMapDetailTextureTable",
+      "subsystem": "graphics",
+      "summary_ru": "Читает карту соответствий текстур из map_detail.txt: основная текстура, detail-текстура и два целочисленных UV масштаба.",
+      "confidence": "high",
+      "details_ru": [
+        "Сбрасывает DAT_104e8150, заполняет таблицу DAT_104e1150 записями по 0x38 байт; поля масштаба +0x30/+0x34. Лимит 512 записей, длины имён <=16 и <=32.",
+        "0x200 в этой функции — лимит записей, а не флаг поверхности; прямых записей surface+8 нет. Вызывается в начале 10069410.",
+        "Обработка отсутствующего файла, неполных записей и слишком длинных токенов видна в сохранённом C; исходный файл освобождается после разбора."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-state/004-pseudocode.c",
+        "decompiled/client/captures/graphics-lighting-core/002-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006a6f0",
+      "proposed_name": "Materials_SortWorldTexturesByDetailId",
+      "subsystem": "graphics",
+      "summary_ru": "Сортирует вставками массив указателей на world textures с компаратором 100693d0; нативное сообщение определяет ключ как detail texture id.",
+      "confidence": "high",
+      "details_ru": [
+        "Массив model+0x174, количество model+0x170; при отсутствии world model возвращается. Вызывается после назначения external material records в 10069410.",
+        "Прямые записи перемещают указатели текстур, а не surface flags 0x200/0x400. Компаратор100693d0 подтверждает стабильный возрастающий signed порядок detail id; при отсутствии marker/material ключ0."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-routing/002-pseudocode.c",
+        "decompiled/client/captures/graphics-material-lifecycle/002-pseudocode.c",
+        "decompiled/client/captures/graphics-lighting-core/002-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    }
+  ]
+}
