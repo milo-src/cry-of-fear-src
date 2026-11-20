@@ -177,7 +177,8 @@ STRING: «ошибка COORD» не означает пропуск оставш
 После независимого чтения `decompiled/engine/captures/graphics-engine-wire/
 010-pseudocode.c` установлен оригинальный MessageEnd 01da64aa. В ветке usermsg
 с id>0x3a он ищет запись регистрации; при registered_size==-1 и staging payload
-size>0xc0 печатает отказ и возвращается **до** переноса в destination. Для
+size>0xc0 вызывает nonreturn Host_Error01d7d873 **до** переноса в destination
+(см. новый engine-message-followup-contract.md), а не обычный packetdrop. Для
 принятого variable message пишет type byte, затем отдельный payload-length byte,
 затем payload. Поэтому 192 относится к payload, а не к сумме с этими двумя
 служебными байтами. Fixed-size сообщения имеют отдельную проверку точного размера.
@@ -247,7 +248,7 @@ float приведены в `engine-wire-contract.md`. Нельзя перено
    а также возможная подмена таблиц/регистраций после исходного bootstrap.
 3. Необычные числовые состояния WRITE_COORD: NaN/Inf, выход за int64 и
    исключения x87; клиентский parser не решает поведение encoder.
-4. Nonreturn/error recovery engine diagnostics и дальнейшая судьба overflow
+4. Setjmp owner/recovery после engine nonlocal error transfer и дальнейшая судьба overflow
    staging; подробнее ограниченная модель в engine-message-buffer-contract.md.
 5. Более узкие ограничения map strings/AllocString и внутренние destinations
    музыкального producer отдельно от сетевой границы.

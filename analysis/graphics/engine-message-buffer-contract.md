@@ -52,8 +52,9 @@ allocator и не увеличение ёмкости. Отрицательна�
    затем01d483c6: cursize=0,flags&=~2. После этого выставляет flags|2.
 4. Возвращает data+текущий cursize и всё равно прибавляет requested.
 
-Шаги после error calls описывают машинный fallthrough **если callee вернётся**;
-их достижимость на фатальных ветвях не доказана. При обычном allowed overflow
+Дополнительный разбор установил:01df2656 не возвращается штатно (exit либо
+recursive longjmp), а01d4abd8/01d4aa99 — возвращающиеся print helpers.
+Следовательно, без allowoverflow reset не достигается; при allowed overflow
 предыдущее содержимое логически сброшено, overflow остаётся выставленным.
 
 Append сначала вызывает reserve, затем проверяет flags&2. При установленном
@@ -103,7 +104,8 @@ destination требуется nonnull dest.data. Проверка0 учитыв
 **не заголовок**, который ниже добавляется отдельными вызовами reserve.
 При type>58 и destination1/8 проверяются индекс клиента через01da8405,
 границы1..0251f328 и несколько полей записи клиента с шагом0x5018. Нарушение
-индекса вызывает01d7d873; дальнейший fallthrough зависит от этого callee.
+индекса вызывает01d7d873: Host_Error завершает этот путь через longjmp
+либо fatal helper и не возвращается штатно.
 Точные имена client flags не назначены только по смещениям.
 
 Запись на нормальной ветке:
@@ -119,7 +121,9 @@ destination требуется nonnull dest.data. Проверка0 учитыв
 не равны фактической сетевой доставке.
 
 Для destination4 вызывается01dd6a43(target,origin,2,0); для5 —(4,0);
-для6/7 —(4,1). Внутренний выбор адресатов этого helper здесь не прочитан.
+для6/7 видна ветвь(4,1), но дополнительный разбор selector01da62cf доказал:
+6/7 сначала вызывают nonreturn Host_Error, поэтому эта поздняя ветвь
+недостижима при обычном коде. Внутренний выбор адресатов helper ещё открыт.
 
 ## Строка: отдельные уровни ограничения
 
@@ -135,18 +139,24 @@ destination требуется nonnull dest.data. Проверка0 учитыв
 включён в обе длины. Поэтому одиночная непустая строка variable message
 помещается при n<=191, а с k байтами других полей — при n+k+1<=192.
 Fixed messages зависят от своего зарегистрированного size. Сверхлимитная
-variable строка не обрезается до191: End явно отказывается от отправки.
+variable строка не обрезается до191: End вызывает Host_Error, прерывая
+текущую обработку. Это сильнее обычного пропуска пакета.
 
 ## Error control flow и оставшиеся границы
 
-Названия диагностик не доказывают `noreturn`. В этом проходе тела01df2656,
-01d7d873,01d4abd8 не восстановлены; ASM caller содержит обычные CALL и
-fallthrough. Явные return в End после diagnostic доказаны независимо от
-этого вопроса. Нельзя объявлять все guard failures безопасным return либо
-падением процесса без чтения callee/его termination path.
+Тела error callees, termination paths, destination selector, copy helper и
+RegUserMsg теперь разобраны в
+[engine-message-followup-contract.md](../network/engine-message-followup-contract.md).
+01df2656 — fatal/recursive longjmp;01d7d873 — Host_Error/longjmp;
+01d4abd8/01d4aa99 — возвращающаяся печать. UnknownID делает обычный return;
+invalid sequence/fixed size mismatch/overflow — fatal, variable oversize и
+invalid recipient — Host_Error. RegUserMsg ограничивает signedsize<=192;
+нижнего guard нет, только-1 трактуется как variable. Для допустимого fixed
+диапазона0..192 дополнительный cap в End не нужен.
 
-Остаются: final ABI/copy contract01d46517; fatal/recoverable error callees;
-destination selector01da62cf; регистрация allowed fixed sizes; routing
-01dd6a43; возможные writers data/maxsize/02079bcc; сетевой flush и receiver.
-Настоящие C entries здесь:01d483e8,01d48557,01da63bd,01da64aa. Добавочные
-01d483c6/01d4705f/01d471b1 описаны по ограниченному ASM без отдельных карточек.
+Copy01d46517 — forward DWORD/BYTE, не memmove. Destination selector и
+недостижимость6/7 описаны в новом контракте. Остаются routing01dd6a43,
+network flush/receiver, registration-list promotion, setjmp owner/recovery,
+возможные writers data/maxsize/02079bcc и exceptional x87 inputs.
+Настоящие C entries этого раннего capture:01d483e8,01d48557,01da63bd,01da64aa.
+Добавочные01d483c6/01d4705f/01d471b1 описаны по ASM без отдельных C-карточек.

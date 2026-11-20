@@ -1,0 +1,99 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1006e910",
+      "proposed_name": "PlaySFX_MessageAdapter",
+      "subsystem": "audio",
+      "summary_ru": "Зарегистрированный callback PlaySFX передаёт сообщение handler10071020 с явным HUD pointer1018a0c0.",
+      "confidence": "high",
+      "details_ru": [
+        "Регистрация1006cf00 связывает PlaySFX с1006e910. Wrapper pushes buffer,size,name,HUD1018a0c0 и вызывает10071020; cleanup16. Это stack argument adapter, не скрытый ECX this.",
+        "Ghidra void не описывает фактический результат: handler устанавливает EAX1 на обоих обычных путях, wrapper его не преобразует. Это статус обработки callback, не подтверждение звучания."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/network-playsfx-client/000-pseudocode.c",
+        "decompiled/client/captures/network-playsfx-client/capture.json",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/network/playsfx-client-assembly/wrapper.asm",
+        "analysis/network/playsfx-client-assembly/handler.asm",
+        "analysis/network/playsfx-client-contract.md",
+        "analysis/network/playsfx-client-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10071020",
+      "proposed_name": "PlaySFX_ParseAndChooseSpatialOrLocalAudio",
+      "subsystem": "audio",
+      "summary_ru": "Читает STRING,BYTE,BYTE,COORD×3,BYTE,SHORT и выбирает spatial event API либо локальный audio context; trailing SHORT не используется.",
+      "confidence": "high",
+      "details_ru": [
+        "InitReader(buffer,size),ReadString10080a60,modeByte100808b0,auxByte100808b0,ReadCoord10080910×3,engineRouteByte100808b0,ReadSignedShort10080a10. Размер нормального пакета n+12. Signed short результата не сохраняет; нет client recipient filter. Handler не проверяет итоговый bad flag.",
+        "engineRoute!=0: при case-sensitive substring weapons_new/ собирает weapons/+suffix после первого slash/backslash исходной строки. По substring fire или shoot в результате выбираетchannel1, иначе0. EventAPI+4 вызывает EV_PlaySound(0,origin,channel,sample,1.0,0.8,0,100). Mode/aux/recipient не участвуют в этом вызове.",
+        "engineRoute==0: вызывает1007fb10(sample,mode,auxLowByteBool,x,y,z). Нормализация меняет только lowbyte DWORD: valid ReadByte даёт0/1, error-1 сохраняет upperFFFFFF. Последующийproducer аргументы aux/xyz не читает.",
+        "ASM закрывает Ghidra void и неверный pointer тип z: coordinate bits перемещаются через MOVSS; обычные выходы EAX1. Return1 возможен при пустом audio context или failed handle create.",
+        "Remap использует stack buffers и постфактум rangecheck suffix<256; формат входа не заменяет bounds-check. EventAPI и backend runtime поведение/доставка звука не проверялись."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/network-playsfx-client/001-pseudocode.c",
+        "decompiled/client/captures/network-playsfx-client/capture.json",
+        "analysis/network/playsfx-client-assembly/handler.asm",
+        "analysis/network/playsfx-client-assembly/readshort.asm",
+        "analysis/network/playsfx-client-assembly/readcoord.asm",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-draw-routing/003-pseudocode.c",
+        "external/hlsdk-portable/engine/cdll_int.h",
+        "external/hlsdk-portable/common/event_api.h",
+        "analysis/network/playsfx-client-contract.md",
+        "analysis/network/playsfx-client-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fb10",
+      "proposed_name": "AudioContext_ForwardEffectSixArguments",
+      "subsystem": "audio",
+      "summary_ru": "Проверяет global context105440a4 и передаёт шесть stack arguments effect producer10080410 с ECX=context.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=105440a4, null→return. Передаёт sample,mode,aux и три координатных DWORD, сохраняя float bit patterns. Передача аргументов доказана ASM, а не одной двухаргументной декларацией callee.",
+        "Producer использует только sample/mode, но выполняет RET0x18. Adapter не применяет объём/позицию/flags самостоятельно и не гарантирует наличие backend105440a8 или active bytecontext0."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/007-pseudocode.c",
+        "analysis/network/playsfx-client-assembly/adapter.asm",
+        "analysis/network/playsfx-client-assembly/producer.asm",
+        "analysis/network/playsfx-client-contract.md",
+        "analysis/network/playsfx-client-assembly/capture.json",
+        "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fb10.asm",
+        "analysis/graphics/sound-lifecycle-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080410",
+      "proposed_name": "AudioContext_PlayOrStopRetainedEffect",
+      "subsystem": "audio",
+      "summary_ru": "По mode запускает retained loop, останавливает retained effect или создаёт one-shot; задаёт cvar volume и случайный playback rate, не использует переданный origin.",
+      "confidence": "high",
+      "details_ru": [
+        "Guards context[0]!=0 иbackend105440a8!=NULL. ABI шесть stackDWORD, RET24, но reads только sample+mode. Aux и xyz не читаются. Внутри этого тела нет отдельного commandline -nosound/-nomusic check.",
+        "Case-sensitive substring weapons/ запускает rewrite weapons_new/+suffix после первого slash/backslash, до mode switch. Mode2 поэтому всё ещё читает/разбирает sample, хотя останавливает всегдаglobal105440ac, независимо от имени.",
+        "Mode1 stop oldac viahandlevirtual+18,create backendvirtual+8(path,1,1,1,0,0) и сохраняетрезультатac. Mode2 stop ac ifnonnull иreturn безобнуления. Othermode create(path,0,1,1,0,0),resultlocal. Музыкальный handle105440b0 не затронут.",
+        "Path format <GetGameDirectory()>/sound/<sample>. ASM подтверждает variadic4arguments: sample сохраняется PUSH до нулеаргументногоAPI, затемdir,format,dest. Не считать ошибочную псевдодекларацию API(arg) истинным ABI.",
+        "Приnonnull handle: virtual+20(clamp(cvar volume,0,1)) дляконечныхобычныхfloat; virtual+60(float(1+RandomFloat(-.1,.1))); virtual+10(0). Retainedac затемполучаетvolume снова изupdate1007f740. Packet mode/aux не задают отдельнуюгромкость.",
+        "Ниreplace,ниstop,ниoneshot не содержатвидимогоrelease/drop. Финальноеbackendownership/pathcopy не установлено; это не runtimeleakdiagnosis. Suffixcopy идётдопроверки<256, prefixconcat иformatter не доказывают boundedbuffercontract."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
+        "analysis/network/playsfx-client-assembly/producer.asm",
+        "decompiled/client/captures/graphics-audio-activation/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c",
+        "analysis/network/playsfx-client-contract.md",
+        "analysis/network/playsfx-client-assembly/capture.json"
+      ]
+    }
+  ]
+}

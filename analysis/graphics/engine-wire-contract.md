@@ -34,7 +34,9 @@ export или превышении лимита проходит к освобо
 ## WRITE_COORD: потерянная в C арифметика
 
 `01da68ad` проверяет active-message global `0242f300`; при нуле вызывает
-diagnostic `01df2656`. Контракт возврата diagnostic отдельно не восстановлен.
+diagnostic `01df2656`. Fatal/recursive longjmp этого helper установлен в
+[engine-message-followup-contract.md](../network/engine-message-followup-contract.md);
+штатного возврата нет.
 На обычном пути инструкции:
 
 ```text
@@ -104,7 +106,7 @@ Staging capacity, overflow flags, MessageBegin/End и лимит перемен�
 - Установлены callbacks, float conversion, endian/truncation, string append
   и связанные ограниченные buffer/message contracts. Это не полный разбор
   engine network transport или всех значений message destination.
-- Не установлены nonreturn/error recovery `01df2656`, последующие изменения
-  callback table и BSS byte, сетевой приём повреждённых пакетов и полный
-  downstream transport.
+- Nonreturn error callees и destination selector закрыты в followup-контракте.
+  Открыты setjmp owner/recovery, последующие изменения callback table и BSS
+  byte, сетевой приём повреждённых пакетов и полный downstream transport.
 - Runtime/визуальных/звуковых проверок и изменений игры в этом этапе нет.

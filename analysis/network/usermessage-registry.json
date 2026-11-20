@@ -1,9 +1,14 @@
 {
-  "schema": 1,
+  "schema": 2,
   "purpose": "Bounded saved-C navigation index; not a complete call graph or verified payload registry.",
   "binary": {
     "path": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
     "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+    "image_base": "0x10000000"
+  },
+  "client_binary": {
+    "path": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/client.dll",
+    "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
     "image_base": "0x10000000"
   },
   "registration": {
@@ -23,8 +28,8 @@
       "digest_definition": "SHA256 of sorted relative-path<TAB>file-SHA256<LF> UTF-8 records; no absolute paths/timestamps."
     },
     "client": {
-      "file_count": 497,
-      "path_sha256_manifest_digest": "e734034de680497912fb6d12f371d5a1cdafe06eccd4aa8c4874ce6ece8cbe01",
+      "file_count": 499,
+      "path_sha256_manifest_digest": "8a732000ca82020e6d9c87d106864d6cb0c041a2d03e6a66473b3d9421a9f34f",
       "digest_definition": "SHA256 of sorted relative-path<TAB>file-SHA256<LF> UTF-8 records; no absolute paths/timestamps."
     }
   },
@@ -33,7 +38,7 @@
     "Lexical global reference is not necessarily a sender; direct MessageBegin arguments are identified syntactically, without control-flow/alias recovery.",
     "Ghidra can lose MessageBegin arguments, e.g. two PlayMP3 stop calls. No reference does not prove unused or absent.",
     "Named declarations without a parsed FUN address retain function_address:null. saved_selector_address comes only from a partial-pass filename; it is a navigation selector, not an asserted function entry. Unique-function counts exclude null; source-file and unresolved-entry counts remain separate.",
-    "Client name literals are not proof of a hook unless the explicit DAT_101b2650 call is present; wrappers are not automatically decoded. Raw &DAT hook names remain in unresolved_client_hook_labels, not silently assigned to server names.",
+    "Client name literals are not proof of a hook unless the explicit DAT_101b2650 call is present; wrappers are not automatically decoded. Resolved raw &DAT names retain original expressions, PE bytes and call sites separately; failed resolutions remain explicit.",
     "Repeated client captures of the same function are preserved as separate evidence paths and deduplicated only by handler address in counts.",
     "Registered fixed size does not establish field layout or prove every sender/receiver agrees; variable -1 does not mean unlimited size.",
     "Runtime message numeric IDs, recipient routing, payload schemas, and functions not saved here remain outside this automatic index."
@@ -87,7 +92,14 @@
     "zero_size": 9,
     "with_server_lexical_reference": 132,
     "with_direct_begin_candidate": 130,
-    "with_client_named_hook": 69,
+    "with_client_named_hook": 72,
+    "client_raw_hook_occurrences": 12,
+    "client_resolved_raw_hook_occurrences": 12,
+    "client_resolved_raw_hook_unique_labels": 4,
+    "client_unresolved_raw_hook_occurrences": 0,
+    "client_unresolved_raw_hook_unique_labels": 0,
+    "client_outside_registration_hook_occurrences": 30,
+    "client_outside_registration_unique_names": 10,
     "server_unresolved_entry_occurrences": 66,
     "server_unresolved_entry_source_files": 36
   },
@@ -345,99 +357,755 @@
     "decompiled/client/captures/menu-switch-initial/006-pseudocode.c": "d9d1cf6174f7c3e31581ad06ae02592bd97504131f1fdc2d7d2fe885b8d4b434",
     "decompiled/client/captures/vgui-menu-panels/007-pseudocode.c": "4e1edbdb92cbed88601449f182acf1f7acd81b073a7edddf6373b7cbb1d7fbfa"
   },
-  "unresolved_client_hook_labels": [
+  "raw_client_name_strings": [
     {
-      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 147,
-      "source_expression": "&DAT_1014e890",
-      "handler_wrapper": "0x1006e7e0"
+      "va": "0x1014e890",
+      "end_exclusive": "0x1014e895",
+      "file_offset": "0x14d290",
+      "bytes_hex": "4c6f676f00",
+      "sha256": "3df624e8ab3dc68b7a8217ef273e4041a6ca5f6f43f0ccfe96053efa067f5e92",
+      "ascii": "Logo"
     },
     {
-      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 183,
-      "source_expression": "&DAT_1014e944",
-      "handler_wrapper": "0x1006e510"
+      "va": "0x1014e944",
+      "end_exclusive": "0x1014e949",
+      "file_offset": "0x14d344",
+      "bytes_hex": "426c757200",
+      "sha256": "a60a20792d8bfcd4ec00681bd6d7327752424263c8208f4e509e222a1c7bd0fb",
+      "ascii": "Blur"
     },
     {
-      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 209,
-      "source_expression": "&DAT_1014e9d8",
-      "handler_wrapper": "0x1006e530"
+      "va": "0x1014e9d8",
+      "end_exclusive": "0x1014e9dd",
+      "file_offset": "0x14d3d8",
+      "bytes_hex": "426f617400",
+      "sha256": "d36ee27665ee6cda2475f7da6555e7138e1fae1b6d15aaf49baa9760d4d0ca29",
+      "ascii": "Boat"
     },
     {
-      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 265,
-      "source_expression": "&DAT_1014eb1c",
-      "handler_wrapper": "0x1006e800"
-    },
-    {
-      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 147,
-      "source_expression": "&DAT_1014e890",
-      "handler_wrapper": "0x1006e7e0"
-    },
-    {
-      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 183,
-      "source_expression": "&DAT_1014e944",
-      "handler_wrapper": "0x1006e510"
-    },
-    {
-      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 209,
-      "source_expression": "&DAT_1014e9d8",
-      "handler_wrapper": "0x1006e530"
-    },
-    {
-      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 265,
-      "source_expression": "&DAT_1014eb1c",
-      "handler_wrapper": "0x1006e800"
-    },
-    {
-      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 147,
-      "source_expression": "&DAT_1014e890",
-      "handler_wrapper": "0x1006e7e0"
-    },
-    {
-      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 183,
-      "source_expression": "&DAT_1014e944",
-      "handler_wrapper": "0x1006e510"
-    },
-    {
-      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 209,
-      "source_expression": "&DAT_1014e9d8",
-      "handler_wrapper": "0x1006e530"
-    },
-    {
-      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
-      "function_address": "0x1006cf00",
-      "line": 265,
-      "source_expression": "&DAT_1014eb1c",
-      "handler_wrapper": "0x1006e800"
+      "va": "0x1014eb1c",
+      "end_exclusive": "0x1014eb21",
+      "file_offset": "0x14d51c",
+      "bytes_hex": "4d4f544400",
+      "sha256": "ad4b67b90dcc11f539c2e13ed0a77073c19c957d48b3c8b5926de270f7ef8fd2",
+      "ascii": "MOTD"
     }
   ],
+  "resolved_client_hook_labels": [
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 147,
+      "source_expression": "&DAT_1014e890",
+      "handler_wrapper": "0x1006e7e0",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Logo",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e890"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 183,
+      "source_expression": "&DAT_1014e944",
+      "handler_wrapper": "0x1006e510",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Blur",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e944"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 209,
+      "source_expression": "&DAT_1014e9d8",
+      "handler_wrapper": "0x1006e530",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Boat",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e9d8"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 265,
+      "source_expression": "&DAT_1014eb1c",
+      "handler_wrapper": "0x1006e800",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "MOTD",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014eb1c"
+    },
+    {
+      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 147,
+      "source_expression": "&DAT_1014e890",
+      "handler_wrapper": "0x1006e7e0",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Logo",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e890"
+    },
+    {
+      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 183,
+      "source_expression": "&DAT_1014e944",
+      "handler_wrapper": "0x1006e510",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Blur",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e944"
+    },
+    {
+      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 209,
+      "source_expression": "&DAT_1014e9d8",
+      "handler_wrapper": "0x1006e530",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Boat",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e9d8"
+    },
+    {
+      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 265,
+      "source_expression": "&DAT_1014eb1c",
+      "handler_wrapper": "0x1006e800",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "MOTD",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014eb1c"
+    },
+    {
+      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 147,
+      "source_expression": "&DAT_1014e890",
+      "handler_wrapper": "0x1006e7e0",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Logo",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e890"
+    },
+    {
+      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 183,
+      "source_expression": "&DAT_1014e944",
+      "handler_wrapper": "0x1006e510",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Blur",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e944"
+    },
+    {
+      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 209,
+      "source_expression": "&DAT_1014e9d8",
+      "handler_wrapper": "0x1006e530",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Boat",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e9d8"
+    },
+    {
+      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+      "function_address": "0x1006cf00",
+      "line": 265,
+      "source_expression": "&DAT_1014eb1c",
+      "handler_wrapper": "0x1006e800",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "MOTD",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014eb1c"
+    }
+  ],
+  "unresolved_client_hook_labels": [],
+  "client_outside_registration_audit": [
+    {
+      "name": "AllowSpec",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 281,
+          "source_expression": "\"AllowSpec\"",
+          "handler_wrapper": "0x1006e480",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "AllowSpec"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 281,
+          "source_expression": "\"AllowSpec\"",
+          "handler_wrapper": "0x1006e480",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "AllowSpec"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 281,
+          "source_expression": "\"AllowSpec\"",
+          "handler_wrapper": "0x1006e480",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "AllowSpec"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 360,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "BuildSt",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 267,
+          "source_expression": "\"BuildSt\"",
+          "handler_wrapper": "0x1006e550",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "BuildSt"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 267,
+          "source_expression": "\"BuildSt\"",
+          "handler_wrapper": "0x1006e550",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "BuildSt"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 267,
+          "source_expression": "\"BuildSt\"",
+          "handler_wrapper": "0x1006e550",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "BuildSt"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 345,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "Detpack",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 263,
+          "source_expression": "\"Detpack\"",
+          "handler_wrapper": "0x1006e620",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Detpack"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 263,
+          "source_expression": "\"Detpack\"",
+          "handler_wrapper": "0x1006e620",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Detpack"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 263,
+          "source_expression": "\"Detpack\"",
+          "handler_wrapper": "0x1006e620",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Detpack"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 344,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "Feign",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 261,
+          "source_expression": "\"Feign\"",
+          "handler_wrapper": "0x1006e670",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Feign"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 261,
+          "source_expression": "\"Feign\"",
+          "handler_wrapper": "0x1006e670",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Feign"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 261,
+          "source_expression": "\"Feign\"",
+          "handler_wrapper": "0x1006e670",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Feign"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 343,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "GasMask",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 171,
+          "source_expression": "\"GasMask\"",
+          "handler_wrapper": "0x1006e6e0",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "GasMask"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 171,
+          "source_expression": "\"GasMask\"",
+          "handler_wrapper": "0x1006e6e0",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "GasMask"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 171,
+          "source_expression": "\"GasMask\"",
+          "handler_wrapper": "0x1006e6e0",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "GasMask"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_without_this_SDK_hook_analogue",
+      "sdk_comparison": [],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "Logo",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 147,
+          "source_expression": "&DAT_1014e890",
+          "handler_wrapper": "0x1006e7e0",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Logo",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e890"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 147,
+          "source_expression": "&DAT_1014e890",
+          "handler_wrapper": "0x1006e7e0",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Logo",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e890"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 147,
+          "source_expression": "&DAT_1014e890",
+          "handler_wrapper": "0x1006e7e0",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Logo",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e890"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 327,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "RandomPC",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 269,
+          "source_expression": "\"RandomPC\"",
+          "handler_wrapper": "0x1006e970",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "RandomPC"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 269,
+          "source_expression": "\"RandomPC\"",
+          "handler_wrapper": "0x1006e970",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "RandomPC"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 269,
+          "source_expression": "\"RandomPC\"",
+          "handler_wrapper": "0x1006e970",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "RandomPC"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 346,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "Spectator",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 279,
+          "source_expression": "\"Spectator\"",
+          "handler_wrapper": "0x1006eae0",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Spectator"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 279,
+          "source_expression": "\"Spectator\"",
+          "handler_wrapper": "0x1006eae0",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Spectator"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 279,
+          "source_expression": "\"Spectator\"",
+          "handler_wrapper": "0x1006eae0",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Spectator"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 358,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "ValClass",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 257,
+          "source_expression": "\"ValClass\"",
+          "handler_wrapper": "0x1006ec60",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "ValClass"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 257,
+          "source_expression": "\"ValClass\"",
+          "handler_wrapper": "0x1006ec60",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "ValClass"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 257,
+          "source_expression": "\"ValClass\"",
+          "handler_wrapper": "0x1006ec60",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "ValClass"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 340,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    },
+    {
+      "name": "ViewMode",
+      "hook_occurrences": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 155,
+          "source_expression": "\"ViewMode\"",
+          "handler_wrapper": "0x1006ecf0",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "ViewMode"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 155,
+          "source_expression": "\"ViewMode\"",
+          "handler_wrapper": "0x1006ecf0",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "ViewMode"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 155,
+          "source_expression": "\"ViewMode\"",
+          "handler_wrapper": "0x1006ecf0",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "ViewMode"
+        }
+      ],
+      "native_server_engine_literal_references": [],
+      "classification": "outside_main_registration_with_SDK_hook_analogue",
+      "sdk_comparison": [
+        {
+          "path": "external/hlsdk-portable/cl_dll/hud.cpp",
+          "line": 331,
+          "sha256": "2177d97b45a949e36cbde5b00102574ca705d7db38ef496dd0729f90cfb52999"
+        }
+      ],
+      "limitation": "SDK resemblance is not original-engine builtin ID proof; bounded native name-literal absence does not prove unused, missing handler, or absence of raw-label/indirect registration."
+    }
+  ],
+  "outside_audit_scan": {
+    "server_scope": "same server scope as scan_scope.server",
+    "engine_directory": "decompiled/engine/captures",
+    "engine_file_count": 32,
+    "engine_manifest_sha256": "a7948ea42eb092c26a8aef66bcbfea03fc6fc19377f718e848682b24292fbad3",
+    "comparison": "Exact quoted literals only; no raw-label, alias or control-flow recovery"
+  },
   "client_hook_names_not_in_this_registration": [
     {
       "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
       "function_address": "0x1006cf00",
+      "line": 147,
+      "source_expression": "&DAT_1014e890",
+      "handler_wrapper": "0x1006e7e0",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Logo",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e890"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
       "line": 155,
       "source_expression": "\"ViewMode\"",
       "handler_wrapper": "0x1006ecf0",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "ViewMode"
     },
     {
@@ -446,6 +1114,10 @@
       "line": 171,
       "source_expression": "\"GasMask\"",
       "handler_wrapper": "0x1006e6e0",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "GasMask"
     },
     {
@@ -454,6 +1126,10 @@
       "line": 257,
       "source_expression": "\"ValClass\"",
       "handler_wrapper": "0x1006ec60",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "ValClass"
     },
     {
@@ -462,6 +1138,10 @@
       "line": 261,
       "source_expression": "\"Feign\"",
       "handler_wrapper": "0x1006e670",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Feign"
     },
     {
@@ -470,6 +1150,10 @@
       "line": 263,
       "source_expression": "\"Detpack\"",
       "handler_wrapper": "0x1006e620",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Detpack"
     },
     {
@@ -478,6 +1162,10 @@
       "line": 267,
       "source_expression": "\"BuildSt\"",
       "handler_wrapper": "0x1006e550",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "BuildSt"
     },
     {
@@ -486,6 +1174,10 @@
       "line": 269,
       "source_expression": "\"RandomPC\"",
       "handler_wrapper": "0x1006e970",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "RandomPC"
     },
     {
@@ -494,6 +1186,10 @@
       "line": 279,
       "source_expression": "\"Spectator\"",
       "handler_wrapper": "0x1006eae0",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Spectator"
     },
     {
@@ -502,14 +1198,36 @@
       "line": 281,
       "source_expression": "\"AllowSpec\"",
       "handler_wrapper": "0x1006e480",
+      "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+      "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+      "saved_selector_address": "0x1006d23f",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "AllowSpec"
     },
     {
       "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
       "function_address": "0x1006cf00",
+      "line": 147,
+      "source_expression": "&DAT_1014e890",
+      "handler_wrapper": "0x1006e7e0",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Logo",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e890"
+    },
+    {
+      "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+      "function_address": "0x1006cf00",
       "line": 155,
       "source_expression": "\"ViewMode\"",
       "handler_wrapper": "0x1006ecf0",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "ViewMode"
     },
     {
@@ -518,6 +1236,10 @@
       "line": 171,
       "source_expression": "\"GasMask\"",
       "handler_wrapper": "0x1006e6e0",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "GasMask"
     },
     {
@@ -526,6 +1248,10 @@
       "line": 257,
       "source_expression": "\"ValClass\"",
       "handler_wrapper": "0x1006ec60",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "ValClass"
     },
     {
@@ -534,6 +1260,10 @@
       "line": 261,
       "source_expression": "\"Feign\"",
       "handler_wrapper": "0x1006e670",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Feign"
     },
     {
@@ -542,6 +1272,10 @@
       "line": 263,
       "source_expression": "\"Detpack\"",
       "handler_wrapper": "0x1006e620",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Detpack"
     },
     {
@@ -550,6 +1284,10 @@
       "line": 267,
       "source_expression": "\"BuildSt\"",
       "handler_wrapper": "0x1006e550",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "BuildSt"
     },
     {
@@ -558,6 +1296,10 @@
       "line": 269,
       "source_expression": "\"RandomPC\"",
       "handler_wrapper": "0x1006e970",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "RandomPC"
     },
     {
@@ -566,6 +1308,10 @@
       "line": 279,
       "source_expression": "\"Spectator\"",
       "handler_wrapper": "0x1006eae0",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Spectator"
     },
     {
@@ -574,14 +1320,36 @@
       "line": 281,
       "source_expression": "\"AllowSpec\"",
       "handler_wrapper": "0x1006e480",
+      "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+      "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+      "saved_selector_address": "0x1006d4fe",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "AllowSpec"
     },
     {
       "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
       "function_address": "0x1006cf00",
+      "line": 147,
+      "source_expression": "&DAT_1014e890",
+      "handler_wrapper": "0x1006e7e0",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+      "name": "Logo",
+      "name_source": "hash_pinned_original_client_PE_string",
+      "raw_string_va": "0x1014e890"
+    },
+    {
+      "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+      "function_address": "0x1006cf00",
       "line": 155,
       "source_expression": "\"ViewMode\"",
       "handler_wrapper": "0x1006ecf0",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "ViewMode"
     },
     {
@@ -590,6 +1358,10 @@
       "line": 171,
       "source_expression": "\"GasMask\"",
       "handler_wrapper": "0x1006e6e0",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "GasMask"
     },
     {
@@ -598,6 +1370,10 @@
       "line": 257,
       "source_expression": "\"ValClass\"",
       "handler_wrapper": "0x1006ec60",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "ValClass"
     },
     {
@@ -606,6 +1382,10 @@
       "line": 261,
       "source_expression": "\"Feign\"",
       "handler_wrapper": "0x1006e670",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Feign"
     },
     {
@@ -614,6 +1394,10 @@
       "line": 263,
       "source_expression": "\"Detpack\"",
       "handler_wrapper": "0x1006e620",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Detpack"
     },
     {
@@ -622,6 +1406,10 @@
       "line": 267,
       "source_expression": "\"BuildSt\"",
       "handler_wrapper": "0x1006e550",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "BuildSt"
     },
     {
@@ -630,6 +1418,10 @@
       "line": 269,
       "source_expression": "\"RandomPC\"",
       "handler_wrapper": "0x1006e970",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "RandomPC"
     },
     {
@@ -638,6 +1430,10 @@
       "line": 279,
       "source_expression": "\"Spectator\"",
       "handler_wrapper": "0x1006eae0",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "Spectator"
     },
     {
@@ -646,6 +1442,10 @@
       "line": 281,
       "source_expression": "\"AllowSpec\"",
       "handler_wrapper": "0x1006e480",
+      "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+      "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+      "saved_selector_address": "0x1006d640",
+      "entry_address_source": "actual FUN declaration in saved C; selector is separate",
       "name": "AllowSpec"
     }
   ],
@@ -671,7 +1471,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -785,7 +1587,9 @@
         "direct_begin_unique_functions": 7,
         "direct_begin_unique_source_files": 8,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -819,7 +1623,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -861,7 +1667,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -886,7 +1694,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -952,7 +1762,9 @@
         "direct_begin_unique_functions": 4,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -986,7 +1798,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -1020,7 +1834,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -1054,7 +1870,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -1096,7 +1914,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -1211,7 +2031,9 @@
         "direct_begin_unique_functions": 7,
         "direct_begin_unique_source_files": 7,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1253,7 +2075,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -1287,7 +2111,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -1346,7 +2172,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1405,7 +2233,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1464,7 +2294,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1523,7 +2355,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1582,7 +2416,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1641,7 +2477,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -1700,7 +2538,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2158,7 +2998,9 @@
         "direct_begin_unique_functions": 18,
         "direct_begin_unique_source_files": 21,
         "direct_begin_unresolved_entry_source_files": 3,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2183,7 +3025,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2217,7 +3061,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2259,7 +3105,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2342,7 +3190,9 @@
         "direct_begin_unique_functions": 4,
         "direct_begin_unique_source_files": 4,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2417,7 +3267,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2467,7 +3319,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2534,7 +3388,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2558,7 +3414,56 @@
           "saved_selector_address": "0x100c9970"
         }
       ],
-      "client_references": [],
+      "client_references": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 265,
+          "source_expression": "&DAT_1014eb1c",
+          "handler_wrapper": "0x1006e800",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "MOTD",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014eb1c",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014eb1c,FUN_1006e800);"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 265,
+          "source_expression": "&DAT_1014eb1c",
+          "handler_wrapper": "0x1006e800",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "MOTD",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014eb1c",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014eb1c,FUN_1006e800);"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 265,
+          "source_expression": "&DAT_1014eb1c",
+          "handler_wrapper": "0x1006e800",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "MOTD",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014eb1c",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014eb1c,FUN_1006e800);"
+        }
+      ],
       "counts": {
         "server_lexical_occurrences": 1,
         "server_unique_functions": 1,
@@ -2568,8 +3473,10 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 0,
-        "client_distinct_hook_wrappers": 0
+        "client_resolved_raw_hook_occurrences": 3,
+        "client_distinct_hook_wrappers": 1
       }
     },
     {
@@ -2627,7 +3534,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2669,7 +3578,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2694,7 +3605,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2744,7 +3657,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2778,7 +3693,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2853,7 +3770,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -2878,7 +3797,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2912,7 +3833,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -2946,7 +3869,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3020,7 +3945,9 @@
         "direct_begin_unique_functions": 5,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3079,7 +4006,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3113,7 +4042,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3138,7 +4069,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3163,7 +4096,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3213,7 +4148,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3272,7 +4209,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3371,7 +4310,9 @@
         "direct_begin_unique_functions": 4,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3430,7 +4371,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3464,7 +4407,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3498,7 +4443,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3532,7 +4479,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3582,7 +4531,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3673,7 +4624,9 @@
         "direct_begin_unique_functions": 5,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 2,
         "client_literal_occurrences": 2,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3707,7 +4660,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3741,7 +4696,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3808,7 +4765,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3867,7 +4826,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3926,7 +4887,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -3960,7 +4923,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -3992,7 +4957,56 @@
           "saved_selector_address": "0x100f6ca0"
         }
       ],
-      "client_references": [],
+      "client_references": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 183,
+          "source_expression": "&DAT_1014e944",
+          "handler_wrapper": "0x1006e510",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Blur",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e944",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014e944,FUN_1006e510);"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 183,
+          "source_expression": "&DAT_1014e944",
+          "handler_wrapper": "0x1006e510",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Blur",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e944",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014e944,FUN_1006e510);"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 183,
+          "source_expression": "&DAT_1014e944",
+          "handler_wrapper": "0x1006e510",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Blur",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e944",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014e944,FUN_1006e510);"
+        }
+      ],
       "counts": {
         "server_lexical_occurrences": 2,
         "server_unique_functions": 2,
@@ -4002,8 +5016,10 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 0,
-        "client_distinct_hook_wrappers": 0
+        "client_resolved_raw_hook_occurrences": 3,
+        "client_distinct_hook_wrappers": 1
       }
     },
     {
@@ -4085,7 +5101,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4136,7 +5154,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4211,7 +5231,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 2,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4253,7 +5275,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4295,7 +5319,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4361,7 +5387,9 @@
         "direct_begin_unique_functions": 5,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4395,7 +5423,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4469,7 +5499,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 6,
         "direct_begin_unresolved_entry_source_files": 5,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4512,7 +5544,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4537,7 +5571,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4587,7 +5623,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4646,7 +5684,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4713,7 +5753,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4772,7 +5814,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4797,7 +5841,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -4880,7 +5926,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -4947,7 +5995,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -5046,7 +6096,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -5168,7 +6220,9 @@
         "direct_begin_unique_functions": 5,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5202,7 +6256,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -5227,7 +6283,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5261,7 +6319,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5327,7 +6387,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5377,7 +6439,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5411,7 +6475,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5533,7 +6599,9 @@
         "direct_begin_unique_functions": 6,
         "direct_begin_unique_source_files": 7,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -5912,7 +6980,9 @@
         "direct_begin_unique_functions": 35,
         "direct_begin_unique_source_files": 39,
         "direct_begin_unresolved_entry_source_files": 4,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -5962,7 +7032,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6012,7 +7084,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6046,7 +7120,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6113,7 +7189,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -6172,7 +7250,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -6214,7 +7294,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6239,7 +7321,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6298,7 +7382,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -6357,7 +7443,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -6407,7 +7495,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6441,7 +7531,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6499,7 +7591,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6541,7 +7635,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6639,7 +7735,9 @@
         "direct_begin_unique_functions": 7,
         "direct_begin_unique_source_files": 7,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6706,7 +7804,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 4,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -6756,7 +7856,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6806,7 +7908,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6872,7 +7976,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 2,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -6914,7 +8020,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -7164,7 +8272,9 @@
         "direct_begin_unique_functions": 6,
         "direct_begin_unique_source_files": 8,
         "direct_begin_unresolved_entry_source_files": 2,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -7223,7 +8333,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7248,7 +8360,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -7296,7 +8410,56 @@
           "saved_selector_address": "0x100f6ca0"
         }
       ],
-      "client_references": [],
+      "client_references": [
+        {
+          "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 209,
+          "source_expression": "&DAT_1014e9d8",
+          "handler_wrapper": "0x1006e530",
+          "capture_manifest": "decompiled/client/captures/graphics-client-first/capture.json",
+          "evidence_id": "ev_e75c0dc3b6b2c270d4781a1493ae50d70d726c693d4acc23925083ca1a2b7972",
+          "saved_selector_address": "0x1006d23f",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Boat",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e9d8",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014e9d8,FUN_1006e530);"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 209,
+          "source_expression": "&DAT_1014e9d8",
+          "handler_wrapper": "0x1006e530",
+          "capture_manifest": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "evidence_id": "ev_6e2eb5c629a2f20700bd0f041872dc6ade11a2bc63ad08e7d698cbd5abdf0c1a",
+          "saved_selector_address": "0x1006d4fe",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Boat",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e9d8",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014e9d8,FUN_1006e530);"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
+          "function_address": "0x1006cf00",
+          "line": 209,
+          "source_expression": "&DAT_1014e9d8",
+          "handler_wrapper": "0x1006e530",
+          "capture_manifest": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "evidence_id": "ev_3ac798e876630dc289bf9ab8ef71f283c2b8ed654cb5dd32df9be8b38b846e4b",
+          "saved_selector_address": "0x1006d640",
+          "entry_address_source": "actual FUN declaration in saved C; selector is separate",
+          "name": "Boat",
+          "name_source": "hash_pinned_original_client_PE_string",
+          "raw_string_va": "0x1014e9d8",
+          "kind": "raw_PE_resolved_hook_call_DAT_101b2650_in_C",
+          "excerpt": "(*DAT_101b2650)(&DAT_1014e9d8,FUN_1006e530);"
+        }
+      ],
       "counts": {
         "server_lexical_occurrences": 4,
         "server_unique_functions": 2,
@@ -7306,8 +8469,10 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 4,
         "direct_begin_unresolved_entry_source_files": 2,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 0,
-        "client_distinct_hook_wrappers": 0
+        "client_resolved_raw_hook_occurrences": 3,
+        "client_distinct_hook_wrappers": 1
       }
     },
     {
@@ -7413,7 +8578,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7504,7 +8671,9 @@
         "direct_begin_unique_functions": 5,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7659,7 +8828,9 @@
         "direct_begin_unique_functions": 8,
         "direct_begin_unique_source_files": 11,
         "direct_begin_unresolved_entry_source_files": 3,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7734,7 +8905,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7784,7 +8957,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7907,7 +9082,9 @@
         "direct_begin_unique_functions": 4,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -7966,7 +9143,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -8104,7 +9283,9 @@
         "direct_begin_unique_functions": 7,
         "direct_begin_unique_source_files": 10,
         "direct_begin_unresolved_entry_source_files": 2,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8146,7 +9327,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8397,7 +9580,9 @@
         "direct_begin_unique_functions": 23,
         "direct_begin_unique_source_files": 24,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -8422,7 +9607,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8497,7 +9684,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 2,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -8540,7 +9729,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -8574,7 +9765,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8673,7 +9866,9 @@
         "direct_begin_unique_functions": 6,
         "direct_begin_unique_source_files": 6,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -8698,7 +9893,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8723,7 +9920,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8748,7 +9947,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8790,7 +9991,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8888,7 +10091,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -8947,7 +10152,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -8997,7 +10204,9 @@
         "direct_begin_unique_functions": 2,
         "direct_begin_unique_source_files": 2,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9056,7 +10265,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9137,7 +10348,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 5,
         "client_literal_occurrences": 5,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9212,7 +10425,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 4,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9287,7 +10502,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 4,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9321,7 +10538,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9420,7 +10639,9 @@
         "direct_begin_unique_functions": 4,
         "direct_begin_unique_source_files": 4,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9454,7 +10675,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9488,7 +10711,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9530,7 +10755,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9564,7 +10791,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9671,7 +10900,9 @@
         "direct_begin_unique_functions": 5,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9730,7 +10961,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9755,7 +10988,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -9798,7 +11033,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9849,7 +11086,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -9908,7 +11147,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 1,
         "client_literal_occurrences": 1,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -10014,7 +11255,9 @@
         "direct_begin_unique_functions": 4,
         "direct_begin_unique_source_files": 5,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -10048,7 +11291,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 1,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     },
@@ -10107,7 +11352,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -10182,7 +11429,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -10257,7 +11506,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -10332,7 +11583,9 @@
         "direct_begin_unique_functions": 3,
         "direct_begin_unique_source_files": 3,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -10399,7 +11652,9 @@
         "direct_begin_unique_functions": 1,
         "direct_begin_unique_source_files": 1,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 3,
         "client_literal_occurrences": 3,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 1
       }
     },
@@ -10424,7 +11679,9 @@
         "direct_begin_unique_functions": 0,
         "direct_begin_unique_source_files": 0,
         "direct_begin_unresolved_entry_source_files": 0,
+        "client_reference_occurrences": 0,
         "client_literal_occurrences": 0,
+        "client_resolved_raw_hook_occurrences": 0,
         "client_distinct_hook_wrappers": 0
       }
     }

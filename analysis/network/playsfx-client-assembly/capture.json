@@ -1,0 +1,86 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "new_rea_process": false,
+  "source_listing": "analysis\\local\\music-state-client-text.asm",
+  "source_listing_sha256": "fdf5a6a09539335fc42892b84367c4b204716d8a3784e49e0ea7ca6661c75bf9",
+  "ranges": [
+    {
+      "file": "wrapper.asm",
+      "start": "0x1006e910",
+      "end_exclusive": "0x1006e92b",
+      "sha256": "1fb08de6087fbc186734b75141ea0c448cad0b3a126114523677caa8cd065082",
+      "binary_range_sha256": "fe2a0a795cd267608c0104859639410f55bc9680853eb52f67856f95a360a4e9",
+      "bytes_verified": true
+    },
+    {
+      "file": "handler.asm",
+      "start": "0x10071020",
+      "end_exclusive": "0x10071293",
+      "sha256": "c5c3b6115368c9223e76550806da3cac836285721c6f0cbc6f38fc1a11f4bcaa",
+      "binary_range_sha256": "b2673a150e32ed07e6da8954509ac32e7b4a102a88ac4f20bb353cbba6000374",
+      "bytes_verified": true
+    },
+    {
+      "file": "adapter.asm",
+      "start": "0x1007fb10",
+      "end_exclusive": "0x1007fb4f",
+      "sha256": "165d2835f81228d1a625d0791a97040387fcfce03b02fd46a27c6768a059cbb5",
+      "binary_range_sha256": "ba0c69599b4f13d968ede5d109a39ad7502acf6c0b10f5832a6b19b407d0096d",
+      "bytes_verified": true
+    },
+    {
+      "file": "producer.asm",
+      "start": "0x10080410",
+      "end_exclusive": "0x10080700",
+      "sha256": "aec92850e7403d28a807ffa94e6a68122d0984b173a054cbf11d9121eef4d7d5",
+      "binary_range_sha256": "8661ce647cd0576af457be784bddba25c98df17c6fbaa2ff7372f48db6e43c1a",
+      "bytes_verified": true
+    },
+    {
+      "file": "readshort.asm",
+      "start": "0x10080a10",
+      "end_exclusive": "0x10080a5a",
+      "sha256": "92c300e2db3c099878f9b05b942c2c745bd326f1da8e5df97e66ba8f336619d0",
+      "binary_range_sha256": "446264e3e7ae2449dae69a60018d12df257b0245aae329a72b0b4fffb4782f52",
+      "bytes_verified": true
+    },
+    {
+      "file": "readcoord.asm",
+      "start": "0x10080910",
+      "end_exclusive": "0x10080939",
+      "sha256": "f32f9a000fe2e75462cdb5e851baf46dac10934d6a03c1a19e53278420f919a3",
+      "binary_range_sha256": "d4429ac6d7173b7ab73e10c9e2ef525fb22d8c4c484999d0b314a2c95bcb59b9",
+      "bytes_verified": true
+    }
+  ],
+  "literals": {
+    "0x101496c8": "weapons/",
+    "0x101496d4": "weapons_new/",
+    "0x1014edcc": "fire",
+    "0x1014edd4": "shoot",
+    "0x101509ac": "%s/sound/%s",
+    "0x101509b8": "volume"
+  },
+  "numeric_literals": {
+    "0x1013ee58_double": 0.125,
+    "0x1013eec0_double": 1.0
+  },
+  "engine_api_layout": {
+    "native_copy_evidence": "decompiled/client/captures/graphics-studio-draw-routing/003-pseudocode.c",
+    "base": "0x101b2608",
+    "sdk_header": "external/hlsdk-portable/engine/cdll_int.h",
+    "sdk_header_sha256": "c5a5bc977a6a9ce21f4451a2286998dc10d9ab300c026f65051a06526b1c030d",
+    "x86_pointer_bytes": 4,
+    "slots": {
+      "pfnGetCvarFloat": 15,
+      "pfnRandomFloat": 67,
+      "pfnGetGameDirectory": 71,
+      "pEventAPI": 84
+    },
+    "event_api_header": "external/hlsdk-portable/common/event_api.h",
+    "event_api_header_sha256": "b0bc340ff6a863af42bfc66b48a43bd39fb4884333e5a74622afaafd81cf7847",
+    "EV_PlaySound_offset": 4
+  }
+}

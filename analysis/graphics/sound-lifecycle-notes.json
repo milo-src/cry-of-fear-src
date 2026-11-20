@@ -88,15 +88,20 @@
     {
       "module": "client",
       "address": "0x1007fb10",
-      "proposed_name": "Audio_DispatchSoundIfLocalContextExists",
+      "proposed_name": "AudioContext_ForwardEffectSixArguments",
       "subsystem": "audio",
-      "summary_ru": "Загружает локальный звуковой контекст в ECX и при ненулевом указателе передаёт параметры воспроизведения обработчику.",
+      "summary_ru": "Проверяет global context105440a4 и передаёт шесть stack arguments effect producer10080410 с ECX=context.",
       "confidence": "high",
       "details_ru": [
-        "Bounded assembly loadsECX=105440a4, null-checks it, marshals six stack arguments and calls10080410. Therefore10080410 first-byte activation test reads a4.byte0; a4 is not merely an unrelated global presence flag."
+        "ECX=105440a4, null→return. Передаёт sample,mode,aux и три координатных DWORD, сохраняя float bit patterns. Передача аргументов доказана ASM, а не одной двухаргументной декларацией callee.",
+        "Producer использует только sample/mode, но выполняет RET0x18. Adapter не применяет объём/позицию/flags самостоятельно и не гарантирует наличие backend105440a8 или active bytecontext0."
       ],
       "evidence_paths": [
         "decompiled/client/captures/weapons-client-core/007-pseudocode.c",
+        "analysis/network/playsfx-client-assembly/adapter.asm",
+        "analysis/network/playsfx-client-assembly/producer.asm",
+        "analysis/network/playsfx-client-contract.md",
+        "analysis/network/playsfx-client-assembly/capture.json",
         "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
         "analysis/graphics/hud-lifetime-assembly/1007fb10.asm",
         "analysis/graphics/sound-lifecycle-contract.md"

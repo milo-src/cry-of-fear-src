@@ -9,7 +9,7 @@
       "confidence": "высокая для описанного статического поведения",
       "details_ru": [
         "Sizebuf fields name+0,flags WORD+4,data+8,maxsize+c,cursize+10. Signed cursize+requested>maxsize запускает overflow branch. Явного negative-length или integer-overflow guard нет.",
-        "Без allow mask1 вызывает01df2656 (maxsize0: uninitialized, иначе overflow not allowed). requested>maxsize вызывает01df2656 безallow либо01d4abd8 сallow. Reachability после этих calls зависит от непрочитанного callee, diagnostic string не доказывает noreturn.",
+        "Без allow mask1 вызывает fatal01df2656 (maxsize0: uninitialized, иначе overflow not allowed); нормального возврата нет. requested>maxsize сallow вызывает возвращающийся debugprint01d4abd8, затем достигаетreset/overflowflag.",
         "Далее diagnostic01d4aa99, reset01d483c6(cursize0,flags&~2),flags|2. Затем cursize+=requested и return data+старыйcursize. Reset подтверждён bounded ASM; buffer capacity не расширяется.",
         "Staging descriptor01ec1a98 в исходном PE содержит data0242f0f4,maxsize512. Это начальное состояние, не доказательство отсутствия runtime writers."
       ],
@@ -19,7 +19,10 @@
         "analysis/graphics/engine-message-buffer-contract.md",
         "analysis/graphics/engine-message-buffer-assembly/capture.json",
         "analysis/graphics/engine-message-buffer-assembly/01d483e8.asm",
-        "analysis/graphics/engine-message-buffer-assembly/01d483c6.asm"
+        "analysis/graphics/engine-message-buffer-assembly/01d483c6.asm",
+        "analysis/network/engine-message-followup-contract.md",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-assembly/capture.json"
       ]
     },
     {
@@ -32,7 +35,7 @@
       "details_ru": [
         "Аргументы (sizebuf,source,length); сначала01d483e8(sizebuf,length), затем WORD flags+4&2. При0 вызывает01d46517(reserved,source,length), иначе возвращается без copy.",
         "Cursize может измениться даже при пропущенном copy. Existing overflow сохраняет запрет копирования до reset; эта функция не проверяет sourceNULL либо sign length отдельно.",
-        "Не переносить правило no-copy-on-overflow на primitive byte writer01d4705f: bounded ASM того helper пишет байт после reserve без дополнительной flagscheck. Точная семантика/overlap copyhelper01d46517 остаётся границей."
+        "Не переносить no-copy-on-overflow на primitivebyte01d4705f: онпишетпослеreserveбезflagscheck. Copy01d46517 подтверждён какforwardDWORD/BYTEloop, безoverlaphandling; неmemmove."
       ],
       "evidence_paths": [
         "decompiled/engine/captures/graphics-engine-wire/005-pseudocode.c",
@@ -40,7 +43,10 @@
         "analysis/graphics/engine-message-buffer-contract.md",
         "analysis/graphics/engine-message-buffer-assembly/capture.json",
         "analysis/graphics/engine-message-buffer-assembly/01d483e8.asm",
-        "analysis/graphics/engine-message-buffer-assembly/01d4705f.asm"
+        "analysis/graphics/engine-message-buffer-assembly/01d4705f.asm",
+        "analysis/network/engine-message-followup-contract.md",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-assembly/capture.json"
       ]
     },
     {
@@ -51,7 +57,7 @@
       "summary_ru": "Проверяет последовательность и target/destination, сохраняет метаданные активного сообщения и сбрасывает общий staging buffer.",
       "confidence": "высокая для описанного статического поведения",
       "details_ru": [
-        "Параметры(destination,type,origin,target). destination1/8 безtarget, прочиеdestination сtarget, active0242f300!=0 иtype0 вызывают01df2656; callsites не доказывают его noreturn.",
+        "Параметры(destination,type,origin,target). destination1/8 безtarget, прочиеdestination сtarget, active0242f300!=0 иtype0 вызывают01df2656; этотfatalhelper не возвращается штатно.",
         "Затем active=1,type→0242f2fc,target→0242f2f4,destination→0242f2f8. Дляdestination4/5 nonnullorigin копирует3dword в0242eb24..2c, затем01d7f691. Nullorigin сохраняет прежнее значение.",
         "ASM: ненулевой01d7f691 обнуляет только stackargument destination, global destination уже сохранён и не изменяется повторно. Нельзя трактовать это как доказанный remap route0.",
         "cursize01ec1aa8=0,flagsWORD01ec1a9c=1; data/maxsize не переназначаются. Global state доказывает один активный staging transaction, а не независимые nested buffers."
@@ -61,7 +67,10 @@
         "decompiled/engine/captures/graphics-engine-wire/capture.json",
         "analysis/graphics/engine-message-buffer-contract.md",
         "analysis/graphics/engine-message-buffer-assembly/capture.json",
-        "analysis/graphics/engine-message-buffer-assembly/01da63bd.asm"
+        "analysis/graphics/engine-message-buffer-assembly/01da63bd.asm",
+        "analysis/network/engine-message-followup-contract.md",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-assembly/capture.json"
       ]
     },
     {
@@ -75,8 +84,8 @@
         "Приactive0 diagnostic01df2656; затемactive0242f300=0 ДОearlyexits. target+228&0x2000 отбрасывает message. Stagingflags&2 вызывает diagnostic иreturn. Metadata/data не очищаются поуспеху End.",
         "Type>58 ищетid в024988ac(next+18); приmiss иdestination3 дополнительно024988a8. Unknownid diagnostic01d4abd8+return. Registeredsize==-1: variablepayload<=192, иначе01d7d873+return. Fixedsize требует точногоравенства, иначе01df2656+return; cap192 толькоvariableветка.",
         "Destination01da62cf result: nonnulldata required. Destination0 preflight cursize+payload<=maxsize не включаетheader. Дляuser type иdest1/8 дополнительноtargetindex1..0251f328 иclientrecord stride5018,flagsguards; precisefieldnamesнеустановлены.",
-        "Header01d4705f writes1byte type;variableещё1byte payloadlength.01d471b1(dest,size,stagingdata) callsappend ifsource!=NULL. ASM подтверждает helper widths/order. Destination4→routing01dd6a43(target,origin,2,0);5→(4,0);6/7→(4,1). Этоbufferwrite/routingcall,неподтверждениеnetworkdelivery.",
-        "512 stagingcapacity и192 variablepayload различны. Строковыйsource01d47171 передаётstrlen+1; одиночная variableстрока допускает191символ припрочихполях0. Нетобрезаниясверхлимита. Fatal semantics01df2656/01d7d873 иdestinationhelper остаютсянепрочитаны."
+        "Header01d4705f writes1byte type; variableещё1bytepayloadlength.01d471b1(dest,size,stagingdata) callsappend ifsource!=NULL. Destination4→01dd6a43(target,origin,2,0);5→(4,0). Видимые6/7→(4,1) недостижимычерезselector01da62cf: тамHost_Error. Bufferwrite/routingcallнеравныдоставке.",
+        "512 initialstagingcapacity и192 variablepayload различны. Одиночнаяvariableстрокадо191символов,нетусечения. Fatal01df2656/Host_Error01d7d873 не возвращаются; unknownIDdebugprint возвращается. RegUserMsgдопускаетsignedsize<=192,нижнегoguardнет;валидныеfixed0..192."
       ],
       "evidence_paths": [
         "decompiled/engine/captures/graphics-engine-wire/010-pseudocode.c",
@@ -87,7 +96,10 @@
         "analysis/graphics/engine-message-buffer-assembly/01d4705f.asm",
         "analysis/graphics/engine-message-buffer-assembly/01d471b1.asm",
         "decompiled/engine/captures/graphics-engine-wire/003-pseudocode.c",
-        "decompiled/engine/captures/graphics-engine-wire/008-pseudocode.c"
+        "decompiled/engine/captures/graphics-engine-wire/008-pseudocode.c",
+        "analysis/network/engine-message-followup-contract.md",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-assembly/capture.json"
       ]
     }
   ]

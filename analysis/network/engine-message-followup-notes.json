@@ -1,0 +1,136 @@
+{
+  "functions": [
+    {
+      "module": "engine",
+      "address": "0x01df2656",
+      "proposed_name": "Sys_Error_FatalOrRecursiveLongjmp",
+      "subsystem": "network",
+      "summary_ru": "Фатальная диагностика: обычные пути завершают процесс, повторный вход выполняет longjmp.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Формат1024; guard02499f94. Повторный вход→01e731bc(027fc1a0,2); первый вход ставитguard1, условныйcallback0250d944, fatal log.",
+        "Dedicated gate0250de38→MessageBoxA+01e712a6(-1); другаяветка GetForegroundWindow/DestroyWindow/MessageBoxA/01df7711→тотжеexit. Это статическое описание, функции не выполнялись.",
+        "CRT wrapper( status,1,0 )→IAT01e8b24c ExitProcess; reentry использует TerminateProcess. PE imports и ASM доказаны. Нормального возврата кcallerнет; setjmpowner/recovery не исследованы."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/000-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d7d873",
+      "proposed_name": "Host_Error_AbortToHostJumpBuffer",
+      "subsystem": "network",
+      "summary_ru": "Прерывает текущую обработку через longjmp(027fc1a0,1), а при recursion/state0 вызывает fatal helper.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Guard023c9dec!=0→01df2656; иначеguard1,01d724ac,format1024,console01d4aa99 иусловныеhelpers01d38050/01d7e77b.",
+        "State02dcf280==0→fatal; иначе01d31007,02dd31ec=-1,guard0,longjmp(buffer,1). Необычный RET послеcall вASM недостижимприштатномlongjmp.",
+        "Этоcallee variablepayload>192 иinvalidrecipient/destination. Отказ не является простым packetdrop; owner setjmp и смысл всех cleanupglobals ещё открыты."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/001-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d4abd8",
+      "proposed_name": "Con_DPrintf_GatedDeveloperOutput",
+      "subsystem": "network",
+      "summary_ru": "Условная отладочная печать через OutputDebugStringA и console helper; обычный возврат.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Gate float01ebc9ac!=0 && (float027fc7f4==0 || state02dcf280!=5); format4096,OutputDebugStringA,01d0fa2b.",
+        "В теле нетexit/longjmp. Этоprintcallee для allowed oversize reserve и unknown messageID, нефатальнаяошибка сама по себе. Downstream helper failures не исследованы; varargs/stackprobe искажают C signature."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/002-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d4aa99",
+      "proposed_name": "Con_Printf_RedirectOrConsole",
+      "subsystem": "network",
+      "summary_ru": "Форматирует сообщение и направляет в redirect buffer либо console/notify.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Format4096,01df27b5; gate025160d4 выбираетredirect026fd680,combinedlength>0x577→flush01ddb985,затемstrncat.",
+        "Console branch uses gates02d7d0ec,023c9de4,02d7d0e0,02dcf280; их semantic имена не назначены только по смещениям.",
+        "Developer notify копирует256 в02079bd8 и явнообнуляет02079cd7,записываетtimestamp через0207ace0. Обычныйreturn,нетпрямогоexit/longjmp. Не использовать потерянную Ghidra void(void) как ABI."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/003-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01da62cf",
+      "proposed_name": "WriteDest_SelectMessageSizebuf",
+      "subsystem": "network",
+      "summary_ru": "Выбирает sizebuf по destination; неподдержанные6/7 и неверный клиент вызывают Host_Error.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "0→02572510;2→025734c4;3→02574ca0;4/5→02574478;9→0257488c. Raw10DWORDjumptable01da6395 подтверждена.",
+        "1/8: index01da8405(target0242f2f4),range1..0251f328;clientBase0251f324+(index-1)*5018+7c либо+25c0.",
+        "6/7 ивнедиапазона0..9→01d7d873 nonreturn. Поэтому поздние6/7branches MessageEnd недостижимы черезэтотselector при обычном неизменённомкоде. Выборбуферанеравендоставке."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/004-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d46517",
+      "proposed_name": "Q_memcpy_ForwardAligned",
+      "subsystem": "network",
+      "summary_ru": "Копирует вперёд DWORD либо BYTE; не обеспечивает memmove при перекрытии.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "cdecl(dst,src,length). При(dst|src|length)&3==0 signedlength SAR2, затемforwardDWORDloop; иначеforwardBYTEloop. Signedlength<=0 не делаетитераций.",
+        "Нетnull/bounds/overlapguards иобратногопрохода; dst>src с перекрытиемможетиспортитьsource. EAXнеявляетсяобещаннымвозвратомdst. SZ_Write вызываетего толькоеслиoverflowflag2==0."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/005-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01de0e44",
+      "proposed_name": "RegUserMsg_ValidateAndQueueRegistration",
+      "subsystem": "network",
+      "summary_ru": "Проверяет имя/размер/счётчик, возвращает существующий ID либо добавляет регистрацию в pending list.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Порядокguards: signednextID01ec9dd0<=255,name!=NULL,strlen<=11,signedsize<=192. RawinitialnextID64. Пустоеимя иsize<-1 отдельнонезапрещены; только-1 являетсяvariable вEnd.",
+        "Search024988ac(next+18),compare01d4676f(name,node+8). Matchreturnстарыйid безобновленияsize. Приexhaustedcounter guardпредшествуетlookup.",
+        "Allocate32 через01d8cf91;nodeid+0;counter++;затемsize+4,copyname+8,next+18;linkв024988a8. Этоинойсписок. NULLcheck послеderef не доказываетgracefulallocationfailure.",
+        "ИменаnumericruntimeIDs невычислятьпо155serverregistrations: порядокruntimeотдельно. Transferpending→active,comparehelper иallocationpolicy открыты."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/006-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json"
+      ]
+    }
+  ]
+}

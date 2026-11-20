@@ -1,0 +1,167 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10116a40",
+      "proposed_name": "SendPlaySFX",
+      "subsystem": "network audio",
+      "summary_ru": "Формирует PlaySFX и выбирает MSG_ONE/MSG_ALL либо персональный MP fanout; playback backend здесь не вызывается.",
+      "confidence": "high",
+      "details_ru": [
+        "Wire STRING rawpath,BYTE operation,BYTE byteArg,COORD xyz,BYTE spatialFlag,SHORT index. MP+substring weapons+sendToAll: каждому найденному recipient MSG_ONE, spatialFlag=(recipient!=source), short=IndexOfEdict(recipient), не source. Иначе suffix0/1; sendToAll→MSG_ALL2,NULL, иначе MSG_ONE1 source edict.",
+        "MP rules virtual20!=0 до проверки substring/flag заменяетXYZ через source private player virtual228. Native CBasePlayer vtable101a4da8+228=100e01e0 даётorigin+view_ofs. strstr1013f5f0 ищетcase-sensitive substring weapons, неprefix.",
+        "Native ABI8DWORD: path,operation,byteArg,XYZ,source,sendToAll. byteArg MOVZXlowbyte,sendToAll lowbytecheck; caller10047b9f..bc7 передаёт32байта. Видимые3args вC скрывают aggregate/byvalue stacksetup.",
+        "Нет path normalization,prefix,clamp,filenameexistence check,queue/timer/retained soundhandle. Lexical scan8000C:28calls в27files, преимущественноweapon; отдельный mapentity Use/KeyValue/factory не доказан. Client wrapper1006e910→отдельный playsfx-client-contract."
+      ],
+      "evidence_paths": [
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x10116a40.c",
+        "analysis/network/playsfx-server-evidence-sender.asm",
+        "analysis/network/playsfx-server-evidence-caller.asm",
+        "decompiled/server/partial-pass/functions/0x1013f5f0.c",
+        "decompiled/server/partial-pass/functions/0x10119680.c",
+        "analysis/network/usermessage-registry.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100e01e0",
+      "proposed_name": "Player_OriginPlusViewOffset_228",
+      "subsystem": "network audio",
+      "summary_ru": "Возвращает origin+view_ofs vector; подтверждён CBasePlayer vtable slot для PlaySFX positions.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело вычисляет триfloat суммы pev+8/+c/+10 с pev+178/+17c/+180. CBasePlayer factory100125e0 назначает101a4da8, rawslot+228 указываетна0x100e01e0.",
+        "Slot104 применяется показаннымGlockcaller для byvalueXYZ; slot228 заменяетXYZ внутри MP sender10116a40. Связь доказана для даннойvtable, не всехподклассов."
+      ],
+      "evidence_paths": [
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x100e01e0.c",
+        "decompiled/server/partial-pass/functions/0x100125e0.c",
+        "analysis/network/playsfx-server-evidence-player-factory.asm",
+        "analysis/doors/capture.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d5a0",
+      "proposed_name": "Player_OriginPlusViewOffset_104",
+      "subsystem": "network audio",
+      "summary_ru": "Возвращает origin+view_ofs vector; подтверждён CBasePlayer vtable slot для PlaySFX positions.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело вычисляет триfloat суммы pev+8/+c/+10 с pev+178/+17c/+180. CBasePlayer factory100125e0 назначает101a4da8, rawslot+104 указываетна0x1000d5a0.",
+        "Slot104 применяется показаннымGlockcaller для byvalueXYZ; slot228 заменяетXYZ внутри MP sender10116a40. Связь доказана для даннойvtable, не всехподклассов."
+      ],
+      "evidence_paths": [
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000d5a0.c",
+        "decompiled/server/partial-pass/functions/0x100125e0.c",
+        "analysis/network/playsfx-server-evidence-player-factory.asm",
+        "analysis/doors/capture.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005b2e0",
+      "proposed_name": "mp5_PrecacheAndSetLoopSoundPaths",
+      "subsystem": "network audio",
+      "summary_ru": "Precache/setup оружия задаёт loop/end path offsets, используемые PlaySFX lifecycle.",
+      "confidence": "high",
+      "details_ru": [
+        "Пишет weapon+1a8=literal weapons/mp5/mp5_shoot_loop.wav minus stringBase; +1ac аналогично mp5_shoot_end.wav. Это прямые setters, не KeyValue и не доказанный AllocStringresult.",
+        "Ненулевые paths проходят10116a30→engine PrecacheSound10222f4c. Модели/прочиеprecache также есть втеле; PlaySFX здесь не отправляется."
+      ],
+      "evidence_paths": [
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1005b2e0.c",
+        "decompiled/server/partial-pass/functions/0x10116a30.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1007f070",
+      "proposed_name": "tmp_PrecacheAndSetLoopSoundPaths",
+      "subsystem": "network audio",
+      "summary_ru": "Precache/setup оружия задаёт loop/end path offsets, используемые PlaySFX lifecycle.",
+      "confidence": "high",
+      "details_ru": [
+        "Пишет weapon+1a8=literal weapons/tmp/tmp_shoot_loop.wav minus stringBase; +1ac аналогично tmp_shoot_end.wav. Это прямые setters, не KeyValue и не доказанный AllocStringresult.",
+        "Ненулевые paths проходят10116a30→engine PrecacheSound10222f4c. Модели/прочиеprecache также есть втеле; PlaySFX здесь не отправляется."
+      ],
+      "evidence_paths": [
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1007f070.c",
+        "decompiled/server/partial-pass/functions/0x10116a30.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011d560",
+      "proposed_name": "Weapon_ItemPostFrame_SoundLifecycle",
+      "subsystem": "network audio",
+      "summary_ru": "Частично разобран weapon frame: прекращение loop sound latch и SP PlaySFX mode2/0.",
+      "confidence": "high",
+      "details_ru": [
+        "Только prefix1011d560..1011d81b: latch byte+1a5 сбрасывается по release/state predicates. Nondual: playervirtualbc==0 либоclip1e4<1 либо1f0!=0 либоbuttonbit1снят либоweapon128!=0. Dual дополнительно требует партнёра ID14/23/27 и releasebit800 либоweapon128!=0.",
+        "Приloop offset1a8!=0 SP шлётmode2/byte1: dualpath1a8,nondualpath1ac (подтвержденоasm1011d776). Далее endoffset1ac!=0→mode0/byte1/endpath. MP идёт через1001e990 и100fc9f0, не те SP PlaySFXcalls.",
+        "Client mode2 выбирает retainedhandle независимоотfilename, но предварительныестроковые чтения остаются. Весь weapon frame/reload/прочиеvirtualbranches этимподразбором не объявлены исчерпанными."
+      ],
+      "evidence_paths": [
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1011d560.c",
+        "analysis/network/playsfx-server-evidence-weapon-frame.asm",
+        "analysis/network/playsfx-client-contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005b400",
+      "proposed_name": "weapon_mp5_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_mp5; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_glock); цикл: 0.06 с; fire sequences: [4, 5, 6, 10]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md.",
+        "PlaySFX lifecycle уточнён: при byte1a5==0&&loopoffset1a8!=0 выставляетlatch1; SP→10116a40(base+1a8,mode1,byte1,...). MP→100fc9f0. Setter paths и stop/end frame см.analysis/network/playsfx-server-contract.md; прежниепараметрывыстрела сохранены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005b400.c",
+        "analysis/weapons/ranged.json",
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1011d560.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1007f1a0",
+      "proposed_name": "weapon_tmp_primary",
+      "subsystem": "combat weapon",
+      "summary_ru": "Основной выстрел weapon_tmp; параметры, ветвления и анимации сверены с native телом.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Базовый урон: int(sk_cof_glock/1.65); цикл: 0.07 с; fire sequences: [4, 13]. Это параметры конкретного оружия, не всей системы.",
+        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md.",
+        "PlaySFX lifecycle уточнён: при byte1a5==0&&loopoffset1a8!=0 выставляетlatch1; SP→10116a40(base+1a8,mode1,byte1,...). MP→100fc9f0. Setter paths и stop/end frame см.analysis/network/playsfx-server-contract.md; прежниепараметрывыстрела сохранены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1007f1a0.c",
+        "analysis/weapons/ranged.json",
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1011d560.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}

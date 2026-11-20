@@ -244,15 +244,19 @@
       "proposed_name": "weapon_mp5_primary",
       "subsystem": "combat weapon",
       "summary_ru": "Основной выстрел weapon_mp5; параметры, ветвления и анимации сверены с native телом.",
-      "confidence": "high",
+      "confidence": "высокая для описанного статического поведения",
       "details_ru": [
         "Базовый урон: int(sk_cof_glock); цикл: 0.06 с; fire sequences: [4, 5, 6, 10]. Это параметры конкретного оружия, не всей системы.",
         "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
-        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md.",
+        "PlaySFX lifecycle уточнён: при byte1a5==0&&loopoffset1a8!=0 выставляетlatch1; SP→10116a40(base+1a8,mode1,byte1,...). MP→100fc9f0. Setter paths и stop/end frame см.analysis/network/playsfx-server-contract.md; прежниепараметрывыстрела сохранены."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x1005b400.c",
-        "analysis/weapons/ranged.json"
+        "analysis/weapons/ranged.json",
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1011d560.c"
       ]
     },
     {
@@ -312,15 +316,19 @@
       "proposed_name": "weapon_tmp_primary",
       "subsystem": "combat weapon",
       "summary_ru": "Основной выстрел weapon_tmp; параметры, ветвления и анимации сверены с native телом.",
-      "confidence": "high",
+      "confidence": "высокая для описанного статического поведения",
       "details_ru": [
         "Базовый урон: int(sk_cof_glock/1.65); цикл: 0.07 с; fire sequences: [4, 13]. Это параметры конкретного оружия, не всей системы.",
         "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
-        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md.",
+        "PlaySFX lifecycle уточнён: при byte1a5==0&&loopoffset1a8!=0 выставляетlatch1; SP→10116a40(base+1a8,mode1,byte1,...). MP→100fc9f0. Setter paths и stop/end frame см.analysis/network/playsfx-server-contract.md; прежниепараметрывыстрела сохранены."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x1007f1a0.c",
-        "analysis/weapons/ranged.json"
+        "analysis/weapons/ranged.json",
+        "analysis/network/playsfx-server-contract.md",
+        "analysis/network/playsfx-server-evidence.json",
+        "decompiled/server/partial-pass/functions/0x1011d560.c"
       ]
     },
     {

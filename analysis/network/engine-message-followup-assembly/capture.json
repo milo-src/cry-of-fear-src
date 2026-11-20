@@ -1,0 +1,341 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll",
+  "sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+  "target_executed": false,
+  "ranges": [
+    {
+      "start": "0x01df2656",
+      "end_exclusive": "0x01df2767",
+      "file": "01df2656.asm",
+      "sha256": "c68d80a42ba509e6d12319775d766c4126e46a93e42731fd9e0c13b6c1a17b0f",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1df2656",
+        "--stop-address=0x1df2767",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01d7d873",
+      "end_exclusive": "0x01d7d968",
+      "file": "01d7d873.asm",
+      "sha256": "71de7837b7c3b322673abe51129a298792a02b44f6aa3d79a047180c76bc2c9b",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1d7d873",
+        "--stop-address=0x1d7d968",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01d4aa99",
+      "end_exclusive": "0x01d4ac6a",
+      "file": "01d4aa99.asm",
+      "sha256": "3fa5f977bbd53b14e9433c1b58e64f1323899c81d4d2189a2e85a4f8cd28d72d",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1d4aa99",
+        "--stop-address=0x1d4ac6a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01da62cf",
+      "end_exclusive": "0x01da6395",
+      "file": "01da62cf.asm",
+      "sha256": "df1f1ebcdcd7bc3a3e6e5518e6bbd81082f5ade9cf8d36390119ea81ad491067",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1da62cf",
+        "--stop-address=0x1da6395",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01d46517",
+      "end_exclusive": "0x01d46596",
+      "file": "01d46517.asm",
+      "sha256": "8adb5a9f04f297ddb8b1fb9eadc28bf4374a4b09d6977e56a14a101debc789d6",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1d46517",
+        "--stop-address=0x1d46596",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01de0e44",
+      "end_exclusive": "0x01de0f5a",
+      "file": "01de0e44.asm",
+      "sha256": "3dd7ce00f0732c9e6f8697df95a1307c1ba3b104f0a52827a2fb82a81d39fdf1",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1de0e44",
+        "--stop-address=0x1de0f5a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01e712a6",
+      "end_exclusive": "0x01e7137a",
+      "file": "01e712a6.asm",
+      "sha256": "17be6066fc7255ece81cc138f1dd9afb4e13465b8dd0ef84062e4b1c86531b35",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1e712a6",
+        "--stop-address=0x1e7137a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    },
+    {
+      "start": "0x01e731bc",
+      "end_exclusive": "0x01e73235",
+      "file": "01e731bc.asm",
+      "sha256": "c595d035863759c7537a7dc185525bc47ba99ae8c15c39c7500e770a5c297fc2",
+      "command": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x1e731bc",
+        "--stop-address=0x1e73235",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "coverage": "bounded interval; may include adjacent code"
+    }
+  ],
+  "raw": [
+    {
+      "va": "0x01da6395",
+      "file_offset": "0xa6395",
+      "bytes_hex": "ef62da01f962da016263da016963da017063da017063da017e63da017e63da01f962da017763da01",
+      "sha256": "dc363a0c73c03596ce3740fb40e80c21029c90fb66e5e5d8c821de03715fe044",
+      "destinations": [
+        "0x01da62ef",
+        "0x01da62f9",
+        "0x01da6362",
+        "0x01da6369",
+        "0x01da6370",
+        "0x01da6370",
+        "0x01da637e",
+        "0x01da637e",
+        "0x01da62f9",
+        "0x01da6377"
+      ]
+    },
+    {
+      "va": "0x01ec9dd0",
+      "file_offset": "0x1c9dd0",
+      "bytes_hex": "40000000",
+      "sha256": "c31425b44a7ed682a3356bf6820141e1584a15c43b6d6793f552e5d4621586f7"
+    }
+  ],
+  "imports": [
+    {
+      "iat_va": "0x01e8b248",
+      "dll": "KERNEL32.dll",
+      "name": "TerminateProcess",
+      "evidence": [
+        {
+          "va": "0x01e9b008",
+          "file_offset": "0x19b008",
+          "bytes_hex": "38b21900000000000000000068c119002cb11800",
+          "sha256": "9ac666adb9c6ecb8d397891fa68764203cfd1c51ff82f68a5ce7087d2d67e668"
+        },
+        {
+          "va": "0x01e9b354",
+          "file_offset": "0x19b354",
+          "bytes_hex": "cc011a00",
+          "sha256": "5ee6266685b1caa7e7d3637fc1602c3ae73dcb02e3718fc5bd74c7bfdf9e6aaa"
+        },
+        {
+          "va": "0x01e9c168",
+          "file_offset": "0x19c168",
+          "bytes_hex": "4b45524e454c33322e646c6c00",
+          "sha256": "f8efc1f27ef6c525f7fd20dcb8d65e8197e97410eced20db4d323dfbf230a2a4"
+        },
+        {
+          "va": "0x01ea01cc",
+          "file_offset": "0x1a01cc",
+          "bytes_hex": "9e025465726d696e61746550726f6365737300",
+          "sha256": "3a88d43a09b03b6e8ebf0b0ab297758d5c4ac53c47bcc68126a0745a88ef2665"
+        }
+      ]
+    },
+    {
+      "iat_va": "0x01e8b24c",
+      "dll": "KERNEL32.dll",
+      "name": "ExitProcess",
+      "evidence": [
+        {
+          "va": "0x01e9b008",
+          "file_offset": "0x19b008",
+          "bytes_hex": "38b21900000000000000000068c119002cb11800",
+          "sha256": "9ac666adb9c6ecb8d397891fa68764203cfd1c51ff82f68a5ce7087d2d67e668"
+        },
+        {
+          "va": "0x01e9b358",
+          "file_offset": "0x19b358",
+          "bytes_hex": "be011a00",
+          "sha256": "9746c02dcbd7b080a3c104be088bed6bbd2d1163358682233c34879df196a727"
+        },
+        {
+          "va": "0x01e9c168",
+          "file_offset": "0x19c168",
+          "bytes_hex": "4b45524e454c33322e646c6c00",
+          "sha256": "f8efc1f27ef6c525f7fd20dcb8d65e8197e97410eced20db4d323dfbf230a2a4"
+        },
+        {
+          "va": "0x01ea01be",
+          "file_offset": "0x1a01be",
+          "bytes_hex": "7d004578697450726f6365737300",
+          "sha256": "9b53fb51c55408c0bbedf4cad663de0bb1ce65c217ca0bd522d79b6ac3c7b4bb"
+        }
+      ]
+    },
+    {
+      "iat_va": "0x01e8b294",
+      "dll": "KERNEL32.dll",
+      "name": "GetCurrentProcess",
+      "evidence": [
+        {
+          "va": "0x01e9b008",
+          "file_offset": "0x19b008",
+          "bytes_hex": "38b21900000000000000000068c119002cb11800",
+          "sha256": "9ac666adb9c6ecb8d397891fa68764203cfd1c51ff82f68a5ce7087d2d67e668"
+        },
+        {
+          "va": "0x01e9b3a0",
+          "file_offset": "0x19b3a0",
+          "bytes_hex": "4cbf1900",
+          "sha256": "b45ff08a71a23573b75df9b8fcd769633162cf44740d97ed751fa33c4b7c1f64"
+        },
+        {
+          "va": "0x01e9c168",
+          "file_offset": "0x19c168",
+          "bytes_hex": "4b45524e454c33322e646c6c00",
+          "sha256": "f8efc1f27ef6c525f7fd20dcb8d65e8197e97410eced20db4d323dfbf230a2a4"
+        },
+        {
+          "va": "0x01e9bf4c",
+          "file_offset": "0x19bf4c",
+          "bytes_hex": "f70047657443757272656e7450726f6365737300",
+          "sha256": "c83a3d59b33f3f1f6464f91da415fb6f155bf563feb684c9062767a3bc8e3ec9"
+        }
+      ]
+    },
+    {
+      "iat_va": "0x01e8b38c",
+      "dll": "USER32.dll",
+      "name": "GetForegroundWindow",
+      "evidence": [
+        {
+          "va": "0x01e9b01c",
+          "file_offset": "0x19b01c",
+          "bytes_hex": "80b4190000000000000000008cc5190074b31800",
+          "sha256": "7f859978e640327eaed91962435454435bbb8b3148fcfdd305f63f9a49232e26"
+        },
+        {
+          "va": "0x01e9b498",
+          "file_offset": "0x19b498",
+          "bytes_hex": "f4c31900",
+          "sha256": "e429696c066e84dc2fa7de18a17f683fa543c3a30b2b20ac630889933c85807c"
+        },
+        {
+          "va": "0x01e9c58c",
+          "file_offset": "0x19c58c",
+          "bytes_hex": "5553455233322e646c6c00",
+          "sha256": "d9ccebf796b4ece7d68a5a4a786098b5ec2055c2c3642c7924e41b7368eef955"
+        },
+        {
+          "va": "0x01e9c3f4",
+          "file_offset": "0x19c3f4",
+          "bytes_hex": "0801476574466f726567726f756e6457696e646f7700",
+          "sha256": "bef6a2ff09420b6830995e83f88ba8424a4be55b029f328b59a288a41c543750"
+        }
+      ]
+    },
+    {
+      "iat_va": "0x01e8b390",
+      "dll": "USER32.dll",
+      "name": "DestroyWindow",
+      "evidence": [
+        {
+          "va": "0x01e9b01c",
+          "file_offset": "0x19b01c",
+          "bytes_hex": "80b4190000000000000000008cc5190074b31800",
+          "sha256": "7f859978e640327eaed91962435454435bbb8b3148fcfdd305f63f9a49232e26"
+        },
+        {
+          "va": "0x01e9b49c",
+          "file_offset": "0x19b49c",
+          "bytes_hex": "e4c31900",
+          "sha256": "b27eb1d35930e790df16a540ae9e7c9fa4e0f270960b171e26e2fa04a162f53e"
+        },
+        {
+          "va": "0x01e9c58c",
+          "file_offset": "0x19c58c",
+          "bytes_hex": "5553455233322e646c6c00",
+          "sha256": "d9ccebf796b4ece7d68a5a4a786098b5ec2055c2c3642c7924e41b7368eef955"
+        },
+        {
+          "va": "0x01e9c3e4",
+          "file_offset": "0x19c3e4",
+          "bytes_hex": "8e0044657374726f7957696e646f7700",
+          "sha256": "3c6824d4da53dcd9e4d1cfbdb9c65645d21cbae376f69cbac9e8c51435ebc4ec"
+        }
+      ]
+    },
+    {
+      "iat_va": "0x01e8b444",
+      "dll": "USER32.dll",
+      "name": "MessageBoxA",
+      "evidence": [
+        {
+          "va": "0x01e9b01c",
+          "file_offset": "0x19b01c",
+          "bytes_hex": "80b4190000000000000000008cc5190074b31800",
+          "sha256": "7f859978e640327eaed91962435454435bbb8b3148fcfdd305f63f9a49232e26"
+        },
+        {
+          "va": "0x01e9b550",
+          "file_offset": "0x19b550",
+          "bytes_hex": "b0c31900",
+          "sha256": "11f76ee8be7f36ec0ec030eb32730c5e9f424a5a14abf210d1f75d764c642ea2"
+        },
+        {
+          "va": "0x01e9c58c",
+          "file_offset": "0x19c58c",
+          "bytes_hex": "5553455233322e646c6c00",
+          "sha256": "d9ccebf796b4ece7d68a5a4a786098b5ec2055c2c3642c7924e41b7368eef955"
+        },
+        {
+          "va": "0x01e9c3b0",
+          "file_offset": "0x19c3b0",
+          "bytes_hex": "be014d657373616765426f784100",
+          "sha256": "f66d139a28c015cf0bdd2052aee1d3d8c26956bb7cbfc0f97721331e4b464604"
+        }
+      ]
+    }
+  ]
+}

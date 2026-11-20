@@ -117,10 +117,13 @@
       "proposed_name": "CHud_InitSubsystemsAndMessages",
       "subsystem": "hud",
       "summary_ru": "Инициализация HUD, графических подсистем и регистрация сетевых обработчиков.",
-      "confidence": "high",
+      "confidence": "высокая для описанного статического поведения",
       "details_ru": [
         "Blur lifecycle: initial init обнуляет wordindex0xca (damage deadline+328) и0xc6c (serverblur+31b0). Hook строки1014e944='Blur' указывает1006e510. Это отдельный путь от сообщений ResetHUD/InitHUD.",
-        "Сбрасывает состояние, вызывает renderer/post/weather и VGUI init-функции; регистрирует ResetHUD/SetFog/SetSky/Inventory/FlashFlags/BlackWhite и десятки других messages через DAT_101b2650, commands через DAT_101b264c. Регистрирует hud_draw, hud_takesshots, brightvalue, skybrightcolour*, fmod_volume. Освобождает старый связный HUD-list, вызывает виртуальные Init элементов; музыка инициализируется только без -nomusic. Это не описание полного поведения всех зарегистрированных обработчиков."
+        "Сбрасывает состояние, вызывает renderer/post/weather и VGUI init-функции; регистрирует ResetHUD/SetFog/SetSky/Inventory/FlashFlags/BlackWhite и десятки других messages через DAT_101b2650, commands через DAT_101b264c. Регистрирует hud_draw, hud_takesshots, brightvalue, skybrightcolour*, fmod_volume. Освобождает старый связный HUD-list, вызывает виртуальные Init элементов; музыка инициализируется только без -nomusic. Это не описание полного поведения всех зарегистрированных обработчиков.",
+        "Четыре raw имени явных HookUserMsg calls разрешены по оригинальному client PE: &DAT_1014e890=Logo, &DAT_1014e944=Blur, &DAT_1014e9d8=Boat, &DAT_1014eb1c=MOTD. Все 12 повторных occurrences сохранены как provenance, а не разные функции.",
+        "ViewMode, GasMask, ValClass, Feign, Detpack, BuildSt, RandomPC, Spectator и AllowSpec отсутствуют в проверенном server block100e5fc0. Восемь имён имеют локальный SDK hook-аналог, GasMask — нет. Это не доказательство engine builtin ID, отсутствия sender во всей DLL или неиспользуемого handler.",
+        "Разрешённый raw label Logo также отсутствует в основном registration block: итог 10 внешних имён / 30 вхождений, 9 с SDK hook-аналогом. Среди 155 зарегистрированных сообщений доказанные client hooks увеличились с 69 до 72 (Blur, Boat, MOTD)."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
@@ -128,7 +131,11 @@
         "analysis/graphics/blur-triggers.md",
         "decompiled/client/captures/inventory-ui-first/005-pseudocode.c",
         "decompiled/client/captures/menu-switch-initial/006-pseudocode.c",
-        "analysis/ui/hud.md"
+        "analysis/ui/hud.md",
+        "analysis/network/usermessage-registry.json",
+        "analysis/network/usermessage-registry.md",
+        "analysis/network/build-usermessage-registry.py",
+        "analysis/network/usermessage-hook-resolution.md"
       ]
     }
   ]

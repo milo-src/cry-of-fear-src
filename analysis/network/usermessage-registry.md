@@ -2,11 +2,11 @@
 
 Навигация по оригинальной серверной `LinkUserMessages100e5fc0` и сохранённому C-корпусу. Это статический RE; игра, REA-процесс и порт не запускались/не изменялись.
 
-Регистраций **155**: фиксированных **78** (включая 9 нулевых), variable `-1` **77**. В 8000 server C найдены обращения к 132 ID-слотам, явные аргументы MessageBegin — для 130 сообщений. В 497 client capture C найдены named hook calls для 69 имён.
+Регистраций **155**: фиксированных **78** (включая 9 нулевых), variable `-1` **77**. В 8000 server C найдены обращения к 132 ID-слотам, явные аргументы MessageBegin — для 130 сообщений. В 499 client capture C найдены named hook calls для 72 имён.
 
 Источник: `decompiled/server/partial-pass/functions/0x100e5fc0.c`; SHA и строки регистрации — в [JSON](usermessage-registry.json). Вся функция защищена `DAT_1022649c == 0`; каждый ID-слот получает runtime-результат `RegUserMsg` через `10223074`. Адрес слота не является числовым ID сообщения.
 
-Пять имён, оставленных декомпилятором как `&DAT_*`, прочитаны из оригинального `hl.dll` SHA-256 751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641. JSON содержит их VA, file offset, NUL-terminated bytes и SHA. Остальные имена взяты из C literals. Воспроизведение: `python analysis/network/build-usermessage-registry.py`.
+Пять имён, оставленных декомпилятором как `&DAT_*`, прочитаны из оригинального `hl.dll` SHA-256 751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641. JSON содержит их VA, file offset, NUL-terminated bytes и SHA. Остальные имена взяты из C literals. Четыре raw client hook labels разрешены отдельно по hash-pinned client.dll; исходные выражения и все повторные call sites сохранены. Воспроизведение: `python analysis/network/build-usermessage-registry.py`.
 
 ## Как выбирать следующий протокол
 
@@ -14,12 +14,38 @@
    Если адрес входа не извлечён из объявления именованной функции, `function_address:null` сохранён. `saved_selector_address` берётся из имени partial-pass файла; селектор не объявляется адресом входа.
 2. `direct_MessageBegin_argument_in_C` — видимый аргумент вызова; `other_lexical_global_reference` — только обращение к глобалу. Условия и payload нужно читать в теле.
 3. `client_references` отличает named hook call от простого literal; поле `handler_wrapper` даёт следующий адрес. Повторные captures одной функции не являются разными handlers.
-   Неразрешённые client `&DAT_*` hook names сохранены отдельно в `unresolved_client_hook_labels`; они не подставляются по догадке. Hook literals вне этого server registration block лежат в `client_hook_names_not_in_this_registration`.
+   `resolved_client_hook_labels` сохраняет raw call sites, `raw_client_name_strings` — оригинальные PE bytes; неуспешные чтения остаются в `unresolved_client_hook_labels`. Hook names вне server registration block лежат отдельно с bounded audit и SDK comparison, не объявляются встроенными engine messages.
 4. Перед новым захватом проверить REVIEW адресов в `decompiled/FUNCTION_CATALOG.txt` и существующие analysis-контракты. Этот индекс не присваивает им статус полноты.
 
 **Ограничение:** 8000 partial-pass C — не все функции DLL. Ghidra теряет аргументы/alias-связи; ноль найденных отправителей или hooks не доказывает отсутствие протокола. Fixed size не раскрывает поля и не гарантирует согласие всех senders/readers; `-1` означает variable registration, не безлимитную сеть. Полный граф, runtime IDs, маршрутизация, типы полей и проверки лимитов не выводятся автоматически.
 
-Нулевой H также не означает, что протокол неизвестен существующим ручным REVIEW: индекс намеренно не подменяет semantic-каталог и не угадывает имя raw client label.
+Нулевой H также не означает, что протокол неизвестен существующим ручным REVIEW: индекс намеренно не подменяет semantic-каталог. Подробности проверки client labels и внешних имён: [usermessage-hook-resolution.md](usermessage-hook-resolution.md).
+
+## Разрешение клиентских имён
+
+Raw hook occurrences: 12; разрешено 12 вхождений / 4 labels; осталось 0 вхождений / 0 labels. Повторы captures сохранены.
+
+| PE label | Имя | Hook wrapper |
+|---|---|---|
+| `&DAT_1014e890` | Logo | 0x1006e7e0 |
+| `&DAT_1014e944` | Blur | 0x1006e510 |
+| `&DAT_1014e9d8` | Boat | 0x1006e530 |
+| `&DAT_1014eb1c` | MOTD | 0x1006e800 |
+
+Вне основного registration block: 10 имён / 30 call-site вхождений. Совпадение с локальным SDK — только сходство происхождения, не доказанный исходный handler, builtin ID или неиспользуемый код.
+
+| Имя | Hook wrappers | HOOK_MESSAGE в локальном HLSDK | Server/engine literal occurrences |
+|---|---|---|---:|
+| AllowSpec | 0x1006e480 | да | 0 |
+| BuildSt | 0x1006e550 | да | 0 |
+| Detpack | 0x1006e620 | да | 0 |
+| Feign | 0x1006e670 | да | 0 |
+| GasMask | 0x1006e6e0 | нет | 0 |
+| Logo | 0x1006e7e0 | да | 0 |
+| RandomPC | 0x1006e970 | да | 0 |
+| Spectator | 0x1006eae0 | да | 0 |
+| ValClass | 0x1006ec60 | да | 0 |
+| ViewMode | 0x1006ecf0 | да | 0 |
 
 ## Таблица
 
@@ -55,7 +81,7 @@ R = число уникальных server C-файлов с ID-обращени
 | TeamInfo | -1 | `0x102264f4` | 3 / 3 / 1 | 0x10106730 / 0x1006eb30 |
 | TeamScore | -1 | `0x102264f8` | 0 / 0 / 1 | — / 0x1006eb90 |
 | GameMode | 1 | `0x102264fc` | 2 / 2 / 1 | 0x100ca4b0 / 0x1006e6c0 |
-| MOTD | -1 | `0x10226500` | 1 / 1 / 0 | 0x100c9970 / — |
+| MOTD | -1 | `0x10226500` | 1 / 1 / 1 | 0x100c9970 / 0x1006e800 |
 | ServerName | -1 | `0x10226504` | 1 / 1 / 1 | 0x100c9970 / 0x1006ea10 |
 | AmmoPickup | -1 | `0x10226508` | 1 / 1 / 0 | 0x100e04d0 / — |
 | WeapPickup | 1 | `0x10226700` | 0 / 0 / 0 | — / — |
@@ -85,7 +111,7 @@ R = число уникальных server C-файлов с ID-обращени
 | Inventory | -1 | `0x102265e4` | 1 / 1 / 1 | 0x100e4360 / 0x1006e760 |
 | Maglite | 1 | `0x1022656c` | 1 / 1 / 1 | 0x100ead70 / 0x1006e830 |
 | BlackBars | -1 | `0x10226570` | 1 / 1 / 0 | 0x100ead70 / — |
-| Blur | 1 | `0x10226574` | 2 / 2 / 0 | 0x100ead70 / — |
+| Blur | 1 | `0x10226574` | 2 / 2 / 1 | 0x100ead70 / 0x1006e510 |
 | UnreadSMS | 2 | `0x10226578` | 3 / 3 / 1 | 0x10032e70 / 0x1006ec10 |
 | Stamina | 3 | `0x1022657c` | 2 / 2 / 1 | 0x100f4090 / 0x1003a360 |
 | VGUIMenu | 2 | `0x10226580` | 3 / 3 / 1 | 0x100f4050 / 0x1006ec30 |
@@ -135,7 +161,7 @@ R = число уникальных server C-файлов с ID-обращени
 | QSlotClear | 2 | `0x10226634` | 8 / 8 / 0 | 0x100a60c0 / — |
 | FlashFlags | -1 | `0x10226638` | 1 / 1 / 1 | 0x100ead70 / 0x1006e6a0 |
 | Documents | -1 | `0x1022663c` | 0 / 0 / 0 | — / — |
-| Boat | -1 | `0x10226640` | 4 / 4 / 0 | 0x100ead70 / — |
+| Boat | -1 | `0x10226640` | 4 / 4 / 1 | 0x100ead70 / 0x1006e530 |
 | Ripple | -1 | `0x10226644` | 3 / 3 / 1 | 0x100ead70 / 0x1006e9c0 |
 | AddNote | -1 | `0x10226648` | 5 / 5 / 1 | 0x10018d60 / 0x1006e440 |
 | AttachCam | -1 | `0x1022664c` | 11 / 11 / 1 | 0x1004fb50 / 0x1006e4b0 |

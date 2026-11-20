@@ -1,0 +1,377 @@
+{
+  "schema": 1,
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "method": "Read-only bounded objdump/PE; no original process or REA session.",
+  "ranges": "Preferred-image VA start inclusive, end exclusive; raw file offsets and hashes pinned to binary SHA.",
+  "objdump": "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+  "objdump_version": "GNU objdump (Binutils for MinGW-W64 x86_64, built by Brecht Sanders, r2) 2.46.0.20260210",
+  "assembly": [
+    {
+      "va": "0x10116a40",
+      "end_exclusive": "0x10116c25",
+      "length": 485,
+      "file_offset": "0x115e40",
+      "bytes_hex": "558bec83ec0c8b0de42e221053560fb675108b0157897510ff50208b5d088b7d2085c00f8425010000ff7704e86fbbefff83c4048d4df48b10518bc8ff922802000068d4521e1053f30f7e00660fd645148b400889451ce8548b020083c40885c00f84e7000000807d24000f84f1000000a188312210be0100000039b0900000000f8c5701000056e8b32b00008bf883c40485ff0f849b0000008b4f04ffb10c0200006a00ff35f46622106a01ff150030221053ff1520302210ff750cff1508302210ff7510ff1508302210f30f10451483c418f30f110424ff151c302210f30f104518f30f110424ff151c302210f30f10451cf30f110424ff151c30221083c4043b7d2075046a00eb026a01ff15083022108b470483c404ffb00c020000ff156430221050ff151030221083c408ff1504302210a188312210463bb0900000000f8e40ffffff5f5e5b8be55dc3807d2400740e6a006a00ff35f46622106a02eb138b4704ffb00c0200006a00ff35f46622106a01ff150030221053ff1520302210ff750cff150830221056ff1508302210f30f10451483c418f30f110424ff151c302210f30f104518f30f110424ff151c302210f30f10451cf30f110424ff151c3022106a00ff15083022106a01ff151030221083c40cff15043022105f5e5b8be55dc3",
+      "sha256": "386d063a7b2e8696d1b68c044a0d6171322d5c9d8f2cf5aff486d27d6cbe3b68",
+      "scope": "Complete sender range,8DWORD call ABI and both wire branches.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10116a40",
+        "--stop-address=0x10116c25",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/network/playsfx-server-evidence-sender.asm",
+      "assembly_sha256": "97375b23780af9845f7e4ea50f69bcfccd2e579499d48af84972cb07643a9509"
+    },
+    {
+      "va": "0x10047b9f",
+      "end_exclusive": "0x10047bc7",
+      "length": 40,
+      "file_offset": "0x46f9f",
+      "bytes_hex": "8b8e600100006a015183ec0c8b0154ff90040100006a016a0068f4de1a10e87eee0c0083c4205ec3",
+      "sha256": "9f3f5f80d6b17a935c71416e0a5dcdaf91da0598fea3703ba28e2c899d99e4fb",
+      "scope": "Glock call setup through ret; excludes next instruction at47bc7.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10047b9f",
+        "--stop-address=0x10047bc7",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/network/playsfx-server-evidence-caller.asm",
+      "assembly_sha256": "38471f07d055f3c17efb75abd31f08dd7def6a23d0b1bfb85f8872a4978a1b1a"
+    },
+    {
+      "va": "0x100125e0",
+      "end_exclusive": "0x1001263c",
+      "length": 92,
+      "file_offset": "0x119e0",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c07527681c28000051ff154430221083c40889450885c0740cc700a84d1a108970045e5dc333c08970045e5dc3",
+      "sha256": "3b1bb5419bf609f78e6f3766331a0986b6d756ee1396cf5b997bcee79fcd1c3a",
+      "scope": "Factory assigning CBasePlayer vtable; used only to bind two position slots.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100125e0",
+        "--stop-address=0x1001263c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/network/playsfx-server-evidence-player-factory.asm",
+      "assembly_sha256": "84e01032997691d6b4443c1d2bc75fda715de5e63ab919e7d654b1f7abed890e"
+    },
+    {
+      "va": "0x1011d560",
+      "end_exclusive": "0x1011d81b",
+      "length": 699,
+      "file_offset": "0x11c960",
+      "bytes_hex": "558bec83ec085356578bf983bfb401000000751383bfe4010000007e0ac787b4010000010000008b07ff90d40100008b7704bab8dc1a108b8e0c0200008d8180000000f7d91bc923c8a1883122108b090388980000008a013a02751a84c074128a41013a4201750e83c10283c20284c075e433c0eb051bc083c80185c00f85d700000056e8971bf1ff83c40480bfa5010000000f842202000085c00f841a0200008b800002000083f80e740e83f817740983f81b0f85010200008b87600100008b4004f7808401000000080000740d83bf28010000000f84df01000083bfa801000000c687a5010000000f84390100008b0de42e22108b01ff502085c07430a1883122108b80980000000387a8010000508b87600100006a018b4004ffb00c020000e80913f0ff83c40ce9fa0000008b8f600100006a015183ec0c8b0154ff9004010000a1883122108b80980000000387a8010000e9c200000080bfa5010000000f84540100008b8f600100008b01ff90bc00000085c0743183bfe4010000007e2883bff001000000751f8b87600100008b4004f6808401000001740d83bf28010000000f841101000083bfa801000000c687a501000000746f8b0de42e22108b01ff502085c0742da1883122108b80980000000387a8010000508b87600100006a018b4004ffb00c020000e83f12f0ff83c40ceb338b8f600100006a015183ec0c8b0154ff9004010000a1883122108b80980000000387ac0100006a016a0250e8ba92ffff83c42083bfac010000000f84850000008b0de42e22108b01ff502085c07443a1883122106a646a0083ec088b80980000000387ac010000c7442404cdcc4c3fc704240000803f508b87600100006a018b4004ffb00c020000e80df2fdff83c41ceb338b8f600100006a015183ec0c8b0154ff9004010000a1883122106a016a008b80980000000387ac01000050e82892ffff83c420",
+      "sha256": "3c9b7df8a8c5ca934ba69ef2cf13c375383ae3a85f6c2e09bc02ab8f765eef10",
+      "scope": "Prefix of ItemPostFrame through sound-latch release; excludes unrelated remainder.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011d560",
+        "--stop-address=0x1011d81b",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/network/playsfx-server-evidence-weapon-frame.asm",
+      "assembly_sha256": "b864f66efbfe309725d954099a3663f8f410a652f9c6d753f3b27141c8f26c0b"
+    }
+  ],
+  "raw": [
+    {
+      "va": "0x101a4eac",
+      "end_exclusive": "0x101a4eb0",
+      "length": 4,
+      "file_offset": "0x1a42ac",
+      "bytes_hex": "a0d50010",
+      "sha256": "3c1547f507315431fe3258c575ee7047447aa1bbf9f7a848e208b5e6ecfe9f34",
+      "vtable": "0x101a4da8",
+      "slot": "0x104",
+      "target": "0x1000d5a0"
+    },
+    {
+      "va": "0x101a4fd0",
+      "end_exclusive": "0x101a4fd4",
+      "length": 4,
+      "file_offset": "0x1a43d0",
+      "bytes_hex": "e0010e10",
+      "sha256": "64478954455381f1670105d56aa9325b53a035469ea4235d4661f7c564636568",
+      "vtable": "0x101a4da8",
+      "slot": "0x228",
+      "target": "0x100e01e0"
+    },
+    {
+      "va": "0x101e52d4",
+      "end_exclusive": "0x101e52dc",
+      "length": 8,
+      "file_offset": "0x1e46d4",
+      "bytes_hex": "776561706f6e7300",
+      "sha256": "c77145bec7601622f68d9f17366775323a6ea9022033e33bcbcbcd06a368de9c",
+      "ascii": "weapons"
+    },
+    {
+      "va": "0x101adef4",
+      "end_exclusive": "0x101adf15",
+      "length": 33,
+      "file_offset": "0x1ad2f4",
+      "bytes_hex": "776561706f6e735f6e65772f676c6f636b2f676c6f636b5f666972652e77617600",
+      "sha256": "d5474e2657be5cebaba7a87cc946a0bb9580da4ba22a6b42176d6da48f2b4591",
+      "ascii": "weapons_new/glock/glock_fire.wav"
+    }
+  ],
+  "saved_C_sha256": {
+    "decompiled/server/partial-pass/functions/0x1000d5a0.c": "90c0a84221980a6c65c37f4846dd138df994511bf30c2a20d492964e04c22170",
+    "decompiled/server/partial-pass/functions/0x100125e0.c": "38ae85da4b4bed587cee5bc51db97d829f9c1d8712cab91c0b99794490d03dab",
+    "decompiled/server/partial-pass/functions/0x10026180.c": "f13746a6b1e901910ac47c7b9b11c49f02fbdd29ba87d12e7667e406c6ca7e2f",
+    "decompiled/server/partial-pass/functions/0x10032330.c": "989a29ae85d99864fbed1519528102b4c6594b3e1728659353cf456e9c8919d9",
+    "decompiled/server/partial-pass/functions/0x10033c90.c": "a015781e5de846b12703b6e787da3cde57a1200cfb7f55b9455c01f986642d3b",
+    "decompiled/server/partial-pass/functions/0x10035050.c": "81a678004457c23fcc3c782b520efa4cfe1deee17b32e1ef18e45a938061da85",
+    "decompiled/server/partial-pass/functions/0x10036620.c": "d2d65296fa0ff94b3794f04ab18bf69877b70259c1317718e373d8dc41d19bb1",
+    "decompiled/server/partial-pass/functions/0x1003bbd0.c": "b28561c2f849cac7d0887486f03b27d146116ac9db48014be5fe17951423c606",
+    "decompiled/server/partial-pass/functions/0x1003c7f0.c": "78b24258828701268f72c0458892d57c87076454a57e9e39dea7b55409f5f3ce",
+    "decompiled/server/partial-pass/functions/0x10044690.c": "d258887e530bd1454f30e2472656442a8595b9001fafcc52880b2d22c178d178",
+    "decompiled/server/partial-pass/functions/0x10045320.c": "350af80a644d6eff4adcf6b11f4c3bf07b50cbbe7e96aa9a14ae56eda63c3d4f",
+    "decompiled/server/partial-pass/functions/0x10046dc0.c": "80f95f13c4664f52f6aee9bc092d827eedb40f496c77e580c07d57da5e4b5a8a",
+    "decompiled/server/partial-pass/functions/0x10047b70.c": "b3f01d702f8382e71a68580d04c9e2ee421bb32a88c05fe2aead1301badb9612",
+    "decompiled/server/partial-pass/functions/0x10052120.c": "0fdc844f39142bf896bc9b78e6a7b292e0075dbab9017c498768b1ea4b9f7a9d",
+    "decompiled/server/partial-pass/functions/0x10052bc0.c": "386c96e3ad3be1c2fb80b0dfa2e5346a154b699282af95fba206aa7466654df2",
+    "decompiled/server/partial-pass/functions/0x1005b2e0.c": "f1d9ae3cfd0c917079ff3b80519193e8b260dd31a0de7436f5fa77ccddeb456f",
+    "decompiled/server/partial-pass/functions/0x1005b400.c": "215add37e6175a9b1bcc7fcb3a76a2c748d7645571dddedb0a4a6f07587528e9",
+    "decompiled/server/partial-pass/functions/0x1005c1b0.c": "01e404c246e5e89aa12c9bb60192517dec83e64a245cecd67968312fe74d3fad",
+    "decompiled/server/partial-pass/functions/0x1005ec90.c": "3d6b44219f5a4d007b729b35bf96d4b045ab4e8f1525a71bb2194a2f1879540d",
+    "decompiled/server/partial-pass/functions/0x1005f8f0.c": "4268185e39bfa2699e80b4cd572fd3a21a320e938bb0c32bb6f84a61e00f1869",
+    "decompiled/server/partial-pass/functions/0x10064c60.c": "436c4823b10803ef0c6e98b7c85a464f2aebcaa7a9c25661766e32210ddb9a18",
+    "decompiled/server/partial-pass/functions/0x10065b80.c": "92296c3843b51d3ff2b926fb02058560f0f7ab90e3080f02250a4ab4cb982be5",
+    "decompiled/server/partial-pass/functions/0x10067260.c": "95976f3c7cb8db3ba52840b06a745e8cf5fa73ae5a30801cf5b1ed6f2381c37d",
+    "decompiled/server/partial-pass/functions/0x10068210.c": "74b7fde69d68b32da275d09a25ba2d1edfca21729489b99ae8060f73d8bddffd",
+    "decompiled/server/partial-pass/functions/0x1006df20.c": "b7c65a0e37be77830597544e6ace143185d2810c2d0c6d424d9523e18f81d553",
+    "decompiled/server/partial-pass/functions/0x1006eae0.c": "496c77aafd5ded35c77c7afa7f7147c5d6a14248ea0161ef3420061724ffc55b",
+    "decompiled/server/partial-pass/functions/0x1007f070.c": "4341423d2de4d6944993f6cebe8ceb60138296cd1996fd375328afc03184c437",
+    "decompiled/server/partial-pass/functions/0x1007f1a0.c": "f3e3efb7b11327030dececacbc979f937f5007fcd71bc4a120447419f03224cc",
+    "decompiled/server/partial-pass/functions/0x1007ffa0.c": "97444ba8d09bb0da6aa12611589843017ec3a5661e4e798430d018871e24a35c",
+    "decompiled/server/partial-pass/functions/0x10085660.c": "a0ff57a481abf5ebbaeb4ab891de2767855ce53c5c7ebef017dfb450687f6db9",
+    "decompiled/server/partial-pass/functions/0x100e01e0.c": "78e7c04e0760db1759677307a5b577f9396a114b991336bfad514ca8c98a1a54",
+    "decompiled/server/partial-pass/functions/0x100e5fc0.c": "9dee1dd77571fe01b42451837b3a9d0c3624cef77289ad83c177af0c66ed3a7b",
+    "decompiled/server/partial-pass/functions/0x10116a30.c": "4890cab4fd326ec2a92cba29dda1dbb32e1df530686e3de0467d8da4da8250e2",
+    "decompiled/server/partial-pass/functions/0x10116a40.c": "ba562a2e5876aa6a2766bde55f53ab1cf43acad848165e743b63cedcc38ebfa3",
+    "decompiled/server/partial-pass/functions/0x10119680.c": "99de35ab0355a105abb7557d0c8e934a9734842d0d7671cb40532931ff64b037",
+    "decompiled/server/partial-pass/functions/0x1011d560.c": "aeb252d6c20a8820a5af2f9da65228cd6037b43ba6df87f7b4d114092be50658",
+    "decompiled/server/partial-pass/functions/0x1013f5f0.c": "7ecc7c36b10b4a8b3b446368a6124bf8fb1ff7732300f05209b180fea0f0d764"
+  },
+  "caller_occurrences": [
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10026180.c",
+      "saved_selector_address": "0x10026180",
+      "line": 220,
+      "arguments_as_decompiled": "\"weapons_new/browning/browning_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10032330.c",
+      "saved_selector_address": "0x10032330",
+      "line": 237,
+      "arguments_as_decompiled": "\"weapons_new/glock/glock_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10033c90.c",
+      "saved_selector_address": "0x10033c90",
+      "line": 211,
+      "arguments_as_decompiled": "\"weapons_new/p345/p345_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10035050.c",
+      "saved_selector_address": "0x10035050",
+      "line": 211,
+      "arguments_as_decompiled": "\"weapons_new/revolver/revolver_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10036620.c",
+      "saved_selector_address": "0x10036620",
+      "line": 235,
+      "arguments_as_decompiled": "\"weapons_new/vp70/vp70_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1003bbd0.c",
+      "saved_selector_address": "0x1003bbd0",
+      "line": 221,
+      "arguments_as_decompiled": "\"weapons_new/famas/famas_shoot.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1003c7f0.c",
+      "saved_selector_address": "0x1003c7f0",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/famas/famas_shoot.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10044690.c",
+      "saved_selector_address": "0x10044690",
+      "line": 212,
+      "arguments_as_decompiled": "\"weapons_new/g43/g43_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10045320.c",
+      "saved_selector_address": "0x10045320",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/g43/g43_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10046dc0.c",
+      "saved_selector_address": "0x10046dc0",
+      "line": 262,
+      "arguments_as_decompiled": "\"weapons_new/glock/glock_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10047b70.c",
+      "saved_selector_address": "0x10047b70",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/glock/glock_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10052120.c",
+      "saved_selector_address": "0x10052120",
+      "line": 259,
+      "arguments_as_decompiled": "\"weapons_new/m16/m16_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10052bc0.c",
+      "saved_selector_address": "0x10052bc0",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/m16/m16_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1005b400.c",
+      "saved_selector_address": "0x1005b400",
+      "line": 229,
+      "arguments_as_decompiled": "(int)DAT_10223188[0x26] + in_ECX[0x6a],1,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1005c1b0.c",
+      "saved_selector_address": "0x1005c1b0",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/mp5/mp5_shoot_end.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1005ec90.c",
+      "saved_selector_address": "0x1005ec90",
+      "line": 203,
+      "arguments_as_decompiled": "\"weapons_new/p345/p345_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1005f8f0.c",
+      "saved_selector_address": "0x1005f8f0",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/p345/p345_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10064c60.c",
+      "saved_selector_address": "0x10064c60",
+      "line": 230,
+      "arguments_as_decompiled": "\"weapons_new/revolver/revolver_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10065b80.c",
+      "saved_selector_address": "0x10065b80",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/revolver/revolver_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10067260.c",
+      "saved_selector_address": "0x10067260",
+      "line": 214,
+      "arguments_as_decompiled": "\"weapons_new/rifle/rifle_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10068210.c",
+      "saved_selector_address": "0x10068210",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/rifle/rifle_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1006df20.c",
+      "saved_selector_address": "0x1006df20",
+      "line": 145,
+      "arguments_as_decompiled": "\"weapons_new/shotgun/shoot.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1006eae0.c",
+      "saved_selector_address": "0x1006eae0",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/shotgun/shoot.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1007f1a0.c",
+      "saved_selector_address": "0x1007f1a0",
+      "line": 210,
+      "arguments_as_decompiled": "(int)DAT_10223188[0x26] + in_ECX[0x6a],1,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1007ffa0.c",
+      "saved_selector_address": "0x1007ffa0",
+      "line": 34,
+      "arguments_as_decompiled": "\"weapons_new/tmp/tmp_shoot_end.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10085660.c",
+      "saved_selector_address": "0x10085660",
+      "line": 39,
+      "arguments_as_decompiled": "\"weapons/vp70/vp70_fire.wav\",0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1011d560.c",
+      "saved_selector_address": "0x1011d560",
+      "line": 74,
+      "arguments_as_decompiled": "iVar5,2,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1011d560.c",
+      "saved_selector_address": "0x1011d560",
+      "line": 92,
+      "arguments_as_decompiled": "(int)DAT_10223188[0x26] + in_ECX[0x6b],0,1",
+      "limitation": "Lexical caller only; decompiler often hides aggregate/by-value arguments. Not a complete native xref graph."
+    }
+  ],
+  "caller_scan_scope": {
+    "directory": "decompiled/server/partial-pass/functions",
+    "C_files": 8000,
+    "occurrences": 28,
+    "source_files": 27
+  }
+}

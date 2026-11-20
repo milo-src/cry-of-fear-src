@@ -161,7 +161,13 @@ omitted this parameter.10080410 immediately rejects context byte0==0 or a8==null
 Thus a4 existence and its activation byte are separate gates; a8 is a separate
 backend dependency.
 
-10080410's already recovered weapon-event behavior:
+The complete PlaySFX sender→handler linkage and six-DWORD adapter ABI are now in
+[playsfx-client-contract.md](../network/playsfx-client-contract.md) and
+[playsfx-server-contract.md](../network/playsfx-server-contract.md). The local
+producer reads only path/mode, ignoring aux/origin; the alternate handler branch
+uses spatial event API. A consumed trailing SHORT is not a client recipient filter.
+
+10080410's recovered weapon-event behavior:
 
 - Resource paths containing case-sensitive `weapons/` are rewritten to
   `weapons_new/` followed by bytes after the first slash/backslash.

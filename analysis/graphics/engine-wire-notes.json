@@ -8,7 +8,7 @@
       "summary_ru": "Кодирует float через trunc(value*8) и младшие16 бит; Ghidra потерял арифметику x87.",
       "confidence": "высокая для описанного статического поведения",
       "details_ru": [
-        "Callback53 table01eced18→01da68ad; сервер получает его через GiveFnptrsToDll и copied slot1022301c. Проверяет active0242f300; при0 diagnostic01df2656, полный nonreturn/error contract не установлен.",
+        "Callback53 table01eced18→01da68ad; сервер получает его через GiveFnptrsToDll и copied slot1022301c. Проверяет active0242f300; при0 diagnostic01df2656, fatalhelper не возвращается штатно (exit либоrecursive longjmp).",
         "ASM FLD[ebp+8],FMUL float01e8cc48=8.0,CALL01e7163c; EAX→01d47080(sizebuf01ec1a98,q). Для finite x приabs(8*x)<2^63 и без исключений q=truncTowardZero(8*x), wire little-endian low16(q). Clamp отсутствует.",
         "Клиент10080910 декодирует signed16/8;1.2→1.125,-1.2→-1.125,4096→-4096. Это статически вычисленные примеры; NaN/Inf/int64 overflow и x87 exceptions отдельно не проверены. Не копировать ошибочное void/no-argument C как ABI."
       ],
@@ -16,7 +16,9 @@
         "decompiled/engine/captures/graphics-engine-wire/000-pseudocode.c",
         "decompiled/engine/captures/graphics-engine-wire/capture.json",
         "analysis/graphics/engine-wire-contract.md",
-        "analysis/graphics/engine-wire-assembly/capture.json"
+        "analysis/graphics/engine-wire-assembly/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "decompiled/engine/captures/engine-message-followup/capture.json"
       ]
     },
     {
@@ -28,13 +30,15 @@
       "confidence": "высокая для описанного статического поведения",
       "details_ru": [
         "Callback54 table01eced18→01da68e4, copied server slot10223020. Приactive0242f300==0 вызывает01df2656; затем показанный путь вызывает01d47171(01ec1a98,text).",
-        "Не делает отдельного client-size clamp или фильтрации имени. Длина/NUL и NULL-case находятся в01d47171, overflow и packet cap — в buffer/MessageEnd контрактах. Nonreturn diagnostic не установлен."
+        "Не делает отдельного client-size clamp или фильтрации имени. Длина/NUL и NULL-case находятся в01d47171, overflow и packet cap — в buffer/MessageEnd контрактах. Nonreturn01df2656 установлен отдельнымcapture/terminationASM."
       ],
       "evidence_paths": [
         "decompiled/engine/captures/graphics-engine-wire/001-pseudocode.c",
         "decompiled/engine/captures/graphics-engine-wire/capture.json",
         "analysis/graphics/engine-wire-contract.md",
-        "analysis/graphics/engine-wire-assembly/capture.json"
+        "analysis/graphics/engine-wire-assembly/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "decompiled/engine/captures/engine-message-followup/capture.json"
       ]
     },
     {
