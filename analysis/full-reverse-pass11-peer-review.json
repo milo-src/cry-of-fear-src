@@ -1,0 +1,254 @@
+{
+  "scope": "Static RE pass11; no target execution or game implementation",
+  "result": "PASS",
+  "new_reviewed": 27,
+  "updated_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-radius-damage",
+      "primary_count": 4,
+      "author": "shader_inventory",
+      "reviewers": [
+        "root",
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All4 primary saved C/native bodies and contracts. Independent support review: BodyTarget, sphere enumeration, TraceLine, Clear/Apply, IsPlayer leaves. Verified raised-source and water order; ordered/NaN/visibility gates; startSolid after visibility; attacker IsPlayer under target spawnflags40; TraceAttack Vector12 by value; RET14h/20h wrappers; Add OR before flush and inflictor passed twice. Peer independent PE PASS18C18ASM1266byte rows196raw,2vtables/2save tables.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "aa53bc60d47337be354f7135cdb3733dc04529acd043181e29cc0c33db6b0bd3",
+        "notes.json": "a319e51a91403c10eef6ea4612d373a63cb4dccd15f64c74e1d84cd848e75878",
+        "evidence.json": "efca85fd6ef695b08ff0489805c9714b626ef69444185a1fc74de5ad2cba083e",
+        "capture.py": "a28f19ceac94acbc8127f8337ddb17d9049030028ee9077746f1521ebb3531af",
+        "verify.py": "4d29fbf1a01a33eabaeb7f84fbe0042b00777162e1d1b163cfcc7e8c1c589313"
+      }
+    },
+    {
+      "package": "analysis/server-monster-controls",
+      "primary_count": 10,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All10 primary C/native bodies, notes and contract. Full-EAX SETBE including unordered; renderfx135 latch and pev/object distinction; eight-slot route shift/current-index reread; EAX-forwarding route setters; completion jump table; grouped door Use4args and ST0 deadline; sentence RET18h wrapper forwards only4 arguments; Generic deadflag!=2 predicate. Independent PE PASS19C19ASM693byte rows176raw, RTTI/descriptors/dispatch4.",
+      "corrections": [
+        "Clarified100bf8c0 instruction order: flags load precedes first shift store, AND follows record6-to7 store, OR follows next load; final formula unchanged."
+      ],
+      "final_hashes": {
+        "contract.md": "9207e85707892a4ed6a2777a5439e65b492760974efd1414a213598c4a2204cd",
+        "notes.json": "619458e0ccea930a2fc1758c5d168289593baedd0308167e4ad0a92915c1aa0e",
+        "evidence.json": "b2f117dc04956ed7db0c6aaee51bb43259c020db9e3c5cbbe0b357e9be83dc44",
+        "capture.py": "1ec832a431a342705c1cbeffb9b9d7f57c076a6c920d7fb27484e0a72ed4657d",
+        "verify.py": "a21cb81f7792a9633dc4bd1847aa381ba134c0b0f792f58391d0fb276f315348"
+      }
+    },
+    {
+      "package": "analysis/server-spread-callers",
+      "primary_count": 9,
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All9 primary C/native bodies and contracts; parent-first persistence, native descriptors/time fixup/overlap, vptr prefix bindings, RNG bit-pattern seed/global state/integer width and unsigned conversion boundary. Independent PE PASS22C23ASM931byte rows144raw57descriptors67rel32 edges. Exact LE32 search and fresh full objdump E8/E9 scan reproduced. ASM-only100d1930 retained as support gap, no fabricated C REVIEW; concrete expand-to-shot/derived reachability remains open.",
+      "corrections": [
+        "Corrected type12 persistence width: native generic serializer uses4-byte rawDWORD reads/writes, including overlapping ranges at+1a4/+1a5; m_b names do not imply byte serialization."
+      ],
+      "final_hashes": {
+        "contract.md": "1803b51f8e8db6c77c7a7887fb792a5a8c308e6020d9b9a393cc4babed6900ed",
+        "notes.json": "3a0f930f1bda1c757a3769eb9ccda5512b6f2cab4d572f70b0def2f470cf9906",
+        "evidence.json": "74642a824302cb2f84038a60e1e8fada7df130e4a19b48d20d68b49587de3efd",
+        "capture.py": "12c2576ee6d1e635ce81069ca7bc6fae559a1333c267b90088ded0189ce89e5a",
+        "verify.py": "f0839dd4fa7ae288a1ed4738bc24266c1c33200c1dc4db66ac02fbcb0ddf032b"
+      }
+    },
+    {
+      "package": "analysis/server-unlock-settings",
+      "primary_count": 4,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All4 primary C, native reader exits/writer loops/cleanup and contracts. Tokenizer and shared getline epilogue; two GetGameDir buffers; close and DeleteFileW/MoveFileExW backends. Independent PE PASS18C24ASM4082byte rows369raw; independent bounded replay128 selector paths,64 reader false-before-true dispatches,128 writer mode/polarity paths,34 token pairs and PE imports. AL-only vs DWORD result, RET0c/10h vs cdecl, ordinal666, copy-before-length-guard, delete-before-conditional-rename and no rollback. No target/file writer execution.",
+      "corrections": [
+        "Clarified two separate output buffers passed to GetGameDir; each call has one pointer argument."
+      ],
+      "final_hashes": {
+        "contract.md": "ff08f76b5cfb28770d2dda75645c4752e8e5bcdef6b8a132ee5fdad7bd85b684",
+        "notes.json": "0472a7ebc24d1ba860eecf8ed6e422709c6a74fe46d37a1a0d628db94faa1702",
+        "evidence.json": "4653e55aa6a77cb79dce223fc8f51947446f4f6616667fe54a6faf216165fa56",
+        "capture.py": "bce03ab217fbe66b0ad52d7ec94d803e360c73060a95c5cb4d5a3352fadf6302",
+        "verify.py": "93b939e564af4720b747f3b4fad027ec386b211fee8a28b74e44a3604d7f3410",
+        "verify_paths.py": "5825db2f6f231b3698397b0313a166fa517a5d199b3ac930f17b54f9cee409fa"
+      }
+    }
+  ],
+  "navigation_cleanup": "Closed radius core and unlock parser removed from current next queue; spread persistence/RNG and monster route/door/sentence continuations linked. Concrete weapon/damage callbacks, expand-to-shot, gameplay state and corpus gaps remain explicitly open. All1705 prior REVIEW blocks preserved exactly. Historical reports unchanged. Only deliberate documentation hashes refreshed, never original binary/C pins.",
+  "notes_contract_parity": true,
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-cinematic-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d",
+          "new": "ea24f57e62bf6bdafdc4d90fb75be6ca1b79696774e475bbc4ac989582c325fb"
+        },
+        {
+          "path": "analysis/server-targets/contract.md",
+          "old": "03376480f4aee36c266cf78ff24a3345fb7b434552773c785174fcfbfb916331",
+          "new": "51d515d6c3bcd33225f8878b7c59a0cf74bc6cf004c02c81a56dfba88914226f"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-grenade-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-senses/contract.md",
+          "old": "668edd7a3ed538b0f14c5ecac5a35e68c267bf37648e71878af3bf7006ea6678",
+          "new": "5d631ad04e9068a6c45a18c8e5f5b7df18f8d52477535a0b8d0487b284044a51"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-controls/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-navigation/contract.md",
+          "old": "63fc0a4e670b6f5fea2c7ee1001b4420579e0ac955dc3103d05711d83a3970a6",
+          "new": "736eac736af806aff6cdced539694af7fd1f679f0e736f3a0de57b82db8a5d43"
+        },
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d",
+          "new": "ea24f57e62bf6bdafdc4d90fb75be6ca1b79696774e475bbc4ac989582c325fb"
+        },
+        {
+          "path": "analysis/server-sentence-groups/contract.md",
+          "old": "9c6dac3f1830b00c3ed92703f70323c8e8776e704d27cebf095f4eef94eddec6",
+          "new": "f37cf30d3aa42311624e2b4d071b83f571a4a0b0fce204264c017237ea06f18f"
+        },
+        {
+          "path": "analysis/server-targets/contract.md",
+          "old": "03376480f4aee36c266cf78ff24a3345fb7b434552773c785174fcfbfb916331",
+          "new": "51d515d6c3bcd33225f8878b7c59a0cf74bc6cf004c02c81a56dfba88914226f"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-decisions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d",
+          "new": "ea24f57e62bf6bdafdc4d90fb75be6ca1b79696774e475bbc4ac989582c325fb"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-events/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d",
+          "new": "ea24f57e62bf6bdafdc4d90fb75be6ca1b79696774e475bbc4ac989582c325fb"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-senses/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sound-entity/contract.md",
+          "old": "44947e0a5b1370765a7e1d09bdb3d9f73c40960f13f538230df83fa1a018b920",
+          "new": "763d3ec5eb25f07c4e3d418e34cd66f4eb5b99eaf895bca751c3b2c11fd87349"
+        },
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d",
+          "new": "ea24f57e62bf6bdafdc4d90fb75be6ca1b79696774e475bbc4ac989582c325fb"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-radius-damage/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-grenade-lifecycle/contract.md",
+          "old": "95f562ca9c336148a6bd29d6ef4885035234542336eb48b8c9e5adc2d1f0495e",
+          "new": "c91b2aa91f598f249aea3b4c622d8c32d85177ba2d0fffb5b9b680a527e933e9"
+        },
+        {
+          "path": "analysis/server-monster-senses/contract.md",
+          "old": "668edd7a3ed538b0f14c5ecac5a35e68c267bf37648e71878af3bf7006ea6678",
+          "new": "5d631ad04e9068a6c45a18c8e5f5b7df18f8d52477535a0b8d0487b284044a51"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-rules-bootstrap/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-targets/contract.md",
+          "old": "03376480f4aee36c266cf78ff24a3345fb7b434552773c785174fcfbfb916331",
+          "new": "51d515d6c3bcd33225f8878b7c59a0cf74bc6cf004c02c81a56dfba88914226f"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sentence-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sentence-groups/contract.md",
+          "old": "9c6dac3f1830b00c3ed92703f70323c8e8776e704d27cebf095f4eef94eddec6",
+          "new": "f37cf30d3aa42311624e2b4d071b83f571a4a0b0fce204264c017237ea06f18f"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sound-entity/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-scheduler/contract.md",
+          "old": "3806779304fa737d606f254fcc6340c4839018e0e3e130dc3cce655d14212b4d",
+          "new": "ea24f57e62bf6bdafdc4d90fb75be6ca1b79696774e475bbc4ac989582c325fb"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-spread-callers/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-spread-application/contract.md",
+          "old": "3a70efc1a846ab399ebc560ba11197e5f5ed07d503aee090ed31c6480fefd092",
+          "new": "b922c8ce824a23237793b1121b36b2c89c0bf3a6ab772dcb8467cf51eed20af2"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-settings/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "2d638847248c495d8be5597ab4ec3caa0a49af1d3385766222498f53ddf77b63",
+          "new": "0230f3e52cd68607d5000a55df44e7c1ebae300bea063c8dddf69370f98bd50d"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "server-cinematic-lifecycle": "PASS 46 C, 46 ASM, 2341 byte rows, 270 raw, 15 cards",
+    "server-grenade-lifecycle": "PASS 47 C, 47 ASM, 3014 byte rows, 737 raw, 15 cards",
+    "server-monster-decisions": "PASS 26 C, 26 ASM, 1147 byte rows, 212 raw, 10 cards",
+    "server-monster-events": "PASS 33 C, 33 ASM, 2098 byte rows, 207 raw, 9 cards",
+    "server-monster-senses": "PASS 29 C, 29 ASM, 1261 byte rows, 245 raw, 12 cards",
+    "server-rules-bootstrap": "PASS 26 C, 27 ASM, 3783 byte rows, 399 raw, 11 cards",
+    "server-sentence-lifecycle": "PASS 18 C, 21 ASM, 904 byte rows, 143 raw, 102 save fields, 9 cards",
+    "server-sound-entity": "PASS 29 C, 29 ASM, 1531 byte rows, 133 raw, 18 cards"
+  },
+  "reproducible_extra_peer_check": "analysis/server-unlock-settings/verify_paths.py independently checks PE/selector/reader/writer paths and is invoked by verify.py",
+  "verification_report_sha256": "17ec7b6c0fdc8f99719bfc98412d61a1ed6d42028500c03e8d76a68706601ce6"
+}

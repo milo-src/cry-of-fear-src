@@ -76,3 +76,7 @@ KV group/defaultmember и multi/m_iMode сравниваются case-sensitive.
 - Save/restore этих четырёх классов, loader field offsets и все inherited virtual callbacks не объявлены полностью разобранными. PE table prefix не равен полному C++ ABI класса.
 
 Уточнение native поля: ENTVARS table1021aae0 называет +1ec `noise` (type17), а +1f8 — `noise3`. Сохранение pending/active и alias links, factory/vtable/dispatch рассмотрены в [alias state](../server-alias-state/contract.md); семантика remapping — в [serializer](../server-serializer/contract.md).
+
+## Продолжение разбора: pass11
+
+[Monster controls](../server-monster-controls/contract.md) дополняет локальные route setters goal2/goal20, вставку waypoint, завершение движения, Use связанной группы дверей и расчёт deadline, IgnoreConditions и два sentence wrappers. Он фиксирует native ABI/порядок callbacks; derived overrides, engine movement и sound backend остаются открытыми. Закрытые10 entry перечислены в новом контракте и REVIEW каталога.

@@ -1,0 +1,17 @@
+# RadiusDamage и глобальный накопитель урона
+
+Статический разбор оригинального server hl.dll, SHA-256 `751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641`. Игра и DLL не запускались. Здесь 4 новые карточки; ClearMultiDamage1011c070, ApplyMultiDamage1011b8f0 и sphere helper101186b0 уже имеют REVIEW и не считаются новыми. Адреса/offsets обозначены hex, если не оговорено иное.
+
+## Навигация и граница
+
+Цепь взрыва: [CGrenade Explode](../server-grenade-lifecycle/contract.md) →1008a9e0 →1008a690 → target.virtual64 либо Clear→target.virtual60→Apply. Add1011b640 вызывается из конкретных TraceAttack implementations. Это контракт доставки урона, а не полный контракт потери HP: target-specific callbacks, armour, immunity, hitgroup scale, killed/death и engine collision здесь не реконструируются.
+
+Нативные таблицы CGrenade101ce8e0 и CBasePlayer101a4da8, RTTI и ENTVARS1021aae0 сохранены в evidence.json. CGrenade+108→10012920: hidden output Vector*, input source*, RET8; EAX=output. Эта реализация не читает source, а усредняет два результата virtual100/fc по0.5. Нельзя переносить её на каждый возможный target. CGrenade+d0→1000db80 даёт0, CBasePlayer+d0→100135b0 даёт1; это подтверждает смысл IsPlayer gate. CGrenade+60→1008c4d0 и+64→1008bc50 показывают реальные dispatch границы, не универсальность damage model.
+
+TraceResult: 56 байт; allSolid0, startSolid4, inOpen8, inWaterc, fraction10, endPos14..1c, planeDist20, planeNormal24..2c, hitEdict30, hitgroup34. Stack offsets core и caller1011a800 совпадают с pinned eiface.h. Engine API slots: sphere16, trace31, contents45, PEntityOfEntOffset69, EntOffsetOfPEntity70. Полная семантика engine callbacks остаётся внешней.
+
+## Воспроизводимость и важные ограничения
+
+`python analysis/server-radius-damage/capture.py` читает original PE и сохранённые C, запускает только objdump для ограниченных function ranges, сравнивает каждую строку машинных байтов. `verify.py` проверяет native bytes, SHA, raw offsets, vtables, descriptors, API mapping и наличие4 карточек. Скрипты не загружают DLL для исполнения, не правят игру/общий каталог. Provider C может терять calling convention, vector-by-value и NaN семантику; критические ветви ниже выведены из ASM.
+
+Отдельно не закрыты: полная libm fallback1016be90 при отрицательном squaredSum; точный engine sphere/trace backend; concrete target callbacks; непрямые callers explicit-origin wrapper1008aa40. Native SIMD rounding/MXCSR режим не переопределяется этим кодом. Формулы описывают последовательность операций, не обещают битовую эквивалентность произвольной реализации на другом floating-point runtime.

@@ -86,8 +86,8 @@ Thiscall ECX=weapon, no stack args, plain RET. Mode208==0 вызываетvtable
 
 ## Оставшиеся границы
 
-- Найти доказанные callers `100d0410` и связь его аргумента с expand+3c/+74. Имеющаяся локальная цепочка заканчивается входным аргументом, а не выстрелом.
+- [Spread callers](../server-spread-callers/contract.md) доказывает прямой ASM-only100d1930→100d0410 с literal float32 0.7. Связь с expand+3c/+74 и конкретным выстрелом ещё не установлена; bounded direct/pointer scan не исключает непрямые вызовы.
 - Установить concrete class/vtable consumers, не выводить runtime reachability из наличия helper в DLL.
-- Отдельно разобрать RNG1011a050/1011abb0/1011abe0 и numeric conversion1013e5c0 как REVIEW при необходимости; здесь они support, не новые карточки. Полный sqrt error-path1016be90 остаётся внешним.
-- Save/Restore100d19b0/100d19f0/100d1a30/100d1a90 ещё не входят в этот пакет; сериализацияtable pointer/amplitude не объявлена восстановленной.
+- RNG1011a050/1011abb0/1011abe0 теперь имеют REVIEW в [spread callers](../server-spread-callers/contract.md). Numeric conversion1013e5c0 и полный sqrt error-path1016be90 остаются отдельными границами.
+- Save/Restore100d19b0/100d19f0/100d1a30/100d1a90 и parent1011e7a0/1011ede0 разобраны в [spread callers](../server-spread-callers/contract.md). Native descriptors доказывают1fc=m_flSpreadTime,200=m_flLastShotTime,204=m_flLastSpreadPower,208=m_iWeaponMode; parent1cc/1d0 — m_flNextPrimaryAttack/m_flNextSecondaryAttack. Pointer1f8 отсутствует в собственных descriptors, полного rebinding этим не доказано.
 - Capture и verify работают с оригинальными bytes и saved C, без target execution и без обязательного локального objdump cache. Поведение в кадре, реальные параметры файлов и оружейные derived classes не проверялись.

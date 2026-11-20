@@ -1,0 +1,48 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1705,
+  "new_reviewed": 27,
+  "updated_existing": [],
+  "after_reviewed": 1732,
+  "remaining_unreviewed": 6923,
+  "server_reviewed": 1077,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 91,
+    "assembly_ranges": 84,
+    "verified_assembly_byte_rows": 6972,
+    "raw_records": 890,
+    "decoded_save_fields": 359,
+    "review_evidence_references": 195,
+    "synchronized_note_occurrences": 27
+  },
+  "checks": {
+    "prior_unrelated_reviews_preserved": true,
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.017s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-radius-damage": "PASS 18 C, 18 ASM, 1266 byte rows, 196 raw, 4 cards",
+      "server-monster-controls": "PASS 19 C, 19 ASM, 693 byte rows, 176 raw, 10 cards",
+      "server-spread-callers": "PASS 9 cards, 22 C, 23 ASM, 931 byte rows, 144 raw, 57 descriptors, 67 direct edges; fresh scan without cache",
+      "server-unlock-settings": "INDEPENDENT PASS 18 C 24 ASM 4082 rows 369 raw;128selector,64reader dispatch,128writer polarity paths,34token pairs\nPASS 18 C, 24 ASM, 4082 byte rows, 369 raw, 4 cards"
+    }
+  },
+  "artifacts": [
+    "analysis/server-radius-damage/contract.md",
+    "analysis/server-monster-controls/contract.md",
+    "analysis/server-spread-callers/contract.md",
+    "analysis/server-unlock-settings/contract.md"
+  ],
+  "catalog_sha256": "831290cca09d575a4630d820fec601c29fce2204cb02aada6ad22c822727597d",
+  "progress_sha256": "fc85fbc16198af2c47041d4d1226255a8573e75b48d88611d97ad1d7baafdb85"
+}

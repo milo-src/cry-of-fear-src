@@ -229,3 +229,7 @@ Builder, reorder и node/viewer lifecycle разобраны в [graph builder](
 Исторические десять карточек и evidence этого пакета неизменны. Все таблицы/const
 в evidence содержат PE bytes, а mutable BSS globals перечислены как
 unbacked_operands: их runtime значения не выдуманы.
+
+## Продолжение разбора: pass11
+
+[Monster controls](../server-monster-controls/contract.md) дополняет локальные route setters goal2/goal20, вставку waypoint, завершение движения, Use связанной группы дверей и расчёт deadline, IgnoreConditions и два sentence wrappers. Он фиксирует native ABI/порядок callbacks; derived overrides, engine movement и sound backend остаются открытыми. Закрытые10 entry перечислены в новом контракте и REVIEW каталога.

@@ -149,8 +149,12 @@ Thiscall ECX=player, stack(classname pointer,signed int marker), RET8. Пере�
 
 Закрыты локальные ABI и ветви 13 входов: native export/factory/vtable связь, key parsing, 32-slot traversal, Touch против Use, специальные gates, native field writes, Spawn/Touch порядок и bool AL при RTTI helper. Никакое локальное завершение не объявлено гарантированным inventory pickup.
 
-Дальше: полный unlock parser100dd000; producers player+3b4/+1ef8 и global10226488; setters/игровой смысл CHalfLifeRules byte+dc; weapon consumers max_health/frags/iuser3/iuser4; сохранение equipment map keys при restore за пределами inherited wrapper. Native engine string-pool/allocator zero initialization и полное CRT поведение переполнения atoi остаются внешними условиями. Это не запрос запускать игру.
+Reader100dd000 и его global/player read/write пары продолжены в [unlock settings](../server-unlock-settings/contract.md). Дальше: producers player+3b4/+1ef8 и global10226488; setters/игровой смысл CHalfLifeRules byte+dc; weapon consumers max_health/frags/iuser3/iuser4; сохранение equipment map keys при restore за пределами inherited wrapper. Native engine string-pool/allocator zero initialization и полное CRT поведение переполнения atoi остаются внешними условиями. Это не запрос запускать игру.
 
 ## Воспроизводимость
 
 `python analysis/server-player-equipment/capture.py` заново читает hash-pinned PE, сохраняет ограниченные objdump ranges и сырые RTTI/vtables/ENTVARS/PLAYER/export records. Все строки машинных байтов сравниваются с PE; BSS не читается как file-backed runtime state. `python analysis/server-player-equipment/verify.py` независимо проверяет hashes, byte rows, таблицы и пути карточек. Engine API labels сопоставлены через initializer100b4aa0 и eiface.h с regex, допускающим whitespace перед закрывающей скобкой. Оригинальная DLL никогда не загружается для исполнения. Общий каталог интегрируется отдельно; этот пакет содержит самостоятельные доказательства.
+
+## Продолжение разбора: pass11
+
+Поддерживающий100dd000 из прежней карточки GiveNamedItem теперь имеет отдельный полный локальный контракт вместе с100e0db0/100e1690/100f2ed0: [unlock settings](../server-unlock-settings/contract.md). Прежняя карточка сохраняет границу исходного equipment-пакета; текущая очередь не включает повторный разбор этих четырёх тел. Игровые callers, marker consumers и полный цикл unlock state остаются отдельными задачами.

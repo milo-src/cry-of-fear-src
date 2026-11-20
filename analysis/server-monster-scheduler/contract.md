@@ -321,3 +321,7 @@ Graph helpers/lifecycle/precompute теперь имеют самостояте�
 |100c27c0|generic virtual1ac изMaintainSchedule; ideal state decision|
 |100c1f50|generic virtual1b0; activity mismatch, sequence reset иtiming|
 |100be5e0|generic virtual1c8; cover search сдвумяVector BY VALUE,min/max|
+
+## Продолжение разбора: pass11
+
+[Monster controls](../server-monster-controls/contract.md) дополняет локальные route setters goal2/goal20, вставку waypoint, завершение движения, Use связанной группы дверей и расчёт deadline, IgnoreConditions и два sentence wrappers. Он фиксирует native ABI/порядок callbacks; derived overrides, engine movement и sound backend остаются открытыми. Закрытые10 entry перечислены в новом контракте и REVIEW каталога.

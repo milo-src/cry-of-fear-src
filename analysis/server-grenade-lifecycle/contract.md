@@ -16,7 +16,7 @@ Explode → messages + radiusDamage wrapper + debris → schedule Smoke100b1fb0
 Smoke → smoke/bubbles → lifecycle mark10119900 → engine removal later
 ```
 
-[Bounce/danger sound и pool](../server-monster-senses/contract.md), [scheduler](../server-queue-b/contract-parent.md), [effects/removal](../server-event-effects/contract.md). Это локальный жизненный цикл CGrenade; полный damage core `1008a690`, engine collision/physics и все weapon callers ещё не закрыты. BounceTouch действует при назначении callback внешним producer: прочитанные contact/remote constructors назначают другие Touch. Полный timed-grenade producer и все производные классы не следует считать восстановленными из одного BounceTouch.
+[Bounce/danger sound и pool](../server-monster-senses/contract.md), [scheduler](../server-queue-b/contract-parent.md), [effects/removal](../server-event-effects/contract.md). Это локальный жизненный цикл CGrenade. Core `1008a690`, оба radius wrappers и AddMultiDamage продолжены в [radius damage](../server-radius-damage/contract.md); engine collision/physics, конкретные damage callbacks и все weapon callers ещё не закрыты. BounceTouch действует при назначении callback внешним producer: прочитанные contact/remote constructors назначают другие Touch. Полный timed-grenade producer и все производные классы не следует считать восстановленными из одного BounceTouch.
 
 ## Native layout и ABI
 
@@ -41,7 +41,7 @@ Message id global1022655c зарегистрирован как `mydlight` size�
 
 ## Точные оставшиеся вопросы
 
-Полный radius damage `1008a690`, все virtual60/64 target overrides; geometry/trace callbacks engine; caller/signature игнорируемых24bytes100b18e0; producer, назначающий BounceTouch/timed grenade; полный набор100b1bb0/100b1c80/100b22e0 weapon callers; precache scheduling до Spawn; derived BounceSound overrides и save/restore специфичного latch+368. Сохранённые helper C/ASM позволяют проверить call/argument границы, но не означают автоматически закрытые подсистемы. В частности factory failure не является нормальным NULL return, `DetonateUse` лишь планирует, Smoke лишь маркирует удаление.
+Radius core и AddMultiDamage разобраны в server-radius-damage. Остаются все virtual60/64 target overrides; geometry/trace callbacks engine; caller/signature игнорируемых24bytes100b18e0; producer, назначающий BounceTouch/timed grenade; полный набор100b1bb0/100b1c80/100b22e0 weapon callers; precache scheduling до Spawn; derived BounceSound overrides и save/restore специфичного latch+368. Сохранённые helper C/ASM позволяют проверить call/argument границы, но не означают автоматически закрытые подсистемы. В частности factory failure не является нормальным NULL return, `DetonateUse` лишь планирует, Smoke лишь маркирует удаление.
 
 
 ## 0x100b0f50 — CGrenade_GetOrAllocatePrivateObject

@@ -30,7 +30,7 @@ MONSTER native descriptors подтверждают conditions+180, state+224; �
 
 ## Оставшиеся границы
 
-- Grenade BounceTouch/Explode/Detonate/Smoke и contact/remote setup продолжены в [grenade-lifecycle](../server-grenade-lifecycle/contract.md). Открыты полный radius-damage core, timed producer, все weapon callers и engine physics/lifetime; здесь описана граница sound writers.
+- Grenade BounceTouch/Explode/Detonate/Smoke и contact/remote setup продолжены в [grenade-lifecycle](../server-grenade-lifecycle/contract.md). Radius-damage core продолжен в [radius damage](../server-radius-damage/contract.md). Открыты concrete target damage callbacks, timed producer, все weapon callers и engine physics/lifetime; здесь описана граница sound writers.
 - Полный lifecycle player field24e8, deadline22a0, внешние writers дополнительного type и flash; caller100ead70 уже REVIEW в другом пакете, но полный player noise feedback не подменён слухом монстра.
 - Все derived virtual sound masks/sensitivity/eye positions; native таблицы трёх классов не исчерпывают иерархию.
 - Конкретные AI schedule реакции после выбора best, ширина повреждённых цепей, управление lifetime между разными Listen, фактический engine frame/order и occlusion за пределами этих функций. Здесь нет wall trace; это не утверждение, что любой внешний AI код никогда не проверяет видимость.

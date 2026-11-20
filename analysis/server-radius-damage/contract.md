@@ -1,0 +1,74 @@
+# RadiusDamage и глобальный накопитель урона
+
+Статический разбор оригинального server hl.dll, SHA-256 `751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641`. Игра и DLL не запускались. Здесь 4 новые карточки; ClearMultiDamage1011c070, ApplyMultiDamage1011b8f0 и sphere helper101186b0 уже имеют REVIEW и не считаются новыми. Адреса/offsets обозначены hex, если не оговорено иное.
+
+## Навигация и граница
+
+Цепь взрыва: [CGrenade Explode](../server-grenade-lifecycle/contract.md) →1008a9e0 →1008a690 → target.virtual64 либо Clear→target.virtual60→Apply. Add1011b640 вызывается из конкретных TraceAttack implementations. Это контракт доставки урона, а не полный контракт потери HP: target-specific callbacks, armour, immunity, hitgroup scale, killed/death и engine collision здесь не реконструируются.
+
+Нативные таблицы CGrenade101ce8e0 и CBasePlayer101a4da8, RTTI и ENTVARS1021aae0 сохранены в evidence.json. CGrenade+108→10012920: hidden output Vector*, input source*, RET8; EAX=output. Эта реализация не читает source, а усредняет два результата virtual100/fc по0.5. Нельзя переносить её на каждый возможный target. CGrenade+d0→1000db80 даёт0, CBasePlayer+d0→100135b0 даёт1; это подтверждает смысл IsPlayer gate. CGrenade+60→1008c4d0 и+64→1008bc50 показывают реальные dispatch границы, не универсальность damage model.
+
+TraceResult: 56 байт; allSolid0, startSolid4, inOpen8, inWaterc, fraction10, endPos14..1c, planeDist20, planeNormal24..2c, hitEdict30, hitgroup34. Stack offsets core и caller1011a800 совпадают с pinned eiface.h. Engine API slots: sphere16, trace31, contents45, PEntityOfEntOffset69, EntOffsetOfPEntity70. Полная семантика engine callbacks остаётся внешней.
+
+## Воспроизводимость и важные ограничения
+
+`python analysis/server-radius-damage/capture.py` читает original PE и сохранённые C, запускает только objdump для ограниченных function ranges, сравнивает каждую строку машинных байтов. `verify.py` проверяет native bytes, SHA, raw offsets, vtables, descriptors, API mapping и наличие4 карточек. Скрипты не загружают DLL для исполнения, не правят игру/общий каталог. Provider C может терять calling convention, vector-by-value и NaN семантику; критические ветви ниже выведены из ASM.
+
+Отдельно не закрыты: полная libm fallback1016be90 при отрицательном squaredSum; точный engine sphere/trace backend; concrete target callbacks; непрямые callers explicit-origin wrapper1008aa40. Native SIMD rounding/MXCSR режим не переопределяется этим кодом. Формулы описывают последовательность операций, не обещают битовую эквивалентность произвольной реализации на другом floating-point runtime.
+
+
+## 0x1008a690 — RadiusDamage_TraceAndDispatch
+
+Перечисляет цели вокруг источника, отсеивает по воде и трассе, рассчитывает спад урона и вызывает damage callbacks.
+
+Native cdecl, RET без очистки arguments: 9 DWORD = source Vector по значению (x,y,z), inflictor entvars*, attacker entvars*, damage float32, radius float32, ignoredClass int, damageBits. ECX не является this. Результат повреждения не возвращается. Источник лежит в собственных stack arguments; z увеличивается на float32 1.0, исходный Vector вызывающего объекта не записывается.
+
+Сначала slope=1.0, если radius ordered equal ±0; иначе DIVSS damage/radius, в том числе при NaN. PointContents проверяет исходный source ДО z+=1; только результат -3 задаёт water source. Attacker NULL заменяется inflictor, но inflictor NULL не защищён. После этого все FindEntityInSphere/BodyTarget/TraceLine работают с поднятым source. Нет проверки radius>0, damage>0 или finite.
+
+Перечисление через101186b0(NULL,source,radius), затем101186b0(previous,source,radius). Helper передаёт engine slot16 previous edict, указатель source, radius; требует nonNULL edict и EntOffsetOfPEntity!=0, возвращает edict+7c private. Любой NULL private/нулевой offset завершает весь loop core, не означает поиск следующего допустимого edict. Геометрическая семантика и порядок самого engine sphere search остаются внешними.
+
+Для каждой цели сначала skip только при pev.takedamage(+170) ordered equal zero; NaN проходит. Если low BYTE target.spawnflags(+1a4)&40h, из attacker.entvars+20c берётся edict; при NULL edict вызывается PEntityOfEntOffset(0), затем private+7c и virtual+d0. Ненулевой результат пропускает цель. NULL private не защищён. Проверяется именно attacker/fallback inflictor, не target IsPlayer. Затем ignoredClass!=0 и target.virtual+50()==ignoredClass исключают цель.
+
+Вода: при source contents -3 исключается только target.waterlevel(+1c4)==0; при остальных contents исключается только waterlevel==3. Частичные уровни1/2 проходят в обоих случаях. Проверка следует после player/class gates. Никакого общего исключения самого inflictor, его owner, союзника либо мёртвой цели здесь нет.
+
+Target.virtual+108 получает скрытый output Vector* и source Vector*; EAX результата указывает на12 байт целевой точки, которые копируются. TraceLine1011a800(source,point,0,inflictor.edict,trace*) передаёт engine flag0 (helper нормализует flag==1), то есть эта ветка не игнорирует monsters. TraceResult native layout: startSolid+4, fraction+10h, endPos+14h, hitEdict+30h, hitgroup+34h. Принимать разрешено только fraction ordered==1 либо hitEdict==target.edict; NaN fraction требует второго условия.
+
+Только ПОСЛЕ visibility gate при startSolid!=0 устанавливаются endPos=поднятый source и fraction=0. Остальные поля trace, в частности hitgroup/plane/hitEdict, не обнуляются; allSolid отдельно не проверяется. Одна трасса на принятую к проверке цель, без penetration/retry.
+
+Расстояние берётся от source до trace.endPos, не до target origin/BodyTarget point. SSE: dx/dy/dz float32; squaredSum=float32(float32(dy²+dx²)+dz²); convert double, SQRTSD, обратно float32. Отдельная libm ветвь1016be90 при ordered negative squaredSum не разобрана полностью. adjustedRaw=float32(damage-float32(distance*slope)); затем MAXSS(dst=+0,src=adjustedRaw). Это сохраняет NaN из src и знак -0 при равенстве, вопреки Ghidra C условию, которое выглядит как NaN→0. Нет верхнего clamp и нет skip adjusted<=0.
+
+Если текущая fraction ordered==1: target.virtual+64(inflictor,attacker,adjusted,damageBits), без clear/apply accumulator. Иначе ClearMultiDamage1011c070, direction=normalize(trace.endPos-source); ordered zero length даёт (0,0,1), NaN идёт через reciprocal. Target.virtual+60(inflictor,adjusted,Vector direction ПО ЗНАЧЕНИЮ 12 байт,trace*,damageBits), затем ApplyMultiDamage1011b8f0(inflictor,attacker). Таким образом startSolid branch всегда идёт через TraceAttack, даже при исходной fraction1. Нулевая adjusted всё равно доставляется callback.
+
+Общий accumulator не сохраняется/не восстанавливается вокруг TraceAttack: clear уничтожает предыдущую запись, apply не очищает новую. Конкретный virtual+60 может изменить урон, target, masks либо вообще ничего не накопить; virtual+64 определяет фактический health/armour/death. Эти overrides не заменяются предположением о простом вычитании HP. После callback поиск продолжает с прежним object; локальной защиты от удаления/reentrancy или snapshot списка нет.
+
+## 0x1008a9e0 — CBaseEntity_RadiusDamageFromOrigin
+
+Вызывает RadiusDamage из текущего origin объекта с радиусом damage×2.5.
+
+Thiscall ECX=object; stack(inflictor entvars*,attacker entvars*,damage float32,ignoredClass,damageBits), RET14h. Читает object+4 и pev.origin+8/+c/+10 без NULL guards, копирует Vector по значению на stack core. Сам объект только предоставляет source; passed inflictor/attacker не заменяются автоматически this.pev.
+
+Радиус равен float32(double(damage)*2.5), native double constant101b8e90, CVTPS2PD→MULSD→CVTPD2PS. Затем cdecl1008a690(source,inflictor,attacker,damage,radius,ignoredClass,bits), caller ADD ESP24h. Нулевой/отрицательный/NaN/infinite damage не фильтруется. Core отдельно поднимает локальный source.z на1.
+
+CGrenade Explode100b1540 вызывает этот wrapper с ECX=grenade, grenade.pev inflictor, сохранённым owner.entvars attacker илиNULL, текущим pev.dmg, ignoredClass0 и входными damageBits; owner к этому моменту уже очищен. Caller damage и full downstream explosion contract сохранены в server-grenade-lifecycle. Не возвращает число поражённых/успех.
+
+## 0x1008aa40 — RadiusDamageFromExplicitOrigin_ScaledRadius
+
+Пересылает заданный Vector и damage в RadiusDamage, вычисляя радиус damage×2.5.
+
+Native stack: Vector source по значению12 байт, inflictor*,attacker*,damage float32,ignoredClass,bits; всего8 DWORD. RET20h очищает32 байта. ECX не читается; одного тела недостаточно, чтобы отличить member со свободным this от stdcall-like wrapper. Нельзя обозначать его cdecl по одной декларации Ghidra. В сохранённом C corpus явного named caller кроме определения не найдено; это не доказательство отсутствия runtime использования.
+
+Radius=float32(double(damage)*2.5), тот же native double101b8e90. Передаёт source и остальные значения без изменений в cdecl1008a690, ADD ESP24h после вызова. Не читает entity origin, не выделяет память, не проверяет pointers/finite/sign и не возвращает семантический результат. Core меняет только свою копию source.z.
+
+## 0x1011b640 — AddMultiDamage
+
+Накапливает damage и объединяет flags в общем target accumulator, сбрасывая старую цель через Apply при смене.
+
+Cdecl(inflictor entvars*,target object*,damage float32,typeBits), RET без очистки16 байт arguments. При target==NULL возвращается без любого изменения globals/callback. Target global10231f34, damage float32 global10231f38, bits DWORD global10231f3c; runtime state находится в общей памяти, это не per-target контейнер.
+
+При nonNULL target сначала OR globalBits|typeBits, затем сравнение target с globalTarget. При совпадении ADDSS globalDamage+damage и store. Нет проверки положительности, finite, takedamage, alive/валидности target; вызывающие TraceAttack могут иметь собственные gates.
+
+При другой цели сначала ApplyMultiDamage1011b8f0(inflictor,inflictor), то есть новый inflictor передаётся также как attacker старой записи. OR новых bits уже выполнен ДО flush, поэтому старая цель получает объединённую маску. Затем globalTarget=newTarget и globalDamage=ADDSS(+0,damage). Bits при смене target не сбрасываются. Даже первый target после clear проходит no-op apply на NULL.
+
+Clear1011c070 обнуляет все3 DWORD; Apply1011b8f0 лишь при target!=NULL вызывает target.virtual+64(inflictor,attacker,damage,bits) и ничего сам не очищает. Поэтому повторный Apply может повторно доставить ту же запись; новый target наследует bits до следующего Clear. Никакой RAII/reentrancy защиты. Если virtual callback сам меняет globals, последующие writes Add заменяют target/damage, но bits после callback не восстанавливаются.
+
+Native callsites1008c419 и1008c793 подтверждают все4 stack arguments (inflictor,this,damage,bits), которые Ghidra ошибочно сокращает до одного в TraceAttack pseudocode. Полные override-specific hitgroup/blood/armour/death ветви остаются отдельной задачей; в этом пакете эти тела только support для binding AddMultiDamage.
