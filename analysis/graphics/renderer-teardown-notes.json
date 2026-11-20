@@ -1,0 +1,123 @@
+{
+  "scope": "Static native teardown; C-corpus entries including library/export symbols. No runtime resource-leak or context recreation claim.",
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10139320",
+      "proposed_name": "GLManager_AtExitCallback",
+      "subsystem": "graphics",
+      "summary_ru": "Exit callback устанавливает owner101be5f8 и tail-calls GL manager cleanup10053b40.",
+      "confidence": "high",
+      "details_ru": [
+        "Bounded assembly10139320: MOV ECX,101be5f8;JMP10053b40. Полный C body соответствует вызовуcleanup, но не показывает ECX, который закрыт assembly.",
+        "Tiny initializer10001080 сначала вызываетconstructor10053b20 с тем жеowner, затемatexit100b4a40(callback10139320). Это зарегистрированная exitцепь, не доказательство что HUD_Shutdown сам её вызывает."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/009-pseudocode.c",
+        "analysis/graphics/gl-lifecycle-assembly/10139320.asm",
+        "analysis/graphics/gl-lifecycle-assembly/capture.json",
+        "analysis/graphics/studio-flow-assembly/10001080.asm",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/002-pseudocode.c",
+        "analysis/graphics/renderer-teardown-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053b40",
+      "proposed_name": "GLManager_ReleaseLibraryAtExit",
+      "subsystem": "graphics",
+      "summary_ru": "Условно вызывает FreeLibrary для manager.module и обнуляет module; status и dispatch pointers не сбрасывает.",
+      "confidence": "high",
+      "details_ru": [
+        "Еслиthis+210!=0,FreeLibrary(module). Затем всегдаlog GL manager: shutdown иthis+210=0; returnFreeLibrary не проверяется. При ужеmodule0 log остаётся.",
+        "Полное тело не пишетstatus+214,dispatchslots,capabilityflags,textureIDs/readybytes илиallocator. Поэтому cleanup не делает state0 дляretry.",
+        "При исходномstatus2 послеcleanup readygate10053c70 по-прежнемуистинен, аinit100556f0 из-заstatus!=0 неreprobe. Это статическое условное следствие; atexitконтекст не доказывает runtimeиспользование staleуказателей или утечку."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-routing/000-pseudocode.c",
+        "analysis/graphics/gl-lifecycle-assembly/10139320.asm",
+        "analysis/graphics/renderer-teardown-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100b4a40",
+      "proposed_name": "atexit_RegisterExitCallback",
+      "subsystem": "runtime",
+      "summary_ru": "CRT atexit wrapper регистрирует callback через __onexit и возвращает0 либо-1.",
+      "confidence": "high",
+      "details_ru": [
+        "Сохранённая C declaration называется_atexit, а неFUN100b4a40; адрес берётся из query/capturemetadata. Ghidra SingleMatch librarysignature подкреплена телом:__onexit(callback);return(result!=NULL)-1.",
+        "Tiny initializer10001080 передаётcallback10139320, не проверяет результат. Полный CRT terminationordering/успех регистрации во время запуска этим не доказан.",
+        "Bounded assembly100b4a30..55 подтверждает entry100b4a40 после предыдущегоRET, передачуstackarg и преобразование return в0/-1. Автоиндекс для library symbol оставляет консервативную пометку selector-only; это ограничение resolver каталога, не оставшийся вопрос о данном entry."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/002-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/002-procedure_pseudo_code.json",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/capture.json",
+        "analysis/graphics/studio-flow-assembly/10001080.asm",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "analysis/graphics/gl-lifecycle-assembly/100b4a30.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007ad10",
+      "proposed_name": "HUD_Shutdown",
+      "subsystem": "runtime",
+      "summary_ru": "Engine export последовательно вызывает1007a870 и1007fa40; прямого GL manager cleanup в этом теле нет.",
+      "confidence": "high",
+      "details_ru": [
+        "Порядок:1007a870(), затем1007fa40(), return. Export table подтверждает address1007ad10/nameHUD_Shutdown.",
+        "1007a870 деактивирует mouse input и вызывает непрочитанный1007a750.1007fa40 уменьшает refcount shared object105440a8 с virtual release при0, затем helper100b42a4 для105440a4,size0xe0 и обнуляетa4.",
+        "Прямого вызова10139320/10053b40 здесь и в двух прочитанных helpers нет. Но1007a750 и virtual release не раскрыты, поэтому отсутствие любых вложенных GL действий не доказано; engine export не равнозначен полному CRT atexit."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "analysis/exports/client.csv",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007a870",
+      "proposed_name": "Input_ShutdownDeactivateMouse",
+      "subsystem": "input",
+      "summary_ru": "Отключает mouse input через IN_DeactivateMouse и вызывает1007a750.",
+      "confidence": "high",
+      "details_ru": [
+        "Полное тело содержит строго IN_DeactivateMouse(),1007a750(),return. Вызывается первым из HUD_Shutdown1007ad10.",
+        "В теле нет прямой GL manager операции; действия1007a750 остаются непрочитанной границей. Не объявлять callback global renderer destructor по одному shutdown caller."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/001-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "analysis/graphics/renderer-teardown-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fa40",
+      "proposed_name": "ClientSound_ReleaseSharedObjects",
+      "subsystem": "audio",
+      "summary_ru": "Уменьшает refcount shared object105440a8, вызывает virtual release при0 и освобождает/обнуляет105440a4 через helper100b42a4.",
+      "confidence": "high",
+      "details_ru": [
+        "Приa8!=0:p=a8+4+*(int*)(*(int*)(a8+4)+4); refcount=*(int*)(p+4) уменьшается1. При результате0 выполняется virtual slot0 с аргументом1. Точный concrete destructor не идентифицирован.",
+        "Приa4!=0 вызывает100b42a4(a4,0xe0), затемa4=0. Pointer105440a8 не обнуляет; нельзя предполагать повторный вызов безопасным без lifetime evidence. Точное тело deallocation helper100b42a4 этим проходом не снято.",
+        "Sound-path связь подтверждают10080410 (проверкаa8, virtual+8 с weapon sound paths) и1007fb10 (gatea4). Это не полное восстановление класса из одного irrKlang import. Прямого GL cleanup нет, но косвенный virtual target остаётся границей."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/002-pseudocode.c",
+        "decompiled/client/captures/weapons-client-effects/000-pseudocode.c",
+        "decompiled/client/captures/weapons-client-core/007-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/003-pseudocode.c",
+        "analysis/graphics/renderer-teardown-contract.md"
+      ]
+    }
+  ]
+}

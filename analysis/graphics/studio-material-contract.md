@@ -28,10 +28,14 @@ Engine API base101b2608 доказана initializer capture, см.
 101b26e0=GetClientTime, 101b2714=RandomFloat, 101b2730=GetLevelName.
 Это отдельная таблица от engine studio API.
 
-GL вызовы в этих C косвенные. Имена ниже восстановлены по сигнатурам,
-числу аргументов и enum из локальных `ref/gl/gl_export.h` и
-`3rdparty/gl4es/gl4es/include/GL/glext.h`; initializer самих GL cells в этом
-capture отсутствует. Numeric contract остаётся первичным:
+GL вызовы в этих C косвенные. Первоначальное сопоставление по сигнатурам и
+enum из локальных `ref/gl/gl_export.h` и
+`3rdparty/gl4es/gl4es/include/GL/glext.h` теперь подтверждено именованными
+GetProcAddress assignments в10053c80. Таблица ниже входит в71 core GL/WGL
+entry points: `native-gl-dispatch-map.json`, цепочка instance/initializer —
+`renderer-bootstrap-contract.md`. Это доказательство имён этих cells;
+optional extension dispatch и фактическая поддержка драйвером рассматриваются
+отдельно. Numeric contract сохранён:
 
 | Cell | Интерпретация |
 |---|---|
@@ -167,8 +171,12 @@ Jeans model exclusions: `badkarne1`, `sophie.mdl`, `tortyrscen`, `deadvictim`,
 
 `local_5` для cam_vfind устанавливается внутри mesh loop, но обнуляется
 до loop, а не для каждого mesh; последующие mesh тоже выполняют bind104d26ec.
-Что именно создают capture helpers и как распределяются их GL ids — отдельный
-неисследованный контракт. Не называем это SSR/кубической картой/зеркалом.
+Capture helpers теперь разобраны в `camera-capture-contract.md`: live texture
+104d26e8 используется viewfinder и HUD blur, retained photo104d26f0 — веткой
+diffusegay после TakePhoto. Они копируют framebuffer через доказанный
+glCopyTexImage2D, без отдельного рендера сцены. Внешний engine frame ordering,
+read-buffer state и срок жизни IDs при смене GL context остаются открытыми.
+Не называем этот механизм SSR/кубической картой/зеркалом.
 
 ## Setup / restore
 
@@ -206,6 +214,9 @@ alpha func и другие состояния не восстанавливаю�
 а не свойствами texture. Helper10072710 и часть globals не названы; полного
 контракта этих gates здесь не заявлено. Paths и replacement helper bodies теперь раскрыты отдельно в
 `studio-texture-replacements.md`; raw strings013..016 подтверждают page/coop/r_/l_.
-Первичная загрузка GL dispatch cells и полный смысл bone mask остаются
-отдельными вопросами. Новые notes описывают только
+Загрузка core GL dispatch доказана в `renderer-bootstrap-contract.md`;
+replacement invalidation и TakePhoto scheduling описаны в
+`studio-texture-lifecycle-audit.md` и `camera-capture-contract.md`. Полный смысл
+bone mask, полный GL resource lifetime и внешнее engine ordering остаются
+открытыми вопросами. Новые notes описывают только
 показанные ветки. Общий каталог не изменён, runtime/visual QA не проводились.

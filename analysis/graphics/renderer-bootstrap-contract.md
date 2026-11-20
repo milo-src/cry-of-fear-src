@@ -13,8 +13,10 @@ constructor sets module+210 and status+214 to zero. Ghidra did not recognize
 the small initialization wrapper10001080 as a procedure; its failed query is
 retained in `graphics-studio-flow-init/capture.json`. The assembly remains
 independent evidence, and no synthetic decompiled C was created for that wrapper.
-The wrapper also registers a callback10139320 through100b4a40; that callback's
-cleanup behavior and full CRT initialization ordering are outside this audit.
+The wrapper registers callback10139320 through100b4a40 (_atexit). Its confirmed
+cleanup route is now in `renderer-teardown-contract.md`: the callback passes this
+manager to10053b40, which releases the module but does not reset ready status or
+dispatch slots. Full CRT/engine shutdown ordering remains outside the audit.
 
 **10053c70 simply returns this.status==2.** It is not a sky-culling algorithm.
 The studio sky-effect branch calls this general GL-ready gate before examining
@@ -53,11 +55,14 @@ attempt to update Steam LaunchOptions via10055620. We analyzed this code only;
 no dialog, registry change or target execution occurred.
 
 A failure stored as status1 prevents retry on another call in the same state.
-Changing contexts or retrying loads would require another reset/teardown path;
-that behavior is not supplied by this routine. Conversely `-noglfx` leaves0.
+Changing contexts or retrying loads would require a separate reinitialization
+contract; the now-recovered shutdown10053b40 does not clear status either.
+That behavior is not supplied by this routine. Conversely `-noglfx` leaves0.
 The successful branch calls extension/capability helpers100554c0,10054f90,
 10054de0,10054e20,10055100,100552d0,10055140,10054c90,10055440. Their complete
-contracts remain separate work; this pass establishes routing and state only.
+contracts are now recovered in `gl-capability-contract.md`, including the exact
+extension-string matcher and20 optional pointer assignments. Per-feature draw
+gates and driver behavior remain distinct from these availability flags.
 
 ## Dispatch loader10053c80
 
@@ -150,7 +155,8 @@ New captures under `decompiled/client/captures`:
 - graphics-studio-flow-init: GL initialization, constructor, HUD_Reset; failed
   small-wrapper query retained separately.
 
-Next questions: optional extension helpers, GL manager teardown and context
-recreation, complete studio vtable initialization, and external engine frame
-ordering. Recovered static contracts still require port integration and visual
-comparison before claiming original rendering equivalence.
+Closed follow-ups: optional extension helpers (`gl-capability-contract.md`) and
+the registered GL module-release path (`renderer-teardown-contract.md`).
+Remaining: complete context recreation, studio vtable initialization and external
+engine frame/shutdown ordering. Recovered static contracts still require port
+integration and visual comparison before claiming original rendering equivalence.

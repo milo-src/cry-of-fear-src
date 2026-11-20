@@ -3,17 +3,25 @@
     {
       "module": "client",
       "address": "0x10060b10",
-      "proposed_name": "Render_ResetAndInvalidateMaterialState",
+      "proposed_name": "Renderer_ResetSubsystemStateAndRequestRebuild",
       "subsystem": "graphics",
-      "summary_ru": "Вызывает четыре helper сброса, устанавливает dirty1018f848=1 и обнуляет frame counter104cdd44; готовит отложенное восстановление материалов/flags/TBN.",
+      "summary_ru": "Последовательно сбрасывает renderer подсистемы и запрашивает повторное построение renderer состояния.",
       "confidence": "high",
       "details_ru": [
+        "Вызывает100586a0,10059110,1005c3d0,100640a0; затем DAT1018f848=1 и DAT104cdd44=0. Если10053c70()!=0 и DAT101be7f8!=0, DAT104cdd68=1.",
+        "Новый разбор100640a0 подтверждает sky state reset, а не studio replacement readiness reset. Сам10060b10 не пишет104d26b8..f0; полное косвенное воздействие остальных callees нужно оценивать по их телам.",
+        "Callers установлены: HUD_VidInit1001d560 иHUD_Reset1001d520→1006d9e0→10060b10 (call1006dd4a). Сохранено полное тело1006d9e0. Это не доказывает точное соответствие внешним map/context событиям или освобождение всех GL textures.",
         "Selector10060b2b попал внутрь функции; реальный entry10060b10. Helpers:100586a0,10059110,1005c3d0,100640a0. При valid GLmanager и101be7f8!=0 ставит104cdd68=1.",
-        "Доказанная цепь HUD_VidInit1001d560 ->1006d9e0 ->10060b10 (call1006dd4a). Тело промежуточного1006d9e0 не сохранено; его условия и смысл new-map не утверждаются.",
         "Dirty write10060b29; единственные другие наблюдаемые refs: read1005f47a и clear1005f492 внутри1005f3a0."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-material-reset/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/004-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-flow-routing/004-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/003-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-flow-init/004-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md",
         "decompiled/client/captures/graphics-material-reset/001-analyze_function.json",
         "decompiled/client/captures/graphics-material-reset/004-inspect_native_instruction.json",
         "decompiled/client/captures/hud-entry/002-pseudocode.c",

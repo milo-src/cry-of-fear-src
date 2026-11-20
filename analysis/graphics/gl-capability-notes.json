@@ -1,0 +1,210 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x100554c0",
+      "proposed_name": "GLManager_LogContextAndFramebufferBits",
+      "subsystem": "graphics",
+      "summary_ru": "Logs GL renderer/vendor/version and RGBA, accumulation, depth and stencil bits.",
+      "confidence": "high",
+      "details_ru": [
+        "Uses GetString+0xb0 for1f01/1f00/1f02 and GetIntegerv+0xc0 for0d52..0d5b; outputs are locals, not capability fields. No version parsing, null-string check, GL error check or feature flag write.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10054f90",
+      "proposed_name": "GLManager_ProbeARBMultitexture",
+      "subsystem": "graphics",
+      "summary_ru": "Probes ARB multitexture and five exact suffixed entry points; stores supported flag and reported unit count.",
+      "confidence": "high",
+      "details_ru": [
+        "Initializes flag+164=0, units+168=1. If10053bf0(\"GL_ARB_multitexture\") succeeds, queries84e2 MAX_TEXTURE_UNITS_ARB before pointer loads. No minimum-unit threshold here.",
+        "Loads+16c ActiveTextureARB,+170 ClientActiveTextureARB,+174 MultiTexCoord1fARB,+178 MultiTexCoord2fARB,+17c MultiTexCoord3fvARB; all5 nonzero required. Missing pointer logs but remaining names still resolve. Counts can remain nonzero while flag0.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10054de0",
+      "proposed_name": "GLManager_ProbeDiffuseBumpCombineDot3",
+      "subsystem": "graphics",
+      "summary_ru": "Stores diffuse bump capability from conjunction of two literal extension probes.",
+      "confidence": "high",
+      "details_ru": [
+        "Probes \"ARB_texture_env_combine\" then \"ARB_texture_env_dot3\" without GL_ prefix; both true ->+180=1 else0. Generic10053bf0 uses case-sensitive substring with trailing boundary only, so these match suffixes of full GL_ARB names. No pointer loads, minimum units or extra cube-map/3D requirement here.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/002-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/000-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10054e20",
+      "proposed_name": "GLManager_ProbeARBFragmentPrograms",
+      "subsystem": "graphics",
+      "summary_ru": "Loads four ARB program APIs and queries image-unit and texture-coordinate capacities.",
+      "confidence": "high",
+      "details_ru": [
+        "Initial flag+1a0=0 and counts+1a4/+1a8=0. GL_ARB_fragment_program probe ->GetIntegerv8872 image units and8871 coords, before resolving APIs.",
+        "+1ac GenProgramsARB,+1b0 BindProgramARB,+1b4 ProgramStringARB,+1b8 GetProgramivARB all nonzero required. No capacity>=4 requirement or compilation here; those belong downstream. Query results remain after pointer failure.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10055100",
+      "proposed_name": "GLManager_ProbeARBCubeMaps",
+      "subsystem": "graphics",
+      "summary_ru": "Stores cube-map support from GL_ARB_texture_cube_map probe only.",
+      "confidence": "high",
+      "details_ru": [
+        "Clears+1d4, sets1 if10053bf0(\"GL_ARB_texture_cube_map\") true. No optional API loads, cube-map size query or trial allocation.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/004-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100552d0",
+      "proposed_name": "GLManager_ProbeNVRegisterCombiners",
+      "subsystem": "graphics",
+      "summary_ru": "Loads five NV combiner APIs and reported maximum general combiner count.",
+      "confidence": "high",
+      "details_ru": [
+        "Initial+184=0,+188=0; GL_NV_register_combiners ->query854d MAX_GENERAL_COMBINERS_NV. No minimum count gate in this helper.",
+        "Requires all+18c CombinerParameteriNV,+190 CombinerParameterfvNV,+194 CombinerInputNV,+198 CombinerOutputNV,+19c FinalCombinerInputNV nonzero. Completes all lookups/logs missing pointers; flag0 need not imply zero count or zero other pointers.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10055140",
+      "proposed_name": "GLManager_ProbeEXTTexture3D",
+      "subsystem": "graphics",
+      "summary_ru": "Probes GL_EXT_texture3D and resolves glTexImage3DEXT.",
+      "confidence": "high",
+      "details_ru": [
+        "Initial+1dc=0; if extension probe true, resolves exact glTexImage3DEXT into+1d8. Flag=(pointer!=0). No core glTexImage3D alias/version fallback or3D-size query.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/006-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10054c90",
+      "proposed_name": "GLManager_ProbeARBVertexBuffers",
+      "subsystem": "graphics",
+      "summary_ru": "Probes ARB VBO and resolves five exact buffer entry points.",
+      "confidence": "high",
+      "details_ru": [
+        "Initial+1e0=0; GL_ARB_vertex_buffer_object ->+1e4 BindBufferARB,+1e8 GenBuffersARB,+1ec BufferDataARB,+1f0 DeleteBuffersARB,+1f4 GetBufferParameterivARB. All5 nonzero required.",
+        "No allocation/test upload/core-name fallback. Null pointers are logged and all lookups continue; absent extension leaves old pointer slots untouched.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/007-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10055440",
+      "proposed_name": "GLManager_ProbeRectangleTextureAliases",
+      "subsystem": "graphics",
+      "summary_ru": "Accepts first matching NV, ARB or EXT rectangle extension and queries maximum rectangle size.",
+      "confidence": "high",
+      "details_ru": [
+        "Initial+1f8=0,+1fc=0. Short-circuit probes GL_NV_texture_rectangle then GL_ARB_texture_rectangle then GL_EXT_texture_rectangle. Any true ->GetIntegerv84f8 into+1fc, flag1.",
+        "No optional API load or positive-size validation, and no stored vendor-alias enum. Query returning0 does not change true flag.",
+        "Called after manager status2 is already established; optional failure does not clear base GL-ready status. Literal-extension gates and optional pointers are not Cg profile selection or runtime pixel validation."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-capabilities/008-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053bf0",
+      "proposed_name": "GLManager_FindExtensionWithTrailingBoundaryOnly",
+      "subsystem": "graphics",
+      "summary_ru": "Searches GL_EXTENSIONS and accepts matching candidate only when its following character is whitespace/NUL; no leading boundary test.",
+      "confidence": "high",
+      "details_ru": [
+        "Gets glGetString1f03 throughthis+b0; search100d3cf0(extensions,needle), end=p+strlen(needle), accepts isspace(*end)||NUL, otherwise repeats search fromend. No preceding-character check, so GL_-less bump probe literals can match inside full extension names.",
+        "No explicit null-input check, version/core promotion or indexed extension enumeration. Search100d3cf0 is proven case-sensitive byte substring search, distinct from Cg1008a280. All observed capability literals are nonempty.",
+        "Empty needle returns haystack from100d3cf0; wrapper end=p so repeated failed boundary makes no progress. For nonempty non-whitespace first byte this can loop; whitespace/NUL accepts. Do not claim robust empty-input handling."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/000-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-capabilities/002-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100d3cf0",
+      "proposed_name": "String_FindSubstringCaseSensitiveCpuDispatch",
+      "subsystem": "graphics",
+      "summary_ru": "Case-sensitive byte substring search returning matching pointer/null; CPU-dispatched scalar and SIMD branches.",
+      "confidence": "high",
+      "details_ru": [
+        "CPU selector10559ed8:0 scalar/word scan,1 vector equality masks,>1 PCMPISTRI with scalar boundary comparisons. Empty needle returns original haystack in every selector branch. Literal byte equality and no case folding establish case sensitivity.",
+        "Generic extension wrapper10053bf0 adds only a trailing isspace/NUL boundary; this helper itself is substring search, not extension token matching.",
+        "Ghidra undefined1(*)[16] signature reflects vector loads, not proof of16-byte-only strings. Exact CPU selection, all SIMD condition flags, memory-boundary/fault behavior and portable bit-exact reproduction are not claimed; original full body retained."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/000-pseudocode.c",
+        "analysis/graphics/gl-capability-contract.md"
+      ]
+    }
+  ]
+}

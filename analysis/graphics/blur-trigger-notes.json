@@ -33,22 +33,26 @@
     {
       "module": "client",
       "address": "0x10071df0",
-      "proposed_name": "HUD_DrawNativeScreenBlur",
+      "proposed_name": "HUD_DrawRadialScreenBlurFromLiveFramebufferCopy",
       "subsystem": "graphics",
-      "summary_ru": "Native radial blur с тремя игровыми причинами: server Blur, полное погружение и Damage deadline.",
+      "summary_ru": "HUD radial zoom blur consumes the same live capture texture as cam_vfind, independently of TakePhoto.",
       "confidence": "high",
       "details_ru": [
-        "2026-11-20: DAT1018d270 = HUD+31b0 = полученный byte Blur; DAT1054506c = integer waterlevel (не счётчик); HUD+328 = абсолютный срок повреждения.",
-        "gl_screenblur AND (gl_blurtest OR serverBlur OR waterlevel>2 OR clientTime<damageUntil) AND frameDelta!=0 AND validcapture. Delta не масштабирует силу эффекта.",
-        "Подробности источников, времени и ограничений reset: analysis/graphics/blur-triggers.md. Это статический контракт, не готовый интегрированный проход.",
-        "Требует gl_screenblur и gl_blurtest/native flags/deadline; opacity 0.5, steps 32/24 масштабируются от 640x480. Смысл трёх игровых условий ещё не установлен.",
-        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md.",
-        "Framebuffer capture и expanding centered quads; opacity0.5, steps32/24 масштабируются по640x480. См. shader-pass-contracts.md."
+        "10072740 calls after frame-delta update and10072470, before subsequent HUD elements. Requires gl_screenblur, nonzero delta, and blurtest/server Blur/waterlevel>2/damage deadline condition; captures full screen through10064c10.",
+        "Checks live texture ID104d26e8!=0 rather than ready104d26e5; does not clear ready. Expanding centered quads use same captured texture, flipped V, white modulation, gl_opacity and SRC_ALPHA/ONE_MINUS_SRC_ALPHA; texgen S/T disabled.",
+        "Not a scene render or temporal history buffer. Immediate preceding10072470 is an empty return, so no hidden capture/render stage exists there. External engine world/viewmodel/HUD ordering remains separate from this resolved client scheduling.",
+        "Caller clamps negative frame delta only after this blur call; condition is delta!=0, not delta>0. Steps/opacity do not scale by delta. HUD times+30f0/+30f4 are floats, double delta stored+30f8.",
+        "Previously recovered trigger fields retained: DAT1018d270=HUD+31b0 is received Blur byte; DAT1054506c is integer waterlevel; HUD+328 is absolute damage deadline. See blur-triggers.md for producers and reset limits.",
+        "Baseline opacity0.5 and steps32/24 scale against640x480; controls and exact draw math remain documented in shader-pass-contracts.md. This is a static contract, not an integrated native blur pass."
       ],
       "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
+        "decompiled/client/captures/graphics-client-blackwhite/001-pseudocode.c",
+        "decompiled/client/captures/hud-entry/001-pseudocode.c",
+        "analysis/graphics/camera-capture-contract.md",
+        "decompiled/client/captures/graphics-studio-flow-routing/002-pseudocode.c",
         "decompiled/client/captures/graphics-blur-triggers/002-analyze_function.json",
         "analysis/graphics/blur-triggers.md",
-        "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
         "analysis/graphics/shader-pass-contracts.md"
       ]
     },

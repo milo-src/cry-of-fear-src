@@ -13,7 +13,7 @@
         "Прямой consumer cof_fullbrighttextures104cddbc: name fullbright/corona_/fullbright_mess и timed sleeve/glove shading. Chrome и nonchrome имеют разные условия; fullbright-name не тождественен flag4.",
         "cof_fullbrighttextures default0.5 доказан raw1014cc24; setupRGBscale2 делает множитель0.5*2=1 для обычного именованного fullbright до blending. Chrome formula вынесена вstudio-chrome-contract.md.",
         "Replacement helpers выбираются по hoodie/jeans/head_face/sleeve/fingers/glove/cam_vfind/pages/diffusegay с исключениями моделей; helper bodies и raw strings теперь вынесены вstudio-texture-replacements.md.",
-        "Частичный контракт: bone mask/culling, GL pointer initializer и replacement lifecycle исследуются отдельно вstudio-texture-lifecycle-audit.md. Не считать всю функцию или renderer полностью восстановленными."
+        "Установлены GL dispatch assignments (native-gl-dispatch-map.json иgl-optional-dispatch-map.json), replacement readers/reset routes иcamera capture contracts. Открыты bone-mask/culling semantics, полное время жизни caches при смене контекста и внешний engine frame ordering; всю функцию/renderer полностью восстановленными не считать."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
@@ -23,7 +23,11 @@
         "decompiled/client/captures/graphics-studio-math-abi/005-read_bytes.json",
         "analysis/graphics/studio-texture-replacements.md",
         "decompiled/client/captures/graphics-studio-texture-replacements/013-read_bytes.json",
-        "decompiled/client/captures/graphics-studio-texture-replacements/014-read_bytes.json"
+        "decompiled/client/captures/graphics-studio-texture-replacements/014-read_bytes.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "analysis/graphics/camera-capture-contract.md"
       ]
     },
     {
@@ -38,12 +42,15 @@
         "Mode5: depth writes0, SRC_ALPHA/ONE; mode2/4: depth writes0, SRC_ALPHA/ONE_MINUS_SRC_ALPHA. Alpha=entity renderamt/255 и entityBlendFlag1.",
         "Fallback texture-env COMBINE MODULATE(TEXTURE,PREVIOUS),RGB_SCALE2; NV register combiners альтернативно удваивают textureRGB*primaryRGB и перемножают alpha без удвоения.",
         "Selector105458b0 и точное имя nv_goggles/gasmask/tv_frame/death/telescope/динамическое имя могут поставить alpha0.7; сама коррекция не включает blending.",
-        "GL названия восстановлены по сигнатурам/enums локальных headers, initializer cells отдельно не подтверждён; числовые вызовы сохранены."
+        "Core GL names доказаны GetProcAddress assignments; NV combiner pointers101be784/78c/790/794 доказаны100552d0 черезwglGetProcAddress. Gate101be77c=manager+184 — combined NV extension/pointer availability; это не общая GL-ready проверка."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-mesh-materials/001-pseudocode.c",
         "analysis/graphics/studio-material-contract.md",
-        "external/hlsdk-portable/engine/studio.h"
+        "external/hlsdk-portable/engine/studio.h",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c"
       ]
     },
     {

@@ -1,0 +1,147 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x100556f0",
+      "proposed_name": "GLManager_InitializeForVideo",
+      "subsystem": "graphics",
+      "summary_ru": "Проверяет режим рендера, загружает opengl32 и dispatch, фиксирует GL readiness и запускает capability probes.",
+      "confidence": "high for initialization routing",
+      "details_ru": [
+        "status!=0 выходит без повторной загрузки. -noglfx оставляетstatus0. Software, failed load/dispatch и missingGL_RENDERER приводятstatus1; success→status2.",
+        "LoadLibraryA(opengl32.dll)→module+210;10053c80 заполняетdispatch. На failure после load: FreeLibrary,module0,status1. На success: glGetString(GL_RENDERER)!=NULL и серия extension helpers.",
+        "Engine IsHardware enum0/1/2 software/OpenGL/Direct3D отличается от managerstatus. Unsupported branch содержит MessageBox и helper изменения LaunchOptions; это статически разобранные действия оригинала, не выполненные нами.",
+        "Послеstatus2 выполняются9 capability/diagnostic helpers; их gates и20 optional pointers разобраны вgl-capability-contract.md. Optional failure не сбрасывает общийstatus2. Shutdown10053b40 очищает module, но неstatus: это не повторная инициализация контекста."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/hud-manager-call.asm",
+        "analysis/graphics/studio-flow-assembly/100556f0.asm",
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/001-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053b20",
+      "proposed_name": "GLManager_InitModuleAndStatus",
+      "subsystem": "graphics",
+      "summary_ru": "Инициализирует module+210 и status+214 нулями.",
+      "confidence": "high",
+      "details_ru": [
+        "Bounded assembly wrapper10001080 передаётECX101be5f8. Для этого wrapper Ghidra не выдала C; его exact bytes сохранены отдельно, отдельная synthetic function card не создана.",
+        "Constructor и shutdown различны:10053b20 задаётmodule/status0; зарегистрированныйatexit callback10139320→10053b40 освобождаетmodule и очищаеттолькоmodule. Это не доказательство сброса dispatch/studio caches."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-init/001-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/10001080.asm",
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/001-pseudocode.c",
+        "analysis/graphics/gl-lifecycle-assembly/10139320.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10065ef0",
+      "proposed_name": "Studio_DrawMeshesWithMaterialOverrides",
+      "subsystem": "graphics",
+      "summary_ru": "Обрабатывает skin/mesh texture flags, UV и RGB arrays, именованные fullbright и динамические texture bindings; emission triangle strips/fans.",
+      "confidence": "high",
+      "details_ru": [
+        "Texture table+0xb8 и skin table+0xc8 из renderer+0x40b0; mesh.skinref индексирует выбранную skin family. Vertex transforms10091790, lighting10068d70 и chrome10065050 вызываются до emission.",
+        "flags&2 выбирает chrome UV. При entityBlendFlag104ce4b4==0 flags&20 включает SRC_ALPHA/ONE, flags&40 alpha-test GREATER0.5, оба состояния выключаются после mesh.",
+        "Прямой consumer cof_fullbrighttextures104cddbc: name fullbright/corona_/fullbright_mess и timed sleeve/glove shading. Chrome и nonchrome имеют разные условия; fullbright-name не тождественен flag4.",
+        "cof_fullbrighttextures default0.5 доказан raw1014cc24; setupRGBscale2 делает множитель0.5*2=1 для обычного именованного fullbright до blending. Chrome formula вынесена вstudio-chrome-contract.md.",
+        "Replacement helpers выбираются по hoodie/jeans/head_face/sleeve/fingers/glove/cam_vfind/pages/diffusegay с исключениями моделей; helper bodies и raw strings теперь вынесены вstudio-texture-replacements.md.",
+        "Установлены GL dispatch assignments (native-gl-dispatch-map.json иgl-optional-dispatch-map.json), replacement readers/reset routes иcamera capture contracts. Открыты bone-mask/culling semantics, полное время жизни caches при смене контекста и внешний engine frame ordering; всю функцию/renderer полностью восстановленными не считать."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "external/hlsdk-portable/engine/studio.h",
+        "decompiled/client/captures/graphics-lighting-entry/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-math-abi/005-read_bytes.json",
+        "analysis/graphics/studio-texture-replacements.md",
+        "decompiled/client/captures/graphics-studio-texture-replacements/013-read_bytes.json",
+        "decompiled/client/captures/graphics-studio-texture-replacements/014-read_bytes.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "analysis/graphics/camera-capture-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100687d0",
+      "proposed_name": "Studio_SetupMaterialRenderState",
+      "subsystem": "graphics",
+      "summary_ru": "Настраивает studio blending, alpha и doubled RGB texture combine; содержит отдельные alpha0.7 исключения моделей.",
+      "confidence": "high",
+      "details_ru": [
+        "Назначает transformed vertex/RGB buffers104d8718/104d2718, SMOOTH shading, alpha1, entityBlendFlag0.",
+        "Mode5: depth writes0, SRC_ALPHA/ONE; mode2/4: depth writes0, SRC_ALPHA/ONE_MINUS_SRC_ALPHA. Alpha=entity renderamt/255 и entityBlendFlag1.",
+        "Fallback texture-env COMBINE MODULATE(TEXTURE,PREVIOUS),RGB_SCALE2; NV register combiners альтернативно удваивают textureRGB*primaryRGB и перемножают alpha без удвоения.",
+        "Selector105458b0 и точное имя nv_goggles/gasmask/tv_frame/death/telescope/динамическое имя могут поставить alpha0.7; сама коррекция не включает blending.",
+        "Core GL names доказаны GetProcAddress assignments; NV combiner pointers101be784/78c/790/794 доказаны100552d0 черезwglGetProcAddress. Gate101be77c=manager+184 — combined NV extension/pointer availability; это не общая GL-ready проверка."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-mesh-materials/001-pseudocode.c",
+        "analysis/graphics/studio-material-contract.md",
+        "external/hlsdk-portable/engine/studio.h",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10060b10",
+      "proposed_name": "Renderer_ResetSubsystemStateAndRequestRebuild",
+      "subsystem": "graphics",
+      "summary_ru": "Последовательно сбрасывает renderer подсистемы и запрашивает повторное построение renderer состояния.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает100586a0,10059110,1005c3d0,100640a0; затем DAT1018f848=1 и DAT104cdd44=0. Если10053c70()!=0 и DAT101be7f8!=0, DAT104cdd68=1.",
+        "Новый разбор100640a0 подтверждает sky state reset, а не studio replacement readiness reset. Сам10060b10 не пишет104d26b8..f0; полное косвенное воздействие остальных callees нужно оценивать по их телам.",
+        "Callers установлены: HUD_VidInit1001d560 иHUD_Reset1001d520→1006d9e0→10060b10 (call1006dd4a). Сохранено полное тело1006d9e0. Это не доказывает точное соответствие внешним map/context событиям или освобождение всех GL textures.",
+        "Selector10060b2b попал внутрь функции; реальный entry10060b10. Helpers:100586a0,10059110,1005c3d0,100640a0. При valid GLmanager и101be7f8!=0 ставит104cdd68=1.",
+        "Dirty write10060b29; единственные другие наблюдаемые refs: read1005f47a и clear1005f492 внутри1005f3a0."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-material-reset/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/004-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-flow-routing/004-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/003-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-flow-init/004-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "decompiled/client/captures/graphics-material-reset/001-analyze_function.json",
+        "decompiled/client/captures/graphics-material-reset/004-inspect_native_instruction.json",
+        "decompiled/client/captures/hud-entry/002-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10089830",
+      "proposed_name": "Render_IsApiModeOne",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает результат сравнения engine render API mode с1.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственное действие: (*DAT_10545850)()==1. Функция не проверяет готовность Cg/context, profiles или extensions.",
+        "Callback10545850: соседний initializer100556f0 доказанно различает0software,1OpenGL,2Direct3D. Это engine API enum, не GLmanager.status0/1/2; predicate не проверяет Cg-ready или GL-ready."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-client-second/008-pseudocode.c",
+        "analysis/graphics/cg-profile-routing.md",
+        "analysis/graphics/client-renderer.md",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    }
+  ]
+}

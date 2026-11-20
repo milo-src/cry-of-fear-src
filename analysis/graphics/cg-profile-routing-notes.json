@@ -45,12 +45,14 @@
       "confidence": "high",
       "details_ru": [
         "Единственное действие: (*DAT_10545850)()==1. Функция не проверяет готовность Cg/context, profiles или extensions.",
-        "Вызывает callback DAT_10545850 и возвращает result==1. Смысл остальных кодов в этом теле не установлен."
+        "Callback10545850: соседний initializer100556f0 доказанно различает0software,1OpenGL,2Direct3D. Это engine API enum, не GLmanager.status0/1/2; predicate не проверяет Cg-ready или GL-ready."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-client-second/008-pseudocode.c",
         "analysis/graphics/cg-profile-routing.md",
-        "analysis/graphics/client-renderer.md"
+        "analysis/graphics/client-renderer.md",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md"
       ]
     },
     {

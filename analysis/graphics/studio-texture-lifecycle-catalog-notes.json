@@ -73,12 +73,22 @@
       "details_ru": [
         "Вызывает100586a0,10059110,1005c3d0,100640a0; затем DAT1018f848=1 и DAT104cdd44=0. Если10053c70()!=0 и DAT101be7f8!=0, DAT104cdd68=1.",
         "Новый разбор100640a0 подтверждает sky state reset, а не studio replacement readiness reset. Сам10060b10 не пишет104d26b8..f0; полное косвенное воздействие остальных callees нужно оценивать по их телам.",
-        "Из этого тела нельзя установить события запуска reset (карта, video context, команда): необходимы callers. Вызов не доказывает освобождение всех GL textures."
+        "Callers установлены: HUD_VidInit1001d560 иHUD_Reset1001d520→1006d9e0→10060b10 (call1006dd4a). Сохранено полное тело1006d9e0. Это не доказывает точное соответствие внешним map/context событиям или освобождение всех GL textures.",
+        "Selector10060b2b попал внутрь функции; реальный entry10060b10. Helpers:100586a0,10059110,1005c3d0,100640a0. При valid GLmanager и101be7f8!=0 ставит104cdd68=1.",
+        "Dirty write10060b29; единственные другие наблюдаемые refs: read1005f47a и clear1005f492 внутри1005f3a0."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-material-reset/000-pseudocode.c",
         "decompiled/client/captures/graphics-studio-texture-lifecycle/004-pseudocode.c",
-        "analysis/graphics/studio-texture-lifecycle-audit.md"
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-flow-routing/004-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/003-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-flow-init/004-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "decompiled/client/captures/graphics-material-reset/001-analyze_function.json",
+        "decompiled/client/captures/graphics-material-reset/004-inspect_native_instruction.json",
+        "decompiled/client/captures/hud-entry/002-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
       ]
     },
     {
@@ -86,22 +96,23 @@
       "address": "0x100719f0",
       "proposed_name": "HUD_TakePhotoQueueFramebufferCapture",
       "subsystem": "graphics",
-      "summary_ru": "Обработчик TakePhoto ставит pending flag для снимка при последующей отрисовке camera-screen mesh.",
+      "summary_ru": "TakePhoto sets a single pending flag for deferred retained capture during eligible studio mesh drawing.",
       "confidence": "high",
       "details_ru": [
-        "Полное тело и bounded asm: byte[104ce4a1]=1; return1. Здесь нет чтения payload, GL copy, сохранения файла или fullscreen flash.",
-        "Registration1006cf00 ведёт TakePhoto в wrapper1006eb10, затем100719f0. Consumer10065ef0 на texture branch diffusegay вызывает10064ac0 при pending!=0 и очищает pending.",
-        "Retained capture получает texture104d26f0 и ready104d26e6, который consumer не очищает после draw. Без подходящего mesh draw pending сам по себе не выполняет capture. Новое standalone C тело подтверждает прежнее bounded assembly."
+        "Only writes104ce4a1=1 and returns1; no payload read, immediate capture, flash draw or file output. Multiple messages before consumption coalesce into one boolean.",
+        "Registration1006cf00 ->wrapper1006eb10 ->this reader.10065ef0 diffusegay branch later calls10064ac0(textureWidth,textureHeight), clears pending after helper without GL success check, then uses retained texture when ready.",
+        "Retained texture104d26f0/ready104d26e6 is not consumed after display. Without eligible diffusegay mesh drawing, the pending flag alone does not perform capture."
       ],
       "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/003-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
+        "analysis/graphics/camera-capture-contract.md",
         "analysis/weapons/photo-body-evidence/1006eb10.asm",
         "analysis/weapons/photo-body-evidence/100719f0.asm",
         "analysis/weapons/photo-body-evidence/capture.json",
-        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
         "decompiled/client/captures/graphics-studio-texture-lifecycle/022-inspect_native_instruction.json",
-        "analysis/graphics/studio-texture-lifecycle-audit.md",
-        "decompiled/client/captures/graphics-studio-texture-loader/003-pseudocode.c"
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
       ]
     },
     {
@@ -116,15 +127,18 @@
         "Ставит active flag10542bb0=1; при длине<3 очищает его вместе со строкой.",
         "Безусловно очищает ready 104d26c7, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
-        "Новый wrapper1006e5c0 закрывает mapping: явный object argument1018a0c0 передан reader1006fb40 вместе с(name,size,buffer). Registration1006cf00 и новый wrapper C/assembly доказывают связь packet name с соответствующим global path."
+        "Полная цепочка подтверждена: registration CustomFng→wrapper1006e5c0→reader1006fb40, explicit object1018a0c0→destination1018a1dc. Reader получает name отдельным callback argument; payload — ReadString result.",
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/004-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
         "analysis/graphics/studio-texture-lifecycle-audit.md",
-        "decompiled/client/captures/graphics-studio-flow-entry/000-pseudocode.c",
         "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
-        "analysis/graphics/studio-custom-protocol.md"
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
       ]
     },
     {
@@ -139,15 +153,19 @@
         "Ставит active flag10542bb1=1; при длине<3 очищает его вместе со строкой.",
         "Безусловно очищает ready 104d26d0, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
-        "Новый wrapper1006e5e0 закрывает mapping: явный object argument1018a0c0 передан reader1006fbb0 вместе с(name,size,buffer). Registration1006cf00 и новый wrapper C/assembly доказывают связь packet name с соответствующим global path."
+        "Полная цепочка подтверждена: registration CustomGlv→wrapper1006e5e0→reader1006fbb0, explicit object1018a0c0→destination1018a2dc. Reader получает name отдельным callback argument; payload — ReadString result.",
+        "Короткий CustomGlv также выключает10542bb1, а mesh10065ef0 требует этот флаг. Поэтому helper short-path ECX особенность не является доказанным результатом обычного empty CustomGlv draw.",
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/005-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
         "analysis/graphics/studio-texture-lifecycle-audit.md",
-        "decompiled/client/captures/graphics-studio-flow-entry/001-pseudocode.c",
         "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
-        "analysis/graphics/studio-custom-protocol.md"
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
       ]
     },
     {
@@ -161,15 +179,18 @@
         "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x1c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
         "Безусловно очищает ready 104d26c6 и104d26d3, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
-        "Новый wrapper1006e600 закрывает mapping: явный object argument1018a0c0 передан reader1006fc20 вместе с(name,size,buffer). Registration1006cf00 и новый wrapper C/assembly доказывают связь packet name с соответствующим global path."
+        "Полная цепочка подтверждена: registration CustomSlv→wrapper1006e600→reader1006fc20, explicit object1018a0c0→destination1018a0dc. Reader получает name отдельным callback argument; payload — ReadString result.",
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/006-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
         "analysis/graphics/studio-texture-lifecycle-audit.md",
-        "decompiled/client/captures/graphics-studio-flow-entry/002-pseudocode.c",
         "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
-        "analysis/graphics/studio-custom-protocol.md"
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/002-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
       ]
     },
     {

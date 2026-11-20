@@ -63,13 +63,16 @@
         "status!=0 выходит без повторной загрузки. -noglfx оставляетstatus0. Software, failed load/dispatch и missingGL_RENDERER приводятstatus1; success→status2.",
         "LoadLibraryA(opengl32.dll)→module+210;10053c80 заполняетdispatch. На failure после load: FreeLibrary,module0,status1. На success: glGetString(GL_RENDERER)!=NULL и серия extension helpers.",
         "Engine IsHardware enum0/1/2 software/OpenGL/Direct3D отличается от managerstatus. Unsupported branch содержит MessageBox и helper изменения LaunchOptions; это статически разобранные действия оригинала, не выполненные нами.",
-        "Уже записанныйstatus1 блокирует retry в этом методе. Полный teardown/context recreation и точные extension contracts остаются отдельными задачами."
+        "Послеstatus2 выполняются9 capability/diagnostic helpers; их gates и20 optional pointers разобраны вgl-capability-contract.md. Optional failure не сбрасывает общийstatus2. Shutdown10053b40 очищает module, но неstatus: это не повторная инициализация контекста."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
         "analysis/graphics/studio-flow-assembly/hud-manager-call.asm",
         "analysis/graphics/studio-flow-assembly/100556f0.asm",
-        "analysis/graphics/renderer-bootstrap-contract.md"
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "analysis/graphics/gl-capability-contract.md",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/001-pseudocode.c"
       ]
     },
     {
@@ -81,12 +84,15 @@
       "confidence": "high",
       "details_ru": [
         "Bounded assembly wrapper10001080 передаётECX101be5f8. Для этого wrapper Ghidra не выдала C; его exact bytes сохранены отдельно, отдельная synthetic function card не создана.",
-        "Не является доказательством обнуления всей GL таблицы или studio texture caches."
+        "Constructor и shutdown различны:10053b20 задаётmodule/status0; зарегистрированныйatexit callback10139320→10053b40 освобождаетmodule и очищаеттолькоmodule. Это не доказательство сброса dispatch/studio caches."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-flow-init/001-pseudocode.c",
         "analysis/graphics/studio-flow-assembly/10001080.asm",
-        "analysis/graphics/renderer-bootstrap-contract.md"
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "analysis/graphics/renderer-teardown-contract.md",
+        "decompiled/client/captures/graphics-gl-lifecycle-followup/001-pseudocode.c",
+        "analysis/graphics/gl-lifecycle-assembly/10139320.asm"
       ]
     },
     {

@@ -1,0 +1,209 @@
+{
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "manager": "0x101be5f8",
+  "resolver_proof": "analysis/graphics/native-gl-dispatch-map.json",
+  "scope": "Optional capability helper assignments; no live support test.",
+  "assignment_count": 20,
+  "assignments": [
+    {
+      "api": "glActiveTextureARB",
+      "offset": "0x16c",
+      "native_address": "0x101be764",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054f90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/001-pseudocode.c",
+      "source_sha256": "a5ccade827fe2c64395e658d026878f882403cd894312753ac5c34ad6cd9cac2",
+      "evidence_id": "ev_c64889153c24d8508f94f15656b68cf33921b14e0a5963c9d293704478c68d81"
+    },
+    {
+      "api": "glClientActiveTextureARB",
+      "offset": "0x170",
+      "native_address": "0x101be768",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054f90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/001-pseudocode.c",
+      "source_sha256": "a5ccade827fe2c64395e658d026878f882403cd894312753ac5c34ad6cd9cac2",
+      "evidence_id": "ev_c64889153c24d8508f94f15656b68cf33921b14e0a5963c9d293704478c68d81"
+    },
+    {
+      "api": "glMultiTexCoord1fARB",
+      "offset": "0x174",
+      "native_address": "0x101be76c",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054f90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/001-pseudocode.c",
+      "source_sha256": "a5ccade827fe2c64395e658d026878f882403cd894312753ac5c34ad6cd9cac2",
+      "evidence_id": "ev_c64889153c24d8508f94f15656b68cf33921b14e0a5963c9d293704478c68d81"
+    },
+    {
+      "api": "glMultiTexCoord2fARB",
+      "offset": "0x178",
+      "native_address": "0x101be770",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054f90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/001-pseudocode.c",
+      "source_sha256": "a5ccade827fe2c64395e658d026878f882403cd894312753ac5c34ad6cd9cac2",
+      "evidence_id": "ev_c64889153c24d8508f94f15656b68cf33921b14e0a5963c9d293704478c68d81"
+    },
+    {
+      "api": "glMultiTexCoord3fvARB",
+      "offset": "0x17c",
+      "native_address": "0x101be774",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054f90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/001-pseudocode.c",
+      "source_sha256": "a5ccade827fe2c64395e658d026878f882403cd894312753ac5c34ad6cd9cac2",
+      "evidence_id": "ev_c64889153c24d8508f94f15656b68cf33921b14e0a5963c9d293704478c68d81"
+    },
+    {
+      "api": "glGenProgramsARB",
+      "offset": "0x1ac",
+      "native_address": "0x101be7a4",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054e20",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/003-pseudocode.c",
+      "source_sha256": "2196c00e0651b716ff0b2baa1af294575a74daac232c322ac8983cef24bd7130",
+      "evidence_id": "ev_daeff34c4081ace0331e23c371e9b68b57a18555240c72d2e861bea70b7a9fc1"
+    },
+    {
+      "api": "glBindProgramARB",
+      "offset": "0x1b0",
+      "native_address": "0x101be7a8",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054e20",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/003-pseudocode.c",
+      "source_sha256": "2196c00e0651b716ff0b2baa1af294575a74daac232c322ac8983cef24bd7130",
+      "evidence_id": "ev_daeff34c4081ace0331e23c371e9b68b57a18555240c72d2e861bea70b7a9fc1"
+    },
+    {
+      "api": "glProgramStringARB",
+      "offset": "0x1b4",
+      "native_address": "0x101be7ac",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054e20",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/003-pseudocode.c",
+      "source_sha256": "2196c00e0651b716ff0b2baa1af294575a74daac232c322ac8983cef24bd7130",
+      "evidence_id": "ev_daeff34c4081ace0331e23c371e9b68b57a18555240c72d2e861bea70b7a9fc1"
+    },
+    {
+      "api": "glGetProgramivARB",
+      "offset": "0x1b8",
+      "native_address": "0x101be7b0",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054e20",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/003-pseudocode.c",
+      "source_sha256": "2196c00e0651b716ff0b2baa1af294575a74daac232c322ac8983cef24bd7130",
+      "evidence_id": "ev_daeff34c4081ace0331e23c371e9b68b57a18555240c72d2e861bea70b7a9fc1"
+    },
+    {
+      "api": "glCombinerParameteriNV",
+      "offset": "0x18c",
+      "native_address": "0x101be784",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x100552d0",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c",
+      "source_sha256": "5e2e6bc4214ad6c17f4b3bcbf5617b4dd58b5bdc960672ca0b64fa5f9947704a",
+      "evidence_id": "ev_f0832a5c255e924dba43a4e317202044e0d45f3cbf37bfe3936f1812bf44e7da"
+    },
+    {
+      "api": "glCombinerParameterfvNV",
+      "offset": "0x190",
+      "native_address": "0x101be788",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x100552d0",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c",
+      "source_sha256": "5e2e6bc4214ad6c17f4b3bcbf5617b4dd58b5bdc960672ca0b64fa5f9947704a",
+      "evidence_id": "ev_f0832a5c255e924dba43a4e317202044e0d45f3cbf37bfe3936f1812bf44e7da"
+    },
+    {
+      "api": "glCombinerInputNV",
+      "offset": "0x194",
+      "native_address": "0x101be78c",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x100552d0",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c",
+      "source_sha256": "5e2e6bc4214ad6c17f4b3bcbf5617b4dd58b5bdc960672ca0b64fa5f9947704a",
+      "evidence_id": "ev_f0832a5c255e924dba43a4e317202044e0d45f3cbf37bfe3936f1812bf44e7da"
+    },
+    {
+      "api": "glCombinerOutputNV",
+      "offset": "0x198",
+      "native_address": "0x101be790",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x100552d0",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c",
+      "source_sha256": "5e2e6bc4214ad6c17f4b3bcbf5617b4dd58b5bdc960672ca0b64fa5f9947704a",
+      "evidence_id": "ev_f0832a5c255e924dba43a4e317202044e0d45f3cbf37bfe3936f1812bf44e7da"
+    },
+    {
+      "api": "glFinalCombinerInputNV",
+      "offset": "0x19c",
+      "native_address": "0x101be794",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x100552d0",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/005-pseudocode.c",
+      "source_sha256": "5e2e6bc4214ad6c17f4b3bcbf5617b4dd58b5bdc960672ca0b64fa5f9947704a",
+      "evidence_id": "ev_f0832a5c255e924dba43a4e317202044e0d45f3cbf37bfe3936f1812bf44e7da"
+    },
+    {
+      "api": "glTexImage3DEXT",
+      "offset": "0x1d8",
+      "native_address": "0x101be7d0",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10055140",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/006-pseudocode.c",
+      "source_sha256": "e8784e5a0031ed66016d3da2fc6475031c867d19ec1b5d2b7e4d5d5297f997b9",
+      "evidence_id": "ev_b3af958e18d7f5592c694198e0af5cb5c23917f8e9100100197c85ea0211601c"
+    },
+    {
+      "api": "glBindBufferARB",
+      "offset": "0x1e4",
+      "native_address": "0x101be7dc",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054c90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/007-pseudocode.c",
+      "source_sha256": "6bd1aef5e6bfb0680a64ef91534adee2ece440426e346990f0d690a918148dc0",
+      "evidence_id": "ev_d297d411d9d9441c501acc817bee60034a8819591ee9be517f5ebc969a28c421"
+    },
+    {
+      "api": "glGenBuffersARB",
+      "offset": "0x1e8",
+      "native_address": "0x101be7e0",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054c90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/007-pseudocode.c",
+      "source_sha256": "6bd1aef5e6bfb0680a64ef91534adee2ece440426e346990f0d690a918148dc0",
+      "evidence_id": "ev_d297d411d9d9441c501acc817bee60034a8819591ee9be517f5ebc969a28c421"
+    },
+    {
+      "api": "glBufferDataARB",
+      "offset": "0x1ec",
+      "native_address": "0x101be7e4",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054c90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/007-pseudocode.c",
+      "source_sha256": "6bd1aef5e6bfb0680a64ef91534adee2ece440426e346990f0d690a918148dc0",
+      "evidence_id": "ev_d297d411d9d9441c501acc817bee60034a8819591ee9be517f5ebc969a28c421"
+    },
+    {
+      "api": "glDeleteBuffersARB",
+      "offset": "0x1f0",
+      "native_address": "0x101be7e8",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054c90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/007-pseudocode.c",
+      "source_sha256": "6bd1aef5e6bfb0680a64ef91534adee2ece440426e346990f0d690a918148dc0",
+      "evidence_id": "ev_d297d411d9d9441c501acc817bee60034a8819591ee9be517f5ebc969a28c421"
+    },
+    {
+      "api": "glGetBufferParameterivARB",
+      "offset": "0x1f4",
+      "native_address": "0x101be7ec",
+      "resolver": "wglGetProcAddress@0x101be758",
+      "source_procedure": "ram:0x10054c90",
+      "source_file": "decompiled/client/captures/graphics-gl-capabilities/007-pseudocode.c",
+      "source_sha256": "6bd1aef5e6bfb0680a64ef91534adee2ece440426e346990f0d690a918148dc0",
+      "evidence_id": "ev_d297d411d9d9441c501acc817bee60034a8819591ee9be517f5ebc969a28c421"
+    }
+  ]
+}

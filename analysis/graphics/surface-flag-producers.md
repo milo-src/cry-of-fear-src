@@ -138,10 +138,13 @@ proven, but that signature must not be used to reconstruct the ABI.
 three observed references to dirty1018f848: the read and clear in preparation,
 and the set in reset. This establishes the observed static lifecycle. It does
 not rule out undetected aliasing or engine behavior. The full intermediate body
-1006d9e0 is not saved, so its internal branch conditions are not established.
-Call the proven boundary **HUD video initialization**, not an invented new-map
-callback. Marking is deferred until the next eligible preparation pass after
-reset; it is not unconditionally performed every frame.
+1006d9e0 is now saved in `graphics-studio-flow-routing/004-pseudocode.c`: it
+calls10060b10 after the GL/video helpers and before GetScreenInfo. Both
+HUD_VidInit1001d560 and HUD_Reset1001d520 enter this video initializer, as
+documented in `renderer-bootstrap-contract.md`. Call the proven boundary
+**HUD video initialization/reset**, not an invented new-map callback. Marking
+is deferred until the next eligible preparation pass after reset; it is not
+unconditionally performed every frame.
 
 Outer gates are gl_renderer!=0, a valid GLmanager, hacked-OpenGL marker101be7f8,
 world lightdata at model+0x17c, nonzero capabilities101be75c/101be778/101be7cc,
@@ -223,9 +226,10 @@ producer in a reconstruction.
 
 ## Remaining bounded questions
 
-1. Read the full intermediate1006d9e0 body if exact conditional timing within
-   HUD_VidInit is needed. Video-init reset and the next eligible preparation
-   lifecycle are proven; the engine's reasons for invoking HUD_VidInit are not.
+1. Establish the external engine's reasons and ordering for invoking HUD_VidInit
+   or HUD_Reset on map/context transitions. Their full intermediate1006d9e0
+   body, reset call and next eligible preparation lifecycle are already captured;
+   rereading that client chain alone cannot establish external engine events.
 2. Confirm brush submodel storage sharing and any paths bypassing the world
    surface table; no separate brush marking loop is present in10059e30.
 3. Check downstream behavior for invalid atlases/samples; producer itself only

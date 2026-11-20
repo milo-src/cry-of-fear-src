@@ -173,34 +173,62 @@
     {
       "module": "client",
       "address": "0x10071df0",
-      "proposed_name": "HUD_DrawNativeScreenBlur",
-      "subsystem": "graphics renderer shaders",
-      "summary_ru": "Рисует fixed-function radial zoom blur: framebuffer capture и растущие центрованные quads.",
+      "proposed_name": "HUD_DrawRadialScreenBlurFromLiveFramebufferCopy",
+      "subsystem": "graphics",
+      "summary_ru": "HUD radial zoom blur consumes the same live capture texture as cam_vfind, independently of TakePhoto.",
       "confidence": "high",
       "details_ru": [
-        "Требует gl_screenblur и gl_blurtest/native flags/deadline; opacity 0.5, steps 32/24 масштабируются от 640x480. Смысл трёх игровых условий ещё не установлен.",
-        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+        "10072740 calls after frame-delta update and10072470, before subsequent HUD elements. Requires gl_screenblur, nonzero delta, and blurtest/server Blur/waterlevel>2/damage deadline condition; captures full screen through10064c10.",
+        "Checks live texture ID104d26e8!=0 rather than ready104d26e5; does not clear ready. Expanding centered quads use same captured texture, flipped V, white modulation, gl_opacity and SRC_ALPHA/ONE_MINUS_SRC_ALPHA; texgen S/T disabled.",
+        "Not a scene render or temporal history buffer. Immediate preceding10072470 is an empty return, so no hidden capture/render stage exists there. External engine world/viewmodel/HUD ordering remains separate from this resolved client scheduling.",
+        "Caller clamps negative frame delta only after this blur call; condition is delta!=0, not delta>0. Steps/opacity do not scale by delta. HUD times+30f0/+30f4 are floats, double delta stored+30f8.",
+        "Previously recovered trigger fields retained: DAT1018d270=HUD+31b0 is received Blur byte; DAT1054506c is integer waterlevel; HUD+328 is absolute damage deadline. See blur-triggers.md for producers and reset limits.",
+        "Baseline opacity0.5 and steps32/24 scale against640x480; controls and exact draw math remain documented in shader-pass-contracts.md. This is a static contract, not an integrated native blur pass."
       ],
       "evidence_paths": [
         "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
+        "decompiled/client/captures/graphics-client-blackwhite/001-pseudocode.c",
+        "decompiled/client/captures/hud-entry/001-pseudocode.c",
+        "analysis/graphics/camera-capture-contract.md",
+        "decompiled/client/captures/graphics-studio-flow-routing/002-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-triggers/002-analyze_function.json",
+        "analysis/graphics/blur-triggers.md",
         "analysis/graphics/shader-pass-contracts.md"
       ]
     },
     {
       "module": "client",
       "address": "0x10064c10",
-      "proposed_name": "Render_CaptureCenteredFramebuffer",
-      "subsystem": "graphics renderer shaders",
-      "summary_ru": "Выделяет RGB texture и копирует центрированный прямоугольник framebuffer через CopyTexImage2D.",
+      "proposed_name": "Studio_CopyFramebufferToViewfinderTexture",
+      "subsystem": "graphics",
+      "summary_ru": "Live framebuffer copy shared by camera viewfinder and HUD screen blur.",
       "confidence": "high",
       "details_ru": [
-        "Начальный размер 256x256 затем заменяется размером запроса; linear filtering; после функции capture остаётся bound.",
-        "Статические контракты, не доказательство готового порта: analysis/graphics/shader-pass-contracts.md."
+        "Lazy ID104d26e8, ready104d26e5; initial256x256 RGB black texture, LINEAR filters. Every call saves binding104d26ec, binds live ID, copies centered requested dimensions and sets ready1. Dimensions are not fixed256x256 after copy.",
+        "cam_vfind calls with material dimensions only when cl_cameraeffect!=0; consumes ready and sets a local restoration flag. HUD10071df0 calls full screen dimensions, checks texture ID rather than ready and leaves ready untouched.",
+        "No new scene draw, FBO, camera orientation, read-buffer selection or viewport-origin addition. Dispatch101be670 is proven glCopyTexImage2D; dimensions are engine SCREENINFO. External engine ordering/read-buffer state remain unresolved, so source cannot be called a clean world-only/final/previous frame.",
+        "Typed native refs show exactly two returned direct call sites10066b77 within10065ef0 and10071e88 within10071df0. Both known consumers are accounted for; computed calls are not excluded.",
+        "Dimensions1018f430/434 are SCREENINFO width/height: HUD_VidInit sets ECX1018a0c0 ->1006d9e0 calls GetScreenInfo101b2638(this+536c), sets size214h. API base101b2608 slot12 and SDK SCREENINFO layout prove source; not a GL viewport query.",
+        "Dispatch proof: HUD1006dcc7 passes manager ECX101be5f8 to100556f0; preserved object passed to10053c80; named GetProcAddress(module+210,\"glCopyTexImage2D\") stores this+78=101be670. This resolves pointer identity without claiming external GL framebuffer state.",
+        "Copy region origin is screenWidth/2-width/2, screenHeight/2-height/2; initial temporary CPU allocation is freed after RGB upload."
       ],
       "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-replacements/008-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-mesh-materials/000-pseudocode.c",
         "decompiled/client/captures/shader-pass-bindings/005-pseudocode.c",
-        "decompiled/client/captures/shader-pass-inputs/007-pseudocode.c",
-        "analysis/graphics/shader-pass-contracts.md"
+        "analysis/graphics/camera-capture-contract.md",
+        "decompiled/client/captures/graphics-studio-flow-routing/006-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-flow-routing/004-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/1001d560.asm",
+        "decompiled/client/captures/graphics-studio-draw-routing/003-pseudocode.c",
+        "external/hlsdk-portable/engine/cdll_int.h",
+        "decompiled/client/captures/graphics-studio-flow-abi/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/hud-manager-call.asm",
+        "analysis/graphics/studio-flow-assembly/100556f0.asm",
+        "decompiled/client/captures/graphics-studio-texture-loader/012-inspect_native_instruction.json",
+        "analysis/graphics/studio-texture-loader-contract.md",
+        "analysis/graphics/studio-texture-lifecycle-audit.md"
       ]
     },
     {

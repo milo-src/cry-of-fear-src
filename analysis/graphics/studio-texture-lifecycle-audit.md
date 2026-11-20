@@ -211,7 +211,13 @@ state, а не studio replacement textures. В нём нет записи ready/
 texture cache нельзя. Назначение состояния подтверждают SkyMarker10063fb0
 (menu-sky-functions/000: координаты и optional ambient/direct bytes) и
 WorldMarker10064040 (menu-sky-transform-discovery/003: координаты и scale).
-События вызова верхнего10060b10 ещё требуют callers.
+Два входа в верхний10060b10 теперь доказаны: HUD_VidInit1001d560 и
+HUD_Reset1001d520 вызывают1006d9e0, который вызывает10060b10. Цепочка и
+native HUD instance подтверждены в `renderer-bootstrap-contract.md`,
+`graphics-studio-flow-routing/004-pseudocode.c` и
+`analysis/graphics/studio-flow-assembly/1001d560.asm`. Это не полный перечень
+внешних engine events: порядок смены карты/GL context и полный teardown
+не устанавливаются по этим экспортам.
 
 Пока не доказаны: все initial/load/save/vid-reset writers ready flags,
 срок жизни GL IDs при смене карты/контекста, полный список writers custom
@@ -236,7 +242,7 @@ Gamma math и decoder/upload10069630 подробно ведутся отдел�
 |---|---|---|
 |2|WRITE xrefs **104d26b8/bc/c0/c8/cc/d4/d8/dc/e8/f0**, **1018fe8c**|Срок жизни GL IDs и reset общего allocator counter; ec искать отдельно как binding state|
 |2|WRITE xrefs **1018a0dc/1018a1dc/1018a2dc**, selector **1018ca20/101b27bc**|Custom sleeve/hands/glove paths и их invalidation|
-|3|Callers **10060b10**|Доказать конкретные события запуска общего renderer reset|
+|3|Внешние engine callers **HUD_VidInit1001d560 / HUD_Reset1001d520**|Внутренняя цепочка через1006d9e0→10060b10 уже доказана; остаются реальные события/порядок смены карты и GL context, а не повторный поиск этой цепочки|
 
 TakePhoto100719f0 закрыт и полным C телом, и bounded assembly с хешем DLL.
 Entry1003a170 закрыт bounded assembly; registration10038900 подтверждает MPModel.
