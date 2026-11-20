@@ -1,0 +1,237 @@
+{
+  "scope": "Static original ABI closure; C corpus entries only. Assembly-only1003a170 documented separately; no runtime/pixel verification.",
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1006e5c0",
+      "proposed_name": "MsgFunc_CustomFng_Wrapper",
+      "subsystem": "graphics",
+      "summary_ru": "Callback CustomFng: передаёт фиксированный HUD object1018a0c0 и исходные name/size/buffer в reader1006fb40.",
+      "confidence": "high",
+      "details_ru": [
+        "1006cf00 регистрирует CustomFng на этот exact wrapper. Assembly показывает PUSH buffer,size,name,0x1018a0c0; CALL1006fb40; ADD ESP,0x10; RET, возвращая результат reader.",
+        "Object передан явно на стеке, не через thiscall ECX. Через offset reader определяется global path1018a1dc; invalidation ready104d26c7 происходит в reader, wrapper сам ничего не загружает."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/000-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fb40",
+      "proposed_name": "HUD_ReadCustomFingersPath",
+      "subsystem": "graphics",
+      "summary_ru": "Читает custom texture path в object+0x11c и инвалидирует готовность 104d26c7.",
+      "confidence": "high",
+      "details_ru": [
+        "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x11c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
+        "Ставит active flag10542bb0=1; при длине<3 очищает его вместе со строкой.",
+        "Безусловно очищает ready 104d26c7, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
+        "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
+        "Полная цепочка подтверждена: registration CustomFng→wrapper1006e5c0→reader1006fb40, explicit object1018a0c0→destination1018a1dc. Reader получает name отдельным callback argument; payload — ReadString result.",
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/004-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006e5e0",
+      "proposed_name": "MsgFunc_CustomGlv_Wrapper",
+      "subsystem": "graphics",
+      "summary_ru": "Callback CustomGlv: передаёт фиксированный HUD object1018a0c0 и исходные name/size/buffer в reader1006fbb0.",
+      "confidence": "high",
+      "details_ru": [
+        "1006cf00 регистрирует CustomGlv на этот exact wrapper. Assembly показывает PUSH buffer,size,name,0x1018a0c0; CALL1006fbb0; ADD ESP,0x10; RET, возвращая результат reader.",
+        "Object передан явно на стеке, не через thiscall ECX. Через offset reader определяется global path1018a2dc; invalidation ready104d26d0 происходит в reader, wrapper сам ничего не загружает."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/001-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fbb0",
+      "proposed_name": "HUD_ReadCustomGlovePath",
+      "subsystem": "graphics",
+      "summary_ru": "Читает custom texture path в object+0x21c и инвалидирует готовность 104d26d0.",
+      "confidence": "high",
+      "details_ru": [
+        "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x21c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
+        "Ставит active flag10542bb1=1; при длине<3 очищает его вместе со строкой.",
+        "Безусловно очищает ready 104d26d0, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
+        "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
+        "Полная цепочка подтверждена: registration CustomGlv→wrapper1006e5e0→reader1006fbb0, explicit object1018a0c0→destination1018a2dc. Reader получает name отдельным callback argument; payload — ReadString result.",
+        "Короткий CustomGlv также выключает10542bb1, а mesh10065ef0 требует этот флаг. Поэтому helper short-path ECX особенность не является доказанным результатом обычного empty CustomGlv draw.",
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/005-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006e600",
+      "proposed_name": "MsgFunc_CustomSlv_Wrapper",
+      "subsystem": "graphics",
+      "summary_ru": "Callback CustomSlv: передаёт фиксированный HUD object1018a0c0 и исходные name/size/buffer в reader1006fc20.",
+      "confidence": "high",
+      "details_ru": [
+        "1006cf00 регистрирует CustomSlv на этот exact wrapper. Assembly показывает PUSH buffer,size,name,0x1018a0c0; CALL1006fc20; ADD ESP,0x10; RET, возвращая результат reader.",
+        "Object передан явно на стеке, не через thiscall ECX. Через offset reader определяется global path1018a0dc; invalidation ready104d26c6 и104d26d3 происходит в reader, wrapper сам ничего не загружает."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006fc20",
+      "proposed_name": "HUD_ReadCustomSleevePath",
+      "subsystem": "graphics",
+      "summary_ru": "Читает custom texture path в object+0x1c и инвалидирует готовность 104d26c6 и104d26d3.",
+      "confidence": "high",
+      "details_ru": [
+        "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x1c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
+        "Безусловно очищает ready 104d26c6 и104d26d3, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
+        "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
+        "Полная цепочка подтверждена: registration CustomSlv→wrapper1006e600→reader1006fc20, explicit object1018a0c0→destination1018a0dc. Reader получает name отдельным callback argument; payload — ReadString result.",
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-texture-loader/006-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/002-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10038900",
+      "proposed_name": "HUD_RegisterCoFStatusAndMPModelMessages",
+      "subsystem": "graphics",
+      "summary_ru": "Регистрирует16 CoF HUD messages, включая MPModel callback1003a170 для invalidation fingers texture.",
+      "confidence": "high",
+      "details_ru": [
+        "HookUserMsg registrations:Stamina1003a360,CoFLogo10039560,ShowHint1003a180,CameraZoom100393d0,HealthCap10039a70,Chapter10039430,ControlHint10039800,Timer1003a3e0,Lobby10039f40,MPModel1003a170,HoldBreath10039c60,DevDonator10039a20,Introdn10039c90,LookingAt1003a140,TimerPlus1003a580,SimonMode1003a330.",
+        "MPModel callback восстанавливается по bounded assembly1003a170..17c: byte104d26c7=0;return1. Не читает payload и не меняет model/path/active flag/texture ID. Следующий подходящий fingers draw повторно использует player-model selector.",
+        "Точное имя MPModel подтверждено C registration и bytes10146288; входящий DATA xref10038993 указывает на callback. Standalone C функции1003a170 нет, поэтому её семантика сохранена как доказанный callback в карточке caller, без вымышленной декомпиляции."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-routing/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-routing/008-read_bytes.json",
+        "decompiled/client/captures/graphics-studio-flow-entry/003-inspect_native_instruction.json",
+        "analysis/graphics/studio-flow-assembly/1003a140.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "analysis/graphics/studio-custom-protocol.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080850",
+      "proposed_name": "MessageReader_Begin",
+      "subsystem": "network",
+      "summary_ru": "Инициализирует общий message reader: сохраняет buffer/size и обнуляет cursor/error state.",
+      "confidence": "high",
+      "details_ru": [
+        "buffer→105440b4,size→105440b8,cursor105440bc=0,state105440c0=0. Сам payload не читает и размер не нормализует.",
+        "Custom path readers вызывают его с callback buffer/size перед ReadString10080a60. Состояние глобальное, не отдельный объект parser на каждый reader."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-abi/001-pseudocode.c",
+        "analysis/graphics/studio-custom-protocol.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080a60",
+      "proposed_name": "MessageReader_ReadString2047",
+      "subsystem": "network",
+      "summary_ru": "Читает строку в общий2048-байтный scratch, ограничивает2047символами и дописывает NUL.",
+      "confidence": "high",
+      "details_ru": [
+        "Обнуляет scratch105440c8[0]; пока cursor105440bc+1<=snapshot size105440b8, вызывает100808e0. Результат0 либо-1 завершает цикл; остальные значения копируются как char. После2047символов прекращает копирование.",
+        "Возвращает105440c8 с trailing NUL. При исчерпании size завершает строку без вызова out-of-bounds ReadChar; missing input NUL сам по себе не ставит bad flag. Cap2047 не дочитывает оставшийся payload/NUL.",
+        "Этот cap превышает256-байтные destinations custom path readers. strncpy256 без explicit dest[255]=0 затем выполняет NUL scan; parser cap2047 не доказывает защиту destination. Достижимость длинного payload зависит от engine packet limit; runtime crash не проверялся.",
+        "ReadChar100808e0 sign-extends char:0xff потребляется,cursor++,результат-1 завершает строку без bad flag. Другие high bytes через cast к char сохраняют байтовое значение;0x00 также потребляется и завершает строку. Это не Unicode decoding."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-init/003-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100808e0",
+      "proposed_name": "MessageReader_ReadSignedChar",
+      "subsystem": "network",
+      "summary_ru": "Читает signed char с продвижением cursor либо возвращает-1 и ставит bad flag при нехватке байта.",
+      "confidence": "high",
+      "details_ru": [
+        "Если size105440b8<cursor105440bc+1:105440c0=1,return-1,cursor не меняется. Иначе сохраняетстарый cursor,увеличивает его1,возвращает(int)*(char*)(buffer105440b4+oldcursor).",
+        "Byte0xff успешно прочитан как-1; это отличается от недостатка данных по bad flag и продвижению cursor. ReadString10080a60 прекращает строку в обоих случаях, сам не различая причину-1.",
+        "Прямой вызов не очищает прежний bad flag при успешном чтении; его обнуляет InitReader10080850."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-init/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+        "analysis/graphics/studio-custom-protocol.md"
+      ]
+    }
+  ],
+  "assembly_only_observations": [
+    {
+      "address": "0x1003a170",
+      "summary_ru": "Самостоятельный короткий leaf очищает fingers ready104d26c7 и возвращает1.",
+      "details_ru": [
+        "Bounded assembly содержит полное тело1003a170..1003a17c: MOV BYTE[104d26c7],0; MOV EAX,1; RET. Предыдущий RET1003a16b отделён4INT3, следующий padding3INT3. Это entry evidence после неудачного Ghidra interior resolution.",
+        "Не читает payload/аргументы, не меняет path1018a1dc,active10542bb0 или texture ID104d26c8; лишь разрешает следующую lazy загрузку. Registration10038900 подтверждает packet MPModel; отдельного C тела по-прежнему нет.",
+        "Exact incoming DATA reference10038993 закрыт полным registration caller10038900 и raw bytes10146288=MPModel. Не добавляется как самостоятельная C-карточка."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/studio-flow-assembly/1003a140.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "decompiled/client/captures/graphics-studio-texture-lifecycle/015-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-texture-final/capture.json",
+        "analysis/graphics/studio-custom-protocol.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/003-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-flow-routing/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-routing/008-read_bytes.json"
+      ],
+      "catalog_entry": false
+    }
+  ]
+}

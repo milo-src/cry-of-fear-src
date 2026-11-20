@@ -204,13 +204,29 @@ fallback на обычную glove texture. После ready1 последующ
 Loader10069630, path-normalization и ошибки TGA описываются основным
 исследованием; screen copies10064c10/10064ac0 не входят в этот документ.
 Сброс ready/id и producers strings/selectors: `studio-texture-lifecycle-audit.md`.
-Ни происхождение custom строк, ни bounds их записи здесь не предполагаются.
+Происхождение custom строк и256-байтные destination wrappers/reader теперь
+раскрыты в `studio-custom-protocol.md`; ReadString cap2047 теперь доказан отдельно и превышает256-байтный
+destination. Фактический engine packet limit остаётся отдельной границей.
 Новые notes содержат8 функций; fingers byte algorithm и glove register
-branch дополнительно проверены assembly. Runtime producers/prefix contents
-не предполагаются. Общий каталог не изменён.
+branch дополнительно проверены assembly. Server world/dynamic KeyValue producers разобраны в
+`custom-texture-server.md`; конкретное runtime содержимое buffer tail
+не предполагается. Общий каталог этим аудитом не изменён.
 
 Read-only инвентаризация ресурсов основного исследования:
 `studio-replacement-resource-inventory.json` содержит35 литеральных TGA paths
 с существующими loose files, заголовками и хэшами. `_black.tga` — suffix,
 не самостоятельный отсутствующий файл. Этот список не гарантирует
 существование всех динамических custom путей или успех runtime загрузки.
+
+## Уточнение после восстановления custom message wrappers
+
+Новый [protocol audit](studio-custom-protocol.md) подтвердил object1018a0c0
+и256-байтные buffers sleeve1018a0dc,fingers1018a1dc,glove1018a2dc.
+Следовательно police3 source1018a1d8 расположен в последних4байтах sleeve
+buffer; его runtime значение по-прежнему не предположено.
+
+CustomGlv reader1006fbb0 при длине<3 очищает path и active10542bb1.
+Mesh10065ef0 требует active!=0 до вызова glove helper. Поэтому описанная
+выше helper ECX ветка при коротком пути подтверждена локально, но пустое
+CustomGlv само по себе выключает внешний gate и не доказывает её выполнение.
+Это уточняет достижимость ветки, не отменяя assembly результата helper.

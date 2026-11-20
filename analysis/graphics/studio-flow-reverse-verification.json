@@ -1,0 +1,100 @@
+{
+  "date": "2026-11-20",
+  "scope": "Static studio custom protocol/server senders, camera capture scheduling and GL/HUD bootstrap",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "runtime_or_visual_validation": false,
+  "renderer_implementation_changed": false,
+  "original_resources_changed": false,
+  "captures": [
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-entry",
+      "successful_queries": 15,
+      "failed_queries": 0,
+      "cleanup_reset": true
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-routing",
+      "successful_queries": 9,
+      "failed_queries": 0,
+      "cleanup_reset": true
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-abi",
+      "successful_queries": 6,
+      "failed_queries": 0,
+      "cleanup_reset": true
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-init",
+      "successful_queries": 4,
+      "failed_queries": 1,
+      "cleanup_reset": true
+    }
+  ],
+  "failed_queries": [
+    {
+      "capture": "decompiled/client/captures/graphics-studio-flow-init",
+      "file": "002-procedure_pseudo_code.json",
+      "sha256": "e5a967707efd92bc3effad6513db1982ba032357b4a28aa4b250863e170906e9",
+      "query": {
+        "name": "procedure_pseudo_code",
+        "arguments": {
+          "procedure": "ram:0x10001080",
+          "detail": "complete"
+        }
+      },
+      "reason": "Provider could not resolve procedure; not accepted as function evidence"
+    }
+  ],
+  "checks": {
+    "new_C_files": 16,
+    "retained_REA_records": 34,
+    "capture_file_hash_checks": 51,
+    "bounded_assembly_files_checked": 8,
+    "named_GL_dispatch_entries": 71,
+    "original_DLL_hash_unchanged": true,
+    "unique_review_updates": 28,
+    "newly_reviewed": 21,
+    "existing_reviews_updated": 7,
+    "unrelated_existing_reviews_preserved": 781,
+    "prior_evidence_paths_preserved": true,
+    "evidence_paths_exist": true,
+    "git_diff_check": "passed",
+    "private_session_reset_verified": true
+  },
+  "catalog": {
+    "path": "decompiled/FUNCTION_CATALOG.txt",
+    "files": 8675,
+    "entries": 8564,
+    "reviewed": 809,
+    "selector_mismatches": 150,
+    "unconfirmed_entries": 11,
+    "workboard_updated": true
+  },
+  "remaining": [
+    "Optional GL capability helpers and complete teardown/context recreation",
+    "External engine frame ordering/read-buffer/viewport origin",
+    "Studio constructor vtable association and bone mask semantics",
+    "Server class factory/vtable association and engine message-length limits",
+    "Native renderer integration and original-game/readback comparison"
+  ],
+  "artifact_sha256": {
+    "analysis/graphics/studio-custom-protocol-notes.json": "78844f66562020137dd0eb29848dce86f87583d6c5de747554ef0eb183aa50e7",
+    "analysis/graphics/custom-texture-server-notes.json": "f64f9b9f6bf0477e10b7477af99cad47795a7d4f24fd4ae07ca37f962b5dfe86",
+    "analysis/graphics/camera-capture-catalog-notes.json": "15c3d8a07d6cabd36e84d7eeafdb241d55f9f3cff84e57604c5862e2a69777a3",
+    "analysis/graphics/renderer-bootstrap-notes.json": "a8dbebece6e42f2b44d727964d2c006c6045f0a54482c24a445be6e0fcad09aa",
+    "decompiled/FUNCTION_CATALOG.txt": "ccdb2662b7e2be4ece20e6aaad644c1ce26727c67452cfd0a65d0873dfc5552b",
+    "analysis/graphics/studio-custom-protocol.md": "1fb6dd89cf0c7bc171889903e5357125830d8349921621ee96d3af4ec072f33b",
+    "analysis/graphics/custom-texture-server.md": "da42bd4dc17b4f08d1fa9afa4c325527c05e9c358c68a448693491f13e5b74d1",
+    "analysis/graphics/camera-capture-contract.md": "72e1c531e9db7a3b69f9943d7272b135897715fc31bf2b66d761fad8ae855eaf",
+    "analysis/graphics/renderer-bootstrap-contract.md": "abed680660c19f43698be27c10e94d2bbe9a564c5524e7c4c8c2fbcca4c88bad",
+    "analysis/graphics/native-gl-dispatch-map.json": "0c8195c2839a293571b608af7815b99dcfa407f96ecf3f739e12d73db4c05d95",
+    "analysis/graphics/studio-flow-assembly/capture.json": "bc92c97f398d214c97ac87e592664eafed369386af82ab01133df4b2c01282af",
+    "analysis/graphics/studio-existing-audit.md": "de692f55efe26be4ca941830bf88f3ea71c1b9ca34b342bd44f2af65f25f0774",
+    "analysis/graphics/studio-texture-loader-contract.md": "047779101c5a2de32b60aeca9f24ad7e35e75bcaaaa7f8e7e8111c3176723674",
+    "analysis/graphics/studio-texture-lifecycle-audit.md": "c5dd1d1a03b35941f1a9af3a1e02c90bade28c6d58a694982f5e298e6a68149f",
+    "analysis/graphics/studio-texture-lifecycle-catalog-notes.json": "ff7cf24f1be0cf760e7486564bf74d20fc290579cada33bfc48d8b813f4e7e7f",
+    "analysis/graphics/studio-texture-replacements.md": "fb44b8f8ca0403c8079df654144c204b00e444fe1d5166cd292348cfc12c127e"
+  }
+}

@@ -116,12 +116,15 @@
         "Ставит active flag10542bb0=1; при длине<3 очищает его вместе со строкой.",
         "Безусловно очищает ready 104d26c7, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
-        "Registration1006cf00 содержит CustomFng/CustomGlv/CustomSlv wrappers1006e5c0/1006e5e0/1006e600; точный wrapper→reader и this base ещё не сняты, поэтому имя packet не используется как единственное доказательство назначения."
+        "Новый wrapper1006e5c0 закрывает mapping: явный object argument1018a0c0 передан reader1006fb40 вместе с(name,size,buffer). Registration1006cf00 и новый wrapper C/assembly доказывают связь packet name с соответствующим global path."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/004-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-        "analysis/graphics/studio-texture-lifecycle-audit.md"
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/000-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-custom-protocol.md"
       ]
     },
     {
@@ -136,12 +139,15 @@
         "Ставит active flag10542bb1=1; при длине<3 очищает его вместе со строкой.",
         "Безусловно очищает ready 104d26d0, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
-        "Registration1006cf00 содержит CustomFng/CustomGlv/CustomSlv wrappers1006e5c0/1006e5e0/1006e600; точный wrapper→reader и this base ещё не сняты, поэтому имя packet не используется как единственное доказательство назначения."
+        "Новый wrapper1006e5e0 закрывает mapping: явный object argument1018a0c0 передан reader1006fbb0 вместе с(name,size,buffer). Registration1006cf00 и новый wrapper C/assembly доказывают связь packet name с соответствующим global path."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/005-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-        "analysis/graphics/studio-texture-lifecycle-audit.md"
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/001-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-custom-protocol.md"
       ]
     },
     {
@@ -155,12 +161,15 @@
         "Init reader10080850(param4,param3), READ_STRING10080a60, strncpy256 в object+0x1c. Затем strlen-подобный scan: длина<3 очищает первый байт destination.",
         "Безусловно очищает ready 104d26c6 и104d26d3, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
-        "Registration1006cf00 содержит CustomFng/CustomGlv/CustomSlv wrappers1006e5c0/1006e5e0/1006e600; точный wrapper→reader и this base ещё не сняты, поэтому имя packet не используется как единственное доказательство назначения."
+        "Новый wrapper1006e600 закрывает mapping: явный object argument1018a0c0 передан reader1006fc20 вместе с(name,size,buffer). Registration1006cf00 и новый wrapper C/assembly доказывают связь packet name с соответствующим global path."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/006-pseudocode.c",
         "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
-        "analysis/graphics/studio-texture-lifecycle-audit.md"
+        "analysis/graphics/studio-texture-lifecycle-audit.md",
+        "decompiled/client/captures/graphics-studio-flow-entry/002-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/1006e5c0.asm",
+        "analysis/graphics/studio-custom-protocol.md"
       ]
     },
     {
@@ -183,15 +192,21 @@
       ]
     }
   ],
-  "open_gaps": [
+  "resolved_gaps": [
     {
       "address": "0x1003a170",
       "kind": "instruction-write-not-function",
-      "summary_ru": "Exact WRITE к104d26c7; Ghidra interior query не разрешил содержащую procedure. Нет function card без entry evidence.",
+      "summary_ru": "Прежний failed Ghidra query сохранён как история. Bounded assembly доказал entry1003a170; registration10038900 и bytes10146288 закрыли имя MPModel. Callback semantics включены в notes10038900, standalone C-карточка не создаётся.",
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-lifecycle/015-inspect_native_instruction.json",
-        "decompiled/client/captures/graphics-studio-texture-final/capture.json"
-      ]
+        "decompiled/client/captures/graphics-studio-texture-final/capture.json",
+        "analysis/graphics/studio-flow-assembly/1003a140.asm",
+        "analysis/graphics/studio-flow-assembly/capture.json",
+        "decompiled/client/captures/graphics-studio-flow-entry/003-inspect_native_instruction.json",
+        "decompiled/client/captures/graphics-studio-flow-routing/003-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-routing/008-read_bytes.json"
+      ],
+      "status": "resolved-entry-by-bounded-assembly-and-MPModel-registration"
     }
   ]
 }

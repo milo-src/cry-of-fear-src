@@ -2,9 +2,10 @@
 
 Static analysis of original client.dll, 2026-11-20. SHA256:
 `e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360`.
-The game/DLL was not executed. GL API names below are reconstructed from
-numeric enums, argument lists and existing dispatch usage; pointer initialization
-is a separate question. No image-output equivalence is claimed.
+The game/DLL was not executed. GL API names were first reconstructed from
+enums/signatures; the later renderer-bootstrap-contract.md and
+native-gl-dispatch-map.json now prove their GetProcAddress assignments.
+No image-output equivalence is claimed.
 
 ## TGA loader 10069630
 
@@ -13,7 +14,7 @@ Inputs are filename, mip mode, optional existing texture ID. The studio
 replacement helpers use mip mode0 and a previously reserved ID. This loader
 also has mode1/2 callers outside that immediate use.
 
-The loader first requires10053c70 success (GL manager initialized), then calls
+The loader first requires10053c70 success (GL manager status==2), then calls
 engine COM_LoadFile(filename,5,&fileSize) via101b2744. A missing file logs failure.
 The data checks observed in this body are:
 
@@ -110,11 +111,12 @@ is initialized before the mesh loop, not per mesh. The diffusegay branch does
 not independently set that flag. This distinction and shared previous-binding
 storage are part of the observed contract, not a generalized push/pop GL state.
 
-Exact reference captures009..013 in `graphics-studio-texture-loader` contain
-only reads of screenWidth/screenHeight and dispatch101be670; their writers are
-not resolved by these direct references (a structure/table write may populate
-them). Thus the GL dispatch name remains signature-based, and viewport origin
-or screen-info ownership is not asserted here. Texture-ID direct writes occur
+Exact reference captures009..013 in `graphics-studio-texture-loader` contained
+only reads of screenWidth/screenHeight and dispatch101be670. The follow-up
+renderer-bootstrap-contract.md closes their producers: engine GetScreenInfo
+fills the HUD SCREENINFO structure, and manager GetProcAddress stores the named
+glCopyTexImage2D pointer. Viewport origin/read-buffer selection remain open.
+Texture-ID direct writes occur
 only in their respective lazy initialization helpers; this does not exclude
 indexed/bulk clearing. Capture lifecycle and TakePhoto100719f0 are documented
 in `studio-texture-lifecycle-audit.md`.

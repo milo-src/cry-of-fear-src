@@ -1,0 +1,124 @@
+{
+  "source_capture": "analysis/local/graphics-studio-flow-init",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "13b5d08dd07eb6d9ae38490a5c8f2189289a32a3217b87cef1d15935ad7210f2",
+      "procedure": "ram:0x100556f0",
+      "evidence_id": "ev_70228b693e7df9d0d04e714b1d8245183ef6d9d67d8b2279ba8e6be874b8deec",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "00bc88a3a86e48be5ab1956659b0f95fe88a6d9c2b66a39861d3d6c741969507",
+      "procedure": "ram:0x10053b20",
+      "evidence_id": "ev_48d9f9bbba2f17e42748bc324128d67d420ea547aa21760e4f7015ef8773986d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "003-pseudocode.c",
+      "sha256": "a625040585e3f5b15b74d9b8d041b7aa7a7bf830601b5ed83ee2fef7d1de2b55",
+      "procedure": "ram:0x100808e0",
+      "evidence_id": "ev_0819aa51485f7b24368b310cd4c76631b6cffbd9b6221b236c95abea2de79f81",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "004-pseudocode.c",
+      "sha256": "8aba2a675f5e49d86a0472867bd42f9a461c5d7306aa528985ced01b43c463f4",
+      "procedure": "ram:0x1001d525",
+      "evidence_id": "ev_25972d010175ec63f02c782c73f3047e7f1c04f38b5fce515fee7493dbe57492",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "analyses": [
+    {
+      "file": "000-procedure_pseudo_code.json",
+      "sha256": "a5a93b1a069f19d6304436991844aac92f57e73a00fe5fbe5164423ceddb3912",
+      "evidence_id": "ev_70228b693e7df9d0d04e714b1d8245183ef6d9d67d8b2279ba8e6be874b8deec",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x100556f0"
+      }
+    },
+    {
+      "file": "001-procedure_pseudo_code.json",
+      "sha256": "6e9f61b2dd56fe04665564f0fb7e223b91a64fa6ec9196a5881c328b11d6b6a4",
+      "evidence_id": "ev_48d9f9bbba2f17e42748bc324128d67d420ea547aa21760e4f7015ef8773986d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10053b20"
+      }
+    },
+    {
+      "file": "003-procedure_pseudo_code.json",
+      "sha256": "75a9e597c21a3ca9c379df6e25739b822675ec34d792834924b7db32b75ca2fc",
+      "evidence_id": "ev_0819aa51485f7b24368b310cd4c76631b6cffbd9b6221b236c95abea2de79f81",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x100808e0"
+      }
+    },
+    {
+      "file": "004-procedure_pseudo_code.json",
+      "sha256": "966885bc705935f809ad8a1269c007acbb036c77bd5c5c190f7acb205059881a",
+      "evidence_id": "ev_25972d010175ec63f02c782c73f3047e7f1c04f38b5fce515fee7493dbe57492",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x1001d525"
+      }
+    }
+  ],
+  "failed_queries": [
+    {
+      "file": "002-procedure_pseudo_code.json",
+      "sha256": "e5a967707efd92bc3effad6513db1982ba032357b4a28aa4b250863e170906e9",
+      "query": {
+        "name": "procedure_pseudo_code",
+        "arguments": {
+          "procedure": "ram:0x10001080",
+          "detail": "complete"
+        }
+      },
+      "reason": "Provider could not resolve procedure; not accepted as function evidence"
+    }
+  ]
+}

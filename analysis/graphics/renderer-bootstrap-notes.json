@@ -1,0 +1,148 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10053c70",
+      "proposed_name": "GLManager_IsReady",
+      "subsystem": "graphics",
+      "summary_ru": "Возвращает this.status==2; общий gate готовности GL, не алгоритм отсечения неба.",
+      "confidence": "high",
+      "details_ru": [
+        "Статус по смещению+214. Instance101be5f8 доказан assembly вызывающих loader/HUD; constructor задаёт0, GL init success задаёт2, failure задаёт1.",
+        "Studio sky-effect route использует этот gate перед собственной проверкой101be7f8. Сам helper не читает координаты, frustum или entity."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-routing/000-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053bb0",
+      "proposed_name": "GLManager_InitByteArrayDefaults",
+      "subsystem": "graphics",
+      "summary_ru": "Записывает defaults двух12-байтных массивов manager+30/+3c.",
+      "confidence": "high for bytes; array semantic purpose unresolved",
+      "details_ru": [
+        "Все элементы0, кроме index2: первый массив2, второй10. Нет загрузки библиотеки, записи ready status, обнуления studio IDs или GL deletion.",
+        "Семантические имена массивов не установлены по одному initializer."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-routing/001-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053c80",
+      "proposed_name": "GLManager_LoadCoreDispatch",
+      "subsystem": "graphics",
+      "summary_ru": "Загружает71 именованный GL/WGL entry point через GetProcAddress из module+210.",
+      "confidence": "high",
+      "details_ru": [
+        "Точные offsets+48..+160 и global addresses сохранены в native-gl-dispatch-map.json; все71 вызова сопоставлены присваиваниям.",
+        "Возвращает общий non-null result, логирует отдельные ошибки; сам не откатывает частично заполненную таблицу. Caller решает судьбу библиотеки/status.",
+        "glCopyTexImage2D записывается вthis+78: дляinstance101be5f8 это101be670. Прежняя signature-only неопределённость закрыта; наличие runtime GL context этим не проверено."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-abi/000-pseudocode.c",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/studio-flow-assembly/100556f0.asm",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100556f0",
+      "proposed_name": "GLManager_InitializeForVideo",
+      "subsystem": "graphics",
+      "summary_ru": "Проверяет режим рендера, загружает opengl32 и dispatch, фиксирует GL readiness и запускает capability probes.",
+      "confidence": "high for initialization routing",
+      "details_ru": [
+        "status!=0 выходит без повторной загрузки. -noglfx оставляетstatus0. Software, failed load/dispatch и missingGL_RENDERER приводятstatus1; success→status2.",
+        "LoadLibraryA(opengl32.dll)→module+210;10053c80 заполняетdispatch. На failure после load: FreeLibrary,module0,status1. На success: glGetString(GL_RENDERER)!=NULL и серия extension helpers.",
+        "Engine IsHardware enum0/1/2 software/OpenGL/Direct3D отличается от managerstatus. Unsupported branch содержит MessageBox и helper изменения LaunchOptions; это статически разобранные действия оригинала, не выполненные нами.",
+        "Уже записанныйstatus1 блокирует retry в этом методе. Полный teardown/context recreation и точные extension contracts остаются отдельными задачами."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-init/000-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/hud-manager-call.asm",
+        "analysis/graphics/studio-flow-assembly/100556f0.asm",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10053b20",
+      "proposed_name": "GLManager_InitModuleAndStatus",
+      "subsystem": "graphics",
+      "summary_ru": "Инициализирует module+210 и status+214 нулями.",
+      "confidence": "high",
+      "details_ru": [
+        "Bounded assembly wrapper10001080 передаётECX101be5f8. Для этого wrapper Ghidra не выдала C; его exact bytes сохранены отдельно, отдельная synthetic function card не создана.",
+        "Не является доказательством обнуления всей GL таблицы или studio texture caches."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-init/001-pseudocode.c",
+        "analysis/graphics/studio-flow-assembly/10001080.asm",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006d9e0",
+      "proposed_name": "HUD_InitializeVideoStateAndResources",
+      "subsystem": "graphics",
+      "summary_ru": "Видеоинициализация HUD: очищает состояния, запускает renderer reset, получает SCREENINFO и загружает sprites.",
+      "confidence": "high for documented fields and call sequence",
+      "details_ru": [
+        "ВызываетсяHUD_VidInit1001d560 иHUD_Reset1001d520. NativeHUDinstance1018a0c0 доказанwrapperassembly.",
+        "Сбрасывает custom paths+1c/+11c/global1018a2dc и active10542bb0/bb1; вызываетGL manager100556f0, другие video helpers и renderer reset10060b10. Direct body не обнуляет студийные textureIDs.",
+        "ЗаписываетsizeofSCREENINFO0x214 вHUD+536c и вызываетengine101b2638. База1018f42c,width1018f430,height1018f434: подтверждённая struct writer цепь.",
+        "Выбирает320/640 sprite variant поwidth, загружает либо обновляет sprite handles, вызывает virtual HUD initializers, сбрасывает timers. Полные контракты каждого дочернего метода здесь не заявлены."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-routing/004-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/003-inspect_native_instruction.json",
+        "analysis/graphics/studio-flow-assembly/1001d560.asm",
+        "external/hlsdk-portable/engine/cdll_int.h",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005a0b0",
+      "proposed_name": "Lightmap_ReserveThreeTextureIdBlocks",
+      "subsystem": "graphics",
+      "summary_ru": "Резервирует три группы по64 texture IDs для слоёв lightmap.",
+      "confidence": "high",
+      "details_ru": [
+        "Base101cbf70=counter1018fe8c; base101cbf74=counter+64; base101cbf78=counter+128; counter+=192.",
+        "В этой функции нет GL allocation/upload/delete или проверки переполнения. Фактические layer uploads разобраны в lightmap-gamma-contract.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-routing/005-pseudocode.c",
+        "analysis/graphics/renderer-bootstrap-contract.md",
+        "analysis/graphics/lightmap-gamma-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001d520",
+      "proposed_name": "HUD_Reset_VideoStateEntry",
+      "subsystem": "hud",
+      "summary_ru": "ЭкспортHUD_Reset вызывает общий HUD video initializer1006d9e0.",
+      "confidence": "high",
+      "details_ru": [
+        "Полное тело wrapper вызывает1006d9e0 и возвращается; в отличие отHUD_VidInit здесь нет отдельного вызова10098930.",
+        "Это подтверждает второй вход в lifecycle; внешний набор engine events и полный context recreation по одному экспорту не установлены."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-studio-flow-init/004-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/003-inspect_native_instruction.json",
+        "analysis/graphics/renderer-bootstrap-contract.md"
+      ]
+    }
+  ]
+}

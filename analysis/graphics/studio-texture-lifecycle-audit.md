@@ -149,7 +149,7 @@ copy и readiness только при успешном copy в сохранён�
 |c4 /012|10064870:1006489e,100648be|Нет других прямых writers в выдаче|
 |c5 /013|1001f9d0,100294c0,10064340,10020230:10020274|Нет|
 |c6 /014|1001f9d0,10064d60,1006fc20:1006fc61,10020230:10020282|Нет|
-|c7 /015|100648d0:1006490d,10064a24;1006fb40:1006fb9b|1003a170|
+|c7 /015|100648d0:1006490d,10064a24;1006fb40:1006fb9b;1003a170 leaf|MPModel invalidation, registration10038900|
 |d0 /016|100642b0:100642e3,10064329;1006fbb0:1006fc0b|Нет|
 |d1 /017|1001f9d0,100294c0,10064ec0,10020230:1002027b|Нет|
 |d2 /018|1001f9d0,100294c0,100641d0,10020230:10020289|Нет|
@@ -164,13 +164,14 @@ copy и readiness только при успешном copy в сохранён�
 У page c4 и retained photo e6 эта выдача не показывает внешнего direct reset.
 Это не доказательство отсутствия bulk/индексированных/косвенных записей.
 
-10020230 теперь подтверждён полным телом. Единственный неразрешённый
-содержащий entry среди перечисленных direct ready writers — **1003a170**.
-Это доказанный WRITE reference на fingers ready104d26c7, но Ghidra не нашла
-содержащую procedure по interior selector. Неудачная попытка сохранена в
-`graphics-studio-texture-final/capture.json` → failed_queries/002. Следующая
-сохранённая функция1003a360 не доказывает границу предыдущей. Поэтому для
-1003a170 здесь нет вымышленной function note или утверждения об условиях reset.
+10020230 подтверждён полным телом. Первоначальный interior query1003a170
+не дал Ghidra procedure (ошибка сохранена в graphics-studio-texture-final/
+capture.json), но новый bounded assembly1003a140.asm доказывает отдельный
+leaf entry1003a170..17c: byte[104d26c7]=0;return1. Предыдущий RET и4INT3,
+следующий RET и3INT3 задают явные границы. Новый exact xref указывает на
+DATA reference10038993; новое тело10038900 и raw string10146288 закрывают
+имя callback **MPModel**. Payload он не читает, ready fingers обнуляет.
+Полный обновлённый protocol — [studio-custom-protocol.md](studio-custom-protocol.md).
 
 ### Custom texture path messages
 
@@ -188,11 +189,16 @@ Ready сбрасывается безусловно, включая пустую
 или GL deletion нет. Явной гарантии NUL в последнем байте после strncpy нет.
 
 Registration1006cf00 содержит CustomFng→1006e5c0, CustomGlv→1006e5e0 и
-CustomSlv→1006e600. Назначение reader подтверждают offsets и точные flags;
-малые wrappers ещё нужны, чтобы строго замкнуть packet-name→reader и связать
-object base с глобальными path buffers. При this1018a0c0 offsets дали бы
-1018a1dc fingers,1018a2dc glove и1018a0dc sleeve, но это арифметическое
-сопоставление пока отделено от доказанного wrapper ABI.
+CustomSlv→1006e600. Новые wrappers graphics-studio-flow-entry/000..002 и
+bounded assembly1006e5c0.asm замыкают mapping: на стеке передаются
+(object1018a0c0,name,size,buffer) в соответствующие readers1006fb40/1006fbb0/
+1006fc20. Следовательно globals —1018a1dc fingers,1018a2dc glove,
+1018a0dc sleeve. Это explicit object argument, не скрытый reader ECX.
+
+Короткий CustomGlv также очищает active10542bb1; mesh требует active!=0.
+Поэтому short-path ECX поведение glove helper не следует описывать как
+обычный результат пустого packet. Подробные outer gates и соседство sleeve
+buffer с source1018a1d8 разобраны в новом protocol документе.
 
 ## Общий renderer reset и пока не закрытые границы
 
@@ -228,14 +234,14 @@ Gamma math и decoder/upload10069630 подробно ведутся отдел�
 
 | Приоритет | Адрес / запрос | Что закрывает |
 |---|---|---|
-|2|Wrappers **1006e5c0/1006e5e0/1006e600**|Закрыть packet-name→reader и this/global-buffer mapping|
-|1|Bounded assembly около **1003a170**, затем CFG/callers|Содержащая function не найдена Ghidra; требуется отдельное доказательство entry и условий fingers invalidation|
 |2|WRITE xrefs **104d26b8/bc/c0/c8/cc/d4/d8/dc/e8/f0**, **1018fe8c**|Срок жизни GL IDs и reset общего allocator counter; ec искать отдельно как binding state|
 |2|WRITE xrefs **1018a0dc/1018a1dc/1018a2dc**, selector **1018ca20/101b27bc**|Custom sleeve/hands/glove paths и их invalidation|
 |3|Callers **10060b10**|Доказать конкретные события запуска общего renderer reset|
 
 TakePhoto100719f0 закрыт и полным C телом, и bounded assembly с хешем DLL.
-Повторный interior query1003a170 без новой boundary evidence не закроет пробел.
+Entry1003a170 закрыт bounded assembly; registration10038900 подтверждает MPModel.
+Video-init1006d9e0 дополнительно подтверждает очистку трёх path strings/active
+flags и вызов10060b10; это не автоматическое доказательство GL cache deletion.
 
 ## Прямые источники
 
@@ -263,3 +269,6 @@ TakePhoto100719f0 закрыт и полным C телом, и bounded assembly
 
 Это карта статического lifecycle, не проверка утечки памяти, корректности GL
 при смене контекста или визуального совпадения normal/RTX.
+
+Новые источники closure: `graphics-studio-flow-entry/000..003` в client captures;
+`analysis/graphics/studio-flow-assembly/1006e5c0.asm`, `1003a140.asm` и `capture.json`.

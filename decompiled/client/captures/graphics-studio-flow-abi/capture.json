@@ -1,0 +1,128 @@
+{
+  "source_capture": "analysis/local/graphics-studio-flow-abi",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [
+    {
+      "file": "000-pseudocode.c",
+      "sha256": "09c597cf4185023f589455ce35a4bbc092527abd542ddc83361cf5fcf40a2a33",
+      "procedure": "ram:0x10053c80",
+      "evidence_id": "ev_86518aa1df596405cf45dcbf079c58f9f080177694295cf6f564980631a5172d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "001-pseudocode.c",
+      "sha256": "76f922e8c0199dd2d77ab82cdfb578b449b6ae7640b980d3cccffffae33f73d6",
+      "procedure": "ram:0x10080850",
+      "evidence_id": "ev_1c2361f9b381a3050820b2e8aff5d416a9e34f8e8a5c6e465c1625fb0a102760",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    },
+    {
+      "file": "002-pseudocode.c",
+      "sha256": "223e0e1272962ec6f894dfd1d17a5ce55e5429d1c75614e0541d4fb1ed646f58",
+      "procedure": "ram:0x10080a60",
+      "evidence_id": "ev_c197f97b7ce641ca8a45cc2049ed77b3dd27aaea4c67026f5c682535203ba137",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      }
+    }
+  ],
+  "analyses": [
+    {
+      "file": "000-procedure_pseudo_code.json",
+      "sha256": "e5973eb0c92fee4073e01abc494b05af6e6886116fbe3268b8b9e56e045234f0",
+      "evidence_id": "ev_86518aa1df596405cf45dcbf079c58f9f080177694295cf6f564980631a5172d",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10053c80"
+      }
+    },
+    {
+      "file": "001-procedure_pseudo_code.json",
+      "sha256": "01f2919c1497f4c2acf34d52a51bfd4bd3fdf955c505db4f5839e6acb24103bc",
+      "evidence_id": "ev_1c2361f9b381a3050820b2e8aff5d416a9e34f8e8a5c6e465c1625fb0a102760",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10080850"
+      }
+    },
+    {
+      "file": "002-procedure_pseudo_code.json",
+      "sha256": "956034d319593b19ce87f9b57826f9f1e1f908ac0a5ece0712d5800a9978fe99",
+      "evidence_id": "ev_c197f97b7ce641ca8a45cc2049ed77b3dd27aaea4c67026f5c682535203ba137",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "procedure_pseudo_code",
+      "parameters": {
+        "procedure": "ram:0x10080a60"
+      }
+    },
+    {
+      "file": "003-inspect_native_instruction.json",
+      "sha256": "c3653240e7cb5ab704a4e901a7363e6d8fb8a3ea63c769776b999ba18426d60e",
+      "evidence_id": "ev_8798cf60954f5b348729d2a76d4aa81dc8613af4dd3fc4894d4d3ce847eddd10",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "0x1006d9e0"
+      }
+    },
+    {
+      "file": "004-inspect_native_instruction.json",
+      "sha256": "d8b3797df6be7cc7aea4898fe998a955be0dea1753a0a8dd4d537a6653635daf",
+      "evidence_id": "ev_e07d175fbd4dabed3436c1a4f60066beab493948bc9ffd1a25329b87a6715a18",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "0x101be80c"
+      }
+    },
+    {
+      "file": "005-inspect_native_instruction.json",
+      "sha256": "3225d0de4f4828a9ad9553a454674c497020427e815f31c51518b4b6a157ce2d",
+      "evidence_id": "ev_a52a498f43e84118b89da34cd74f2f3bb0fe1250f464147f1d0808710c247caa",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "0x101be5f8"
+      }
+    }
+  ],
+  "failed_queries": []
+}

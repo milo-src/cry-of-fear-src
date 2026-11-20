@@ -1,0 +1,106 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10095490",
+      "proposed_name": "PlayerModelSettings_KeyValue",
+      "subsystem": "graphics",
+      "summary_ru": "Читает runtime keys sleeve/fingers/gloves как pooled strings; числовая vtable привязка к cof_customiseplayer пока не установлена.",
+      "confidence": "high",
+      "details_ru": [
+        "Точные keys sleeve/fingers/gloves вызывают AllocString(value), записывают private +ec/+f0/+f4, устанавливают handled=1. Неизвестный ключ передаётся1000dba0.",
+        "Длина не ограничивается; префикс models/, расширение и padding не добавляются. Пустое значение также передаётся AllocString; получаемый string_t зависит от движка.",
+        "Соседние model fields и setter100a38e0 согласуются с размером CCoFCustomisePlayerModels 0xf8, но числовая привязка методов к vtable пока не доказана."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10095490.c",
+        "analysis/graphics/custom-texture-server.md",
+        "decompiled/server/partial-pass/functions/0x1000aba0.c",
+        "decompiled/server/partial-pass/functions/0x100a38e0.c",
+        "decompiled/server/partial-pass/functions/0x100aa250.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100a38e0",
+      "proposed_name": "PlayerModelSettings_ApplyAndSendCustomTextures",
+      "subsystem": "graphics",
+      "summary_ru": "Копирует ненулевые настройки в world object и рассылает custom texture strings всем найденным игрокам.",
+      "confidence": "high",
+      "details_ru": [
+        "При world global10223190==0 выходит. Ненулевые source +dc..+f4 копирует в world +e0..+f8; source +ec/+f0/+f4 соответствуют sleeve/fingers/gloves.",
+        "Перебирает1..gpGlobals.maxClients, получает игрока через10119680 и при ненулевом source field посылает MSG_ONE CustomSlv/CustomFng/CustomGlv.",
+        "Payload: WRITE_STRING(world field + pStringBase), затем END. Нет форматирования, проверки длины или сравнения старого пути с новым; нулевой string_t сохраняет прежнее значение и не шлёт clear.",
+        "При ненулевом результате game-rules vcall+20 вызывает callback+6c(player,info buffer). Activator и UseType не читаются; точная привязка функции к классу/Use остаётся открытой."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100a38e0.c",
+        "analysis/graphics/custom-texture-server.md",
+        "decompiled/server/partial-pass/functions/0x10095490.c",
+        "decompiled/server/partial-pass/functions/0x100e5fc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c8b70",
+      "proposed_name": "GameRules_InitializeJoiningPlayer_CustomTextureReset",
+      "subsystem": "graphics",
+      "summary_ru": "В join/init helper очищает custom-texture latch игрока и вызывает три STRING(NULL) reset сообщения; остальной join pipeline исследован лишь контекстно.",
+      "confidence": "high",
+      "details_ru": [
+        "Начало: entvars+264=0, player BYTE+3a9=0. Затем MSG_ONE CustomSlv/Fng/Glv, каждое с WRITE_STRING(NULL) и END.",
+        "Контракт преобразования NULL в wire string оригинальным движком здесь не установлен. Дальше следуют join log, score/health, userinfo и env_model setup.",
+        "10106de0 напрямую вызывает helper перед team setup. Точное исходное имя виртуального метода game rules не назначается по аналогии с SDK.",
+        "Review ограничен texture reset и latch lifecycle; остальные join branches не объявляются полностью раскрытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c8b70.c",
+        "analysis/graphics/custom-texture-server.md",
+        "decompiled/server/partial-pass/functions/0x100e5fc0.c",
+        "decompiled/server/partial-pass/functions/0x10106de0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011c1a0",
+      "proposed_name": "Weapon_DeployWithInitialCustomTextureSync",
+      "subsystem": "graphics",
+      "summary_ru": "В общем deploy helper один раз для игрока отправляет ненулевые world custom texture paths; полный weapon deploy контракт здесь не заявлен.",
+      "confidence": "high",
+      "details_ru": [
+        "Нужны ненулевой результат weapon vcall+140 и player pointer weapon+160. При player BYTE+3a9==0 сначала ставит1, затем проверяет world global10223190.",
+        "Каждый ненулевой world +f0/+f4/+f8 отправляется владельцу через MSG_ONE CustomSlv/Fng/Glv STRING(pool+offset), без ограничения длины и преобразования filename. При world==NULL latch всё равно остаётся1.",
+        "Повторный deploy пропускает блок до внешнего сброса player+3a9. Нулевой world field не вызывает reset, хотя latch уже установлен.",
+        "После texture block идут custom viewmodel, ammo/animation state, звуки рукава, установка моделей и animation extension. Полный контракт этих ветвей не заявляется этим review."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011c1a0.c",
+        "analysis/graphics/custom-texture-server.md",
+        "decompiled/server/partial-pass/functions/0x100e5fc0.c",
+        "decompiled/server/partial-pass/functions/0x100c8b70.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101208e0",
+      "proposed_name": "WorldSettings_KeyValue_CustomTexturePaths",
+      "subsystem": "graphics",
+      "summary_ru": "World KeyValue сохраняет customsleeve/customfingers/customgloves как pooled strings без преобразования путей; review ограничен этой частью большого обработчика.",
+      "confidence": "high",
+      "details_ru": [
+        "customsleeve→private+f0, customfingers→+f4, customgloves→+f8 через AllocString(value), затем handled=1 и return.",
+        "1000aba0 проверяет точное равенство с учётом регистра. Нет ограничения длины, проверки расширения/существования или префикса models/; пустое значение передаётся движку как есть.",
+        "10120eb0 устанавливает DAT10223190=this world;1011c1a0 позже читает поля и передаёт строки владельцу оружия.",
+        "Смежные ветви skyname/materials/player models/map rules этим review полностью не раскрываются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101208e0.c",
+        "analysis/graphics/custom-texture-server.md",
+        "decompiled/server/partial-pass/functions/0x1000aba0.c",
+        "decompiled/server/partial-pass/functions/0x10120eb0.c",
+        "decompiled/server/partial-pass/functions/0x1011c1a0.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}

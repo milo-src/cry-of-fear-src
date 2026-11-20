@@ -146,7 +146,7 @@ slot32→10545830 = StudioClientEvents; slot39→1054584c = SetChromeOrigin.
 
 * При entity+0x304==0x11 и допустимом index entity+0x2fc создаётся временный
   player-state и вызывается vtable+0x0c(flags,state), затем early return.
-* Effect IDs0x46/0x89/0xb8 используют sky culling helper **10053c70**,
+* Effect IDs0x46/0x89/0xb8 используют общий GL-ready gate **10053c70** (manager.status==2),
   дополнительные transforms и временный depth-range. Lighting override
   использует globals104ce070/74, если они не -1.
 * Effect0x31/0x32 дополнительно рисует соответственно `models/zombie_eyes.mdl`
@@ -290,7 +290,7 @@ chrome/nonchrome условия различаются. Полный контр�
 | Разобрано отдельно | **1005bd90**, прямой callee100678d0 | Выбор dynamic lights: studio-lighting-contract.md. |
 | Разобрано отдельно | **10094880**, прямой callee100678d0 | Тело graphics-studio-math-abi/002: out=scale*A; studio-chrome-contract.md. |
 | 2 | **1008b3f0**, прямой callee1008cee0 | Backup/setup перед extra eyes/mask render. |
-| 2 | **10053c70**, прямой callee1008cee0 | Sky-specific visibility/culling gate. |
+| closed | **10053c70**, прямой callee1008cee0 | Общий GL-ready gate, не spatial culling; renderer-bootstrap-contract.md. |
 | 3 | **1008efe0**, PE vtable+50 | Software render counterpart; не требуется для вывода о hardware цепочке. |
 | После wrappers | vtable +0x18/+0x20/+0x24 | PE candidates раскрывают targets, но связь активного instance следует подтвердить constructor. |
 | Разобрано отдельно | **10068d70**, **10065050**, **104cddbc** | Consumers lighting/chrome/fullbright установлены; подробности в трёх контрактах выше. |

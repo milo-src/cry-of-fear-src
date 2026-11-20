@@ -1,0 +1,365 @@
+{
+  "scope": "Static dispatch assignments in10053c80; runtime resolution success not observed",
+  "manager_base": "0x101be5f8",
+  "module_field_offset": "0x210",
+  "evidence_path": "decompiled/client/captures/graphics-studio-flow-abi/000-procedure_pseudo_code.json",
+  "evidence_id": "ev_86518aa1df596405cf45dcbf079c58f9f080177694295cf6f564980631a5172d",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "entries": [
+    {
+      "api": "glAccum",
+      "offset": "0x48",
+      "global_if_manager_101be5f8": "0x101be640"
+    },
+    {
+      "api": "glAlphaFunc",
+      "offset": "0x4c",
+      "global_if_manager_101be5f8": "0x101be644"
+    },
+    {
+      "api": "glBegin",
+      "offset": "0x50",
+      "global_if_manager_101be5f8": "0x101be648"
+    },
+    {
+      "api": "glBindTexture",
+      "offset": "0x54",
+      "global_if_manager_101be5f8": "0x101be64c"
+    },
+    {
+      "api": "glBlendFunc",
+      "offset": "0x58",
+      "global_if_manager_101be5f8": "0x101be650"
+    },
+    {
+      "api": "glClear",
+      "offset": "0x60",
+      "global_if_manager_101be5f8": "0x101be658"
+    },
+    {
+      "api": "glClearColor",
+      "offset": "0x64",
+      "global_if_manager_101be5f8": "0x101be65c"
+    },
+    {
+      "api": "glClipPlane",
+      "offset": "0x5c",
+      "global_if_manager_101be5f8": "0x101be654"
+    },
+    {
+      "api": "glColor3f",
+      "offset": "0x68",
+      "global_if_manager_101be5f8": "0x101be660"
+    },
+    {
+      "api": "glColor4f",
+      "offset": "0x6c",
+      "global_if_manager_101be5f8": "0x101be664"
+    },
+    {
+      "api": "glColor4ub",
+      "offset": "0x70",
+      "global_if_manager_101be5f8": "0x101be668"
+    },
+    {
+      "api": "glColorMask",
+      "offset": "0x74",
+      "global_if_manager_101be5f8": "0x101be66c"
+    },
+    {
+      "api": "glCopyTexImage2D",
+      "offset": "0x78",
+      "global_if_manager_101be5f8": "0x101be670"
+    },
+    {
+      "api": "glCopyTexSubImage2D",
+      "offset": "0x7c",
+      "global_if_manager_101be5f8": "0x101be674"
+    },
+    {
+      "api": "glCullFace",
+      "offset": "0x80",
+      "global_if_manager_101be5f8": "0x101be678"
+    },
+    {
+      "api": "glDepthMask",
+      "offset": "0x84",
+      "global_if_manager_101be5f8": "0x101be67c"
+    },
+    {
+      "api": "glDepthRange",
+      "offset": "0x88",
+      "global_if_manager_101be5f8": "0x101be680"
+    },
+    {
+      "api": "glDepthFunc",
+      "offset": "0x8c",
+      "global_if_manager_101be5f8": "0x101be684"
+    },
+    {
+      "api": "glDisable",
+      "offset": "0x90",
+      "global_if_manager_101be5f8": "0x101be688"
+    },
+    {
+      "api": "glDisableClientState",
+      "offset": "0x94",
+      "global_if_manager_101be5f8": "0x101be68c"
+    },
+    {
+      "api": "glDrawArrays",
+      "offset": "0x98",
+      "global_if_manager_101be5f8": "0x101be690"
+    },
+    {
+      "api": "glDrawBuffer",
+      "offset": "0x9c",
+      "global_if_manager_101be5f8": "0x101be694"
+    },
+    {
+      "api": "glEnable",
+      "offset": "0xa0",
+      "global_if_manager_101be5f8": "0x101be698"
+    },
+    {
+      "api": "glEnableClientState",
+      "offset": "0xa4",
+      "global_if_manager_101be5f8": "0x101be69c"
+    },
+    {
+      "api": "glEnd",
+      "offset": "0xa8",
+      "global_if_manager_101be5f8": "0x101be6a0"
+    },
+    {
+      "api": "glFrustum",
+      "offset": "0xac",
+      "global_if_manager_101be5f8": "0x101be6a4"
+    },
+    {
+      "api": "glGetDoublev",
+      "offset": "0xb8",
+      "global_if_manager_101be5f8": "0x101be6b0"
+    },
+    {
+      "api": "glGetFloatv",
+      "offset": "0xbc",
+      "global_if_manager_101be5f8": "0x101be6b4"
+    },
+    {
+      "api": "glGetIntegerv",
+      "offset": "0xc0",
+      "global_if_manager_101be5f8": "0x101be6b8"
+    },
+    {
+      "api": "glGetTexEnviv",
+      "offset": "0xc4",
+      "global_if_manager_101be5f8": "0x101be6bc"
+    },
+    {
+      "api": "glGetTexImage",
+      "offset": "0xc8",
+      "global_if_manager_101be5f8": "0x101be6c0"
+    },
+    {
+      "api": "glGetTexLevelParameteriv",
+      "offset": "0xcc",
+      "global_if_manager_101be5f8": "0x101be6c4"
+    },
+    {
+      "api": "glGetString",
+      "offset": "0xb0",
+      "global_if_manager_101be5f8": "0x101be6a8"
+    },
+    {
+      "api": "glGetError",
+      "offset": "0xb4",
+      "global_if_manager_101be5f8": "0x101be6ac"
+    },
+    {
+      "api": "glIsEnabled",
+      "offset": "0xd0",
+      "global_if_manager_101be5f8": "0x101be6c8"
+    },
+    {
+      "api": "glLoadIdentity",
+      "offset": "0xd4",
+      "global_if_manager_101be5f8": "0x101be6cc"
+    },
+    {
+      "api": "glLoadMatrixf",
+      "offset": "0xd8",
+      "global_if_manager_101be5f8": "0x101be6d0"
+    },
+    {
+      "api": "glMatrixMode",
+      "offset": "0xdc",
+      "global_if_manager_101be5f8": "0x101be6d4"
+    },
+    {
+      "api": "glMultMatrixd",
+      "offset": "0xe0",
+      "global_if_manager_101be5f8": "0x101be6d8"
+    },
+    {
+      "api": "glOrtho",
+      "offset": "0xe4",
+      "global_if_manager_101be5f8": "0x101be6dc"
+    },
+    {
+      "api": "glPopAttrib",
+      "offset": "0xe8",
+      "global_if_manager_101be5f8": "0x101be6e0"
+    },
+    {
+      "api": "glPushAttrib",
+      "offset": "0xec",
+      "global_if_manager_101be5f8": "0x101be6e4"
+    },
+    {
+      "api": "glPixelStorei",
+      "offset": "0xf0",
+      "global_if_manager_101be5f8": "0x101be6e8"
+    },
+    {
+      "api": "glPolygonOffset",
+      "offset": "0xf4",
+      "global_if_manager_101be5f8": "0x101be6ec"
+    },
+    {
+      "api": "glPushMatrix",
+      "offset": "0xf8",
+      "global_if_manager_101be5f8": "0x101be6f0"
+    },
+    {
+      "api": "glPopMatrix",
+      "offset": "0xfc",
+      "global_if_manager_101be5f8": "0x101be6f4"
+    },
+    {
+      "api": "glReadBuffer",
+      "offset": "0x100",
+      "global_if_manager_101be5f8": "0x101be6f8"
+    },
+    {
+      "api": "glRotatef",
+      "offset": "0x104",
+      "global_if_manager_101be5f8": "0x101be6fc"
+    },
+    {
+      "api": "glScalef",
+      "offset": "0x108",
+      "global_if_manager_101be5f8": "0x101be700"
+    },
+    {
+      "api": "glShadeModel",
+      "offset": "0x10c",
+      "global_if_manager_101be5f8": "0x101be704"
+    },
+    {
+      "api": "glStencilFunc",
+      "offset": "0x110",
+      "global_if_manager_101be5f8": "0x101be708"
+    },
+    {
+      "api": "glStencilOp",
+      "offset": "0x114",
+      "global_if_manager_101be5f8": "0x101be70c"
+    },
+    {
+      "api": "glStencilMask",
+      "offset": "0x118",
+      "global_if_manager_101be5f8": "0x101be710"
+    },
+    {
+      "api": "glTexCoord2f",
+      "offset": "0x11c",
+      "global_if_manager_101be5f8": "0x101be714"
+    },
+    {
+      "api": "glTexCoordPointer",
+      "offset": "0x120",
+      "global_if_manager_101be5f8": "0x101be718"
+    },
+    {
+      "api": "glTexEnvfv",
+      "offset": "0x124",
+      "global_if_manager_101be5f8": "0x101be71c"
+    },
+    {
+      "api": "glTexEnvf",
+      "offset": "0x128",
+      "global_if_manager_101be5f8": "0x101be720"
+    },
+    {
+      "api": "glTexEnvi",
+      "offset": "0x12c",
+      "global_if_manager_101be5f8": "0x101be724"
+    },
+    {
+      "api": "glTexGenfv",
+      "offset": "0x130",
+      "global_if_manager_101be5f8": "0x101be728"
+    },
+    {
+      "api": "glTexGeni",
+      "offset": "0x134",
+      "global_if_manager_101be5f8": "0x101be72c"
+    },
+    {
+      "api": "glTexImage1D",
+      "offset": "0x138",
+      "global_if_manager_101be5f8": "0x101be730"
+    },
+    {
+      "api": "glTexImage2D",
+      "offset": "0x13c",
+      "global_if_manager_101be5f8": "0x101be734"
+    },
+    {
+      "api": "glTexParameteri",
+      "offset": "0x140",
+      "global_if_manager_101be5f8": "0x101be738"
+    },
+    {
+      "api": "glTexParameterf",
+      "offset": "0x144",
+      "global_if_manager_101be5f8": "0x101be73c"
+    },
+    {
+      "api": "glTranslated",
+      "offset": "0x148",
+      "global_if_manager_101be5f8": "0x101be740"
+    },
+    {
+      "api": "glTranslatef",
+      "offset": "0x14c",
+      "global_if_manager_101be5f8": "0x101be744"
+    },
+    {
+      "api": "glVertex3f",
+      "offset": "0x150",
+      "global_if_manager_101be5f8": "0x101be748"
+    },
+    {
+      "api": "glVertex3fv",
+      "offset": "0x154",
+      "global_if_manager_101be5f8": "0x101be74c"
+    },
+    {
+      "api": "glVertexPointer",
+      "offset": "0x158",
+      "global_if_manager_101be5f8": "0x101be750"
+    },
+    {
+      "api": "glViewport",
+      "offset": "0x15c",
+      "global_if_manager_101be5f8": "0x101be754"
+    },
+    {
+      "api": "wglGetProcAddress",
+      "offset": "0x160",
+      "global_if_manager_101be5f8": "0x101be758"
+    }
+  ]
+}
