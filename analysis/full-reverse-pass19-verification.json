@@ -1,0 +1,50 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1876,
+  "new_reviewed": 14,
+  "updated_existing": [],
+  "after_reviewed": 1890,
+  "remaining_unreviewed": 6765,
+  "server_reviewed": 1235,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 66,
+    "assembly_ranges": 79,
+    "verified_assembly_byte_rows": 5595,
+    "raw_records": 913,
+    "decoded_save_fields": 517,
+    "review_evidence_references": 103,
+    "synchronized_note_occurrences": 14
+  },
+  "checks": {
+    "unrelated_prior_review_semantics_preserved": true,
+    "prior_reviews_exactly_preserved": 1876,
+    "prior_semantic_corrections": [],
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.005s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-phone-call-lifecycle": "PASS 28 C 28 ASM 1115 byte rows 212 raw 4 tables 2 exports 10 cards",
+      "server-subtitle-multiple-keyvalue": "PASS 14 C 18 ASM 1852 byte rows 213 raw 3 tables 2 exports 1 cards",
+      "server-phone-call-callbacks": "PASS 22 C 22 ASM 1022 byte rows 256 raw 180 descriptors 4 vtables 2 cards",
+      "server-phone-call-keyvalue": "PASS 10 C 11 ASM 1606 byte rows 103 raw 29 descriptors 65 keys, 1 card"
+    }
+  },
+  "artifacts": [
+    "analysis/server-phone-call-lifecycle/contract.md",
+    "analysis/server-subtitle-multiple-keyvalue/contract.md",
+    "analysis/server-phone-call-callbacks/contract.md",
+    "analysis/server-phone-call-keyvalue/contract.md"
+  ],
+  "catalog_sha256": "2778bb5c5d9673054d3cbf553141005066f4c7a2bb3d6da12a4536e2a307b5cc",
+  "progress_sha256": "8e8db5836dc85c99d2a515ed2239fd6b4fba5ceb73e118df2bd2cfb1d48287c7"
+}

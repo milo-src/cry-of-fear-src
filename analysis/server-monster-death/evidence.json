@@ -13,7 +13,8 @@
     "1008bac0",
     "1008ad80",
     "10117700",
-    "101180b0"
+    "101180b0",
+    "100876d0"
   ],
   "source_c": [
     {
@@ -74,6 +75,12 @@
       "path": "decompiled/server/partial-pass/functions/0x101180b0.c",
       "sha256": "e0cb6910837ac70744557f194604c632b7968ae97f2a091a00c8bbc85979eed3",
       "entry": "0x101180b0",
+      "primary": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100876d0.c",
+      "sha256": "ee2d6aa7e5756ad55980907d2426fee1d26f790f8149d2b017e14c2f3927c193",
+      "entry": "0x100876d0",
       "primary": true
     },
     {
@@ -191,6 +198,36 @@
       "primary": false
     },
     {
+      "path": "decompiled/server/partial-pass/functions/0x1000db00.c",
+      "sha256": "dc484924afbd6a679c1e175ac9a099d3988574c6599851c9ec645a93dc7cee53",
+      "entry": "0x1000db00",
+      "primary": false
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1000e1f0.c",
+      "sha256": "0782147c522dd73a33e77fa9aafc1ae8dfe8886465425ebec817d6ff292e8db4",
+      "entry": "0x1000e1f0",
+      "primary": false
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1000d580.c",
+      "sha256": "306bc2ef67a65d00108a043289045ed0e2b42fdf1cd0c6fcace5079d320dbc6f",
+      "entry": "0x1000d580",
+      "primary": false
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10017660.c",
+      "sha256": "0f743e8fde2a6f819c04955215d88130c12a0f54a9dd4c19561d1dde12321ef6",
+      "entry": "0x10017660",
+      "primary": false
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x101028e0.c",
+      "sha256": "083bbab7eb135da8b3eaea27754f68b3335488819206f82ca50280cfb1a6966a",
+      "entry": "0x101028e0",
+      "primary": false
+    },
+    {
       "path": "decompiled/server/partial-pass/functions/0x1008bc50.c",
       "sha256": "354d461259e23200bab16994ff423519bac9595566e30d316301fb3ef2060067",
       "entry": "0x1008bc50",
@@ -289,6 +326,14 @@
       "start": "0x101180b0",
       "end_exclusive": "0x101181eb",
       "binary_range_sha256": "afa262cb539ceb2d9acd2fdcde67e2126a9b5d213c0c236073c9f760c5fb94a9"
+    },
+    {
+      "path": "analysis/server-monster-death/100876d0-0.asm",
+      "sha256": "d921b2bb1b9de23dc7feb0514c0bad5baf206c533f95be2d29ee2424b02a9eb6",
+      "entry": "0x100876d0",
+      "start": "0x100876d0",
+      "end_exclusive": "0x10087793",
+      "binary_range_sha256": "ecf496bd420b1c0f59b40d2563e5c561f977145f1a68834bb0ecb75513c06717"
     },
     {
       "path": "analysis/server-monster-death/1008ac70-0.asm",
@@ -441,6 +486,46 @@
       "start": "0x10013550",
       "end_exclusive": "0x10013560",
       "binary_range_sha256": "0a254412fd465e90e25c46042bd036bba5e3df13415de5fd550275efbfdacf7c"
+    },
+    {
+      "path": "analysis/server-monster-death/1000db00-0.asm",
+      "sha256": "359a7afd22efa819472ec402be877daa64b896f0db8eb0c1daea785dedc071a7",
+      "entry": "0x1000db00",
+      "start": "0x1000db00",
+      "end_exclusive": "0x1000db1e",
+      "binary_range_sha256": "5adabed295e80eb86f3db567efda6382e3898dfcbccf8f8e0bafc70bab6718fe"
+    },
+    {
+      "path": "analysis/server-monster-death/1000e1f0-0.asm",
+      "sha256": "f5c3d3caa5fe51029018790813af7344fb56f3a417efb2f6e4052f717dc81d13",
+      "entry": "0x1000e1f0",
+      "start": "0x1000e1f0",
+      "end_exclusive": "0x1000e209",
+      "binary_range_sha256": "e7c84d8dca05282e4a79056d9cc98fb93bd48c5dad920ee905c624d1f587d432"
+    },
+    {
+      "path": "analysis/server-monster-death/1000d580-0.asm",
+      "sha256": "5f6b78facad9b41ade08aed541862cac3af9794604b80e249ffd969b0ccfec98",
+      "entry": "0x1000d580",
+      "start": "0x1000d580",
+      "end_exclusive": "0x1000d583",
+      "binary_range_sha256": "e598d0c3ba86d917b177d7adde0556aa99bc355543c57aee0a3e50b684dd7e99"
+    },
+    {
+      "path": "analysis/server-monster-death/10017660-0.asm",
+      "sha256": "3378d8f0778ac889baaa19f063a2f68fd5ec580dd6bb361604ee28eedad4b24e",
+      "entry": "0x10017660",
+      "start": "0x10017660",
+      "end_exclusive": "0x100176e6",
+      "binary_range_sha256": "9f4e02377c66498af8fa5d4ffe46b91e9c31c749c84ddb6af23372560a8be5b4"
+    },
+    {
+      "path": "analysis/server-monster-death/101028e0-0.asm",
+      "sha256": "b3f6efddbe90fde353f99bc1a32ff03acac10e49aa265ecc54ac8aebef62c47c",
+      "entry": "0x101028e0",
+      "start": "0x101028e0",
+      "end_exclusive": "0x10102929",
+      "binary_range_sha256": "8309019eabf6455a8fdc2fa1dc4594d0d3700a91a23f226e6899a9cf09f6d4c1"
     },
     {
       "path": "analysis/server-monster-death/1008bc50-0.asm",
@@ -2191,6 +2276,27 @@
       "label": "primary ASM direct data operand"
     },
     {
+      "address": "0x101a1dd8",
+      "bytes_hex": "0000003f6666263ffca9f1d24d62503f",
+      "file_offset": "0x1a11d8",
+      "sha256": "feb0e135f3aec211c1ee235d1dbe20b858cef4a918635be111b7e169c78f1242",
+      "label": "primary ASM direct data operand"
+    },
+    {
+      "address": "0x101a1eec",
+      "bytes_hex": "0000a0410000e0410000f04100000842",
+      "file_offset": "0x1a12ec",
+      "sha256": "ad99d82d629d15c1cb7cb3bc3492a75a1c243f4932e4d4a87c2ac333a9b8aed8",
+      "label": "primary ASM direct data operand"
+    },
+    {
+      "address": "0x101b0df0",
+      "bytes_hex": "6d6f6e737465725f7370697474657200",
+      "file_offset": "0x1b01f0",
+      "sha256": "ba6959e66b5fb52fd229139c4505d41e4b0bdd71e50efb60530edc540ad44a52",
+      "label": "primary ASM direct data operand"
+    },
+    {
       "address": "0x10208af0",
       "bytes_hex": "00000000ffffffff0000000024ac2000010000004e0300004e030000188b20005098200088a52000",
       "file_offset": "0x207ef0",
@@ -2686,6 +2792,13 @@
       "file_offset": "0x1e4c3c",
       "sha256": "ebc158a863d10ec3e79cb9a7814e31d673a6dd8264c32f597526f6d24bc31b1d",
       "label": "native literal"
+    },
+    {
+      "address": "0x101b0df0",
+      "bytes_hex": "6d6f6e737465725f7370697474657200",
+      "file_offset": "0x1b01f0",
+      "sha256": "ba6959e66b5fb52fd229139c4505d41e4b0bdd71e50efb60530edc540ad44a52",
+      "label": "native literal"
     }
   ],
   "accounting": {
@@ -2699,7 +2812,8 @@
       "1008bac0",
       "1008ad80",
       "10117700",
-      "101180b0"
+      "101180b0",
+      "100876d0"
     ],
     "updated_existing": []
   },
@@ -5089,6 +5203,21 @@
       "entry": "0x101180b0",
       "address": "0x101e583c",
       "bytes_hex": "73636f72636800004e554c4c20456e74"
+    },
+    {
+      "entry": "0x100876d0",
+      "address": "0x101a1dd8",
+      "bytes_hex": "0000003f6666263ffca9f1d24d62503f"
+    },
+    {
+      "entry": "0x100876d0",
+      "address": "0x101a1eec",
+      "bytes_hex": "0000a0410000e0410000f04100000842"
+    },
+    {
+      "entry": "0x100876d0",
+      "address": "0x101b0df0",
+      "bytes_hex": "6d6f6e737465725f7370697474657200"
     }
   ],
   "exports": [
@@ -5274,6 +5403,10 @@
     {
       "address": "0x101e583c",
       "text": "scorch"
+    },
+    {
+      "address": "0x101b0df0",
+      "text": "monster_spitter"
     }
   ],
   "api_binding": {
@@ -5309,6 +5442,11 @@
         "slot": 21,
         "name": "pfnCreateEntity",
         "address": "0x10222f9c"
+      },
+      {
+        "slot": 22,
+        "name": "pfnRemoveEntity",
+        "address": "0x10222fa0"
       },
       {
         "slot": 29,
@@ -5395,7 +5533,7 @@
   "support_documents": [
     {
       "path": "analysis/server-monster-damage/contract.md",
-      "sha256": "84a02306e72b6b18315e44324e2bad301ee8329f53e0c7ac19766bc3558c89a4"
+      "sha256": "ecd1854f87ba46d7cd2496403f23d3660e9c8c0a0cf2cbfe01756399d7ae2bd4"
     },
     {
       "path": "analysis/server-event-effects/contract.md",
@@ -5404,6 +5542,10 @@
     {
       "path": "analysis/server-monster-senses/contract.md",
       "sha256": "5d631ad04e9068a6c45a18c8e5f5b7df18f8d52477535a0b8d0487b284044a51"
+    },
+    {
+      "path": "analysis/network/usermessage-registry.json",
+      "sha256": "a02684fb8a45f5d201af1e3c30c86fce7c446b52aa8cf4ce34097c3be6a71f22"
     },
     {
       "path": "external/hlsdk-portable/common/const.h",

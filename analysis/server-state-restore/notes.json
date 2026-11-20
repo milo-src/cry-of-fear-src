@@ -1,0 +1,40 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10029090",
+      "proposed_name": "PlayerStateManager_RestorePlayerFromBanks",
+      "subsystem": "inventory",
+      "summary_ru": "Восстанавливает состояние игрока из двух банков записей менеджера: статистику либо статистику с экипировкой; AL сообщает caller, нужно ли пропустить обычные game_player_equip.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10029090.c",
+        "analysis/server-state-restore/10029090-0.asm",
+        "analysis/server-state-restore/evidence.json",
+        "analysis/server-state-restore/contract.md",
+        "analysis/server-state-restore/100c9210-0.asm",
+        "analysis/server-state-restore/10120eb0-0.asm",
+        "analysis/server-state-restore/10029070-0.asm",
+        "analysis/server-state-restore/100e5fc0-0.asm",
+        "analysis/server-state-restore/100f1a50-0.asm",
+        "analysis/server-player-inventory/contract.md",
+        "analysis/server-world-bootstrap/contract.md"
+      ],
+      "details_ru": [
+        "ABI: ECX=M, один stack argument P, RET 4; возвращается только AL=0/1, верхние 24 бита EAX не нормализованы. NULL P даёт AL=0; для ненулевого P нет проверки NULL M. MP PlayerSpawn100c9210 вызывает global10222e10 и проверяет TEST AL,AL: 1 пропускает game_player_equip, 0 оставляет обычную выдачу. Это не общий признак отсутствия побочных эффектов.",
+        "Два банка: S=0x41c, A_i=M+4+i*S, B_i=A_i+0x879c; i=1..32. Для каждого i сначала проверяется B_i при ненулевом BYTE M[0], затем A_i. Поэтому ранняя A-запись приоритетнее поздней B. Нужны ненулевой valid BYTE R[0] и точное равенство DWORD R+8 адресу stringPool+P.pev.netname(1d4). Это сравнение указателей, не текста имени. Для A дополнительно BYTE R+1d0 должен быть 1 или 0; другие значения пропускаются. M[0] не отключает A.",
+        "Общий блок статистики: 15 DWORD R+1d8+4*j → P+63c+4*j (j=0..14), BYTE R+214 → P+678, DWORD R+218 → P+67c, BYTE R+21c → P+680. Это 66 копируемых байтов, не непрерывный player stats block. P+638,679..67b,681..687 не копируются. Никаких проверок диапазонов или нормализации этой статистики здесь нет.",
+        "Совпавшая B-запись копирует только статистику, затем memset(B_i,0,41c), затем memset(A_i,0,41c), AL=1. A_i стирается без проверки его имени/valid. В этой ветке непосредственно нет выдачи оружия, восстановления здоровья или сообщений HUD. M[0] не меняется.",
+        "A.mode=1: копируется статистика, вызывается внешняя map-config функция100c6570(P), затем 32 AmmoX (BYTE index0..31, SHORT P.ammo[index], MSG_ONE). После loop ESI=32, и native очищает A_32, а не исходную найденную A_i: XOR ESI,ESI100293d1, IMUL EAX,ESI,41c1002941d. Для i!=32 совпавшая запись остаётся. AL=1 независимо от результата map-config; B не очищается.",
+        "A.mode=0 сначала переводит signed int32 R+48 и R+4c в float32 и записывает pev.health+164 и P+21f0 (stamina), без clamp. DWORD R+4 → P+3b4; R+224/228/22c → P+3dc/3e0/3e4. Затем копирует статистику, 32 байта R+3f9..418 → P+3f5..414 и три NUL-terminated строки R+278/2f8/378 → P+204c/20cc/214c. Интервал между строками80h не является ограничением: native копирует до NUL без проверки длины.",
+        "Шесть записей оружия имеют начало R+230+12*k (k=0..5): raw classname pointer, clip DWORD, reserve DWORD. Для каждого ненулевого classname вызывается100e0a80(ECX=P, classname,0,zeroExtend(BYTE R+14)), результат игнорируется. Classname перечитывается после callback. Точное строковое сравнение weapon_syringe вызывает Syringe(MSG_ALL=2, BYTE IndexOfEdict(P), BYTE1) даже без подтверждённого успешного pickup.",
+        "После каждой выдачи сканируются шесть голов P+2514..2528 и next item+164. Если имя ГОЛОВЫ равно weapon_action, вся цепь пропускается; следующие элементы не проходят повторный action-filter. Все элементы с точным совпадением classname получают item+1e4=clip и P+2540+4*(item+1dc)=reserve. Нет проверки ammo index, capacity, отрицательных значений, циклов; обновляются все совпадения, включая существовавшие до выдачи. Повторные записи могут перезаписывать один reserve. Локальных AmmoX после этих прямых записей нет; сообщения внутри callee этим не исключаются.",
+        "Восстановление active weapon находится внутри ветки НЕПУСТОЙ шестой weapon-записи: JE10029d83→10029f19 обходит блок10029ef7. Только здесь ненулевой raw pointer R+c проверяется100e2380(P,name); при наличии вызывается100f1a50(P,name). Последний может отказаться и иначе ставит отложенные P+2538/1ef9, а не прямо active+252c; результат здесь не проверяется. Записи1..5 сами не обеспечивают этот шаг.",
+        "Завершение A.mode=0 отправляет QSlotUpdate MSG_ONE, BYTE slot1/2/3, BYTE value для каждого ненулевого DWORD P+3dc/3e0/3e4. Нулевые значения не посылают clear; значения не clamp, wire BYTE обрезает. Затем очищается найденная A_i целиком41c и AL=1. B_i и M[0] остаются. Старые цепочки оружия и все ammo counters предварительно не обнуляются этой функцией.",
+        "При отсутствии подходящего слота CVarGetFloat(sv_coop_nosave) сохраняется в float32 и сравнивается с0. Только ordered ±0 вызывает100c6570(P) и 32 AmmoX; ненулевые значения и NaN этот шаг пропускают. Обе ветки возвращают AL=0. Поэтому parser может изменить игрока, после чего caller ещё применяет game_player_equip. Cvar не блокирует найденные A/B записи.",
+        "Owner support: WorldPrecache10120eb0 создаёт manager размером10f3c; constructor10029070 очищает M+4 длиной10f38 и возвращает this, не инициализируя первые4байта. 4+2*33*41c=10f3c. World reset также очищает лишь M+4. В non-MP release global10222e10 не обнуляется (см. world-bootstrap). Производители строковых указателей/записей, значение M[0], concrete class name и lifetime pointees здесь не установлены; это формат памяти, не доказанный формат файла или сетевого save.",
+        "Полное тело10029090 проверено по native, включая все шесть unrolled weapon blocks и четыре return paths. Map-config100c6570, все derived pickup callbacks и корректность доставки HUD остаются отдельными границами; их результаты не подменены гарантиями успеха. Нет rollback, локальных проверок жизни объектов после callbacks или runtime/pixel проверки."
+      ]
+    }
+  ]
+}

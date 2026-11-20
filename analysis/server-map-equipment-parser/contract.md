@@ -1,0 +1,85 @@
+# Map equipment parser100c6570: полный локальный контракт
+
+Один новый primary оригинального hl.dll: полное C тело и весь native диапазон100c6570..100c6dd6 прочитаны. Только статическое чтение; игра/DLL не запускались, cfg и ресурсы не изменялись. Proposed name аналитическое. Support entries не получают новую REVIEW автоматически.
+
+Навигация: [manager restore](../server-state-restore/contract.md), [другой player cfg reader](../server-state-reader/contract.md), [GiveNamedItem](../server-player-equipment/contract.md), [Inventory sender](../server-player-inventory/contract.md). Одинаковые getline/atoi helpers не означают одинаковые callbacks, files или field sets.
+
+Порядок: `P guard → path maps/<map>.cfg → ifstream/getline → шесть последовательных mutable checks → optional GiveNamedItem с latch → matching owned item payload → Inventory1..6 → string/ifstream cleanup → return`. Повторяющиеся/ошибочные строки меняют эту последовательность согласно веткам, перечисленным ниже.
+
+## ABI и файл карты
+
+100c6570 — native cdecl с одним stack player* P, входной ECX не this, plain RET100c6dd1. Нет meaningful bool/success результата. При P==NULL пропускает все операции и идёт к cookie/SEH эпилогу. При P!=NULL engine GetGameDir(slot99,global102230d4) получает один buffer pointer EBP-510h; Ghidra ошибочно показывает второй аргумент cookie. К результату без bounds дописывает literal "/maps/"@101d61a0, текущее globalvars.mapname(+c)+stringPool(+98), затем ".cfg"@101b144c. Это <gameDir>/maps/<mapname>.cfg, не netname cfg и не wildcard enumeration. Stack путь занимает1024байта до scratch EBP-110h; strlen/append и REP MOVSD/MOVSB копируют до NUL без проверки вместимости, escaping или валидации mapname.
+
+## Поток и отказ открытия
+
+1002f8d0(this=EBP-5e4h,path,1,40h,1) создаёт ifstream; numeric mode/share аргументы сохранены, полная OS-share семантика не выводится по ним. Сразу после создания идёт getline1002f550(stream,&S), без is_open или отдельного file-exists guard. S — один mutable std::string по EBP-528h; length DWORD по-518h, capacity по-514h, capacity>=16 выбирает heap pointer. Отказ открытия на обычном не бросающем пути устанавливает stream fail state; цикл пропускается, но ниже всё равно идут шесть Inventory сообщений и destructor. Нет поиска других файлов, DeleteFileA, записи cfg, проверки времени файла или fallback-path внутри этого entry.
+
+## getline и EOF
+
+Вся обработка строки зависит от BYTE state(stream+virtual-base+0c)&6==0: failbit2/badbit4 завершают цикл, только eofbit1 не мешает. Shared helpers1002f550→1002f350/1002f49f используют delimiter из ctype facet virtual+20(10), обычно LF; delimiter потребляется, в S не сохраняется. S очищается только при успешном sentry10037300(stream,1), whitespace не пропускается. Пустая delimiter-строка считается извлечённой; EOF до первого извлечения даёт fail|eof, EOF после байтов — один eof, так что последняя строка без LF обрабатывается. Последующий вызов при ненулевом state ставит fail и может оставить прежнюю S. 1002f49f — continuation того же native frame, а не независимый application entry. Exceptions зависят от mask; primary не делает rollback предыдущих mutations.
+
+## Полная грамматика и порядок проверок
+
+Ровно шесть независимых if в порядке: substring "health ", "stamina ", "quicksel1 ", "quicksel2 ", "quicksel3 ", "weapon_". Case-sensitive1013f5f0 ищет label в любом месте текущей NUL-terminated S; позиция совпадения игнорируется. В первых пяти ветках удаляет первые min(unsigned length,K) байт, а не префикс до найденной позиции; K=7,8,10,10,10. Native memmove101406b0 сдвигает оставшиеся length+1 байт вместе с NUL. Все следующие проверки используют уже изменённую S. Нет else-if, strtok, trim, отдельной comment grammar, key=value parser или case folding. Неизвестная строка не меняет поля непосредственно; строка, выглядящая как комментарий, всё же обработается, если содержит label. Отдельных labels playerstats_* и записи статистики/timestamp438 в полном теле нет.
+
+## Поздняя проверка256 и atoi
+
+Для каждой из пяти веток и weapon_, а также clip/ammo, сначала копирует S до первого NUL в scratch EBP-110h (256байт). Только ПОСЛЕ копии сравнивает unsigned S.length>=256 и вызывает range-check failure1013dd48 через100c6dd2. При меньшей длине ставит scratch[S.length]=NUL. Это не безопасное усечение; embedded NUL не обязан совпадать со std::string.length. Numeric converter1016b55e→1016a01f(NULL,text,NULL,10,1): decimal signed32, locale-whitespace, необязательный один знак, цифры до первого неподходящего байта, отсутствие цифр→0. Суффикс не проверяется. Overflow detector10169fb8 насыщает до INT_MAX/INT_MIN и errno=22h; parser errno не читает. Сохранённые shared CRT C/ASM подтверждают это для данного backend, не для любой реализации atoi.
+
+## HP и stamina
+
+Health: atoi затем MOVD/CVTDQ2PS signed int32→float32 и store P.pev.health(+164) в100c6760. Stamina аналогично P.m_fStamina(+21f0) в100c682c. Native save descriptors подтверждают владельцев/offsets, преобразование подчиняется MXCSR rounding. Нет float-parser, max-value clamp, отрицательного guard, проверки живости, HP-message, healthbar, TakeHealth или stamina API. Например ASCII12.75 даёт12, nan без цифрового начала даёт0. Пропущенные поля остаются прежними, повторы overwrite; до цикла не очищается состояние player. Статистика из restore caller не является записью этого parser.
+
+## Quick-select копируется в обратную сторону
+
+После удаления label/copy/late guard native100c68de/69ae/6a7e загружает SOURCE ECX=P+204c/20cc/214c, EDX=scratch−ECX; loop MOV AL,[ECX],INC ECX,MOV [EDX+ECX-1],AL. Таким образом существующий player quick-select копируется В scratch, а loaded value не присваивается player. Native PLAYER descriptors m_sQuickSel1/2/3 имеют128байт, но этот второй NUL-copy не ограничен128/256 и не проверяется дополнительным guard. В S остаётся загруженное value после удаления label; последующие проверки могут сработать на нём. Обычная реконструкция strcpy(player.quicksel,loaded) поменяла бы подтверждённое поведение оригинала.
+
+## weapon_ и byte latch10226488
+
+Если текущая S содержит "weapon_", не удаляет его и не требует prefix. После scratch copy/late guard записывает BYTE global10226488=1 (100c6b22), вызывает100e0a80(ECX=P,S.c_str(),0,0) в100c6b31, затем безусловно на обычном возврате BYTE10226488=0 (100c6b3c). Возврат GiveNamedItem игнорируется. Передаётся вся S, не scratch и не адрес найденной подстроки. Предыдущее значение latch не сохраняется: это overwrite1→call→overwrite0, не save/restore и не per-player field. Если callback не вернулся нормально, последняя запись не гарантирована; RAII/finally для latch в primary не доказаны.
+
+## Перенос latch в item и граница звука
+
+Support100e0a80 native100e0c41..54 после успешных CreateNamedEntity/EntOffsetOfPEntity: если BYTE10226488!=0, пишет DWORD item edict+2d0=1 и очищает byte. При edict.entvars offset80h это pev.iuser3(+250), что подтверждено native ENTVARS table. Отдельно GiveNamedItem всегда ставит iuser4(+254)=1 на этом успешном пути; это другой marker. Ранние weapon gates/creation failure могут не потребить latch, но map parser после обычного возврата всё равно обнулит его. Global не является sound API: в полном primary нет EmitSound/100fc9f0, поэтому назвать его гарантированным mute всех pickup звуков нельзя. Значение iuser3 для каждого derived weapon и его downstream sound consumer остаются внешней границей. Сам факт producer10226488→iuser3 теперь установлен без предположений о звуке.
+
+## Создание — отдельная граница
+
+GiveNamedItem100e0a80 проверяет собственные weapon ограничения; использует classname−engine.stringPool в CreateNamedEntity, не вызывает AllocString для переданного S. Восстановитель не должен приписывать map parser автоматическую интернизацию произвольного heap/inline string в engine pool. Helper на успехе ставит markers, вызывает DispatchSpawn100167d0 и DispatchTouch10016980, но map parser не проверяет успешную выдачу, returned owner, private lifetime или отказ derived callbacks. Он не очищает существующий inventory и может пройти к поиску уже имеющегося оружия даже после неудачной попытки создания. Полный helper описан в server-player-equipment, не расширен до всех derived weapons этим пакетом.
+
+## Шесть цепей и условные payload строки
+
+После GiveNamedItem обходит heads P+2514..2528 (шесть), next item+164. NULL head пропускается. Только HEAD сравнивает classname с точным case-sensitive "weapon_action"; совпадение пропускает всю цепь, последующие nodes не повторяют action-filter. Для каждого node сначала проверяет nonNULL ItemInfo primary-ammo-name по10231890+id(+168)*2ch, затем точное classname==текущая S. Только при совпадении читает две дополнительные строки. Первое getline при state&6==0 даёт atoi→node.m_iClip+1e4 (100c6c78). Второе выполняется даже после отказа первого; при своём state&6==0 даёт atoi→P.m_rgAmmo+2540+4*node.primaryAmmoType(+1dc) (100c6cfb). Нет id/index bounds, clip capacity, GiveAmmo или reserve clamp; save descriptors задают32 ammo DWORD, но reader их диапазон не проверяет.
+
+## Продолжение после совпадения и incomplete record
+
+Нет break после совпадения node. Дополнительные getline меняют общую S, и следующие nodes/heads сравниваются уже с clip/ammo-строкой, а не с сохранённым weapon name. При fail sentry может оставить прежнее S. Если нет exact matching owned item с primary-ammo-name, две строки вообще не потребляются в этой ветке: следующая внешняя итерация прочитает их как обычные строки. EOF после clip допускает изменение clip без ammo; отсутствие цифр даёт0 вместо ошибки всего record. Позднейшие записи общего ammo-type перезаписывают один reserve slot. По завершении шести heads наружное getline обновляет S и запускает все шесть if заново; это не фиксированный независимо декодируемый трёхстрочный record.
+
+## HUD, cleanup и ошибки
+
+После любого обычного выхода из line loop (включая отсутствие файла/open failure) вызывает100e4360(P,slot1..6,DWORD[P+2200+4*(slot−1)],0), по очереди перечитывая current slot value, ещё ДО destruction stream. Это Inventory MSG_ONE: BYTE slot,BYTE0,STRING stringPool+value,BYTE P+1e9c snapshot,BYTE current P+1ef8,bool100e24a0; sender после MessageEnd очищает P+1ef8 при ненулевом значении. Поэтому последующие refresh могут отличаться. Нулевой P всю серию пропускает. Сам parser не шлёт AmmoX/WpnInfo/QSlotUpdate/HP и не пишет slots2200+. После messages освобождает heap S при capacity>=16, сбрасывает её length/capacity/NUL и вызывает100308f0(this=stream) в100c6db1.
+
+## Destructor и предел гарантии
+
+100308f0 переставляет ifstream vtable, вызывает10030290(this=stream+10h), затем istream/ios-base cleanup10122ff5(stream+70h). Filebuf destructor при owned byte+48 и file pointer+4c подготавливает буфер10037080 и вызывает fclose1016fd61. В primary нет explicit close-result check, DeleteFileA или commit marker. Стандартный путь завершается cookie-check и plain RET; ошибки allocation/open/read/facet или callback могут прервать работу, нет rollback player stores/созданных предметов. Нельзя выдавать выход из функции или шесть HUD messages за доказательство успешного полного применения cfg.
+
+## Связь с manager restore и границы статистики
+
+Native два direct calls внутри10029090:10029158 и100293c6, оба передают P одним stack аргументом и делают caller cleanup4. По отдельному server-state-restore контракту первый — no-record fallback при sv_coop_nosave, сравнившемся с0; второй — совпавшая A запись mode1 после копирования статистики. В обоих caller после parser отправляет32 AmmoX. Эти 32 сообщения и stats copy принадлежат manager, не map parser. Map cfg применяет HP/stamina и equipment поверх уже имеющегося player, не принимает playerstats_* и не пишет timestamp438, который есть в соседнем100c5300. Условия выбора A/B, return AL manager и его очистка records остаются в отдельном контракте, не выводятся из имени этого entry.
+
+## Пять удаляемых labels
+
+K decimal; offsets hexadecimal. weapon_ — шестая проверка, ничего не удаляет.
+
+| Literal | K | Owner offset / действие | Native erase |
+|---|---:|---|---|
+| `health ` | 7 | `0x164` — pev float32 from signed atoi | `0x100c66d6` |
+| `stamina ` | 8 | `0x21f0` — player float32 from signed atoi | `0x100c679e` |
+| `quicksel1 ` | 10 | `0x204c` — player existing string TO scratch | `0x100c686a` |
+| `quicksel2 ` | 10 | `0x20cc` — player existing string TO scratch | `0x100c693d` |
+| `quicksel3 ` | 10 | `0x214c` — player existing string TO scratch | `0x100c6a0d` |
+
+## Воспроизведение и точные оставшиеся вопросы
+
+`capture.py` читает hash-pinned PE, дизассемблирует bounded saved ranges и сохраняет raw descriptors/literals/call edges. `write_notes.py` генерирует этот текст и одну карточку. `verify.py` проверяет C/ASM/source hashes, каждый byte row, PE raw и native field grammar/ABI. Статическая проверка не является runtime/filesystem test.
+
+Открыты: derived item.iuser3 consumers и звук; фактический engine string-offset contract при передаче inline/heap S; полные filebuf mode/share/encoding/locale/exception semantics; исходы произвольных Spawn/Touch callbacks. Полный local body закрыт, но весь transitive call graph и игра не объявлены восстановленными. Для дальнейшей навигации конкретные edges:100e0a80→edict+2d0/pev+250→derived consumer;1002f8d0→filebuf open;10029090→данный parser, контракты manager сохранены отдельно.

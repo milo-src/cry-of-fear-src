@@ -1,0 +1,231 @@
+{
+  "scope": "Static RE pass14; no game execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 29,
+  "updated_existing": [
+    "server:0x100dad40"
+  ],
+  "packages": [
+    {
+      "package": "analysis/server-item-rules",
+      "new_reviewed": 13,
+      "updated_existing": 0,
+      "primary_count": 13,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All13 primary C/native and complete contract/notes;4 support ASM. Independent17C/17ASM/564byte rows/416raw/3RTTI-vtables/362descriptors. Verified staged PUSH0 before no-stack carry query, cached old owner vptr plus reloaded new owner ECX, signed limits,32 case-sensitive ItemInfo rows versus31 folded registry slots, NaN COMISS gates, ST0/hidden Vector return, absolute time+20 reused as delay.",
+      "corrections": [
+        "Root self-review corrected100e2410 return description from pointer to normalized boolean; peer checked native MOV EAX,1/XOR EAX."
+      ],
+      "final_hashes": {
+        "contract.md": "984ee4666835c502a41ce0157909ed79c8a733c418fe4158c22bb9d22f408971",
+        "notes.json": "dc7ec4f190393f7719f34929a93402650a6a6d3637149bb621da190f6b6b61be",
+        "evidence.json": "54f19039a89586077616e11aef852c918fa299c841305e5e9b3923d697161feb",
+        "capture.py": "7d96ebb9d58432d62553bae0c9a2add05678a5be9cbede96e8ce672fb6e0af52",
+        "verify.py": "c1f3b4ca229ff95bc62dd0dbd813b4e775c3aff72b1a7dbc0b531c67df27f37d",
+        "write_notes.py": "3dedb54ecc8c82c67f772e0b9ec6bb9cef9b61bb351597d563d041cdb1a57c89"
+      }
+    },
+    {
+      "package": "analysis/server-player-inventory",
+      "new_reviewed": 3,
+      "updated_existing": 1,
+      "primary_count": 4,
+      "author": "client_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "All4 primary C/native including both100dad40 ranges and full contract/notes. Root checked native callback arguments,3 distinct virtual180 queries, duplicate success returning0, ammo index on accepted<1, pointer-equality localized strings,32bit arithmetic and wire ordering. Supporting empty-slot/respawn/Inventory ABI and prior3 evidence paths preserved. Independent24C/26ASM/2114byte rows/363raw,155descriptors/4vtable prefixes.",
+      "corrections": [
+        "Added explicit string pool and target classname caching before selected-chain traversal; verified against native.",
+        "Expanded previous100dad40 summary: no unconditional insert on success; full GUI inventory rejects before duplicate check, weapon-name dedup can return1 without write, sound/Syringe remain possible."
+      ],
+      "final_hashes": {
+        "contract.md": "a4d36a2338849b62d94c1301fda48c481b3062de58ebea8c0f2d8a87aa2a1128",
+        "notes.json": "56ab06f07d4f7078be84fee93a449427b1da8d21d08102639f5f55c1bf2b74dd",
+        "evidence.json": "76075cd1d05f3da9cd63fa97e5c45ec622a650e0e5e913c5460d0a803038f84f",
+        "capture.py": "746ee2142bcc5c37b1bb762ae69adf87b83adda1ad2e412b7199c8c2c458530b",
+        "verify.py": "c780c3587594d9bb3a45aec743aa55fdfe6253e15270f26ee9b8a81a7a992db5",
+        "notes-updated.json": "6735ab05fb841f66b977e16952b15f7587db598d5102da2e5384ba19283bfd1e"
+      }
+    },
+    {
+      "package": "analysis/server-stats-lifecycle",
+      "new_reviewed": 5,
+      "updated_existing": 0,
+      "primary_count": 5,
+      "author": "shader_inventory",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All5 primary C/native and contract/notes, critical float/integer formatter/flush/close/conversion support. Independent21C/23ASM/1610byte rows/416raw/3save tables/1RTTI/2exports. Confirmed NaN health float writer, head-only weapon_action chain filter, latched679/680 without reset,9native field labels,RET4 writer,close state and throw; atomicity and reader roundtrip not claimed.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "de2ed4fcd3e0f7cd95e5bb361aef6798657109867de4e6a601f9947ca4fec7e7",
+        "notes.json": "abb41e8dcdaef71bb17bb63e18db22b50d55479eab69c80c5577ac598a990ef4",
+        "evidence.json": "67df61d37ac8c0a31d7680d916b53c23e1fde83995835355d07fa7e8ae64b915",
+        "capture.py": "01d5c7487ab6b83cdd21d8ea2219838d6a02ed09c88f835a0dda7b10bc33724e",
+        "verify.py": "5849dbc62e4cf89a7d56a1c08cc43952d2e412e405d7e0aaedd55cf938d7cb3e",
+        "write_notes.py": "795647e4bced0657a5794d763ae9fd3679084c7d812ad6ff6c3a9d8fdb9d47d2"
+      }
+    },
+    {
+      "package": "analysis/server-derived-death",
+      "new_reviewed": 8,
+      "updated_existing": 0,
+      "primary_count": 8,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All8 primary C/native and contract/notes plus critical support. Independent33C/33ASM/1906byte rows/282raw/3RTTI-vtables/4save tables/export235; raw pointer scan recomputed. BookSimon frags NaN immediate path and unused policy; SquadRemove resolvedMember==context rather than stack member, self fallback,virtual254 PUSH this,wrapper tail ABI. Two concrete wrapper owners explicitly unresolved.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "f1e04cdd5776d3a1ff210851734e25e00206cc0491ff23787734da24f6d78210",
+        "notes.json": "19eaa3c544050812e948d7ee96cfc438614696972141e05e6bd23a955b638be9",
+        "evidence.json": "5c3183b5ac967bd2db4f2added19b3616d80d0f620574339f21b4abb64592639",
+        "capture.py": "ee9a226da92ac4cd609373aae92276b3c0543d892e86cc9bb74a4fb8e976c401",
+        "verify.py": "fcf93ade8857582903af8f5c04d13434c9d09cb43459a779752d62667b71551c",
+        "write_notes.py": "224caf491f6d7d8c068add452299584a8f6fcf57bc881e74a09ff4f80d3fb1bc"
+      }
+    }
+  ],
+  "notes_contract_parity": true,
+  "prior_reviews": {
+    "exactly_preserved": 1787,
+    "expanded": "server:0x100dad40",
+    "previous_review_text": "  Предлагаемое имя: Player_AddInventoryDescriptor\n  Подсистема: inventory\n  Назначение: Помещает описание предмета в первый свободный слот инвентаря.\n  Уверенность: высокая для описанного статического поведения\n  Разбор: Обычные слоты 1..6; переполнение возвращает неуспех; сохраняет дескриптор, посылает обновление и weapons/item_get.wav. Есть отдельный режим трёх слотов и оружейные ветви, не разобранные полностью.\n  Основание: decompiled/server/captures/ghidra-key-batch/003-pseudocode.c\n  Основание: decompiled/server/partial-pass/functions/0x100dad40.c\n  Основание: analysis/inventory/behavior.md\n",
+    "previous_review_text_sha256": "b44cfaa6ed225982ab6149fbb5656aac0f0b6c4c1ae272a27fe16718cf7d2bc4",
+    "evidence_preserved": "All3 original evidence paths retained. Previous partial claims refined by full primary body; GUI successful dedup without insert is explicit, not silently normalized."
+  },
+  "navigation_cleanup": "Removed29 new primary addresses and expanded100dad40 from active queue. Added precise links for player ammo/inventory/rules,9statistics labels/start/text save/restart and selected derived deaths. New queue covers readers/native writer callers, remaining registry/ItemInfo producers, arbitrary overrides and unknown wrapper owners. Saved-corpus coverage remains separate from full-game coverage.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-derived-death/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-death/contract.md",
+          "old": "91f7c29b942048cf9411dc2f3ebece7ce5bb2f8017cdd0f6fdae6ec397b72c71",
+          "new": "362756c566c2b38f1da06a5982a86999daf8568a8c1314ec51e78886d11f0e9d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-item-pickup/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-item-lifecycle/contract.md",
+          "old": "4a823b8b91dd1150a503fa0e1d03eaa88be12d3bde50460045bbd58f083f2173",
+          "new": "0d35da6c651a9e30083c6809d4650acf7d668efbc82f912ecb40c406a0dfe81d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-item-rules/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-item-pickup/contract.md",
+          "old": "b57b5df7c52e5315800e1e97e481d05ae265e31dcffa34f3511b1f8c96a58aaf",
+          "new": "bb0a05ef0354cff12800271fee688363648e9057cb2ffe921011986c9eb6fb4a"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-player-inventory/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-item-pickup/contract.md",
+          "old": "b57b5df7c52e5315800e1e97e481d05ae265e31dcffa34f3511b1f8c96a58aaf",
+          "new": "bb0a05ef0354cff12800271fee688363648e9057cb2ffe921011986c9eb6fb4a"
+        },
+        {
+          "path": "analysis/server-item-lifecycle/contract.md",
+          "old": "4a823b8b91dd1150a503fa0e1d03eaa88be12d3bde50460045bbd58f083f2173",
+          "new": "0d35da6c651a9e30083c6809d4650acf7d668efbc82f912ecb40c406a0dfe81d"
+        },
+        {
+          "path": "analysis/inventory/behavior.md",
+          "old": "27ace04128c1f153be805b31dbed710efc0387252ce39c0666fa0da96f232220",
+          "new": "d06da9d54150eedf7c0058a40f91181c744161d8a8735fe9177672e777a6379f"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-stats-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-score/contract.md",
+          "old": "3d1c3c3a99ec955c322ee7bcba0bd3a0facf8d230a53f2352db03071cba425a5",
+          "new": "83dc75b5e7ba559a3518dfd38e1a175a531ab5da04ce8a97b7bb0008fb4ca426"
+        },
+        {
+          "path": "analysis/server-unlock-callers/contract.md",
+          "old": "14d0f85f3d3a4f443178af647657b6546b715e2af8c27df6b499077455e265ac",
+          "new": "2236b95954f6d1e659be2bf12e645da985755d7e910da034982b1c2584739b19"
+        },
+        {
+          "path": "analysis/server-item-lifecycle/contract.md",
+          "old": "4a823b8b91dd1150a503fa0e1d03eaa88be12d3bde50460045bbd58f083f2173",
+          "new": "0d35da6c651a9e30083c6809d4650acf7d668efbc82f912ecb40c406a0dfe81d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-stats-score/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-callers/contract.md",
+          "old": "14d0f85f3d3a4f443178af647657b6546b715e2af8c27df6b499077455e265ac",
+          "new": "2236b95954f6d1e659be2bf12e645da985755d7e910da034982b1c2584739b19"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-actions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-callers/contract.md",
+          "old": "14d0f85f3d3a4f443178af647657b6546b715e2af8c27df6b499077455e265ac",
+          "new": "2236b95954f6d1e659be2bf12e645da985755d7e910da034982b1c2584739b19"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-derived-death": {
+      "returncode": 0,
+      "output": "PASS 33 C, 33 ASM, 1906 byte rows, 282 raw, 8 cards"
+    },
+    "analysis/server-item-pickup": {
+      "returncode": 0,
+      "output": "PASS 9 cards 34 C 35 ASM 2259 byte rows 198 raw; ABI/owner/FP/155descriptors assertions"
+    },
+    "analysis/server-item-rules": {
+      "returncode": 0,
+      "output": "PASS 17 C, 17 ASM, 564 byte rows, 416 raw, 13 cards; ABI/registry limits/descriptor checks"
+    },
+    "analysis/server-player-inventory": {
+      "returncode": 0,
+      "output": "PASS 3 new + 1 updated; 24 C 26 ASM 2114 byte rows 363 raw; ABI/return/network/155descriptors assertions"
+    },
+    "analysis/server-stats-lifecycle": {
+      "returncode": 0,
+      "output": "PASS 21 C, 23 ASM, 1610 byte rows, 416 raw, 5 cards"
+    },
+    "analysis/server-stats-score": {
+      "returncode": 0,
+      "output": "PASS 835 saved-ASM score/ratio replays, exact thresholds/overflow/BYTE gate; synthetic NaN guards; no target execution\nPASS 6 C, 6 ASM, 2355 byte rows, 223 raw, 3 cards"
+    },
+    "analysis/server-unlock-actions": {
+      "returncode": 0,
+      "output": "PASS 20 C, 20 ASM, 1927 byte rows, 549 raw, 8 cards"
+    }
+  },
+  "verification_report_sha256": "46f5abdb3b084f672ee5de46745a5e5accc993d3aefd9703c80ba6a75dfd8120"
+}

@@ -1,0 +1,121 @@
+# CFuncValve: полный локальный lifecycle
+
+Только статический оригинальный server hl.dll, SHA-256 751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641. 14 новых REVIEW, baseline pass26:2012 разобранных/6643 pending. Unlock10042cf0 остаётся прежним support, не новой карточкой. Все offsets и адреса hex; обычные числовые величины и durations явно decimal/float. Native evidence, RTTI, exports, таблицы и полные ASM закреплены capture.py/evidence.json и независимо перепроверяются verify.py; ни игра, ни DLL не исполнялись.
+
+Путь: func_valve thunk→factory→vtable Spawn/Precache/KeyValue/Save/Restore/Use. Spawn выбирает FindTargetEnt или ProThink; Use меняет углы и срок charge; ProThink делает возврат, copy render state и completion. Отдельный inventory key callback разблокировки: [предыдущий контракт](../server-inventory-key-use/contract.md). Семантика base scheduler/handles: [parent-tree](../server-parent-tree/contract.md); serializer: [serializer](../server-serializer/contract.md).
+
+## Native поля и binding
+
+VALVE table10212410 содержит ровно7 descriptors. Поля +180/+184 — имена lock strings; +188 — доказанный KeyValue unlockedmsg, но descriptor отсутствует. +18c..194 initial vector, +198..19c EHANDLE, +1a0 nextCharge, +1a4 sound stage, +1a8 sound deadline. pev.angles+50..58, iuser1+248 threshold, iuser2+24c step, iuser3+250 completion, iuser4+254 valve axis, impulse+188 linked axis; message+1d8 выбирает имя linked entity, target+1cc — completion output. Назначения основаны на native writes/reads, не SDK аналогии. V+e4 принимает activator EHANDLE, но его descriptor name/внешние consumers не установлены данным пакетом.
+
+## 0x10042560 CFuncValve_InstanceOrAllocate
+
+Полное native тело 10042560..100425bb, cdecl один entvars pointer, RET без очистки argument; EAX возвращает объект вопреки void в C. При NULL argument вызывает engine CreateEntity через slot21, при ненулевом edict берёт edict+80h. Если CreateEntity вернул NULL, последующее чтение entvars+20c не защищено.
+
+Из entvars+20c берёт edict, из ненулевого edict+7c — private data. Ненулевой private pointer возвращается как есть, без RTTI/classname проверки или повторной инициализации. Иначе engine PvAllocEntPrivateData(edict,0x1ac), затем при success пишет vtable101aff4c и object+4=entvars. Native allocation failure не является безопасным return NULL: XOR EAX,EAX, затем MOV [EAX+4],ESI. Нулевое edict допускается до allocator; исход engine здесь не доказан.
+
+RTTI COL/type descriptor подтверждает имя CFuncValve. Raw vtable связывает +2c Spawn10042ba0, +30 Precache100429d0, +34 KeyValue10042740, +38 Save10042b40, +3c Restore10042b00, +40 ObjectCaps100429b0, +5c state10042720, +e8 Use10042da0. Это доказанная concrete binding, но factory сама не вызывает Spawn/Precache и не заполняет остальные поля; нулевую инициализацию allocator нельзя выводить из её тела.
+
+## 0x10043380 func_valve_ExportFactoryThunk
+
+Реальная native функция — ровно 5 bytes 10043380..10043384: E9 к10042560. Декомпилятор развернул в этом C всё тело factory, но собственного второго allocation path здесь нет. Сохраняет исходный cdecl entvars argument и EAX результата factory; отдельного RET и изменения ECX/stack нет. Native export directory: func_valve ordinal602. Ошибки/NULL/ownership те же, что у10042560, не дополнительная проверка.
+
+## 0x10042740 CFuncValve_KeyValue
+
+Полное тело10042740..100429a2, thiscall ECX=V, stack KeyValueData*, RET4. Читает key=kv+4 и value=kv+8 без NULL/length guards. Сравнения case-sensitive до NUL: шесть встроенных strcmp-подобных циклов, unlockedsnd/unlockedmsg через1000aba0 с full EAX1 при equality,0 иначе. Это восемь ключей: lockedby, lockedmsg, lockedsnd, unlockedsnd, unlockedmsg, movewith, skill, style. Prefix/case folding/trim отсутствуют.
+
+Первые шесть строковых keys вызывают engine AllocString(value) slot67. lockedby пишет V+180, lockedmsg V+184, lockedsnd V.pev.noise2(+1f4), unlockedsnd V.pev.noise3(+1f8), unlockedmsg V+188, movewith V.m_MoveWith(+18). После каждой записи kv.handled(+c)=1. Возвращаемый AllocString index не проверяется; пустое value не отфильтровано. Названия m_sLockedBy/m_sLockedMsg/m_MoveWith и noise2/noise3 подтверждены native descriptors, а +188 именуется здесь по доказанному key, не по отсутствующему descriptor.
+
+skill/style передают value в1016b55e (Ghidra _atoi; native wrapper передаёт radix10/flag1 в1016a01f) и пишут полный EAX соответственно V.m_iLFlags(+60) / V.m_iStyle(+64), затем handled=1. Локальных clamps, error status/end-pointer или валидации диапазона нет. Внутренний CRT parse/locale/overflow1016a01f не объявляется полностью разобранным этим пакетом.
+
+Любой иной key: handled=0, return; base KeyValue не вызывается. Здесь нет обработки iuser1/iuser2/iuser3/iuser4, impulse, target/message/model; их возможная engine/general dispatch обработка вне локального parser. Все собственные пути возвращают ненормализованный EAX, результатом обработки является kv+0c. unlockedmsg+188 отсутствует в VALVE7 и BASE22 descriptors; поэтому точечная запись/использование доказаны, а сохранение этого поля собственным Save не подтверждается.
+
+## 0x100429b0 CFuncValve_ObjectCaps
+
+Полное тело100429b0..100429c1, thiscall V, без stack args, RET, full EAX=0x10. Если V.m_pMoveWith(+14) nonNULL, вызывает его virtual+40 с ECX=parent и игнорирует результат. Затем в любом случае MOV EAX,10h. Нет OR с parent flags, проверки циклов/lifetime parent или использования spawnflags. Native BASE descriptor связывает +14; 10h соответствует FCAP_CONTINUOUS_USE в закреплённом SDK const.h, числовой результат доказан самим native.
+
+## 0x100429d0 CFuncValve_Precache
+
+Полное тело100429d0..100429fb, no stack args/RET. Последовательно10116a30("buttons/valve_turn.wav"), valve_start.wav, valve_end.wav, placevalve.wav. Native10116a30 tail-jumps engine PrecacheSound slot1. Caller сохраняет прежние pushed arguments до общего ADD ESP,10h, но каждый вызов получает ровно свой верхний path argument. EAX последнего callback остаётся в регистре, отдельный статус не формируется.
+
+Никакие custom noise2/noise3 из KeyValue здесь не precache-ятся; path placevalve.wav в этом теле только регистрируется, его playback здесь не доказан. Нет model precache, проверок успеха или id cache; факт запроса не доказывает наличие ресурса/слышимый результат.
+
+## 0x10042ba0 CFuncValve_Spawn
+
+Полное тело10042ba0..10042ce3; thiscall V, RET, EAX не статус. Сначала virtual+30 Precache, затем перечитывая pev пишет solid(+10c)=4, movetype(+108)=7. Вызывает10119fe0(V,&pev.origin),1011a030(pev,&pev.mins,&pev.maxs), engine SetModel(pev.edict,stringBase+pev.model). Порядок именно origin→size→model. Native wrapper SetOrigin перед engine проверяет virtual+d0; concrete CFuncValve slot+d0 указывает1000db80 (не следует переносить player-ветку на valve).
+
+Если pev.message(+1d8)==0, сначала virtual+8(0.1f), потом V.m_pfnThink(+78)=ProThink10042a00. Иначе сначала virtual+8(2.0f), затем callback FindTargetEnt100426a0. Эти delays задаются как float32 bits3dcccccd/40000000. Concrete virtual+8=1000e1f0 перенаправляет на virtual+4(delay,0);10017110 использует pev.ltime для movetype7, иначе globals.time, и отдельный parent scheduler для связанных объектов. Поэтому задержки Spawn не следует безусловно считать globals.time+delay.
+
+После scheduler/callback assignment проверяет V.m_sLockedBy. Ненулевой → rendermode5, renderamt0; нулевой → rendermode0, renderamt255.0f. Затем signed iuser1>=360 заменяет на359 (отрицательные остаются); signed iuser2<=0 заменяет на2 (верхнего предела нет); iuser4>2 заменяет2, затем iuser4<0 заменяет0. В конце iuser3=0 безусловно. Native ENTVARS даёт offsets iuser1+248/iuser2+24c/iuser3+250/iuser4+254. Это не unsigned clamp и не округление float.
+
+Spawn не сбрасывает angles, m_iOn, m_flNextCharge, m_flSoundTime, m_hRotateModel или cached initial angles. Их исходное значение нельзя вывести из отсутствия записей; повторный Spawn сбрасывает completion latch и render state, но не все стадии вращения. При внешних callbacks pev перечитывается между многими stores, поэтому нельзя считать всю процедуру атомарной.
+
+## 0x100426a0 CFuncValve_FindTargetEnt
+
+Полное тело100426a0..10042715, thiscall V, RET; native export ?FindTargetEnt@CFuncValve@@QAEXXZ ordinal123. Если pev.message!=0, вызывает10118590(NULL,stringBase+message): этот wrapper сначала10118980, при EAX0 ищет targetname через10118480. Это существующий resolver, а не голый engine first-target loop; полная alias policy описана отдельно в server-targets.
+
+При ненулевом результате X присваивает EHANDLE V+198 через10017740(X), затем100177a0(&V+198) без дополнительного NULL guard, читает X.pev.angles и копирует все три float bits в V+18c..194. Native descriptors подтверждают m_hRotateModel и m_vInitialEntityAngles. EHANDLE содержит edict и serial;10017780 проверяет edict/serial, но не гарантирует nonNULL private data,100177a0 читает edict+7c после serial check. Если найденный private object исчезнет/станетNULL между helpers, последующее dereference не защищено.
+
+Независимо от пустого message или failed search вызывает virtual+8(0.1f), затем пишет m_pfnThink=10042a00. При search failure старый handle и cached angles не очищаются; retries FindTargetEnt не планируются. Нет запрета найти самого себя, нет classname/type проверки и нет проверки импульса/углов ведомого. Эти границы важны для повторного вызова и внешней мутации.
+
+## 0x10042720 CFuncValve_GetChargeState
+
+Полное тело10042720..1004273a, thiscall V, RET, full EAX. Загружает float globals.time, сравнивает COMISS time,[V+1a0], MOV EAX,4; CMOVA EAX,0. Поэтому 0 только при строго ordered time>m_flNextCharge, а equality, time<deadline и NaN любой стороны дают4. Поле m_flNextCharge подтверждено descriptor type15 TIME. В теле нет проверки m_iOn, iuser3, lockedBy, player или исправления таймера. Concrete virtual+5c=этот entry; ProThink использует 0 как разрешение отпускания/возврата.
+
+## 0x10042da0 CFuncValve_Use
+
+Полное native тело10042da0..1004312e. Thiscall ECX=V, RET10h: четыре stack Use args присутствуют, но читается только первый activator A; caller/useType/value игнорируются. A==NULL либо signed pev.iuser3>0 → return. Отрицательный iuser3 проходит этот guard, хотя completion/return helpers требуют именно0. Далее EHANDLE V+e4= A через10017740 ДО A.virtual+d0. Если полный EAX этого callback0, return, но handle уже записан. Имя поля+e4 и concrete runtime-класс A здесь не выводятся из одного callsite.
+
+Затем COMISS V.m_flNextCharge,globals.time / JAE return. Ordered deadline>=time отвергается, ordered deadline<time и unordered/NaN проходят. Это отличается от более строгого ordered GetChargeState. При lockedBy!=0 optional lockedMsg отправляется10119810(A,string,5,0), затем optional pev.noise2 воспроизводится100fc9f0(V.edict,4,path,1.0f,0.8f,0,100). После locked ветки никаких timer/angles/m_iOn updates, поэтому нет собственного throttling отказных сообщений; callbacks могут видеть всё ещё locked state.
+
+Unlocked: если m_iOn==0, сначала m_iOn=1, затем valve_start.wav channel3 с volume1, attenuation0.8, flags0,pitch100, после callback перечитывает m_iOn и globals.time и пишет m_flSoundTime=float32(double(time)+double0.31). Если текущий m_iOn==1 и ordered time>=m_flSoundTime, пишет m_iOn=2 до valve_turn.wav channel6 с теми же параметрами. NaN в sound comparison блокирует эту вторую стадию. Иные m_iOn не препятствуют вращению; никакой wait до старта звука для angles нет.
+
+Выбирает собственную ось по signed pev.iuser4:0→angles.x,1→y,2→z; прочее пропускает только этот шаг. Делает float32(int32 iuser2)+angle через CVTDQ2PS/ADDSS, пишет результат, затем перечитывает pev и выбранный angle; если ordered angle>359.0f, пишет359.0f. Нет modulo360, нижнего clamp, dt множителя или проверки finite. NaN остаётся NaN. iuser2 перечитывается при каждой новой операции; Spawn нормализует только <=0, direct/restore mutation может дать отрицательное значение.
+
+Затем проверяет m_hRotateModel через10017780. При валидном serial выбирает ось ведомого по V.pev.impulse(+188), не по iuser4:0/1/2→X.angles x/y/z. Для выбранной оси ещё раз проверяет handle, затем отдельно берёт private object для addition, сравнения и возможного clamp. Прибавляет текущий V.pev.iuser2 и так же clamp только ordered >359.0f. Нет гарантии nonNULL private data после handle-valid и нет защиты от self handle: если X==V, возможно двойное приращение выбранной общей оси.
+
+В конце любой unlocked проход, даже с invalid axes/no linked model, обновляет m_flNextCharge=float32(double(current globals.time)+double0.025). Binary operands101ae0a0/101b00d8 подтверждают именно double0.31/0.025, а не ADDSS с округлённым float constant. Здесь нет FireTargets/проверки threshold/completion latch update; завершение произойдёт лишь при последующем ProThink. EAX на выходе не нормализуется и не является success flag.
+
+## 0x10043130 CFuncValve_ReturnRotation
+
+Полное тело10043130..10043370; thiscall V без args, RET, EAX не статус. Если pev.iuser3!=0, сразу return (включая отрицательное). Иначе для iuser4=0/1/2 выбирает собственную ось: если ordered angle>0, float32 angle-=float32(int32 iuser2), Независимо от того, выполнялось ли это вычитание, следующая отдельная проверка читает angle (после вычитания также перечитывается pev): если ordered angle<0, записывает +0.0 bits. Изначально отрицательный angle тоже обнуляется. Invalid axis пропускает собственную часть, но не дальнейшую linked часть. При masked FP exceptions NaN не проходит ни comparison; отрицательный step может увеличивать angle, поскольку helper повторно его не нормализует.
+
+Если10017780(&V.m_hRotateModel)==0, return. Иначе V.pev.impulse выбирает0/1/2; invalid → return. Сравнивает linked angle с соответствующим cached m_vInitialEntityAngles(+18c/+190/+194). При ordered angle>initial вычитает float32(int32 текущего V.iuser2), заново получив private object; Независимо от выполнения вычитания заново читает private object/initial и отдельной проверкой при ordered angle<initial пишет точные cached bits. Изначальный angle ниже initial также поднимается до initial. Equality сохраняется; при masked FP exceptions NaN comparisons ничего не исправляют. Повторные100177a0 после первого handle-valid не имеют отдельных NULL checks.
+
+Нижняя граница для собственной модели0, для linked model сохранённый угол, а не0. Нет upper clamp, dt scaling, SetOrigin/SetAngles callback или изменения m_iOn/таймеров/звука. Прямые writes entvars. Собственная часть выполняется раньше linked, поэтому self handle влияет на обе последовательные операции; duplicate identity не исключается.
+
+## 0x100425c0 CFuncValve_CheckCompletion
+
+Полное тело100425c0..1004269b, thiscall V, RET. Требует pev.iuser3==0; iuser4=0/1/2 выбирает angles.x/y/z, иное return. Signed iuser1 конвертируется в float32 CVTDQ2PS. COMISS angle,threshold / JB return означает completion только при ordered angle>=float32(iuser1); NaN отклоняется. Это текущий абсолютный угол, не накопленная дельта от Spawn или linked initial.
+
+При threshold success вызывает10101ff0(stringBase+pev.target,V,V,3,0.0f): оба object arguments именно сам valve, activator сохранённого Use не передаётся. Нет отдельного target string_t!=0 guard. Затем перечитывает vtable и вызывает virtual+8(0.0f), после callback перечитывает pev и пишет iuser3=1. FireTargets и scheduler происходят ДО latch, потому reentrant callback может ещё видеть0; полного once-only across reentrancy guard нет.
+
+Затем стоп-запрос1001e990(V.edict,6,"buttons/valve_turn.wav"), который вызывает100fc9f0 с volume0/attenuation0/flags20h/pitch100, и valve_end.wav channel3 volume1/atten0.8/flags0/pitch100. m_iOn не очищается, сам think pointer не сбрасывается. Внешний caller ProThink после этого всё равно назначит delay0.025f, поэтому этот schedule(0) не доказывает остановку think: numeric latch прекращает вращение/return/completion, но render synchronization и scheduling продолжаются.
+
+## 0x10042a00 CFuncValve_ProThink
+
+Полное тело10042a00..10042afa, thiscall V, RET; native export ordinal230. Сначала V.virtual+5c. Если EAX==0 и текущий pev.iuser3==0, вызывает10043130 ReturnRotation; затем m_iOn=0 и100fc9f0(V.edict,6,valve_turn.wav,0,0,20h,100). С concrete GetChargeState это ordered globals.time>m_flNextCharge. Stop-запрос повторяется на каждом таком think, в том числе при угле0; здесь нет отдельного флага sound playing.
+
+Независимо от этой ветки проверяет m_hRotateModel через10017780. При valid serial получает private object и сравнивает linked rendermode с текущим V.rendermode. При различии повторно получает private object и копирует mode; далее заново получает object/pev для renderamt, сравнивает UCOMISS/LAHF/TEST44h/JNP. Копирует amount при ordered inequality И unordered/NaN, пропускает только ordered equality. Renderfx/color/effects/solid не копируются. Нет блокировки locked/completed и no self-identity guard.
+
+Потом всегда100425c0 CheckCompletion, затем заново virtual+8(0.025f bits3ccccccd). Это float32 scheduler delay, в отличие от double0.025 arithmetic при Use. Порядок return→visibility→completion→next think существенен: если time уже вышло, angle может уменьшиться до сравнения с threshold. Даже если completion вызвал scheduler(0), внешний tail перезаписывает планирование delay0.025; m_pfnThink при этом не очищается. Никакого отдельного return при iuser3!=0 после первого guard нет.
+
+## 0x10042b00 CFuncValve_Restore
+
+Полное тело10042b00..10042b30, thiscall ECX=V, stack reader context, RET4. Передаёт context в inherited10017f30 с ECX=V. Его EAX0 немедленно возвращается; иначе ECX=context и10117010("CFuncValve",V,table10212410,count7). Возвращает EAX reader без преобразования, вопреки void декомпилятора. Собственной cleanup/retry/Spawn/FindTargetEnt после read нет, даже при read failure.
+
+Native descriptors7: m_flNextCharge+1a0 type15 count1; m_iOn+1a4 type10; m_flSoundTime+1a8 type15; m_hRotateModel+198 type4; m_vInitialEntityAngles+18c type7; m_sLockedBy+180 type1; m_sLockedMsg+184 type1. Все flags0/count1; type7 vector занимает3float. Base читает ENTVARS и BASE22; его model relink side effects возможны даже при его итоговом0. Serializer field-specific time/EHANDLE/string semantics приведены в server-serializer, это не byte memcpy всего0x1ac.
+
+Собственная таблица не содержит unlockedmsg+188 и handle+e4, а BASE22 их также не содержит. Этот факт не означает, что любые внешние сохранения отсутствуют, но именно этот wrapper их не перечисляет. Restored iuser-параметры не проходят Spawn clamps, render state не пересчитывается из lockedBy, target не перепривязывается и cached angles не переснимаются.
+
+## 0x10042b40 CFuncValve_Save
+
+Полное тело10042b40..10042b9e, thiscall ECX=V, stack writer context, RET4. Inherited10018000(V,context) выполняется первым; EAX0 возвращается сразу. Иначе заново читает pev и stringBase. Diagnostic first string для writer — stringBase+pev.targetname при nonzero targetname, иначе stringBase+pev.classname. Остальные args1011adc0(label,"CFuncValve",V,10212410,7), ECX=context, не V.
+
+Возвращает writer EAX неизменным. Доказанный core1011adc0 ставит1 на обычном возврате даже после отдельных overflow/warnings, поэтому этот wrapper не подтверждает успешную запись bool-результатом. Никакого собственного rollback/transaction/field validation нет. Привязка семи descriptors идентична Restore; time fields15, handle4, vector7 и строки1 сохраняются посредством serializer contracts. m_iOn сохраняется int10, а не bool; angles/threshold/axes живут в ENTVARS, не в этой семёрке.
+
+## Закрытые границы и оставшееся
+
+Закрыты полные локальные тела14 и numerical concrete vtable/export binding. Не заявлены: полная engine dispatch cadence, renderer/physics реакция на прямые angles writes, все map producers iuser/impulse/message, runtime ресурсная доступность, все consumers handle+e4 и полная CRT1016a01f error grammar. Resolver10118590 и inherited serialization/scheduler связаны с уже существующими контрактами; внешние callbacks и reentrancy не считаются атомарными. Дополнительные source/runtime эффекты за границами прочитанных helpers остаются отдельной работой.
+
+Собственный Precache не регистрирует noise2/noise3; собственный Save не перечисляет unlockedmsg+188; completion продолжает scheduling в ProThink. Это наблюдаемые границы оригинала, не предлагаемые исправления игры. Подсчёт14 не означает восстановление всей entity в исполняемом проекте.

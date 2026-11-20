@@ -1,0 +1,253 @@
+{
+  "scope": "Static reverse only; no target execution/game implementation/resources/commits",
+  "result": "PASS",
+  "new_reviewed": 7,
+  "updated_existing": [
+    "server:0x100dff70",
+    "server:0x100e0310",
+    "server:0x100e4410"
+  ],
+  "prior_review_bodies_exactly_preserved": 2002,
+  "packages": [
+    {
+      "package": "analysis/server-inventory-combine",
+      "new_reviewed": 2,
+      "updated_existing": [
+        "server:0x100e0310"
+      ],
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "server_catalog",
+        "package": "analysis/server-inventory-combine",
+        "primary": [
+          "100e3020",
+          "100e42f0",
+          "100e0310"
+        ],
+        "semantic_review": "Read all three primary saved C and full native bodies, entire contract/notes, plus critical clear/update/formatter/empty-predicate/cookie support ASM. All contracts consistent after explicit empty-predicate polarity clarification.",
+        "confirmed": [
+          "Pre-bounds slot reads occur before unsigned1..6 and inequality guards; empty predicate EAX1 means string_t==0.",
+          "Two parsed results compared mutually, not with requestedResult; first snapshot precedes second parser call.",
+          "Accessory clears chosen slot before lookup, consumes even if weapon missing, sets BYTE1f8 only if found, re-sends current value of cleared accessory slot.",
+          "Generic branch only updates GUI descriptor and neither issues AddPlayerItem nor closes panel.",
+          "Fullness mode read once, starts slot1, uses string_t emptiness.",
+          "FindWeaponById forwards virtual174 result but traverses original item.next after callback; six heads and full EAX pointer return."
+        ],
+        "provenance": {
+          "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+          "source_c": 12,
+          "asm_ranges": 15,
+          "machine_byte_rows": 856,
+          "raw_records": 415,
+          "descriptors": 384,
+          "file_pins": 60,
+          "notes": 3,
+          "independent_mapper": "Python struct PE sections: all range machine bytes, file/range/raw SHA, descriptor pointers/names and contract-note parity."
+        },
+        "findings": [
+          {
+            "severity": "wording",
+            "function": "0x100e3020",
+            "detail": "Specify original string_t==0 means helper100e4ee0 EAX1; phrase if zero after helper call is ambiguous. Native100e4ee8 SETE AL proves polarity.",
+            "status": "resolved_verified_explicit_string_t_zero_returns_EAX1"
+          }
+        ],
+        "target_executed": false,
+        "files_modified_in_reviewed_package": false
+      },
+      "final_hashes": {
+        "capture.py": "b5028562abf98bb3190d0b38a4afe88c9cb8864ba46b9c43e1f528789a7355f1",
+        "verify.py": "468ae9f4902674c9b1c5fe709604bf6082cde59c4f76bcc2fad53b446e4e9c68",
+        "contract.md": "ef551b844868151f44884d8ddf44e1f3f1df7f327b3b8d8d1a5656faa407128d",
+        "notes.json": "6fa1b6af72e9d89d1ea80bb511b4da9800655e379324592a87e78ee4e832e9db",
+        "evidence.json": "2db31ebddb88f250c94afed403de6b4861718e0b9da702b4e015eb8fc2344d61",
+        "write_notes.py": "5028b9314baba06be27c580ed6f812edbd34b0c165ebfefd544baeb8db7346bf"
+      }
+    },
+    {
+      "package": "analysis/server-inventory-key-use",
+      "new_reviewed": 2,
+      "updated_existing": [
+        "server:0x100e4410"
+      ],
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "root",
+        "package": "analysis/server-inventory-key-use",
+        "primary": [
+          "100e4410",
+          "10042cf0",
+          "10015a20"
+        ],
+        "semantic_review": "All three full saved C and complete native primary bodies read; final contract/notes checked, plus full factory, find-entity/sphere, trace bridge and door lock predicate native supports.",
+        "confirmed": [
+          "Trace path low-byte caps38 versus sphere path without caps/visibility; extra sphere lockedBy guards and first-success termination.",
+          "Original slot cleared before callbacks; all success tails ignore callback return and then click/close; mismatches channel2 versus final channel3.",
+          "Valve exact noise3 sound→message→render→lock stores with repeated pev reads and RET4.",
+          "Button no player argument, first classname player lookup, low-byte lock clear, native float32 versus double0.75 timers, direct ButtonUse four args and FireTargets five args with button as both activator/caller.",
+          "Factory null allocation branches write [0+4]; sphere wrapper stops on missing private data rather than advancing."
+        ],
+        "provenance": {
+          "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+          "source_c": 30,
+          "asm_ranges": 33,
+          "machine_byte_rows": 2220,
+          "raw_records": 579,
+          "descriptors": 475,
+          "vtables": 4,
+          "notes": 3,
+          "independent_mapper": "analysis/local/verify_fullpass26.py --pe-only server-inventory-key-use PASS; native ranges/bytes/raw descriptors/file hashes independently verified"
+        },
+        "findings": [],
+        "target_executed": false,
+        "files_modified_in_reviewed_package": false
+      },
+      "final_hashes": {
+        "capture.py": "432706203dc1553ab7d9421dbc39897e4a04fa6f1f161b544d36eb5460ea9d5e",
+        "verify.py": "d7d1c688b8bf7dc03b0779f6db8b2ba4e74d599c18819b43dc042264725d4f19",
+        "contract.md": "a1f59610e958d5735530a3d3a45de5989aea4ff9e7c8fea94cd75c411cf84f57",
+        "notes.json": "d34412b7847d55978f485eaef1b7ea7d59e3b784bfe1d78f0a61a4fc9f697a34",
+        "evidence.json": "0c5025d6a54256d2eca3e248f1e504b3122a9b60a1c946e87c3088cc0cad7bf5",
+        "write_notes.py": "19f2e1bf03b77d7c7cdd09a631ca9e570571bcc4e9f191a3214047a44d5fe7bf"
+      }
+    },
+    {
+      "package": "analysis/server-monster-movement",
+      "new_reviewed": 2,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "passed": true,
+        "module": "server",
+        "source_c": 30,
+        "asm": 30,
+        "rows": 2701,
+        "raw": 588,
+        "descriptors": 178,
+        "file_pins": 80,
+        "primary": [
+          "100c0750",
+          "100c0e70"
+        ],
+        "semantic_review": "Both complete primary C/native and all contract/notes read. Key supporting Normalize/Blocked bridge/routeempty/stop/threshold/insertion/advance/clear/MoveToOrigin native checked. U,D,L,Q and NaN/callback/NULL boundaries match. No actionable discrepancies.",
+        "method": "Independent struct PE section mapper, exact raw and complete ASM byte rows, descriptors, RTTI name/slots, SDK API slots and all-offset LE32 data refs recalculated. Author verifier additionally passed."
+      },
+      "final_hashes": {
+        "capture.py": "dfe6fb89dd368893d957b6585b16b94e146a6a5d9180807d01d5b0a1675d0cc1",
+        "verify.py": "992538651a412dc52a5be537648b4afbc9b71de4376f1dcc360ed1f67f5611a9",
+        "contract.md": "42463f67ed6815ad523172a0a5d4a218e91ba69aadc820ac89501e356734c7ae",
+        "notes.json": "28b1db216fbc898a6290ed115ec6ded509ab096e755c2caa483fb1f9661f0af9",
+        "evidence.json": "15925a7ca5e25a61f18faa4cf61e9fd467677dc0334123713eb2a6ddd08b5ad0",
+        "write_notes.py": "335bab7f365ff72e969ea116b924bf6067f2ca9418820481bb56a7b91fcf40fe"
+      }
+    },
+    {
+      "package": "analysis/server-glock-iron-entry",
+      "new_reviewed": 1,
+      "updated_existing": [
+        "server:0x100dff70"
+      ],
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "packet": "analysis/server-glock-iron-entry",
+        "reviewer": "/root/client_catalog",
+        "result": "PASS",
+        "primary": [
+          "10045f20",
+          "100dff70"
+        ],
+        "accounting": {
+          "new_primary": [
+            "10045f20"
+          ],
+          "updated_existing": [
+            "100dff70"
+          ],
+          "support_review_count": 0,
+          "baseline_reviewed": 2005,
+          "baseline_pending": 6650
+        },
+        "target_executed": false,
+        "foreign_packet_modified": false,
+        "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+        "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+        "checks": [
+          "Read both complete saved primary C and full native ASM; compared complete contract and notes.",
+          "Checked all four key lookups, repeat reads, ST0 float stores, numeric zoom conversion and BYTE wire difference.",
+          "Confirmed native IronSights/CameraZoom ordering, animation callback, byte-state store, double cooldown and separate x87 idle duration path.",
+          "Checked parser section grammar, case-sensitive comparisons, consume-value-before-key comparison, early success and borrowed global token after FreeFile.",
+          "Checked NULL/zero-size load guards, no FreeFile on nonNULL zero-size branch, missing brace/EOF loops, 512-byte local copy and cookie boundary.",
+          "Read critical COM_Parse, duration, animation, atof wrapper and cookie support ASM; retained deeper CRT/engine boundaries.",
+          "Independent struct-based PE mapper verified original SHA, all source/pin hashes, contiguous machine-byte rows, raw values/file offsets, native descriptors, vtable slots, RTTI and API layout.",
+          "Author verifier rerun PASS; prior-review evidence preserved."
+        ],
+        "counts": {
+          "source_c": 12,
+          "asm_ranges": 13,
+          "machine_byte_rows": 2097,
+          "raw_records": 438,
+          "native_descriptors": 362,
+          "file_pins": 42,
+          "cards": 2,
+          "new": 1,
+          "refined": 1
+        },
+        "semantic_findings": [],
+        "limitations": [
+          "Static review only; no target execution, no runtime/pixel parity claim.",
+          "Supporting functions checked for their claimed call contracts; deeper CRT/loader and all parser callers not newly certified."
+        ],
+        "independent_checker": "analysis/local/peer_glock26.py",
+        "artifact_hashes": {
+          "contract.md": "0e907a882f998a855aff8dc292dda22702cf654bfdda57e20a22ceff05f53380",
+          "notes.json": "4782cb9eb9181ab24f16af0626a6663b0e3456e6b93ea5b77bc5ddf01c69f3c1",
+          "evidence.json": "6cbb35a002370a4f5f36d3daca31685b8e9855a090dafe87280b7b06e1aa3f47",
+          "verify.py": "d6b6a18e1f1405c3213c51a0ddd59544ab1213d2034122f1cdb691daf4598338"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "9f396bb988bd82a7855e447e830e85bd297715170c709fa53b2b7e92e51475b3",
+        "verify.py": "d6b6a18e1f1405c3213c51a0ddd59544ab1213d2034122f1cdb691daf4598338",
+        "contract.md": "0e907a882f998a855aff8dc292dda22702cf654bfdda57e20a22ceff05f53380",
+        "notes.json": "4782cb9eb9181ab24f16af0626a6663b0e3456e6b93ea5b77bc5ddf01c69f3c1",
+        "evidence.json": "6cbb35a002370a4f5f36d3daca31685b8e9855a090dafe87280b7b06e1aa3f47",
+        "write_notes.py": "25a4eccb9fc5dbf3d7df8bcfc62db4e9d9169c43db8f535db143214755831b16"
+      }
+    }
+  ],
+  "verification_report_sha256": "050e68b4fc4819f10e490c09fec37fb312735d4fa17dc0c28ad8a21dead8466f",
+  "navigation_cleanup": "7 newly reviewed entries removed from pending;3 existing cards fully refined with old evidence retained and duplicate notes synchronized. Mechanics routes/workboard/line numbers regenerated. Previous monster initialization, inventory dispatch and Glock actions residuals linked to completed bodies. Engine callbacks, other state writers, deeper CRT and uncaptured code remain open.",
+  "note_sync": {
+    "updated_ids": [
+      "server:0x10015a20",
+      "server:0x10042cf0",
+      "server:0x10045f20",
+      "server:0x100c0750",
+      "server:0x100c0e70",
+      "server:0x100dff70",
+      "server:0x100e0310",
+      "server:0x100e3020",
+      "server:0x100e42f0",
+      "server:0x100e4410"
+    ],
+    "changed_files": []
+  }
+}

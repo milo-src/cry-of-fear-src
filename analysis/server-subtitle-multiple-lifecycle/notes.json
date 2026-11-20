@@ -1,0 +1,158 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10102fe0",
+      "proposed_name": "SubtitleMultiple_PrivateDataFactory",
+      "subsystem": "subtitles",
+      "summary_ru": "Получает или выделяет private data CSubtitleMultiple и связывает объект с entvars.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl с одним stack entvars*, plain RET; результат полный EAX private-data pointer. При входном NULL вызывает engine CreateEntity(slot21); nonNULL edict преобразует в entvars=edict+80. При NULL результате CreateEntity не делает раннего возврата: следующая инструкция читает [NULL+20c]. Нативный код не содержит безопасного fallback.",
+        "Читает entvars.pContainingEntity+20c. Если edict!=NULL и edict.private+7c!=NULL, возвращает этот существующий указатель без проверки класса/размера и без обновления pev/vtable. Иначе вызывает PvAllocEntPrivateData(slot63,edict,1e4h=484bytes). При успехе пишет vptr101df634 и object.pev+4=entvars; другие поля не инициализирует явно. Нельзя приписывать этому телу memset/конструктор полей: состояние памяти задаёт allocator.",
+        "При NULL от allocator native10103034 делает XOR EAX,EAX, затем MOV [EAX+4],ESI. Это запись по адресу4, а не успешная обработка ошибки. Экспорт subtitle_multiple10103f60 выполняет JMP сюда; корректная реконструкция должна сохранять различие установленного поведения и будущего исправления сбоя. Original runtime здесь не исполнялся."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102fe0.c",
+        "analysis/server-subtitle-multiple-lifecycle/10102fe0-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103040",
+      "proposed_name": "SubtitleMultiple_ChangeSubtitleAndScheduleNext",
+      "subsystem": "subtitles",
+      "summary_ru": "Выдаёт очередной номер через subtitle_main и планирует следующий абсолютный момент последовательности.",
+      "confidence": "high",
+      "details_ru": [
+        "Original PE export ?ChangeSubtitle@CSubtitleMultiple@@QAEXXZ, ordinal53, thiscall без stack args, plain RET; meaningful bool отсутствует. Сначала snapshot signed index=this.m_iCurrentSubtitle+1dc в EDI. Ищет первый subtitle_main через10118460(0,classname); только при успехе ищет первого player. Отсутствие любого объекта пропускает выдачу, но НЕ проверку/планирование следующего элемента.",
+        "После обоих поисков заново читает текущий this+1dc для DWORD number=[this+dc+index*4], без диапазона. Если number==0, engine AlertMessage(slot61,type1,\"SUBTITLE CHANGE: Could not change number!\\n\"). Иначе1005fbc0(main.pev) получает/создаёт CSubtitle private data, без NULL guard вызывающего; signed int number преобразует в float32 через CVTDQ2PS и сохраняет returnedObject+dc. Затем main.virtuale8(player,player,USE_TYPE numeric3,float0). Оба player-аргумента одинаковы, index и цель могут измениться через callbacks.",
+        "Для продолжения использует исходный EDI, а не перечитанный index: signed EDI<32, DWORD[this+e0+EDI*4]!=0 и float[this+160+EDI*4]!=0.0. Lower-bound guard отсутствует; NaN delay считается nonzero, +0/-0 останавливают. При успехе берёт globals.time, float32 elapsed=now−this.m_flStartTime+1e0, увеличивает ТЕКУЩИЙ DWORD this+1dc на1 и вызывает own virtual8(float32(delay−elapsed)). Порядок SUBSS/INC/SUBSS сохранён, нет clamp отрицательного интервала. m_flStartTime не обновляется; это последовательность относительно начального time, не паузы от предыдущей реплики.",
+        "Concrete factory vtable101df634: slot8→1000e1f0, тот вызывает slot4(delay,0); slot4→10017110 задаёт timing (обычно nextthink=currentTime+delay, MOVETYPE7 использует ltime; attach-related branch отдельный). Следовательно отрицательный/NaN delay передаётся scheduler без фильтра. Этот body не устанавливает и не очищает think callback; его назначает10103f00. Полный формат KeyValue10103130 и показ текста клиентом остаются вне данного пакета."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103040.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103040-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103df0",
+      "proposed_name": "SubtitleMultiple_DelegateAttachedResetReturnZero",
+      "subsystem": "subtitles",
+      "summary_ru": "При наличии связанного объекта вызывает его slot40 и всегда возвращает ноль.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без stack args, plain RET. Читает object+14; NULL пропускает вызов. Иначе ECX=linkedObject, indirect call linkedObject.vtable+40 без stack args. После callback безусловно XOR EAX,EAX, то есть полный return0 независимо от результата. Concrete CSubtitleMultiple vtable slot40 указывает сюда. Назначение связанного object+14 и его concrete callback этим телом не установлено; это не доказанное удаление/Reset/перезапуск."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103df0.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103df0-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103e00",
+      "proposed_name": "SubtitleMultiple_RestoreFourFields",
+      "subsystem": "subtitles",
+      "summary_ru": "После успешного базового восстановления читает четыре native descriptor-поля последовательности.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(this,reader*), RET4. Вызывает10017f30(this,reader), проверяет полный EAX; при0 сразу возвращает0. При nonzero вызывает10117010(ECX=reader,\"CSubtitleMultiple\",this,10219bd8,count4), передаёт полный EAX результата без нормализации. Concrete vtable slot3c. Ghidra void и имя Save по соседству не меняют направление:10117010 — ReadFields.",
+        "Native descriptors stride16: FIELD_INTEGER10 m_iSubtitleNumber offsetdc,count33; FIELD_FLOAT0 m_fSubtitleNumberNext offset15c,count33; FIELD_INTEGER10 m_iCurrentSubtitle offset1dc,count1; FIELD_TIME15 m_flStartTime offset1e0,count1. Все flags0. Диапазоны33*4 перекрывают последний DWORD предыдущего массива/первый следующего; это точные native descriptors, не исправленный C++ layout. Служебный index0 массива времён соответствует15c, первый используемый delay1→160. Порядок очистки/чтения generic reader может затрагивать пересекающиеся DWORD. Не сокращать count до32 по предположению."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103e00.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103e00-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103e40",
+      "proposed_name": "SubtitleMultiple_SaveFourFields",
+      "subsystem": "subtitles",
+      "summary_ru": "Записывает четыре поля через native Save_WriteFields с диагностическим именем сущности.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(this,writer*), RET4. Вызывает10018000(this,writer) и проверяет полный EAX;0 немедленно возвращается. Иначе ownerLabel=globals.pStringBase(+98)+pev.targetname(+1d0), если string_t!=0; при0 берёт pStringBase+pev.classname(+0). Затем1011adc0(ECX=writer,ownerLabel,\"CSubtitleMultiple\",this,10219bd8,count4); возвращает его полный EAX без нормализации. Concrete vtable slot38. OwnerLabel предназначен diagnostic helper, имя блока всегдаCSubtitleMultiple.",
+        "Использует те же4 descriptors и native counts33/33/1/1 с overlap, что Restore10103e00. FIELD_TIME последнего поля сериализуется generic writer относительно save time; в этом wrapper нет собственной коррекции clock, валидации index, проверки массива или post-save reset. ENT/base side effects происходят до специализированного блока; при его ошибке rollback здесь отсутствует."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103e40.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103e40-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103ea0",
+      "proposed_name": "SubtitleMultiple_SpawnInvisibleSequenceEntity",
+      "subsystem": "subtitles",
+      "summary_ru": "Размещает невидимую несолидную сущность и задаёт первый index только если он был нулём.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без stack args, plain RET; concrete vtable slot2c. Вызывает cdecl10119fe0(this,&this.pev.origin+8). Его callback engine SetOrigin(slot28) подтверждён таблицей API. Own virtuald0 в factory table→1000db80(return0), поэтому на этой concrete vtable player-cache branch+618 не исполняется; иная подмена vtable здесь не проверяется.",
+        "После SetOrigin повторно читает pev: solid+10c=0, effects+118=80h прямым присваиванием (не OR). Копирует12bytes global10222f34..10222f3f в pev.v_angle+74..7c. Эти globals находятся в zero-fill virtual tail .data, не имеют raw file bytes; loader начнёт с нулей, но отсутствие иных runtime writers не доказано, поэтому нельзя безусловно заменить копирование константой zero.",
+        "Если DWORD this.m_iCurrentSubtitle+1dc==0, пишет1; любой nonzero, включая отрицательный/большой, сохраняет. Не очищает массивы, m_flStartTime, callback+78 и nextthink; это не полный reset последовательности."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103ea0.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103ea0-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103f00",
+      "proposed_name": "SubtitleMultiple_UseRestartSequence",
+      "subsystem": "subtitles",
+      "summary_ru": "Перезапускает индекс и начальное время, назначает ChangeSubtitle после вызова scheduler.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall Use с четырьмя stack DWORD(activator,caller,useType,value), RET10h; все4 входных аргумента игнорируются. Ghidra ошибочно показывает отсутствие аргументов. Concrete vtable slote8. Делает currentSubtitle+1dc=1 и startTime+1e0=raw DWORD globals.time. Берёт float delay=this+160 (first timing element). Если ±0, передаёт virtual8(float0.1 bits3dcccccd); любой иной, включая NaN/negative, передаёт неизменённый float. UCOMISS/LAHF/TEST44/JNP обеспечивает NaN!=zero.",
+        "Только ПОСЛЕ возврата own virtual8 пишет callback+78=10103040. Старый think не очищается перед callback, scheduler может видеть старое значение; это важно при reentrancy. Повторный Use независимо от USE_TYPE снова ставит index1 и новое startTime; не проверяет уже запущена ли последовательность. Нет изменения subtitle_main до будущего ChangeSubtitle callback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103f00.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103f00-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10103f60",
+      "proposed_name": "subtitle_multiple_ExportFactoryThunk",
+      "subsystem": "subtitles",
+      "summary_ru": "Экспорт class name перенаправляет создание сущности в CSubtitleMultiple factory.",
+      "confidence": "high",
+      "details_ru": [
+        "Native PE export subtitle_multiple ordinal753 указывает10103f60. Полное тело ровно5bytes E9→10102fe0; это tail JMP, не отдельный allocator или NULL guard. Сохраняет исходный cdecl stack argument entvars* и EAX-return заводской функции. Ghidra показывает развёрнутое тело factory, но own range10103f60..10103f64 содержит только переход."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10103f60.c",
+        "analysis/server-subtitle-multiple-lifecycle/10103f60-0.asm",
+        "analysis/server-subtitle-multiple-lifecycle/evidence.json",
+        "analysis/server-subtitle-multiple-lifecycle/contract.md",
+        "external/hlsdk-portable/engine/eiface.h"
+      ]
+    }
+  ]
+}

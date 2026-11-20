@@ -1,0 +1,73 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100f5db0",
+      "proposed_name": "Player_PlaySwingVocalByRulesAndMode",
+      "subsystem": "audio",
+      "confidence": "high",
+      "summary_ru": "Выбирает одну из трёх native таблиц swing-реплик и передаёт выбранный звук общему emitter.",
+      "details_ru": [
+        "ECX=P, stack arguments отсутствуют, plain RET100f5e40. Нет определённого bool/status. Получить global rules10222ee4; если nonNULL и virtual20 возвращает full EAX!=0, выбрать police table10217f30 через engine RandomLong(0,5). При NULL rules или predicate0 используется текущий P.pev+268=vuser1.x. Ordered equality с float0 выбирает vocal table10217eb8; любое ordered nonzero и unordered NaN при masked exceptions выбирают doctor table10217f8c. Native UCOMISS/LAHF/TEST44/JNP проверяет именно ordered equal; отрицательный0 тоже равен0.",
+        "В обеих неполицейских ветвях RandomLong получает(0,9). PUSH9 и PUSH0 расположены ДО сравнения vuser1.x и сохраняются для обоих calls; отсутствие аргументов у doctor-call в Ghidra не означает другой диапазон. Пинованные raw arrays содержат соответственно10 vocal,6 police,10 Doctor pointers: player/vocal/Swing/Swing1.wav…Swing10.wav; player/police/Swing/Swing1.wav…Swing6.wav; player/Doctor/Swing/Swing1.wav…Swing10.wav. Регистр Doctor сохранён по native literals. Выбранный EAX используется как индекс без локальной проверки отрицательного/выхода за границу; свойства engine RNG остаются внешними.",
+        "После RNG заново читается P.pev/edict. Общий cdecl100fc9f0 получает(edict,channel2,sample,volume1.0f,attenuation float32(0.8),flags0,pitch100). Здесь нет probabilistic пропуска, throttling, cooldown, проверки alive или собственной модификации stamina. Сам emitter может изменить volume при global10226489 и передаёт обычные wav samples engine EmitSound; это не гарантированная физическая громкость1.0. Конкретные rules vtable101de3b0/+20→100fc430 возвращают0,101d608c/+20→100c90b0 возвращают1, но активный runtime rules и другие overrides данным helper не устанавливаются. Выбор Doctor не доказывает более широкое значение vuser1.x во всех подсистемах."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100f5db0.c",
+        "analysis/server-weapon-melee/100f5db0-0.asm",
+        "analysis/server-weapon-melee/evidence.json",
+        "analysis/server-weapon-melee/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100f9790",
+      "proposed_name": "CBasePlayer_WeaponMelee",
+      "subsystem": "combat",
+      "confidence": "high",
+      "summary_ru": "Разрешает отложенный удар оружием: точный trace32, hull/refinement, усечённый skill damage, callbacks и две ветви звука/ScreenShake.",
+      "details_ru": [
+        "Полный refinement прежнего shallow REVIEW; exact prior-review.txt и три старых evidence paths сохранены. Native EAT ordinal366 связывает100f9790 с ?WeaponMelee@CBasePlayer@@QAEXXZ. ECX=P, stack arguments нет, normal RET; EAX не нормализован как success. Единственный ранний object guard: P252c active weapon!=NULL. Нет проверки alive, can-attack, stamina, ammo или pending deadline. Наблюдаемый caller CGlock100476b0 назначает P78=100f9790 после player scheduler virtual8(0.3f); данный callback сам не очищает P78/nextthink и не повторяет guards вызывающего оружия.",
+        "Сразу прочитать current active weapon168=m_iId и CVTTSS2SI глобального float32 skill10226834 в EBX signed int32. Производитель100af810 связан с sk_cof_weapon_melee; значение считывается один раз ДО sound/recoil/trace callbacks. Дробная часть отбрасывается к0. При NaN/out-of-range с masked exceptions native indefinite=-2147483648; никаких clamp или проверки здесь нет. Позже MOVD/CVTDQ2PS численно конвертирует сохранённый int32 обратно в float32 для TraceAttack. Это не передача исходного skill float и не bit reinterpretation.",
+        "Если m_iId==10, пропустить только три pre-trace эффекта; ID3 явно направлен в разрешённую ветку, но итоговое условие эквивалентно ID!=10. Разрешённая ветка вызывает100f5db0(P), затем emitter100fc9f0(current P.edict,0,\"weapons/mobile/punch_swing.wav\",1.0f,float32(0.8),0,100), затем100f91b0(P,1.0f,1.0f,8.0f). Последние три stack slots повторно используются после частичной очистки cdecl emitter; фактический recoil-call RET0c. Эти эффекты происходят и при последующем miss; исключение ID10 не отменяет попадание или hit effects.",
+        "MakeVectors10119320 получает pointer current P.pev.v_angle74. Затем P.virtual228(&localStart); concrete Player101a4da8/+228→100e01e0 записывает float32(view_ofs+origin), RET4. Forward читается из свежего G+28/2c/30 уже после virtual callback. End=start+forward*32.0f покомпонентно с float32 multiply/add;32 закреплено literal101a9728. TraceLine1011a800(start,end,0,current ownEdict,&trace) передаёт engine flags0. Local TraceResult56 bytes по ebp-68 не инициализирован, fraction=+10, endPos=+14, pHit=+30; wrapper/engine должны заполнить output.",
+        "Первый COMISS fraction,1/JB пропускает hull при ordered fraction<1 И unordered NaN. При ordered fraction>=1 вызывается TraceHull1011a7e0(start,end,0,hull3,current ownEdict,&trace). После hull COMISS1,fraction/JBE возвращает при >=1 или NaN. Иначе resolve pHit: еслиNULL, вызвать PEntityOfEntOffset(0), затем private+7c. Если edict/private отсутствует либо private.virtualc0()!=0, вызвать FindHullIntersection100df820(start,&trace,mins[-16,-16,-18],maxs[16,16,18],ownEdict). Если private.virtualc0()==0, refinement пропускается. Helper имеет5 stack arguments RET14, удлиняет луч и при необходимости перебирает8 углов; его полный контракт отдельный. После hull/refinement копируется trace.endPos в local end. На direct-line-hit пути такой копии нет.",
+        "Общий COMISS1,fraction/JBE допускает только ordered fraction<1, включая отрицательный; initial NaN поэтому НЕ даёт damage/hit effects, хотя пропускал hull. Нет дополнительных allsolid/startsolid/finite guards. Повторно resolve текущий trace.pHit, снова fallback PEntityOfEntOffset(0). Если нет edict/private, перейти прямо к default hit effects. Это не полный miss: fraction прошёл, но повреждаемого private object не нашли.",
+        "При private target T: ClearMultiDamage1011c070, затем T.virtual60(current P.pev,damageFloat,Vector forward BY VALUE,&trace,0x04001000). Переданные7 DWORD занимают28 bytes: attacker,damage,XYZ,trace*,mask; нельзя свести сигнатуру к двум аргументам потерявшего их C. Direction берётся из свежего G.forward ПОСЛЕ ClearMultiDamage, не из local end−start; target virtual отвечает за фактическую запись accumulator. Далее current P.pev заново читается один раз и передаётся обеими аргументами ApplyMultiDamage1011b8f0(pev,pev). Apply вызывает virtual64 накопленной цели, если она есть, и не очищает accumulator. Никакого собственного target.health store, blood/decal policy или проверки return damage callbacks этот primary не выполняет.",
+        "После Apply вызвать сохранённый T.virtual50(). Если результат0 — default effects. Иначе второй, новый virtual50(); только если второй результат!=1 выбирается special effects. При различающихся результатах важен именно этот порядок: первый!=0 и второй0 тоже выбирают special. Target pointer не resolve заново и не защищён после TraceAttack/TakeDamage callbacks; нет lifetime/reentrancy guards. Нельзя считать classification неизменной или объявлять эти ветви исключительно flesh/world по имени.",
+        "Special: emitter(current P.edict,0,\"weapons/mobile/punch_smack.wav\",1.0f,float32(0.8),0,100), ПОСЛЕ него ScreenShake10119de0(&current P.pev.origin,amplitude5.0f,frequency0.25f,duration float32(0.1),radius2.0f), затем return. Default (target отсутствует, либо first classification0, либо second1): сначала ScreenShake с теми же origin/amplitude/frequency/radius, но duration float32(0.15), ПОСЛЕ него тот же punch_smack emitter. Поэтому sample общий, duration и порядок callbacks различны; origin берётся у игрока, не у trace.endPos/цели. Поддержка ScreenShake имеет собственные recipient/flags/radius gates, не обещание тряски каждому клиенту.",
+        "Повторные P.pev/edict и G.forward reads сохраняются через callbacks, но skill integer, initial weapon ID, start/end и сохранённый target не становятся автоматически fresh snapshots. Вызов может иметь damage без звука при исключениях внешнего кода и наоборот — эффекты не означают успешное применение урона. Конкретные derived TraceAttack/TakeDamage/Classify/c0, движковая collision world и гарантии scheduling остаются внешними; библиотека не исполнялась. Локальное тело полностью закрыто по C/native, без подмены ожидаемым SDK алгоритмом."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100f9790.c",
+        "analysis/server-weapon-melee/100f9790-0.asm",
+        "analysis/server-weapon-melee/evidence.json",
+        "analysis/server-weapon-melee/contract.md",
+        "analysis/server-weapon-melee/prior-review.txt",
+        "decompiled/server/partial-pass/functions/0x1011c070.c",
+        "decompiled/server/partial-pass/functions/0x1011b8f0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100f91b0",
+      "proposed_name": "Player_ApplyViewImpulse",
+      "subsystem": "player-view",
+      "confidence": "high",
+      "summary_ru": "Передаёт три исходных float через зарегистрированный viewpunch event либо изменяет native pev.vuser3 покомпонентным импульсом.",
+      "details_ru": [
+        "Полный refinement прежнего REVIEW Player_ApplyViewImpulse, исходное evidence сохранено. ABI ECX=P, stack(float x,float y,float z), RET0c; EAX не определён как bool. Если global rules10222ee4 nonNULL и virtual20 возвращает full EAX!=0, выполняется event branch; иначе local branch. NULL rules здесь допустим, но P/P.pev не проверяются. Политика конкретных rules подтверждена таблицами: CHalfLifeRules slot20=constant0, CHalfLifeMultiplay slot20=constant1; это не проверка количества клиентов внутри helper.",
+        "Event branch копирует x,y,z без масштаба/инверсии в один12-byte local. PlaybackEvent engine slot123@10223134 получает(flags0x10,current P.edict,eventIndex=zero-extended WORD[10231f44],delay0.0f,origin=&local,angles=&тот же local,fparam1=0,fparam2=0,iparam1=0,iparam2=0,bparam1=0,bparam2=0). Флаг0x10 НЕ event ID. Native producer1011fd90 calls PrecacheEvent(1,\"events/viewpunch.sc\") at101200f9 и stores AX→10231f44 at10120106; ближайшие PUSH следующего event не меняют владельца результата. Ни scale20, ни vuser3 store в event branch нет. Alias origin/angles и временный lifetime stack local — часть ABI; callback должен потребить/copy данные до возврата. Полное downstream клиентское воспроизведение этим server body не доказано.",
+        "Local branch один раз сохраняет current P.pev и native float20.0@101a1eec. Последовательно пишет V280=f32(oldV280−f32(x*20)), V284=f32(f32(y*20)+oldV284), V288=f32(f32(z*20)+oldV288). Native ENTVARS descriptor vuser3 offset280 count1 typeVector подтверждает имя трёх компонентов; это не непосредственная запись punchangle. Операции SSE scalar float32, порядок сложений и X subtraction не заменены симметричным vector addition. Нет clamp, damping, finite guard или нормализации углов; NaN/infinity распространяются по native FP-правилам, trap режим здесь не задаётся.",
+        "В event branch original three float bits лишь копируются, а в local branch используются разные signs и scale20; визуальная эквивалентность режимов зависит от ещё отдельно разбираемого клиента. Для WeaponMelee вызов(1,1,8) даёт при обычной finite арифметике local приращения(-20,+20,+160), но helper общий и не ограничен melee. Следующие frames/другие writers vuser3, mode global ownership и обработчик viewpunch.sc не объявляются восстановленными этой функцией."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100f91b0.c",
+        "analysis/server-weapon-melee/100f91b0-0.asm",
+        "analysis/server-weapon-melee/evidence.json",
+        "analysis/server-weapon-melee/contract.md",
+        "analysis/server-weapon-melee/prior-review.txt"
+      ]
+    }
+  ]
+}

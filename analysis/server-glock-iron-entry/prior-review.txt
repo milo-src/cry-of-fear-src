@@ -1,0 +1,10 @@
+[REVIEW server:0x100dff70]
+  Предлагаемое имя: Player_ReadItemDescriptionField
+  Подсистема: inventory
+  Назначение: Читает поле из файла описания предмета.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Загружает файл, разбирает именованные секции с фигурными скобками и токенами data; диагностирует GetItemDescription/CheckItem parsing error. Имя реконструировано по строкам и потоку, сигнатура декомпилятора приблизительна.
+  Основание: decompiled/server/captures/ghidra-inventory-batch/004-pseudocode.c
+  Основание: decompiled/server/partial-pass/functions/0x100dff70.c
+  Основание: analysis/inventory/behavior.md
+[/REVIEW]

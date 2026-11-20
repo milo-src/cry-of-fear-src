@@ -1,0 +1,153 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 17,
+  "corrected_existing": [
+    "server:0x100e7af0"
+  ],
+  "packages": [
+    {
+      "package": "analysis/server-punch-resolution",
+      "new_reviewed": 2,
+      "updated_existing": [
+        "server:0x100e7af0"
+      ],
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "Full3 primary C/native; short dual-weapon delegation, player32-unit ray/hull hit resolution, exact vector-by-value damage ABI, NaN gates, eight-corner56-byte trace refinement and effects. Existing100e7af0 deliberately expanded; prior card archived and evidence preserved.",
+      "corrections": [
+        "Arithmetic summation order clarified as(dy²+dx²)+dz²."
+      ],
+      "final_hashes": {
+        "capture.py": "106e62a655845339bfca1444c4a1f6e7fc8e428dd5121b6acf4f202811453995",
+        "verify.py": "f21e8f14fcb7ad97af90f6ced2aed92b12167708af2123febfe212f8f661338b",
+        "contract.md": "0a231567c2d6247d2b825517ae04ddddbe19386705afeec6fd96740b8fa3e58a",
+        "notes.json": "4a8d89ced37bdb5b61daa016a6a60b3336bec09c1cc94dbd6eea6585e1af6dc4",
+        "evidence.json": "8c082a3ed50e283250e490054d3fa5262eb59a6d0f0d0bfebc01db9e16eaaa76",
+        "prior-review.txt": "97f64077c1af3316a91db42d3b77415a69568e076937e897b2128ec8db3a9ee4"
+      }
+    },
+    {
+      "package": "analysis/server-mobile-lifecycle",
+      "new_reviewed": 7,
+      "updated_existing": [],
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full7 primary C/native; factory/export, deploy/spawn/precache, ItemInfo unwritten flags field, script-field gates and constant virtual predicate; exact vtable/native export binding.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "83e0dc37165431c4b63e7ffb586a4aaeccf110017d75644689b311ead86ae123",
+        "verify.py": "9ee819f2bc1eabc9469e377c1243a2382dff6c390d7dee0f3f3558aae16a874a",
+        "contract.md": "868d94326a69f9fdfd9d34d6a73623f95f99111b992aeee921f87c8e8a083809",
+        "notes.json": "4f9cec55dd641afa6ddef785c6a4d1230462dcc050938db1736dda59d85bcafe",
+        "evidence.json": "c63f5bc7d833fceb310eb30a83562c995cd82376bf5e18863380f883c6fcfae2",
+        "write_notes.py": "8497e5a72ccb6c1f2a8d214e14efedba56338c92b30c2557fe908cb8a980e4a4"
+      }
+    },
+    {
+      "package": "analysis/server-mobile-actions",
+      "new_reviewed": 5,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full5 primary C/native; battery middle/final callbacks and FlashOff state mutations, native scheduler/cooldown/animation/body ABI, punch and menu triggers.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "6d2ad41361730f78326ec024cdd1b6bf5b0fdf6be5e57d862b47ea7f8f0d727e",
+        "verify.py": "6fede15c2a0a781fa9858471e0200dd8ce03ec931d30903425fec8acbe8c93fe",
+        "contract.md": "f30f8c1c6f83ad45c41e119beecb8d9da457f3c5dab9ab3239e125b035f25da2",
+        "notes.json": "d6496808254647b38cc98d4a53ddbf27ade2c95fbe885e438625cfa04e86b195",
+        "evidence.json": "69c91e5c723a5a5b07d5ceaa238a900573e1bc2c3b1f2dc7a3b9644ad66d2465"
+      }
+    },
+    {
+      "package": "analysis/server-mobile-frame",
+      "new_reviewed": 3,
+      "updated_existing": [],
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full3 primary C/native; frame ordered callbacks/flags/body/unreadSMS/call gate and tail transfer; localized reader with uninitialized no-match buffer/counterstall, AL-only camera guard.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "be00c137f71220193067cfe85f3ec978d87c5e03094bdde76de105d54771a665",
+        "verify.py": "c2fc27353951ce14db6a678c423a1c74be468eacf15e78ace19143a92c357ed7",
+        "contract.md": "cd19c670f484c12a54976884057c783ee9b0938ea6ae3a95a7572082321ace25",
+        "notes.json": "2d73c948b09d29624e73a5c5a77dd5f7f84bf6de0ba76f2b6d4eec9d406e9d05",
+        "evidence.json": "11fcb876201b45600c764e75a065f0d210a264804855b07036ae1af78cd0186c",
+        "write_notes.py": "2e3932f41a6e735dca6dbae205b80c31d4a2af6ff82111a877c5a29612fccaf6"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1909,
+    "corrections": [
+      "server:0x100e7af0: previously unknown range and shallow damage description replaced with native32-unit/shared-thunk/ABI proof"
+    ],
+    "evidence_preserved": "All prior evidence references retained. Exactly1909 unaffected review bodies preserved byte-for-byte; corrected prior body archived in server-punch-resolution/prior-review.txt."
+  },
+  "navigation_cleanup": "Seventeen primary entries removed from pending, one existing player punch card refined. Catalog navigation now links mobile lifecycle/actions/frame/SMS/camera and punch hit chain; stale frame-pending summary replaced. Dynamic skill damage/config, other player-field producers, engine collision, derived callbacks and CRT boundaries stay explicitly pending",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-mobile-actions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-phone-call-callbacks/contract.md",
+          "old": "c0bb6890216d1333d6647054363db247bf30297827c0c62902a8e71dad68557b",
+          "new": "f804be204be294fa071edacb64d418027bdbae8e88cf07dad885821ea1b91a3d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-mobile-frame/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-weapon-animation/contract.md",
+          "old": "ae2df384bba1baa63dfb576aa8b8be32ab04e73efe70d29a3f38423a7b93d039",
+          "new": "a93dc4ae4ef84f25aee1e5218b56892db4a3653492bb0fcbec2ab5f968a54a14"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-subtitle-playback/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-phone-call-callbacks/contract.md",
+          "old": "c0bb6890216d1333d6647054363db247bf30297827c0c62902a8e71dad68557b",
+          "new": "f804be204be294fa071edacb64d418027bdbae8e88cf07dad885821ea1b91a3d"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-weapon-animation/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-phone-call-callbacks/contract.md",
+          "old": "c0bb6890216d1333d6647054363db247bf30297827c0c62902a8e71dad68557b",
+          "new": "f804be204be294fa071edacb64d418027bdbae8e88cf07dad885821ea1b91a3d"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-mobile-actions": "PASS 19 C 21 ASM 663 byte rows 501 raw 433 descriptors 2 vtables 5 cards",
+    "analysis/server-mobile-frame": "PASS 27 C 28 ASM 2629 byte rows 412 raw 362 descriptors 3 cards",
+    "analysis/server-phone-call-callbacks": "PASS 22 C 22 ASM 1022 byte rows 256 raw 180 descriptors 4 vtables 2 cards",
+    "analysis/server-subtitle-playback": "PASS 19 C 22 ASM 1566 byte rows 199 raw 125 descriptors 2 vtables 1 cards",
+    "analysis/server-weapon-animation": "PASS 15 C 15 ASM 1525 byte rows 377 raw 362 descriptors 6 cards"
+  },
+  "verification_report_sha256": "78cc5b83bff5e40deb6b3ec4e38b7f2ec805ca232c47ea0b57db9a32050fdda3"
+}

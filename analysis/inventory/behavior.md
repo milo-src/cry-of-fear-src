@@ -129,3 +129,7 @@ Final local run on 2026-11-18: full `build_all.py` Waf build/install/audit passe
 
 Next reverse-engineering boundary: original inventory message registration and
 client handler, followed by item selection/drop/combine and their persistence.
+
+## Продолжение разбора: pass14
+
+Частичный100dad40 теперь расширен полным локальным контрактом в [player inventory](../server-player-inventory/contract.md): свободный3/6 GUI slot ищется до dedup, второй argument не читается, успех может не делать записи, sound/Syringe идут после обеих ветвей. Там же player chains100daf10/100e2410 и GiveAmmo100e04d0 с точным return/wire. Старые evidence paths сохранены; никакой игровой реализации этим продолжением не заявляется.

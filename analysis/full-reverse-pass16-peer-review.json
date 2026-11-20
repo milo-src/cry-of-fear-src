@@ -1,0 +1,258 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 16,
+  "corrected_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-state-capture",
+      "new_reviewed": 4,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All4 primary C/native; first-free two-bank layout, preserved header, live/dead mixed-width copies and stale fields; substring six-chain selection with six output triples; full-EAX predicate and RET widths; CVTTSS2SI and raw pointer lifetime boundaries.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "0a69707da4528e77de65a1e597c3df1506c6ecb2c46d75e65cc117f3e4d12e41",
+        "verify.py": "f71d384dd80b465d34b8dc54cdc58dd85d96348f7dd752d678426d3c7278255f",
+        "contract.md": "3b38aa4ad4bf718a0cb1cb7d8ec7fa5f3ff4305a6a3412910df0d66877439675",
+        "notes.json": "9787050847ffe0172f972e7ae9562a0bb38ab831771070adc7561a8cb49e1b0f",
+        "evidence.json": "c3cfda4c3d5dbfbce563b963bad6218bbcba14871c500f63e5d44720c5e18f01",
+        "write_notes.py": "26317d0d6fcadbb24fb4b553623643c542edbbdb424edec14a1b9656db377907"
+      }
+    },
+    {
+      "package": "analysis/server-map-equipment-parser",
+      "new_reviewed": 1,
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full411-line primary and complete native body; five erase-labels plus weapon substring, shared mutable S and conditional clip/ammo reads, reversed quicksel copy, late length check, latch1->GiveNamedItem->0 and item.iuser3, failed-open Inventory6, plainRET. CRT support aligned with prior reviewed reader.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "a6fc70cdd6dc7ab254d6b6819e7ff83f09911733d3a534a93d2ed2db449cd94b",
+        "verify.py": "849e1a995af3c03ae4ba35d08ba78bb80c5a86254d6c7ff89fb95a7209bd8ef3",
+        "contract.md": "94933d00d3a4937cfb8c039af01ddfdfc1b86ed41a1c49658d1f0909171fab2d",
+        "notes.json": "f7e4287f59b1bcecadd5ad182bbe3dc188bce2a85b3eaebf7522339a7511ff1a",
+        "evidence.json": "4c0232ec6a648732bc64a5c5f8ab3c5e789013a979dda00191259a3cb4837e7d",
+        "write_notes.py": "ac6ace253b26e9e0187c658591ed60ffe4342fbda6e69fb112fa667f40430333"
+      }
+    },
+    {
+      "package": "analysis/server-state-lifecycle",
+      "new_reviewed": 5,
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All5 primary C/native; DLL ClientDisconnect binding, A-driven bank clear, full-clear versus capture order, Use RET16 and FireTargets5args, RTTI/factory/export ownership, delayed transition and death restart body continuation.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "8ed9a6de2077293fd8a70c3b63ea866ad670bffe5d31a87a04977b2a247588cd",
+        "verify.py": "91b7b9b7807180a69440c3ab782116f04a0eae30f59564cb6788d798c19a88e2",
+        "contract.md": "3424d8b562ddbb32cfd6e7ce8209f6f4a8f79abd5c05f7a18fe6bf502b289097",
+        "notes.json": "c6c040dd89b94b6b2c918bbb0bc6b032809b71ab313ed231232f4a10b083c140",
+        "evidence.json": "9e7308422a21606d08eb69ac216908311cd94b07a2aa879cf44fe63c22449016"
+      }
+    },
+    {
+      "package": "analysis/server-follower-behavior",
+      "new_reviewed": 6,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All6 primary C/native; second entity argument in FollowerUse, target EHANDLE18c, four-DWORD speech callbacks, duration/order/gates, damage forwarding to base with candidate schedule notification, numeric concrete-owner limitations.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "25cf466dcc64a54e7e77400f242a360c9adbb3eae55fc357b4bbdfef491debb9",
+        "verify.py": "d5b83aa5774c76d65ce5e55b57be14393282a8924e89af66c4d126c6bca4308a",
+        "contract.md": "9e0859a6548ccbf42aa953a163bb3ecd8b09091c50d7b80ece2146d09472e595",
+        "notes.json": "ee9ac2981c78019115402d5a1083c84d5c1536a8cff4ea5bc20fa8570e140e8d",
+        "evidence.json": "50918eb066dce97e0b033ff4db503f5552714dc013ad769a06056ebc34227477",
+        "write_notes.py": "4fa13d56b5dda4c794b8330b36bdfc05eb078d1ba6b77bbe78f0fc1b51450625"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1826,
+    "corrections": [],
+    "evidence_preserved": "All prior review bodies and evidence references preserved byte-for-byte."
+  },
+  "navigation_cleanup": "Sixteen newly reviewed primary addresses removed from active queue. Capture/restore/lifecycle separated from map cfg and player text cfg. Known latch producer linked; remaining positive manager-header writers, concrete follower callbacks and marker consumers explicitly open. Counts describe saved C, not whole-game completion.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-follower-behavior/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "3e2addbd9d523d2af323202dd16c8b1571ff08b5c977c5360da1d09c71f500b0",
+          "new": "bba8aabd5557d1fe2923dce82faab577808368f71ff80bca0701c38e0114da66"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-map-equipment-parser/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "3fb9aa9be52cda546c6bcf368c0a4c22a0d24c6636130824805a7a5d4733b673",
+          "new": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee"
+        },
+        {
+          "path": "analysis/server-state-reader/contract.md",
+          "old": "f89fd7d3ae154da60bc7884d1aa3a37021a02afa12abff669f5829c9b1c33405",
+          "new": "d584e49555a9ef7cbc5ef452cee340c7c663c27d1459dbb313a8ec727ba239f3"
+        },
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-capture/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-state-restore/contract.md",
+          "old": "bd7ba8529ad26d065036984619717bf14ecccf238513cc423302512360099152",
+          "new": "fd5e6e9cfc1975bcd6dc5efcf5c35cd1776f1e54b7404fea468238d0d348728e"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        },
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "3fb9aa9be52cda546c6bcf368c0a4c22a0d24c6636130824805a7a5d4733b673",
+          "new": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee"
+        },
+        {
+          "path": "analysis/server-state-restore/contract.md",
+          "old": "bd7ba8529ad26d065036984619717bf14ecccf238513cc423302512360099152",
+          "new": "fd5e6e9cfc1975bcd6dc5efcf5c35cd1776f1e54b7404fea468238d0d348728e"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-reader/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "3fb9aa9be52cda546c6bcf368c0a4c22a0d24c6636130824805a7a5d4733b673",
+          "new": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee"
+        },
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-restore/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        },
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "3fb9aa9be52cda546c6bcf368c0a4c22a0d24c6636130824805a7a5d4733b673",
+          "new": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-actions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-callers/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-settings/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-equipment/contract.md",
+          "old": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322",
+          "new": "78c0fa8e0b1be4e3c23191aec73e1eceec6e8c03899102402e5a961b9cfcd051"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-actions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-settings/evidence.json",
+          "old": "fae2d20d53bf47bbdccc0d0e3912551d7e6744f2f03aac8cf78a20e9d4b048d8",
+          "new": "dd375f7db9048483e466edc616c25537d8be02d8d8ae2b808f20bd5f17c2527b"
+        },
+        {
+          "path": "analysis/server-unlock-callers/evidence.json",
+          "old": "f865d2e65b686a355edcd8ed277f2caaaf971e394c1e1ae94508adf8d5b958a2",
+          "new": "bf7d631ccd3ecf79b6bc3333f0512e7035b6c852dee93c4a208c1a7899e5e876"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-callers/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-settings/evidence.json",
+          "old": "fae2d20d53bf47bbdccc0d0e3912551d7e6744f2f03aac8cf78a20e9d4b048d8",
+          "new": "dd375f7db9048483e466edc616c25537d8be02d8d8ae2b808f20bd5f17c2527b"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-actions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-callers/evidence.json",
+          "old": "bf7d631ccd3ecf79b6bc3333f0512e7035b6c852dee93c4a208c1a7899e5e876",
+          "new": "f0b20bd7e98d8538663bd36eaa47059639be10b7cc17b9a53b184a30afc96620"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "server-state-reader": "PASS 21 C, 34 ASM, 3139 byte rows, 458 raw, 1 cards",
+    "server-state-restore": "PASS 1 primary; 11 C 11 ASM 3489 byte rows 322 raw; stats/ABI/branch/network/102descriptors",
+    "server-unlock-actions": "PASS 20 C, 20 ASM, 1927 byte rows, 549 raw, 8 cards",
+    "server-unlock-callers": "PASS 37 C, 37 ASM, 11227 byte rows, 404 raw, 4 cards",
+    "server-unlock-settings": "INDEPENDENT PASS 18 C 24 ASM 4082 rows 369 raw;128selector,64reader dispatch,128writer polarity paths,34token pairs\nPASS 18 C, 24 ASM, 4082 byte rows, 369 raw, 4 cards",
+    "server-stats-lifecycle": "PASS 21 C, 23 ASM, 1610 byte rows, 416 raw, 5 cards",
+    "server-monster-groups": "PASS 22 C, 22 ASM, 1135 byte rows, 201 raw, 4 cards"
+  },
+  "verification_report_sha256": "17800f6907aa432d78a64b91e9fee30c158b39c6af358830b26ab545bb4f3ac6"
+}

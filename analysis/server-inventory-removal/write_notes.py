@@ -1,0 +1,38 @@
+"""Curated native contracts; this script only writes analysis documentation."""
+from pathlib import Path
+import json
+OUT=Path(__file__).resolve().parent
+e=json.loads((OUT/'evidence.json').read_text(encoding='utf8'));rows=[]
+def add(a,name,summary,details):
+ rows.append(dict(module='server',address='0x'+a,proposed_name=name,subsystem='weapons',summary_ru=summary,confidence='high',details_ru=details,evidence_paths=[f'decompiled/server/partial-pass/functions/0x{a}.c',f'analysis/server-inventory-removal/{a}-0.asm','analysis/server-inventory-removal/evidence.json','analysis/server-inventory-removal/contract.md']+[r['path']for r in e['support_documents']]))
+add('100f0ba0','Player_RemoveAllItemsAndClearAmmoHud','Очищает шесть цепочек предметов, связанные quick slots, оружейную маску и32 счётчика ammo с сообщениями HUD.',[
+'Thiscall ECX=player P, stack(removeSuit), RET4; meaningful EAX result не устанавливается. При active P+252c!=0 сначала100f1440, затем заново прочитанный active.virtual14c() без stack arguments, active=0. При исходном activeNULL autoaim helper не вызывается. Затем P+2534(m_pLastItem)=0; P+2538(m_pNextItem),+253c(m_pStoredActionItem),+2530 здесь напрямую не очищаются.',
+'Шесть head P+2514..2528 обходятся по порядку. P+252c временно служит текущим item. Сравнивает classname(pool+item.pev.classname) с тремя inline строками P+204c/20cc/214c: точное case-sensitive сравнение до NUL. Для каждого совпадения очищает только первый byte строки, MSG_ONE QSlotClear(global10226634,size2): BYTE1/2/3,BYTE0, затем обнуляет DWORD P+3dc/3e0/3e4. Несовпавшие/stale quick slots не сбрасываются. После каждого совпадения заново читает active, поэтому callbacks могут изменить последующие сравнения; нет lifetime/null guards.',
+'Перед item.virtual15c() кэширует item.next(+164); callback без аргументов, затем active=cachedNext. Весь завершённый head обнуляется. Native CBasePlayerWeapon table101a7804+15c=1011cf10: этот уже разобранный базовый callback лишь отключает pickup и планирует удаление через0.1; не следует подменять вызов синхронным free. Здесь сам item.owner не очищается. Произвольные derived callbacks остаются внешними.',
+'После шести цепочек active=0, pev.viewmodel(+bc)=0,pev.weaponmodel(+c0)=0. removeSuit!=0 очищает всю DWORD pev.weapons(+16c); removeSuit==0 оставляет только bit80000000h (остальные31 бит очищаются). Имя removeSuit — предлагаемое по этой маске, не восстановленный debug symbol. Затем для каждого i=0..31 записывает P.ammo[2540+4*i]=0 и без проверки message id отправляет MSG_ONE AmmoX(global102264e8,size3): BYTE i,SHORT заново прочитанный ammo[i]. Callback может изменить значение между zero-store и отправкой; это не постоянный literal0 в коде.',
+'После AmmoX ещё раз обходит шесть head. В обычном последовательном ходе они ужеNULL, но сама ветвь WpnInfo существует: MSG_ONE(global102265b8,size4), BYTE item.id(+168),BYTE DWORD[102318a4+id*2c] (ItemInfo maxClip),SHORT P.ammo[item.primaryAmmoType(+1dc)], затем читает item.next. Индексы и id не проверяются. Повторное заполнение списков callback-ами способно сделать ветвь достижимой; её нельзя удалять из восстановленного алгоритма как безусловно мёртвую.',
+'В конце P.virtual258() без аргументов (native CBasePlayer table101a4da8+258=100f6ca0, внутренности отдельно), затем MSG_ONE CurWeapon(global102264cc,size3) с тремя BYTE0. В этой функции нет отдельного обхода/очистки GUI string_t слотов2200+, HP/stamina/stats, refill или next-item cancellation. Их возможные изменения внутри callbacks не доказаны локальным телом. Native сообщения идентифицированы registration100e5fc0; успешная доставка клиенту не наблюдалась.',
+'Saved C содержит прямые references из1007dd30/10086370/10086eb0/100a60c0/100c76d0/100ef2d0/100f5b30. Это bounded search по сохранённому corpus с hash pins в caller_search; полный native caller graph и контракты всех этих owners этим пакетом не закрыты.'
+])
+add('100e24a0','Player_HasGlockWithByte200Set','Проверяет шесть цепочек на weapon_glock с ненулевым byte+200 и возвращает bool в AL.',[
+'Thiscall ECX=player, без stack arguments, plain RET. Обходит шесть head2514..2528 и next+164. На каждой непустой цепочке кэширует globals.pStringBase(+98), получает item.pev.classname и case-sensitive сравнивает с native literal weapon_glock@101b06fc. Совпадение и BYTE item+200!=0 даётAL1; не только active item, не GUI slots, не ammo и не rules.',
+'На отсутствии match native XOR AL,AL сохраняет старшие24 бита EAX: они происходят из указателя на конец массива heads. Поэтому это byte-bool ABI, нельзя трактовать полный EAX как нулевой int. В ветви успеха предшествующий comparator обнулилEAX и MOV AL,1 делает фактическиEAX1. Native consumer100e4360 проверяет именно AL и посылает bool последним BYTE Inventory.',
+'Локальное тело не устанавливает авторское имя/назначение item+200: флаг специально назван по смещению. Нет mutation, virtual calls, validation указателей/циклов или оценки функциональности Glock. Полная семантика producers этого derived byte и остальных saved C callers100ead70 остаётся открытой.'
+])
+add('100f1440','Player_ResetAutoaimAndCrosshairIfXYChanged','Условно обнуляет трёхкомпонентную поправку прицеливания и crosshair, всегда сбрасывает target-state DWORD.',[
+'Thiscall ECX=player, без stack arguments, plain RET, нормализованный EAX не задаётся. Native UCOMISS/LAHF/TEST AH,44h/JP проверяет float P+2640 и при необходимости P+2644: любой не равный0, включая unordered NaN, ведёт в reset. +0 и-0 считаются равными. Если оба равны0, P+2648 не читается и не меняется, CrosshairAngle не вызывается: даже ненулевойZ сам по себе reset не запускает.',
+'В reset записывает positive-zero bits во все три DWORD2640/2644/2648, затем engine table10222f48 slot94/global102230c0: pfnCrosshairAngle(P.pev.pContainingEntity(+20c),float0,float0). Во всех путях после callback либо skip записывает DWORD P+264c=0. Нет чтения/mutation active weapon, сетевого MSG_BEGIN, камеры view angles или настройки sensitivity.',
+'Имена autoaim/target-state — семантическое предложение по CrosshairAngle и caller100f5e50/100f0ba0. Native support1011fc80 читает264c для active weapon HUD state40h против1; это не доказательство имени поля из save table (эти поля в ней не найдены). SDK-сходство не используется для добавления отсутствующей логики. Other saved callers100f0fa0/100f1350/100f1a50/100f1c20/100f1d00 остаются отдельными контрактами.'
+])
+(OUT/'notes.json').write_text(json.dumps(dict(functions=rows),ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+intro='''# Player inventory removal, Glock query and crosshair reset
+
+Static pass15. Original server DLL SHA256751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641.
+Only three pending primary bodies receive new REVIEW. No target execution, game code, resources or implementation changes.
+Read `notes.json` for importable cards, `evidence.json` for C/ASM/PE/RTTI/save descriptor pins and the bounded saved-C caller search; run `verify.py` for byte provenance checks. Verification of bytes does not prove runtime behaviour.
+
+The next edges remain explicit: virtual258=100f6ca0, all derived15c/14c callbacks, Glock byte200 writers, GUI removal/deferred-item reset and complete removal caller contracts. Native descriptors bind player chain/active/ammo fields; no guessed field name is presented as a recovered symbol.
+'''
+text=intro
+for r in rows:text+='\n## '+r['address']+' '+r['proposed_name']+'\n\n'+r['summary_ru']+'\n\n'+'\n\n'.join(r['details_ru'])+'\n'
+(OUT/'contract.md').write_text(text,encoding='utf8')

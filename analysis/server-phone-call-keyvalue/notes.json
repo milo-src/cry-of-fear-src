@@ -1,0 +1,31 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10060140",
+      "proposed_name": "CPhoneCall_KeyValueSubtitleNumbersTimesAndAudio",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Разбирает все65 ключей телефонного звонка:32 subtitle ID,32 float-времени и audiofile; остальные передаёт базовому KeyValue.",
+      "details_ru": [
+        "Native CPhoneCall::KeyValue entry10060140..10060e28: ECX=this, один stack pointer K, RET4. K.key находится+4, K.value+8, DWORD handled+0c. EBX сохраняет this, ESI — K, EDI — начальный key pointer. Ни this/K/key, ни value на локальном уровне не проверяются на NULL. Возврат EAX не является status: integer/audio ветви оставляют результат converter/AllocString, float ветви не определяют meaningful integer result; handled — отдельная запись после field store.",
+        "Проверяются ровно65 literal keys в порядке subtitlenumber1..32, subtitletime1..32, audiofile. Первые три сравнения встроены: exact byte-by-byte до NUL, по два байта за проход. Остальные62 используют cdecl1000aba0 с тем же exact case-sensitive правилом и full EAX0/1. Это не распознавание числового suffix: ведущий ноль, знак, дополнительный пробел, другой регистр или номер33 не принимаются данным слоем. Одна успешная ветвь немедленно возвращает; совпадение префикса без совпадения terminating NUL не подходит.",
+        "subtitlenumberN, где N от1 до32, вызывает cdecl1016b55e(K.value) и записывает полный EAX как DWORD в this+e8+4*N. Получаются ec..168. Helper передаёт в1016a01f locale=NULL, источник байтов с end pointer=NULL, base10, signed mode1. Shared native parser пропускает locale whitespace, допускает один знак, читает цифры до неподходящего байта; отсутствие цифр даёт0. Signed overflow насыщается до INT_MAX/INT_MIN, errno22h, что подтверждает10169fb8 и основной parser. Primary не читает errno/end pointer, не ограничивает subtitle ID, не валидирует его наличие и не делает float conversion. ASCII12.75→12, -4junk→-4; повторный ключ перезаписывает поле.",
+        "subtitletimeN, где N от1 до32, вызывает cdecl1016f5ec(K.value), затем FSTP DWORD в this+16c+4*N, то есть170..1ec. Wrapper1016f5ec является отдельным native entry: передаёт (value,NULL) в1016da44, очищает8 stack bytes и возвращает ST0 без собственной обработки. Primary округляет x87 результат до float32 согласно FP control word. Нет проверки знака, конечности, сортировки времён, прибавления globals.time или проверки результата. Если converter вернул NaN/infinity/negative, primary не фильтрует их; это условное утверждение о store, не доказательство конкретного синтаксиса таких литералов. Полный grammar/locale/errno/overflow backend1016da44 здесь не разобран. Ghidra FID_conflict__atof и wchar_t* не доказывают wide-string ABI; native call получает неизменный K.value pointer.",
+        "audiofile вызывает engine AllocString через10223054 (slot67 таблицы10222f48, initializer100b4aa0), передав K.value без изменения. Полученный DWORD string_t сохраняется в this+1f0; даже нулевой результат не проверяется, handled становится1. Ключ не открывает файл, не добавляет путь или extension, не запускает звук и не выполняет precache. Владение строкой передаётся engine string pool; native descriptor m_sAudioFile имеет type17 (sound string), а не raw char buffer.",
+        "Во всех65 успешных ветвях порядок одинаков: conversion/callback → store соответствующего поля → DWORD K.handled=1 → возврат. Входной handled не проверяется, прежнее поле не очищается до converter, остальные slots не изменяются. Нет транзакции, общего reset, allocation локального массива, увеличения current subtitle или запуска think. Ошибка либо невозврат внутри callback не откатывает уже совершённые им изменения и не гарантирует запись handled.",
+        "Если все65 сравнений не совпали, вызывает1000dba0 с исходными this и K, затем RET4; сам до fallback handled не меняет. Этот конкретный base helper принимает movewith→engine AllocString→this+18, skill→signed atoi→this+60, style→signed atoi→this+64, выставляя handled1; любой иной key ставит handled0. Следовательно неизвестный phone key может быть принят базовым слоем. Прямого рекурсивного phone parsing, generic entvars parsing или logging в этом локальном fallback нет.",
+        "Storage подтверждено native save table10212a80 с7 descriptors: m_iSubtitleNumber type10, basee8,count33; m_fSubtitleNumberNext type0, base16c,count33; m_sAudioFile type17,+1f0; m_iCurrentSubtitle type10,+1f4; m_hPhoneUser type4,+1f8; m_bAnswered type12,+200; m_pPlayer type4,+e0. Здесь type IDs записаны десятично. Primary пишет только indices1..32 обоих33-элементных массивов; index0 поe8/16c, current1f4, handles и answered не меняет. Эти поля принадлежат CPhoneCall, не одноимённым offsets player/monster. В type12 нельзя подменять native generic DWORD width догадкой BYTE по префиксу m_b.",
+        "Связь класса не выводится из одного имени: factory1005fb60 записывает vptr101b5a20 в allocation204h, raw vtable+34 содержит10060140, locator101fb414/type descriptor1021d790 несёт .?AVCPhoneCall@@. Restore10060e90 и Save10060ed0 ссылаются на literal CPhoneCall и эту же таблицу7. Эти тела сохранены как supporting evidence, без дополнительных REVIEW. Последующая интерпретация времени/ID, выбор пользователя, Play/End и network payload находятся в отдельных lifecycle/runtime пакетах."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10060140.c",
+        "analysis/server-phone-call-keyvalue/10060140-0.asm",
+        "analysis/server-phone-call-keyvalue/evidence.json",
+        "analysis/server-phone-call-keyvalue/contract.md",
+        "analysis/server-state-reader/contract.md",
+        "analysis/server-alias-state/contract.md"
+      ]
+    }
+  ]
+}

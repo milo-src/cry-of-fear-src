@@ -1,0 +1,104 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x101053d0",
+      "proposed_name": "TalkMonster_RestoreOwnFields",
+      "subsystem": "monsters",
+      "summary_ru": "Восстановление 11 полей CTalkMonster после успешного нижнего Restore.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI: ECX=E, один stack argument Reader R, RET 4; полный EAX сохраняется от последнего вызываемого reader. Ghidra void не описывает реальный возврат. Сначала вызывается 100c19a0(E,R); при EAX==0 собственный блок не читается и возвращается этот ноль.",
+        "При ненулевом нижнем результате 10117010 вызывается с ECX=R и четырьмя аргументами: \"CTalkMonster\", E, table10219c18, count11. Свой слой не содержит cleanup после чтения и не делает rollback при нулевом результате.",
+        "Нижний 100c19a0 сначала вызывает 10102890. После собственного ReadFields CBaseMonster он сохраняет результат и независимо от него очищает route через100c1a70, schedule+230, taskstatus+22c, activity+214; если enemy EHANDLE+184 невалиден, очищает conditions+180. Поэтому возврат0 верхнего Restore не означает отсутствие уже совершённых изменений.",
+        "Таблица CTalkMonster содержит DWORD-поля, string_t, три относительных времени и EHANDLE адресата речи+3e0. Generic ReadFields10117010 возвращает0 при несовпадении block token, иначе1 даже при некоторых проигнорированных полях/ошибках нижних void readers; результат нельзя считать полной проверкой сохранения. Подробная wire-семантика закреплена в server-serializer."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101053d0.c",
+        "analysis/server-follower-schedule-io/101053d0-0.asm",
+        "analysis/server-follower-schedule-io/contract.md",
+        "analysis/server-follower-schedule-io/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101057f0",
+      "proposed_name": "TalkMonster_SaveOwnFields",
+      "subsystem": "monsters",
+      "summary_ru": "Сохранение 11 native descriptors CTalkMonster с diagnostic owner label.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI: ECX=E, один stack argument Writer W, RET 4, полный EAX нижнего Save либо generic writer. Сначала 100c1ec0(E,W); если EAX==0, сразу возврат без собственного блока. После нижнего вызова заново читаются pev и global string pool.",
+        "Owner label выбирается как pool+pev.targetname(+1d0), если string_t ненулевой, иначе pool+pev.classname(+0). Writer1011adc0 получает ECX=W и пять аргументов: ownerLabel, literal\"CTalkMonster\", E, descriptors10219c18, count11. Owner label предназначен для диагностик и не заменяет имя блока; входные строки здесь не валидируются.",
+        "Свой слой сохраняет native таблицу в исходном порядке, включая последний descriptor m_deathNoticed по+3d4 после m_hTalkTarget+3e0. В generic writer обычный return устанавливает EAX1 даже после части low-level ошибок; этот результат не является надёжной гарантией полной записи. Наследуемые блоки пишутся раньше и не откатываются.",
+        "В собственной таблице отсутствуют DWORD+370 и speech payload slots+374..3b0. Это ограничение именно данного descriptor layer; оно не доказывает отсутствие других writers или восстановления этих полей в иных этапах. Относительные времена type15 и EHANDLE type4 нельзя переносить как простую копию native памяти."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101057f0.c",
+        "analysis/server-follower-schedule-io/101057f0-0.asm",
+        "analysis/server-follower-schedule-io/contract.md",
+        "analysis/server-follower-schedule-io/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10105850",
+      "proposed_name": "TalkMonster_FindNamedSchedule",
+      "subsystem": "monsters",
+      "summary_ru": "Поиск имени в 11 follower schedules, затем в 40 generic monster schedules.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI: ECX=E, один stack argument name, RET 4, EAX — заимствованный schedule pointer либо0. Первым вызывается 1008cd80(name,10219ce0,11). Только если результат0, вызывается1008cd60 с тем же E и name; тот ищет через1008cd80 в10213130 с count40. Совпадение в follower list имеет приоритет над generic list.",
+        "Helper1008cd80 обходит signed positive count по порядку. У каждой записи без проверки NULL descriptor читает name по+10. NULL имени записи выдаёт alert1 \"Unnamed schedule!\" и продолжает; ненулевое сравнивает через1017bcbb. При равенстве заново читает list[index] и возвращает его. Ни копирования, ни владения найденным объектом не возникает.",
+        "NULL входного name вызывает alert1 с classname и возвращает0 на каждом поиске: верхний fallback приводит к двум таким вызовам, если alert возвращается. Пустая строка не равна NULL и проходит обычные сравнения. Нет собственной проверки пригодности entity, таблицы или строк.",
+        "Comparator1017bcbb доказан отдельно native ASM: при mode10232e78==0 ASCII A..Z складываются с32, остальные байты не меняются; при mode!=0 используется runtime mapping table. Поэтому нельзя приписывать этому поиску Unicode case-fold или распространять ASCII-only правило на неизвестную runtime ветку. Exact eleven-pointer order, masks, names и все59 task records сохранены в таблице ниже и evidence.json.",
+        "Ни один из пяти primary entry не найден как exact preferred-base LE32 value в raw .rdata/.data; это ограниченный скан, не доказательство отсутствия вызывающих функций или динамической vtable. Concrete derived class/slot данного lookup остаются неустановленными."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10105850.c",
+        "analysis/server-follower-schedule-io/10105850-0.asm",
+        "analysis/server-follower-schedule-io/contract.md",
+        "analysis/server-follower-schedule-io/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10105880",
+      "proposed_name": "TalkMonster_ForwardSetActivity",
+      "subsystem": "monsters",
+      "summary_ru": "Прозрачная передача установки activity в monster helper100c1f50.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело — PUSH EBP; MOV EBP,ESP; POP EBP; JMP100c1f50. Сохраняются ECX entity и исходный stack argument activity; эффективный RET 4 выполняет нижний helper. Saved C void(void) скрывает аргумент. Собственного результата, проверок или мутаций wrapper не добавляет.",
+        "Нижний100c1f50 вызывает LookupActivity1000e950. При signed result>=0 обновляет sequence; frame сбрасывает, когда sequence изменился либо loop flag+fc==0, кроме переходов между activities3/4. Затем ResetSequenceInfo1000e9e0, virtual+1c0(), и записи idealActivity+218/activity+214 из исходного аргумента.",
+        "При отрицательном lookup выдаётся alert1 с classname/activity, sequence обнуляется, +218/+214 всё равно обновляются; ResetSequenceInfo и virtual+1c0 на этом пути не вызываются. EAX нижнего пути не нормализуется в bool; wrapper не обещает status/success. Конкретный target virtual+1c0 зависит от реального объекта и не установлен этой обёрткой."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10105880.c",
+        "analysis/server-follower-schedule-io/10105880-0.asm",
+        "analysis/server-follower-schedule-io/contract.md",
+        "analysis/server-follower-schedule-io/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10105890",
+      "proposed_name": "TalkMonster_SetResponseScheduleAndRecipient",
+      "subsystem": "monsters",
+      "summary_ru": "Условно ставит Idle Response, затем всегда записывает EHANDLE адресата речи.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI: ECX=E, stack argument target private entity pointer, RET 4. Если cine pointer+34c равен0, сначала ChangeSchedule1000aa50(E,10219d44); если ненулевой — пропускается только смена schedule. После обеих ветвей всегда вызывается10017740 с ECX=E+3e0 и исходным target.",
+        "ChangeSchedule записывает schedule+230, очищает taskindex+234, taskstatus+22c, conditions+180 и DWORD+320. Descriptor10219d44 — Idle Response с7 tasks, interrupt mask10300 и sound mask0. В нём нет interrupt bit20000, поэтому generic warning о sound-mask0 здесь не возникает. Расписание меняется до записи handle, rollback отсутствует.",
+        "Setter10017740 возвращает EAX=входной target, и wrapper сохраняет его до возврата: NULL результат не свидетельствует об отказе сменить расписание. NULL target обнуляет обе части EHANDLE; ненулевой target даёт edict через pev+20c, сохраняет pointer и при ненулевом edict обновляет serial. При ненулевом target с NULL edict старый serial остаётся. Проверки alive/player/serial входного private pointer здесь нет.",
+        "Именно native descriptor именует+3e0 m_hTalkTarget. Это не follow target+18c и не enemy+184. Wrapper не пишет stop-talk timer+3dc. В speech helper101041f0 существует compatible callback candidate.virtual+24c(this) с последующим копированием timer; прямой binding этого slot на10105890 данным пакетом не доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10105890.c",
+        "analysis/server-follower-schedule-io/10105890-0.asm",
+        "analysis/server-follower-schedule-io/contract.md",
+        "analysis/server-follower-schedule-io/evidence.json"
+      ]
+    }
+  ]
+}

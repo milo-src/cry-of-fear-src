@@ -1,0 +1,20 @@
+[REVIEW server:0x100af810]
+  Предлагаемое имя: RefreshSkillData
+  Подсистема: movement
+  Назначение: Обновляет skill-таблицу, включая скорости и syringe-heal.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Skill index ограничивается1..4;100fc6c0(base) lookup. Globals102268b0/b4/b8/bc=primary/secondary/sprint/stair,1022672c=syringeheal. Read-only установленный skill.cfg даёт75/45/125/50 для всех4сложностей; heal100/80/60/50. Это file-defaults, не runtime cvar measurements.
+  Основание: decompiled/server/partial-pass/functions/0x100af810.c
+  Основание: analysis/movement/health-stamina.md
+  Основание: analysis/movement/health-evidence/capture.json
+[/REVIEW]
+[REVIEW server:0x100fc6c0]
+  Предлагаемое имя: GetSkillCvar
+  Подсистема: movement
+  Назначение: Получает cvar параметр для выбранного индекса skill.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: PEстрока101de4a8 подтверждена как%s%d: имяbase+decimal skillIndex10226728; вызывается refresh skill. Не фиксирует runtime cvar на file-default.
+  Основание: decompiled/server/partial-pass/functions/0x100fc6c0.c
+  Основание: analysis/movement/health-stamina.md
+  Основание: analysis/movement/health-evidence/capture.json
+[/REVIEW]

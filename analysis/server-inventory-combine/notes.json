@@ -1,0 +1,65 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100e3020",
+      "proposed_name": "CBasePlayer_CombineInventorySlots",
+      "subsystem": "inventory",
+      "summary_ru": "Сравнивает combined_result двух GUI предметов и выполняет accessory или generic combine с точным порядком очистки/обновлений.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e3020.c",
+        "analysis/server-inventory-combine/100e3020-0.asm",
+        "analysis/server-inventory-combine/evidence.json",
+        "analysis/server-inventory-combine/contract.md"
+      ],
+      "details_ru": [
+        "Thiscall ECX=P, stack args(int slotA,int slotB,const char* requestedResult), RET12. Все нормальные выходы проходят security cookie1013dbb3; EAX не является нормализованным success flag. Порядок первых guards: BYTE P.m_bInPhoneCall(+1ee8)!=0 → silent return; затем100e4ed0(P), проверяющий pev.movetype(+108)==5, → silent return. Здесь нет IsAlive, fuser3, health, ammo, three-slot-mode или active-weapon guard.",
+        "Inline strlen(requestedResult)<=1 даёт AlertMessage(1,\"COMBINE ERROR: No combine result\\n\"), затем отказной звук. NULL result не проверяется. При большей длине сначала читает P.inventorySlot(+21fc)[slotA] и вызывает100e4ee0(string_t); если исходный string_t==0 (helper возвращает EAX1) — diagnostic об empty slots и отказ. Только если slotA непустой, аналогично проверяет slotB. Лишь ПОСЛЕ этих indexed reads проверяет unsigned(slotA-1)<=5, unsigned(slotB-1)<=5 и slotA!=slotB. Поэтому поздняя проверка1..6 не защищает первые два чтения от invalid index. m_bThreeSlots здесь не ограничивает индексы до3.",
+        "Для двух непустых допустимых разных слотов вызывает100dff70(\"combined_result\",stringBase+slotA string_t), затем1001f160(localA128,\"%s\",returnedPointer); аналогично slotB в отдельный localB128. Форматтер не получает capacity от caller, передаёт countFFFFFFFF CRT bridge; security cookie не является bounded copy. Снимок первой строки сделан до второго parser-вызова с общим token buffer. Source pointer/formatting success здесь не проверяются. Строки localA/localB сравниваются точно, с учётом регистра, доNUL; mismatch даёт отказной звук. Их длина и равенство requestedResult не проверяются: даже два пустых parsed results проходят это сравнение, если helper вернул такие строки.",
+        "После равенства двух parsed results ветвление идёт исключительно по requestedResult. Точная строка \"glockwithtaclight\" ищет сначала slotA path==\"inventoryitems/taclight.txt\", иначе slotB с тем же точным path. Если оба не совпали — отказной звук. При первом совпадении приоритет slotA. Затем100ddc40(P) закрывает GUI,100dd990(P,chosenSlot,0) очищает выбранный расходник, после этого100e0310(P,3) ищет weapon ID3. Если вернулся ненулевой W, записывает BYTE W+1f8=1. Если W==NULL, не откатывает очистку и всё равно продолжает success sound/update. Не проверяет classname/ID другого GUI слота и не удаляет его.",
+        "Точная строка requestedResult==\"phonewithbattery\" имеет тот же порядок, но exact accessory path=\"inventoryitems/mobile_battery.txt\" и weapon ID2. Во всех четырёх accessory paths после lookup/update читает ТЕКУЩИЙ P.inventorySlot[chosenSlot] и вызывает100e4360(P,chosenSlot,currentString_t,0), затем звук weapons/item_get.wav. Обычная ветвь100dd990(...,0) уже обнулила четыре GUI массива и отправила update, поэтому без callback mutation это повторный update пустого слота. Нельзя заменить его обновлением оставшегося оружейного слота. Значение читается после внешних вызовов; всегда нулевым его не объявляем. Запись W1f8 здесь — producer action latch, не немедленное применение battery/light animation: consumers описаны в server-mobile-frame и server-glock-frame.",
+        "Для любого другого requestedResult после равенства parsed strings выполняет100dd990(P,slotA,0), затем100dd990(P,slotB,0), затем engine AllocString(requestedResult) через10223054. Сохраняет полный возвращённый string_t в P.inventorySlot[slotA], вызывает100e4360(P,slotA,result,0) и weapons/item_get.wav. GUI перед этим generic path не закрывает. Не проверяет возвращённый string_t, существование нового descriptor file или соответствие его двум parsed results. Сам не восстанавливает inventorySlotClassname/+2218/+2250 после очистки, не создаёт entity и не вызывает AddPlayerItem; это изменение GUI descriptor slot. Failure/exception/callback mutation не имеет локального rollback.",
+        "Диагностики wrong slots/empty slots передают AlertMessage(1,literal,slotA,slotB) в исходном порядке. Все отказы после result length, empty slots, invalid range, descriptor mismatch или missing accessory используют inventory/inventory_no.wav. Два ранних guard exits без звука. Оба sound paths имеют точные args100fc9f0(P.pev.edict,3,path,1.0f,0.8f,0,100), float32 bits3f800000/3f4ccccd. Sound и GUI update не доказывают успешную выдачу оружия/ресурса. Player/pev читаются заново перед sound; одно snapshot-состояние на всю операцию не предполагается."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100e42f0",
+      "proposed_name": "CBasePlayer_IsGuiInventoryFull",
+      "subsystem": "inventory",
+      "summary_ru": "Проверяет ненулевые string_t в первых трёх или шести GUI slots, возвращая полный EAX0/1.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e42f0.c",
+        "analysis/server-inventory-combine/100e42f0-0.asm",
+        "analysis/server-inventory-combine/100e42f0-1.asm",
+        "analysis/server-inventory-combine/evidence.json",
+        "analysis/server-inventory-combine/contract.md"
+      ],
+      "details_ru": [
+        "Thiscall ECX=P, no stack args, plain RET; полный EAX0 или1. Один раз проверяет BYTE P.m_bThreeSlots(+1e9c). Ненулевой byte выбирает slots1..3, ноль — slots1..6; slot0 всегда пропущен. Head P+2200 соответствует inventorySlot[1] от base21fc. В выбранном диапазоне последовательно вызывает100e4ee0 со значением каждого DWORD string_t. Первый zero slot возвращает0; только все ненулевые дают1.",
+        "100e4ee0 игнорирует ECX и сравнивает аргумент с0: полный EAX1 означает empty, EAX0 — ненулевой string_t. Поэтому непустой string_t, ведущий к пустой строке, тоже занимает место; NULL/валидность string pool и actual weapon chains не проверяются. Здесь нет writes, сообщений, allocation, поиска matching classname, alive/phone/movetype guards или validation slots4..6 в three-slot mode. Режим выбран до обхода и не перечитывается. Это fullness GUI slots, не ёмкость linked weapon inventory."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100e0310",
+      "proposed_name": "Player_FindWeaponById",
+      "subsystem": "weapons",
+      "summary_ru": "Обходит шесть linked item chains и возвращает первый virtual174 result с совпадающим ID.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e0310.c",
+        "analysis/server-inventory-combine/100e0310-0.asm",
+        "analysis/server-inventory-combine/evidence.json",
+        "analysis/server-inventory-combine/contract.md"
+      ],
+      "details_ru": [
+        "Полное расширение существующей карточки. Thiscall ECX=P, один stack DWORD id, RET4; EAX — указатель, возвращённый virtual174, либо0. Обходит ровно шесть голов P.m_rgpPlayerItems(+2514..2528) в возрастающем порядке. В каждом непустом списке вызывает item.virtual174() с ECX=item. Если result W!=NULL и DWORD W.m_iId(+168)==id, немедленно возвращает именно W, который не обязан совпадать с исходным item. Равенство битовое; ID не ограничивается диапазоном.",
+        "Если callback вернулNULL либо ID не совпал, next читается из первоначального item.m_pNext(+164) ПОСЛЕ callback, не из возвращённого W. Следующая голова читается при переходе к ней; глобальный снимок всех списков не создаётся. При исчерпании всех шести возвращает0. Нет cycle detection, ограничений длины, проверки freed item после callback или владения возвращённым W. Callback side effects не запрещены этим кодом. Сам helper не пишет поля, не выдаёт предмет, не проверяет GUI slots и не выбирает active weapon; имена m_rgpPlayerItems/m_pNext/m_iId подтверждены PLAYER/ITEM native descriptors."
+      ]
+    }
+  ],
+  "subsystems": []
+}

@@ -1,0 +1,116 @@
+{
+  "scope": "Static reverse only; no target execution/game implementation/resources/commits",
+  "result": "PASS",
+  "new_reviewed": 14,
+  "updated_existing": [
+    "server:0x1011d560"
+  ],
+  "prior_review_bodies_exactly_preserved": 1970,
+  "prior_evidence_paths_retained": true,
+  "packages": [
+    {
+      "package": "analysis/server-entity-fade",
+      "new_reviewed": 4,
+      "updated_existing": [],
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All4 C/native bodies; PE exports, float32 thresholds/NaN and phase handling, callback order, no starter reset, concrete monster vtable and direct removal without fade.",
+      "final_hashes": {
+        "capture.py": "3361455fa0914ab647d797f74015be619f89b5f460e2e5a684c94f8022f81495",
+        "verify.py": "6f45acc1a97c2059cd4c1b3d536ffef63a5e9f9bb52f1f3a64afca7c685b979c",
+        "contract.md": "9eeec1b1b048b77e621f71d9cd6deda6953f78b91f228fae26c85c792d32903f",
+        "notes.json": "03e9b5d806d494976167558c41f478681cb42648bbcd1b312aaa9dfad7125a0d",
+        "evidence.json": "c51c0894ff201bc2ca756f41098cf15daf4bd0abf02df6b75d9f40f5a2f64d06"
+      }
+    },
+    {
+      "package": "analysis/server-inventory-drop",
+      "new_reviewed": 4,
+      "updated_existing": [],
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "All4 C/native bodies; iuser3 early exit, repeated ItemInfo gates, unlink failure continuation, reserve debit before spawn, GUI limits and Create ABI/failed Spawn handling.",
+      "final_hashes": {
+        "capture.py": "2e87b31137edcf11e5f3c7081361f94bc9f76de49c687813f8c6fb9bbf52f55e",
+        "verify.py": "4154d428c60af7dfbafdf61b495568c26b836eb94c5ab75504e7a94240ff7bcd",
+        "contract.md": "c9477c3163a0266de047d52ce091296bf530b8f86d0da3aa1eebb95d38a2c875",
+        "notes.json": "d15bf737e55f940b28f0a471618bccab5caf502a2d303b5f5424989322ecc38b",
+        "evidence.json": "8aa21b4dccfd9dce4ac5b715b421768d05f101e6e40127d2affa097764ed25b5",
+        "write_notes.py": "fd6f934b48dd56831368dabacfe20a3a90a4cfa2569cd815f82a8b9aba2b1512"
+      }
+    },
+    {
+      "package": "analysis/server-monster-sight",
+      "new_reviewed": 4,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All4 C/native bodies; BookSimon count vs client-index selection, bbox iteration/capacity, callbacks and intrusive links, reciprocal horizontal view cone and native FP.",
+      "final_hashes": {
+        "capture.py": "d228edbc09a089f70726ae78751404db61ede6180965954b43b9995588238b71",
+        "verify.py": "b5cce158cad2b779b86be771c2fff6bc60c813b57127dfab0b15d8df4c19a99c",
+        "contract.md": "34f7e826fb13c8594b194fcb2463920e24d5efe87b8eced609ca72b007db31d1",
+        "notes.json": "f1e681df30069d5496eb563b17ea3c4b40ae43aa93d6e4953654cddc586eb49a",
+        "evidence.json": "3acad33afc316cce7a0f772e8e06926f31d92a1aeda8a19611ee34cbedd7088d"
+      }
+    },
+    {
+      "package": "analysis/server-glock-frame",
+      "new_reviewed": 2,
+      "updated_existing": [
+        "server:0x1011d560"
+      ],
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All3 C/native bodies including full refinement1011d560; frame ordering, jump animation predicate, reload completion/ItemInfo binding, input dispatch and cached/fresh owner reads.",
+      "final_hashes": {
+        "capture.py": "174fe5bb5d004ee241c92c1c8cf33ba77006b0012d75eb503aa879e3a5e9c86c",
+        "verify.py": "afd786496d00ac500786148677be00c40d4f207abfa37b81fec04f99d6ce9914",
+        "contract.md": "9614ffaadc4872e5eaf8b23a591149dd5aa2fc2323444ef5b5265eda8f27af6b",
+        "notes.json": "29ee6e070e27b38c6eb6807c16c26ea37faa1d5d87aac689f85babf504303db9",
+        "evidence.json": "2d010efdd3aebc88bacc93d6314861c16339ae2f7b4fae16fbb8de7abcac34d0",
+        "write_notes.py": "d5c2340e46ca48e392d4cd90c834e39bf2156dc4d49e85659c1ea52ea0a2d854",
+        "prior-review.txt": "faaf3c3472003199c007b5fcad15818f10f5e9d5c302cda9a2bf7bd0da702d84"
+      }
+    }
+  ],
+  "verification_report_sha256": "560637a5b7e00db2a887ae4c28c144cd59b3451280be6064e5c19baf162eecaa",
+  "navigation_cleanup": "14 reviewed addresses removed from pending; mechanics routes/workboard updated; old common ItemPostFrame note synchronized with full contract and misleading same-edict lookup corrected in playsfx documentation; remaining overrides, data producers, complete drop/death dispatch and engine boundaries remain open.",
+  "note_sync": {
+    "updated_ids": [
+      "server:0x100179f0",
+      "server:0x10046220",
+      "server:0x100880a0",
+      "server:0x10088470",
+      "server:0x1008aaa0",
+      "server:0x1008abb0",
+      "server:0x1008ac10",
+      "server:0x100bfc50",
+      "server:0x100de090",
+      "server:0x100de170",
+      "server:0x100e2240",
+      "server:0x100f5da0",
+      "server:0x1010a470",
+      "server:0x10118390",
+      "server:0x1011d560"
+    ],
+    "changed_files": [
+      {
+        "path": "analysis/network/playsfx-server-notes.json",
+        "rows": 1
+      }
+    ]
+  }
+}

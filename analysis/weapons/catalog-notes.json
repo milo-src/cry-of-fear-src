@@ -4,34 +4,53 @@
       "module": "server",
       "address": "0x10046dc0",
       "proposed_name": "weapon_glock_primary",
-      "subsystem": "combat weapon",
-      "summary_ru": "Основной выстрел weapon_glock; параметры, ветвления и анимации сверены с native телом.",
+      "subsystem": "weapons",
       "confidence": "high",
+      "summary_ru": "Полный вход выстрела CGlock: нажатие, пустой магазин, эффекты, пуля, отдача и отдельные таймеры.",
       "details_ru": [
-        "Базовый урон: int(sk_cof_glock); цикл: 0.1 с; fire sequences: [2, 3, 34, 38]. Это параметры конкретного оружия, не всей системы.",
-        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
-        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+        "ECX=W, без stack-аргументов, plain RET; возвращаемый статус не установлен. P=[W+160], pev=[object+4]. Все смещения здесь шестнадцатеричные. Сначала COMISS(W+1cc, now)/JA отсекает только упорядоченный будущий срок; unordered проходит при маскированных FP-исключениях. Требуются W+128==0, W+140==0 и BYTE(P+22b0)&1: проверяется m_afButtonPressed, а не непрерывное удержание.",
+        "При pev.waterlevel(+1c4)==3 отправляется animation(sequence=14h без iron или23h с BYTE W+178,1,0). Щелчок через virtual190 выполняется только при упорядоченном now>W+1b0 (COMISS/JBE исключает NaN); после него W+1b0=float32(double(fresh now)+0.5). Затем W+1cc и W+1d0 отдельно получают fresh now+0.5. Патрон, пуля и остальные эффекты не расходуются/не выполняются.",
+        "При signed W+1e4<=0: если DWORD W+1b8==0, вызывается virtual1c0 Reload; иначе выполняются та же пустая анимация и строго ограниченный щелчок. После любой ветки W+1cc и W+1d0 снова становятся fresh now+0.5. Следовательно, эти два срока перезаписывают сроки, которые мог установить автоматический Reload; player+308 и idle этой завершающей веткой не меняются. Конкретный virtual190=1011e4a0 выбирает weapons/weapon_fire_empty[_noclick].wav по W+1b4 и затем обнуляет W+1b4; аудиобэкенд остаётся внешним контрактом.",
+        "Принятый выстрел сначала отправляет Particle (global10226490, variable registration в100e5fc0): MessageBegin(1,id,NULL,P.edict); SHORT IndexOfEdict(W.edict); STRING aurora/gunsmoke.aur; BYTE1; STRING models/weapons/glock/v_glock.mdl; SHORT0; End. Только после callbacks сообщения проверяется BYTE текущего P+21ea: если ноль, уменьшается W+1e4. Затем P+2814 (native m_iViewValue) сохраняется для flags события.",
+        "MakeVectors(P.pev.v_angle), player virtual228(hidden output) даёт origin+view_ofs. Локальный вектор eventAngles=start+global right*32. PlaybackEvent (engine slot123,10223134) получает12 DWORD: flags=(сохранённый m_iViewValue!=1), текущий P.edict, WORD10231f50, delay0, текущий origin-pointer, &eventAngles, fparam1/2=0, iparam1=W+168, iparam2=0, bparam1/2=0. 10231f50 производится PrecacheEvent(1,\"events/muzzleflash.sc\") в1011fd90. Поле angles названо по ABI API; назначение этого необычного вектора у получателя здесь не предполагается.",
+        "Далее100ea240(P,\"pistol_shoot\",0),100f2a50(P,5), P.pev.effects|=2. MakeVectors получает float32(v_angle.x+punch.x),float32(punch.y+v_angle.y),float32(punch.z+v_angle.z). Новый virtual228 даёт начало пули. 100dfea0(P,&direction,0x3e31d0d4) RET8 копирует global forward(+28/+2c/+30); cone-аргумент и ECX не читает. Это не доказательство автоматического прицеливания.",
+        "W+19c=float32(W+198+W+19c); W+1a0=float32(double(now)+0.55). Вызов10088ca0 с ECX=current P, RET44h: hidden output, count1, start Vector-by-value, direction Vector-by-value, W+18c/+190/+194 accuracy Vector-by-value, distance8192, kind3, tracer2, damage=CVTTSS2SI(float10226850=sk_cof_glock), attacker=current P.pev, seed=P+2288. Выходной вектор не используется. Для NaN/overflow CVTTSS2SI применим native результат при маскированных исключениях, не абстрактное безопасное int-преобразование. Полный seeded bullet helper разобран в server-bullet-traces; нулевой damage может включать его fallback. Запись kick не изменяет уже переданный direction. CGlock не наследует CBaseSpreadWeapon: native RTTI не позволяет приписать ему parser spread-table или поле spread time+1fc.",
+        "W+1d8=float32(now+1.0). После RandomLong(-2,2) его результат преобразуется CVTDQ2PS; вызов100f91b0(P,float(random),1,1), RET0c. В native часть аргументов заранее остаётся на стеке после ADD ESP,4 к RandomLong. Поле seed в этой RNG-операции не передаётся. Внутреннее SP/MP выполнение recoil — отдельный сохранённый контракт.",
+        "Только при ненулевых rules10222ee4 и rules.virtual20()==0 вызывается shell sender. У CGlock W+1fc — индекс models/shell.mdl. После recoil/rules callbacks заново читаются global basis и W.pev (именно оружия): velocity.x=(up.x*200+right.x*220)+forward.x*40; y=(right.y*220+up.y*200)+forward.y*40; z=(right.z*220+up.z*200)+forward.z*40. Position.x/y=((view_ofs+origin)+forward*80)+right*20; z=((origin.z+view_ofs.z)+forward.z*80)+right.z*20. Каждая MULSS/ADDSS округляет float32. 1011cf70(&position,&velocity,W.pev.angles.y,W+1fc,1). Rules SP/MP constants разобраны отдельно; здесь нет создания серверного shell-object.",
+        "ScreenShake10119de0 получает текущий P.pev.origin: при flags&4000h амплитуда2, frequency0.1,duration0.1,radius2; иначе5,0.25,0.15,2. Затем fire animation(seq,1,0): при W+1e4 именно==0 hip3/iron26h, иначе hip2/iron22h. 100f9100(P,3.0) передаёт ViewKnock с BYTE3.",
+        "PlaySFX10116a40 здесь имеет восемь DWORD: (\"weapons_new/glock/glock_fire.wav\",0,1,Vector-by-value,P,1), ADD ESP,20h. Вектор заполняет P.virtual104=1000d5a0: origin+view_ofs; actor и последний1 подготовлены до hidden-output вызова. Сокращённый C-прототип не отражает этот стек. Путь звука отличается от precache weapons/glock/glock_fire.wav; наличие/загрузка альтернативного ресурса не проверялись.",
+        "В завершение текущий P+2298=1, P+22a0=float32(double(now)+0.2). Сравнение signed W+1e4 с0 происходит ДО следующих записей; его EFLAGS переживают SSE/MOV: W+1cc=float32(double(fresh now)+0.1),W+1d0=float32(fresh now+1.0); если сравнение было <=0, W+1cc снова становится fresh now+1.0. Поэтому прежнее «цикл0.1с» описывало только непустую завершающую ветку. Общих NULL/finite/lifetime guards нет; callbacks могут менять перечитываемые поля."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x10046dc0.c",
-        "analysis/weapons/ranged.json"
+        "analysis/server-glock-attacks/10046dc0-0.asm",
+        "analysis/server-glock-attacks/evidence.json",
+        "analysis/server-glock-attacks/contract.md",
+        "analysis/server-glock-attacks/prior-review.txt",
+        "analysis/weapons/ranged.json",
+        "analysis/weapons/ranged.md"
       ]
     },
     {
       "module": "server",
       "address": "0x100475b0",
       "proposed_name": "weapon_glock_reload",
-      "subsystem": "combat weapon",
-      "summary_ru": "Вход перезарядки weapon_glock; контракт вместе с общими завершениями и таймерами описан в ranged.md.",
+      "subsystem": "weapons",
       "confidence": "high",
+      "summary_ru": "Вход перезарядки CGlock: iron ожидание, сброс магазина и запуск срока по модели, а не переданным2.6/3.5.",
       "details_ru": [
-        "Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.",
-        "Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.",
-        "Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md."
+        "ECX=W, без аргументов, plain RET. Signed reserve=P[2540+4*W+1dc] должен быть>0; индекс не проверяется. COMISS(W+1cc,now)/JA блокирует будущий срок, но unordered проходит. Требуются W+128!=1 и signed W+128<=2 (отрицательные значения не запрещены),W+140==0,BYTE W+1a4==0. Если BYTE W+178!=0, устанавливается BYTE W+1a4=1 и выполняется возврат: это ожидание выхода из iron, без немедленного helper.",
+        "В обычной ветке delta=wrap32(15-W+1e4). Пропуск происходит только при delta<reserve и delta==0; при уже положительном reserve это отвергает ровно полный магазин, но не отвергает отрицательную delta переполненного магазина. Старый clip сохраняется; W+138=0,W+128=2,W+1e4=0 ещё ДО helper. Старый clip!=0:1011c560(W,15,4,float2.6,0,0), затем100ea240(P,\"pistol_reload\",0). Старый clip==0:capacity15,sequence5,float3.5,0,0 и \"pistol_reloadempty\". Результат helper не проверяется; проигрывание player animation вызывается после него и при отказе.",
+        "Native helper RET14h читает только capacity/sequence. Поэтому2.6/3.5 — реальные переданные биты, но не фактическое назначение deadlines: они берутся из длительности модели через10120210. Старые патроны в clip обнуляются здесь; reserve не уменьшается и магазин не заполняется. Завершение reload и дальнейшая frame-машина — отдельная граница. При вызове из пустой ветки PrimaryAttack W+1cc/+1d0 позднее перезаписываются на now+0.5. Предыдущие карточки и сведения о переносе сохранены в prior-review.txt и ranged.json; этот проход не проверяет корректность порта."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x100475b0.c",
-        "analysis/weapons/ranged.json"
+        "analysis/server-glock-attacks/100475b0-0.asm",
+        "analysis/server-glock-attacks/evidence.json",
+        "analysis/server-glock-attacks/contract.md",
+        "analysis/server-glock-attacks/prior-review.txt",
+        "analysis/weapons/ranged.json",
+        "analysis/weapons/ranged.md"
       ]
     },
     {

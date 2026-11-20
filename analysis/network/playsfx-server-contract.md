@@ -132,9 +132,11 @@ engine sound path `100fc9f0`, а не этот вызов PlaySFX. Осталь�
 
 - Не dualweapon: при active latch сброс вызывают нулевой player virtual+bc,
   clip+1e4<1, поле+1f0!=0, отсутствие button bit1 или weapon+128!=0.
-- Dualweapon: проверяет партнёра через1002f180, его ID+200 в наборе14/23/27,
+- Dualweapon: вызывает1002f180 с pev того же weapon edict (private lookup/возможная allocation), проверяет DWORD результата+200 в наборе14/23/27,
   а также снятие button bit0x800 либо weapon+128!=0. Прочие dual-state
   переходы этим звуковым фрагментом не исчерпываются.
+  Полное тело, reload completion и input dispatch теперь разобраны в
+  [server-glock-frame](../server-glock-frame/contract.md); трактовка lookup как отдельного партнёра не подтверждена native ABI.
 - После сброса при loop offset+1a8!=0 SP отправляет operation2, byteArg1.
   В **dual** ветке path берётся из+1a8; в **не dual** — из+1ac.
   Это фактическое различие, а не опечатка, требующая исправления игры.

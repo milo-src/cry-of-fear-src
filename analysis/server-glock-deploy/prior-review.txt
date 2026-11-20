@@ -1,0 +1,14 @@
+[REVIEW server:0x1011c1a0]
+  Предлагаемое имя: Weapon_DeployWithInitialCustomTextureSync
+  Подсистема: graphics
+  Назначение: В общем deploy helper один раз для игрока отправляет ненулевые world custom texture paths; полный weapon deploy контракт здесь не заявлен.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Нужны ненулевой результат weapon vcall+140 и player pointer weapon+160. При player BYTE+3a9==0 сначала ставит1, затем проверяет world global10223190.
+  Разбор: Каждый ненулевой world +f0/+f4/+f8 отправляется владельцу через MSG_ONE CustomSlv/Fng/Glv STRING(pool+offset), без ограничения длины и преобразования filename. При world==NULL latch всё равно остаётся1.
+  Разбор: Повторный deploy пропускает блок до внешнего сброса player+3a9. Нулевой world field не вызывает reset, хотя latch уже установлен.
+  Разбор: После texture block идут custom viewmodel, ammo/animation state, звуки рукава, установка моделей и animation extension. Полный контракт этих ветвей не заявляется этим review.
+  Основание: decompiled/server/partial-pass/functions/0x1011c1a0.c
+  Основание: analysis/graphics/custom-texture-server.md
+  Основание: decompiled/server/partial-pass/functions/0x100e5fc0.c
+  Основание: decompiled/server/partial-pass/functions/0x100c8b70.c
+[/REVIEW]

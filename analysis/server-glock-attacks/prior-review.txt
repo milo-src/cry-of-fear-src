@@ -1,0 +1,23 @@
+[REVIEW server:0x10046dc0]
+  Предлагаемое имя: weapon_glock_primary
+  Подсистема: combat weapon
+  Назначение: Основной выстрел weapon_glock; параметры, ветвления и анимации сверены с native телом.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Базовый урон: int(sk_cof_glock); цикл: 0.1 с; fire sequences: [2, 3, 34, 38]. Это параметры конкретного оружия, не всей системы.
+  Разбор: Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.
+  Разбор: Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md.
+  Основание: decompiled/server/partial-pass/functions/0x10046dc0.c
+  Основание: analysis/weapons/ranged.json
+[/REVIEW]
+
+[REVIEW server:0x100475b0]
+  Предлагаемое имя: weapon_glock_reload
+  Подсистема: combat weapon
+  Назначение: Вход перезарядки weapon_glock; контракт вместе с общими завершениями и таймерами описан в ranged.md.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Magazine replacement и вставка по одному патрону различаются; у Rifle, Revolver и Shotgun отдельные фазы. Нельзя переносить только функцию входа.
+  Разбор: Перенос: src/cof/server/cof_ranged.cpp; общий жизненный цикл: cof_weapons.cpp. Собственные SDK поля заменяют private offsets.
+  Разбор: Статический контракт: analysis/weapons/ranged.json и ranged.md. Ограничения и текущие проверки: analysis/weapons/implementation.md.
+  Основание: decompiled/server/partial-pass/functions/0x100475b0.c
+  Основание: analysis/weapons/ranged.json
+[/REVIEW]

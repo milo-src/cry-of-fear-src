@@ -25,7 +25,7 @@ for a,name in names.items():
  details=[common]+paragraphs(section)
  if a in ['100a2710','100a51c0']:
   details+=paragraphs(doc.split('## Credits wire layout: общий порядок двух отправителей\n\n',1)[1].split('\n## ',1)[0])
-  details+=paragraphs(doc.split('## Поддерживающие score helpers и оставшиеся границы\n\n',1)[1])
+  details+=paragraphs(doc.split('## Поддерживающие score helpers и оставшиеся границы\n\n',1)[1].split('\n## ',1)[0])
  rows.append(dict(module='server',address='0x'+a,proposed_name=name,subsystem='menu' if a=='100a2050' else 'saving',summary_ru=summaries[a],confidence='high',evidence_paths=paths,details_ru=details))
 (OUT/'notes.json').write_text(json.dumps({'functions':rows,'subsystems':[]},ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 print('wrote',len(rows),'cards')

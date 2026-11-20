@@ -1,0 +1,185 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10012a80",
+      "proposed_name": "CBaseButton_Activate",
+      "subsystem": "entity-core",
+      "summary_ru": "Звук, master admission, переход вверх и выбор линейного/углового движения либо немедленного завершения.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012a80.c",
+        "analysis/server-button-dispatch/10012a80-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, no stack args, ordinary RET or tail-jump. First emit E.noise via100fc9f0(E.edict,2,S+noise,1.0f,0.8f,0,100); this happens even when master later rejects. Get activator from B+e4 and call10119060(B.master,activator). EAX0 calls1008e010(E,B+1b4,1,1) locked feedback and returns without changing state/motion. Nonzero calls the same feedback helper with(0,1), then writes state2.",
+        "If E.spawnflags&1 and rotating==0, tail-jump10015960 TriggerAndWait immediately, without assigning +154. Otherwise write +154=10015960 and pass a by-value12-byte vector plus E.speed to thiscall motion helper: rotating==0 uses position2 and101025c0; rotating!=0 uses angle2 and10101b50. Both helpers pop16 stack bytes. There is no local state/timer/player/key-lock check; callers supply admission checks. The immediate completion path rechecks master, so a second rejection can leave state2."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012ba0",
+      "proposed_name": "CBaseButton_ButtonBackHome",
+      "subsystem": "entity-core",
+      "summary_ru": "Завершает возврат, вызывает targets/multisource и восстанавливает touch/искры.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012ba0.c",
+        "analysis/server-button-dispatch/10012ba0-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, RET, exported decorated ButtonBackHome. Write state1 before all callbacks. If spawnflags&20 call UseTargets(B,HandleGet(B+e4),3,0.0f), then reload E. Independently of that flag, when E.target!=0 iterate10118500(previous,S+E.target,HandleGet(B+e4)) with previous initiallyNULL. This finder supports *locus; each iteration freshly reads target and activator, so callback changes are visible.",
+        "Stop the whole scan at NULL object, NULL object.pev.edict, or engine pfnEntOffsetOfPEntity(edict)==0 (API slot70 at10223060). For each surviving object, exact case-sensitive classname \"multisource\" invokes object.virtual+e8(HandleGet(B+e4),B,3,0.0f). Other classes continue scanning. Native stack proves four Use args and caller=B, correcting collapsed Ghidra presentation; no separate live-object guarantee after callbacks is added.",
+        "After callbacks reload E and set B.touch to10012f70 iff spawnflags&100, otherwiseNULL. If spawnflags&40, set think=10012f00 and invoke virtual+8(0.5f); else tail-call10017ad0 CancelThink, which clears desired deadline+58, and only without parent/children also E.nextthink+104 and cached+5c. CancelThink does not clear think pointer. Callback order is state, optional target dispatch, multisource scan, touch restoration, scheduling."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012d00",
+      "proposed_name": "CBaseButton_ResponseToTouch",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает точный код0/1/2 допуска и возврата по state/stayPushed/toggle.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012d00.c",
+        "analysis/server-button-dispatch/10012d00-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, no args, returns full EAX0/1/2. States2 or3 return0. Any nonzero state other than2/3 returns1, including state1 and invalid nonzero integers. State0 returns2 only when stayPushed==0 and spawnflags&20; otherwise0. Native redundant checks reduce to this predicate without reads/writes/callbacks beyond listed fields. This helper is used by touch; ButtonUse has its own conditions."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012d50",
+      "proposed_name": "CBaseButton_ButtonReturn",
+      "subsystem": "entity-core",
+      "summary_ru": "Сбрасывает frame, выбирает движение домой либо общий native tail ButtonBackHome.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012d50.c",
+        "analysis/server-button-dispatch/10012d50-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, exported ButtonReturn, no args. Write state3 and E.frame=0 before checking flag1. If flag1 is set, native JNE10012ba0 transfers directly into ButtonBackHome regardless of rotating. Ghidra includes an expanded copy of that tail, but the machine range10012d50..10012de2 contains only the transfer; the complete target body is separately retained in this package. Do not implement two copies of home callbacks.",
+        "Without flag1, store +154=10012ba0; rotating==0 calls101025c0(B.position1 by value,E.speed), otherwise10101b50(B.angle1 by value,E.speed). These are16-byte arguments with ECX=B. Native asymmetry is deliberate evidence: Activate bypasses motion under flag1 only when rotating==0, whereas Return bypasses even a rotating button. No noise, master/timer check or target firing occurs before the shared home path here."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012f00",
+      "proposed_name": "CBaseButton_ButtonSpark",
+      "subsystem": "entity-core",
+      "summary_ru": "Планирует следующий spark через RandomFloat, затем вызывает эффект от mins.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012f00.c",
+        "analysis/server-button-dispatch/10012f00-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, RET, exported ButtonSpark. Cache current vtable, assign think pointer10012f00, then call engine pfnRandomFloat(0.0f,1.5f), API slot91 at102230b4. Returned x87 value is stored to binary64, added to binary64 constant0.1 at101a1df8, converted to binary32 and passed to cached virtual+8. No clamp or locally verified endpoint distribution is imposed.",
+        "After scheduling, reload E and call100132d0(E,&E.mins) using E+dc, not origin. Existing spark helper computes input+size*0.5, emits temp entity and possibly a random spark sound; its detailed contract remains server-queue-a/contract-extra.md. The actual scheduler runs before the effect callback; this entry does not inspect state, lockedBy or current spawnflags and does not install touch."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012f70",
+      "proposed_name": "CBaseButton_ButtonTouch",
+      "subsystem": "entity-core",
+      "summary_ru": "Обрабатывает касание player с master и отдельной от Use логикой targets.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012f70.c",
+        "analysis/server-button-dispatch/10012f70-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, one object argument P, RET4. No NULL guard: read P.pev.classname and compare exactly to \"player\" (literal101a2130), not virtual IsPlayer. Only a match assigns activator EHANDLE atB+e4, then calls ResponseToTouch. EAX0 returns after the handle assignment. Otherwise master10119060(B.master,P) is tested; rejection emits1008e010(E,B+1b4,1,1) and returns while leaving touch pointer unchanged.",
+        "On acceptance clear B.touch first. Response2 emits button noise(channel2,volume1,atten0.8,flags0,pitch100), calls UseTargets with current handle,3,0.0f, then ButtonReturn. Response1 calls Activate, which emits noise and performs its own master check again. Native order therefore permits a second master rejection with touch alreadyNULL. This route does not inspect key lockedBy/locked byte or unlock/nextUse timers; do not merge it with ButtonUse. Toggle touch fires targets before return, and ButtonBackHome can fire them again under flag20."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013090",
+      "proposed_name": "CBaseButton_ButtonUse",
+      "subsystem": "entity-core",
+      "summary_ru": "Проверяет state и таймеры, сообщает о ключевом замке, активирует либо возвращает кнопку.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013090.c",
+        "analysis/server-button-dispatch/10013090-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, stack(activator,caller,useType,float value), RET16; only activator is read. State2 or3 returns before touching activator. Otherwise assign B+e4 from activator, load G.time once, compare B.unlockTime then B.nextUseTime. Native COMISS/JA rejects ordered timer>time; equality and unordered/NaN continue (under normal masked FP exceptions). Saved C <= conjunction is not equivalent for NaN. Nonmoving NULL activator eventually dereferencesNULL when gates pass; there is no local null-safe wrapper.",
+        "Invoke activator.virtual+d0. If nonzero AND lockedBy!=0 AND byte B+180!=0, optionally10119810(activator,S+lockedMessage,5,0), optionally emit lockedSound on activator.edict with channel0,volume1,atten0.8,flags0,pitch100. Then reread G.time and store only B.nextUseTime=float32(float64(time)+0.75), constant101a1e60; unlockTime/state are unchanged. Callbacks occur before this timer store, even when both message/sound are absent.",
+        "When lock report is bypassed, freshly read state. State0 returns unless stayPushed==0 and flag20; that accepted branch emits button noise then calls ButtonReturn, with no pre-return UseTargets call. Any nonzero state reaches Activate after initial2/3 exclusion (callbacks can have changed it). No master test is applied to the state0 return branch. Caller/useType/value do not select behavior, and non-player activators bypass the key-lock report; movement master is still checked by Activate."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013220",
+      "proposed_name": "CBaseButton_ButtonUse_IgnorePlayer",
+      "subsystem": "entity-core",
+      "summary_ru": "Отсекает игрока-caller и передаёт остальные вызовы ButtonUse без изменения аргументов.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013220.c",
+        "analysis/server-button-dispatch/10013220-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, same four stack args, RET16. Inspect caller (second argument), not activator: if caller!=NULL and caller.virtual+d0 returns nonzero, return without calling ButtonUse. NULL caller or zero predicate forwards activator,caller,useType and float value unchanged to10013090 with ECX=B. The float is forwarded bitwise via MOVSS. No local state/lock/timer/handle mutation. A player activator with a non-player caller is allowed through this filter and still faces ButtonUse checks."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013f00",
+      "proposed_name": "CBaseButton_ObjectCaps",
+      "subsystem": "entity-core",
+      "summary_ru": "Вычисляет use/toggle/hide bits и вызывает родительский caps только ради побочного эффекта.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013f00.c",
+        "analysis/server-button-dispatch/10013f00-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, no args, returns full EAX bitmask. Start usebit8 when E.takedamage compares ordered equal to0 (including negative zero); any nonzero or unordered/NaN clears8. Native UCOMISS,LAHF,TEST ah,44,CMOVP proves NaN behavior. Compute this bit before invoking parent. If B.moveWith(+14)!=NULL, call parent.virtual+40, discard its returned mask, then reload E. This is a side-effect call, not inherited capability OR.",
+        "Return ((E.spawnflags&0x10)<<4) | (B.hideUse!=0 ?0x400:0) | savedUseBit. Spawnflags/hideUse are read after the parent call; takedamage bit is not recomputed. No parent caps or generic0x2000 mask is added. RTTI/vtable101a4c84+40 binds this body to CBaseButton; native BUTTON descriptor binds hideUse at1e0."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10015960",
+      "proposed_name": "CBaseButton_TriggerAndWait",
+      "subsystem": "entity-core",
+      "summary_ru": "Завершает нажатие, повторно проверяет master, вызывает targets и назначает возврат/touch.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10015960.c",
+        "analysis/server-button-dispatch/10015960-0.asm",
+        "analysis/server-button-dispatch/evidence.json",
+        "analysis/server-button-dispatch/contract.md"
+      ],
+      "details_ru": [
+        "ECX=B, exported TriggerAndWait, RET or tail-jump. Fetch B+e4 handle and recheck10119060(B.master,activator); zero returns without changing state/frame/callbacks. Otherwise write state0 then E.frame=1.0f, fetch handle again, and call UseTargets(B,activator,3,0.0f). Post-dispatch reads stayPushed and fresh E.spawnflags, so target callbacks can alter which branch executes.",
+        "When stayPushed==0 and flag20 clear, set think=10012d50. Ordered wait==0 (including negative zero) tail-jumps ButtonReturn immediately; all other waits, including NaN, are passed unchanged to virtual+8 and return. Native UCOMISS/LAHF/TEST44/JNP distinguishes this from a simplistic finite positive wait check: negative waits schedule too. On stayPushed!=0 or flag20 set, restore touch iff flag100, otherwise clear touch; this branch does not cancel an existing think/deadline or replace +154. Master rejection and stay-pushed branches must not acquire invented cleanup."
+      ]
+    }
+  ],
+  "subsystems": []
+}

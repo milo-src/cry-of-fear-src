@@ -1,0 +1,55 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10045f20",
+      "proposed_name": "CGlock_EnterIronSights",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "Читает четыре параметра прицела, отправляет IronSights/CameraZoom, устанавливает серверный zoom, анимацию и сроки оружия.",
+      "details_ru": [
+        "ABI: ECX=W, аргументов на стеке нет, plain RET10046217; EAX не формируется как bool. Native CGlock vtable101b0524, slot12c=10045f20. Вызывающий toggle10047c00 уже записывает BYTEW178=1 перед этим virtual, но сам entry не проверяет прежнее состояние, cooldown, ammo, owner validity или cvar. W=weapon; P=*(W160); V=*(P4); WP=*(W4); G=*(10223188); S=*(G98). Все offsets hex, номера анимаций десятичные. Native descriptors подтверждают script110, m_bIronSights178, forward17c/right180/up184/zoom188; BYTE доступ не следует подменять DWORD доступом сериализатора.",
+        "Последовательно обрабатываются точные ключи ironsight_forward, ironsight_right, ironsight_up, ironsight_zoom. Каждый первый вызов100dff70 получает ECX из текущего W160, key и filename=S+W110. Результат сканируется до NUL без NULL/length guard. Только если он непустой, выполняется ВТОРОЙ lookup того же ключа с заново полученными owner/stringbase/script, после чего второй результат преобразуется без повторной проверки непустоты. Поэтому выполняются 4–8 отдельных загрузок файла, нет snapshot всех параметров или cache. Пустой первый результат оставляет соответствующее старое поле; изменение файла между двумя чтениями не исключено.",
+        "Первые три результата идут через wrapper1016f5ec (atof family, ST0) и FSTP DWORD в W17c,W180,W184; это численные float32, а не целочисленные casts Ghidra. Zoom через1016b55e (atoi family) сохраняется полным signed DWORD в W188. Здесь нет clamp, проверки диапазона, end pointer или errno. Native literal keys и ST0 ABI закреплены bytes; deeper CRT conversion/locale/exception semantics остаются отдельной границей. Невалидные строки не получают придуманного безопасного default.",
+        "Первое сообщение: MessageBegin(1,id из10226668,0,текущий P.edict), COORD(W17c), COORD(W180), COORD(W184), BYTE(W188), BYTE(1), End. Реальная регистрация100e5fc0 и registry связывают global с IronSights, size=-1. На обычном уже описанном engine wire это 8 bytes; WriteByte получает полный DWORD и сохраняет low8. Поля читаются по отдельности между engine calls, а не заранее в структуру. Второй MessageBegin заново получает P.edict и использует id102265cc=CameraZoom: COORD(350.0f), BYTE(0), BYTE(0), End, обычный payload4 bytes. Это тот же постоянный CameraZoom packet, что при выходе; параметр W188 находится в первом сообщении, не подставляется вместо350.",
+        "После обоих сообщений заново загружается P и выполняется MOVD/CVTDQ2PS: signed int32 W188 численно преобразуется в float32 и записывается V274=vuser2.x. Это не bit copy, не low8 и не pev.fov. Значения вне BYTE диапазона могут давать иной клиентский байт и серверное значение, большие int32 также округляются при преобразовании в float32; точный MXCSR rounding/trap режим здесь не устанавливается.",
+        "Затем W1e4 сравнивается только с нулём: nonzero (включая отрицательный clip) выбирает sequence30, zero→31. Вызов virtual198(sequence,1,0) конкретно связан с1011f5d0, RET0c: тот обновляет player animation и отправляет SVC35. Лишь после возврата callback этот entry явно записывает BYTEW178=1; никакого проверки сохранности owner/weapon после callback нет. Собственных изменений clip, ammo reserve, reload flag или P308 здесь нет.",
+        "После callback свежее float32 now=*G повышается до double, складывается с native double0.3@101a1378, один раз округляется до float32; результат записывается по порядку W1d4,W1d0,W1cc. На этом участке P загружен до трёх stores. Затем sequence=P.V21c кладётся на стек перед GetModelPtr(WP.edict); снятие только одного аргумента engine сохраняет sequence для cdecl1000f390(model,sequence). Это два аргумента duration helper, а не лишний аргумент engine API, как может показаться по C.",
+        "Duration1000f390 возвращает ST0; после него заново читается G.time, x87 FADD складывает duration+now и FSTP DWORD записывает W1d8. Поэтому idle срок не обязан вычисляться от того же времени, что три cooldown. Подтверждённый support возвращает0 для NULL model, signed sequence>=count или frames<=1; иначе float32((frames-1)/fps), без отдельного sequence<0/fps0 guard. Этот entry не навязывает фиксированную длительность модели, не пересчитывает геометрию прицела и не доказывает визуальную семантику client IronSights/CameraZoom."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10045f20.c",
+        "analysis/server-glock-iron-entry/10045f20-0.asm",
+        "analysis/server-glock-iron-entry/evidence.json",
+        "analysis/server-glock-iron-entry/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100dff70",
+      "proposed_name": "Player_ReadItemDescriptionField",
+      "subsystem": "inventory",
+      "confidence": "high",
+      "summary_ru": "Разбирает именованные секции файла, возвращает значение data через общий token buffer и различает три пути диагностики; полностью уточнены ABI, владение и границы ошибок.",
+      "details_ru": [
+        "Полный refinement прежнего REVIEW, не новая функция. Сохранены prior-review.txt и все три прежних evidence paths. ABI native: ECX=context, stack(arg1=key char*,arg2=filename char*), RET8 во всех трёх normal returns. EAX=char* вопреки void в сохранённом C. ECX используется только для координат в диагностике общего miss; назначение Player в имени реконструировано по callers и контексту, не доказательство native symbol. Успех возвращает102231a8 (общий COM_Parse token), ошибки возвращают пустой literal101a2496. Cookie helper1013dbb3 сохраняет EAX на нормальном возврате; аварийный путь не объявляется normal return.",
+        "Первым выполняется LoadFileForMe(filename,&local_size), engine slot95@102230c4. Проверяются NULL pointer и size==0, не size<=0. Любой из этих guards ведёт к трём AlertMessage(1): separator, GetItemDescription failed to load file с filename, separator, затем empty return. FreeFile на этом пути нет даже при nonNULL pointer и size0. Это точная локальная ветвь без освобождения, не утверждение о фактическом выделении или полном ownership внешнего loader. Размер далее не задаёт границу чтения; ожидается доступная NUL-terminated область, не проверяемая этим body.",
+        "Для допустимого результата вызов COM_Parse100c6de0(file) даёт cursor в ESI и общий token102231a8. Если token пуст, сразу общий miss. Иначе весь token вместе с NUL копируется циклом в local sectionName[512] по ebp-204 без bound. Далее Parse(cursor), и проверяется исключительно первый байт token=='{'. При несовпадении печатаются separator, CheckItem parsing error: expecting { after key name, separator; затем общий FreeFile+KEY ERROR и empty return. Полного равенства токена скобке нет: quoted token, начинающийся с '{', проходит тот же тест.",
+        "После открытия выполняется ещё Parse, затем цикл до первого байта token=='}'. Внутри точное регистрозависимое NUL-сравнение token с literal data. Если это data, Parse вызывается ОДИН раз для значения, и только после этого exact case-sensitive сравнивается сохранённое sectionName с requested key. При совпадении немедленно FreeFile(file), EAX=общий token, cookie check и RET8: закрывающая скобка и остаток файла не проверяются, непустота значения не проверяется. Значением может оказаться '}' либо пустой token на EOF; последняя ситуация содержимым неотличима от ошибки, хотя путь успешный.",
+        "При data в неподходящей секции значение уже потреблено; затем обычный нижний Parse читает следующий token. При любом другом token выполняется только нижний Parse, без модели пар key/value. Вложенные '{' отдельно не отслеживаются; первый token, начинающийся на '}', закрывает текущую секцию. После закрытия ещё Parse читает следующее имя, непустое имя начинает новый цикл копирования/проверки '{', пустое приводит к общему miss. Поэтому первая совпавшая секция с первым встреченным data возвращает результат; совпадение имени без data само по себе не успех, повторяющиеся секции допустимы до первого успешного data.",
+        "EOF/cursor==NULL во внутреннем цикле не проверяются. COM_Parse(NULL) очищает token[0] и возвращаетNULL; пустой token не '}' и не data, поэтому повторный Parse(NULL) способен зациклить malformed input без закрытия секции. Если завершающий '}' был потреблён как значение data чужой секции, он также уже не закрывает цикл. Если запрошенная секция закончилась словом data без значения, немедленный success с пустым token происходит до такого зацикливания. Empty quoted token как имя снаружи прекращает сканирование независимо от того, остался ли cursor ненулевым.",
+        "Общий miss после пустого внешнего token либо missing-opening-brace вызывает FreeFile(file), slot96@102230c8, затем читает saved ECX→pev(+4)→origin(+8,+c,+10), повышает каждую float32 до double и передаёт AlertMessage(1,KEY ERROR: Couldn't parse token of key at %f %f %f!,x,y,z). После этого возвращается empty literal. Context/pev/key не проверяются наNULL. Нормальный success уже освободил file перед возвратом token; token не указатель внутрь освобождённого file, а отдельный общий изменяемый буфер, перезаписываемый следующим Parse. Empty literal также borrowed. Нельзя передавать возвращённый pointer в FreeFile или считать его отдельной owned string.",
+        "COM_Parse — ранее REVIEW support, а не новая карточка: он снимает quotes, пропускает whitespace и // comments на границе токена, выделяет отдельную punctuation {}()', а escape decoding не добавляется. Его общий буфер рассчитан на1500 bytes и late length check, тогда как местный sectionName512 уже: 511 chars+NUL помещаются; при512 chars завершающий NUL достигает cookie по ebp-4, большие записи продолжаются до проверки cookie. Это не безопасный truncate и не доказательство memory safety. Unterminated quoted input в parser способен вернуть cursor за NUL. Native parser/helper полностью включены как support, но внешние loader/alerts, доступность памяти, concurrent/reentrant вызовы общего token и полный CRT не закрыты данным локальным контрактом."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100dff70.c",
+        "analysis/server-glock-iron-entry/100dff70-0.asm",
+        "analysis/server-glock-iron-entry/evidence.json",
+        "analysis/server-glock-iron-entry/contract.md",
+        "decompiled/server/captures/ghidra-inventory-batch/004-pseudocode.c",
+        "analysis/inventory/behavior.md",
+        "analysis/server-glock-iron-entry/prior-review.txt"
+      ]
+    }
+  ]
+}

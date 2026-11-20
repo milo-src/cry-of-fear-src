@@ -1,0 +1,52 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1005fc20",
+      "proposed_name": "CPhoneCall_ChangeSubtitle",
+      "subsystem": "subtitles",
+      "summary_ru": "Обрабатывает ответ на звонок, звук и анимацию; затем переключает субтитры и планирует EndCall.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=E, без stack arguments, plain RET. Вначале100177a0(&E+1f8) разрешает m_hPhoneUser; возвращённый private pointer немедленно разыменовывается ради virtual+d0(), без NULL guard. При нуле callback ранний выход. Затем handle разрешается ещё раз, returned.pev передаётся100125e0; только полученный P проверяется на NULL. Изменение handle внутри callback не защищено повторным bool/lifetime gate.",
+        "Требуется P.activeItem+252c!=NULL и exact case-sensitive classname \"weapon_mobile\". Имя читается из edict activeItem.pev.pContainingEntity+20c через embedded entvars edict+80 и global string pool; при NULL edict computed pointer0 всё равно разыменовывается. Полный EAX P.virtual+bc() проверяется после имени. При нулевом alive gate: получить private через10017790(E+1f8), вызвать10119810(recipient,\" \",2,0), затем заново разрешить handle и EmitSound100fc9f0 на его edict с channel0,\"common/null.wav\",volume1.0,attenuation float32 0.8,flags0,pitch100, после чего RET. Ни EndCall, ни очистка think/phone flags на этой ветке не выполняются.",
+        "Dead-path10119810 — native ProFont, не TextMsg: при nonNULL recipient и ненулевом recipient.virtual+d4 отправляет destination8, BYTE2, STRING из literal101b5fb0. Literal содержит один ASCII пробел и NUL, не пустую строку; payload3bytes. Три аргумента text/style/broadcast были PUSH до10017790, поэтому они ошибочно попали к getter в псевдокоде. Getter аргументов не потребляет; весь ClientPrint call — cdecl4args.",
+        "При ненулевом alive gate activeItem читается заново, его pev подаётся10052e30; W==NULL ведёт к выходу. Считываются BYTE E+200 m_bAnswered и DWORD index=E+1f4; index сохраняется в local oldIndex. Если answered==0, сначала BYTE становится1, затем schedule(E.delay[index] по+16c), после callback устанавливается E.think+78=1005fc20. Нижней/верхней границы index перед этой адресацией нет.",
+        "Первый answered-pass останавливает звук channel0: E.pev.iuser1+248==0 выбирает \"phone/phone_ringtone.wav\", nonzero — \"phone/phone_ringing.wav\". Stop helper1001e990 фактически вызывает100fc9f0(edict,0,path,volume0,attenuation0,flags20h,pitch100). После него отдельно играет \"phone/tone_send.wav\" с1.0/0.8/flags0/pitch100. Если string_t E.audio+1f0 ненулевой, заново разрешает phoneUser и играет pool+audio с теми же параметрами. Путь не нормализуется и не копируется; все три действия идут именно в таком порядке.",
+        "Затем W+1d8 получает float32(double(global.time)+double1.1 из101b5ff0), а не integer, как выглядит C cast. По P+1e98==0 выбирается animation0c, иначе0d; обе ветви вызывают W.virtual+198(sequence,1,0). После вызова BYTE P+1ee8=1 и возврат. В этом первом pass субтитр не выбирается, index не увеличивается, прочие player phone fields не сбрасываются.",
+        "Если answered уже ненулевой, выполняется FindByClass10118460(NULL,\"subtitle_main\"), затем при успехе FindByClass(NULL,\"player\"). Это первый подходящий player из поиска, не обязательно phoneUser. Helper ищет classname через engine и возвращает найденный private; отсутствие одной из целей пропускает только subtitle delivery. После обоих поисков заново читается текущий E.index; signed DWORD E.numbers[index] по+e8 равный0 выдаёт AlertMessage1 \"SUBTITLE CHANGE: Could not change number!\\n\". Ненулевой переводится CVTDQ2PS в float32, пишется по+dc результата1005fbc0(main.pev) без NULL guard; затем main.virtual+e8(foundPlayer,foundPlayer,3,float0). Native CSubtitle vtable101b5900 связывает этот slot с10077530; его language/file/parser/delivery — отдельная граница, а не прямой message body данной функции.",
+        "После subtitle callback, поиска или warning используется сохранённый oldIndex, не reread currentIndex: signed oldIndex>=32 сразу выходит; отрицательные значения допускаются. Если numbers[oldIndex+1]!=0 и ordered delay[oldIndex+1]>0, увеличивает ТЕКУЩИЙ E.index, перечитывает его и schedule(delay[currentIndex]). Таким образом reentrant callback мог изменить currentIndex независимо от oldIndex; increment не ограничивается диапазоном33.",
+        "Далее независимо от предыдущей ветви заново читает delay[oldIndex+1], расширяет float32 в double и проверяет ordered value<double0.1 (literal101a1df8). При выполнении записывает think=1005ff90 и schedule(float1.0). Поэтому положительная задержка между0 и0.1 может сначала increment/schedule, затем быть заменена EndCall; NaN не проходит ни >0, ни <0.1 при маскированных FP exceptions. При отсутствии следующего номера с delay>=0.1 нет fallback EndCall. При oldIndex32 не проверяется окончание даже при нулевом следующем элементе; вне диапазона нет общей защиты.",
+        "Звуковые параметры1.0/0.8 — вход в wrapper, не обещание backend gain:100fc9f0 при global byte10226489!=0 и path-pointer!=101a8e8c умножает volume на double0.25 с округлением доfloat32. Literal phone/null paths идут напрямую engine EmitSound, optional audio, начинающееся с!, может пройти sentence lookup/subtitle dispatch. Полный supporting wrapper описан в server-sentence-lifecycle. Ошибки engine/звук/показ субтитров runtime не проверялись."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005fc20.c",
+        "analysis/server-phone-call-callbacks/1005fc20-0.asm",
+        "analysis/server-phone-call-callbacks/contract.md",
+        "analysis/server-phone-call-callbacks/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1005ff90",
+      "proposed_name": "CPhoneCall_EndCall",
+      "subsystem": "subtitles",
+      "summary_ru": "Завершает текущий телефонный вызов: target dispatch, анимация, таймеры и условная очистка состояния.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=E, без stack arguments, plain RET; результатvoid, не success bool. Как ChangeSubtitle, сначала resolves E.m_hPhoneUser+1f8 и без NULL guard вызывает private.virtual+d0; нулевой результат даёт выход. Затем повторный getter→pev→100125e0 и только тогда NULL guard для P. Здесь вообще нет проверки P.virtual+bc/alive.",
+        "При nonNULL P native сначала загружает activeItem+252c, затем безусловно пишет DWORD P+1ea0=0 и только после этого проверяет ранее загруженный item. При отсутствии active item, несовпадении точного classname\"weapon_mobile\" или последующем failure эта запись уже остаётся. Сравнение имени повторяет edict+80/pool путь ChangeSubtitle с тем же незащищённым NULL edict.",
+        "Для mobile classname вызывает10052e30(item.pev), сохраняет returned W, затем проверяет E.pev.target+1cc. Если string_t!=0, вызывает FireTargets10101ff0(pool+target,E,E,3,float0). Этот вызов расположен ДО проверки W!=NULL; активация внешних целей может изменить/удалить E,P,W. Native продолжает работу с сохранёнными pointers без повторного разрешения handle или alive check. FireTargets может интерпретировать +/− prefix и выражения цели; данная функция передаёт numeric3/value0, не гарантирует неизменный UseType после нижнего parser.",
+        "Только при W!=NULL записывает W+1d8=float32(double(now)+1.1). Выбирает animation0f при P+1e98==0, иначе10; вызывает W.virtual+198(sequence,1,0). После callback заново читает global time и пишет P+308=float32(double(now)+1.1), затем BYTE P+1ee8=0. Два deadline могут различаться, если время изменено callback; нет единого cached now для обеих записей.",
+        "После таймеров играет \"phone/tone_send.wav\" на P.pev.edict с channel0,volume1.0,attenuationfloat0.8,flags0,pitch100 через100fc9f0. Затем заново читает P.pev, очищает маску0x8 (бит3) в DWORD P+2500, пишет DWORD P+1eb4=0 и float-bits0 в pev.fuser3+260. Последней записью обнуляет E.think+78. Нет прямого удаления E, сброса answered+200/currentIndex+1f4/phoneUser+1f8/playerHandle+e0, очистки ProFont или явного StopSound optional voice.",
+        "При item mismatch или W==NULL хвост с animation/timers/phone flags/think-clear пропускается; W==NULL всё же не отменяет уже возможный FireTargets. Поэтому название EndCall не означает безусловное освобождение всех ресурсов. Ранние/внешние ошибки не откатывают уже выполненные записи. Семантические имена P+1ea0/+1e98/+1ee8/+1eb4 здесь не придуманы: это raw native fields, producer/lifecycle разобраны отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1005ff90.c",
+        "analysis/server-phone-call-callbacks/1005ff90-0.asm",
+        "analysis/server-phone-call-callbacks/contract.md",
+        "analysis/server-phone-call-callbacks/evidence.json"
+      ]
+    }
+  ]
+}

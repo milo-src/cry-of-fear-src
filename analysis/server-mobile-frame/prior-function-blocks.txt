@@ -1,0 +1,90 @@
+[FUNCTION server:0x10053210]
+  Символ тела: FUN_10053210
+  Декларация Ghidra: void FUN_10053210(void)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x10053210.c
+    SHA-256: 739ccae345b15af2321a9802a5e4535b016c32e9cde6e80d00f88da203683695; селектор=0x10053210; вход=0x10053210; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Именованные вызовы (лексически):
+    FUN_100fc9f0
+    FUN_100e4e00
+    FUN_100534d0
+    FUN_1011d560
+  Глобальные метки (упоминания):
+    DAT_10223000
+    DAT_10223004
+    DAT_10223008
+    DAT_10223188
+    DAT_10226578
+  Строки/ресурсы:
+    "weapons/sleeve_generic2.wav"
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x10053210-0x100534c8 inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Вызовы в каталоге: server:0x100534d0, server:0x100e4e00, server:0x100fc9f0, server:0x1011d560
+  Форма эталонного тела: if=12, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x100534d0]
+  Символ тела: FUN_100534d0
+  Декларация Ghidra: void FUN_100534d0(void)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x100534d0.c
+    SHA-256: bc921620f2fce34743361d8446fc545dfa9c366546b111cafdf352e8d079569b; селектор=0x100534d0; вход=0x100534d0; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Именованные вызовы (лексически):
+    FUN_1002f8d0
+    FUN_1002f550
+    FUN_10119680
+    FUN_10119810
+    FUN_100308f0
+    __security_check_cookie
+    ___report_rangecheckfailure
+    FUN_10117f60
+  Глобальные метки (упоминания):
+    DAT_101adc90
+    DAT_1021baf4
+    DAT_1022302c
+    DAT_102230d4
+    DAT_10223188
+  Строки/ресурсы:
+    "cof_subtitlelanguage"
+    "/txtfiles/phone_messages.txt"
+    "/txtfiles/languages/dutch/phone_messages.txt"
+    "/txtfiles/languages/french/phone_messages.txt"
+    "/txtfiles/languages/german/phone_messages.txt"
+    "/txtfiles/languages/norwegian/phone_messages.txt"
+    "/txtfiles/languages/spanish/phone_messages.txt"
+    "/txtfiles/languages/swedish/phone_messages.txt"
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x100534d0-0x100537d5 inclusive
+  Предупреждения Ghidra:
+    WARNING: Subroutine does not return
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Вызовы в каталоге: server:0x1002f550, server:0x1002f8d0, server:0x100308f0, server:0x10117f60, server:0x10119680, server:0x10119810, server:0x1013dbb3, server:0x1013dd48
+  Вызывается из (только разрешённые текстовые связи): server:0x10053210
+  Форма эталонного тела: if=8, циклы=15, switch=1.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x100e4e00]
+  Символ тела: FUN_100e4e00
+  Декларация Ghidra: undefined4 FUN_100e4e00(void)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x100e4e00.c
+    SHA-256: 96045b3afcae90dcbd2817fbfeefdaf449008be09205bb1f34336df1b93ea0ff; селектор=0x100e4e00; вход=0x100e4e00; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Именованные вызовы (лексически):
+    FUN_10017780
+  Глобальные метки (упоминания):
+    DAT_10223064
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x100e4e00-0x100e4e4b inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Вызовы в каталоге: server:0x10017780
+  Вызывается из (только разрешённые текстовые связи): server:0x10018d60, server:0x10032e70, server:0x10053210, server:0x100ead70
+  Форма эталонного тела: if=2, циклы=0, switch=0.
+  Выражения return (Ghidra): 0; 1
+[/FUNCTION]

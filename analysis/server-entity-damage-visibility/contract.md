@@ -1,0 +1,67 @@
+# Базовая сущность: урон, удаление, decal и видимость
+
+Pass20. Только статический разбор оригинального server hl.dll; все7 primary C/native прочитаны полностью. Addresses, offsets, masks и RET sizes hexadecimal; числа в формулах decimal. Семь новых REVIEW; supporting ранее разобранные тела не переучтены. Игра не исполнялась.
+
+Concrete CSubtitle factory1005fbc0 устанавливает vptr101b5900; raw slots64→100172b0,6c→10017600,a4→10017630,110→10088250,114→100882c0. Это локальные base implementations, не заявление об их использовании всеми derived объектами. Native ENTVARS/BASE/MONSTER descriptors и SDK engine ABI используются совместно; наличие полного descriptor table не означает новый разбор всех его полей.
+
+## 0x100172b0 — CBaseEntity_TakeDamageImpulseAndHealth
+
+Native thiscall(inflictorPev,attackerPev,damageFloat,bitsDamage), RET10h; четвёртый аргумент не читается, хотя saved C показывает только три. ECX=this. pev.takedamage+170 сравнивается UCOMISS с0: ordered +0/-0 возвращает EAX0 без изменений; unordered NaN и любое nonzero проходят. Здесь нет alive/team/armor/invulnerability policy, проверки знака damage или mask damage type.
+
+Сначала вычисляет center собственного absmin/absmax через10012420, затем direction=inflictor.origin8..10 минус этот center. inflictor разыменован ДО позднего NULL check100173c6, поэтому NULL не безопасен. Норма: три float32 квадрата и две float32 суммы, расширение в double для SQRT, сужение в float32; ordered zero даёт(0,0,1), иначе reciprocal/multiply float32. Unordered NaN идёт в деление. Полученный vector записывается в общий10222f28..30 до engine callbacks; отдельного reset нет.
+
+Для импульса поздно проверяет inflictor!=NULL и engine EntOffsetOfPEntity(slot70,inflictor.edict+20c)!=0. После callback заново читает own pev; требуется movetype+108 равный3 или4 и attacker.solid+10c!=1. NULL attacker на этой ветви не проверяется. Направление импульса другое: own origin минус center inflictor absmin/absmax, нормализуется10017e70. Базовые поля именованы по native ENTVARS descriptors; значения3/4 и1 соответствуют SDK WALK/STEP иTRIGGER, но специфическая engine семантика этим телом не устанавливается.
+
+Вычисляет volume=float32(float32(size.y*size.x)*size.z), затем double force=(73728.0/double(volume))*double(damage)*5.0 и сужает в float32. Только ordered force>1000 заменяется1000; COMISD/JBE сохраняет NaN. Отрицательные значения и zero volume не исправляются. Каждый компонент velocity+=normalizedComponent*force выполняется в float32. Объект/pev, сохранённый перед normalize, не перечитывается до velocity stores; затем здоровье берётся через актуальный this.pev.
+
+После возможного импульса health+164:=float32(health-damage), затем повторно читает this.pev и выполняет COMISS zero,health; JB10017567 возвращает EAX1 при health>0 И при unordered NaN (при обычных masked FP exceptions). Это важное расхождение с упрощённым C условием health>0: нельзя автоматически послать NaN в death branch. Ordered health<=0 вызывает this.virtual+6c(attackerPev,0), затем EAX0 независимо от callback result. При takedamage0 также EAX0. Нет health clamp, rollback, сохранения damage flags или прямого вызова derived death.
+
+## 0x10017600 — CBaseEntity_KilledDisableDamageAndQueueRemoval
+
+Thiscall ABI уточнён native RET8: два stack аргумента caller (attacker,gibMode) игнорируются. ECX=this передаётся как единственный cdecl аргумент10119900. До этого пишет DWORD own pev.takedamage+170=0, перечитывает this.pev, пишет deadflag+174=2. Это не no-arg функция, несмотря на Ghidra signature. EAX status не нормализуется.
+
+Полный supporting10119900 при entity byte+a может обновить/очистить BossBar tracking игроков, затем вызывает UpdateOnRemove10102c50, ставит pev.flags|40000000 и targetname=0. Физическое освобождение private data остаётся engine lifecycle; этот Killed не вызывает engine RemoveEntity напрямую и не создаёт ragdoll/gibs/loot. При external callback failure нет rollback уже записанных takedamage/deadflag; поведение дочерних callbacks относится к отдельным контрактам.
+
+## 0x10017630 — CBaseEntity_DamageDecalByRenderMode
+
+Thiscall с одним игнорируемым stack DWORD, RET4. Читает native ENTVARS.rendermode+14c: значение4 возвращает fullEAX ffffffff; любой иной nonzero возвращает23h (35decimal); значение0 вызывает engine RandomLong(slot90,0,4), полностью передаёт EAX без clamp или проверки. Один call, никакого локального RNG/state, нанесения decal или проверки damage mask. Concrete CSubtitle vtable101b5900 slot+a4 содержит10017630.
+
+Предлагаемое имя DamageDecal опирается на slot/поведение и доступный SDK vocabulary; это НЕ чтение blood color. SDK decals.h сопоставляет35 с DECAL_BPROOF1 и0..4 с GUNSHOT variants, но конкретная регистрация ресурсов оригинального модуля и runtime material index здесь не разобраны. Числовые возвраты и native rendermode descriptor являются доказанным локальным контрактом.
+
+## 0x10088250 — CBaseEntity_FVisiblePointExactFraction
+
+Thiscall(endVectorPointer), RET4. Вызывает own virtual+100 с hidden output buffer, копирует12 bytes из возвращённого EAX pointer. Для concrete CSubtitle vtable этот slot100→1000d5a0, вычисляющий origin+view_ofs; иной vptr может вернуть иную позицию. После callback заново читает own pev.edict+20c и передаёт1011a820(startCopy,endPointer,1,1,skipEdict,localTrace). endVector не копируется заранее и не проверяется наNULL.
+
+Supporting trace wrapper формирует flags101h и вызывает engine TraceLine(slot31) с5 аргументами. TraceResult локально не обнуляется; ответственность заполнения у callback. Проверяется только flFraction+10h через UCOMISS/LAHF/TEST AH44/JNP: ordered ровно1.0→fullEAX1, любое другое значение включаяNaN→0. pHit, allSolid/startSolid, water и target state не читаются. Это предикат видимости, не трассировка пуль/урона и не обещание renderer visibility.
+
+## 0x100882c0 — CBaseEntity_FVisibleEntityWithCoopAndWaterGates
+
+Thiscall(targetPrivate), RET4, bool fullEAX0/1. Сразу разыменовывает target.pev без NULL/lifetime guard. Если flags+1a8 имеет bit80 И глобальный debug byte10222e4e ненулевой, печатает AlertMessage(1,"FVisible FAIL - FL_NOTARGET\n") и возвращает0. При debug0 этот bit НЕ блокирует видимость, выполнение продолжается. Native100882d6..100882fd подтверждает это отличие от ожидаемого unconditional FL_NOTARGET filter; имя debug условно, producers byte пока отдельно.
+
+Если global rules pointer10222ee4 ненулевой, вызывает его virtual+20; при fullEAX!=0 вызывает target.virtual+d0. Если и он ненулевой и target.pev.fuser3+260 ordered равен3.0, возвращает0 независимо от debug, при debug!=0 дополнительно diagnostic. NaN fuser3 не равен3 и проходит. Конкретная rules vtable/режим и producers fuser3 здесь не объявлены доказанными. После этих callbacks reread debug/pev согласно native, безопасного повторного разрешения target handle нет.
+
+Water gate асимметричен: own.waterlevel+1c4==3 запрещает только target.waterlevel==0; когда own!=3, запрещается target==3 (включая own1/2). Иные значения проходят по этим сравнениям. При отказе debug управляет только печатью waterlevel diagnostic, не bool. Нельзя заменить это симметричной проверкой dry-versus-submerged.
+
+Start вычисляется напрямую own.origin+view_ofs в float32 и сохраняется ДО target callback. Затем target.virtual+100(hiddenOut) возвращает pointer, из него копируются12 bytes end. После callback заново читает own pev.edict, вызывает1011a820(start,end,1,1,skipEdict,trace), то есть TraceLine flags101h. Если ordered fraction==1.0, возвращает1; иначе перечитывает target.pev.edict и сравнивает pHit(trace+30h). Равенство edict тоже даёт1 даже при NaN fraction. Никакого guard для NULL pHit/target.edict; обаNULL формально равны. Все остальные случаи→0 с optional LOS diagnostic. Engine trace internals и реальные цели в игре здесь не исполнялись.
+
+## 0x10012420 — Entvars_AbsBoundsCenterToOutput
+
+Cdecl(outputVector,pev), plain RET, EAX=outputVector (Ghidra void скрывает этот результат). Для x,y,z последовательно читает absmax+d0/d4/d8 и absmin+c4/c8/cc, ADDSS затем MULSS0.5, пишет output+0/+4/+8. Нет прибавления origin, sorting min/max, bounds/null check или нормализации. Порядок float32 вычислений сохранён; overflow суммы до умножения не предотвращается. Native ENTVARS descriptors подтверждают поля.
+
+Функция пишет компоненты последовательно, а не сначала snapshot всего pev. Aliasing output на источник/будущие компоненты может менять последующие чтения; произвольное overlapping копирование не обещано. Caller TakeDamage использует отдельный12-byte local output. Helper завершён локально, прочие callers требуют собственной проверки контекста.
+
+## 0x10017e70 — Vector_NormalizedToOutputWithUpFallback
+
+Thiscall на pointer трёхfloat в ECX плюс один stack output pointer, RET4, EAX=output. Читает x/y/z для длины: float32 squares и ordered sums (x*x+y*y)+z*z; расширяет в double, SQRTSD если сумма не ordered negative, иначе helper1016be90. После sqrt сужает вfloat32. Ordered +0/-0 length возвращает(0,0,1), без деления. UCOMISS parity branch отправляет NaN в reciprocal path, не fallback.
+
+Ненулевая/NaN длина: reciprocal=float32(1/length), затем последовательно перечитывает исходныеx,y,z, умножает и пишетoutput. Входной vector не меняется при непересекающихся областях; exact in-place output==input поддерживается этими обращениями, частичное перекрытие может исказить последующие компоненты. Нет epsilon, finite guard, magnitude clamp или масштабирования против overflow/underflow; sqrt slow helper/FP exception environment остаются отдельной границей. Такой же алгоритм встроен в100172b0 для общего направления атаки.
+
+## Границы и проверка
+
+Открыты concrete game-rules dispatch/producers debug и fuser3, derived damage/death overrides, engine TraceLine/RNG/removal lifecycle и exceptional floating-point environment. Локальные body contracts не доказывают runtime reachability или совпадение портированной игры. Старые REVIEW не изменяются.
+
+Повторение: `python analysis/server-entity-damage-visibility/capture.py`, `write_notes.py`, `verify.py`. Capture читает original PE и cached C; verify повторно сверяет headers/bytes/descriptors/slots и наиболее важные ABI/branch opcodes без выполнения DLL.
+
+## Продолжение разбора: pass22
+
+Pass22: [skill refresh](../server-skill-refresh/contract.md) закрывает native111 чтений/101 float slots, источник punch damage10226844 и ST0/format ABI. [Mobile player state](../server-mobile-player-state/contract.md) продолжает map-trigger/SMS/player chain; [monster attacks](../server-monster-attack-dispatch/contract.md) закрывает attack-condition dispatch и gates; [visibility policy](../server-visibility-policy/contract.md) уточняет concrete rules/player callbacks. Список residual boundaries см. в новых контрактах; установленный skill.cfg не объявляется runtime состоянием.

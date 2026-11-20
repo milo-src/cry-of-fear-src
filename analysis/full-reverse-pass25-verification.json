@@ -1,0 +1,66 @@
+{
+  "scope": "Static reverse; saved corpus only, not whole-game completeness",
+  "target_executed": false,
+  "before_reviewed": 1985,
+  "new_reviewed": 20,
+  "updated_existing": [],
+  "after_reviewed": 2005,
+  "remaining_unreviewed": 6650,
+  "prior_reviews_exactly_preserved": 1985,
+  "all_catalog_evidence_references": 12589,
+  "packages": {
+    "server-toggle-persistence": {
+      "source_files": 13,
+      "assembly_ranges": 13,
+      "verified_assembly_byte_rows": 323,
+      "raw_records": 173,
+      "decoded_save_fields": 152,
+      "pinned_paths": 32,
+      "standalone": "PASS 13 C 13 ASM 323 byte rows 173 raw 0 exports 8 cards"
+    },
+    "server-monster-initialization": {
+      "source_files": 33,
+      "assembly_ranges": 33,
+      "verified_assembly_byte_rows": 2081,
+      "raw_records": 707,
+      "decoded_save_fields": 178,
+      "pinned_paths": 82,
+      "standalone": "PASS 33 C 33 ASM 2081 byte rows 707 raw 178 descriptors 2 vtables 3 cards"
+    },
+    "server-inventory-dispatch": {
+      "source_files": 21,
+      "assembly_ranges": 24,
+      "verified_assembly_byte_rows": 3387,
+      "raw_records": 551,
+      "decoded_save_fields": 438,
+      "pinned_paths": 60,
+      "standalone": "PASS 21 C 24 ASM 3387 byte rows 551 raw 438 descriptors 1 vtables 3 cards"
+    },
+    "server-glock-actions": {
+      "source_files": 27,
+      "assembly_ranges": 28,
+      "verified_assembly_byte_rows": 3400,
+      "raw_records": 446,
+      "decoded_save_fields": 362,
+      "pinned_paths": 66,
+      "standalone": "PASS 27 C 28 ASM 3400 byte rows 446 raw 362 descriptors 6 cards"
+    }
+  },
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "checks": {
+    "catalog_idempotent": true,
+    "catalog_tests": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.003s\n\nOK",
+    "main": true,
+    "no_commits": true,
+    "scope_only_analysis_decompiled_catalog": true,
+    "git_diff_check": true
+  },
+  "hashes": {
+    "decompiled/FUNCTION_CATALOG.txt": "935a22959051197048716355c9cb085e3537caf5fde5643a3dfec2aefbea2442",
+    "decompiled/PROGRESS.json": "07ebaa75b7bf500bd0dce9cacfd4cd09fcfd00339a94319c1df01096c7654b42"
+  }
+}

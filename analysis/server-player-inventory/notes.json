@@ -1,0 +1,85 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100daf10",
+      "proposed_name": "Player_AddPlayerItemIntoChains",
+      "subsystem": "inventory",
+      "summary_ru": "Добавляет предмет в выбранную оружейную цепочку либо обрабатывает дубликат; возврат 1 означает новую вставку, а не любой успешный pickup.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100daf10.c",
+        "analysis/server-player-inventory/100daf10.asm",
+        "analysis/server-player-inventory/evidence.json",
+        "analysis/server-player-inventory/contract.md",
+        "analysis/server-item-pickup/contract.md",
+        "analysis/server-item-lifecycle/contract.md",
+        "analysis/server-player-inventory/1011c040.asm",
+        "analysis/server-player-inventory/100f5e50.asm"
+      ],
+      "details_ru": [
+        "ABI: ECX=P (player), один аргумент S (предмет), RET 4; полный EAX 0/1. Player vtable 101a4da8+8c содержит этот вход. S.virtual180() выбирает индекс головы P+2514+4*index; индекс локально не ограничен. Цепочка идёт через item+164, classname сравнивается побайтно с учётом регистра через pev+0 и string pool globals+98. Pool base и incoming classname сохраняются один раз перед обходом цепи. Нет NULL-проверки S или защиты от циклов.",
+        "Если найден existing E с тем же classname, native PUSH player; PUSH existing; ECX=source вызывает S.virtual138(E,P). Ненулевой результат вызывает rules.virtual80(P,S), S.1011c040(), E.virtual150(), затем active=P+252c.virtual150(), если active ненулевой, и S.virtual160(). После всех этих действий возвращается 0: дубликат не включается в список повторно. Нулевой virtual138 идёт в общий отказ.",
+        "Если дубликата нет, S.virtual134(P) должен вернуть ненулевой результат. Затем rules.virtual80(P,S), S.1011c040(); S.virtual180() вызывается заново для чтения головы, эта голова записывается в S+164. Ещё один, отдельный S.virtual180() выбирает индекс для записи P.head=S. Два запроса индекса не заменены одним кэшированным значением; при изменяющемся callback возможны разные индексы.",
+        "После вставки только этот поздний rules lookup проверяется на NULL. Если rules.virtual18(P,S)!=0, вызывается P.100f5e50(S), его возврат игнорируется. Helper сначала проверяет S.virtual140(), вызывает P.100f1440(), active.virtual14c() без stack arguments, затем записывает P+2538=S и BYTE P+1ef9=1. Это отложенный запрос смены, а не непосредственная запись active+252c. Успешная вставка возвращает 1 независимо от отказа helper переключения.",
+        "Общий отказ вызывает S.virtual160() только при DWORD 1022647c!=0 либо 10226480!=0, затем возвращает 0. Rules перед virtual80 и внутри 1011c040 разыменовывается без NULL guard. 1011c040 вызывает rules.virtual84(S), и только при точном результате 1 делает tail dispatch S.virtualf0(). Звуки/AttachToPlayer/GUI-слоты эта функция напрямую не выполняет; источники и владельцы меняются вызванными методами. Повторных проверок жизни объектов после callbacks нет.",
+        "Нативные slots weapon table 101a7804: +134=1011b860, +138=1011b530, +160=1011dfd0. Их полные контракты находятся в item-lifecycle/item-pickup; derived overrides здесь не объявляются эквивалентными. Rules tables SP/MP и конкретные указатели сохранены в evidence. Поведение всех возможных derived virtual150/180, reentrancy и runtime lifetime остаётся внешней границей."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100e2410",
+      "proposed_name": "Player_HasWeaponClassnameInSelectedChain",
+      "subsystem": "inventory",
+      "summary_ru": "Проверяет classname предмета только в цепочке, выбранной его virtual180; совпадение объекта по адресу не требуется.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e2410.c",
+        "analysis/server-player-inventory/100e2410.asm",
+        "analysis/server-player-inventory/evidence.json",
+        "analysis/server-player-inventory/contract.md",
+        "analysis/server-item-pickup/contract.md"
+      ],
+      "details_ru": [
+        "ABI: ECX=P, stack item W, RET 4, полный EAX 0/1. W.virtual180() выбирает P+2514+4*index. Далее W.pev.classname и classname каждого узла разрешаются через globals+98 и сравниваются полными NUL-terminated байтовыми строками с учётом регистра.",
+        "Pool base и искомый classname кэшируются перед обходом, не перечитываются для каждого узла. Первое совпадение возвращает 1; пустая голова или исчерпание item+164 возвращает 0. Разные указатели предметов с одним classname считаются совпадающими. Функция не перебирает остальные пять голов, в отличие от 100e2380, и не меняет списки, владельца, активное оружие или боезапас.",
+        "Локально нет проверок NULL W/pev/string pool, диапазона virtual180, валидности classname или ограничения числа узлов. Циклический next может не завершиться. Это статический контракт при доступных указателях; наличие штатных вызывающих guards и безопасность всех derived slot methods не предполагаются."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100e04d0",
+      "proposed_name": "Player_GiveAmmoAndSynchronizeHUD",
+      "subsystem": "inventory",
+      "summary_ru": "Ограничивает прибавление боезапаса, обновляет AmmoPickup/AmmoX/WpnInfo и возвращает индекс типа даже при нулевой фактической прибавке.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e04d0.c",
+        "analysis/server-player-inventory/100e04d0.asm",
+        "analysis/server-player-inventory/evidence.json",
+        "analysis/server-player-inventory/contract.md",
+        "analysis/server-item-pickup/contract.md",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-spread-callers/contract.md",
+        "analysis/server-player-inventory/100dfe60.asm",
+        "analysis/server-player-inventory/100db130.asm",
+        "analysis/server-player-inventory/100f5eb0.asm",
+        "analysis/server-player-inventory/100e5fc0.asm",
+        "analysis/server-player-inventory/1013dbb3.asm",
+        "analysis/server-player-inventory/1001f160.asm"
+      ],
+      "details_ru": [
+        "ABI исправляется по native: ECX=P, аргументы (int requestedCount, char *name, int maxCarry, BYTE suppressPickupText), RET 10h, полный EAX index либо -1, а не void из C. NULL name возвращает -1. При rules!=NULL вызывается rules.virtuala8(P,name,maxCarry); нулевой результат запрещает выдачу. Правила SP/MP имеют здесь одну цель 100af520. При rules==NULL проверка пропускается.",
+        "При отказе rules текст выводится только если (pev.button+184 | P+22b4 | P+22b0)&20h!=0. Сравнение name с адресами 101bbe38 (syringe) и 101dbab4 (flare) является сравнением указателей, не строк. Выбираются готовые локализованные строки либо format 101dbadc с name; затем 10119810(P,buffer,2,0). В любом варианте отказа возвращается -1.",
+        "100dfe60(name) ищет первый зарегистрированный тип 1..31, сравнивая имена через отдельно разобранный case-insensitive CRT helper 1017bcbb; неизвестный тип даёт -1. Caller делает unsigned index>31 guard. Формально index0 проходит caller guard, но прочитанный helper его не производит. Вычитание remaining=maxCarry-P.ammo[index] выполняется в 32 битах; accepted выбирается signed min(requestedCount,remaining) через CMOVL. Нет насыщения при переполнении.",
+        "Если signed accepted<1, переход 100e05f8 идёт прямо к 100e05c0, минуя OR EAX,-1 в 100e05bd. EAX всё ещё содержит ammoindex; успешный security-cookie helper 1013dbb3 EAX не меняет. Поэтому запрос 0/отрицательный либо полный магазин резервов может вернуть валидный индекс без каких-либо мутаций или сообщений. Только NULL/отказ rules/неизвестный индекс дают -1. Предыдущие item helpers, проверяющие result>0, могут считать этот случай успешным.",
+        "При accepted>=1 и нулевом младшем байте suppressPickupText выбирается текст по РАВЕНСТВУ УКАЗАТЕЛЕЙ: 101b91e0 (байты русского имени дробовика), 101b256c (m16), 101bbe38 (syringe), 101af17c (flares), 101b72d8 (русское имя револьвера), 101b77fc (rifle); иначе общий format. Для syringe/flares копируются фиксированные строки, для остальных подставляются accepted и иногда name. Ветка отказа использует flare в единственном числе, успешная — flares. Точные CP1251 bytes и format strings сохранены, кодировка отмечена как средство чтения.",
+        "Только pointer name==101a8cb0 (flashlight) подавляет фактический 10119810(P,buffer,2,0), причём форматирование к этому моменту уже выполнено. Ненулевой suppressPickupText пропускает весь текст, но не начисление или HUD. Равные по содержимому строки по разным адресам получают разные специальные тексты. Стековый buffer имеет 128 байт до cookie; wrapper1001f160 передаёт formatter limit FFFFFFFF, не 128. Это отсутствие локальной границы, а не доказательство достижимого переполнения или полный аудит CRT.",
+        "Accepted прибавляется к P+2540+4*originalIndex до сетевых вызовов. Если ID10226508!=0, отправляется MSG_ONE AmmoPickup: BYTE 100dfe60(name), BYTE accepted, STRING name. Индекс вычисляется повторно после MessageBegin и заново не валидируется; accepted не ограничивается до 255 перед WriteByte. Затем без проверки ID отправляется AmmoX (ID102264e8): BYTE originalIndex, SHORT текущий P.ammo[originalIndex]. Полные серверные int сохраняются в памяти; wire width не расширяет эти значения.",
+        "После AmmoX вызывается P.100f5eb0(), обновляющий legacy-поля +8c,+90,+a8,+94,+98,+9c,+a0,+a4,+ac,+b0,+b4,+b8,+bc,+c0 через 100dfe60 и 100db130. Последний возвращает -1 для индекса -1, иначе читает P.ammo[index] без дополнительной границы. Отсутствующие зарегистрированные имена поэтому дают -1 в зеркалах, не автоматически 0.",
+        "Затем перебираются ровно шесть голов P+2514..2528 и все next+164. Для каждого item.id+168 используется 44-байтовая descriptor table: primaryAmmoName по 10231890+44*id. Ненулевое имя сравнивается с name здесь уже case-sensitive побайтно. Совпадение и ненулевой cached ID102265b8 дают WpnInfo: BYTE item.id, BYTE [102318a4+44*id] (descriptor maxclip), SHORT P.ammo[10018440(item.pev).primaryAmmoType+1dc]. Последнее значение не обязано использовать originalIndex. После отправки WpnInfo message ID перечитывается; при пропуске сохраняется кэш.",
+        "Нет локальных bounds для item.id, результата private-object resolver10018440 или weapon primaryAmmoType, и нет cycle guard списков. AmmoPickup callback/reentry не сопровождается rollback или пересчётом исходной прибавки. Финальный обычный возврат заново загружает originalIndex, проверяет cookie и RET10h. Регистрация100e5fc0 доказывает AmmoPickup variable/-1, AmmoX3 и WpnInfo4; клиентская обработка, фактическая доставка и все derived rules последствия вне этого пакета."
+      ]
+    }
+  ]
+}

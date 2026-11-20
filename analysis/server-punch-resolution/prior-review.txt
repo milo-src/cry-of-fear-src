@@ -1,0 +1,10 @@
+[REVIEW server:0x100e7af0]
+  Предлагаемое имя: CBasePlayer_MeleeHitThinkPunch
+  Подсистема: combat
+  Назначение: Разрешает отложенное попадание кулаком.
+  Уверенность: средняя; часть смысла восстановлена по контексту
+  Разбор: Trace с hull fallback; damage source global0x10226844, общая последовательность очистки/накопления/нанесения урона; различает target classification для эффектов. Числовой урон и дальность неизвестны.
+  Основание: decompiled/server/partial-pass/functions/0x100e7af0.c
+  Основание: decompiled/server/partial-pass/functions/0x1011c070.c
+  Основание: decompiled/server/partial-pass/functions/0x1011b8f0.c
+[/REVIEW]

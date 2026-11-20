@@ -1,0 +1,301 @@
+{
+  "scope": "Static reverse only; no target execution/game implementation/resources/commits",
+  "result": "PASS",
+  "new_reviewed": 29,
+  "updated_existing": [
+    "server:0x100f91b0",
+    "server:0x100f9790"
+  ],
+  "prior_review_bodies_exactly_preserved": 2010,
+  "packages": [
+    {
+      "package": "analysis/server-button-dispatch",
+      "new_reviewed": 10,
+      "updated_existing": [],
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "server_catalog",
+        "package": "analysis/server-button-dispatch",
+        "primary": [
+          "10012a80",
+          "10012ba0",
+          "10012d00",
+          "10012d50",
+          "10012f00",
+          "10012f70",
+          "10013090",
+          "10013220",
+          "10013f00",
+          "10015960"
+        ],
+        "scope": "All ten complete saved C and native ASM bodies, full contract and notes; critical target/master/handle/cancel/mover/effect supports read; independent PE struct mapping.",
+        "counts": {
+          "source_c": 27,
+          "asm": 27,
+          "machine_byte_rows": 1477,
+          "raw": 246,
+          "descriptors": 170,
+          "file_pins": 68,
+          "cards": 10
+        },
+        "findings": [
+          {
+            "entry": "0x10012f00",
+            "severity": "wording",
+            "description": "Vtable cached at10012f0d before think assignment10012f17, original prose reversed adjacent operations; no intervening callback.",
+            "status": "resolved_verified"
+          }
+        ],
+        "verified_edges": [
+          "Activate master rejection after sound, double master on touch activation, by-value Vector+speed RET16",
+          "Return flag1 tail to BackHome even when rotating",
+          "BackHome multisource Use(activator,B,3,0), early finder abort and touch restoration",
+          "Use only activator; JA gates allow unordered, stores cooldown after callbacks",
+          "IgnorePlayer checks caller; forwarding four args unchanged",
+          "Caps use bit computed before parent callback, discarded parent mask",
+          "TriggerAndWait master gate, output before postcallback stay/toggle decision, zero wait tail vs NaN scheduler"
+        ],
+        "target_executed": false
+      },
+      "final_hashes": {
+        "capture.py": "9e84bce83a9ed70f7631d65d8170defe504f538aaf6d372802c899ea321a57a8",
+        "verify.py": "6010168bb67bee881b4eb8fb72fbdf06259020bd7288e27b2076e4ff3d4e0bb7",
+        "contract.md": "a39a964935aa7b5d881f901ba922628a09ef9de16bbdd828b1a88642b2a4b953",
+        "notes.json": "f40b051b39d2ba59d04d4c371670ee631611faf00437944fb1c85c2186f9366b",
+        "evidence.json": "d907dff402437016ede059a95ede590e87b715d74ba721ee5b36844e13d50bb5",
+        "write_notes.py": "ba4c88d84b179b59bdc0385ccfd9b297efe4b63ca34b2dff47631edf4756342d"
+      }
+    },
+    {
+      "package": "analysis/server-valve-lifecycle",
+      "new_reviewed": 14,
+      "updated_existing": [],
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "root",
+        "author": "server_catalog",
+        "scope": "All fourteen primary saved C and native bodies manually read against full contract; independent PE mapping and standalone verification. Static only.",
+        "primary": [
+          "10042560",
+          "100425c0",
+          "100426a0",
+          "10042720",
+          "10042740",
+          "100429b0",
+          "100429d0",
+          "10042a00",
+          "10042b00",
+          "10042b40",
+          "10042ba0",
+          "10042da0",
+          "10043130",
+          "10043380"
+        ],
+        "checks": {
+          "server-valve-lifecycle": {
+            "source_files": 35,
+            "assembly_ranges": 36,
+            "verified_assembly_byte_rows": 1685,
+            "raw_records": 266,
+            "decoded_save_fields": 131,
+            "pinned_paths": 83,
+            "standalone": "PASS 35 C 36 ASM 1685 byte rows 266 raw 131 descriptors 1 vtables 14 cards"
+          }
+        },
+        "semantic_checks": [
+          "cdecl factory EAX/null allocation failure and five-byte export thunk",
+          "eight exact KeyValue keys, handled, unknown key no base dispatch, unlockedmsg omitted from save table",
+          "parent caps discard and concrete vtable, ordered four precache calls",
+          "Spawn signed clamps and scheduler before callback assignment; ltime scheduling for movetype7",
+          "FindTargetEnt failed lookup retains handle/cache; getters not private-null safe",
+          "Use RET16 reads activator only, writes handle before predicate; JAE NaN admission versus ordered GetChargeState",
+          "start/loop sound stage order and binary64 delay arithmetic",
+          "own iuser4 versus linked impulse axes, direct writes,359 cap and self-handle double update",
+          "ReturnRotation independent decrement and lower-bound tests for all axes, cached linked baseline",
+          "CheckCompletion FireTargets five arguments V,V,3,0 and latch after scheduler; ProThink reschedules .025 afterwards",
+          "render amount NaN copy versus equality and repeated handle retrieval",
+          "Save/Restore context ECX and descriptor count7, inherited failures, writer status limits"
+        ],
+        "finding_resolved": "ReturnRotation contract clarified that lower-clamp runs independently of the decrement, including initially negative own angle/below-initial linked angle; masked FP exceptions qualified. Contract/notes regenerated and reverified.",
+        "unresolved_findings": [],
+        "file_hashes": {
+          "contract.md": "656e7d655be6092b0a3e9a857f08b83e81f98d144d07e2e2e95e194b6f390aba",
+          "notes.json": "5f0cf312872234716c49b286a005ce07ee0f80114ca45980df28eb2bda516524",
+          "evidence.json": "b5c532bbb677e172649afe460e002923aecb361ad2cae9431c58fdab8c174e92",
+          "capture.py": "35b770a7f7d2c19ad1990563fa0b897169a88d246dc1ffaeb725413ac709f45a",
+          "verify.py": "c221d19f4adb60a9a8208ca13ce12d508bcbc91dba0ce838d706c4d834a5ec47"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "35b770a7f7d2c19ad1990563fa0b897169a88d246dc1ffaeb725413ac709f45a",
+        "verify.py": "c221d19f4adb60a9a8208ca13ce12d508bcbc91dba0ce838d706c4d834a5ec47",
+        "contract.md": "656e7d655be6092b0a3e9a857f08b83e81f98d144d07e2e2e95e194b6f390aba",
+        "notes.json": "5f0cf312872234716c49b286a005ce07ee0f80114ca45980df28eb2bda516524",
+        "evidence.json": "b5c532bbb677e172649afe460e002923aecb361ad2cae9431c58fdab8c174e92",
+        "write_notes.py": "b10e91771534a48ab52b799841e262dae509e3c1a60689077b52b9e9823b18ea"
+      }
+    },
+    {
+      "package": "analysis/server-monster-route-execution",
+      "new_reviewed": 4,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "shader_inventory",
+        "package": "analysis/server-monster-route-execution",
+        "primary": [
+          "0x100bc290",
+          "0x100155d0",
+          "0x100c2390",
+          "0x100ab8b0"
+        ],
+        "semantic_review": "All four complete primary C and native ASM plus final contract/notes read; route alias/reloads, terminal floating gates, generic EAX forwarding, flight vector order and callback behavior checked against native. Critical graph/link, completion, approach, MoveToOrigin and caller contracts checked.",
+        "resolved_findings": [
+          "Current navigation footer no longer calls existing reviewed100c11d0 pending."
+        ],
+        "open_findings": [],
+        "source_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+        "independent_counts": {
+          "source_c": 21,
+          "asm": 21,
+          "byte_rows": 1824,
+          "raw_records": 568,
+          "descriptors": 178,
+          "vtables": 1,
+          "file_pins": 64
+        },
+        "limitations": [
+          "Static original PE only; no target execution.",
+          "No concrete class ownership claim for100ab8b0; raw pointer scan remains bounded to stored data sections.",
+          "Generic callback contracts do not guarantee arbitrary derived implementations."
+        ],
+        "package_hashes": {
+          "contract.md": "8625d639c7c57363a0cdeb835ee2393c6b89c0ceb2af0c9b23eeefc71f499ba2",
+          "notes.json": "45a77941e968a6dbfb212cffe100b2c77c7798b080a79fd0631323abff3264e3",
+          "evidence.json": "dbd58b4eee54714e55b5419fa1903b021ee1b95a626ff90d91787a4b6616f07b"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "f949f58652c125409747cdbc1cc93de2fb7c0d6019f076fcf43812b1aa083e10",
+        "verify.py": "637089f172d97c6c8f640f36cdf21ce444f0cbaa036b3415cc82eb9c9924105f",
+        "contract.md": "8625d639c7c57363a0cdeb835ee2393c6b89c0ceb2af0c9b23eeefc71f499ba2",
+        "notes.json": "45a77941e968a6dbfb212cffe100b2c77c7798b080a79fd0631323abff3264e3",
+        "evidence.json": "dbd58b4eee54714e55b5419fa1903b021ee1b95a626ff90d91787a4b6616f07b",
+        "write_notes.py": "2b0c9add1e08dfe05086d48cb2a971d411fb20dee0f26b2c5f2ef76bdfd8db4a"
+      }
+    },
+    {
+      "package": "analysis/server-weapon-melee",
+      "new_reviewed": 1,
+      "updated_existing": [
+        "server:0x100f9790",
+        "server:0x100f91b0"
+      ],
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "reviewer": "/root/client_catalog",
+        "packet": "analysis/server-weapon-melee",
+        "result": "PASS",
+        "target_executed": false,
+        "primary_addresses": [
+          "0x100f5db0",
+          "0x100f9790",
+          "0x100f91b0"
+        ],
+        "accounting": {
+          "new": 1,
+          "refined": 2
+        },
+        "semantic_checks": [
+          "Read all three full saved-C and bounded native ASM bodies, entire contract and all note details.",
+          "Swing vocal rules branch, ordered zero versus nonzero/NaN, shared pre-pushed RandomLong arguments, 10/6/10 native sound arrays and emitter ABI.",
+          "WeaponMelee active-item guard, skill CVTTSS2SI then CVTDQ2PS, ID10 effect exclusion, reused recoil stack, pointer start output and by-value TraceAttack forward vector.",
+          "Line JB versus hull/final JBE fraction guards including NaN, FindHullIntersection arguments and RET20, null-hit fallback and saved target lifetime boundary.",
+          "ClearMultiDamage and ApplyMultiDamage bodies, fresh attacker reads, two separate target classification callbacks and special/default sound-shake ordering/durations.",
+          "View impulse rules dispatch, PlaybackEvent12-argument ABI, WORD event index, origin/angles local alias and native event precache/store binding.",
+          "Local vuser3 scalar float32 subtract-X/add-Y/add-Z with scale20 and RET12; no inferred visual parity.",
+          "Critical support bodies inspected: 100476b0,100df820,100fc9f0,100e01e0,10119320,1011a800,1011a7e0,1011c070,1011b8f0,10119de0,100fc430,100c90b0; bounded skill producer and event-registration callsites verified."
+        ],
+        "independent_provenance": {
+          "script": "analysis/local/peer_melee27.py",
+          "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+          "source_c": 19,
+          "asm_ranges": 19,
+          "byte_rows": 1456,
+          "raw_records": 469,
+          "native_descriptors": 362,
+          "file_pins": 54,
+          "checks": "Independent struct-based PE mapping; source/file/range/raw SHA256 and every machine-byte row; all descriptor rows, vtable slots/RTTI names, API binding/header indices, EAT identity, sound-pointer arrays/constants and event call/store bytes."
+        },
+        "author_verifier": "PASS 19 C 19 ASM 1456 byte rows 469 raw 362 descriptors 3 cards: 1 new, 2 refined",
+        "actionable_findings": [],
+        "limits": "Static local contracts only; no runtime skill/RNG/collision/visual validation, no completeness claim for external damage overrides or client event playback. Peer did not edit the author's packet."
+      },
+      "final_hashes": {
+        "capture.py": "6b992318128889b6486ac32c3ffec325d5e8c9b62fa79a78c1260acaef5a371c",
+        "verify.py": "8e896f962b8fb866edc4ced0f40b056e8645836db3656fbd013bffa06fa0b87b",
+        "contract.md": "b7dd5b63dae4c50975f55c43caf11a50cda53b7824da3b43785356894ecfd362",
+        "notes.json": "e9fc1d901cf48a03021ed4ebca7e8af54af9b84cc7f82ff573ffdb0745a723fe",
+        "evidence.json": "896259ee13021e761ded6921bd73696d2523562e58db761e0ea328e7dc7a1298",
+        "write_notes.py": "d93675014b2a167d43e90ba91d1efa729b8eb573ea65ba8b4b5c6c1d87bc41d0"
+      }
+    }
+  ],
+  "verification_report_sha256": "eb5a5c9bb7d3d3a78a6eb1347e7ff18c273ea1573d5276e373eca87cde7b5016",
+  "navigation_cleanup": "29 newly reviewed entries removed from pending;2 existing cards fully refined with old evidence retained and duplicate notes synchronized. Mechanics routes/workboard/line numbers regenerated. Previous movement, key-use and Glock actions/iron-entry residuals linked to completed route/valve/button/melee bodies; already-reviewed insertion and door-wait no longer listed as pending. Engine callbacks, other state writers, deeper CRT and uncaptured code remain open.",
+  "note_sync": {
+    "updated_ids": [
+      "server:0x10012a80",
+      "server:0x10012ba0",
+      "server:0x10012d00",
+      "server:0x10012d50",
+      "server:0x10012f00",
+      "server:0x10012f70",
+      "server:0x10013090",
+      "server:0x10013220",
+      "server:0x10013f00",
+      "server:0x100155d0",
+      "server:0x10015960",
+      "server:0x10042560",
+      "server:0x100425c0",
+      "server:0x100426a0",
+      "server:0x10042720",
+      "server:0x10042740",
+      "server:0x100429b0",
+      "server:0x100429d0",
+      "server:0x10042a00",
+      "server:0x10042b00",
+      "server:0x10042b40",
+      "server:0x10042ba0",
+      "server:0x10042da0",
+      "server:0x10043130",
+      "server:0x10043380",
+      "server:0x100ab8b0",
+      "server:0x100bc290",
+      "server:0x100c2390",
+      "server:0x100f5db0",
+      "server:0x100f91b0",
+      "server:0x100f9790"
+    ],
+    "changed_files": []
+  }
+}

@@ -1,0 +1,88 @@
+[FUNCTION server:0x10060140]
+  Символ тела: FUN_10060140
+  Декларация Ghidra: void FUN_10060140(int param_1)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x10060140.c
+    SHA-256: f4e95a5b750abf037afe74638735cecf308457771c5ae63b4ee0b8f46de1f2a2; селектор=0x10060140; вход=0x10060140; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Именованные вызовы (лексически):
+    _atoi
+    FUN_1000aba0
+    FID_conflict__atof
+    FUN_1000dba0
+  Глобальные метки (упоминания):
+    DAT_10223054
+  Строки/ресурсы:
+    "subtitlenumber1"
+    "subtitlenumber2"
+    "subtitlenumber3"
+    "subtitlenumber4"
+    "subtitlenumber5"
+    "subtitlenumber6"
+    "subtitlenumber7"
+    "subtitlenumber8"
+    "subtitlenumber9"
+    "subtitlenumber10"
+    "subtitlenumber11"
+    "subtitlenumber12"
+    "subtitlenumber13"
+    "subtitlenumber14"
+    "subtitlenumber15"
+    "subtitlenumber16"
+    "subtitlenumber17"
+    "subtitlenumber18"
+    "subtitlenumber19"
+    "subtitlenumber20"
+    "subtitlenumber21"
+    "subtitlenumber22"
+    "subtitlenumber23"
+    "subtitlenumber24"
+    "subtitlenumber25"
+    "subtitlenumber26"
+    "subtitlenumber27"
+    "subtitlenumber28"
+    "subtitlenumber29"
+    "subtitlenumber30"
+    "subtitlenumber31"
+    "subtitlenumber32"
+    "subtitletime1"
+    "subtitletime2"
+    "subtitletime3"
+    "subtitletime4"
+    "subtitletime5"
+    "subtitletime6"
+    "subtitletime7"
+    "subtitletime8"
+    "subtitletime9"
+    "subtitletime10"
+    "subtitletime11"
+    "subtitletime12"
+    "subtitletime13"
+    "subtitletime14"
+    "subtitletime15"
+    "subtitletime16"
+    "subtitletime17"
+    "subtitletime18"
+    "subtitletime19"
+    "subtitletime20"
+    "subtitletime21"
+    "subtitletime22"
+    "subtitletime23"
+    "subtitletime24"
+    "subtitletime25"
+    "subtitletime26"
+    "subtitletime27"
+    "subtitletime28"
+    "subtitletime29"
+    "subtitletime30"
+    "subtitletime31"
+    "subtitletime32"
+    "audiofile"
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x10060140-0x10060e28 inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Вызовы в каталоге: server:0x1000aba0, server:0x1000dba0, server:0x1016b55e
+  Форма эталонного тела: if=74, циклы=3, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]

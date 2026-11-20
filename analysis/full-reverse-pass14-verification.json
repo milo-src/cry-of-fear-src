@@ -1,0 +1,54 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1788,
+  "new_reviewed": 29,
+  "updated_existing": [
+    "server:0x100dad40"
+  ],
+  "after_reviewed": 1817,
+  "remaining_unreviewed": 6838,
+  "server_reviewed": 1162,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 111,
+    "assembly_ranges": 99,
+    "verified_assembly_byte_rows": 6194,
+    "raw_records": 1510,
+    "decoded_save_fields": 1026,
+    "review_evidence_references": 812,
+    "synchronized_note_occurrences": 30
+  },
+  "checks": {
+    "prior_review_semantics_preserved": true,
+    "prior_reviews_exactly_preserved": 1787,
+    "prior_semantic_expansions": [
+      "server:0x100dad40"
+    ],
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.003s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-item-rules": "PASS 17 C, 17 ASM, 564 byte rows, 416 raw, 13 cards; ABI/registry limits/descriptor checks",
+      "server-derived-death": "PASS 33 C, 33 ASM, 1906 byte rows, 282 raw, 8 cards",
+      "server-stats-lifecycle": "PASS 21 C, 23 ASM, 1610 byte rows, 416 raw, 5 cards",
+      "server-player-inventory": "PASS 3 new + 1 updated; 24 C 26 ASM 2114 byte rows 363 raw; ABI/return/network/155descriptors assertions"
+    }
+  },
+  "artifacts": [
+    "analysis/server-item-rules/contract.md",
+    "analysis/server-derived-death/contract.md",
+    "analysis/server-stats-lifecycle/contract.md",
+    "analysis/server-player-inventory/contract.md"
+  ],
+  "catalog_sha256": "fd487b00a2d3dfe5501a20155027aa2d2e19d85d7a272a12bcbeb618c81dc4fa",
+  "progress_sha256": "6cb8a39c3de386e30edd2b2b8b008cbeebfba3221a648003a85da9c63f540733"
+}

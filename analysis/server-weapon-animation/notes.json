@@ -1,0 +1,119 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1011f5d0",
+      "proposed_name": "Weapon_SendAnimationAndBody",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "Записывает текущую анимацию владельца и отправляет два BYTE в message35; фактически принимает три stack аргумента.",
+      "details_ru": [
+        "ECX=W, три stack DWORD, RET0c. Используется только первый sequence; второй и третий не читаются, хотя вызывающие методы CMobile передают (sequence,1,0). Ghidra показывает один аргумент и поэтому теряет фактическую ABI. Нет проверки NULL у W, owner или pev, нет проверки диапазона sequence, alive или model.",
+        "Порядок: считывает W.owner и пишет полный sequence DWORD в P+418 (native m_iCurrentWeaponAnimation), перечитывает owner и пишет sequence в P.pev+21c (weaponanim), затем опять перечитывает owner ради P.pev.pContainingEntity+20c. Вызывает MessageBegin через10223000 с destination1, фиксированным message35 (0x23), origin=NULL и этим edict. Затем WriteByte(sequence), после callback заново читает W.pev.body+114 и WriteByte(body), затем MessageEnd10223004. Передаёт целый DWORD в BYTE writer; фактическое wire сужение принадлежит engine. Локальные DWORD stores не сужаются до BYTE.",
+        "Второе значение payload читается уже после MessageBegin/первого WriteByte: оно не snapshot до callbacks. Получатель — текущий W.owner в момент MessageBegin; сравнения с аргументом/локальным player вызывающей PhoneCall нет. Результаты engine callbacks не проверяются; функция не возвращает нормализованный success. Последовательности, клиентская интерпретация message35 и отображение модели остаются downstream, это не renderer."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011f5d0.c",
+        "analysis/server-weapon-animation/1011f5d0-0.asm",
+        "analysis/server-weapon-animation/evidence.json",
+        "analysis/server-weapon-animation/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011f640",
+      "proposed_name": "Weapon_SendBodyByteToExplicitPlayer",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "Отправляет WeaponBody с одним BYTE явно переданному player; NULL recipient даёт ранний выход.",
+      "details_ru": [
+        "Два stack DWORD (player,value), RET8; ECX не используется, хотя адрес стоит в CMobile virtual+19c. При player==NULL немедленный возврат. Иначе без проверок player.pev/edict вызывает MessageBegin(1,global102265f8,NULL,player.pev.pContainingEntity), WriteByte(value), MessageEnd. Сам ни W.pev.body, ни player поля не записывает; full EAX status не нормализован.",
+        "Global102265f8 получает результат RegUserMsg(\"WeaponBody\",1) в100e5fc0. Точное native место: PUSH1/PUSH101dae74 перед CALL100e6649→engine10223074, EAX записан вglobal100e6656; PUSH следующего имени101dae80 уже стоит перед этой записью и не относится к WeaponBody. Message ID динамический, не константа адреса. Нет проверки нулевого ID/успеха регистрации в sender.",
+        "В support10053210 body W.pev+114 сравнивается с P+5cc; при различии сначала обновляется W.pev.body и только потом virtual+19c(P,body). Это доказывает локальную роль sender, но весь большой frame handler здесь не получает REVIEW. Клиентское применение BYTE, диапазоны bodygroups и безопасность engine recipient — внешние границы."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011f640.c",
+        "analysis/server-weapon-animation/1011f640-0.asm",
+        "analysis/server-weapon-animation/evidence.json",
+        "analysis/server-weapon-animation/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100531b0",
+      "proposed_name": "CMobile_SendLowerAnimationAndOwnerDelay",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "При отсутствии звонка выбирает анимацию3/9 и ставит owner deadline now+0.5.",
+      "details_ru": [
+        "ECX=W, stack параметров нет, plain RET; CMobile virtual+14c. Если BYTE P+1ee8 m_bInPhoneCall ненулевой, сразу выходит без анимации и deadline. Иначе DWORD P+1e98 m_iMobileFlashMode==0 выбирает sequence3, любой nonzero —9. Вызывает W.virtual+198(sequence,1,0). Здесь не проверяются sprint state, cooldown или alive.",
+        "После animation callback заново читает globals.time и W.owner; записывает P+308 как float32(double(now_float32)+double0.5 из101a1e48), используя CVTPS2PD/ADDSD/CVTPD2PS. Не использует сохранённый owner до callback. Вызов не выключает flashlight и не меняет call latch. Название lower/holster относится к этому vtable маршруту; конкретное визуальное содержание sequence3/9 требует модели."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100531b0.c",
+        "analysis/server-weapon-animation/100531b0-0.asm",
+        "analysis/server-weapon-animation/evidence.json",
+        "analysis/server-weapon-animation/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10053990",
+      "proposed_name": "CMobile_ScheduleFlashToggleAnimation",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "Проверяет cooldowns, планирует FlashToggle и запускает sequence4/8, затем обновляет три deadline.",
+      "details_ru": [
+        "ECX=W, без stack аргументов, plain RET. Сначала BYTE P+1ee8 должен быть0. Один snapshot globals.time сравнивается последовательно с P+1ee4 m_fPhoneCallTime, W+1cc next primary, W+1d0 next secondary, W+1d4 next tertiary. Каждый COMISS(deadline,now) сопровождается JA exit: ordered deadline>now запрещает действие; equality, deadline<now и unordered пропускаются. При NaN с маскированными FP exceptions это отличается от обычного C <=. Затем DWORD W+128 m_iSprintState должен быть0. Никаких проверок owner NULL/alive или батареи здесь нет.",
+        "Исходный P+1e98==0 вызывает W.virtual+08(float bits3e6b851f, около0.23), выбирает sequence4; nonzero вызывает virtual+08(bits3f28f5c3, около0.66), выбирает8. После scheduler callback перечитывает W.vptr, записывает W.think+78=100530b0 и вызывает virtual+198(sequence,1,0). Выбор sequence сделан по режиму до callback и не пересчитывается. Порядок именно schedule→think store→animation; не наоборот.",
+        "Для доказанного CMobile scheduler1011f680 читает globals.time через ST0 helper1011ab20, складывает с delay в x87, округляет float32 и одинаковое значение пишет W+58, затем W.pev.nextthink+104; RET4. Здесь нет parent-aware base scheduler маршрута, mirror+5c не пишется. Фактический срок исполнения callbacks движком этим не доказан.",
+        "После animation снова читает globals.time, делает ADDSS(float1.0 из101a1390), затем последовательно пишет этот одинаковый float32 в W+1cc, W+1d0, W+1d8 idle. W+1d4 проверялся, но не обновляется. Сам flashlight state не меняет, sound не играет; это делает отдельный запланированный callback и другие системы."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10053990.c",
+        "analysis/server-weapon-animation/10053990-0.asm",
+        "analysis/server-weapon-animation/evidence.json",
+        "analysis/server-weapon-animation/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100530b0",
+      "proposed_name": "CMobile_FlashToggleOwnerModeFlags",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "Экспортированный think callback переключает mode владельца и биты flashlight flags.",
+      "details_ru": [
+        "Экспорт CMobile::FlashToggle, ECX=W, без stack аргументов, plain RET. Нет cooldown/call/alive/NULL проверки. Считывает P=W+160 и DWORD P+1e98. При nonzero сначала пишет mode0; перечитывает owner; очищает бит0 (mask1) P+5d0 только если он выставлен, при записи снова перечитывает owner; затем очищает бит1 (mask2) если выставлен. Остальные биты сохраняются.",
+        "При исходном mode0 проверяется BYTE W+1f9. Если он0, гарантирует mask1=1 в P+5d0 (с повторным чтением owner после записи), затем очищает mask2 при необходимости (с повторным чтением owner после записи). Если W+1f9 ненулевой, обе bit operations пропускаются. В обоих случаях в конце mode становится DWORD1. Так что mode1 может сосуществовать с неизменёнными flags, если W+1f9!=0; нельзя заменить это безусловным flags|1.",
+        "Native PLAYER descriptors называют +1e98 m_iMobileFlashMode и +5d0 m_iFlashlightFlags. Значение/производители W+1f9 в этом пакете не установлены, не называем его автоматически battery dead. Callback не очищает think+78, не назначает следующий deadline, не отправляет message и не рисует свет. Нет нормализованного возвращаемого bool; остаточный EAX зависит от ветки."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100530b0.c",
+        "analysis/server-weapon-animation/100530b0-0.asm",
+        "analysis/server-weapon-animation/evidence.json",
+        "analysis/server-weapon-animation/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10053c90",
+      "proposed_name": "CMobile_IdleOrCallAnimationWithSequenceDuration",
+      "subsystem": "weapons",
+      "confidence": "high",
+      "summary_ru": "Выбирает idle sequence0/5 либо одноразовую call sequence0e, рассчитывая idle deadline через модель.",
+      "details_ru": [
+        "ECX=W, нет stack аргументов, plain RET. Читает current time через ST0 helper1011ab20 и FSTP float32 local. Если COMISS(W+1d8,localNow) даёт ordered greater, JA выходит; unordered проходит при masked FP exceptions. Затем W+128 должен быть0. При BYTE P+1ee8!=0 требует BYTE W+204==0, вызывает virtual+198(0e,1,0), потом ставит BYTE W+204=1 и возвращается, не назначая idle deadline.",
+        "При P+1ee8==0 тоже требует BYTE W+204==0; если latch остался1, просто выходит. Далее свежий snapshot globals.time проверяет W+1cc и W+1d0 через COMISS/JA, с теми же equality/unordered правилами. Здесь не проверяются W+1d4 или P+1ee4. По DWORD P+1e98==0 выбирает sequence0, иначе5; вызывает virtual+198(sequence,1,0). Эта функция сама W+204 не сбрасывает; support10053210 сбрасывает BYTE при P+1ee8==0, но весь frame handler остаётся отдельной границей.",
+        "После animation callback заново читает W.owner.pev.weaponanim+21c и PUSH этого sequence; затем PUSH W.pev.pContainingEntity и вызывает engine GetModelPtr10223070 (slot74). Engine получает только edict: sequence — уже подготовленный второй аргумент будущего cdecl1000f390. ADD ESP,4 удаляет лишь edict, PUSH EAX добавляет model pointer, затем1000f390(model,sequence), ADD ESP,8. Ghidra ошибочно рисует два аргумента у GetModelPtr и один у duration helper.",
+        "Duration support1000f390: NULL model даёт ST0=0; иначе signed sequence>=model.numseq+a4 даёт0. Нижней границы sequence нет. Адрес descriptor=model+model.seqindex+a8+sequence*b0; signed numframes+38<=1 даёт0, иначе DIVSS(float32(numframes-1),fps+20)→float32→ST0. FPS0, negative, NaN не фильтруются. После helper primary читает свежий globals.time, FADD float32 time в x87 и FSTP float32 W+1d8. Это срок duration после возвращения callback/helper, не snapshot первого gate; некорректный sequence/model остаётся небезопасным, а не автоматически duration0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10053c90.c",
+        "analysis/server-weapon-animation/10053c90-0.asm",
+        "analysis/server-weapon-animation/evidence.json",
+        "analysis/server-weapon-animation/contract.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "scope": "Static reverse; saved corpus only, not whole-game completeness",
+  "target_executed": false,
+  "before_reviewed": 2041,
+  "new_reviewed": 31,
+  "updated_existing": [
+    "server:0x10048550",
+    "server:0x100488a0",
+    "server:0x100488c0",
+    "server:0x10048950",
+    "server:0x10048990",
+    "server:0x10048bd0",
+    "server:0x1011c1a0"
+  ],
+  "after_reviewed": 2072,
+  "remaining_unreviewed": 6583,
+  "prior_reviews_exactly_preserved": 2034,
+  "all_catalog_evidence_references": 14338,
+  "packages": {
+    "server-button-lifecycle": {
+      "source_files": 22,
+      "assembly_ranges": 24,
+      "verified_assembly_byte_rows": 1581,
+      "raw_records": 298,
+      "decoded_save_fields": 170,
+      "pinned_paths": 74,
+      "standalone": "PASS 22 C 24 ASM 1581 byte rows 298 raw 170 descriptors 8 cards"
+    },
+    "server-interdoor-lifecycle": {
+      "source_files": 38,
+      "assembly_ranges": 41,
+      "verified_assembly_byte_rows": 1568,
+      "raw_records": 520,
+      "decoded_save_fields": 164,
+      "pinned_paths": 96,
+      "standalone": "PASS 38 C 41 ASM 1568 byte rows 520 raw 164 descriptors 4 vtables 14 cards"
+    },
+    "server-flying-monster-behavior": {
+      "source_files": 25,
+      "assembly_ranges": 26,
+      "verified_assembly_byte_rows": 2512,
+      "raw_records": 413,
+      "decoded_save_fields": 178,
+      "pinned_paths": 75,
+      "standalone": "PASS 25 C 26 ASM 2512 byte rows 413 raw 178 descriptors 10 cards; native-only entry not counted"
+    },
+    "server-glock-deploy": {
+      "source_files": 26,
+      "assembly_ranges": 26,
+      "verified_assembly_byte_rows": 1297,
+      "raw_records": 451,
+      "decoded_save_fields": 362,
+      "pinned_paths": 67,
+      "standalone": "PASS 26 C 26 ASM 1297 byte rows 451 raw 362 descriptors 6 cards"
+    }
+  },
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "checks": {
+    "catalog_idempotent": true,
+    "catalog_tests": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.005s\n\nOK",
+    "main": true,
+    "no_commits": true,
+    "scope_only_analysis_decompiled_catalog": true,
+    "git_diff_check": true
+  },
+  "hashes": {
+    "decompiled/FUNCTION_CATALOG.txt": "8e4158ae5d5640b32ea3dcd6d05200967c11f3467fb2ee2379b371d149a58f08",
+    "decompiled/PROGRESS.json": "39f1ad7400c77528e4daefbdfe77d50e69aee6357513b2eb2655e76ff7c4c712"
+  }
+}

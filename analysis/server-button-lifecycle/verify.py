@@ -1,0 +1,74 @@
+from pathlib import Path
+import json,hashlib,struct,re
+R=Path(__file__).resolve().parents[2];O=Path(__file__).resolve().parent;e=json.loads((O/'evidence.json').read_text(encoding='utf8'));b=Path(e['binary']).read_bytes();h=lambda v:hashlib.sha256(v).hexdigest();v=lambda x:int(x,16)
+assert h(b)==e['sha256'] and not e['target_executed']
+nt=struct.unpack_from('<I',b,60)[0];opt=nt+24;base=struct.unpack_from('<I',b,opt+28)[0];sh=opt+struct.unpack_from('<H',b,nt+20)[0]
+sections=[struct.unpack_from('<8sIIIIIIHHI',b,sh+40*i)for i in range(struct.unpack_from('<H',b,nt+6)[0])]
+def raw(a,n):
+ for s in sections:
+  d=a-base-s[2]
+  if 0<=d and d+n<=s[3]:return b[s[4]+d:s[4]+d+n]
+ raise AssertionError((hex(a),n))
+for r in e['source_c']+e['ranges']+e['support_documents']+[e['index'],e['api_binding']['header'],e['baseline_report']]:assert h((R/r['path']).read_bytes())==r['sha256']
+rows=0
+for r in e['ranges']:
+ a,end=v(r['start']),v(r['end_exclusive']);pos=a
+ assert h(raw(a,end-a))==r['binary_range_sha256']
+ for line in (R/r['path']).read_text().splitlines():
+  m=re.match(r'^([0-9a-f]{8}):\s*((?:[0-9a-f]{2}(?:\s+|$))+)',line)
+  if m:
+   at=v(m[1]);q=bytes.fromhex(m[2]);assert pos==at and raw(at,len(q))==q;pos+=len(q);rows+=1
+ assert pos==end
+for r in e['raw']:
+ q=bytes.fromhex(r['bytes_hex']);assert raw(v(r['address']),len(q))==q and h(q)==r['sha256'];assert b[v(r['file_offset']):v(r['file_offset'])+len(q)]==q
+for t in e['save_tables']:
+ for i,f in enumerate(t['fields']):
+  ty,nm,off,c,fl=struct.unpack('<IIIhh',raw(v(t['address'])+16*i,16));assert (ty,off,c,fl)==(f['type_id'],v(f['offset']),f['count'],f['flags']);assert raw(nm,len(f['name'])+1)==f['name'].encode()+b'\0'
+for t in e['vtables']:
+ for f in t['slots']:assert struct.unpack('<I',raw(v(t['address'])+v(f['offset']),4))[0]==v(f['target'])
+erv=struct.unpack_from('<I',b,opt+96)[0];ex=struct.unpack('<IIHHIIIIIII',raw(base+erv,40))
+for f in e['exports']:
+ i=f['name_index'];nm=base+struct.unpack('<I',raw(base+ex[9]+4*i,4))[0];ix=struct.unpack('<H',raw(base+ex[10]+2*i,2))[0];entry=base+struct.unpack('<I',raw(base+ex[8]+4*ix,4))[0]
+ assert raw(nm,len(f['name'])+1)==f['name'].encode()+b'\0' and ex[5]+ix==f['ordinal'] and entry==v(f['entry'])
+for target,expected in e['exact_le32_data_refs']['targets'].items():
+ found=[]
+ for s in e['exact_le32_data_refs']['sections']:
+  d=b[s['raw_offset']:s['raw_offset']+s['raw_size']];assert h(d)==s['sha256'];at=0
+  while True:
+   at=d.find(struct.pack('<I',v(target)),at)
+   if at<0:break
+   found.append(hex(base+v(s['rva'])+at));at+=1
+ assert found==expected
+
+
+header=(R/e['api_binding']['header']['path']).read_text()
+names=re.findall(r'\(\*(pfn\w+)\s*\)',header.split('typedef struct enginefuncs_s',1)[1])
+for f in e['api_binding']['slots']:assert names[f['slot']]==f['name'] and v(f['address'])==v(e['api_binding']['base'])+4*f['slot']
+for f in e['explicit_strings']:assert raw(v(f['address']),len(f['text_latin1'])+1)==f['text_latin1'].encode('latin1')+b'\0'
+assert e['primary']=='10012580 100135e0 10014260 100146f0 100148e0 10014cc0 10016790 10102b80'.split()
+assert json.loads((R/e['baseline_report']['path']).read_text(encoding='utf8'))['after_reviewed']==2041
+for key,refs in e['saved_c_lexical_references'].items():
+ for r in refs:
+  t=(R/r['path']).read_text(encoding='utf8');assert h((R/r['path']).read_bytes())==r['sha256'];assert len(re.findall(r'FUN_'+key[2:]+r'\(',t))==r['occurrences']
+for cls,off,name in [('BUTTON',0x1d8,'m_bLockedSound'),('BUTTON',0x1da,'m_bUnlockedSound'),('BUTTON',0x1b0,'m_strChangeTarget'),('BUTTON',0x1e0,'m_hide_use'),('BUTTON',0x180,'m_isLocked'),('ENTVARS',0x110,'skin'),('TOGGLE',0x10c,'m_flWait')]:
+ assert any(v(f['offset'])==off and f['name']==name for t in e['save_tables']if t['name']==cls for f in t['fields'])
+for t in e['sentence_switches']:
+ for i,c in enumerate(t['cases']):
+  assert c['input']==i+1 and struct.unpack('<I',raw(v(t['table'])+4*i,4))[0]==v(c['target'])
+  assert raw(v(c['literal']),len(c['text'])+1)==c['text'].encode()+b'\0'
+  assert raw(v(c['target'])+5,1)==b'\xb9' and struct.unpack('<I',raw(v(c['target'])+6,4))[0]==v(c['literal'])
+for a,q in {0x100125b2:'68e4010000',0x100125d6:'897004',0x1001367e:'8883d8010000',0x100136d9:'8883d9010000',0x1001370f:'8883da010000',0x10013745:'8883db010000',0x10014306:'0fb6c0',0x10014331:'0fb6c0',0x10014d95:'888780010000',0x10014dbe:'f6c444',0x10014ddb:'760d',0x10014fb2:'0f4bca',0x10014ff5:'0f45c1',0x10014ff8:'898780000000',0x1001471e:'c20400',0x1001493c:'c20400',0x1013e091:'dd0c24'}.items():
+ q=bytes.fromhex(q);assert raw(a,len(q))==q,hex(a)
+for call,target in [(0x10013671,0x1016f5ec),(0x10013679,0x1013e080),(0x100138ea,0x10102480),(0x100146f9,0x10102890),(0x100148eb,0x10102b20),(0x10014d20,0x10102b80),(0x10102ba4,0x101021d0)]:
+ assert raw(call,1)==b'\xe8' and call+5+struct.unpack('<i',raw(call+1,4))[0]==target
+assert raw(0x10016790,1)==b'\xe9' and 0x10016795+struct.unpack('<i',raw(0x10016791,4))[0]==0x10012580
+assert len(e['pending_checks'])==8 and all('[REVIEW server:' not in r['block'] for r in e['pending_checks'])
+assert all(any(f['offset']==off and f['type_id']==0 for t in e['save_tables']if t['name']=='BUTTON'for f in t['fields'])for off in ['0x184','0x188'])
+assert not any('bad)' in (R/r['path']).read_text()for r in e['ranges'])
+notes=json.loads((O/'notes.json').read_text(encoding='utf8'))['functions'];c=' '.join((O/'contract.md').read_text(encoding='utf8').split())
+assert sorted(n['address'][2:]for n in notes)==sorted(e['primary']) and len(notes)==8
+for n in notes:
+ assert all(' '.join(x.split()) in c for x in n['details_ru'])
+ for path in n['evidence_paths']:assert (R/path).is_file()
+assert h(Path(e['binary']).read_bytes())==e['sha256']
+print('PASS',len(e['source_c']),'C',len(e['ranges']),'ASM',rows,'byte rows',len(e['raw']),'raw',sum(len(t['fields'])for t in e['save_tables']),'descriptors',len(notes),'cards')

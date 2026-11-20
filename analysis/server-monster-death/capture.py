@@ -5,8 +5,8 @@ ROOT=Path(__file__).resolve().parents[2];OUT=Path(__file__).resolve().parent;sys
 from index_evidence import pe_metadata
 B=Path('D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll');b=B.read_bytes();SHA='751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641'
 assert hashlib.sha256(b).hexdigest()==SHA;pe=pe_metadata(b);BASE=int(pe['image_base'],16)
-PRIMARY='1008a330 1008c7e0 1008a440 1008a510 1008ac80 100877a0 1008bac0 1008ad80 10117700 101180b0'.split()
-SUPPORT='1008ac70 10087940 1008c9c0 1002a8e0 100b4aa0 100177b0 1008ac50 10119900 10100820 1011a800 1011a120 10117fe0 1011a030 1011a8d0 100ad0f0 100ad010 100fc9f0 10017e70 10013550 1008bc50 1008c4d0 1013dbb3'.split()
+PRIMARY='1008a330 1008c7e0 1008a440 1008a510 1008ac80 100877a0 1008bac0 1008ad80 10117700 101180b0 100876d0'.split()
+SUPPORT='1008ac70 10087940 1008c9c0 1002a8e0 100b4aa0 100177b0 1008ac50 10119900 10100820 1011a800 1011a120 10117fe0 1011a030 1011a8d0 100ad0f0 100ad010 100fc9f0 10017e70 10013550 1000db00 1000e1f0 1000d580 10017660 101028e0 1008bc50 1008c4d0 1013dbb3'.split()
 
 def h(x):return hashlib.sha256(x).hexdigest()
 def raw(a,n):
@@ -80,7 +80,7 @@ for i in range(27):
 e['literals']=[]
 header=ROOT/'external/hlsdk-portable/engine/eiface.h';names=re.findall(r'\(\*(pfn\w+)\s*\)',header.read_text().split('typedef struct enginefuncs_s',1)[1]);base=0x10222f48
 e['api_binding']=dict(initializer='0x100b4aa0',base=hex(base),copied_dwords=144,header=ref(header),slots=[dict(slot=i,name=names[i],address=hex(base+i*4))for i in sorted({(int(v,16)-base)//4 for r in e['ranges'] for v in re.findall(r'(?:call|jmp)\s+DWORD PTR ds:0x([0-9a-f]+)',(ROOT/r['path']).read_text()) if base<=int(v,16)<base+144*4})])
-e['support_documents']=[ref(ROOT/p)for p in ['analysis/server-monster-damage/contract.md','analysis/server-event-effects/contract.md','analysis/server-monster-senses/contract.md','external/hlsdk-portable/common/const.h','external/hlsdk-portable/engine/progdefs.h']]
+e['support_documents']=[ref(ROOT/p)for p in ['analysis/server-monster-damage/contract.md','analysis/server-event-effects/contract.md','analysis/server-monster-senses/contract.md','analysis/network/usermessage-registry.json','external/hlsdk-portable/common/const.h','external/hlsdk-portable/engine/progdefs.h']]
 e['index']=ref(ROOT/'decompiled/server/partial-pass/index.json')
 # Preserve native literal pointers from all primary immediates where bytes are printable strings.
 seen=set()

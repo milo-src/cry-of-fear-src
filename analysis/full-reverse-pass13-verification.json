@@ -1,0 +1,53 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1757,
+  "new_reviewed": 31,
+  "updated_existing": [],
+  "after_reviewed": 1788,
+  "remaining_unreviewed": 6867,
+  "server_reviewed": 1133,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 112,
+    "assembly_ranges": 99,
+    "verified_assembly_byte_rows": 9122,
+    "raw_records": 1344,
+    "decoded_save_fields": 897,
+    "review_evidence_references": 349,
+    "synchronized_note_occurrences": 31
+  },
+  "checks": {
+    "prior_review_semantics_preserved": true,
+    "prior_reviews_exactly_preserved": 1755,
+    "prior_navigation_only_updates": [
+      "server:0x100a2710",
+      "server:0x100a51c0"
+    ],
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.004s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-item-pickup": "PASS 9 cards 34 C 35 ASM 2259 byte rows 198 raw; ABI/owner/FP/155descriptors assertions",
+      "server-monster-death": "PASS 38 C, 38 ASM, 2581 byte rows, 321 raw, 11 cards",
+      "server-stats-score": "PASS 835 saved-ASM score/ratio replays, exact thresholds/overflow/BYTE gate; synthetic NaN guards; no target execution\nPASS 6 C, 6 ASM, 2355 byte rows, 223 raw, 3 cards",
+      "server-unlock-actions": "PASS 20 C, 20 ASM, 1927 byte rows, 549 raw, 8 cards"
+    }
+  },
+  "artifacts": [
+    "analysis/server-item-pickup/contract.md",
+    "analysis/server-monster-death/contract.md",
+    "analysis/server-stats-score/contract.md",
+    "analysis/server-unlock-actions/contract.md"
+  ],
+  "catalog_sha256": "4b02efd0a64f916f86ff7bf924257bb6f756813bb437c6548427dc875379da6f",
+  "progress_sha256": "41a146f3056eea7bbcc23e114b81e0ac6c71dd580c72daea5af12a8ae58f3ccb"
+}

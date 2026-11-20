@@ -1,0 +1,80 @@
+"""Static saved-C/PE/ASM evidence for Glock deployment/holstering/light action/idle and full shared deployment."""
+from pathlib import Path
+import hashlib,json,re,shutil,struct,subprocess,sys
+ROOT=Path(__file__).resolve().parents[2];OUT=Path(__file__).resolve().parent;sys.path.insert(0,str(ROOT/'tools'))
+from index_evidence import pe_metadata
+B=Path('D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll');b=B.read_bytes();SHA='751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641'
+assert hashlib.sha256(b).hexdigest()==SHA;pe=pe_metadata(b);BASE=int(pe['image_base'],16)
+PRIMARY='100457d0 10045b40 10045ac0 10047db0 10047cf0 1011c1a0'.split()
+SUPPORT='100b4aa0 100f3d90 100fc430 100c90b0 1011c020 100e4ed0 1011f5d0 1011f640 10120210 1000f390 100fc9f0 100f5eb0 100dfea0 10047cc0 1011f680 10017110 1011ab20 10119c00 1011fb60 10045580'.split()
+
+def h(x):return hashlib.sha256(x).hexdigest()
+def raw(a,n):
+ for s in pe['sections']:
+  d=a-BASE-int(s['rva'],16)
+  if 0<=d and d+n<=s['raw_size']:
+   off=s['raw_offset']+d;return b[off:off+n],off
+ raise ValueError(hex(a))
+def ref(p):return dict(path=p.relative_to(ROOT).as_posix(),sha256=h(p.read_bytes()))
+e=dict(objdump=shutil.which('objdump'),objdump_version=subprocess.check_output([shutil.which('objdump'),'--version'],text=True).splitlines()[0],method='Read-only static saved C + bounded native objdump + PE raw reads; no target execution.',module='server',binary=B.as_posix(),sha256=SHA,target_executed=False,primary=PRIMARY,source_c=[],ranges=[],raw=[])
+for a in PRIMARY+SUPPORT:
+ p=ROOT/f'decompiled/server/partial-pass/functions/0x{a}.c';s=p.read_text(encoding='utf8');e['source_c'].append(dict(**ref(p),entry='0x'+a,primary=a in PRIMARY))
+ for k,(lo,hi) in enumerate(re.findall(r'// range: (0x[0-9a-f]+)-(0x[0-9a-f]+) inclusive',s)):
+  start=int(lo,16);end=int(hi,16)+1;cmd=[shutil.which('objdump'),'-d','-M','intel',f'--start-address={start:#x}',f'--stop-address={end:#x}',str(B)];t=subprocess.check_output(cmd,text=True);p=OUT/f'{a}-{k}.asm';p.write_text(t,encoding='utf8',newline='\n');pos=start
+  for line in t.splitlines():
+   m=re.match(r'^\s*([0-9a-f]+):\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})(?:\s|$)',line)
+   if m:
+    at=int(m[1],16);x=bytes.fromhex(m[2]);assert at==pos and raw(at,len(x))[0]==x;pos+=len(x)
+  assert pos==end
+  e['ranges'].append(dict(**ref(p),command=cmd,entry='0x'+a,start=hex(start),end_exclusive=hex(end),binary_range_sha256=h(raw(start,end-start)[0])))
+def keep(a,n,label):
+ x,off=raw(a,n);r=dict(address=hex(a),bytes_hex=x.hex(),file_offset=hex(off),sha256=h(x),label=label);e['raw'].append(r);return x
+def st(a):
+ n=0
+ while raw(a+n,1)[0]!=b'\0':n+=1;assert n<4096
+ return keep(a,n+1,'native literal').decode('latin1')[:-1]
+
+e['accounting']=dict(new_primary=PRIMARY[:5],updated_existing=PRIMARY[5:],support_review_count=0,baseline_reviewed=2041,baseline_pending=6614)
+e['support_documents']=[ref(ROOT/p)for p in ['analysis/server-glock-actions/contract.md','analysis/server-glock-iron-entry/contract.md','analysis/server-glock-frame/contract.md','analysis/server-glock-attacks/contract.md','analysis/server-weapon-animation/contract.md','analysis/graphics/custom-texture-server.md','analysis/server-item-rules/contract.md','analysis/server-resource-precache/contract.md','analysis/network/usermessage-registry.json','external/hlsdk-portable/engine/eiface.h','external/hlsdk-portable/engine/progdefs.h','external/hlsdk-portable/dlls/weapons.h']]
+catalog=(ROOT/'decompiled/FUNCTION_CATALOG.txt').read_text(encoding='utf8');e['pending_checks']=[]
+for a in PRIMARY:
+ block=catalog.split('[FUNCTION server:0x'+a+']',1)[1].split('[/FUNCTION]',1)[0];assert ('[REVIEW'in block)==(a=='1011c1a0');e['pending_checks'].append(dict(entry='0x'+a,block=block))
+e['prior_review']=ref(OUT/'prior-review.txt')
+e['baseline_report']=ref(ROOT/'analysis/full-reverse-pass27-verification.json')
+e['index']=ref(ROOT/'decompiled/server/partial-pass/index.json')
+e['vtables']=[]
+for cls,a,n in [('CBasePlayer',0x101a4da8,0x22c),('CGlock',0x101b0524,0x1d8),('CHalfLifeRules',0x101de3b0,0x24),('CHalfLifeMultiplay',0x101d608c,0x24)]:
+ x=keep(a,n,cls+' native vtable prefix');r=dict(class_name=cls,address=hex(a),slots=[dict(offset=hex(i),target=hex(struct.unpack_from('<I',x,i)[0]))for i in range(0,n,4)])
+ col=struct.unpack('<I',keep(a-4,4,'COL pointer'))[0];f=struct.unpack('<5I',keep(col,20,'COL'));r['col']=hex(col);r['rtti_name']=st(f[3]+8)
+ ch=struct.unpack('<4I',keep(f[4],16,'RTTI class hierarchy'));ds=struct.unpack('<'+'I'*ch[2],keep(ch[3],ch[2]*4,'base descriptor array'));r['bases']=[]
+ for d in ds:
+  z=struct.unpack('<6I',keep(d,24,'RTTI base descriptor'));r['bases'].append(dict(name=st(z[0]+8),mdisp=z[2],pdisp=z[3],vdisp=z[4]))
+ e['vtables'].append(r)
+e['save_tables']=[]
+for cls,a,n in [('PLAYER',0x10217fe8,207),('ENTVARS',0x1021aae0,102),('ITEM',0x1021b188,26),('WEAPON',0x1021b328,27)]:
+ x=keep(a,n*16,cls+' descriptors');r=dict(name=cls,address=hex(a),fields=[])
+ for i in range(n):
+  ty,nm,off,c,fl=struct.unpack_from('<IIIhh',x,i*16);r['fields'].append(dict(type_id=ty,name=st(nm),offset=hex(off),count=c,flags=fl))
+ e['save_tables'].append(r)
+header=ROOT/'external/hlsdk-portable/engine/eiface.h';names=re.findall(r'\(\*(pfn\w+)\s*\)',header.read_text().split('typedef struct enginefuncs_s',1)[1]);base=0x10222f48
+e['api_binding']=dict(initializer='0x100b4aa0',base=hex(base),copied_dwords=144,header=ref(header),slots=[dict(slot=i,name=names[i],address=hex(base+i*4))for i in range(144)])
+e['primary_data_operands']=[];e['literals']=[]
+for a in PRIMARY:
+ t=(OUT/(a+'-0.asm')).read_text()
+ for ptr in sorted(set(int(x,16)for x in re.findall(r'0x(101[a-f][0-9a-f]{4})',t))):
+  keep(ptr,16,'primary absolute operand '+a);e['primary_data_operands'].append(dict(entry=a,address=hex(ptr)))
+  try:
+   x=raw(ptr,256)[0].split(b'\0',1)[0]
+   if x and all(c in (9,10,13)or 32<=c<127 for c in x):e['literals'].append(dict(address=hex(ptr),text=st(ptr)))
+  except ValueError:pass
+# Export identities are independently decoded from the PE EAT.
+nt=struct.unpack_from('<I',b,0x3c)[0];erv=struct.unpack_from('<I',b,nt+24+96)[0];ex=struct.unpack('<IIHHIIIIIII',keep(BASE+erv,40,'PE export directory'));ob,nf,nn,funcs,names,ords=ex[5:];e['exports']=[]
+for i in range(nn):
+ nr=struct.unpack('<I',raw(BASE+names+4*i,4)[0])[0];oi=struct.unpack('<H',raw(BASE+ords+2*i,2)[0])[0];fr=struct.unpack('<I',raw(BASE+funcs+4*oi,4)[0])[0]
+ if BASE+fr in [int(a,16)for a in PRIMARY]:
+  keep(BASE+names+4*i,4,'export name RVA');keep(BASE+ords+2*i,2,'export ordinal');keep(BASE+funcs+4*oi,4,'export function RVA');e['exports'].append(dict(name=st(BASE+nr),entry=hex(BASE+fr),ordinal=ob+oi,name_index=i))
+e['constants']=[dict(address=hex(a),format=fmt,value=struct.unpack(fmt,keep(a,struct.calcsize(fmt),'native scalar'))[0])for a,fmt in [(0x101a1e48,'<d'),(0x101a9b50,'<d'),(0x101a1ee0,'<f'),(0x101a1390,'<f')]]
+j=json.loads((ROOT/'analysis/network/usermessage-registry.json').read_text(encoding='utf8'));e['messages']=[{k:m[k]for k in ['name','id_global','registered_size','registration_line']}for m in j['messages']if m['name']in ['WpnDeploy','WpnInfo','WeaponBody','CustomSlv','CustomFng','CustomGlv']]
+e['message_registry']=ref(ROOT/'analysis/network/usermessage-registry.json')
+OUT.joinpath('evidence.json').write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n',encoding='utf8');assert h(B.read_bytes())==SHA
+print('PASS',len(e['source_c']),'C',len(e['ranges']),'ASM',len(e['raw']),'raw')

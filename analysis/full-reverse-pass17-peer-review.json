@@ -1,0 +1,239 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 15,
+  "corrected_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-follower-speech-policy",
+      "new_reviewed": 5,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All5 primary C/native; native schedule selector and10descriptors, health double thresholds/NaN, KeyValue strings, target/enemy distinction, four/six/seven-stack-argument speech paths and timer ordering.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "bb72661109e4cf17488c860c7a3c74c19a7fa670b1a2b1ec45204839a7ca88a4",
+        "verify.py": "3c6aba93057e7a2d6e1663a365c6d05e477497c7298b0c5e650b671289a43eb5",
+        "contract.md": "c9063115482bba72e5646ee0e3a253023d32423316f4f5dfce213efa2c2da0f5",
+        "notes.json": "9710e1e694eb861bddd2db98d02065848f5db5e36eac7db334ae688160442c0c",
+        "evidence.json": "8358bcaaa662b7715ed35993226f15711bd04b4a84699888c910db030df09f5b",
+        "write_notes.py": "fde6e006ebdb1aace40c1ee3b39675aa0dbe9eb36f4c1c03faff19733bbdad3b"
+      }
+    },
+    {
+      "package": "analysis/server-follower-gates",
+      "new_reviewed": 8,
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All8 primary C/native; full-EAX gates, events1005/1009 and signed RNG threshold, relationship enum2, by-value yaw vector and controller ST0, target handles and NaN duration.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "65ab4810268c0dde16d8ed6ce1f7370f8b9523b0df14f46959b8ca295b07e91f",
+        "verify.py": "e81b41d69b28201d0758f73b3a87bae063292f5702ce93ab5fa110130437a63c",
+        "contract.md": "9eb6bb46ef43eebbfde3aad30e0b17e8f36d1d02489f157f7d4b4773f2212e60",
+        "notes.json": "54f6b0c8ec54fc2b9354dec8e405647cf70ac48c17588dd5a853f49cc32c3cbd",
+        "evidence.json": "99264fd6b7c71b8e6dd3b6b7fa6a7d3912d0eb3d430bc1531cd1506de8704e3f"
+      }
+    },
+    {
+      "package": "analysis/server-follower-tasks",
+      "new_reviewed": 2,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Both full task dispatchers,16/28 numeric selector paths, by-value vectors and callback arguments, Complete versus Fail, exact deadline/NaN predicates, support native descriptor bindings.",
+      "corrections": [
+        "Clarified shared Run67/68 rereads task ID after HeadTurn callback.",
+        "Clarified XY normalization computes float32 reciprocal then products, not two independent divisions."
+      ],
+      "final_hashes": {
+        "capture.py": "967427738c737ba2c5cab2d8f3216a731bd32f9aa3081a1600a019209ec021cd",
+        "verify.py": "0c08781d1e452881dedde18bf8a6862a2325f48235fbf1f4bf41fd174be91459",
+        "contract.md": "f7132a5e2eb79189642783f4349b6ff880d479a47bcf58c72b36e599737b179c",
+        "notes.json": "d930508feef89de3af90f676d474c7c86452a52f94d1e35061146c7807eaf053",
+        "evidence.json": "1cd243796371d2864d2d96c22383b416490814d2899e4208d8ff1aa99545e015",
+        "write_notes.py": "94d0e3c52dc4efbd8617d6dfd6652bbf8cec664681805ce9bf3f64c4849b6344"
+      }
+    },
+    {
+      "package": "analysis/server-state-reachability",
+      "new_reviewed": 0,
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Bounded full-file VA/RVA scan, all-offset executable E8/E9 scan,846EAT entries and HIGHLOW relocation decode;16global literals7owners,22aligned refs;8074savedC corpus manifest. Root independently implemented PE/scans, confirmed negative text entry/body refs. No new REVIEW fabricated.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "0b041d347ed4132b30ffcb02c17f368ac9287661f1bb6e213faafcf43d5564d1",
+        "verify.py": "07a82bc805a05c319d8252b8d4b5ec1a5d4b11e0e58b5871ffed28ba21fedcb8",
+        "contract.md": "6b5a939439729cdf9ebef98388fec1829cc22f8895b8032f428d9b0b63ee760e",
+        "notes.json": "f98f8e3ef622429f9bd425faa392f2a7bd1ac5e1bc38f6ceba76c88a0b726784",
+        "evidence.json": "18fb0f37b2b4c519f023142e912a67b2f46732aefabddd4851c0ce2cdf0f78ae"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1842,
+    "corrections": [],
+    "evidence_preserved": "All prior review bodies and evidence references preserved byte-for-byte."
+  },
+  "navigation_cleanup": "Fifteen reviewed primary addresses removed from pending. Follower helper/dispatch/policy bodies distinguished from unknown concrete bindings. State direct-reference audit prevents repeated scans without claiming indirect reachability or complete alias analysis. Whole-game corpus gaps remain explicit.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-follower-behavior/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "bba8aabd5557d1fe2923dce82faab577808368f71ff80bca0701c38e0114da66",
+          "new": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-gates/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "9e0859a6548ccbf42aa953a163bb3ecd8b09091c50d7b80ece2146d09472e595",
+          "new": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1"
+        },
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "bba8aabd5557d1fe2923dce82faab577808368f71ff80bca0701c38e0114da66",
+          "new": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-speech-policy/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "bba8aabd5557d1fe2923dce82faab577808368f71ff80bca0701c38e0114da66",
+          "new": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8"
+        },
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "9e0859a6548ccbf42aa953a163bb3ecd8b09091c50d7b80ece2146d09472e595",
+          "new": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-tasks/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "9e0859a6548ccbf42aa953a163bb3ecd8b09091c50d7b80ece2146d09472e595",
+          "new": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1"
+        },
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "bba8aabd5557d1fe2923dce82faab577808368f71ff80bca0701c38e0114da66",
+          "new": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-map-equipment-parser/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee",
+          "new": "0bf4a56ed1d252193b5f448fb4a75a12233767feab2ed5c33ec6180a695396be"
+        },
+        {
+          "path": "analysis/server-state-reader/contract.md",
+          "old": "d584e49555a9ef7cbc5ef452cee340c7c663c27d1459dbb313a8ec727ba239f3",
+          "new": "93183888736841388abc5857ab0652096c2b8e856a0cdf4f992935eb4660fdf4"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee",
+          "new": "0bf4a56ed1d252193b5f448fb4a75a12233767feab2ed5c33ec6180a695396be"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-reachability/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-state-capture/contract.md",
+          "old": "3b38aa4ad4bf718a0cb1cb7d8ec7fa5f3ff4305a6a3412910df0d66877439675",
+          "new": "5a788dc676ed959d513df7002756ee7b41af83bf7557f29e94545578ca9ac4d5"
+        },
+        {
+          "path": "analysis/server-state-reader/contract.md",
+          "old": "d584e49555a9ef7cbc5ef452cee340c7c663c27d1459dbb313a8ec727ba239f3",
+          "new": "93183888736841388abc5857ab0652096c2b8e856a0cdf4f992935eb4660fdf4"
+        },
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee",
+          "new": "0bf4a56ed1d252193b5f448fb4a75a12233767feab2ed5c33ec6180a695396be"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-reader/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee",
+          "new": "0bf4a56ed1d252193b5f448fb4a75a12233767feab2ed5c33ec6180a695396be"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-restore/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "219500eb59a1e41e316ea0a3aa7adb9bd49c693c1e21478f64a8ddc37b7b42ee",
+          "new": "0bf4a56ed1d252193b5f448fb4a75a12233767feab2ed5c33ec6180a695396be"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-follower-behavior": "PASS 28 C, 28 ASM, 2160 byte rows, 226 raw, 6 cards",
+    "analysis/server-follower-gates": "PASS 28 C 28 ASM 1934 byte rows 222 raw 3 tables 1 export 8 cards",
+    "analysis/server-follower-speech-policy": "PASS 22 C, 22 ASM, 1238 byte rows, 286 raw, 5 cards",
+    "analysis/server-follower-tasks": "PASS 30 C, 30 ASM, 3528 byte rows, 256 raw, 2 cards",
+    "analysis/server-map-equipment-parser": "PASS 19 C, 31 ASM, 2465 byte rows, 405 raw, 1 cards",
+    "analysis/server-monster-groups": "PASS 22 C, 22 ASM, 1135 byte rows, 201 raw, 4 cards",
+    "analysis/server-state-capture": "PASS 9 C, 10 ASM, 2630 byte rows, 479 raw, 4 cards",
+    "analysis/server-state-lifecycle": "PASS 5 primary; 34 C 35 ASM 2668 byte rows 332 raw 3 vtable/RTTI 7 exports",
+    "analysis/server-state-reachability": "PASS audit0: 8074 searched C, 13 pinned C, 13 ASM, 4546 native rows, 22 aligned refs, 16 global literals, 846 EAT entries",
+    "analysis/server-state-reader": "PASS 21 C, 34 ASM, 3139 byte rows, 458 raw, 1 cards",
+    "analysis/server-state-restore": "PASS 1 primary; 11 C 11 ASM 3489 byte rows 322 raw; stats/ABI/branch/network/102descriptors",
+    "analysis/server-stats-lifecycle": "PASS 21 C, 23 ASM, 1610 byte rows, 416 raw, 5 cards"
+  },
+  "verification_report_sha256": "f782c7878f36c0c83379916e96c1c8981e9b81caa2e2658dd096bf860076e04b",
+  "independent_reachability_peer": {
+    "result": "PASS",
+    "method": "Independent root PE parser, all-offset literal and rel32 search, EAT and HIGHLOW directory decode",
+    "file_bytes": 2413568,
+    "executable_raw_bytes": 1703936,
+    "exports": 846,
+    "manager_literal_relocations": 16,
+    "text_body_direct_refs": []
+  }
+}

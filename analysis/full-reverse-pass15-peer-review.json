@@ -1,0 +1,241 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 9,
+  "corrected_existing": [
+    "server:0x101050b0"
+  ],
+  "packages": [
+    {
+      "package": "analysis/server-inventory-removal",
+      "new_reviewed": 3,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All3 primary C/native: removal6chains, staged next pointer, quickslot and ammo/HUD order, AL-only bool, NaN XY reset and Z-only skip; RTTI and descriptor field bindings.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "7f1023bf2a6e6ee44ca25d9ec1586e43cbc8e2c03d0b8cce6889478deef90569",
+        "verify.py": "aa2dee1cfd17e45327c886eb384edbb3f696857a41e6190411b14e071d6b6501",
+        "contract.md": "50844002f17db2eff4a7a443ecbc10b09506d6f6d5d7612f3961f44c936dafd1",
+        "notes.json": "d137c9e6ec871ceb4eaa72d6865290d100dd07e462a6064bebc5f05063f203df",
+        "evidence.json": "cc39326f410f399a424947726476795a1770ce9a3481b9e4aa4ffb1049174098",
+        "write_notes.py": "2ab6adb1ee0aeb4ad0ac82c9e4ba610533b729ec139f6c360d8e9713c78156ed"
+      }
+    },
+    {
+      "package": "analysis/server-state-reader",
+      "new_reviewed": 1,
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full830-line primary and complete native body; mutable substring grammar14labels+weapon; reversed quicksel copy, late size guards, head-only weapon_action, conditional extra getline and shared string, cdecl plainRET, EOF/atoi saturation, Delete before close, missing FindClose. Independent PE provenance plus selected CRT support semantic review.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "f066e79a866860eac03f71e8e54fb3848817e8524b61be3ecca127cda1465375",
+        "verify.py": "c245b771501e61f6a8280e0d817721fee9ef434c0e1ca20938b7b30fe498fb53",
+        "contract.md": "f89fd7d3ae154da60bc7884d1aa3a37021a02afa12abff669f5829c9b1c33405",
+        "notes.json": "ed7a0d8d63e8d3338d207d90b833b1bcdcb1dfbfab5c9ac26a8688c07dae5e8a",
+        "evidence.json": "af5e105227fcca58e6284223028b4409753907c92698f36a98c1878071658b9d",
+        "write_notes.py": "b21f4a127eb626cd107f0d0e98072a251f52148209d3e1f1ddec8f8d7c56c27f"
+      }
+    },
+    {
+      "package": "analysis/server-state-restore",
+      "new_reviewed": 1,
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full707-line primary and all native unrolled paths; AL-only bool, interleaved pointer-identity bank lookup, A32 clearing in mode1, sixth weapon dependency, NaN/no-save gate, stats and network ordering.",
+      "corrections": [
+        "Corrected provenance: pContainingEntity20c is a raw edict argument, not a field present in this ENTVARS save table."
+      ],
+      "final_hashes": {
+        "capture.py": "1adf6e1d876ca40338c449a52873518748f3225506aff1c918adf874c848ac5e",
+        "verify.py": "27929cfcefc35ee7fc88c0f2d36afa250b73d547573fa72f425d73c24d14eede",
+        "contract.md": "bd7ba8529ad26d065036984619717bf14ecccf238513cc423302512360099152",
+        "notes.json": "cbb83816805f47e1bf9a6b5510e1901586b5427877dd7e02effb77a7dad4bc5a",
+        "evidence.json": "f19127bff49d3875e57fc7545a6332bc007051fe5cd920406ebe907717b90e3d"
+      }
+    },
+    {
+      "package": "analysis/server-monster-groups",
+      "new_reviewed": 4,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All4 primary C/native plus prior101050b0 correction; classname table and derived mapping boundary, target EHANDLE, callback stack args, ordered distances and trace gates, duplicate enumeration and signed count.",
+      "corrections": [
+        "Corrected prior101050b0: object+18c is m_hTargetEnt, not m_hEnemy. Original card and exact doc changes retained in correction.json."
+      ],
+      "final_hashes": {
+        "capture.py": "f16d2c6516d782488d73fed3b166efdadb7246b4826a1b7358923cc2a4a28889",
+        "verify.py": "09cf91e84c42ec22a984698c1acb744e36a6b9f1d461e741f29e2279f9437c1c",
+        "contract.md": "3e2addbd9d523d2af323202dd16c8b1571ff08b5c977c5360da1d09c71f500b0",
+        "notes.json": "8bdc80634f5ce15a87d0761142d7d327328a6844804c232e8e43e8364dffd758",
+        "evidence.json": "b58559d509176be60e15f4bad701ee62d9f14b0cbfe3fe39e06a2d62e117f88a",
+        "write_notes.py": "879f24b6b762d914dca9ca0213410108f7affa9cb3304794642b5e755faa9158",
+        "notes-corrected.json": "c69ffd5cf706acb5984e63fdf0219f0ff55b65e169d8792ade0eb40a6e61a80d",
+        "correction.json": "1acf1fc928cfca50121a511d3c173007b93a4640f1abdeb59d95d1f557507f23"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1816,
+    "corrected": "server:0x101050b0",
+    "previous_review_text": "  Предлагаемое имя: MonsterKilled_NotifyGroup_ClearEnemyAndUse\n  Подсистема: monsters\n  Назначение: Выбирает уведомление группы по attacker flag, очищает enemy handle/Use callback и вызывает generic Killed; concrete class не установлен.\n  Уверенность: высокая для описанного статического поведения\n  Разбор: ECX=this; stack attacker entvars* `A`, policy; RET8. Group logic выполняется только A!=NULL и this.m_MonsterState+224!=5. State6 здесь не исключается. Если A.flags low byte&8, сначала10103f70(ECX=this), затем A.edict+20c либо PEntityOfEntOffset(0), и10105180(ECX=this,attackerPrivateOrNULL,0). NULL edict/private не блокирует group helper; predicate virtual IsPlayer для attacker здесь отсутствует.\n  Разбор: Support10103f70 перечисляет шесть selectors0..5 через10104040(previous,selector,1), вызывает candidate.virtual78, затем без NULL guard результата virtualbc IsAlive, и для alive ставит memory+2ec|=1.10105180 перечисляет selectors0..5 с последним аргументом0, берёт virtual78 при nonNULL, сравнивает Resolve(candidate.enemy+18c) с переданным private. Счётчик совпадений общий по всем шести selectors; при signed count>stack limit вызывает candidate.virtual240(1,1). Здесь limit0, то есть вызов для каждого совпадения, включая обаNULL. Classname mapping virtual250/таблица10219cc8 и конкретные callbacks отдельны; не называем результат «все союзники начинают атаковать».\n  Разбор: Если attacker flag8 отсутствует: только DWORD this+3d4==0 открывает ветку. Сразу +3d4=1 (до поиска), затем10104670(ECX=this,0). При nonNULL результате и его virtualbc()!=0 вызывается результат.virtual254(stack this). PUSH ESI1010513e потерян Ghidra: callback получает dying object. Если поиск неудачен/цель нежива, latch всё равно остаётся1. Не сбрасывается в этом entry.\n  Разбор: Support10104670 с arg0 ищет ближайшего подходящего по selectors5..0: classname через own.virtual250 и10219cc8, кандидаты !=this, alive, nonNULL virtual78 и state!=5/6; расстояние по origin.x/y и absmax.z+ d8, visibility trace.fraction ordered==1, strict distance<500.0 и strict improvement. Собственный libm fallback, mapping/result lifetime и virtual254 semantics не закрыты этим caller; таблица может индексироваться без bounds. Это не доказанный вид конкретного human NPC.\n  Разбор: После group logic ВСЕГДА10017740(ECX=&this.enemy+18c,0), own.virtual1a8() без stack args, this.Use+80=NULL, затем1008a330(this,A,policy). Обнуление enemy происходит до virtual callback, Use после него. Нет собственного memory/death latch, нет проверки изменения this после callbacks. Owner/vtable и все дальнейшие override effects остаются открыты: exact preferred-base LE32 .rdata/.data scan для101050b0 нулевой, что не заменяет full native call graph.\n  Основание: decompiled/server/partial-pass/functions/0x101050b0.c\n  Основание: analysis/server-derived-death/101050b0-0.asm\n  Основание: analysis/server-derived-death/contract.md\n  Основание: analysis/server-derived-death/evidence.json\n  Основание: decompiled/server/partial-pass/functions/0x10068b50.c\n  Основание: decompiled/server/partial-pass/functions/0x1006eec0.c\n  Основание: decompiled/server/partial-pass/functions/0x10070050.c\n  Основание: decompiled/server/partial-pass/functions/0x100ab840.c\n  Основание: decompiled/server/partial-pass/functions/0x10100d50.c\n  Основание: decompiled/server/partial-pass/functions/0x10101980.c\n  Основание: decompiled/server/partial-pass/functions/0x10101860.c\n  Основание: decompiled/server/partial-pass/functions/0x100b4aa0.c\n  Основание: decompiled/server/partial-pass/functions/0x10119900.c\n  Основание: decompiled/server/partial-pass/functions/0x10102c50.c\n  Основание: decompiled/server/partial-pass/functions/0x100125e0.c\n  Основание: decompiled/server/partial-pass/functions/0x100fc9f0.c\n  Основание: decompiled/server/partial-pass/functions/0x1008a330.c\n  Основание: decompiled/server/partial-pass/functions/0x100876d0.c\n  Основание: decompiled/server/partial-pass/functions/0x10017780.c\n  Основание: decompiled/server/partial-pass/functions/0x10017790.c\n  Основание: decompiled/server/partial-pass/functions/0x10017740.c\n  Основание: decompiled/server/partial-pass/functions/0x10017ba0.c\n  Основание: decompiled/server/partial-pass/functions/0x10104670.c\n  Основание: decompiled/server/partial-pass/functions/0x10103f70.c\n  Основание: decompiled/server/partial-pass/functions/0x10105180.c\n  Основание: decompiled/server/partial-pass/functions/0x10104040.c\n  Основание: decompiled/server/partial-pass/functions/0x10119680.c\n  Основание: decompiled/server/partial-pass/functions/0x10119c00.c\n  Основание: decompiled/server/partial-pass/functions/0x100ea600.c\n  Основание: decompiled/server/partial-pass/functions/0x100ea5c0.c\n  Основание: decompiled/server/partial-pass/functions/0x100befc0.c\n  Основание: decompiled/server/partial-pass/functions/0x101011d0.c\n  Основание: decompiled/server/partial-pass/functions/0x10101170.c\n  Основание: decompiled/server/partial-pass/functions/0x10119cc0.c\n  Основание: decompiled/server/partial-pass/functions/0x10119d40.c\n  Основание: decompiled/server/partial-pass/functions/0x101166d0.c\n  Основание: analysis/server-derived-death/10068b50-0.asm\n  Основание: analysis/server-derived-death/1006eec0-0.asm\n  Основание: analysis/server-derived-death/10070050-0.asm\n  Основание: analysis/server-derived-death/100ab840-0.asm\n  Основание: analysis/server-derived-death/10100d50-0.asm\n  Основание: analysis/server-derived-death/10101980-0.asm\n  Основание: analysis/server-derived-death/10101860-0.asm\n  Основание: analysis/server-derived-death/100b4aa0-0.asm\n  Основание: analysis/server-derived-death/10119900-0.asm\n  Основание: analysis/server-derived-death/10102c50-0.asm\n  Основание: analysis/server-derived-death/100125e0-0.asm\n  Основание: analysis/server-derived-death/100fc9f0-0.asm\n  Основание: analysis/server-derived-death/1008a330-0.asm\n  Основание: analysis/server-derived-death/100876d0-0.asm\n  Основание: analysis/server-derived-death/10017780-0.asm\n  Основание: analysis/server-derived-death/10017790-0.asm\n  Основание: analysis/server-derived-death/10017740-0.asm\n  Основание: analysis/server-derived-death/10017ba0-0.asm\n  Основание: analysis/server-derived-death/10104670-0.asm\n  Основание: analysis/server-derived-death/10103f70-0.asm\n  Основание: analysis/server-derived-death/10105180-0.asm\n  Основание: analysis/server-derived-death/10104040-0.asm\n  Основание: analysis/server-derived-death/10119680-0.asm\n  Основание: analysis/server-derived-death/10119c00-0.asm\n  Основание: analysis/server-derived-death/100ea600-0.asm\n  Основание: analysis/server-derived-death/100ea5c0-0.asm\n  Основание: analysis/server-derived-death/100befc0-0.asm\n  Основание: analysis/server-derived-death/101011d0-0.asm\n  Основание: analysis/server-derived-death/10101170-0.asm\n  Основание: analysis/server-derived-death/10119cc0-0.asm\n  Основание: analysis/server-derived-death/10119d40-0.asm\n  Основание: analysis/server-derived-death/101166d0-0.asm\n  Основание: analysis/server-monster-death/contract.md\n  Основание: analysis/server-multiplayer-flow/contract.md\n  Основание: analysis/graphics/music-server-protocol.md\n  Основание: analysis/server-monster-state/contract.md\n  Основание: analysis/server-monster-controls/contract.md\n  Основание: analysis/server-monster-damage/contract.md\n  Основание: analysis/exports/hl.csv\n  Основание: analysis/network/usermessage-registry.json\n  Основание: external/hlsdk-portable/engine/progdefs.h\n  Основание: external/hlsdk-portable/common/const.h\n",
+    "previous_review_text_sha256": "4d2a6b1d5fbd8ce93dcd626db755a53bfe9d5fb896361319053c27bcb29e75c4",
+    "evidence_preserved": "All previous evidence references retained; m_hTargetEnt native descriptor correction is explicit."
+  },
+  "navigation_cleanup": "Nine newly reviewed primary addresses removed from active queue. Text reader distinguished from two-bank in-memory restore; remaining producer/caller/override gaps stated. Progress counts saved-C records, not percent completion of whole game.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-inventory-removal/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-inventory/contract.md",
+          "old": "a4d36a2338849b62d94c1301fda48c481b3062de58ebea8c0f2d8a87aa2a1128",
+          "new": "db987b45ef166746bc1c848a5aa8568c20e60742830bdae752c7f7e2be179701"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-groups/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-derived-death/contract.md",
+          "old": "7fb25bde14cee31f7100a9aaed6239b886859f6e89ddfeaec45f409838df70d3",
+          "new": "372cccdbb2ad07076e9c825ec860dd5e899ff2a9ae059fda35d64db95f4ff0e2"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-reader/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "de2ed4fcd3e0f7cd95e5bb361aef6798657109867de4e6a601f9947ca4fec7e7",
+          "new": "3fb9aa9be52cda546c6bcf368c0a4c22a0d24c6636130824805a7a5d4733b673"
+        },
+        {
+          "path": "analysis/server-player-inventory/contract.md",
+          "old": "a4d36a2338849b62d94c1301fda48c481b3062de58ebea8c0f2d8a87aa2a1128",
+          "new": "db987b45ef166746bc1c848a5aa8568c20e60742830bdae752c7f7e2be179701"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-state-restore/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-player-inventory/contract.md",
+          "old": "a4d36a2338849b62d94c1301fda48c481b3062de58ebea8c0f2d8a87aa2a1128",
+          "new": "db987b45ef166746bc1c848a5aa8568c20e60742830bdae752c7f7e2be179701"
+        },
+        {
+          "path": "analysis/server-stats-lifecycle/contract.md",
+          "old": "de2ed4fcd3e0f7cd95e5bb361aef6798657109867de4e6a601f9947ca4fec7e7",
+          "new": "3fb9aa9be52cda546c6bcf368c0a4c22a0d24c6636130824805a7a5d4733b673"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-stats-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-callers/contract.md",
+          "old": "2236b95954f6d1e659be2bf12e645da985755d7e910da034982b1c2584739b19",
+          "new": "aa225064d03e76806dd591d2e0bf484edd94b3a485d3d2d3e664d7372d64cd48"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-stats-score/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-callers/contract.md",
+          "old": "2236b95954f6d1e659be2bf12e645da985755d7e910da034982b1c2584739b19",
+          "new": "aa225064d03e76806dd591d2e0bf484edd94b3a485d3d2d3e664d7372d64cd48"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-unlock-actions/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-unlock-callers/contract.md",
+          "old": "2236b95954f6d1e659be2bf12e645da985755d7e910da034982b1c2584739b19",
+          "new": "aa225064d03e76806dd591d2e0bf484edd94b3a485d3d2d3e664d7372d64cd48"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": [
+    {
+      "folder": "server-stats-lifecycle",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "01bcbf",
+        "wall_time_seconds": 0.2578754,
+        "exit_code": 0,
+        "original_token_count": 14,
+        "output": "PASS 21 C, 23 ASM, 1610 byte rows, 416 raw, 5 cards\r\n"
+      }
+    },
+    {
+      "folder": "server-stats-score",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "c60222",
+        "wall_time_seconds": 0.5171589,
+        "exit_code": 0,
+        "original_token_count": 43,
+        "output": "PASS 835 saved-ASM score/ratio replays, exact thresholds/overflow/BYTE gate; synthetic NaN guards; no target execution\r\nPASS 6 C, 6 ASM, 2355 byte rows, 223 raw, 3 cards\r\n"
+      }
+    },
+    {
+      "folder": "server-unlock-actions",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "8d2fdc",
+        "wall_time_seconds": 0.2238108,
+        "exit_code": 0,
+        "original_token_count": 14,
+        "output": "PASS 20 C, 20 ASM, 1927 byte rows, 549 raw, 8 cards\r\n"
+      }
+    },
+    {
+      "folder": "server-derived-death",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "12e806",
+        "wall_time_seconds": 0.2698111,
+        "exit_code": 0,
+        "original_token_count": 14,
+        "output": "PASS 33 C, 33 ASM, 1906 byte rows, 282 raw, 8 cards\r\n"
+      }
+    },
+    {
+      "folder": "server-player-inventory",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "1ce3c2",
+        "wall_time_seconds": 0.1860794,
+        "exit_code": 0,
+        "original_token_count": 27,
+        "output": "PASS 3 new + 1 updated; 24 C 26 ASM 2114 byte rows 363 raw; ABI/return/network/155descriptors assertions\r\n"
+      }
+    }
+  ],
+  "verification_report_sha256": "ceee8b7c8b7064b8066434b15baa4ab1fcb35a6634c55501f90b0e04e86b04cb"
+}

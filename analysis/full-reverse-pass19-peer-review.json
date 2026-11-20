@@ -1,0 +1,121 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 14,
+  "corrected_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-phone-call-lifecycle",
+      "new_reviewed": 10,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All10 primary C/native; factory null paths, concrete phone/subtitle vtables, Use four-argument ABI, two EHANDLE fields, Wait early returns and schedule3.0 overwritten by0.1, original save fields and export bindings.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "368415a81201e93a9f405b80b72448b9b95105e90a861dc7234a259f2eba300a",
+        "verify.py": "84fabf8cd5997cecc30e3ce13e617bb93484dbdac3b773f5204d5644231064a9",
+        "contract.md": "39b0c9d3449e7b4bd48074deddb02e1da8395f693889a9500f67b92f2d0654e8",
+        "notes.json": "9e07a03b72a6d5930e1749bb1e5bd8b33f1e200de3a9c20711946910725071f5",
+        "evidence.json": "9eec16b57d9008bae1662311c31424794d6510cb1eee3a21a368ac59c53c03b1",
+        "write_notes.py": "e8d00b78cd274b0659ea1d41d1ad2ec161296739e0513f6274af0952643ebbde"
+      }
+    },
+    {
+      "package": "analysis/server-subtitle-multiple-keyvalue",
+      "new_reviewed": 1,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full primary C/native and64 exact literal branches, signed32/x87 converters, byte string ABI, physical number32/time0 and time32/current-index overlaps, fallback and lifecycle consumer checks.",
+      "corrections": [
+        "Qualified index31 to32 increment: nextnumber32 must be nonzero and native delay guard must pass; zero nextnumber returns before next-delay read."
+      ],
+      "final_hashes": {
+        "capture.py": "b174589bddbb701581a9b38601e8a01a79361c94474ffaf8a588d08152cf9f51",
+        "verify.py": "e8c5423b9fe8d941b10568d415d250b0d456117bded17f27745f8027117c91f2",
+        "contract.md": "3bee2af94ffe20d9a4f74da90c077f193892e15a99ab2a3a5dbad21cb2d333ca",
+        "notes.json": "cbeea107246cc0f9930b607a95fbfd56d0a590d4d2b1dee56ea857f48caf2233",
+        "evidence.json": "b5633b2112880e0b5e8a96157b8c57f89f1841137884ffcd79277c9d5a0429b2",
+        "write_notes.py": "9acf126603c9121386f9b7ae0727dbadfb020e06b6db774a67f91006e8528e27"
+      }
+    },
+    {
+      "package": "analysis/server-phone-call-callbacks",
+      "new_reviewed": 2,
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full2primary C/native; phone-user handle reread, oldIndex snapshot vs callback changes, minimum delay duplicate scheduling, actual three-argument animation ABI, EndCall field/FireTargets/NULL-check ordering and ASCII-space message.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "ada26c7b97945f3b83f07f6ed4b289cd0918de450e50dc7463babb5498cfd06b",
+        "verify.py": "af51d0f1122a5e7434852f9de8ce4397cc9c43e7e6e424f239f4cd137a7f9c02",
+        "contract.md": "8541c3b1d5c539cf9ad4df1f41b35367a1fd9c3fc9b65e8ae7f250f61ea7c1b9",
+        "notes.json": "f9d703ca49d7ac58fdca11b282b759179b4b43d970ef4caa7bdb5e3f246eb9f6",
+        "evidence.json": "e464b3c3e31eb951a71d0a91cf8a685b8fa2443b49b3c47e72606ac444c0e1f0"
+      }
+    },
+    {
+      "package": "analysis/server-phone-call-keyvalue",
+      "new_reviewed": 1,
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full primary C/native; all65 key branches, exact string comparisons, signed32 saturation, ST0 to float32, AllocString audio path, base fallback, independent seven save fields and RTTI/vtable slot34.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "183989b49bb405c38de1b9fe8469538dfb81a140303ff0d32ce27e12aa37c960",
+        "verify.py": "0fd672bf4fa4dcdca933a39c59fe48e8354acc423858f62bb921d33de1b92782",
+        "contract.md": "0af0cfc8a6910946d29a26b040d9ce2a89cc9e79ec5bbb5171bae376271985b7",
+        "notes.json": "3ac7ec1fca033744328ba7244a01f15ce4a41a50f0e3c20dd57c09cf33c35b02",
+        "evidence.json": "63a2ec570b2a555f7fd1443bc605e741f2c3b4700618095d62ecc4aac89fb661",
+        "write_notes.py": "358d462d69f958050898416b315c2806d47ee945d3bef5d79839772b158ca83a"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1876,
+    "corrections": [],
+    "evidence_preserved": "All prior review bodies and evidence references preserved byte-for-byte."
+  },
+  "navigation_cleanup": "Fourteen primary addresses removed from pending. Subtitle KeyValue now linked to lifecycle with confirmed time32/current-index overlap. Complete local phone lifecycle, callbacks and65-key parser indexed. Remaining subtitle_main parser/file/message and downstream player/mobile state explicitly queued; all prior REVIEW preserved.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-phone-call-callbacks/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-subtitle-multiple-lifecycle/contract.md",
+          "old": "55503f163b327a6c1a23cb7290ddfda07ab3a72e5764b20c4099c6fce29dd675",
+          "new": "d6cb9304e1f98cd9387345f221af541db13cf78403bcda9d6ea42a0d3967445c"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-subtitle-multiple-keyvalue/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-subtitle-multiple-lifecycle/contract.md",
+          "old": "55503f163b327a6c1a23cb7290ddfda07ab3a72e5764b20c4099c6fce29dd675",
+          "new": "d6cb9304e1f98cd9387345f221af541db13cf78403bcda9d6ea42a0d3967445c"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-phone-call-callbacks": "PASS 22 C 22 ASM 1022 byte rows 256 raw 180 descriptors 4 vtables 2 cards",
+    "analysis/server-subtitle-multiple-keyvalue": "PASS 14 C 18 ASM 1852 byte rows 213 raw 3 tables 2 exports 1 cards",
+    "analysis/server-subtitle-multiple-lifecycle": "PASS 20 C 20 ASM 838 byte rows 196 raw 4 tables 2 exports 8 cards"
+  },
+  "verification_report_sha256": "4fad86b31010dfaa0ace29557636c88f58049b2d4fe20f1bd33eb94c8ba124a9"
+}

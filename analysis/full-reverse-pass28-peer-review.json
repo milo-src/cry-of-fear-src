@@ -1,0 +1,357 @@
+{
+  "scope": "Static reverse only; no target execution/game implementation/resources/commits",
+  "result": "PASS",
+  "new_reviewed": 31,
+  "updated_existing": [
+    "server:0x10048550",
+    "server:0x100488a0",
+    "server:0x100488c0",
+    "server:0x10048950",
+    "server:0x10048990",
+    "server:0x10048bd0",
+    "server:0x1011c1a0"
+  ],
+  "prior_review_bodies_exactly_preserved": 2034,
+  "packages": [
+    {
+      "package": "analysis/server-button-lifecycle",
+      "new_reviewed": 8,
+      "updated_existing": [],
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "server_catalog",
+        "package": "analysis/server-button-lifecycle",
+        "primary": [
+          "10012580",
+          "100135e0",
+          "10014260",
+          "100146f0",
+          "100148e0",
+          "10014cc0",
+          "10016790",
+          "10102b80"
+        ],
+        "full_primary_c_and_native_read": true,
+        "contract_and_notes_read": true,
+        "findings": [],
+        "counts": {
+          "c_sources": 22,
+          "asm": 24,
+          "machine_byte_rows": 1581,
+          "raw_records": 298,
+          "descriptors": 170,
+          "file_pins": 82,
+          "cards": 8,
+          "sentence_cases": 17
+        },
+        "independent_method": "struct PE section mapper; original SHA; all saved C/ASM/doc pins; all instruction bytes/ranges/raw/descriptors/vtable RTTI/export; independently decoded 17 switch branches and numeric operands",
+        "confirmed": [
+          "Factory existing private reuse and NULL allocation [4] write; export E9 exact ABI",
+          "KeyValue13 exact comparisons, AL narrowing, decimal fields, inherited handled behavior",
+          "Precache17 sentence cases and sound-code0 retain vs sentence default clear",
+          "Spawn14cc0 versus Precache14260, callback order, NaN defaults, cached wait, float32 endpoint/sqrt ordering, 100/200 XOR Use routing",
+          "SetMovedir by-value angles and hidden output; shared-vector copy not asserted runtime zero",
+          "Save/Restore18 via inherited Toggle; FLOAT0 timers vs TIME15, BYTE producers vs BOOL12 serialization DWORD, result propagation"
+        ],
+        "limits": "Static only. No target execution. External engine and deep CRT exceptional behavior retained as declared unknowns.",
+        "evidence_sha256": "47e552acb37dbfc1744ccde8ef4fd52f4e8e989eb01972a8375b16942d71fbd1",
+        "contract_sha256": "64fea36d45e40224df90e6852e81a5298832a83746e70b04878502c452cd1b99",
+        "notes_sha256": "cb13e80023a0bd12ea1b6c45eeb10bd619b1ad87484a6502993ac82e81ad8ed7"
+      },
+      "final_hashes": {
+        "capture.py": "e5af9ebc7fdd7dffe3122e72541c63484a2c1f3abaa9b40ca4613b8b563619c7",
+        "verify.py": "77236e192135702cf856e8ade6baec9aa2955c1708fe242c245a2f3cef52b8f2",
+        "contract.md": "64fea36d45e40224df90e6852e81a5298832a83746e70b04878502c452cd1b99",
+        "notes.json": "cb13e80023a0bd12ea1b6c45eeb10bd619b1ad87484a6502993ac82e81ad8ed7",
+        "evidence.json": "47e552acb37dbfc1744ccde8ef4fd52f4e8e989eb01972a8375b16942d71fbd1",
+        "write_notes.py": "02097051f2ad2316924709d7dcb964ef7bbe83aa6db21daa5cfd97e9b419e4e7"
+      }
+    },
+    {
+      "package": "analysis/server-interdoor-lifecycle",
+      "new_reviewed": 8,
+      "updated_existing": [
+        "server:0x10048550",
+        "server:0x100488a0",
+        "server:0x100488c0",
+        "server:0x10048950",
+        "server:0x10048990",
+        "server:0x10048bd0"
+      ],
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "root",
+        "package": "analysis/server-interdoor-lifecycle",
+        "primary": [
+          "0x10047eb0",
+          "0x10047f10",
+          "0x10047f70",
+          "0x10047fd0",
+          "0x10049370",
+          "0x10049380",
+          "0x10049390",
+          "0x100493a0",
+          "0x10048550",
+          "0x100488a0",
+          "0x100488c0",
+          "0x10048950",
+          "0x10048990",
+          "0x10048bd0"
+        ],
+        "full_primary_c_and_native_read": true,
+        "contract_notes_parity": true,
+        "independent_counts": {
+          "server-interdoor-lifecycle": {
+            "source_files": 38,
+            "assembly_ranges": 41,
+            "verified_assembly_byte_rows": 1568,
+            "raw_records": 520,
+            "decoded_save_fields": 164,
+            "pinned_paths": 96,
+            "standalone": "PASS 38 C 41 ASM 1568 byte rows 520 raw 164 descriptors 4 vtables 14 cards"
+          }
+        },
+        "findings": [],
+        "confirmed": [
+          "Four factories existing private-data reuse, allocation sizes/RTTI/vtable immediate and unsafe NULL writes; exact export thunks",
+          "All14 case-sensitive KeyValue branches,11 pooled strings/two float32/BYTE boolean, inherited fallback",
+          "Precache reloads pev after callbacks and excludes music/newlevelsnd",
+          "Caps calls parent then returns8; concrete vtable bindings",
+          "Save/Restore inherits Toggle/Animating/Delay/Base,12 own descriptors, diagnostic-vs-wire name and EAX failure boundaries",
+          "Spawn conditional BYTE disabled without else clear, virtual Precache, SetOrigin/Size/Model, current-time and unconditional -1 fade writes",
+          "BOOL12 serialized DWORD differs from BYTE local field writes"
+        ],
+        "limits": "Static only; no runtime reachability, engine allocation guarantees, deep CRT grammar, whole transfer/use chain completeness.",
+        "hashes": {
+          "contract.md": "fbc79c02ffb942915b23ed9f62dd35327b01d650e85b2b7f27ba06b924715ff8",
+          "notes.json": "f3221b98e77582ef4219a668c38ce894419ddaa58be2379419db450dc2af7cde",
+          "evidence.json": "aba4acbeb6678f5f04c78d51a098e89f9fd65cce68bfa83506cc704584bda6f0"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "8830f05f73abc410c113aeac12409a423a977f22f7ae39ca42eb52215aa0a307",
+        "verify.py": "d1e4bfafcb0fc1032919563053166acdc89e2b80d5bfb306c9571f0c7dc45777",
+        "contract.md": "fbc79c02ffb942915b23ed9f62dd35327b01d650e85b2b7f27ba06b924715ff8",
+        "notes.json": "f3221b98e77582ef4219a668c38ce894419ddaa58be2379419db450dc2af7cde",
+        "evidence.json": "aba4acbeb6678f5f04c78d51a098e89f9fd65cce68bfa83506cc704584bda6f0",
+        "write_notes.py": "aed1b3b5bb15ea4e6d6c656eae530d3c2d9f6614236ead2160646948c5e2944a"
+      }
+    },
+    {
+      "package": "analysis/server-flying-monster-behavior",
+      "new_reviewed": 10,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "shader_inventory",
+        "package": "analysis/server-flying-monster-behavior",
+        "primary": [
+          "100ab410",
+          "100ab4d0",
+          "100ab5a0",
+          "100ab710",
+          "100ab740",
+          "100ab7d0",
+          "100ab880",
+          "100abc90",
+          "100abea0",
+          "100abf60"
+        ],
+        "semantic_review": "Read all ten primary C and full native ASM, contract and notes; reviewed ceiling/water/floor trace contracts, bank/yaw/ST0, hull/startsolid/global trace_ent, event tail dispatch, contents bisection, threshold NaN and stop writes. No concrete owner asserted.",
+        "open_findings": [],
+        "independent_counts": {
+          "source_c": 25,
+          "asm": 26,
+          "byte_rows": 2512,
+          "raw_records": 413,
+          "descriptors": 178,
+          "vtables": 1,
+          "file_pins": 75
+        },
+        "reproduced_scans": [
+          "Exact LE32 all raw .rdata/.data offsets",
+          "Fresh objdump instruction-aligned .text E8/E9 direct edges",
+          "Case-sensitive Flying substring",
+          "Zero-fill global vector boundary"
+        ],
+        "limitations": [
+          "No target execution or runtime reachability proof.",
+          "Static negative scans exclude indirect/computed entry paths; concrete owner and M37c producer unresolved.",
+          "Native-only100ab7b0 remains support, no fabricated C or REVIEW."
+        ],
+        "package_hashes": {
+          "contract.md": "6140b7694b1383368cb916fb511db4925c0e58c70b170796c674f82753ea256d",
+          "notes.json": "230a66535a8ed7cb5928eba20ccffeab1dbab0c44665342f8ba236ba13fd3ff0",
+          "evidence.json": "3a3c9a19b948d490116b13c303ec73a4585b6c074cee5be6819e947c9c6ace79"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "21c29295c67f6395f46dcdaf5a9bd590429e5ab1aea9aabf9e1bbe2848853f8d",
+        "verify.py": "96ba3b3d7ab56d137e6120c62f47cdc358f04345d68b02941bad04c52dc3c6b6",
+        "contract.md": "6140b7694b1383368cb916fb511db4925c0e58c70b170796c674f82753ea256d",
+        "notes.json": "230a66535a8ed7cb5928eba20ccffeab1dbab0c44665342f8ba236ba13fd3ff0",
+        "evidence.json": "3a3c9a19b948d490116b13c303ec73a4585b6c074cee5be6819e947c9c6ace79",
+        "write_notes.py": "1de08be273d61803893b06a4b86eb776e2679e51fc1b5541038e3f0e5fc7e446"
+      }
+    },
+    {
+      "package": "analysis/server-glock-deploy",
+      "new_reviewed": 5,
+      "updated_existing": [
+        "server:0x1011c1a0"
+      ],
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "packet": "analysis/server-glock-deploy",
+        "reviewer": "client_catalog",
+        "result": "PASS",
+        "target_executed": false,
+        "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+        "primary_addresses": [
+          "0x100457d0",
+          "0x10045b40",
+          "0x10045ac0",
+          "0x10047db0",
+          "0x10047cf0",
+          "0x1011c1a0"
+        ],
+        "new_addresses": [
+          "0x100457d0",
+          "0x10045b40",
+          "0x10045ac0",
+          "0x10047db0",
+          "0x10047cf0"
+        ],
+        "refined_addresses": [
+          "0x1011c1a0"
+        ],
+        "full_primary_c_and_native_read": true,
+        "full_contract_and_notes_compared": true,
+        "findings": [],
+        "independent_provenance": {
+          "source_c": 26,
+          "asm_ranges": 26,
+          "machine_byte_rows": 1297,
+          "raw_records": 451,
+          "native_save_descriptors": 362,
+          "file_pins": 69,
+          "rtti_and_hierarchy": true,
+          "api_slots": true,
+          "literal_constants": true,
+          "message_registry_consistency": true
+        },
+        "semantic_checks": [
+          "All six primary bodies and local branches; full EAX propagation and RET cleanup; borrowed ItemInfo pointers and exact write ordering.",
+          "Deploy body reread and possible second message; clip -666 and first-use latch writes before downstream failure; rules-dependent police model literal.",
+          "Holster conditional callback/suicide clearing; ordered exact fuser3 comparison; flashlight mask preservation and double-to-float deadline.",
+          "Taclight and idle JA gates allow masked NaN; distinct weapon scheduler and cooldown clocks; delayed toggle does not clear callback.",
+          "Idle weaponanim stack staging across GetModelPtr; cdecl duration helper, signed upper guard, ST0 plus fresh global time.",
+          "Complete generic deploy: predicate, null owner and first-latch ordering; per-message world rereads; custom view pointer lifetime; destination8 zero-byte WpnDeploy; WpnInfo maxClip and reserve reread.",
+          "RNG consumed before max_health sound suppression; ordered equality vs NaN; sound uses player edict; model string offsets and unchecked extension copy; final animation/SetModel/duration ordering."
+        ],
+        "critical_support_native_read": [
+          "1011c020",
+          "100e4ed0",
+          "1011f5d0",
+          "1011f640",
+          "1011f680",
+          "1011ab20",
+          "10120210",
+          "1000f390",
+          "100dfea0",
+          "100f5eb0",
+          "10047cc0",
+          "100fc430",
+          "100c90b0"
+        ],
+        "author_verify": "PASS 26 C 26 ASM 1297 byte rows 451 raw 362 descriptors 6 cards",
+        "limits": [
+          "Static evidence only; no game execution or visual/audio parity validation.",
+          "Indirect callback lifetime and runtime frame order remain external; model sequence content and client message handlers were not newly audited."
+        ],
+        "reviewed_packet_pins": {
+          "contract.md": "daae5347abfbf51b9b8faabad9807ae9ccfb755c0867845aa918ea018d01f541",
+          "notes.json": "0a52115498db09c5db0d2795ea20fb349265d7887ef96b96f2ad977f3c210741",
+          "evidence.json": "617e49e65b525d0167c061d4ea8a31a78eb853d584225437213b696e7254a378"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "9855b7ffab6580a02aeaa5be63693745ad80a7e2a571b6849658f426c6ba5294",
+        "verify.py": "ef2d42446654cd3c25fbb56d54a11219153c715c068c20238a42fdf25b145d78",
+        "contract.md": "daae5347abfbf51b9b8faabad9807ae9ccfb755c0867845aa918ea018d01f541",
+        "notes.json": "0a52115498db09c5db0d2795ea20fb349265d7887ef96b96f2ad977f3c210741",
+        "evidence.json": "617e49e65b525d0167c061d4ea8a31a78eb853d584225437213b696e7254a378",
+        "write_notes.py": "b9bd885363b1aa463ca58727c31a92ffeebc44ddfa8ec03d136d19641ec0ced5"
+      }
+    }
+  ],
+  "verification_report_sha256": "c4f37dc1382528608b86294fd216c6a4e3031cd185a153307d5af3353138e5d1",
+  "navigation_cleanup": "31 newly reviewed entries removed from pending;7 existing cards fully refined with old evidence retained and duplicate notes synchronized. Mechanics routes/workboard/line numbers regenerated. Button Spawn corrected to10014cc0;10014260 identified as Precache; already-reviewed sound selector removed from pending. Key-use and button-dispatch footer linked to completed lifecycle; Glock-frame stale iron-entry gap removed. Concrete flying owner/M37c producer and InterDoor full transfer/use chains retained as open. Missing corpus remains separate from saved-C counts.",
+  "note_sync": {
+    "updated_ids": [
+      "server:0x10012580",
+      "server:0x100135e0",
+      "server:0x10014260",
+      "server:0x100146f0",
+      "server:0x100148e0",
+      "server:0x10014cc0",
+      "server:0x10016790",
+      "server:0x100457d0",
+      "server:0x10045ac0",
+      "server:0x10045b40",
+      "server:0x10047cf0",
+      "server:0x10047db0",
+      "server:0x10047eb0",
+      "server:0x10047f10",
+      "server:0x10047f70",
+      "server:0x10047fd0",
+      "server:0x10048550",
+      "server:0x100488a0",
+      "server:0x100488c0",
+      "server:0x10048950",
+      "server:0x10048990",
+      "server:0x10048bd0",
+      "server:0x10049370",
+      "server:0x10049380",
+      "server:0x10049390",
+      "server:0x100493a0",
+      "server:0x100ab410",
+      "server:0x100ab4d0",
+      "server:0x100ab5a0",
+      "server:0x100ab710",
+      "server:0x100ab740",
+      "server:0x100ab7d0",
+      "server:0x100ab880",
+      "server:0x100abc90",
+      "server:0x100abea0",
+      "server:0x100abf60",
+      "server:0x10102b80",
+      "server:0x1011c1a0"
+    ],
+    "changed_files": [
+      {
+        "path": "analysis/graphics/custom-texture-server-notes.json",
+        "rows": 1
+      }
+    ]
+  }
+}

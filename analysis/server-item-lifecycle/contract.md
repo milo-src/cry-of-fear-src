@@ -177,10 +177,18 @@ Native thiscall ECX=item, один float32 delay на стеке, RET4. Helper10
 
 ## Границы и следующие адреса
 
-Локальные ветви всех12 entry разобраны, но полное владение инвентарём этим пакетом не закрыто. Значимые отдельные зависимости: `1011c7d0` DefaultTouch (допуск/подбор), `1011b530` virtual+138, `1011cf10` virtual+15c, `1011d030` virtual+184, producer ammo ItemInfo table10231890, конкретный owner.virtual90 и rules.virtual8c. Support Respawn1011e630 показывает назначение Attempt callback, но здесь не получает новой REVIEW. Свежий pending статус этих зависимостей следует проверять в общем каталоге перед следующим пакетом.
+Локальные ветви всех12 entry разобраны, но полное владение инвентарём этим пакетом не закрыто. Pickup/duplicate/removal/extract/Respawn продолжены самостоятельными REVIEW в server-item-pickup (ссылка ниже). Открыты producer ammo ItemInfo table10231890, конкретный owner.virtual90 и полные rules policies. Свежий pending статус этих зависимостей следует проверять в общем каталоге перед следующим пакетом.
 
 `10017ac0` DefaultUse только передаёт activator в DefaultTouch; caller/useType/value не передаются. Отложенное удаление не доказывает корректность player linked list после owner callback; Destroy не проверяет его результат и не защищается от удаления this внутри callback. Аналогично сохранённый m_pPlayer не превращается автоматически в engine owner/aiment после Restore. В данном entry нет такой операции; поведение внешнего восстановления может дополнять его.
 
 Attachment для flare и обычного предмета намеренно различается, эффекты не нормализованы «для удобства». Точные sound arguments подтверждены wrapper [sentence lifecycle](../server-sentence-lifecycle/contract.md); бит0x20 передаётся как флаг остановки, runtime звучание не проверялось. Axe reader с AL-семантикой разобран в [unlock settings](../server-unlock-settings/contract.md). Конкретные derived weapons, клиентский HUD и отображение моделей находятся вне этого пакета.
 
 Duplicate+158, type12 DWORD-overlap, нулевые bounds, повторный Think time до очистки callback и NaN delay сохранены в описании как наблюдаемое поведение. Они не объявляются исправленными ошибками или гарантированно достижимыми проблемами. Тест rotating-match в verify.py проверяет только воспроизведение decoder index rule для упорядоченного списка, не запускает serializer и не доказывает savegame roundtrip.
+
+## Продолжение разбора: pass13
+
+DefaultTouch1011c7d0, duplicate1011b530, removal1011cf10, extract1011d030 и Respawn1011e630 теперь имеют самостоятельные локальные REVIEW: [item pickup](../server-item-pickup/contract.md). Там же primary/secondary ammo1011b6a0/1011b7c0, carry limit101202f0 и six-chain lookup100e2380. Эти адреса исключены из pending очереди. Полные player100daf10/100e04d0, inventory100dad40, lookup100e2410, runtime ItemInfo producer и derived callbacks требуют отдельного продолжения; сначала сверять текущие REVIEW.
+
+## Продолжение разбора: pass14
+
+Полные player100daf10/100e04d0/100dad40/100e2410: [player inventory](../server-player-inventory/contract.md). SP/MP ammo/pickup и respawn queries, различие absolute time и delay в цепочке Attempt, registry1..31 против ItemInfo0..31: [item rules](../server-item-rules/contract.md). Предыдущая очередь pass13 для этих адресов закрыта; новые вопросы — derived overrides, таблицы/registry producers и UI/network consumers.

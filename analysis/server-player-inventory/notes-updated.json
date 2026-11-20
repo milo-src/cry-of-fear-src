@@ -1,0 +1,35 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100dad40",
+      "proposed_name": "Player_AddInventoryDescriptor",
+      "subsystem": "inventory",
+      "summary_ru": "Ищет свободный GUI-слот, отдельно исключает дубликат оружейного имени и отправляет Inventory/звук/Syringe; успех не всегда означает новую запись.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100dad40.c",
+        "analysis/server-player-inventory/100dad40.asm",
+        "analysis/server-player-inventory/evidence.json",
+        "analysis/server-player-inventory/contract.md",
+        "decompiled/server/captures/ghidra-key-batch/003-pseudocode.c",
+        "analysis/inventory/behavior.md",
+        "analysis/server-player-inventory/100dad40-1.asm",
+        "analysis/server-player-inventory/1016f680.asm",
+        "analysis/server-item-pickup/contract.md",
+        "analysis/server-player-inventory/100e2240.asm",
+        "analysis/server-player-inventory/100e4360.asm",
+        "analysis/server-player-inventory/100e5fc0.asm"
+      ],
+      "details_ru": [
+        "Полный разбор расширяет прежний REVIEW, сохраняя его три evidence paths; это не новая функция в счётчике. Native ABI: ECX=P, три stack arguments (nameString_t, unusedSecondArg, classnameString_t), RET0c, полный EAX0/1. Второй аргумент не читается ни в одном из двух машинных диапазонов. nameString_t==0 вызывает AlertMessage(1,\"ERROR: Missing name\\n\") и возвращает 0.",
+        "BYTE P+1e9c выбирает слоты 1..3 при ненулевом значении, иначе 1..6; физический первый слот P+2200. Через 100e4ee0(slotValue)==(slotValue==0) ищется первый пустой. Если нет свободного слота, возвращается 0 ещё ДО проверки дубликата имени. Существующее оружие при полном GUI-инвентаре поэтому не превращает отказ в успех.",
+        "Classname из string pool проверяется на первые семь байтов \"weapon_\" через native1016f680. ASM-only support подтверждает ограниченное count сравнение unsigned bytes без case folding, остановку на NUL и EAX0/-1/+1; функции без saved C не добавлена фиктивная карточка. При несовпадении префикса name записывается в P+21fc+4*slot и вызывается 100e4360(slot,name,0).",
+        "При совпадении weapon_ вызывается 100e2240(pool+name,0): case-sensitive поиск такого отображаемого имени среди тех же 3/6 слотов, без удаления. Если совпадения нет, запись и Inventory выполняются; если оно есть, запись/Inventory пропускаются. Обе ветви продолжают общие постэффекты и возвращают 1. Это дедупликация по name, не classname и не указателю entity; обычные неоружейные строки не дедуплицируются.",
+        "100e4360 имеет native RET0c, третий аргумент игнорируется. Его Inventory packet MSG_ONE: BYTE slot, BYTE0, STRING pool+name, BYTE сохранённый перед отправкой bool(P+1e9c), BYTE bool(P+1ef8), BYTE bool(AL результата P.100e24a0()). Затем End и сброс P+1ef8, если он ненулевой. Последний helper в этом пакете остаётся явной внешней query, не догаданным именем состояния.",
+        "Если DWORD10226480==0, даже после дедупликации вызывается 100fc9f0(P.edict,3,\"weapons/item_get.wav\",1.0,0.8,0,100). Далее при rules!=NULL и rules.virtual20()!=0 проверяется точный classname \"weapon_syringe\". Совпадение отправляет MessageBegin(2,ID102266dc,NULL,NULL), BYTE IndexOfEdict(P.edict), BYTE1, End. Регистрация Syringe имеет size2; ID здесь не проверяется. В остальных случаях этот broadcast пропускается, но EAX1 сохраняется.",
+        "GUI string_t-слоты не являются weapon chains или ammo counters. Функция сама не создаёт сущность, не прикрепляет оружие, не меняет player active item и не обеспечивает атомарность с внешним DefaultTouch/AddPlayerItem. Нет проверки границ переданных string_t, второго ресурса или lifetime player после callbacks. Звук является вызовом wrapper, а не проверенной слышимостью; семантика всех derived rules.virtual20 и query100e24a0 остаётся внешней."
+      ]
+    }
+  ]
+}

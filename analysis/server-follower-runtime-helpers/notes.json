@@ -1,0 +1,80 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10104020",
+      "proposed_name": "Follower_ForwardSelectedStateGate",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Передаёт полный результат одного из двух виртуальных предикатов, выбранного аргументом.",
+      "details_ru": [
+        "Thiscall здесь означает ECX=this; один stack DWORD selector, RET4. При selector!=0, включая отрицательное значение, вызывает this.virtual+bc(); при selector==0 вызывает this.virtual+244(). Ни один callback не получает selector как stack argument. После CALL нет преобразования EAX: полный результат callback передаётся вызывающему без нормализации bool. Псевдокод void не отражает этот native return flow.",
+        "Собственных записей полей и проверки NULL this/vptr нет. Virtual+bc используется окружающими функциями как alive gate, +244 — как speech gate, но конкретный класс и implementations этим телом не установлены. Побочные эффекты callback не ограничиваются данной оболочкой. Отсутствие exact VA references в ограниченном data scan не доказывает недостижимость функции."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10104020.c",
+        "analysis/server-follower-runtime-helpers/10104020-0.asm",
+        "analysis/server-follower-runtime-helpers/evidence.json",
+        "analysis/server-follower-runtime-helpers/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10104f50",
+      "proposed_name": "Follower_IsSpeechDeadlineActive",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Проверяет строгое превышение срока речи над текущим временем; возвращает полный EAX 0 или 1.",
+      "details_ru": [
+        "ECX=this, без stack arguments, plain RET. Сначала читает float32 this+3dc, затем globals pointer10223188 и float32 globals.time+0. XOR EAX,EAX; COMISS deadline,now; SETA AL дают полный EAX=1 только при ordered deadline>now. Равенство, включая +0/-0, и unordered NaN дают 0 при маскированных FP exceptions. +infinity больше finite time, но не больше +infinity; нет проверки конечности, epsilon или clamp. COMISS может вызвать исключение при немаскированном invalid, поэтому это не гарантия безопасной обработки NaN при любом MXCSR.",
+        "Нет записи deadline, сброса timer, проверки sound backend или фактического проигрывания речи. Поддержка10105f30 устанавливает это поле: ordered duration<=0 заменяется сроком now+3.0; положительная duration или NaN используется в duration+now. Здесь проверяется только сохранённое значение. Прямые вызовы найдены в сохранённых C10104a10,10105410 и101064f0; поиск по сохранённому корпусу не является полной картой native callers."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10104f50.c",
+        "analysis/server-follower-runtime-helpers/10104f50-0.asm",
+        "analysis/server-follower-runtime-helpers/evidence.json",
+        "analysis/server-follower-runtime-helpers/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10106430",
+      "proposed_name": "Follower_DistanceToLivingFollowTarget",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Возвращает 3D-расстояние до цели следования либо float32 1000000 при отсутствии handle или нулевом alive gate.",
+      "details_ru": [
+        "ECX=this, без stack arguments, plain RET; результат возвращается через ST0 после FLD float32, а не как integer EAX. Использует EHANDLE this+18c (native MONSTER m_hTargetEnt), не enemy+184 и не speech recipient+3e0. Сначала10017780(&target) проверяет serial-valid edict; при 0 сразу загружает float32 1000000 из101bbb68. Иначе100177a0 возвращает private pointer, после чего без NULL guard вызывается target.virtual+bc(). Полный EAX callback==0 также даёт sentinel; любой ненулевой допускает измерение. Нет IsPlayer или проверки собственного alive state.",
+        "После virtual callback сохраняет own pev=[this+4], затем повторно вызывает100177a0(&target) и немедленно читает [returnedPrivate+4]. Второго bool gate и NULL private guard нет. При изменении handle во время callback будет использован новый target либо возникнет недопустимое разыменование; lifetime stability не обеспечена. Helpers10017ba0/10017780 сравнивают edict serial с handle+4, но не доказывают nonNULL private, free==0 или живое состояние объекта. Own pev сохраняется до второго getter.",
+        "Пусть dx,dy,dz — target.origin−self.origin, каждое вычитание округляется float32. Каждое произведение dx²,dy²,dz² также float32. Native порядок суммы: q=float32(float32(dy²+dx²)+dz²). Затем q расширяется в double; UCOMISD(0,q)/JA направляет только ordered q<0 к1016be90. Обычная ветвь, включая unordered q, выполняет SQRTSD, округляет CVTSD2SS до float32 и возвращает через FLD/ST0. Псевдокод if(0<=q) ошибочно представляет NaN-routing: native NaN идёт в SQRTSD, а не в precise helper.",
+        "Ветка1016be90 принимает double в XMM0, затем использует возвращённый XMM0 с тем же float32→ST0 завершением; полная CRT обработка исключений/errno здесь не разобрана. При обычных неотрицательных данных результат — 3D, включая Z, не XY-distance. Zero distance остаётся 0; overflow q может дать +infinity; NaN не заменяется sentinel, если вычисление продолжается. Значения больше1000000 не ограничиваются. Нет записи цели, health, schedule или deadline."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10106430.c",
+        "analysis/server-follower-runtime-helpers/10106430-0.asm",
+        "analysis/server-follower-runtime-helpers/evidence.json",
+        "analysis/server-follower-runtime-helpers/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101064f0",
+      "proposed_name": "Follower_OnPlayerTouchSetPushConditionAndYaw",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "При быстром касании игроком и отсутствии speech/memory gates ставит condition и рассчитывает ideal yaw к его позиции.",
+      "details_ru": [
+        "ECX=this, один stack DWORD other*, RET4; возврат не нормализован в success bool. Без NULL guard вызывает other.virtual+d0() и проверяет полный EAX!=0. Затем требует отсутствия mask1 в собственном BYTE this+2ec (low byte native MONSTER m_afMemory), затем10104f50(this)==0. При провале любого gate выходит без собственных записей. Название OnPlayerTouch описывает операцию; concrete Touch/vtable assignment к этому entry пока не доказан.",
+        "После callbacks читает other.pev.velocity.y(+24) и x(+20), расширяет каждый float32 в double через CVTPS2PD. ANDPS с101a1f90, то есть двумя QWORD 0x7fffffffffffffff, очищает double sign. Сумма abs(double(vy))+abs(double(vx)) вычисляется ADDSD, затем CVTPD2PS округляет её до float32. COMISS с float32 50.0 из101a1efc и JBE пропускают тело при <=50 либо unordered. Требуется ordered строго >50; +infinity проходит, NaN не проходит при маскированных exceptions. Это XY Manhattan speed с double intermediate, не евклидова длина и не скорость по Z; не следует заменять порядок округлений выражением float32 fabs+fabs.",
+        "При успехе OR DWORD this+180 с0x10000000, сохраняя остальные condition bits. Затем заново читает other.pev, копирует origin.x/y/z в12 stack bytes и вызывает100c00f0(this,Vector-by-value). Callee RET0c очищает вектор; primary RET4 очищает other. Condition записан до yaw helper и остаётся установленным даже если helper пропустит изменение yaw. Нет прямого изменения velocity, actual angles, route, speech recipient или timer.",
+        "Поддержка100c00f0 — ранее разобранный MakeIdealYaw: exact classname monster_slowerstuck, monster_spitter либо BYTE this+9!=0 запрещают yaw write. Иначе activity+2d0==0b преобразует входной XY в(-y,x), activity==0c — в(y,x), прочие оставляют(x,y); далее вычитает own origin, вызывает1011a930→engine VecToYaw(slot9,10222f6c) и записывает ST0 как float32 pev.ideal_yaw+ac. Результат не означает, что модель сразу повернулась: actual angle update и выбор расписания находятся за границей текущего body. Support class exclusions и поля подтверждены native bytes/descriptors, не импортированы из ожидаемого SDK поведения."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101064f0.c",
+        "analysis/server-follower-runtime-helpers/101064f0-0.asm",
+        "analysis/server-follower-runtime-helpers/evidence.json",
+        "analysis/server-follower-runtime-helpers/contract.md"
+      ]
+    }
+  ]
+}

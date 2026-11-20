@@ -1,0 +1,101 @@
+# Менеджер состояния: отключение, map transitions, death think
+
+Только статический оригинальный server hl.dll, SHA-256 `751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641`. Пять новых primary перечислены ниже. Числа адресов/смещений/масок — hex; количества, секунды и float values — decimal. Все primary C прочитаны целиком и сверены с native инструкциями. Цель не запускалась; общие каталоги и игра не менялись.
+
+## Общее владение
+
+M=global10222e10, банки A_i=M+4+i*41c и B_i=A_i+879c. В [restore](../server-state-restore/contract.md) доказан размер10f3c и constructor-clear10f38 после первых4байт. Этот пакет показывает consumers/reset callers; producer1002a480 изучается отдельно. Никакой universal reset M[0] из memset(M+4,...) не следует.
+
+| Entry | Подтверждённый вход | Manager действие | Дальнейший переход |
+|---|---|---|---|
+|1001cc90|DLL callback ClientDisconnect|Matched A и B при M[0]!=0|rules.virtual3c|
+|1004c100|CInterDoorCoopChangeLevel Use|Full clear → players mutation → capture|Think через2.0 →ChangeLevel|
+|100a1f70|CCoFChangeLevel Use|Full clear → capture|Немедленный ChangeLevel(message)|
+|100a4500|CCoFLobbyStart Use|Full clear, безcapture|FireTargets(message,firstPlayer,this,3,0)|
+|100e9ab0|Exported player death think|Capture безfullclear вrestartветке|ChangeLevel(current map), затемbodytail|
+
+Use entries имеют RET10, даже когда Ghidra показывает0/1arguments. RTTI/native table slots+e8, factory writes, PE exports и DLL API copy сохранены в evidence. World/game rules/live callbacks могут изменять поля; проверки не являются транзакцией.
+
+## 0x1001cc90 — ClientDisconnect_ClearStateLinksAndNotify
+
+Engine ClientDisconnect очищает ссылки и совпавшие записи состояния, сообщает об отключении и передаёт edict игровым правилам.
+
+ABI cdecl, один edict* E, plain RET; определённого EAX result нет. DLL_FUNCTIONS base102119f8 slot16 содержит1001cc90; GetEntityAPI100183d0 копирует50DWORD при version140. Если DWORD10222f04!=0, всё тело пропускается. При обычном пути E предполагается валидным: временный fallback PEntityOfEntOffset(0) используется лишь для поиска private data и НЕ заменяет E для последующих обращений.
+
+Если получен private P, вызывается P.virtuald0(); nonzero очищает EHANDLE P+2348 через10017740(...,0). Затем индекс1..globals.maxClients(+90), helper10119680; первый Q с Resolve(Q+26a0)==P получает очищение Q+26a0, после чего поиск прекращается. Это не очистка всех дубликатов. NULL private пропускает лишь эту часть, дальнейшее уведомление и rules callback остаются.
+
+При manager M!=NULL перебираются i=1..32, S=41c: A_i=M+4+i*S,B_i=A_i+879c. Только M[0]!=0, valid A_i[0]!=0 и pointer identity A_i+8==stringPool+E.netname(+254) ведут к memset(A_i,0,41c), затем memset(B_i,0,41c). B valid/name не проверяются; B-only совпадение не очищается. Все совпавшие A обрабатываются, без break. M перечитывается после пары clears, M[0] не меняется. В отличие от restore10029090, это A-driven clear и он полностью запрещён при M[0]==0.
+
+Если rules10222ee4!=NULL и BYTE rules+a8!=0, первый IndexOfEdict(E) должен быть в1..32 (unsigned index-1<=31). Тогда MSG_ALL2 ID102266b0 посылает BYTE заново вычисленного index,0,0; после End текущий rules перечитывается, BYTE rules+firstIndex+a9=0. Первый сохранённый index определяет адрес памяти, второй определяет пакет. После callbacks нет повторной NULL-проверки rules.
+
+Всегда форматируется локальная строка в256byte buffer через1001f160: "- %s has left the game\n", netname=pool+E+254. Call не передаёт размер256; wrapper передаёт CRT size=-1, результата не проверяет. Затем SayText(MSG_ALL2,ID10226518) содержит BYTE IndexOfEdict(E),STRING buffer. Реальные ограничения netname и глубокое CRT поведение вне этого caller, не заявляется безопасный bounded-format.
+
+101005c0(E) возвращает IndexOfEdict(E)-1;10100910 ищет sound pool record только при global10230d70 и signed index0..63. При record!=NULL 101008e0 пишет vector из global10222f34, DWORD+0c/+10=0,+18=-1; остальные поля остаются. Значение исходного vector не объявляется вечным нулём. Далее E+2e4=float1 (pev.fuser4), E+1f0=0 (pev.takedamage), E+18c=0 (pev.solid), SetOrigin10119fa0(E,&E+88), E+228|=80 (pev.flags). После этого rules.virtual3c(E) без NULL guard. E.pev начинается с80, это подтверждается ABI/header и native аргументами, не совпадением save table offsets.
+
+Состояние менеджера не освобождается; private entity не удаляется собственным телом. Флаги10222f04 и rules+a8, поля handles2348/26a0 и roster+a9 здесь названы смещениями: их полная семантика и все upstream producers не доказаны этим entry. Последовательность callback/clears сохранена; lifetime/reentrancy после внешних вызовов не защищены локально.
+
+## 0x1004c100 — CInterDoorCoopChangeLevel_UsePreparePlayers
+
+Use кооперативной двери проверяет готовность, очищает/снимает состояние всех игроков и планирует переход через две секунды.
+
+ECX=D, Use ABI четыре stack DWORD, RET10; читается только первый argument A, остальные три игнорируются. RTTI CInterDoorCoopChangeLevel: vtable101b1300+e8=1004c100, factory100496b0 устанавливает эту таблицу, export inter_door_coop_changelevel1004db30 связывает factory. Конкретное this и роль установлены нативными данными, не именем Ghidra.
+
+Guard order: A!=NULL; A.virtuald0()!=0;10119060(D+17c,A)!=0; pev.target+1cc!=0; pev.message+1d8!=0. Затем при D+180 string_t!=0 устанавливается CVarSetString(sv_coop_music,pool+value) ДО readiness отказов. По target вызывается10118590(NULL,name), затем100125e0(A.pev) выполняется даже если lookup ничего не нашёл. Последний возвращает/создаёт player private без RTTI cast (allocation failure в helper не гарантирует безопасныйNULL); оба результата затем проверяются наNULL.
+
+Если global10222f20!=0, только этому player отправляется10119810(P,literal101b1590,2,0): «Вот же чёрт... Дверь заклинило!», и return. Иначе найденный target.pev.iuser1 должен точно равняться1; при другом значении literal101ac294 «Подождите, пока все будут готовы!» и return. Класс target не проверяется. Музыкальный cvar при этих отказах уже мог измениться.
+
+Успешный путь при pev.noise+1ec!=0 вызывает100fc9f0(doorEdict,channel0,pool+noise,float1,float0.8,flags0,pitch100). Затем, если M!=NULL, memset(M+4,0,10f38) — обе банки, включая их slot0; первые4байта/M[0] не меняются. Clear выполняется до player loop и не откатывается при отсутствии игроков.
+
+Для каждого индекса1..maxClients helper10119680 даёт P; nonNULL получают BYTE P+1ea4=1, ScreenFade10119c00(P,RGB(0,0,0),duration0.5,hold2.0,alpha255,flags5),100deff0(ECX=P,0),DWORD P+2500|=9 и pev.flags|=80.100deff0 ставит flags1000, копирует globalvector10222f34 в velocity, при P+1ed0!=0 сбрасывает1ed0/1ecc. Нет отдельного alive/team фильтра; helper только проверяет index, edict.free и private.
+
+Если D+180!=0,100ea5c0(ECX=P,string_t D+180,door.pev.iuser1,door.pev.fuser1) сохраняет P+2310, bool P+231c, float P+2320, P+2314=1; это отложенная музыка, не непосредственное проигрывание. После этого заново проверяется M!=NULL и вызывается1002a480(M,P). Таким образом snapshot снимается ПОСЛЕ fade/freeze/music mutation; результат игнорируется. M заново проверяется для каждого P. Наконец D.Think+78=1004aca0, D.virtual08(float2.0). Экспортированный ChangeLevelThink читает актуальный pev.message и вызывает engine ChangeLevel(pool+message,NULL), без повторения readiness guards. Значение message не захватывается в момент Use.
+
+Не проверяются multiplayer rules или useType прямо в этом entry; ненулевой activator обязан пройти virtuald0, но вторичные callbacks могут менять состояние. Нет собственного latch против повторного Use, rollback либо проверки успешности capture/планирования/ChangeLevel. Полный producer1002a480 находится в отдельном пакете; этот контракт фиксирует его точные аргументы и порядок.
+
+## 0x100a1f70 — CCoFChangeLevel_UseCaptureAndChangeMap
+
+Use CCoFChangeLevel очищает банки, снимает состояния игроков и немедленно передаёт message как имя карты.
+
+ECX=D, Use ABI RET10; только первый stack argument проверяется на ненулевое значение, он не разыменовывается и не проверяется IsPlayer. Остальные caller/useType/value игнорируются. RTTI vtable101c85e4+e8, factory1008f7a0, export cof_changelevel100aa170 подтверждают CCoFChangeLevel. Return EAX не нормализован и не является успехом перехода.
+
+Если activator==NULL, ничего. Иначе при M!=NULL memset(M+4,0,10f38), затем index1..maxClients: каждый nonNULL10119680(index) передаётся1002a480(ECX=текущий globalM,P). В отличие от door Use, внутри loop M перечитывается БЕЗ новой NULL-проверки, guards lifetime отсутствуют. Результат capture игнорируется. При исходномMNULL весь clear/capture пропускается.
+
+Лишь ПОСЛЕ clear/capture читается D.pev.message+1d8. Если string_t!=0, engine ChangeLevel(pool+message,NULL). При message==0 записи всё равно могли быть очищены/пересняты; при MNULL переход всё равно возможен. Нет readiness gate, fade/freeze, master lookup или delayed Think. Globals pointer перечитывается в loop, последняя версия служит string pool. M[0] не изменяется; собственного one-shot guard нет.
+
+## 0x100a4500 — CCoFLobbyStart_UseClearAndFireMessage
+
+Use CCoFLobbyStart очищает банки и запускает targets из message от имени первого найденного player.
+
+ECX=D; нативный RET10, все четыре входных Use arguments не читаются. RTTI CCoFLobbyStart vtable101c9e48+e8, factory1008ff20 и export cof_lobby_start100aa420 подтверждены. Если D.pev.message==0, return без очистки. Иначе M!=NULL вызывает memset(M+4,0,10f38); первые4байта и M[0] сохраняются.
+
+После clear ищется только первый entity через10118460(NULL,"player"). При nonNULL найденном entity вызывается100125e0(entity.pev); результат не является проверенным RTTI cast и может создать private. Если lookup или результатNULL, действие прекращается, clear не отменяется; последующие player не ищутся. Исходный Use activator не используется.
+
+При успехе native посылает пять аргументов10101ff0(pool+D.pev.message,foundPlayer,D,USE_SET=3,float0). PUSH0/PUSH3/PUSHthis потеряны в короткой C-декларации вызова. Это target dispatch, не engine ChangeLevel и не capture1002a480. Полный FireTargets contract остаётся в server-targets; эффекты конечных entities могут включать переход, но caller этого не гарантирует. Имяmessage перечитывается после helper callbacks без нового nonzero guard, никакого lifetime pin нет.
+
+## 0x100e9ab0 — CBasePlayer_MultiplayerPlayerDeathThink
+
+Multiplayer death think выполняет timed revive, одноразовый restart текущей карты со snapshot либо завершает death animation и скрывает тело.
+
+ECX=P, без stack arguments, plain RET; native PE export ordinal209 CBasePlayer::MultiplayerPlayerDeathThink.100e9230 устанавливает P.Think+78 на этот адрес и вызывает virtual08(float0.1). Ещё bounded callsite100f0265..100f0293 внутри100ef2d0 вызывает его при signed deadflag>=1, rules!=NULL и rules.virtual20()!=0. Это навигация callsite, не полная REVIEW PlayerPreThink. Собственного NULL guard this/pev нет; EAX на выходах не объявляется result.
+
+Первый приоритет: ordered pev.fuser3==3.0 и ordered now>P+4fc. Тогда pev.deadflag=0, movetype=3, flags&=~200,health=30.0. Native перечитываетhealth, MAXSS с0 и CVTTSS2SI формируют один integer для всех Health packets. Для каждого nonNULL player index1..maxClients MSG_ONE Health102264d0 содержит BYTE health, BYTE IndexOfEdict(P), BYTE(rules.virtual20()!=0). Значение health кэшировано, индекс/правила вычисляются заново для каждого адресата; rules здесь разыменовывается безNULLguard.
+
+Если P.active+252c!=NULL, вызывается active.virtual144() безargs; затем CurWeapon102264cc MSG_ONE P: BYTE1, BYTE currentActive+168, BYTE currentActive+1e4. Active перечитывается после callback безNULLguard и между полями, retval Deploy игнорируется. Затем100f67f0(P) посылает ID10226628 BYTE0,SHORT255 и обнуляетP+2814; pev.fuser3=0;10119810(P," ",4,0); немедленный return. Это revive на30HP без full Spawn/restore manager.
+
+Если первая ветка не сработала: BYTE P+4e8 должен быть ровно1, signed DWORD P+4f0<=0, ordered now>P+1f24, BYTE P+1f28==0,rules!=NULL,rules.virtual20()!=0. Тогда P+1f28=1 ДО snapshot. При M!=NULL для каждого nonNULL10119680(index1..maxClients) вызывается1002a480(ECX=текущийM,P_i), без общего memset и без повторнойNULLпроверкиM в loop. Затем ChangeLevel(pool+globals.mapname(+c),NULL), даже при MNULL/отсутствииигроков. Latch не откатывается; после возврата engine call функция ПРОДОЛЖАЕТ обработку тела.
+
+Далее при ordered fuser3==3.0, ordered deadline P+4fc>now и deadflag==2 вызывает1000eda0(ECX=P,float0), отбрасывает ST0 и возвращается. Равенство времени не проходит ни revive, ни waiting branch; NaN тоже не проходит strict gates. Если modelindex!=0,P+f8==0,deadflag==1, вызывается FrameAdvance(0), float P+2654 увеличивается на1.0; return только если ordered updated<120.0. При120/больше/NaN обработка продолжается. Это frame counter, не seconds/timestep.
+
+Финальная общая ветка: если movetype!=0 и flags&200, movetype=0. Если deadflag==1, deadflag=2. Затем framerate=0, effects|=20, снова framerate=0,1011a030(pev,mins(-16,-16,-36),maxs(16,16,36)). Исходныйmovetype сохраняется безflags200; прочийdeadflag сохраняется. Нет собственного remove/free либо повторногоschedule на этом tail. Constants0/1/3/30/120 и native FP comparisons сохранены; derived callbacks могут менять поля и не объявляются чистыми.
+
+Локальные роли P+4e8/+4f0/+1f24/+1f28, fuser3/deadline определены операциями, но все producers и смысл каждого режима требуют отдельных callers. Manager capture semantics принадлежат root packet. ДоставкаHealth/CurWeapon и игровая длительность animation не проверялись runtime; анализ не меняет поведение оригинала.
+
+## Проверяемость и оставшиеся границы
+
+Native ENTVARS descriptor table подтверждает target1cc,message1d8,noise1ec,iuser1=248,fuser1=258,fuser3=260,health164,movetype108,effects118,framerate13c,modelindexb4. Некоторые оригинальные descriptor types для deadflag/flags необычны; при описании фактических операций использованы native DWORD instructions, типы не исправлялись по SDK.
+
+`100125e0` — factory/existing-private resolver, а не dynamic_cast: existing private возвращается без проверки класса; при allocation failure native пытается записать [0+4]. Guard caller после вызова не превращает helper в безопасный cast.
+
+Глубокие контракты master/target lookup, FireTargets, sound wrapper, fade и Stats находятся в прежних пакетах; нынешние supports закрепляют ABI и последовательность, не добавляют новые REVIEW. Новые producers manager и режимов игрока, writers10222f04/10222f20 и полное поведение rules3c/weapon144 остаются границами. Repeated Use не блокируется локальным latch, кроме явноописанного P+1f28 вdeaththink. Ни отсутствие all-program callers, ни parity игрового запуска не заявляются.
+
+`capture.py` читает исходныйPE и вызывает только статический objdump, не нуждается в ignored giant cache. `verify.py` независимо отображаетPE, сверяет C/ASM/raw/RTTI/export hashes и критические ветви/ABI. Бounded callsite100f0265 не считается полным разбором100ef2d0.

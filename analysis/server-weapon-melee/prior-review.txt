@@ -1,0 +1,19 @@
+[REVIEW server:0x100f9790]
+  Предлагаемое имя: CBasePlayer_WeaponMelee
+  Подсистема: combat
+  Назначение: Обрабатывает попадание прикладом/текущим оружием.
+  Уверенность: средняя; часть смысла восстановлена по контексту
+  Разбор: Требует active weapon; выполняет первичную trace и fallback hull trace, затем damage accumulator clear → target virtual trace-attack → apply accumulated damage. Использует глобал0x10226834, выбирает hit effects по классификации цели. Декомпилятор потерял ряд аргументов: дальность/точную величину и все sounds нельзя утверждать по этому телу.
+  Основание: decompiled/server/partial-pass/functions/0x100f9790.c
+  Основание: decompiled/server/partial-pass/functions/0x1011c070.c
+  Основание: decompiled/server/partial-pass/functions/0x1011b8f0.c
+[/REVIEW]
+
+[REVIEW server:0x100f91b0]
+  Предлагаемое имя: Player_ApplyViewImpulse
+  Подсистема: player-view
+  Назначение: Применяет трёхкомпонентный импульс вида локально либо через event.
+  Уверенность: средняя; часть смысла восстановлена по контексту
+  Разбор: В multiplayer-like ветви отправляет event0x10 с тремя floats; иначе обновляет pev+0x280/284/288: первый минус param1*20, второй/третий плюс param*20. Оригинальное имя этих entvars и точная client-side интеграция пока не подтверждены.
+  Основание: decompiled/server/partial-pass/functions/0x100f91b0.c
+[/REVIEW]

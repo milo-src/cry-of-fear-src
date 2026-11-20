@@ -1,0 +1,1008 @@
+{
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "target_executed": false,
+  "new_primary": [],
+  "method": "Whole-file unaligned VA/RVA literals; all-offset E8/E9 executable-section scan; PE export/relocation tables; entry-aligned saved-body objdump; no runtime or new Ghidra session.",
+  "scan": {
+    "image_base": "0x10000000",
+    "file_bytes": 2413568,
+    "sections": [
+      {
+        "name": ".text",
+        "rva": 4096,
+        "virtual_size": 1703532,
+        "raw_size": 1703936,
+        "raw_offset": 1024,
+        "flags": 1610612768
+      },
+      {
+        "name": ".rdata",
+        "rva": 1708032,
+        "virtual_size": 457238,
+        "raw_size": 457728,
+        "raw_offset": 1704960,
+        "flags": 1073741888
+      },
+      {
+        "name": ".data",
+        "rva": 2166784,
+        "virtual_size": 141588,
+        "raw_size": 64512,
+        "raw_offset": 2162688,
+        "flags": 3221225536
+      },
+      {
+        "name": ".rsrc",
+        "rva": 2310144,
+        "virtual_size": 480,
+        "raw_size": 512,
+        "raw_offset": 2227200,
+        "flags": 1073741888
+      },
+      {
+        "name": ".reloc",
+        "rva": 2314240,
+        "virtual_size": 185640,
+        "raw_size": 185856,
+        "raw_offset": 2227712,
+        "flags": 1107296320
+      }
+    ],
+    "executable_raw_bytes": 1703936,
+    "targets": {
+      "0x10222e10": {
+        "va_literal": [
+          {
+            "file_offset": "0x1c142",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x1001cd42"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x1c184",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x1001cd84"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x1c19e",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x1001cd9e"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x4b64a",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x1004c24a"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x4b71d",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x1004c31d"
+              }
+            ]
+          },
+          {
+            "file_offset": "0xa1381",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x100a1f81"
+              }
+            ]
+          },
+          {
+            "file_offset": "0xa13bf",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x100a1fbf"
+              }
+            ]
+          },
+          {
+            "file_offset": "0xa3910",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x100a4510"
+              }
+            ]
+          },
+          {
+            "file_offset": "0xc87d7",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x100c93d7"
+              }
+            ]
+          },
+          {
+            "file_offset": "0xe90ab",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x100e9cab"
+              }
+            ]
+          },
+          {
+            "file_offset": "0xe90d4",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x100e9cd4"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x120468",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x10121068"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x1204f7",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x101210f7"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x120528",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x10121128"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x120538",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x10121138"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x12053f",
+            "mappings": [
+              {
+                "section": ".text",
+                "address": "0x1012113f"
+              }
+            ]
+          }
+        ],
+        "rva_literal": [],
+        "rel32_candidates": []
+      },
+      "0x1004a6e0": {
+        "va_literal": [],
+        "rva_literal": [],
+        "rel32_candidates": []
+      },
+      "0x100c5300": {
+        "va_literal": [],
+        "rva_literal": [],
+        "rel32_candidates": []
+      },
+      "0x10029070": {
+        "va_literal": [],
+        "rva_literal": [],
+        "rel32_candidates": [
+          {
+            "address": "0x1012111b",
+            "opcode": "0xe8",
+            "bytes_hex": "e8507ff0ff"
+          }
+        ]
+      },
+      "0x10029090": {
+        "va_literal": [],
+        "rva_literal": [],
+        "rel32_candidates": [
+          {
+            "address": "0x100c93e0",
+            "opcode": "0xe8",
+            "bytes_hex": "e8abfcf5ff"
+          }
+        ]
+      },
+      "0x1002a480": {
+        "va_literal": [],
+        "rva_literal": [],
+        "rel32_candidates": [
+          {
+            "address": "0x1004c326",
+            "opcode": "0xe8",
+            "bytes_hex": "e855e1fdff"
+          },
+          {
+            "address": "0x100a1fc4",
+            "opcode": "0xe8",
+            "bytes_hex": "e8b784f8ff"
+          },
+          {
+            "address": "0x100e9cd9",
+            "opcode": "0xe8",
+            "bytes_hex": "e8a207f4ff"
+          }
+        ]
+      },
+      "0x1002a000": {
+        "va_literal": [],
+        "rva_literal": [
+          {
+            "file_offset": "0x2222a8",
+            "mappings": [
+              {
+                "section": ".reloc",
+                "address": "0x102374a8"
+              }
+            ]
+          },
+          {
+            "file_offset": "0x24859f",
+            "mappings": [
+              {
+                "section": ".reloc",
+                "address": "0x1025d79f"
+              }
+            ]
+          }
+        ],
+        "rel32_candidates": [
+          {
+            "address": "0x1002a85d",
+            "opcode": "0xe8",
+            "bytes_hex": "e89ef7ffff"
+          }
+        ]
+      }
+    },
+    "exports_count": 846,
+    "target_exports": [],
+    "text_body_exports": [],
+    "text_body_rel32_candidates": [],
+    "target_relocations": [
+      {
+        "address": "0x1001cd42",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x1001cd84",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x1001cd9e",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x1004c24a",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x1004c31d",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x100a1f81",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x100a1fbf",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x100a4510",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x100c93d7",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x100e9cab",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x100e9cd4",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x10121068",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x101210f7",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x10121128",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x10121138",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      },
+      {
+        "address": "0x1012113f",
+        "value": "0x10222e10",
+        "type": "HIGHLOW"
+      }
+    ]
+  },
+  "objdump": "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+  "objdump_version": "GNU objdump (Binutils for MinGW-W64 x86_64, built by Brecht Sanders, r2) 2.46.0.20260210",
+  "source_c": [
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1001cc90.c",
+      "sha256": "64545c8bf9af4b22e578b5732235aa39a6f4b1dffc21c128b16a6ceeef510fc9",
+      "entry": "0x1001cc90"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1004c100.c",
+      "sha256": "089725317507c4bc6f58f3e65a0c442429fc054a0c2f992910433f90ca3ceb2e",
+      "entry": "0x1004c100"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100a1f70.c",
+      "sha256": "c8cfc3597b46797c5d03ed0f94c78cb8a2be8d824e1322d3f29d144f63738fd6",
+      "entry": "0x100a1f70"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100a4500.c",
+      "sha256": "7e4531e1f1ffcbe41dab1ba27ef14a79ac88cdb43804727caa96a8987787f423",
+      "entry": "0x100a4500"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100c9210.c",
+      "sha256": "77238aacfcb1d6b4ab111a6798c2e4ecb838f6e76e85628888847ce5be52b81c",
+      "entry": "0x100c9210"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100e9ab0.c",
+      "sha256": "ed4d1bdf188c41a648fd5f3edbdfef9630c0c0c0234678c806c20cbeb3163fc5",
+      "entry": "0x100e9ab0"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10120eb0.c",
+      "sha256": "54d93f54f5d0b214e5f11f66d71bc88d54883ab56b70aca00a26ece7f6775e88",
+      "entry": "0x10120eb0"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10029070.c",
+      "sha256": "9bacc9e93665629a55549cc8ab1fa1eac7308c323fd2effec392f33a6859a70b",
+      "entry": "0x10029070"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10029090.c",
+      "sha256": "154e75c3d777f032d9071139e66c329cc8eef8ab5ba5189c95de4fd9bb097064",
+      "entry": "0x10029090"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1002a480.c",
+      "sha256": "fc0cc20fc1b6c58edaaa21db3e0787059f395a8233ebc67290e2cd4a72c3864d",
+      "entry": "0x1002a480"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1002a000.c",
+      "sha256": "d2119926946dd58f842c40648cc9080e3f2d6a758e237559950dcbb38148f081",
+      "entry": "0x1002a000"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1004a6e0.c",
+      "sha256": "e41d94b5b2856e636fc7fce848e50d46dfc999eec78c25d28e0dff001fa0599c",
+      "entry": "0x1004a6e0"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100c5300.c",
+      "sha256": "b15c322c239a440b50e3104591acc366b8af4e14d7f67c61eed90bb9a4c1a82d",
+      "entry": "0x100c5300"
+    }
+  ],
+  "ranges": [
+    {
+      "path": "analysis/server-state-reachability/1001cc90-0.asm",
+      "sha256": "a4bd4899475e64cd216de145d1d6ee9e21902fbf356d2148fa9c5925b8d6b908",
+      "entry": "0x1001cc90",
+      "start": "0x1001cc90",
+      "end_exclusive": "0x1001cee4",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x1001cc90",
+        "--stop-address=0x1001cee4",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "826ab738c472e116e5ac63934802e6f827d4e9a5ac54b17ac3f34933e5c69051"
+    },
+    {
+      "path": "analysis/server-state-reachability/1004c100-0.asm",
+      "sha256": "bff37154945a9e12b2fd6895031efefff45fda88b53e91ee5297e371d6fb97e7",
+      "entry": "0x1004c100",
+      "start": "0x1004c100",
+      "end_exclusive": "0x1004c35c",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x1004c100",
+        "--stop-address=0x1004c35c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "46c0ac998470b8207f236b1f6edf5edd4f5450339a3b7dc6ec420e69611c70df"
+    },
+    {
+      "path": "analysis/server-state-reachability/100a1f70-0.asm",
+      "sha256": "eb871199c659fc6ff98b8c6993b80df04d55bbace5ff3bdd09e526ad75be83a2",
+      "entry": "0x100a1f70",
+      "start": "0x100a1f70",
+      "end_exclusive": "0x100a2007",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x100a1f70",
+        "--stop-address=0x100a2007",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "8c44e9fe620cddd523bce7bc8c2e416df3b40ed821d4c0b80d805493430275a0"
+    },
+    {
+      "path": "analysis/server-state-reachability/100a4500-0.asm",
+      "sha256": "c7a9fdd552b9bab7e8f1db21b1025aa9a96a7d0dba1013db414e2c6e94c06512",
+      "entry": "0x100a4500",
+      "start": "0x100a4500",
+      "end_exclusive": "0x100a457a",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x100a4500",
+        "--stop-address=0x100a457a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "ac73bc7b9f3c59cf3b0d857d16e52237b24d131945765ac65ba430f82e39f87a"
+    },
+    {
+      "path": "analysis/server-state-reachability/100c9210-0.asm",
+      "sha256": "3af36a13e88191c3fa421918a93d7784265eafd47553dd4f11b72e43fe31ff6e",
+      "entry": "0x100c9210",
+      "start": "0x100c9210",
+      "end_exclusive": "0x100c95e1",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x100c9210",
+        "--stop-address=0x100c95e1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "18d8c0a87a3e58da91e5b30729ee7b678f234eb7d67b03b53b386867054c7597"
+    },
+    {
+      "path": "analysis/server-state-reachability/100e9ab0-0.asm",
+      "sha256": "efe2183afd1a21090dde1f89fefcc75902860d96c3f275115e7b7a3733948fcd",
+      "entry": "0x100e9ab0",
+      "start": "0x100e9ab0",
+      "end_exclusive": "0x100e9e47",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x100e9ab0",
+        "--stop-address=0x100e9e47",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "b309f26c55481032dd8bc297f48a45b26c5c5ae91d26929a32988f156183ba15"
+    },
+    {
+      "path": "analysis/server-state-reachability/10120eb0-0.asm",
+      "sha256": "5084462721cfb8702734c9fc08912753fe58ac80ef9165fc242d1b25098414d7",
+      "entry": "0x10120eb0",
+      "start": "0x10120eb0",
+      "end_exclusive": "0x10121515",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x10120eb0",
+        "--stop-address=0x10121515",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "4add7fc2ed3bc3b275d2570704c14aa5b12973a823415081867cc54954eebf65"
+    },
+    {
+      "path": "analysis/server-state-reachability/10029070-0.asm",
+      "sha256": "0204ab65c1b1f21dd220cb93942ead6575b70a60557c7c583ea6ca015bb27d48",
+      "entry": "0x10029070",
+      "start": "0x10029070",
+      "end_exclusive": "0x1002908a",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x10029070",
+        "--stop-address=0x1002908a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "fccf86df2a4b35ddeb9f99e56dd9d334709cfff787db22a7e9a6c16503fedd74"
+    },
+    {
+      "path": "analysis/server-state-reachability/10029090-0.asm",
+      "sha256": "5b898a10f3089a29a6c7d325dc7c096a59d5a6ae8b4c560e94cf3c1b50705159",
+      "entry": "0x10029090",
+      "start": "0x10029090",
+      "end_exclusive": "0x10029ff6",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x10029090",
+        "--stop-address=0x10029ff6",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "862c2184a2a3aa2453b7f7662e13e34fba876f80aca8104ee9e385b7e55aa804"
+    },
+    {
+      "path": "analysis/server-state-reachability/1002a480-0.asm",
+      "sha256": "507e2986aa3bbd7be37c906ffb91295c565fdc8c675c22e1860832d66c77a805",
+      "entry": "0x1002a480",
+      "start": "0x1002a480",
+      "end_exclusive": "0x1002a874",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x1002a480",
+        "--stop-address=0x1002a874",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "1ef0b4d2293a909de74f05e5913c158445cfb6c25d29e5c88dd84811e88c8244"
+    },
+    {
+      "path": "analysis/server-state-reachability/1002a000-0.asm",
+      "sha256": "955972d0169c1daf3c3fb058af7ce621255db6e893e3596b308994291e1d7234",
+      "entry": "0x1002a000",
+      "start": "0x1002a000",
+      "end_exclusive": "0x1002a461",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x1002a000",
+        "--stop-address=0x1002a461",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "dd0050aa38e063fd7bb46a67f7457a0f6d3d99f02faf8d323c59347728de97d4"
+    },
+    {
+      "path": "analysis/server-state-reachability/1004a6e0-0.asm",
+      "sha256": "9e58e4274dffb3d1457a9d2a03d2e6194a2267a50e48ac3d563b6e63d48ac797",
+      "entry": "0x1004a6e0",
+      "start": "0x1004a6e0",
+      "end_exclusive": "0x1004ac9a",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x1004a6e0",
+        "--stop-address=0x1004ac9a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "1c3cede53e72433d594066eda754f401872ad139ba8b5291e6a9b856e1e0d802"
+    },
+    {
+      "path": "analysis/server-state-reachability/100c5300-0.asm",
+      "sha256": "e4c0a928c5832037f0d506cf479ffa04e31f1c4ea6793710518ef3c282e1f7f6",
+      "entry": "0x100c5300",
+      "start": "0x100c5300",
+      "end_exclusive": "0x100c6562",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-w",
+        "-M",
+        "intel",
+        "--start-address=0x100c5300",
+        "--stop-address=0x100c6562",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "binary_range_sha256": "926c9023d27246d81895d4e2b468b1866648da1ea68fa4a9b25fc092bdef9363"
+    }
+  ],
+  "references": [
+    {
+      "owner": "0x1001cc90",
+      "address": "0x1001cd40",
+      "bytes_hex": "8b15102e2210",
+      "instruction": "mov    edx,DWORD PTR ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x1001cc90",
+      "address": "0x1001cd83",
+      "bytes_hex": "a1102e2210",
+      "instruction": "mov    eax,ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x1001cc90",
+      "address": "0x1001cd9c",
+      "bytes_hex": "8b15102e2210",
+      "instruction": "mov    edx,DWORD PTR ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x1004c100",
+      "address": "0x1004c249",
+      "bytes_hex": "a1102e2210",
+      "instruction": "mov    eax,ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x1004c100",
+      "address": "0x1004c31b",
+      "bytes_hex": "8b0d102e2210",
+      "instruction": "mov    ecx,DWORD PTR ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x1004c100",
+      "address": "0x1004c326",
+      "bytes_hex": "e855e1fdff",
+      "instruction": "call   0x1002a480",
+      "literal_targets": [],
+      "relative_target": "0x1002a480"
+    },
+    {
+      "owner": "0x100a1f70",
+      "address": "0x100a1f80",
+      "bytes_hex": "a1102e2210",
+      "instruction": "mov    eax,ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x100a1f70",
+      "address": "0x100a1fbd",
+      "bytes_hex": "8b0d102e2210",
+      "instruction": "mov    ecx,DWORD PTR ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x100a1f70",
+      "address": "0x100a1fc4",
+      "bytes_hex": "e8b784f8ff",
+      "instruction": "call   0x1002a480",
+      "literal_targets": [],
+      "relative_target": "0x1002a480"
+    },
+    {
+      "owner": "0x100a4500",
+      "address": "0x100a450f",
+      "bytes_hex": "a1102e2210",
+      "instruction": "mov    eax,ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x100c9210",
+      "address": "0x100c93d5",
+      "bytes_hex": "8b0d102e2210",
+      "instruction": "mov    ecx,DWORD PTR ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x100c9210",
+      "address": "0x100c93e0",
+      "bytes_hex": "e8abfcf5ff",
+      "instruction": "call   0x10029090",
+      "literal_targets": [],
+      "relative_target": "0x10029090"
+    },
+    {
+      "owner": "0x100e9ab0",
+      "address": "0x100e9ca9",
+      "bytes_hex": "833d102e221000",
+      "instruction": "cmp    DWORD PTR ds:0x10222e10,0x0",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x100e9ab0",
+      "address": "0x100e9cd2",
+      "bytes_hex": "8b0d102e2210",
+      "instruction": "mov    ecx,DWORD PTR ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x100e9ab0",
+      "address": "0x100e9cd9",
+      "bytes_hex": "e8a207f4ff",
+      "instruction": "call   0x1002a480",
+      "literal_targets": [],
+      "relative_target": "0x1002a480"
+    },
+    {
+      "owner": "0x10120eb0",
+      "address": "0x10121067",
+      "bytes_hex": "a1102e2210",
+      "instruction": "mov    eax,ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x10120eb0",
+      "address": "0x101210f5",
+      "bytes_hex": "833d102e221000",
+      "instruction": "cmp    DWORD PTR ds:0x10222e10,0x0",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x10120eb0",
+      "address": "0x1012111b",
+      "bytes_hex": "e8507ff0ff",
+      "instruction": "call   0x10029070",
+      "literal_targets": [],
+      "relative_target": "0x10029070"
+    },
+    {
+      "owner": "0x10120eb0",
+      "address": "0x10121127",
+      "bytes_hex": "a3102e2210",
+      "instruction": "mov    ds:0x10222e10,eax",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x10120eb0",
+      "address": "0x10121137",
+      "bytes_hex": "a3102e2210",
+      "instruction": "mov    ds:0x10222e10,eax",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x10120eb0",
+      "address": "0x1012113e",
+      "bytes_hex": "a1102e2210",
+      "instruction": "mov    eax,ds:0x10222e10",
+      "literal_targets": [
+        "0x10222e10"
+      ],
+      "relative_target": null
+    },
+    {
+      "owner": "0x1002a480",
+      "address": "0x1002a85d",
+      "bytes_hex": "e89ef7ffff",
+      "instruction": "call   0x1002a000",
+      "literal_targets": [],
+      "relative_target": "0x1002a000"
+    }
+  ],
+  "saved_c_search": [
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1001cc90.c",
+      "sha256": "64545c8bf9af4b22e578b5732235aa39a6f4b1dffc21c128b16a6ceeef510fc9",
+      "entry": "0x1001cc90",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1004a6e0.c",
+      "sha256": "e41d94b5b2856e636fc7fce848e50d46dfc999eec78c25d28e0dff001fa0599c",
+      "entry": "0x1004a6e0",
+      "terms": [
+        "FUN_1004a6e0"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1004c100.c",
+      "sha256": "089725317507c4bc6f58f3e65a0c442429fc054a0c2f992910433f90ca3ceb2e",
+      "entry": "0x1004c100",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100a1f70.c",
+      "sha256": "c8cfc3597b46797c5d03ed0f94c78cb8a2be8d824e1322d3f29d144f63738fd6",
+      "entry": "0x100a1f70",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100a4500.c",
+      "sha256": "7e4531e1f1ffcbe41dab1ba27ef14a79ac88cdb43804727caa96a8987787f423",
+      "entry": "0x100a4500",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100c5300.c",
+      "sha256": "b15c322c239a440b50e3104591acc366b8af4e14d7f67c61eed90bb9a4c1a82d",
+      "entry": "0x100c5300",
+      "terms": [
+        "FUN_100c5300"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100c9210.c",
+      "sha256": "77238aacfcb1d6b4ab111a6798c2e4ecb838f6e76e85628888847ce5be52b81c",
+      "entry": "0x100c9210",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100e9ab0.c",
+      "sha256": "ed4d1bdf188c41a648fd5f3edbdfef9630c0c0c0234678c806c20cbeb3163fc5",
+      "entry": "0x100e9ab0",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10120eb0.c",
+      "sha256": "54d93f54f5d0b214e5f11f66d71bc88d54883ab56b70aca00a26ece7f6775e88",
+      "entry": "0x10120eb0",
+      "terms": [
+        "DAT_10222e10"
+      ],
+      "definition_alone_possible": true
+    }
+  ],
+  "searched_c_manifest": {
+    "path": "analysis/server-state-reachability/searched-c.json",
+    "sha256": "965543c857fc42db02017405dd3c6eb97eb47387a308e9673773f45041067cc2"
+  },
+  "text_body_candidate_alignment": [],
+  "support_documents": [
+    {
+      "path": "analysis/server-state-capture/contract.md",
+      "sha256": "5a788dc676ed959d513df7002756ee7b41af83bf7557f29e94545578ca9ac4d5"
+    },
+    {
+      "path": "analysis/server-state-restore/contract.md",
+      "sha256": "fd5e6e9cfc1975bcd6dc5efcf5c35cd1776f1e54b7404fea468238d0d348728e"
+    },
+    {
+      "path": "analysis/server-state-lifecycle/contract.md",
+      "sha256": "3424d8b562ddbb32cfd6e7ce8209f6f4a8f79abd5c05f7a18fe6bf502b289097"
+    },
+    {
+      "path": "analysis/server-state-reader/contract.md",
+      "sha256": "93183888736841388abc5857ab0652096c2b8e856a0cdf4f992935eb4660fdf4"
+    },
+    {
+      "path": "analysis/server-stats-lifecycle/contract.md",
+      "sha256": "0bf4a56ed1d252193b5f448fb4a75a12233767feab2ed5c33ec6180a695396be"
+    },
+    {
+      "path": "analysis/server-world-bootstrap/contract.md",
+      "sha256": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+    },
+    {
+      "path": "analysis/corpus-coverage/server-discovered-evidence.json",
+      "sha256": "e7a75d529d78ab3c8c3deba696c81ce0b8bc195900d6c1764001fd6291b1b05e"
+    }
+  ]
+}

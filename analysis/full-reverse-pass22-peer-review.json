@@ -1,0 +1,158 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 19,
+  "corrected_existing": [
+    "server:0x100af810",
+    "server:0x100fc6c0",
+    "server:0x100f1860"
+  ],
+  "packages": [
+    {
+      "package": "analysis/server-skill-refresh",
+      "new_reviewed": 1,
+      "updated_existing": [
+        "server:0x100af810",
+        "server:0x100fc6c0"
+      ],
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "Full3 primary C/native:111 ordered cvar reads/101float slots, exact damaged literal97, signed difficulty conversion/clamp, ST0 lookup return, variadic7DWORD formatter ABI; two old cards expanded and one new primary.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "ecf2c9d2af5660864b50d6e9f1dd88ceccf35cef4221414f19c9425914efd088",
+        "verify.py": "c441e4551defae0256fcbf27027770ecaef189529ed6a1b869779bf95518086f",
+        "contract.md": "73f8b95f36277f43369377d97971762ddaab936deca486c8fd48628881ce3ac1",
+        "notes.json": "f2856f35d29ad56f5998cd0576e4164f64891de90ed3cdecb199084de8138fb2",
+        "evidence.json": "f491b8dc65fde1588bbe98bdb3525930765c04d8b49c641a1e9aa7877b9a6636",
+        "prior-review.txt": "778c9f486c0b1e9aa0aa9d01eeca4ed7dc8ea24fe3ada1ff2e1a8570a625714f",
+        "skill-writes.tsv": "2d1c018aca4d9444098f4d5c7171e65aed8501604e2c090c48f1ab9a563138d0"
+      }
+    },
+    {
+      "package": "analysis/server-mobile-player-state",
+      "new_reviewed": 9,
+      "updated_existing": [],
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full9 primary C/native: map mobile trigger concrete factory/export/save/restore/key/spawn, SMS Use traversal, disable callback and player number/call routing.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "4c137cf1c41facd5f58bd815d99d37bc0ac727f75349799c4aa743741c08afbb",
+        "verify.py": "177489a44675e87acdfa1ebca97f9799087d1405f7e1cb5727c651ad78078f90",
+        "contract.md": "711feadf5d3db4d443c92330380bbf715f7c6a3b83655da2a72dadd1364f15e3",
+        "notes.json": "b908d27ebff0d3fecfeae8b8da59f100076a7c87a5d51524103597544f2eeccb",
+        "evidence.json": "51d517eb4ff8db931e99aac13cb2258782162cd50684ed27a9dadfa34d9090b2",
+        "write_notes.py": "35e964fd176778391f04cdcec72b46697c51ec764086f599f243935ab7990941"
+      }
+    },
+    {
+      "package": "analysis/server-monster-attack-dispatch",
+      "new_reviewed": 6,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full6 primary C/native: attack conditions, four distance/dot gates, activity-driven capability initialization and startup/scheduling callbacks; concrete table and FP gates.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "b346b11e67a958f6bd508293f808e023d2bf1619141d8b89ae1fd67837659c7c",
+        "verify.py": "764c0ed0bbed0fc0c5f54ebe4f2ea5bca4b2c41fcea8af572613d2c22e314934",
+        "contract.md": "aa0a06202d917370af3053d6e2c5f77abc4c636dc81e55f072c9118a12af5051",
+        "notes.json": "4ef61c6f9ca79fc3ce2e7b901e83e6a23ccb41f84eb51918dde849d4f5b9930f",
+        "evidence.json": "50bc53b1162576ca856cf369a33d217658f8ace9c74e64b1267883df87ce4620"
+      }
+    },
+    {
+      "package": "analysis/server-visibility-policy",
+      "new_reviewed": 3,
+      "updated_existing": [
+        "server:0x100f1860"
+      ],
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full4 primary C/native: concrete SP/MP/player predicates, revised revived animation callback/fuser3 producer, native model/sequence ABI and bounded debug VA/RVA/HIGHLOW scans.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "175935e0f5124d28cfeea2bfa118253df8e366a52143fc7e5f4e313cba1dcee5",
+        "verify.py": "25272c8653becf77dd8f24d61bf9867ccf88e2a524ae8834657098a0051207b0",
+        "contract.md": "667b2919defd3de538475534dcd6ae415f6c5bb026406236afd238a3bef81bbf",
+        "notes.json": "289b5c97e7a4e9b941f416befff2f97ee0487d7d530aa7189fd15a2c3cdea295",
+        "evidence.json": "f9a1795c6eb9044e88dab9fb6f6d8ed10b376df15de92c94a2c838e1f6f100d9",
+        "write_notes.py": "b25e443f13e37a2df3ef3f5bcb993a4efeaa1fd8bc7770071103c9676fc222a9",
+        "prior-review.txt": "ffaa0b0bdb5fa1c65a854649143d75218c57a704633db61b46746721842dbe36"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1924,
+    "corrections": [
+      "server:0x100af810: full skill map, native branches and damaged lookup literal",
+      "server:0x100fc6c0: ST0 return/formatter ABI",
+      "server:0x100f1860: full revived-state sequence/fuser3 callback"
+    ],
+    "evidence_preserved": "All prior evidence links retained. Exactly1924 unaffected REVIEW bodies unchanged; corrected prior bodies archived in each package."
+  },
+  "navigation_cleanup": "Nineteen primary entries removed from pending. Skill damage producer/lookup chain and concrete visibility predicates now linked; mobile map/player and monster attack chains indexed. Stale corpus-coverage/REPORT.md navigation corrected to existing inventory.md. Unresolved runtime, indirect/bulk writers, remaining subclass/follower dispatch and engine/CRT boundaries preserved.",
+  "prior_catalog_reference_audit": {
+    "review_references": 10840,
+    "missing": {},
+    "after_review_references": 11910,
+    "after_missing": {},
+    "coverage_navigation": "analysis/corpus-coverage/inventory.md (existing); nonexistent REPORT.md removed from active catalog"
+  },
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-mobile-player-state/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-mobile-frame/contract.md",
+          "old": "cd19c670f484c12a54976884057c783ee9b0938ea6ae3a95a7572082321ace25",
+          "new": "f51c983db74dcd00c227bef0e09c2d94d2d5d6b5260b58034ba74c662b03c3fe"
+        },
+        {
+          "path": "analysis/server-mobile-actions/contract.md",
+          "old": "f30f8c1c6f83ad45c41e119beecb8d9da457f3c5dab9ab3239e125b035f25da2",
+          "new": "92ff6ba3234233ee3ee57b7a767d58fef48a80860030098f58dc16ae70010a9f"
+        },
+        {
+          "path": "analysis/server-mobile-lifecycle/contract.md",
+          "old": "868d94326a69f9fdfd9d34d6a73623f95f99111b992aeee921f87c8e8a083809",
+          "new": "bc4ac23ea8086c418bd58d05da85b2c966fa5c635d4c53afaa4681f7e1f0fa0e"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-visibility-policy/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-entity-damage-visibility/contract.md",
+          "old": "fe42be5ffc7ac5ec29b3bc8f347984e723261158be0dc38930269e4f1b10114f",
+          "new": "b0803e2472d1b9023dde3baba2b797005681734c77945d1c8686007504126005"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-entity-damage-visibility": "PASS 12 C 12 ASM 670 byte rows 196 raw 3 tables 0 exports 7 cards",
+    "analysis/server-mobile-actions": "PASS 19 C 21 ASM 663 byte rows 501 raw 433 descriptors 2 vtables 5 cards",
+    "analysis/server-mobile-frame": "PASS 27 C 28 ASM 2629 byte rows 412 raw 362 descriptors 3 cards",
+    "analysis/server-mobile-lifecycle": "PASS 22 C 22 ASM 1235 byte rows 189 raw 3 tables 1 exports 7 cards",
+    "analysis/server-mobile-player-state": "PASS 32 C 32 ASM 1711 byte rows 509 raw 434 descriptors 4 vtables 9 cards",
+    "analysis/server-visibility-policy": "PASS 16 C 16 ASM 2233 byte rows 341 raw 309 descriptors 4 cards; VA/reloc/saved-C scans reproduced"
+  },
+  "verification_report_sha256": "131d5dc198526d45e57ac2ee506c57856aa47199dc347612ef5047c20860b186"
+}

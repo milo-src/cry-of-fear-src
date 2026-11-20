@@ -1,0 +1,131 @@
+{
+  "scope": "Static reverse only; no target execution/game implementation/resources/commits",
+  "result": "PASS",
+  "new_reviewed": 25,
+  "updated_existing": [
+    "server:0x10046dc0",
+    "server:0x100475b0"
+  ],
+  "prior_review_bodies_exactly_preserved": 1944,
+  "prior_evidence_paths_retained": true,
+  "packages": [
+    {
+      "package": "analysis/server-fogfield",
+      "new_reviewed": 11,
+      "updated_existing": [],
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All11 C/native contracts; export5-byte tail, by-value Vector cleanup, concrete RTTI/vtable and inherited state vs activity, proximity/cvar FP, RNG fallback, immediate fade override.",
+      "final_hashes": {
+        "capture.py": "580241607bbc90fda11344d805ca5fef2b1a64ca33676c67ed46f120fb1aff92",
+        "verify.py": "c7fcccebc27a643aa03751959c871c21ce3a0c20082da50adde40c004b1ee6ba",
+        "contract.md": "d4ff3bc705606c7636aee1b4d4e260ce7f776f95808f7e88538f7a96a78e24a9",
+        "notes.json": "9c335f9f88350bef4ac64047e31288a8a824002fb3f5c6991d7ccbd6256818b0",
+        "evidence.json": "6a79b20afcf39b8d64a64fa72b37b871d965c1d31b3388330c4822d9820f277f",
+        "write_notes.py": "29f7f555090732863e311456b38f092fb4749bf8a563ac64b956938ed28d2b13"
+      }
+    },
+    {
+      "package": "analysis/server-inventory-release",
+      "new_reviewed": 6,
+      "updated_existing": [],
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "All6 C/native bodies/full contract, unlink active/last else-if and pending retention, repeated virtual slot lookup, selection NaN gates, bounded pending consumer, box ownership and model type.",
+      "final_hashes": {
+        "capture.py": "74da254d71dc540728e53418c1f2d365f3245b7aff1f1036e566d4aa3f0f01c9",
+        "verify.py": "118ae7e2a4236b094dfc4f3c6766b3be6296f2085912b8cafe9afb8a7ca88853",
+        "contract.md": "71f55d984cea8c5e71f5f53f4b39f25982582f2af19bce8a59dc534c7ce62a27",
+        "notes.json": "19fb13f954800b921bf842eb8a5cf1553f5c210b75c27893a430dee9ad35ff79",
+        "evidence.json": "46f68a78d4bd527ccae171bea6e92baec7062bf29f57f04ff6b0b17a8a4d69d5",
+        "write_notes.py": "83bd46931d071974520797a066870499e88c0ee06f7cb9123024c1b6312bc733"
+      }
+    },
+    {
+      "package": "analysis/server-monster-hearing",
+      "new_reviewed": 3,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All3 C/native bodies/full contract, RunAI dispatch ordering, stale sound union on skipped Listen, trigger jump table/NaN/FireTargets reset order, key producers and callback ABI.",
+      "final_hashes": {
+        "capture.py": "06590d8c163f960d7588373ec97c919a4b7876c433762651165547e2f79f3d18",
+        "verify.py": "b3731f991ac589e4dee4fb943dd84fc8e32d920b14babdc61a47a3734098709a",
+        "contract.md": "0e8be5d423092398bc41060ad1183ff7f6c6cca561fce3568a3e438b3149874e",
+        "notes.json": "b0bbcfba181df346ebee73a5dd43b34f897454171bdd2e45386f9dabde45aa7c",
+        "evidence.json": "5c992dbf656aed5b904a038f2c3940e7e1f016bd4c86b2ec027d8241bfaf8327"
+      }
+    },
+    {
+      "package": "analysis/server-glock-attacks",
+      "new_reviewed": 5,
+      "updated_existing": [
+        "server:0x10046dc0",
+        "server:0x100475b0"
+      ],
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All7 C/native bodies/full contract including2 prior refinements; concrete Glock dispatch, bullet/recoil vectors and native timing, hidden animation argument, reload model-duration and shell protocol.",
+      "final_hashes": {
+        "capture.py": "1b91ac2e17c05550f6c55b66c9c80c255fb991d2010c3885a514de1d85caad63",
+        "verify.py": "cb10632d44d801341dc9b77a36768487a9e5cc363e357466e2ef4726297745f7",
+        "contract.md": "fff91c9de4ca4a1074fbd4076345051642464fcf523f7b402539ce4a7a1b4a2f",
+        "notes.json": "1d32a0aa2b23b149137375e3a46ca982fc8f375d630d9ab88fdc0f982bf02719",
+        "evidence.json": "8653b80da6cfd200dcd486d95e5bde8a641e134eb0c71d23dfef61d852892709",
+        "write_notes.py": "1bb2a606b025fc76a8a136f14d47de12c59c46406dc07b6be195ecafab33f47a",
+        "prior-review.txt": "e1da35de99dd3395ad06eed5f5bcdc0e6217fe10213eb9dfaa37986715792aa4"
+      }
+    }
+  ],
+  "verification_report_sha256": "b6dee471ed51fbb55c11c2895847c84339b32998344b8a16e7a12960c6180b7a",
+  "navigation_cleanup": "25 reviewed entries removed from pending; mechanics routes/workboard updated;2 old Glock note rows synchronized with complete native contracts; remaining indirect callers, global cancellation, other weapons, full fade and engine boundaries remain open.",
+  "note_sync": {
+    "updated_ids": [
+      "server:0x1000fb60",
+      "server:0x1000ff30",
+      "server:0x100101a0",
+      "server:0x10010430",
+      "server:0x10010500",
+      "server:0x10010ad0",
+      "server:0x10011340",
+      "server:0x10011a30",
+      "server:0x100121e0",
+      "server:0x10012240",
+      "server:0x100124f0",
+      "server:0x10046cb0",
+      "server:0x10046dc0",
+      "server:0x100475b0",
+      "server:0x10047780",
+      "server:0x100bda70",
+      "server:0x100bf970",
+      "server:0x100c2970",
+      "server:0x100f1350",
+      "server:0x100f1a50",
+      "server:0x100f1c20",
+      "server:0x100f1d00",
+      "server:0x1011c560",
+      "server:0x1011cf70",
+      "server:0x1011d350",
+      "server:0x1011e390",
+      "server:0x10120210"
+    ],
+    "changed_files": [
+      {
+        "path": "analysis/weapons/catalog-notes.json",
+        "rows": 2
+      }
+    ]
+  }
+}

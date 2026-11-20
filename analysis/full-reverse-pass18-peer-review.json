@@ -1,0 +1,233 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 19,
+  "corrected_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-subtitle-multiple-lifecycle",
+      "new_reviewed": 8,
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All8 primary C/native; factory null paths, concrete71-slot vtable, Use4ignoredarguments/NaN timing, original ChangeSubtitle export and snapshot index versus current state;4descriptors overlap and mutable zero-fill vector.",
+      "corrections": [
+        "Corrected Spawn field label from angles to native v_angle at pev+74."
+      ],
+      "final_hashes": {
+        "capture.py": "ae7a979d6423838d835135fcb48287c96b96a6b572414f3db735e8a416562f93",
+        "verify.py": "8a07b3546b14187b48aa4ab3346bfb235682916bbeab6745db50a57ab40e5ac0",
+        "contract.md": "55503f163b327a6c1a23cb7290ddfda07ab3a72e5764b20c4099c6fce29dd675",
+        "notes.json": "640df221547a983e493552767092f30cae1773d2b5ba917a1397d901ee9f8df6",
+        "evidence.json": "54e5f8e32348a54bcd2b4528fa754eb35083845202ba3dec278f5863f2b52c7e",
+        "write_notes.py": "69956333aa30b4fe86bf9b57106356b5197345691037f88077d4dad9c204ca22"
+      }
+    },
+    {
+      "package": "analysis/server-follower-initialization",
+      "new_reviewed": 2,
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full2primary C/native;19suffixes and string_t versus pointer stores,64byte local capacity, three independent spawnflags checks,group returned-object callback target. Independent raw PE provenance and184save descriptors.",
+      "corrections": [
+        "Replaced ignored local baseline dependency with repository pass17 verification report; embedded initial pending blocks preserved."
+      ],
+      "final_hashes": {
+        "capture.py": "856353f5f80535a436c613795cb4d4356539bd8f310e62acf7882280d7ad389a",
+        "verify.py": "67884d151639e583ed2382f5300d8fec04a3f33671af8d297dc1de143313de6c",
+        "contract.md": "f1d2b2ccb4a04cb85819bfe0f921a0e20ce1d68d80f98e067e0131ad24b725fb",
+        "notes.json": "82ab32ae9e6ec3f59f4c7dbbbd484b36627dd98f14a1b2bc9a3da605973697ba",
+        "evidence.json": "7b7452a4ebef7b9e8c7e9b5002f3396e1df0ca962d216c31af212d63c3c24ad6",
+        "write_notes.py": "a668417a485ede1b074ace815054237d46b2dc6d4762f2db4d29747aa663c35a"
+      }
+    },
+    {
+      "package": "analysis/server-follower-schedule-io",
+      "new_reviewed": 5,
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "Full5primary C/native; Restore/Save full-EAX ABI,11TALK fields,11schedule descriptors/59tasks,base fallback and tail-jump activity forwarding, unconditional talk-target setter.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "832a7f68c84cda67152a84b0b900f8691f4191b5c4b1f9c2b600124f09a07f1a",
+        "verify.py": "c67983660233a9199cb8e28071165560547595fe3fc8dd09617b1059c07c6348",
+        "contract.md": "592eb169752a2af9fed7b5320af4b5d61272b5177b5afd1cbc3c4b60b8432698",
+        "notes.json": "638e7d00b08ea468f352182cb9eb5071175a7ed6d1f873898dbbdaf7f13fd0ea",
+        "evidence.json": "b46492c1ef71bf22dfd938decfc8c4d6360094142a4856607a63ec43a5a4a04b"
+      }
+    },
+    {
+      "package": "analysis/server-follower-runtime-helpers",
+      "new_reviewed": 4,
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full4primary C/native; full-EAX virtual wrapper, ordered speech time, ST0 distance with repeated handle read, touch double absolute-sum then float32 threshold and by-value vector.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "176f00d9c85566847bcba7fccdf1a4d13bc5a7985227c8bf552b08c404321df5",
+        "verify.py": "958c580511a2a142dd82ae484f192d0b5cf7ff2f7b25c2626a3622d16dad92d5",
+        "contract.md": "9d02f2e541553caefc9cc4cf18fb29984ce7b78d42644c1ca0fc81e2ab14fb3d",
+        "notes.json": "88fb09ab1df15e609362899a964197e6f3c27ed76f488ec0c69729289447922a",
+        "evidence.json": "697947c38978b72238c0f14911c6cefbcd4fb1b077df348af178c0e536e8a9b6",
+        "write_notes.py": "85f5c454453fa9852b18f46c44f5855c1833186955e2eb6e5f5f5d95e95e7a07"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1857,
+    "corrections": [],
+    "evidence_preserved": "All prior review bodies and evidence references preserved byte-for-byte."
+  },
+  "navigation_cleanup": "Nineteen primary addresses removed from pending. Follower initialization, tables and local helper bodies separated from unresolved concrete dispatch. Subtitle lifecycle linked to remaining KeyValue and client playback. Native field names synchronized in navigation, all prior REVIEW preserved.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-follower-behavior/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8",
+          "new": "207fa0b29acb81e1c6b9a1741cef121add215e8088c33524c30642a8f278e63a"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-gates/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1",
+          "new": "03cd54619c06d9d74bcdc42a2c59fd7220ebf201c80476173289f59c4dc463b7"
+        },
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8",
+          "new": "207fa0b29acb81e1c6b9a1741cef121add215e8088c33524c30642a8f278e63a"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-initialization/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1",
+          "new": "03cd54619c06d9d74bcdc42a2c59fd7220ebf201c80476173289f59c4dc463b7"
+        },
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8",
+          "new": "207fa0b29acb81e1c6b9a1741cef121add215e8088c33524c30642a8f278e63a"
+        },
+        {
+          "path": "analysis/server-follower-gates/contract.md",
+          "old": "9eb6bb46ef43eebbfde3aad30e0b17e8f36d1d02489f157f7d4b4773f2212e60",
+          "new": "836a72b6715c7cd1afbd19d3bb8ea0f9113553fa072f1a04c3215008e3b97f27"
+        },
+        {
+          "path": "analysis/server-follower-tasks/contract.md",
+          "old": "f7132a5e2eb79189642783f4349b6ff880d479a47bcf58c72b36e599737b179c",
+          "new": "d786fc3e72803ff41b6c063541a5de9134868e22e5fbe7b80c43ee652e31f168"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-runtime-helpers/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1",
+          "new": "03cd54619c06d9d74bcdc42a2c59fd7220ebf201c80476173289f59c4dc463b7"
+        },
+        {
+          "path": "analysis/server-follower-gates/contract.md",
+          "old": "9eb6bb46ef43eebbfde3aad30e0b17e8f36d1d02489f157f7d4b4773f2212e60",
+          "new": "836a72b6715c7cd1afbd19d3bb8ea0f9113553fa072f1a04c3215008e3b97f27"
+        },
+        {
+          "path": "analysis/server-follower-tasks/contract.md",
+          "old": "f7132a5e2eb79189642783f4349b6ff880d479a47bcf58c72b36e599737b179c",
+          "new": "d786fc3e72803ff41b6c063541a5de9134868e22e5fbe7b80c43ee652e31f168"
+        },
+        {
+          "path": "analysis/server-follower-speech-policy/contract.md",
+          "old": "c9063115482bba72e5646ee0e3a253023d32423316f4f5dfce213efa2c2da0f5",
+          "new": "f897cf850d03459653be4c101dde426fd12c87bbc5909a9f85116428068508a8"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-schedule-io/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1",
+          "new": "03cd54619c06d9d74bcdc42a2c59fd7220ebf201c80476173289f59c4dc463b7"
+        },
+        {
+          "path": "analysis/server-follower-tasks/contract.md",
+          "old": "f7132a5e2eb79189642783f4349b6ff880d479a47bcf58c72b36e599737b179c",
+          "new": "d786fc3e72803ff41b6c063541a5de9134868e22e5fbe7b80c43ee652e31f168"
+        },
+        {
+          "path": "analysis/server-follower-gates/contract.md",
+          "old": "9eb6bb46ef43eebbfde3aad30e0b17e8f36d1d02489f157f7d4b4773f2212e60",
+          "new": "836a72b6715c7cd1afbd19d3bb8ea0f9113553fa072f1a04c3215008e3b97f27"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-speech-policy/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8",
+          "new": "207fa0b29acb81e1c6b9a1741cef121add215e8088c33524c30642a8f278e63a"
+        },
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1",
+          "new": "03cd54619c06d9d74bcdc42a2c59fd7220ebf201c80476173289f59c4dc463b7"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-follower-tasks/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-follower-behavior/contract.md",
+          "old": "1f38ea2f75bb77ffe7780063f37172a2993e2fa154174cd92a13412501fc14b1",
+          "new": "03cd54619c06d9d74bcdc42a2c59fd7220ebf201c80476173289f59c4dc463b7"
+        },
+        {
+          "path": "analysis/server-monster-groups/contract.md",
+          "old": "ad8dd5830c6d5397698c483f7cd4cad453dbf5e6e4aa3e069d42db011893c7f8",
+          "new": "207fa0b29acb81e1c6b9a1741cef121add215e8088c33524c30642a8f278e63a"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-follower-behavior": "PASS 28 C, 28 ASM, 2160 byte rows, 226 raw, 6 cards",
+    "analysis/server-follower-gates": "PASS 28 C 28 ASM 1934 byte rows 222 raw 3 tables 1 export 8 cards",
+    "analysis/server-follower-initialization": "PASS 21 C, 21 ASM, 1835 byte rows, 247 raw, 2 cards",
+    "analysis/server-follower-runtime-helpers": "PASS 13 C, 13 ASM, 795 byte rows, 190 raw, 173 descriptors, 4 cards",
+    "analysis/server-follower-schedule-io": "PASS 24 C 24 ASM 1679 byte rows 311 raw 4 save tables 11 schedules 5 cards",
+    "analysis/server-follower-speech-policy": "PASS 22 C, 22 ASM, 1238 byte rows, 286 raw, 5 cards",
+    "analysis/server-follower-tasks": "PASS 30 C, 30 ASM, 3528 byte rows, 256 raw, 2 cards",
+    "analysis/server-monster-groups": "PASS 22 C, 22 ASM, 1135 byte rows, 201 raw, 4 cards"
+  },
+  "verification_report_sha256": "7fc311425341137c6179b23c84b62b3f4ee483185feb19b27ad114a7c0fbcf39"
+}

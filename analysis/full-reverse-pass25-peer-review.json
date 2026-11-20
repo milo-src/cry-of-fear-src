@@ -1,0 +1,241 @@
+{
+  "scope": "Static reverse only; no target execution/game implementation/resources/commits",
+  "result": "PASS",
+  "new_reviewed": 20,
+  "updated_existing": [],
+  "prior_review_bodies_exactly_preserved": 1985,
+  "packages": [
+    {
+      "package": "analysis/server-toggle-persistence",
+      "new_reviewed": 8,
+      "updated_existing": [],
+      "author": "root",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "server_catalog",
+        "package": "analysis/server-toggle-persistence",
+        "primary": [
+          "10102b20",
+          "10102890",
+          "10102ac0",
+          "10102850",
+          "10010920",
+          "101022c0",
+          "100102c0",
+          "100101f0"
+        ],
+        "semantic_review": "Read all eight primary saved C and complete native bodies, all contract/notes and complete five support ASM. No actionable discrepancy.",
+        "confirmed": [
+          "Save and Restore retain object in ESI, pass stream as ECX only to serializer, return full EAX and RET4; inherited failure short-circuits own block.",
+          "Owner label selected by nonzero targetname offset, not string emptiness; diagnostics do not become fields. Writer result does not guarantee complete serialization.",
+          "Native Delay 3 and Toggle 20 descriptors, exact count/flags/types/order and inherited fogfield slots.",
+          "Fog caps invokes parent virtual40 then discards result; no local cycle guard.",
+          "Mapped state raw0/1/2/3 maps2/0/1/3; unsigned JA rejects negative values; raw getter separate.",
+          "Wait getter returns x87 ST0, without finite/timer/clamp semantics."
+        ],
+        "provenance": {
+          "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+          "source_c": 13,
+          "asm_ranges": 13,
+          "machine_byte_rows": 323,
+          "raw_records": 173,
+          "descriptors": 152,
+          "vtables": 3,
+          "notes": 8,
+          "independent_mapper": "Python struct PE section map; all range bytes, raw/file SHA, descriptor and RTTI/vtable pointer records verified independently."
+        },
+        "findings": [],
+        "target_executed": false,
+        "files_modified_in_reviewed_package": false
+      },
+      "final_hashes": {
+        "capture.py": "a2a53cb13ce5f0fb768544e71c6455a892f595a748adad5e7cc6facabeee4c77",
+        "verify.py": "ad6ffd65428dfea14a7e3c62dd39fc11ea859d0186bc6b745a3fd39f8064d43c",
+        "contract.md": "431d0f578a589301715224f747655e0543434ef2785b87d2a39c752740fdc4bd",
+        "notes.json": "d939a9facfb3c71c4cab78241131247dbef6639bac998dffb078c6fa822b8d08",
+        "evidence.json": "28150ee666c0ee1e7e9486d20b252d5b42e8df574aeb2ce03d61658639d891b5"
+      }
+    },
+    {
+      "package": "analysis/server-inventory-dispatch",
+      "new_reviewed": 3,
+      "updated_existing": [],
+      "author": "server_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "reviewer": "root",
+        "package": "analysis/server-inventory-dispatch",
+        "primary": [
+          "100e3460",
+          "100e40e0",
+          "100dfed0"
+        ],
+        "semantic_review": "Read all three complete saved C and native bodies; contract and notes checked against instruction flow; substring and formatting support inspected.",
+        "confirmed": [
+          "Drop guards, native four-argument text calls and asymmetric sound ordering; raw GUI substring classification rather than parsed classname.",
+          "All three quickslots clear independently; linked inventory traversal reloads next after callbacks; final click does not imply successful world drop.",
+          "Use has no IsAlive check; ordered fuser3 equality excludes NaN; unused local formatting buffer is not bounded by caller; selection failure still closes GUI and clicks.",
+          "Getter clamps signed slot to1..3 or1..6 and rereads string pointer after diagnostic callback."
+        ],
+        "provenance": {
+          "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+          "source_c": 21,
+          "asm_ranges": 24,
+          "machine_byte_rows": 3387,
+          "raw_records": 551,
+          "descriptors": 438,
+          "vtables": 1,
+          "notes": 3,
+          "independent_mapper": "analysis/local/verify_fullpass25.py --pe-only server-inventory-dispatch PASS; every range byte and raw record independently mapped from PE sections"
+        },
+        "findings": [],
+        "target_executed": false,
+        "files_modified_in_reviewed_package": false
+      },
+      "final_hashes": {
+        "capture.py": "e0659d5e8b4c1413603c22a4aa3b5a01132f90938bba34cf3b74c98aaaaa4b00",
+        "verify.py": "1fe2d68d61aa085d4d7d6c249233f6d7bf7eb08f2b1f14d1caedd35668b4005c",
+        "contract.md": "9ddf48c950dedb34e3952dd54a59804511ef085231b548a647bfb25da2a277f6",
+        "notes.json": "97369db8f482330d9f95dce61f51abb18b49ae92d1a2edfe2d384c0c2b680199",
+        "evidence.json": "168c926af5db42e3ab0ee46d1f3862b27229a332c5f0eb6b93ecf2e5a6a2990d",
+        "write_notes.py": "ab29a710e48a36f7cbef067a8127d24083e111b790e111270459fc7dc4af6e14"
+      }
+    },
+    {
+      "package": "analysis/server-monster-initialization",
+      "new_reviewed": 3,
+      "updated_existing": [],
+      "author": "client_catalog",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "status": "PASS",
+        "packet": "analysis/server-monster-initialization",
+        "primary": [
+          "100c0200",
+          "100c0370",
+          "100c0430"
+        ],
+        "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+        "source_c": 33,
+        "asm": 33,
+        "byte_rows": 2081,
+        "raw": 707,
+        "descriptors": 178,
+        "vtables": 2,
+        "file_pins": 82,
+        "exports": 4,
+        "semantic": "All three complete primary C/native and final contract/notes read; critical animation, scheduler, eye/vector, rules, SetSize/SetOrigin and callback supports checked. Author corrected intro constructor label to factory100b05e0 with direct vptr store. Reviewer retracted an incorrect preliminary suggestion of a constructor100b06a0 chain: that body returns constant zero, and factory writes vptr itself. Final contract is accurate; no remaining actionable findings."
+      },
+      "final_hashes": {
+        "capture.py": "9c2bd60f249e0f7a5576545faa6e8e5025d2bf91bf1a7d2cd86772774085d2cb",
+        "verify.py": "0c165d6016087c145562027c58b28fb621f602e349956d916878681448778486",
+        "contract.md": "4a9d118e2c306ae437a1f4d7edb0acf4ecc87ac3f7378a5dfe48e2a877bc036f",
+        "notes.json": "9c93b177a0a46e26926d85290f5bafc1a6cb019766c50b5ca4a9ac9bc0bac655",
+        "evidence.json": "9994a139fdd95d2499ac3ee57d14b3106702c795d8402eacf55bcdb4ea78f527",
+        "write_notes.py": "0160ab7158316971ae12627e235d463b65f8e61707663591394332eebf1ca3bd"
+      }
+    },
+    {
+      "package": "analysis/server-glock-actions",
+      "new_reviewed": 6,
+      "updated_existing": [],
+      "author": "shader_inventory",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "peer_review": {
+        "packet": "analysis/server-glock-actions",
+        "reviewer": "/root/client_catalog",
+        "result": "PASS",
+        "primary": [
+          "0x10045c40",
+          "0x100476b0",
+          "0x10047c00",
+          "0x100478e0",
+          "0x10047a70",
+          "0x100459b0"
+        ],
+        "target_executed": false,
+        "foreign_packet_modified": false,
+        "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+        "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+        "performed_checks": [
+          "Read all six complete primary saved C and native ASM bodies; compared every local branch with contract.md and notes.json.",
+          "Verified key lookup repeated calls, returned token buffer/cookie and atof wrapper ABI; retained deeper parser/CRT boundaries.",
+          "Verified player versus weapon scheduling, player animation helper, SVC35 animation message, model-duration argument stack and deferred callback supports.",
+          "Verified ordered/unordered deadline comparisons, low-byte pressed-button guard, ST0 float stores, exact effect/audio arguments, two cancel time reads and unchanged idle deadline.",
+          "Ran independent struct-based PE mapper: file SHA pins, contiguous ASM machine bytes, raw PE literals, native save descriptors, vtable slots, RTTI and engine API slots.",
+          "Ran package verify.py successfully."
+        ],
+        "counts": {
+          "source_c": 27,
+          "asm_ranges": 28,
+          "machine_byte_rows": 3400,
+          "raw_records": 446,
+          "native_descriptors": 362,
+          "file_pins": 67,
+          "primary_cards": 6
+        },
+        "semantic_findings": [],
+        "limits": [
+          "Static original binary analysis only; no game execution or visual/runtime parity claim.",
+          "Support bodies checked for claims needed by the six primary contracts, not independently counted as new full REVIEW entries."
+        ],
+        "independent_checker": "analysis/local/peer_glock25.py",
+        "artifact_sha256": {
+          "contract.md": "b4e79905141dc114186a8d7a07883e9a86f2e672126cd47a0feffaddbb132b45",
+          "notes.json": "3862e3c1753ef045eb4ec5b2e5999d223941e673ca20c834d876c0b9af96a11e",
+          "evidence.json": "c182d75c5e254e446007e96f0945dfb39874f21b6579f7ad292978c3de4eaf56",
+          "verify.py": "11ee9f61474d682dc060280e580eca27ee448459e386bdc82bd44ae30c464e74"
+        }
+      },
+      "final_hashes": {
+        "capture.py": "64a84032afc88eef96b517fbb1a3f396345197fe521bbcc056ae80741b920459",
+        "verify.py": "11ee9f61474d682dc060280e580eca27ee448459e386bdc82bd44ae30c464e74",
+        "contract.md": "b4e79905141dc114186a8d7a07883e9a86f2e672126cd47a0feffaddbb132b45",
+        "notes.json": "3862e3c1753ef045eb4ec5b2e5999d223941e673ca20c834d876c0b9af96a11e",
+        "evidence.json": "c182d75c5e254e446007e96f0945dfb39874f21b6579f7ad292978c3de4eaf56",
+        "write_notes.py": "092289737c98f03e7125275c4f067848bae377e97ffe4a5ab9c167ec0d92cdc0"
+      }
+    }
+  ],
+  "verification_report_sha256": "cb8e07947fa81d1dd571097e1356be8135b103647dc6fca8830d9feb88ba6056",
+  "navigation_cleanup": "20 reviewed addresses removed from pending; mechanics routes, workboard and line numbers regenerated. Obsolete fogfield inherited persistence and Glock action boundaries replaced with completed contract links; their generators synchronized. Unresolved producers, delayed callbacks, monster movement and engine behavior remain open.",
+  "note_sync": {
+    "updated_ids": [
+      "server:0x100101f0",
+      "server:0x100102c0",
+      "server:0x10010920",
+      "server:0x100459b0",
+      "server:0x10045c40",
+      "server:0x100476b0",
+      "server:0x100478e0",
+      "server:0x10047a70",
+      "server:0x10047c00",
+      "server:0x100c0200",
+      "server:0x100c0370",
+      "server:0x100c0430",
+      "server:0x100dfed0",
+      "server:0x100e3460",
+      "server:0x100e40e0",
+      "server:0x101022c0",
+      "server:0x10102850",
+      "server:0x10102890",
+      "server:0x10102ac0",
+      "server:0x10102b20"
+    ],
+    "changed_files": []
+  }
+}

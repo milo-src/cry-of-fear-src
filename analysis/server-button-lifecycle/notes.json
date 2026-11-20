@@ -1,0 +1,160 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10012580",
+      "proposed_name": "CBaseButton_InstanceOrAllocate",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает существующий private object либо выделяет0x1e4 и связывает CBaseButton; фиксирует native failure paths.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012580.c",
+        "analysis/server-button-lifecycle/10012580-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "cdecl(entvars* E), plain RET, результат объекта в EAX вопреки void C. При E==NULL engine CreateEntity(slot21@10222f9c); nonNULL edict превращается в E=edict+80. При неуспехе E остаётсяNULL и последующий E+20c dereference не защищён. Из E.edict(+20c), если nonNULL, берётся edict.privateData(+7c); ненулевой объект возвращается без проверки класса, размера или повторной инициализации.",
+        "При отсутствии private data вызвать PvAllocEntPrivateData(edict,0x1e4), slot63@10223044. NonNULL allocation получает vtable101a4c84 и object+4=E; EAX возвращается. При NULL native XOR EAX,EAX, затем MOV[EAX+4],ESI, то есть небезопасная запись, а не корректный returnNULL. Factory не вызывает Spawn/Precache/constructors полей; нулевую инициализацию остальных0x1e4 bytes из этого тела вывести нельзя. Native RTTI и descriptor table10211640 дают CBaseButton binding."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10016790",
+      "proposed_name": "func_button_ExportFactoryThunk",
+      "subsystem": "entity-core",
+      "summary_ru": "Экспортный пятибайтовый переход к единственной фабрике CBaseButton.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016790.c",
+        "analysis/server-button-lifecycle/10016790-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "Native export func_button, ordinal573, ровно5 bytes E9 к10012580. Это отдельный export entry, но не второй allocation body: Ghidra разворачивает тело factory. Исходный cdecl entvars argument, ECX и stack передаются без изменения; EAX/ошибки соответствуют factory. Здесь нет самостоятельного Spawn, resource precache или NULL guard."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100135e0",
+      "proposed_name": "CBaseButton_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Разбирает13 точных ключей с byte/string/int storage и inherited Toggle fallback.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100135e0.c",
+        "analysis/server-button-lifecycle/100135e0-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "thiscall ECX=B, stack K=KeyValueData*, RET4. Читаются K.key(+4), K.value(+8) без местных NULL/length checks.13 точных case-sensitive ключей: первые3 сравниваются встроенными strcmp-подобными циклами, остальные через1000aba0 full EAX1 equality/0 inequality. Не prefix parser; после каждого собственного совпадения K.handled(+c)=1. Возвращаемый EAX не нормализованный статус, статус хранится в K.",
+        "Семь строковых ключей вызывают engine AllocString(value) и записывают полный EAX string_t: changetarget→B1b0; lockedby→B18c; lockedmsg→B190; lockedsnd→B194; unlockedsnd→B198; unlockedmsg→B19c; propertarget→B1a4. Никакой проверки пустоты, результата allocation или существования target/key нет. Имена/offsets подтверждены BUTTON18 descriptors. String_t propertarget находится в private B1a4 и не совпадает с E.spawnflags+1a4.",
+        "locked_sound→BYTE B1d8, locked_sentence→BYTE B1d9, unlocked_sound→BYTE B1da, unlocked_sentence→BYTE B1db. Каждый вызывает1016f5ec(value), затем1013e080(ST0), затем сохраняет только AL.1016f5ec — narrow-text floating wrapper, не wchar_t несмотря на ошибочную подпись Ghidra; native wrapper и предыдущий subtitle-multiple-keyvalue контракт фиксируют ABI.1013e080 при capability>=2 использует FISTTP64; software branch1013e09e..1013e12a делает разбор80-bit exponent/significand. Для обычного finite signed64 диапазона результат усечён к0, затем младший byte без range clamp. Например259.9→3 и -1.9→255. Software helper также выполняет x87 operations для exception side effects; полная float grammar/locale и error policy не объявлены закрытыми. Saved C range1013e080 заканчивается до fallback, поэтому fallback сохранён отдельно как ASM-only support.",
+        "sounds→DWORD B1dc и hide_use→DWORD B1e0 получают EAX от1016b55e(value), signed decimal CRT wrapper. Здесь нет ограничения enum/range, последующей проверки errno или bool-нормализации hide_use. Native parser не использует floating converter для этих двух ключей. Подробная signed parser saturation/whitespace policy уже рассмотрена в subtitle-multiple-keyvalue; дополнительной button validation нет.",
+        "Неизвестный ключ передаётся напрямую10102480(B,K) с исходным K, затем RET4; перед этим handled не обнуляется. Этот inherited Toggle parser покрывает lip/wait/master/distance и далее Delay/base keys. Свой parser не является концом общей цепи и не обрабатывает все entvars(map model/health/speed/spawnflags) самостоятельно. Конкретный порядок engine/general dispatch остаётся внешним."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014260",
+      "proposed_name": "CBaseButton_Precache",
+      "subsystem": "entity-core",
+      "summary_ru": "Регистрирует spark/custom resources и преобразует sound/sentence codes в feedback strings.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014260.c",
+        "analysis/server-button-lifecycle/10014260-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "thiscall B, no args/RET, concrete virtual30; это подготовка ресурсов, не Spawn. Если текущий E.spawnflags&40, по порядку PrecacheSound buttons/spark1.wav..spark6.wav. Затем всегда PrecacheModel(\"sprites/glow04.spr\"). После него ненулевые B194 lockedSound и B198 unlockedSound по очереди переводятся через текущий S и передаются PrecacheSound. Индексы precache не сохраняются и успех/доступность файла не проверяется.",
+        "Если BYTE B1d8!=0, zero-extend его доDWORD,10012df0(code)→sample, PrecacheSound(sample), затем AllocString(sample)→B1b4. Аналогично BYTE B1da→B1bc. Отсутствие code пропускает ветку и НЕ очищает уже существующее B1b4/B1bc. Поэтому повторный Precache после изменения code на0 не эквивалентен полному reset feedback. Преобразование MOVZX важно:255 не превращается в -1. Sound selector уже отдельно разобран; неизвестные коды идут в его default, дополнительного местного guard нет. Главный звук B1dc здесь не регистрируется: это делает Spawn до virtual Precache.",
+        "BYTE B1d9 задаёт locked sentence:1 NA,2 ND,3 NF,4 NFIRE,5 NCHEM,6 NRAD,7 NCON,8 NH,9 NG. BYTE B1db задаёт unlocked:1 EA,2 ED,3 EF,4 EFIRE,5 ECHEM,6 ERAD,7 ECON,8 EH. Native jump tables10014500(count9) и10014524(count8), branch targets и все literals сохранены из PE. Каждая допустимая ветка пишет B1b8/B1c0=literalAddress−текущий S; AllocString для sentence не вызывается. Всё вне соответствующего диапазона (включая0 и255) явно пишет0. Это строковые смещения в движковой базе, не numeric sentence indices и не копирование текста.",
+        "Precache не сбрасывает feedback deadline/cursor/EOF поля B1c4..1d7, не присваивает touch/use/think и не двигает brush. Обработка sounds и sentence keys различается: пропущенные sound-коды оставляют прежнее derived поле, sentence default очищает своё. Runtime воспроизведение/доступность sentence group не подтверждается одной регистрацией."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102b80",
+      "proposed_name": "Entvars_SetMoveDirectionFromAngles",
+      "subsystem": "entity-core",
+      "summary_ru": "Получает movedir через by-value angles и special up/down helper, затем копирует shared vector в angles.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102b80.c",
+        "analysis/server-button-lifecycle/10102b80-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "cdecl(E), один stack pointer, plain RET; EAX не документированный статус. Копирует три E.angles(+50/+54/+58) по значению на stack, передаёт hidden result pointer к local12 и вызывает101021d0(out,angles.x,angles.y,angles.z); caller очищает16 bytes. Этот helper возвращает out в EAX. Потом raw-копирует12 bytes из результата в E.movedir(+44/+48/+4c).",
+        "Support101021d0 трактует ordered angles=(0,-1,0) как(0,0,1), ordered(0,-2,0) как(0,0,-1); -0 считается0, NaN не совпадает. Иначе10119320(&by-value angles) вызывает engine MakeVectors и helper копирует globals.v_forward(+28/+2c/+30). Это ABI vector-by-value плюс result pointer; Ghidra не следует превращать в передачу указателя на исходные angles.",
+        "После записи movedir wrapper читает shared vector10222f34..3c и копирует его в E.angles. Нельзя без доказательства всех runtime writers заменить эту копию литеральным(0,0,0). Даже при callback MakeVectors используется первоначальный E pointer для последующих writes. Здесь нет SetOrigin/SetModel, нормализации результата, проверки speed/flags или master; special direction wrapper — только часть Spawn. Полная engine MakeVectors и ownership shared vector остаются отдельной границей."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014cc0",
+      "proposed_name": "CBaseButton_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Инициализирует brush, lock/timers/defaults, вычисляет endpoints и назначает Use/Touch по двум bits.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014cc0.c",
+        "analysis/server-button-lifecycle/10014cc0-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "thiscall ECX=B, no stack args, RET без bool-результата. Сначала10012df0(full DWORD B.sounds+1dc)→sample, PrecacheSound(sample), AllocString(sample), затем запись E.noise(+1ec) из EAX. Далее virtual30(B), который concrete CBaseButton связывает с10014260 Precache. Если после него текущий E.spawnflags&40, assign think10012f00 и virtual8(0.5f). Scheduler вызывается ДО SetMoveDirection, movetype, solid и SetModel; этот порядок не заменён типичной SDK инициализацией. Если sparks bit снят, прежний think/deadline здесь не очищается.",
+        "Вызвать10102b80(current E), затем current E.movetype(+108)=7. Если flag80 установлен, solid(+10c)=0, skin(+110)=-1; иначе solid=4, skin не сбрасывается. Затем engine SetModel(current E.edict,S+E.model). Только после этого присвоить BYTE B.locked+180=(B.lockedBy+18c!=0) и обнулить DWORD unlockTime184/nextUseTime188. Верхние3 bytes locked DWORD не очищаются. Native entvars descriptor+110 есть skin, а не flags/solid.",
+        "Defaults применяются при ordered equality0: speed→40.0f, B.wait+10c→1.0f, B.lip+110→4.0f. -0 подпадает под default, NaN не подпадает. Если ordered E.health+164>0, E.takedamage+170=1.0f; иначе прежнее takedamage сохраняется. Ни отрицательная speed/lip/wait, ни бесконечности не отсеиваются. Эффективное wait читается в local float до расчёта endpoint и далее используется для stayPushed; speed/health defaults могут перечитать E.",
+        "Установить state1. Скопировать E.origin в B.position1(+11c..124). Для каждого компонента native вычисляет float32 q_i=abs(float32(float32(E.size_i−2.0f)*E.movedir_i)); abs реализован AND sign mask. D=float32(float32(q_x+q_y)+q_z)−lip, с float32 округлением subtraction. position2_i=float32(position1_i+float32(movedir_i*D)); в этом теле нет нормализации movedir, clamp D к0 или использования B.distance+108. Отрицательный D может направить endpoint обратно.",
+        "Проверка короткого хода: d=position2−position1 в float32; squared=float32(float32(d_y²+d_x²)+d_z²), затем conversion кdouble, SQRTSD (при ordered negative —1016be90 precise helper), conversion кfloat32. Если ordered length<1.0f ИЛИ flag1, raw position2=position1. При NaN length первая проверкаfalse, но flag1 всё равно схлопывает endpoint. Здесь не устанавливается сам flag1 по результату короткого хода. Подробный внутренний exceptional SQRT helper остаётся внешним; основной finite путь полностью сохранён.",
+        "Далее rotating(+1ac)=0 и stayPushed(+1a8)=1 только при ordered cached wait==-1.0f, иначе0 (NaN→0). В конце обработчики выбираются по двум bits: flag100=0 → touchNULL, исходный Use=10013090; flag100!=0 → touch10012f70, исходный Use=10013220 IgnorePlayer. Flag200 инвертирует этот выбор Use: без touch+200 получается IgnorePlayer, с touch+200 получается обычный ButtonUse. Пишется B.use+80, не virtual table. Native XOR-подобная таблица не заменена утверждением, что flag200 всегда игнорирует игрока.",
+        "Spawn не пишет B.changeTarget/properTarget/lockedMessage, не строит угловые endpoints, не вызывает target output и не сбрасывает move-completion+154 или все feedback fields. Setter callbacks/engine calls до geometry могут менять E/fields; cached E для конечного расчёта и cached wait сохранены в native. Это локальный Spawn contract, не гарантия полной entity reset при повторном использовании памяти."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100146f0",
+      "proposed_name": "CBaseButton_Restore",
+      "subsystem": "entity-core",
+      "summary_ru": "После Toggle Restore читает18 native descriptors CBaseButton с точными типами.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100146f0.c",
+        "analysis/server-button-lifecycle/100146f0-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "thiscall B, stack readerContext, RET4. Сначала10102890(B,context) inherited Toggle Restore. При EAX0 немедленно вернуть0; иначе reader ECX=context вызывает10117010(\"CBaseButton\",B,table10211640,count18), итоговый EAX передаётся без преобразования. Нет собственного retry/rollback/Spawn/повторного normalizing default после чтения. Побочные эффекты inherited chain не исключаются даже при его отказе.",
+        "BUTTON18 fields: stayPushed1a8/rotating1ac/locked180 имеют type12; lockedBy18c/lockedMessage190/unlockedMessage19c/properTarget1a4/lockedSound194/unlockedSound198/changeTarget1b0 имеют type1; unlockTime184/nextUseTime188 type0 FLOAT, не TIME15; hideUse1e0/sounds1dc type10; lockedSoundCode1d8/lockedSentenceCode1d9/unlockedSoundCode1da/unlockedSentenceCode1db type14 CHAR. Все count1/flags0. Native state/callback/activator и positions входят в inherited BASE/DELAY/ANIMATING/TOGGLE цепь, а не в эту таблицу.",
+        "Derived feedback region1b4..1d7 в собственной таблице отсутствует. Прямые byte writes locked180 не отменяют того, что serializer BOOL12 обрабатывает типовуюDWORD ширину. Для timers184/188 нельзя автоматически применять time-rebase семантику type15: descriptors здесьtype0. Полное восстановление callback binding/model relink следует inherited serializer contracts; этот wrapper лишь читает18 перечисленных fields."
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100148e0",
+      "proposed_name": "CBaseButton_Save",
+      "subsystem": "entity-core",
+      "summary_ru": "После Toggle Save пишет18 полей через context writer с targetname/classname label.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100148e0.c",
+        "analysis/server-button-lifecycle/100148e0-0.asm",
+        "analysis/server-button-lifecycle/evidence.json",
+        "analysis/server-button-lifecycle/contract.md"
+      ],
+      "details_ru": [
+        "thiscall B, stack writerContext, RET4. Сначала10102b20(B,context) inherited Toggle Save; EAX0 возвращается немедленно. Затем актуальные E и S: diagnostic owner label=S+E.targetname если string_t ненулевой, иначе S+E.classname. Вызвать writer1011adc0(label,\"CBaseButton\",B,table10211640,18) с ECX=context; вернуть его EAX неизменным. Native5 writer args и context ECX исправляют неполную Ghidra this attribution.",
+        "Сохраняются те же18 descriptors и inherited chain; это не raw dump0x1e4 bytes. Поля ресурсов/derived feedback вне таблицы не становятся автоматически persistent. Writer1011adc0 в обычном возврате выдаёт1 даже после отдельных overflow/warnings, поэтому итог Save не доказывает полную успешную запись. Нет транзакции, cleanup, clamp или проверки конечного cursor в этом wrapper."
+      ]
+    }
+  ],
+  "subsystems": []
+}

@@ -1,0 +1,14 @@
+[REVIEW server:0x1011d560]
+  Предлагаемое имя: Weapon_ItemPostFrame_SoundLifecycle
+  Подсистема: network audio
+  Назначение: Частично разобран weapon frame: прекращение loop sound latch и SP PlaySFX mode2/0.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Только prefix1011d560..1011d81b: latch byte+1a5 сбрасывается по release/state predicates. Nondual: playervirtualbc==0 либоclip1e4<1 либо1f0!=0 либоbuttonbit1снят либоweapon128!=0. Dual дополнительно требует партнёра ID14/23/27 и releasebit800 либоweapon128!=0.
+  Разбор: Приloop offset1a8!=0 SP шлётmode2/byte1: dualpath1a8,nondualpath1ac (подтвержденоasm1011d776). Далее endoffset1ac!=0→mode0/byte1/endpath. MP идёт через1001e990 и100fc9f0, не те SP PlaySFXcalls.
+  Разбор: Client mode2 выбирает retainedhandle независимоотfilename, но предварительныестроковые чтения остаются. Весь weapon frame/reload/прочиеvirtualbranches этимподразбором не объявлены исчерпанными.
+  Основание: analysis/network/playsfx-server-contract.md
+  Основание: analysis/network/playsfx-server-evidence.json
+  Основание: decompiled/server/partial-pass/functions/0x1011d560.c
+  Основание: analysis/network/playsfx-server-evidence-weapon-frame.asm
+  Основание: analysis/network/playsfx-client-contract.md
+[/REVIEW]

@@ -1,0 +1,95 @@
+# CMobile: полный frame, локализованные SMS и camera guard
+
+Pass21: baseline1910 reviewed/6745 pending. Только static original hl.dll SHA256751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641. Все3 primary C/native прочитаны целиком. Hexadecimal addresses/offsets/RET; counts и durations decimal. Игру/DLL не исполняли. No shared catalog или resource changes.
+
+W — CMobile private, P=W+160, pev=W+4. Evidence сохраняет native RTTI/vtable, PLAYER/ENTVARS/ITEM/WEAPON descriptors, C/ASM bytes и все language branches. Поддержка CRT/engine callbacks не добавляет REVIEW.
+
+
+## 0x10053210 — CMobile_ItemFrameBatteryBodyUnreadSMSAndCallGate
+
+
+ECX=W, без stack аргументов. Обычная ранняя ветвь заканчивается plain RET; основной конец100534c4 — E9 tail JMP1011d560 с исходным W в ECX после POP ESI, а не невозвращающий CALL. Saved C правильно хранит body range до100534c8, но описание terminal call не соответствует opcodeE9. Concrete CMobile factory10052e30/vptr101b26c8 связывает slot158 с10053210. Возврат не является bool success, ABI конечного tail определяется downstream1011d560.
+
+
+Первая часть выполняется только при BYTE W+1f8!=0, BYTE P+1ee8 m_bInPhoneCall==0 и DWORD W+128 m_iSprintState==0. Между ними один snapshot globals.time сравнивается с P+1ee4 m_fPhoneCallTime и W+1cc/+1d0/+1d4 (native next primary/secondary/tertiary). Все четыре COMISS(deadline,now)→JA skip: ordered deadline>now блокирует только эту часть; equality и unordered при masked FP exceptions проходят. Неудача любого gate не завершает весь frame: дальнейший body/flags/SMS путь выполняется.
+
+
+При P+1e98 m_iMobileFlashMode==0 вызывает W.virtual+198(3,1,0), иначе(9,1,0). После callback свежий globals.time расширяется в double и складывается с0.5 либо1.0, затем сужается вfloat32 и пишется в заново прочитанный P+308. Далее W.virtual+08(1.0), после него W.think+78=10053800 CMobile::MidBatteryFix. Доказанный scheduler1011f680 пишет одинаковый float32(now+delay) в W+58 и W.pev.nextthink+104. Фактическое исполнение engine think и вся battery lifecycle описываются отдельно, здесь не выполняются.
+
+
+После think store вызывает100fc9f0(W.pev.edict,channel2,"weapons/sleeve_generic2.wav",1.0,float0.8,flags0,pitch100). Это edict оружия, не owner. Затем заново читает time, делает ADDSS(float5.0), перечитывает owner и пишет один полученный float32 по порядку P+308,W+1d4,W+1d0,W+1cc. Промежуточный P+308 now+0.5/1 уже мог быть наблюдаем scheduler/sound callbacks, затем заменяется now+5. W+1d8 idle и W+1f8 в этой части не сбрасываются. Volume является аргументом wrapper, а не гарантией конечной громкости.
+
+
+После первой части всегда сравнивает W.pev.body+114 с DWORD P+5cc m_iPhoneMessage. Если различаются, сначала записывает body, потом заново читает W.pev.body и owner и вызывает W.virtual+19c(P,body), после callback снова загружает owner. Concrete slot19c→1011f640 отправляет WeaponBody с одним BYTE, RET8; локальный body остаётся полным DWORD. При одинаковом body callback отсутствует.
+
+
+Если текущий P+1e98==0, очищает в DWORD P+5d0 m_iFlashlightFlags маску1 и затем маску2, каждую только при установленном бите; после первой записи owner перечитывается. Иные биты сохраняются. При mode!=0 flags не исправляются. Затем безусловно записывает W.pev.health+164=float50.0, это здоровье weapon entity, не player HP. После этого, если BYTE P+1ee8==0 и BYTE W+204!=0, сбрасывает W+204; это latch call-анимации предыдущего idle10053c90.
+
+
+Проверяет BYTE P+1ec0 m_UnreadSMS на точное значение1 (любое другое, включая2, не подходит). Вызов100e4e00 получает ECX=P; только AL результата проверяется. AL!=0 пропускает SMS часть, unread latch остаётся. При AL==0 заново читает owner и snapshot BYTE P+1f1c m_bPhoneLow. Обе ветви вызывают MessageBegin(1,global10226578,NULL,P.pev.edict), WriteByte(0), WriteByte(phoneLow!=0), MessageEnd. Global зарегистрирован как UnreadSMS с fixed size2; ложный no-arg MessageBegin в C — артефакт decompiler, четыре аргумента подготовлены до branch.
+
+
+После network callbacks вызывает100534d0 с ECX=W, затем заново читает W.owner и сбрасывает его BYTE+1ec0=0. В primary нет проверки успешного открытия файла, найденного текста или результата рассылки. При исключении/невозврате reader latch reset не достигается; при обычном возврате reader с отсутствующим файлом reset всё равно выполняется. Значение phoneLow для двухBYTE snapshot сделано до MessageBegin, не перечитывается между WriteByte.
+
+
+Последний gate заново читает P+1ee4 и current time; COMISS(deadline,now)→JBE bypass. Только ordered deadline>now запускает virtual+198(0e,1,0) и немедленный RET. Equality и unordered идут дальше. Эта ветвь не проверяет m_bInPhoneCall и не ставит W+204, поэтому сама не обещает одноразовую animation. Иначе при W+128==2 и DWORD W+1f0==0 записывает sprintState0; другие значения не меняет. После этого tail JMP1011d560 с W. Здесь закрыт весь local body; общие weapon input/attack decisions downstream уже имеют отдельный REVIEW, а не повторно присвоены этому entry.
+
+
+У W/owner/pev в этом frame нет NULL/lifetime/RTTI guards. Последовательность callbacks и перечитывания указателей сохранена; произвольные overrides могут менять state. Имена player/weapon полей подтверждены раздельными native save tables, однако bytes W+1f8,+1f9,+204 и DWORD W+1f0 нельзя автоматически назвать по соседним PLAYER offsets. Функция не реализует rendering света или весь мобильный телефон.
+
+
+## 0x100534d0 — CMobile_ReadLocalizedSMSLineAndDistributeProFont
+
+
+ECX=W, stack аргументов нет, нормальный выход plain RET. Сохраняет W в EBP-248h; использует stack path[256] поEBP-110h, selectedText[256] поEBP-210h, stream поEBP-300h, std::string S поEBP-228h с lengthDWORD+10 (EBP-218h) и capacityDWORD+14 (EBP-214h). Начальный saved cookie не является вторым аргументом GetGameDir: native PUSH path→engine102230d4 (slot99, один pointer). SelectedText не инициализируется в prologue, до file reads или перед dispatch.
+
+
+Engine GetGameDir(path) пишет базовый путь; затем CVarGetFloat1022302c("cof_subtitlelanguage") возвращает ST0, FSTP float32 и CVTTSS2SI определяют signed integer selector. Unsigned CMP selector,7→JA default направляет отрицательные/большие значения в default; при masked invalid conversion NaN/out-of-range дают integer indefinite80000000 и тоже default. Truncation идёт после float32 rounding, не прямо из бесконечной точности ST0. Raw jump table100537d8 содержит8 targets:0/1→default;2 Dutch,3 French,4 German,5 Norwegian,6 Spanish,7 Swedish.
+
+
+Каждая ветвь сканирует path до NUL без проверки длины, затем копирует suffix вместе с NUL. Default: /txtfiles/phone_messages.txt (29 bytes с NUL);2 /txtfiles/languages/dutch/phone_messages.txt (45);3 french (46);4 german (46);5 norwegian (49);6 spanish (47);7 swedish (47). Формулы byte count следуют native REP MOVSD/WORD/BYTE, raw literals закреплены. Предел256 не проверяется ни для engine base path, ни для append. Нет fallback на default-файл при отсутствии выбранной локализации, нет изменения cvar, нормализации пути или загрузки ресурсов renderer.
+
+
+Вызывает1002f8d0(this=stream,path,1,40h,1), затем инициализирует S.capacity=15,S.length=1,S.inline[1]=0 и S.inline[0]=lowBYTE(DWORD P+5cc+1). Полный desired=DWord P+5cc+1 удерживается в EBX (32-bit wrap), logical counter EDI=1. Это странная seed-строка с одним байтом, НЕ decimal representation desired; она не копируется в selectedText автоматически. Дополнительный пустой S-подобный local поEBP-240h получает length0/capacity15/NUL, но в line selection/dispatch не участвует. Далее сразу getline1002f550(stream,&S), без is_open или file-exists guard.
+
+
+После каждого getline тестируется BYTE state(stream+virtualBase+0c)&6. Failbit2/badbit4 завершают loop, один eofbit1 не блокирует последнюю извлечённую строку. Shared1002f550→1002f350 использует delimiter из ctype virtual+20(10), обычноLF; успешный sentry10037300(stream,1) очищает S и читает без пропуска whitespace, delimiter потребляется без записи в S. Пустая delimiter-строка считается прочитанной; EOF после байтов сохраняет обработку последней строки, EOF без байтов добавляетfail. Failed sentry не обязан очищать S. Кодировка/CRLF/filebuf sharing/locale/exception masks остаются backend границей.
+
+
+При counter!=desired никакой проверки содержимого нет: counter++ и следующий getline. При counter==desired считывается S.length в ESI. Unsigned length<=254 допускает копирование NUL-циклом из inline S либо heap pointer (capacity>=16) в selectedText, без ограничения самого copy loop по length. Затем проверяет ESI>=256 и при этом вызывает1013dd48; на обычном неизменном пути этот поздний guard недостижим из-за предыдущего<=254. Иначе записывает NUL в selectedText[length], увеличивает counter и продолжает читать весь остаток файла. Встроенный NUL обрывает копирование раньше logical length, но принудительный NUL всё равно ставится поlength; прежние промежуточные байты buffer не очищаются.
+
+
+Если выбранная строка length>=255, вызывает cdecl10117f60(4,literal101adc90,0,0,0,0) и сразу переходит к следующему getline, НЕ увеличив counter. Поэтому следующая физическая строка проверяется снова как desired; короткая строка может стать заменой, несколько длинных подряд дают несколько предупреждений. Native literal сохранён байтами, его предположительную кодировку не используем как доказательство. Supporting sender шлёт destination2/global1022651c (TextMsg), BYTE4 и STRING warning; дополнительные четыре optional строки отсутствуют. Warning не является exception/return/reset выбранного buffer.
+
+
+После любого обычного выхода из loop перечитывает BYTE W+1f9. При nonzero только пропускает рассылку, но path/open/full scan уже выполнены. При0 запускает signed i=1..globals.maxClients+90; максимум перечитывается после каждой итерации.10119680(i) проверяет positive/inrange, enginePEntityOfEntIndex, edict!=NULL и edict.free==0, возвращает private+7c. Любой nonNULL private передаётся10119810(private,selectedText,1,0). Никакого выбора только owner, alive/range/team фильтра или проверки successful text copy в primary нет.
+
+
+10119810 на этом пути дополнительно требует recipient.virtual+d4()!=0 и отправляет destination8/global10226568 (ProFont), BYTE1 и STRING selectedText, затем MessageEnd. Это персональные сообщения каждому допустимому private в цикле, а не одна MSG_ALL рассылка; TextMsg warning — отдельный канал. Если файл не открыт/пуст, desired отсутствует/равен0/недостижим или все совпадающие строки слишком длинные, selectedText остаётся stack-мусором: primary всё равно передаёт его при W+1f9==0. Нет default empty string, success flag, found marker или check terminated buffer. Это статически доказанный небезопасный путь, не утверждение, что каждый запуск обязательно выдаёт видимый сбой.
+
+
+Локальный cap254 относится к std::string length выбранной строки; это не гарантия принятия network payload. ProFont добавляет BYTE mode и NUL, значит при N видимых байтах payload N+2. При обычном original engine variable-usermessage limit192, ранее разобранном в engine-message-buffer-contract, гарантированно проходящая по длине граница190; N191..254 локально допустимы, но превышают тот engine предел. Альтернативный callback/replace путь и invalid buffer требуют отдельного анализа. Полный клиентский ProFont handler разобран отдельно, здесь не объявлен новым.
+
+
+После dispatch или его пропуска при capacity>=16 вызывает1002f290(S.heap,capacity+1); при меньшей capacity не освобождает inline storage. Затем100308f0(this=stream) выполняет ifstream/filebuf/ios cleanup; поддержка10030290 включает owned-file close, primary не проверяет close результат. Восстанавливается FS exception chain, вызывается cookie checker1013dbb3, plain RET. Open/read/facet/allocation/network exceptions могут прервать normal flow; первичный SEH metadata/общий unwind backend не восстановлены полностью, rollback SMS latch/file/сообщений здесь отсутствует. Наличие helper1013dd48 с внутренним RET не принимается само по себе за доказательство возвращаемости полного fail-fast backend1013dd54.
+
+
+## 0x100e4e00 — CBasePlayer_IsCameraViewIndexDifferentFromSelf
+
+
+ECX=P, без stack аргументов, plain RET. Сначала вызывает bool resolver10017780(&P+2348 m_hCurrentCamera). Только если результатfullEAX0, вызывает10017780(&P+388 m_pAttachedCamera). Когда оба0, идёт false. Resolver10017780→10017ba0 читает handle.edict, проверяет edict.serialnumber+4 против handle+4, возвращает0 либо edict, затем нормализуетfullEAX0/1. Он не проверяет edict.free или private data; bool handle не равен доказанному существованию player camera object.
+
+
+При хотя бы одном valid handle требует DWORD P+2038 m_iViewEntIndex!=0. Затем engine IndexOfEdict10223064(slot71) получает P.pev.pContainingEntity, после callback P+2038 перечитывается и сравнивается с полным EAX. Неравенство даёт true, равенство false. Значение поля до callback только gate; возможное изменение внутриcallback не откатывается и не проверяется на nonzero повторно. Нулевые P/pev/edict не защищены, handle после callback заново не проверяется.
+
+
+Возврат только AL: true MOV AL,1, false XOR AL,AL. Верхние24бита EAX сохраняют остаток предыдущих операций, поэтому Ghidra undefined4 return1/0 нельзя использовать как full-width ABI. Вызывающий10053210 корректно делает TEST AL,AL. Функция не назначает камеру/view index, не двигает игрока и не отправляет сообщения. Fields2348/388 имеют native type4 EHANDLE,2038 type10 DWORD; camera runtime/происхождение view index остаются отдельными producer contracts.
+
+
+## Навигация и открытые границы
+
+Батарейный MidBatteryFix10053800/FixBattery и actions — соседний server-mobile-actions; Spawn/Deploy/другой lifecycle — отдельный пакет. Weapon-animation закрывает sender198/19c, flash toggle и idle. Общий frame1011d560 имеет прежний REVIEW; здесь доказан только tail routing к нему. Формат OS-path/locale/unwind, concrete overridden callbacks, расписание engine think, rendering и сохранность uninitialized buffer не объявлены восстановленными. Engine wire length: analysis/graphics/engine-message-buffer-contract.md; при его перемещении следует искать FUNCTION engine MessageEnd, не подменять местный cap254 гарантиями движка.
+
+## Продолжение разбора: pass22
+
+Pass22: [skill refresh](../server-skill-refresh/contract.md) закрывает native111 чтений/101 float slots, источник punch damage10226844 и ST0/format ABI. [Mobile player state](../server-mobile-player-state/contract.md) продолжает map-trigger/SMS/player chain; [monster attacks](../server-monster-attack-dispatch/contract.md) закрывает attack-condition dispatch и gates; [visibility policy](../server-visibility-policy/contract.md) уточняет concrete rules/player callbacks. Список residual boundaries см. в новых контрактах; установленный skill.cfg не объявляется runtime состоянием.

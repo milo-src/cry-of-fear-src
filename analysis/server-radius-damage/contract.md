@@ -14,7 +14,7 @@ TraceResult: 56 байт; allSolid0, startSolid4, inOpen8, inWaterc, fraction10,
 
 `python analysis/server-radius-damage/capture.py` читает original PE и сохранённые C, запускает только objdump для ограниченных function ranges, сравнивает каждую строку машинных байтов. `verify.py` проверяет native bytes, SHA, raw offsets, vtables, descriptors, API mapping и наличие4 карточек. Скрипты не загружают DLL для исполнения, не правят игру/общий каталог. Provider C может терять calling convention, vector-by-value и NaN семантику; критические ветви ниже выведены из ASM.
 
-Отдельно не закрыты: полная libm fallback1016be90 при отрицательном squaredSum; точный engine sphere/trace backend; прочие derived target callbacks, Killed и TraceBleed (общий damage pipeline продолжен в [monster damage](../server-monster-damage/contract.md)); непрямые callers explicit-origin wrapper1008aa40. Native SIMD rounding/MXCSR режим не переопределяется этим кодом. Формулы описывают последовательность операций, не обещают битовую эквивалентность произвольной реализации на другом floating-point runtime.
+Отдельно не закрыты: полная libm fallback1016be90 при отрицательном squaredSum; точный engine sphere/trace backend; прочие derived target callbacks (generic Killed/TraceBleed продолжены в server-monster-death; общий damage pipeline продолжен в [monster damage](../server-monster-damage/contract.md)); непрямые callers explicit-origin wrapper1008aa40. Native SIMD rounding/MXCSR режим не переопределяется этим кодом. Формулы описывают последовательность операций, не обещают битовую эквивалентность произвольной реализации на другом floating-point runtime.
 
 
 ## 0x1008a690 — RadiusDamage_TraceAndDispatch

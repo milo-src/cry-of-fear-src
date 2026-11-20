@@ -9,7 +9,7 @@ SHA='751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641'
 sha=lambda x:hashlib.sha256(x).hexdigest()
 b=B.read_bytes(); assert sha(b)==SHA; pe=pe_metadata(b)
 IDS='1011c7d0 1011b530 1011cf10 1011d030 1011e630 1011b6a0 1011b7c0 101202f0 100e2380'.split()
-SUPPORT='10018440 100125e0 100e4c30 100e4d60 100af7e0 1000aba0 100dad40 100e2410 100fc9f0 10119810 10119900 10102930 10017950 1011b920 1011bb00 101028e0 1011f680'.split()
+SUPPORT='10018440 100125e0 100e4c30 100e4d60 100af7e0 1000aba0 100dad40 100e2410 100fc9f0 10119810 10119900 10102930 10017950 1011b920 1011bb00 101028e0 1011f680 100daf10 1000d3b0 100171b0 100fc680 100ca550 100fc2b0 100c8850 100b4aa0'.split()
 def raw(a,n):
  for s in pe['sections']:
   d=a-int(pe['image_base'],16)-int(s['rva'],16)
@@ -47,7 +47,7 @@ for addr in IDS+SUPPORT:
      r=string(int(mm[1],16))
      if r['ascii'] and all(c.isprintable() or c in '\n\r\t' for c in r['ascii']):e['literals'].append(r)
     except (ValueError,UnicodeError):pass
-for label,a,n in [('CBasePlayerItem',0x1021b188,26),('ENTVARS_support',0x1021aae0,102)]:
+for label,a,n in [('CBasePlayerItem',0x1021b188,26),('CBasePlayerWeapon',0x1021b328,27),('ENTVARS_support',0x1021aae0,102)]:
  r=raw(a,n*16);r.update(class_name=label,stride=16,count=n,fields=[])
  for i in range(n):
   kind,name,off,count,flags=struct.unpack_from('<IIIhh',bytes.fromhex(r['bytes_hex']),i*16)
@@ -55,9 +55,20 @@ for label,a,n in [('CBasePlayerItem',0x1021b188,26),('ENTVARS_support',0x1021aae
   r['fields'].append(dict(record_va=hex(a+i*16),type_id=kind,name=ss['ascii'],offset=hex(off),count=count,flags=flags))
  e['save_tables'].append(r)
 r=raw(0x101a7804,0x190);r.update(class_name='CBasePlayerWeapon factory-bound prefix',factory='0x10018440',scope='Prefix through +18c; not a full class vtable extent',slots=[])
-for off in [8,0x10,0x38,0x3c,0x134,0x138,0x158,0x15c,0x160,0x164,0x180,0x184,0x18c]:r['slots'].append(dict(offset=hex(off),target=hex(struct.unpack('<I',bytes.fromhex(raw(0x101a7804+off,4)['bytes_hex']))[0])))
+for off in [8,0xc,0x10,0x38,0x3c,0x134,0x138,0x158,0x15c,0x160,0x164,0x180,0x184,0x18c]:r['slots'].append(dict(offset=hex(off),target=hex(struct.unpack('<I',bytes.fromhex(raw(0x101a7804+off,4)['bytes_hex']))[0])))
 e['vtables'].append(r)
-for path in ['analysis/server-item-lifecycle/contract.md','analysis/server-spread-callers/contract.md','analysis/server-serializer/contract.md','analysis/server-animation-state/contract.md','analysis/server-sentence-lifecycle/contract.md','analysis/server-parent-tree/contract.md','analysis/server-unlock-settings/contract.md','external/hlsdk-portable/engine/eiface.h']:
+for label,a,size,slots in [('CBasePlayer factory-bound prefix',0x101a4da8,0xd4,[0x8c,0x94,0xd0]),('CHalfLifeRules existing owner evidence',0x101de3b0,0x94,[0x20,0x7c,0x88,0x8c,0x90]),('CHalfLifeMultiplay existing owner evidence',0x101d608c,0x94,[0x20,0x7c,0x88,0x8c,0x90])]:
+ r=raw(a,size);r.update(class_name=label,scope='Only listed slots interpreted; remaining prefix is raw evidence',slots=[])
+ for off in slots:r['slots'].append(dict(offset=hex(off),target=hex(struct.unpack('<I',bytes.fromhex(raw(a+off,4)['bytes_hex']))[0])))
+ e['vtables'].append(r)
+# The original localized diagnostic bytes are not ASCII. Preserve exact bytes;
+# CP1251 is an explicitly labelled decoding aid, not an inferred translation.
+for a in [0x101e65dc,0x101e6618,0x101e663c,0x101e6654,0x101c4ad0]:
+ for n in range(1,512):
+  r=raw(a,n);v=bytes.fromhex(r['bytes_hex'])
+  if v[-1]==0:
+   r.update(decoded_cp1251=v[:-1].decode('cp1251'),encoding_assumption='cp1251');e['literals'].append(r);break
+for path in ['analysis/server-item-lifecycle/contract.md','analysis/server-spread-callers/contract.md','analysis/server-rules-bootstrap/contract.md','analysis/server-multiplayer-flow/contract.md','analysis/server-entity-defaults/contract.md','analysis/server-sentence-lifecycle/contract.md','analysis/server-parent-tree/contract.md','analysis/server-unlock-settings/contract.md','external/hlsdk-portable/engine/eiface.h']:
  p=ROOT/path;e['supporting_sources'].append(dict(path=path,sha256=sha(p.read_bytes())))
 # API names are orientation from a pinned SDK; native offsets remain primary facts.
 p=ROOT/'external/hlsdk-portable/engine/eiface.h';names=re.findall(r'\(\*(pfn\w+)\s*\)',p.read_text(encoding='utf-8'))

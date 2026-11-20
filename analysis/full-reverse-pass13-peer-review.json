@@ -1,0 +1,191 @@
+{
+  "scope": "Static RE pass13; no target execution or game implementation",
+  "result": "PASS",
+  "new_reviewed": 31,
+  "packages": [
+    {
+      "package": "analysis/server-item-pickup",
+      "new_reviewed": 9,
+      "author": "client_catalog",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "All9 primary C/ASM and contract/notes read. Source/recipient ECX, RET8 duplicate ABI, AddPlayerItem0 still UseTargets, pre-rejection iuser4 reset, defaultAmmo clearing and secondary result overwrite, signed clip/carry, NaN max_health sound guards, source caps/floor versus replacement callbacks and absolute scheduler. Independent raw PE and native descriptors/vtable verification.",
+      "corrections": [
+        "Renamed1011cf10 to DisablePickupAndScheduleDelayedRemove to avoid assuming original virtual Drop name."
+      ],
+      "final_hashes": {
+        "contract.md": "b57b5df7c52e5315800e1e97e481d05ae265e31dcffa34f3511b1f8c96a58aaf",
+        "notes.json": "04213f93e00fb12e6f79e68fd8d8b38b05b333507676b8863b927d098df82785",
+        "evidence.json": "5f399ac4aa87bf5edc93ff440a094b367076f7c454acffc6a42b209e6b46676d",
+        "capture.py": "776d10dd952849b2c98cff36b4defaa69728891e7d6c63dd8cb27f35befe0340",
+        "verify.py": "85b761ec5f0fa719ecb079c91499fbaf26f506b651854f00291f17066da508e3"
+      }
+    },
+    {
+      "package": "analysis/server-monster-death",
+      "new_reviewed": 11,
+      "author": "shader_inventory",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All11 primary C/ASM and contract/notes; supporting ShouldGib/GibMonster, factory, trace/decal, WaitTillLand, StartFadeOut and VecToAngles. Generic ShouldGib0/GibMonster empty; virtual144 BecomeDead and native radsuit_finished; TraceBleed NaN4, MINSD NaN volume, gib scaling, particle/decal payload. Independent38C/38ASM/2581byte rows/321raw/3 save tables/2 RTTI hierarchies/27decal records.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "91f7c29b942048cf9411dc2f3ebece7ce5bb2f8017cdd0f6fdae6ec397b72c71",
+        "notes.json": "2302b1b44ddd8dc514b02e8d9db3eddc1c544ada801c8066307deff1fccc0fe1",
+        "evidence.json": "530da17d386f14b9ce08f5691bd2d5d24f1f7b6b8c59514163319fa131b6240e",
+        "capture.py": "0d356d36c11648524c8f3a4b7c1bd2b21347312cec3a6622147940ca44476cba",
+        "verify.py": "68acd708b362acfa5f4b0522e66e64ab30d261f9681aac23e147ae079b3010da",
+        "write_notes.py": "3b58d3e860be65908e32de8a6aaedf194efa8c2b158a740bb05ed384e4db8ede"
+      }
+    },
+    {
+      "package": "analysis/server-unlock-actions",
+      "new_reviewed": 8,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "All8 primary C/ASM and contract/notes; caller118/Use dispatch, Cat Spawn, text helper and deferred remove. Axe versus Camera latch order, commentary ordered0/NaN, hoodie10..15 fallthrough, Cat signed count/deadline/double rounding/foundmask without writer. Independent20C/20ASM/1927byte rows/549raw,8RTTI hierarchies/vtables,16switch targets,CatUse export ordinal49.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "24fa3172418bf89cceeb23acdd9c0317d23084088aaa62cf8fa69c548edb8c92",
+        "notes.json": "ba56c9a3ede61cdebebaab3dfb9c9ced0ff42f13d59f4d455dfb047ba44089dd",
+        "evidence.json": "2ccc3391b54f2d39d83d317af1f78db899340eb8cab24e26567b0c83becf565a",
+        "capture.py": "d394392a7283a4766f3bf0e5329d4bffc5dc0c234e71a8f316c01e71a446916e",
+        "verify.py": "8dd7c5b6990053557fdca7041497c97e2b89b07cac7d81ccc32fb224adba746c",
+        "write_notes.py": "471e43627979b45cc1cb56e71f4e088b9ad2b0c427cc12b01c3e352f2ee05df3"
+      }
+    },
+    {
+      "package": "analysis/server-stats-score",
+      "new_reviewed": 3,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "All3 primary C/ASM and contract/notes; full EAX/ST0, signed score thresholds, wrap32 time, BYTE678==1, ratio float32 and no clamp. Independent6C/6ASM/2355byte rows/223raw/207descriptors/10 rel32 edges.835 bounded saved-ASM interpreter cases; synthetic NaN/Inf not game reachability or DLL execution.",
+      "corrections": [
+        "Corrected10092f60 exact interleaved reads:66c, FSTP,67c,64c,668,LEA time. Reviewer re-read corrected paragraph and confirmed PASS."
+      ],
+      "final_hashes": {
+        "contract.md": "3d1c3c3a99ec955c322ee7bcba0bd3a0facf8d230a53f2352db03071cba425a5",
+        "notes.json": "74dff45caf516c01e427683cd2b075b8a66135002a938a891e0515b9c78d378d",
+        "evidence.json": "d53633090fbd710e097223eed98c08211a01592596cf0c2a99644177874a9294",
+        "capture.py": "d1ba3a2a7aaaf12c14bdba7885b7e4c9e4b08e09e515a8a3551b3d55dadcbe29",
+        "verify.py": "61727098af48264be6db809b97d4a4e9e4393523ec6c6f4cf04cf478596a75d7",
+        "write_notes.py": "0f25bf861c874a07792173c636cf0c5ff1ec3de1847e4d790a82135d244f73e4",
+        "verify_paths.py": "7450f6b6c254fde49d2694becfbb72ea1714c73a5287e8e4c292072dbbb90fc2"
+      }
+    }
+  ],
+  "notes_contract_parity": true,
+  "parity_scope": "Exact primary detail paragraphs; unlock package common ABI and short summaries checked semantically by peer, not literal inclusion",
+  "navigation_cleanup": "Removed31 newly reviewed addresses from active queue. Linked item pickup/ammo/respawn, generic death/bleed/gib/decal, unlock actions and score. Corrected stale16 direct-owner claim: all20 scanned owners now have REVIEW, some older cards remain partial. Updated only navigation sentence in prior Credits/Stats cards; preserved other1755 prior cards exactly and all prior functional facts. Full corpus gaps remain separate.",
+  "prior_navigation_only_updates": [
+    "server:0x100a2710",
+    "server:0x100a51c0"
+  ],
+  "prior_reviews_preserved_exactly": 1755,
+  "document_pin_refresh": {
+    "document_deltas": [
+      {
+        "manifest": "analysis/server-bullet-traces/evidence.json",
+        "path": "analysis/server-radius-damage/contract.md",
+        "old": "dee17981700f6da2cebd4d4235b61e90e6dc68483492ca3a5e5d295b9866da7f",
+        "new": "6108d3d42c0bf7a4ece8d60715b5051a3a18b99449ab357d10ca590ddc50077e"
+      },
+      {
+        "manifest": "analysis/server-item-lifecycle/evidence.json",
+        "path": "analysis/server-unlock-settings/contract.md",
+        "old": "4d5de08b5fa4812c20cf40d5bdf31bb798fb076f5ab3c94c8e8f99ab75bd36a2",
+        "new": "e3b3b38af044d5e23194bc07879cf71adb8a06573b951662a402e44700432eaf"
+      },
+      {
+        "manifest": "analysis/server-monster-damage/evidence.json",
+        "path": "analysis/server-radius-damage/contract.md",
+        "old": "dee17981700f6da2cebd4d4235b61e90e6dc68483492ca3a5e5d295b9866da7f",
+        "new": "6108d3d42c0bf7a4ece8d60715b5051a3a18b99449ab357d10ca590ddc50077e"
+      },
+      {
+        "manifest": "analysis/server-radius-damage/evidence.json",
+        "path": "analysis/server-grenade-lifecycle/contract.md",
+        "old": "3a10d7bf1d95c6b2edb576ae274ccf1a50323bc7a1a350381305c07a2cf7f421",
+        "new": "7db3a45f9a6dffb0bdbceed31bfe8ce91a9f0484478c62003954e29dcf64d92e"
+      },
+      {
+        "manifest": "analysis/server-unlock-callers/evidence.json",
+        "path": "analysis/server-unlock-settings/contract.md",
+        "old": "4d5de08b5fa4812c20cf40d5bdf31bb798fb076f5ab3c94c8e8f99ab75bd36a2",
+        "new": "e3b3b38af044d5e23194bc07879cf71adb8a06573b951662a402e44700432eaf"
+      },
+      {
+        "manifest": "analysis/server-unlock-callers/evidence.json",
+        "path": "analysis/server-unlock-settings/evidence.json",
+        "old": "6d2d6cf58a5c56abc6df4615fa24619d0ecee36817c1fa8662a8113f23f19437",
+        "new": "fae2d20d53bf47bbdccc0d0e3912551d7e6744f2f03aac8cf78a20e9d4b048d8"
+      },
+      {
+        "manifest": "analysis/server-unlock-callers/evidence.json",
+        "path": "analysis/server-player-equipment/contract.md",
+        "old": "8c094888c7a5d7b84305427afb0cc74d2adf8454bda533164b97c9c068163664",
+        "new": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322"
+      },
+      {
+        "manifest": "analysis/server-unlock-settings/evidence.json",
+        "path": "analysis/server-player-equipment/contract.md",
+        "old": "8c094888c7a5d7b84305427afb0cc74d2adf8454bda533164b97c9c068163664",
+        "new": "28dc5c4c235782c9f5fa5892dc65c95b8353084a608acebf882a4b44d550b322"
+      }
+    ],
+    "cascade_updates": [
+      {
+        "manifest": "analysis/server-unlock-actions/evidence.json",
+        "changes": [
+          {
+            "path": "analysis/server-unlock-callers/evidence.json",
+            "old": "dcbee7ba6900debffd251614502bf0f7667244730b7d5e24a7c3c6d026f2907c",
+            "new": "f865d2e65b686a355edcd8ed277f2caaaf971e394c1e1ae94508adf8d5b958a2",
+            "reason": "deliberately edited navigation document or dependent manifest; previous intermediate dependency pin"
+          }
+        ]
+      }
+    ]
+  },
+  "linked_document_package_checks": {
+    "server-bullet-traces": {
+      "returncode": 0,
+      "output": "PASS 24 C, 24 ASM, 2575 byte rows, 215 raw, 3 cards"
+    },
+    "server-item-lifecycle": {
+      "returncode": 0,
+      "output": "PASS 12 cards 29 C 29 ASM 2099 byte rows 195 raw; descriptor/ABI/rotating-match assertions"
+    },
+    "server-monster-damage": {
+      "returncode": 0,
+      "output": "PASS 34 C, 34 ASM, 2063 byte rows, 284 raw, 7 cards"
+    },
+    "server-unlock-callers": {
+      "returncode": 0,
+      "output": "PASS 37 C, 37 ASM, 11227 byte rows, 404 raw, 4 cards"
+    },
+    "server-unlock-settings": {
+      "returncode": 0,
+      "output": "INDEPENDENT PASS 18 C 24 ASM 4082 rows 369 raw;128selector,64reader dispatch,128writer polarity paths,34token pairs\nPASS 18 C, 24 ASM, 4082 byte rows, 369 raw, 4 cards"
+    },
+    "server-radius-damage": {
+      "returncode": 0,
+      "output": "PASS 18 C, 18 ASM, 1266 byte rows, 196 raw, 4 cards"
+    },
+    "server-grenade-lifecycle": {
+      "returncode": 0,
+      "output": "PASS 47 C, 47 ASM, 3014 byte rows, 737 raw, 15 cards"
+    }
+  },
+  "verification_report_sha256": "3fe3ff18a7fb681fd02b541528edf7465e1fac574ad3b026aa4d3af78e236701"
+}

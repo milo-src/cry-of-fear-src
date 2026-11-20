@@ -1,0 +1,85 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100bfc50",
+      "proposed_name": "Monster_LookAndBuildVisibleChain",
+      "subsystem": "monsters",
+      "summary_ru": "ECX=M, один signed int distance на стеке, RET4; определённого возвращаемого статуса нет. До всех ветвей M180 &= ff9fffe1 (сбрасывает2,4,8,10,200000,400000), M10=0 и локальная маска=0. Иные conditions сохраняются. Сравнение собственной classname с literal monster_booksimon идёт через V20c→edict+80→string offset+S; превращение NULL edict в адрес0 не обеспечивает безопасного возврата: следующий MOV всё равно разыменовывает0. Строковый compare точный, побайтный, чувствительный к регистру.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=M, один signed int distance на стеке, RET4; определённого возвращаемого статуса нет. До всех ветвей M180 &= ff9fffe1 (сбрасывает2,4,8,10,200000,400000), M10=0 и локальная маска=0. Иные conditions сохраняются. Сравнение собственной classname с literal monster_booksimon идёт через V20c→edict+80→string offset+S; превращение NULL edict в адрес0 не обеспечивает безопасного возврата: следующий MOV всё равно разыменовывает0. Строковый compare точный, побайтный, чувствительный к регистру.",
+        "Особая ветка требует classname monster_booksimon, false serial-validity predicate10017780(M184), ordered V.frags==0 (UCOMISS/LAHF/TEST44/JP отвергает NaN). 1010a470 возвращает число разрешившихся клиентских слотов с ordered V.fuser4==0; затем без count>0 guard вызываются RandomLong(1,count) и resolver10119680(result). Это НЕ случайный элемент отфильтрованного списка: при дырках/неподходящих ранних индексах индекс может не отвечать предикату счётчика. Границы RNG при count0 остаются поведением engine; здесь нет повторной попытки.",
+        "Если выбранный private pointer ненулевой и повторная проверка M184 всё ещё false, setter10017740 сперва назначает его в M184. Затем PushEnemy100c1670(M,resolve(M184),&M2f4), RET8, получает уже назначенного нового врага и прежний LKP, а не старого врага до setter. Локальный &M2f4 заранее помещён на стек через безаргументный getter. Далее M180|=10000, тот же кандидат назначается повторно, getter100177a0 разрешает M184 и без NULL guard его origin копируется в M2f4; M180|=200000 и ранний RET4. Эта ветка не строит M10, не проверяет здоровье/FOV/visibility/distance, не выставляет condition10 и проходит до обычного own spawnflags10 gate. Если выбор/повторный handle gate не прошли, выполняется обычный путь.",
+        "Обычный путь пропускает поиск при BYTE V.spawnflags&10, оставляя уже очищенные sight conditions и M10. Иначе signed distance преобразуется CVTDQ2PS в float32 d; min=(origin.x-d,origin.y-d,origin.z-d), max=(d+origin.x,origin.y+d,origin.z+d), с отдельным ADDSS/SUBSS округлением. Отрицательный d не нормализуется. 10118390 получает (local array[100],100,&min,&max,28h); используется bbox overlap, а не сферическое расстояние. Возвращённый signed count фиксируется, обработка начинается лишь при count>0; re-query списка между кандидатами отсутствует.",
+        "Для каждого T сначала исключаются T==M, BYTE T.V.spawnflags&10 и здоровье, не проходящее ordered T.V.health>0 (COMISS/JBE исключает NaN). Если T.V.noise3!=0, M.V.targetname!=0 и точная classname T равна monster_target, требуется точное строковое равенство S+M.targetname и S+T.noise3; при отсутствии любого из двух offsets или иной classname этот фильтр не применяется. Это не общий targetname-фильтр всех сущностей. String-base кэшируется для обеих проверок этого кандидата.",
+        "Далее кэшируется exclude flag: rules10222ee4!=NULL, rules.virtual20()!=0 и ordered T.V.fuser3==3. После этого в строгом порядке вызываются свежий M.virtual138(T) с требованием EAX!=0; свежий M.virtual154(T) с EAX!=0; проверяется BYTE T.V.flags&80==0; свежий M.virtual114(T) с EAX!=0; лишь затем проверяется кэшированный exclude flag. Значит callbacks relationship/cone/FVisible всё ещё исполняются для заранее отмеченного exclude-кандидата. Здесь нет повторной проверки ранних health/flags/target filters после callbacks.",
+        "У прошедшего T вызывается T.virtualD0(). При ненулевом результате и BYTE M.V.spawnflags&1 выполняются T.virtual78() и virtual154(M) на возвращённом объекте: native PUSH M на100bffce обязателен, хотя C потерял аргумент. Возвращённый объект не проверяется на NULL. Для доказанного CBasePlayer это reciprocal horizontal cone. Нулевой результат отвергает T; ненулевой очищает только mask1 в текущем M.V.spawnflags. После этого для всякого T с D0!=0 локальная маска получает200000. Для D0==0 reciprocal gate и этот бит обходятся.",
+        "Видимый кандидат вставляется в общий intrusive link: T10=старый M10, M10=T, то есть порядок списка обратен порядку перечисления. Это поля самих объектов, не отдельные узлы/копии; повторные Look других observers могут перезаписать эти links. Через10017790(M184) сравнивается текущий private enemy pointer с T; совпадение добавляет локальный10. Вторая, свежая M.virtual138(T) вызывается ПОСЛЕ включения в список и сравнения enemy; результат первого вызова не кэшируется и может отличаться.",
+        "Второй relationship обрабатывается native switch unsigned(wrap32(value+2))<=5 с таблицей100c00d4: -2 не добавляет бит; -1 добавляет4; 1 добавляет8; 2 добавляет2; 3 добавляет400000; 0 и остальные значения вызывают AlertMessage(2,\"%s can't assess %s\\n\",own classname,candidate classname), не удаляя уже добавленный T. После всех кандидатов M180 |= локальная маска, с сохранением побочных изменений M180 от callbacks. Нет нормализации relationships, защиты lifetime/list integrity или общего EAX bool результата; cookie check не меняет эти границы."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bfc50.c",
+        "analysis/server-monster-sight/100bfc50-0.asm",
+        "analysis/server-monster-sight/evidence.json",
+        "analysis/server-monster-sight/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118390",
+      "proposed_name": "EnumeratePrivateEntitiesInBox",
+      "subsystem": "monsters",
+      "summary_ru": "Обычный cdecl, пять DWORD: out private-pointer array, signed capacity, mins*,maxs*,flags mask. Начинает с engine PEntityOfEntIndex(1); NULL даёт полный EAX0. Если signed G.maxEntities(+94)<=1, также0. Иначе перечисляет индексы1..maxEntities-1, двигаясь по contiguous edict storage с native stride32ch от возвращённого edict1; world index0 исключён. Повторного PEntityOfEntIndex для каждого индекса нет. Это original ABI layout, не универсальный размер SDK edict.",
+      "confidence": "high",
+      "details_ru": [
+        "Обычный cdecl, пять DWORD: out private-pointer array, signed capacity, mins*,maxs*,flags mask. Начинает с engine PEntityOfEntIndex(1); NULL даёт полный EAX0. Если signed G.maxEntities(+94)<=1, также0. Иначе перечисляет индексы1..maxEntities-1, двигаясь по contiguous edict storage с native stride32ch от возвращённого edict1; world index0 исключён. Повторного PEntityOfEntIndex для каждого индекса нет. Это original ABI layout, не универсальный размер SDK edict.",
+        "Отбрасывает DWORD edict.free(+0)!=0. При mask!=0 требуется DWORD edict+228 & mask !=0; mask0 обходит фильтр. Query mins по x,y,z сравниваются с edict.absmax(+150/+154/+158), edict.absmin(+144/+148/+14c) — с query maxs. Каждая из шести проверок — COMISS/JA: отбрасывается только ordered strict greater; equality проходит, а unordered NaN также проходит при masked exceptions. Это отличается от безопасной реализации через все шесть <=. Нет нормализации min/max или отдельного finite gate.",
+        "После bbox-фильтра требуется ненулевой raw private pointer edict+7c. Он записывается в out[count], count увеличивается и только затем signed count>=capacity завершает обход. Поэтому capacity0 или отрицательная capacity не защищает первую запись; при наличии кандидата возможен результат1. На нормальном caller Look capacity100 ограничивает массив100. Нет out NULL/буферной проверки и handle/RTTI/health проверки результата. G pointer обновляется после принятой записи, если обход продолжается; maxEntities читается на каждой итерации через сохранённый текущий G. Полный EAX возвращает накопленный count, plain RET; аргументы убирает caller."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118390.c",
+        "analysis/server-monster-sight/10118390-0.asm",
+        "analysis/server-monster-sight/evidence.json",
+        "analysis/server-monster-sight/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1010a470",
+      "proposed_name": "CountClientsWithZeroFuser4",
+      "subsystem": "monsters",
+      "summary_ru": "Без аргументов и без использования входного ECX, plain RET, полный EAX=count. Итерирует signed indices от1 до текущего G.maxClients(+90) включительно; начальное maxClients<1 даёт0. Каждый индекс разрешает10119680, который проверяет диапазон, ненулевой edict, free==0 и возвращает raw private pointer+7c. NULL не учитывается.",
+      "confidence": "high",
+      "details_ru": [
+        "Без аргументов и без использования входного ECX, plain RET, полный EAX=count. Итерирует signed indices от1 до текущего G.maxClients(+90) включительно; начальное maxClients<1 даёт0. Каждый индекс разрешает10119680, который проверяет диапазон, ненулевой edict, free==0 и возвращает raw private pointer+7c. NULL не учитывается.",
+        "Ненулевой private pointer учитывается только при ordered V.fuser4(+264)==0. UCOMISS/LAHF/TEST44/JP допускает оба знака нуля и исключает NaN; остальные значения не проходят. Никакой проверки health/deadflag/classname/virtualIsPlayer здесь нет. После каждого resolver вызова G/maxClients перечитываются; список индексов и count не фиксируются заранее. Look использует лишь число как верхнюю границу RandomLong, а не как список выбранных игроков. Реальная роль fuser4 и поведение RNG при пустом наборе остаются вне этого тела."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1010a470.c",
+        "analysis/server-monster-sight/1010a470-0.asm",
+        "analysis/server-monster-sight/evidence.json",
+        "analysis/server-monster-sight/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100880a0",
+      "proposed_name": "Entity_IsInHorizontalViewCone",
+      "subsystem": "monsters",
+      "summary_ru": "ECX=observer, один private target pointer, RET4; полный EAX0/1 благодаря XOR EAX,EAX перед SETA AL. Сначала10119320(observer.V.angles+50) вызывает engine MakeVectors и меняет общие G.forward/up/right. После callback перечитываются V обоих объектов; target/observer NULL и lifetime не проверяются. Используются только разности origin.x/y: target-observer, каждая SUBSS float32; z полностью игнорируется.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=observer, один private target pointer, RET4; полный EAX0/1 благодаря XOR EAX,EAX перед SETA AL. Сначала10119320(observer.V.angles+50) вызывает engine MakeVectors и меняет общие G.forward/up/right. После callback перечитываются V обоих объектов; target/observer NULL и lifetime не проверяются. Используются только разности origin.x/y: target-observer, каждая SUBSS float32; z полностью игнорируется.",
+        "Сначала squareSum=float32(float32(dx*dx)+float32(dy*dy)), затем перевод в double. UCOMISD(0,sum)/JA ведёт только ordered negative в1016be90; все остальные, включая NaN, идут SQRTSD. Результат double округляется CVTSD2SS в float32 length. Если length ordered equal0, nx=ny=0; иначе, включая NaN, reciprocal=float32(1/length), nx=float32(dx*reciprocal),ny=float32(dy*reciprocal). Это два умножения на округлённое обратное, не два прямых деления.",
+        "Dot=float32(float32(G.forward.x*nx)+float32(G.forward.y*ny)); native COMISS(dot,observer208)/SETA принимает только ordered dot>m_flFieldOfView. Equality и NaN отвергаются. Нет clamp threshold в[-1,1], повторной нормализации горизонтального forward или вертикального угла: pitch из исходных angles может уменьшить горизонтальную длину forward. При совпавших XY итог зависит от threshold и конечности basis, а не от отдельного coincident-point запрета. Lower libm helper/engine trigonometry остаются внешними реализациями; локальные FP/ABI ветви закрыты полностью."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100880a0.c",
+        "analysis/server-monster-sight/100880a0-0.asm",
+        "analysis/server-monster-sight/evidence.json",
+        "analysis/server-monster-sight/contract.md"
+      ]
+    }
+  ]
+}

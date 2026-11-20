@@ -1,0 +1,8 @@
+[REVIEW server:0x100f1860]
+  Предлагаемое имя: Player_StartRevivedAnimation
+  Подсистема: healing
+  Назначение: Выбирает и запускает анимацию восстановления игрока.
+  Уверенность: высокая для описанного статического поведения
+  Разбор: Ищет revived или crouch_revived по crouch bit0x4000; missing sequence→0, сбрасывает frame/state, получает длительность и задаёт два private timers, fuser3=3. Само тело не восстанавливает health и не доказывает полное оживление.
+  Основание: decompiled/server/partial-pass/functions/0x100f1860.c
+[/REVIEW]

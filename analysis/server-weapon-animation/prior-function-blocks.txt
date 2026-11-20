@@ -1,0 +1,104 @@
+[FUNCTION server:0x1011f5d0]
+  Символ тела: FUN_1011f5d0
+  Декларация Ghidra: void FUN_1011f5d0(undefined4 param_1)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x1011f5d0.c
+    SHA-256: 15c22231bbe86a0d5cedd9bed0c97c1df0c166cf31ca2b99b04ffc36bd341de5; селектор=0x1011f5d0; вход=0x1011f5d0; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Глобальные метки (упоминания):
+    DAT_10223000
+    DAT_10223004
+    DAT_10223008
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x1011f5d0-0x1011f634 inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Форма эталонного тела: if=0, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x1011f640]
+  Символ тела: FUN_1011f640
+  Декларация Ghidra: void FUN_1011f640(int param_1,undefined4 param_2)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x1011f640.c
+    SHA-256: afe40338c7e9dfd286ef0e8a6219ad83c67d06e006d9569b984898b212cc0438; селектор=0x1011f640; вход=0x1011f640; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Глобальные метки (упоминания):
+    DAT_10223000
+    DAT_10223004
+    DAT_10223008
+    DAT_102265f8
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x1011f640-0x1011f678 inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Форма эталонного тела: if=1, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x100531b0]
+  Символ тела: FUN_100531b0
+  Декларация Ghidra: void FUN_100531b0(void)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x100531b0.c
+    SHA-256: f9761078e339ed464166878bace607a5a740e045b7b7c6de93c01c5dc16d9a77; селектор=0x100531b0; вход=0x100531b0; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Глобальные метки (упоминания):
+    DAT_10223188
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x100531b0-0x10053206 inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Форма эталонного тела: if=2, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x10053990]
+  Символ тела: FUN_10053990
+  Декларация Ghidra: void FUN_10053990(void)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x10053990.c
+    SHA-256: cf02ba42c61bfcf1a8b4cca1b7b7efd832fd0c6dc0e94a307f29dd5360d53271; селектор=0x10053990; вход=0x10053990; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Глобальные метки (упоминания):
+    DAT_10223188
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x10053990-0x10053a63 inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Форма эталонного тела: if=2, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x100530b0]
+  Символ тела: CMobile::FlashToggle
+  Декларация Ghidra: void __thiscall CMobile::FlashToggle(CMobile *this)
+  Статус: символ
+  Экспорт: public: void __thiscall CMobile::FlashToggle(void); evidence=ev_d4edd1dd254aef37e75f3bdfb0bc60500eefa5ad1fbfdde88f14ec4baf91ead0
+  Назначение/граница знания: Символ CMobile::FlashToggle задаёт точку поиска. Конкретное поведение ещё требует разбора тела; имя не считается доказательством семантики.
+  Файл: decompiled/server/partial-pass/functions/0x100530b0.c
+    SHA-256: 69e79cc79b376553b171a6f9176d729fe8624b4ffbb1bbe98039de3871f9bbec; селектор=0x100530b0; вход=0x100530b0; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x100530b0-0x10053145 inclusive
+  Форма эталонного тела: if=6, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]
+[FUNCTION server:0x10053c90]
+  Символ тела: FUN_10053c90
+  Декларация Ghidra: void FUN_10053c90(void)
+  Статус: не разобрана
+  Назначение/граница знания: Конкретное игровое назначение пока не установлено. Ниже сохранены наблюдаемые связи и данные для следующего разбора.
+  Файл: decompiled/server/partial-pass/functions/0x10053c90.c
+    SHA-256: e36d9abce5f414dbc6af5321f45ac74ef448400e934e6dd66c5da40edef80be3; селектор=0x10053c90; вход=0x10053c90; основание=индекс Ghidra
+    Provenance: decompiled/server/partial-pass/index.json
+  Именованные вызовы (лексически):
+    FUN_1011ab20
+    FUN_1000f390
+  Глобальные метки (упоминания):
+    DAT_10223070
+    DAT_10223188
+  Машинные диапазоны из экспорта (псевдокод может разворачивать thunk):
+    0x10053c90-0x10053d7a inclusive
+  Есть косвенные указатели/вызовы: получатели не разрешены по одному тексту.
+  Вызовы в каталоге: server:0x1000f390, server:0x1011ab20
+  Форма эталонного тела: if=5, циклы=0, switch=0.
+  Выражения return (Ghidra): void
+[/FUNCTION]

@@ -1,0 +1,161 @@
+{
+  "scope": "Static original-game reverse engineering; no target execution, resources, commits or implementation",
+  "result": "PASS",
+  "new_reviewed": 20,
+  "corrected_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-entity-damage-visibility",
+      "new_reviewed": 7,
+      "author": "root",
+      "reviewers": [
+        "shader_inventory"
+      ],
+      "result": "PASS",
+      "checked": "Full7 primary C/native; concrete base vtable bindings, damage four-argument ABI and NaN health result, staged impulse arithmetic, Killed two-argument ABI, decal scalar return, asymmetric water/debug visibility gates, two vector helpers.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "4a31c04e91e2c1ef6bec21827149e5878bce92c47b94a429734ac53dbb9345ef",
+        "verify.py": "58e051dfd1ca906632e25d5bc160258533b010e45ede45220bab104ff2e39101",
+        "contract.md": "fe42be5ffc7ac5ec29b3bc8f347984e723261158be0dc38930269e4f1b10114f",
+        "notes.json": "9098d4b7dc027957078f2406ac7334c608e82be5672fd94da8aa770e6da3bf79",
+        "evidence.json": "7e664bd866a20b637fb4f8f817a85b5133b39dc7d6b316090b22c40e8168a388",
+        "write_notes.py": "27f46ab7c4a93b71f8c52898b7c3b79f0fe7a89714937fdcce1a2e714d47c764"
+      }
+    },
+    {
+      "package": "analysis/server-subtitle-main-lifecycle",
+      "new_reviewed": 6,
+      "author": "server_catalog",
+      "reviewers": [
+        "client_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full6 primary C/native; CSubtitle factory/export and unsafe allocation failure path, four KeyValue branches, float CurrentLine descriptor, exact Save/Restore ABI and Spawn v_angle/SetOrigin behavior.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "048f8a81abac80e76ecb116b1166437b019f00dde6fb09fbddf2a50e6035e5a6",
+        "verify.py": "e129459911b28ffc569c4acd97818d8d9aa03ce73a6d7d7f7665eba2b90b900b",
+        "contract.md": "a89583203c69de56f71407c05f479f3166af101c977781756f5474a705012074",
+        "notes.json": "e548c90e5158ffb684dda68aaeae620cd1d0ac42568fa83a57d47c47b1cd7c6b",
+        "evidence.json": "cb5250671483484f272f4e54c648e1909ec3c82282936f7f27dca86429a1d612",
+        "write_notes.py": "84fc9a5f6e598a3658138d4295a6d4415ea17801be33c5679dc3cf344facc32a"
+      }
+    },
+    {
+      "package": "analysis/server-subtitle-playback",
+      "new_reviewed": 1,
+      "author": "client_catalog",
+      "reviewers": [
+        "server_catalog"
+      ],
+      "result": "PASS",
+      "checked": "Full primary C/native; Use RET16, language jump table and copied path bytes, file/line/float selection, long-line counter stall, uninitialized no-match output, marker starts at index1, individualized dynamic ProFont payload and normal cleanup.",
+      "corrections": [],
+      "final_hashes": {
+        "capture.py": "6fa74638e49948c8f3fd8ef423eb3bc64eac84885d826ae1f61d8557aa8d7f31",
+        "verify.py": "4a0874e5f3743425d7128b818d66c124f019ca7043662c367831b12d24feb4c0",
+        "contract.md": "cf1fb475857dd885262d80ebbe48730be7037e6de40801387771f5a619e7e12d",
+        "notes.json": "27cb9b8cfe7e3228bca8d8193d682d3ee169b239ff5cbf48fffbae60911f9bf1",
+        "evidence.json": "c8fa08fd16155b070f30a2c6785dc560c1b5cc128278e955b2fd303ca0486e21"
+      }
+    },
+    {
+      "package": "analysis/server-weapon-animation",
+      "new_reviewed": 6,
+      "author": "shader_inventory",
+      "reviewers": [
+        "root"
+      ],
+      "result": "PASS",
+      "checked": "Full6 primary C/native; sender RET0c/RET8, dynamic WeaponBody registration, concrete CMobile scheduler, NaN timer gates, mode/flag toggle, sequence staged through GetModelPtr and duration helper.",
+      "corrections": [
+        "Clarified bit numbering as bit0(mask1),bit1(mask2); removed dead conditional expression in capture output path."
+      ],
+      "final_hashes": {
+        "capture.py": "bfc7e3067d937a2d7702fb9b5da8a6e85aa767200fe3d85962c90e04862d7b07",
+        "verify.py": "45ab331b849f44fb7b0894607e0008cb8d4b2e7f91a430fbbd86e13b785a38d6",
+        "contract.md": "ae2df384bba1baa63dfb576aa8b8be32ab04e73efe70d29a3f38423a7b93d039",
+        "notes.json": "a113d8eb651f491681e885db68b4bf98f0ab9da5c3ad92d4401906ce9f6af6c3",
+        "evidence.json": "c7c0944fe496d1f41c24f317294de278cabff300652064918d3921b7b1ac8744",
+        "write_notes.py": "ae5ef452123ff2a21e5e61cc1065ddff67d4970120eb0efe39ab5ba6f9a307dd"
+      }
+    }
+  ],
+  "notes_contract_details_parity": true,
+  "summary_semantics_peer_reviewed": true,
+  "prior_reviews": {
+    "exactly_preserved": 1890,
+    "corrections": [],
+    "evidence_preserved": "All prior review bodies and evidence references preserved byte-for-byte."
+  },
+  "navigation_cleanup": "Twenty primary addresses removed from pending. Subtitle_main lifecycle and playback linked from prior phone/subtitle contracts; base damage and visibility plus animation sender/callback routes indexed. Remaining mobile frame handler, player state producers, concrete rules/debug dispatch and CRT/engine boundaries explicitly queued. All prior REVIEW preserved.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-phone-call-callbacks/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-subtitle-multiple-lifecycle/contract.md",
+          "old": "d6cb9304e1f98cd9387345f221af541db13cf78403bcda9d6ea42a0d3967445c",
+          "new": "c19f6da44e1baaaaa7c8ed08153979834f787c59543ce2588fb7fa605df095cd"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-subtitle-main-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-subtitle-multiple-keyvalue/contract.md",
+          "old": "3bee2af94ffe20d9a4f74da90c077f193892e15a99ab2a3a5dbad21cb2d333ca",
+          "new": "8ea69da4b1ca9b147bcf93c3fc5e2dd43faa8b261cb7e25b2f6fea7db8fc17e4"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-subtitle-multiple-keyvalue/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-subtitle-multiple-lifecycle/contract.md",
+          "old": "d6cb9304e1f98cd9387345f221af541db13cf78403bcda9d6ea42a0d3967445c",
+          "new": "c19f6da44e1baaaaa7c8ed08153979834f787c59543ce2588fb7fa605df095cd"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-subtitle-playback/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-subtitle-multiple-lifecycle/contract.md",
+          "old": "d6cb9304e1f98cd9387345f221af541db13cf78403bcda9d6ea42a0d3967445c",
+          "new": "c19f6da44e1baaaaa7c8ed08153979834f787c59543ce2588fb7fa605df095cd"
+        },
+        {
+          "path": "analysis/server-phone-call-callbacks/contract.md",
+          "old": "8541c3b1d5c539cf9ad4df1f41b35367a1fd9c3fc9b65e8ae7f250f61ea7c1b9",
+          "new": "c0bb6890216d1333d6647054363db247bf30297827c0c62902a8e71dad68557b"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-weapon-animation/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-phone-call-callbacks/contract.md",
+          "old": "8541c3b1d5c539cf9ad4df1f41b35367a1fd9c3fc9b65e8ae7f250f61ea7c1b9",
+          "new": "c0bb6890216d1333d6647054363db247bf30297827c0c62902a8e71dad68557b"
+        }
+      ]
+    }
+  ],
+  "linked_document_package_checks": {
+    "analysis/server-phone-call-callbacks": "PASS 22 C 22 ASM 1022 byte rows 256 raw 180 descriptors 4 vtables 2 cards",
+    "analysis/server-phone-call-keyvalue": "PASS 10 C 11 ASM 1606 byte rows 103 raw 29 descriptors 65 keys, 1 card",
+    "analysis/server-phone-call-lifecycle": "PASS 28 C 28 ASM 1115 byte rows 212 raw 4 tables 2 exports 10 cards",
+    "analysis/server-subtitle-main-lifecycle": "PASS 16 C 20 ASM 1119 byte rows 145 raw 3 tables 1 exports 6 cards",
+    "analysis/server-subtitle-multiple-keyvalue": "PASS 14 C 18 ASM 1852 byte rows 213 raw 3 tables 2 exports 1 cards",
+    "analysis/server-subtitle-multiple-lifecycle": "PASS 20 C 20 ASM 838 byte rows 196 raw 4 tables 2 exports 8 cards",
+    "analysis/server-subtitle-playback": "PASS 19 C 22 ASM 1566 byte rows 199 raw 125 descriptors 2 vtables 1 cards",
+    "analysis/server-weapon-animation": "PASS 15 C 15 ASM 1525 byte rows 377 raw 362 descriptors 6 cards"
+  },
+  "verification_report_sha256": "d40379eb29a7a18f1a117fedd11e5efc000f65ca556f9ff71cab2c56594342b2"
+}

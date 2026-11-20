@@ -1,0 +1,58 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1927,
+  "new_reviewed": 19,
+  "updated_existing": [
+    "server:0x100af810",
+    "server:0x100f1860",
+    "server:0x100fc6c0"
+  ],
+  "after_reviewed": 1946,
+  "remaining_unreviewed": 6709,
+  "server_reviewed": 1291,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 101,
+    "assembly_ranges": 82,
+    "verified_assembly_byte_rows": 5769,
+    "raw_records": 1803,
+    "decoded_save_fields": 916,
+    "review_evidence_references": 1077,
+    "synchronized_note_occurrences": 22
+  },
+  "checks": {
+    "unrelated_prior_review_semantics_preserved": true,
+    "prior_reviews_exactly_preserved": 1924,
+    "prior_semantic_corrections": [
+      "server:0x100af810: full111-lookup skill map and native branches",
+      "server:0x100fc6c0: ST0 return and formatter ABI",
+      "server:0x100f1860: full visibility-related player callback; prior evidence retained"
+    ],
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.004s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-skill-refresh": "PASS 8 C 8 ASM 649 byte rows 232 raw 0 exports 3 cards",
+      "server-mobile-player-state": "PASS 32 C 32 ASM 1711 byte rows 509 raw 434 descriptors 4 vtables 9 cards",
+      "server-monster-attack-dispatch": "PASS 26 C 26 ASM 1176 byte rows 721 raw 173 descriptors 1 vtables 6 cards",
+      "server-visibility-policy": "PASS 16 C 16 ASM 2233 byte rows 341 raw 309 descriptors 4 cards; VA/reloc/saved-C scans reproduced"
+    }
+  },
+  "artifacts": [
+    "analysis/server-skill-refresh/contract.md",
+    "analysis/server-mobile-player-state/contract.md",
+    "analysis/server-monster-attack-dispatch/contract.md",
+    "analysis/server-visibility-policy/contract.md"
+  ],
+  "catalog_sha256": "4b8d6d4b58e6034dd06fb456ddf49d4db55a4814425092ad76edad04d1a30e22",
+  "progress_sha256": "63a9c073b097cce740388ca8bf539fb33359cfe72f20740951df795afcfcca6a"
+}

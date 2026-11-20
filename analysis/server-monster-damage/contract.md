@@ -130,3 +130,7 @@ Native thiscall ECX=this, stack(hitgroup int, ignored damage DWORD), RET8. Вт�
 Cdecl stack(entvars*), RET без очистки4bytes, полный EAX pointer. Сначала без NULL guard читает entvars+20c (edict*). При nonNULL возвращает edict+7c private pointer как есть. При NULL вызывает engine PEntityOfEntOffset(0), slot69 at1022305c; если engine также вернулNULL, EAX0, иначе возвращает его private+7c.
 
 Это не проверка валидности handle/serial/alive и не allocation: NULL private возвращается, stale/чужой указатель не фильтруется. Отдельная проверка EntOffsetOfPEntity!=0 в TakeDamage выполняется вызывающим, не этим helper. Нельзя заменить fallback на unconditionalNULL без изменения native контракта. ECX не используется как this.
+
+## Продолжение разбора: pass13
+
+Generic Killed1008a330, TraceBleed1008c7e0, BecomeDead100876d0, explicit blood trace1008a510, decal selector/wire10117700/101180b0, gib clamp/spawn/touch/producer1008a440/1008ac80/100877a0/1008bac0/1008ad80 разобраны в [monster death](../server-monster-death/contract.md). Generic ShouldGib возвращает0, GibMonster пуст: это не доказательство готового generic gib pipeline. Derived Killed/TraceBleed, particle consumer, rendering gore mask и runtime effect registration остаются границами. Новые11 REVIEW не означают полный реверс всех смертей.
