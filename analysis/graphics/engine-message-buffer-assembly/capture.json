@@ -1,0 +1,67 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll",
+  "sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+  "target_executed": false,
+  "tool": "GNU objdump -d -Mintel",
+  "ranges": [
+    {
+      "start": "0x1d483e8",
+      "end_exclusive": "0x1d48598",
+      "file": "01d483e8.asm",
+      "sha256": "13ad4a7e6bd5daa15fba9d6be8972bc49a102354185a84942a095d8f12ec60cc",
+      "coverage": "bounded interval; complete function status assessed separately"
+    },
+    {
+      "start": "0x1da63bd",
+      "end_exclusive": "0x1da67c1",
+      "file": "01da63bd.asm",
+      "sha256": "ac6d7bd199d868fa728220f001bcb52ebda8d9284da5d7bec6141ab86d6714f4",
+      "coverage": "bounded interval; complete function status assessed separately"
+    },
+    {
+      "start": "0x1d483c6",
+      "end_exclusive": "0x1d483e8",
+      "file": "01d483c6.asm",
+      "sha256": "222b14885a75ced9bf23908e2a2e6a1d0c3f8169d943a50b29f3ea66f18cff80",
+      "coverage": "complete small helper ending RET at1d483e7; asm only, not catalog entry"
+    },
+    {
+      "start": "0x1d4705f",
+      "end_exclusive": "0x1d47080",
+      "file": "01d4705f.asm",
+      "sha256": "3613d0062b3d04bd18971c14f4c7246c34290251e8d4a16641b98377b4f0d0ce",
+      "coverage": "bounded interval; complete function status assessed separately"
+    },
+    {
+      "start": "0x1d471b1",
+      "end_exclusive": "0x1d471d2",
+      "file": "01d471b1.asm",
+      "sha256": "32639489181a278b9129c6a8255ecf9b7e6542e049ec086665c8870e79fdcc28",
+      "coverage": "bounded interval; complete function status assessed separately"
+    }
+  ],
+  "static_data": {
+    "staging_address": "0x1ec1a98",
+    "staging_hex": "b01aec0100000000f4f042020002000000000000",
+    "storage": "raw PE",
+    "empty_string_address": "0x2079bcc",
+    "empty_string_first_byte": "00",
+    "empty_string_storage": "zero-fill (uninitialized section virtual range)",
+    "error_literals": {
+      "0x1eb1290": "SZ_GetSpace:  Tried to write to an uninitialized sizebuf_t: %s",
+      "0x1eb12d4": "SZ_GetSpace: overflow without FSB_ALLOWOVERFLOW set on %s",
+      "0x1eb1314": "SZ_GetSpace: %i is > full buffer size on %s",
+      "0x1eb1344": "SZ_GetSpace: %i is > full buffer size on %s, ignoring",
+      "0x1eb1380": "SZ_GetSpace: overflow on %s\n",
+      "0x1ec243c": "MSG_ONE or MSG_ONE_UNRELIABLE with no target entity\n",
+      "0x1ec2474": "Invalid message;  cannot use broadcast message with a target entity",
+      "0x1ec24b8": "New message started when msg '%d' has not been sent yet",
+      "0x1ec24f0": "Tried to create a message with a bogus message type ( 0 )",
+      "0x1ec252c": "MESSAGE_END called with no active message\n",
+      "0x1ec2558": "MESSAGE_END called, but message buffer from .dll had overflowed\n",
+      "0x1ec259c": "PF_MessageEnd_I:  Unknown User Msg %d\n",
+      "0x1ec25c4": "PF_MessageEnd_I:  Refusing to send user message %s of %i bytes to client, user message size limit is %i bytes\n",
+      "0x1ec2634": "User Msg '%s': %d bytes written, expected %d\n"
+    }
+  }
+}

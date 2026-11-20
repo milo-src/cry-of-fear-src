@@ -1,0 +1,132 @@
+{
+  "functions": [
+    {
+      "module": "engine",
+      "address": "0x01da68ad",
+      "proposed_name": "PF_WriteCoord_I",
+      "subsystem": "network music",
+      "summary_ru": "Кодирует float через trunc(value*8) и младшие16 бит; Ghidra потерял арифметику x87.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Callback53 table01eced18→01da68ad; сервер получает его через GiveFnptrsToDll и copied slot1022301c. Проверяет active0242f300; при0 diagnostic01df2656, полный nonreturn/error contract не установлен.",
+        "ASM FLD[ebp+8],FMUL float01e8cc48=8.0,CALL01e7163c; EAX→01d47080(sizebuf01ec1a98,q). Для finite x приabs(8*x)<2^63 и без исключений q=truncTowardZero(8*x), wire little-endian low16(q). Clamp отсутствует.",
+        "Клиент10080910 декодирует signed16/8;1.2→1.125,-1.2→-1.125,4096→-4096. Это статически вычисленные примеры; NaN/Inf/int64 overflow и x87 exceptions отдельно не проверены. Не копировать ошибочное void/no-argument C как ABI."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/000-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01da68e4",
+      "proposed_name": "PF_WriteString_I",
+      "subsystem": "network music",
+      "summary_ru": "Передаёт строку в общий message buffer после проверки active-message flag.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Callback54 table01eced18→01da68e4, copied server slot10223020. Приactive0242f300==0 вызывает01df2656; затем показанный путь вызывает01d47171(01ec1a98,text).",
+        "Не делает отдельного client-size clamp или фильтрации имени. Длина/NUL и NULL-case находятся в01d47171, overflow и packet cap — в buffer/MessageEnd контрактах. Nonreturn diagnostic не установлен."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/001-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d47080",
+      "proposed_name": "MSG_WriteShort_LittleEndian",
+      "subsystem": "network music",
+      "summary_ru": "Резервирует два байта и записывает младшие16 бит целого в little-endian.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "01d483e8(sizebuf,2) возвращает destination; byte0=value&255,byte1=(value arithmetic_shift_right8)&255. Signed-range clamp отсутствует; high16 отбрасываются.",
+        "Это primitive buffer writer, не active-message wrapper. Успех резервирования и error-policy зависят от01d483e8; вывод о безопасной записи при любом состоянии из этого тела не следует."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/002-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d47171",
+      "proposed_name": "MSG_WriteString_NulTerminated",
+      "subsystem": "network music",
+      "summary_ru": "Для nonnull пишет strlen+1 байт; NULL использует один байт zero-fill global.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Nonnull:01d466c2(text)+1→01d48557(sizebuf,text,length). Нет собственного ограничения длины или принудительного усечения под256/2048.",
+        "NULL:01d48557(sizebuf,02079bcc,1). Адрес02079bcc лежит в PE zero-fill, raw offset отсутствует; начальный ноль доказан layout, runtime неизменность не доказана. Buffer overflow и End limit описываются отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/003-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01e7163c",
+      "proposed_name": "__ftol_TruncateX87ToInt64",
+      "subsystem": "network music",
+      "summary_ru": "Конвертирует ST0 в int64 с временным округлением к нулю и восстанавливает x87 control word.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "FSTCW;OR AH,0x0c;FLDCW;FISTP QWORD;FLDCW saved. Возврат EDX:EAX. Ghidra ROUND(in_ST0) скрывает явно установленный RC=11, это не round-to-nearest.",
+        "PF_WriteCoord использует только EAX; последующий short writer только low16. Поведение invalid operands/NaN/Inf/out-of-int64 зависит от x87 exceptions и здесь не исчерпано.",
+        "Библиотечное имя __ftol в C не содержит entry. CALL и тело01e7163c..01e71663 подтверждены bounded ASM; автоматический basis каталога остаётся selector, не выдуманный Ghidra index. Capture metadata нормализует нули PE32 адреса, exact request сохранён отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/006-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01df3929",
+      "proposed_name": "Engine_LoadGameDllAndGiveApi",
+      "subsystem": "network music",
+      "summary_ru": "Находит GiveFnptrsToDll и передаёт оригинальную engine callback table и globals.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Фактический entry01df3929; selector01df3999 попал внутрь. Load helper01d5d87f,GetProcAddress(GiveFnptrsToDll),indirect call01df39a3(table01eced18,globals0251f3c0). Raw slots46/47/48/53/54/75 фиксируют связь message API.",
+        "На успешном пути приcount02499f9c!=50 добавляет12-byte record в0250d9c0, сохраняет handle и вызывает01d9fd45. Показанный failure/fallthrough освобождает ненулевойhandle. Полный поискDLL/helper semantics/дальнейшая мутация таблицы не разобраны."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/007-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d466c2",
+      "proposed_name": "Engine_StringLengthOrZero",
+      "subsystem": "network music",
+      "summary_ru": "Считает байты до NUL; для NULL возвращает0.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Nonnull pointer: цикл до первого byte0, без переданного capacity. Это внутреннийstrlen-подобный helper; внешний ограничитель допустимой памяти/строки здесь отсутствует.",
+        "MSG_WriteString использует result+1 для включения terminator. Сам helper не обеспечивает лимит usermsg192 или client destination256."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/graphics-engine-wire/008-pseudocode.c",
+        "decompiled/engine/captures/graphics-engine-wire/capture.json",
+        "analysis/graphics/engine-wire-contract.md",
+        "analysis/graphics/engine-wire-assembly/capture.json"
+      ]
+    }
+  ]
+}

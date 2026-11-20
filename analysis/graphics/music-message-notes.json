@@ -11,7 +11,8 @@
         "Begin(buffer,size), unsigned BYTE loop, unsigned BYTE play, signed-short COORD duration, STRING; strncpy в local256 без явного завершающего NUL после копирования. Общий bad-read flag явно не проверяет. При cl_downwiththesickness==1.0 заменяет имя на downwiththesickness.mp3.",
         "play==0: flag1007fbf0(1), stop1007fc10(duration). Иначе при duration!=0 setter1007fb50(-1,-1,GetClientTime(),duration), затем loop1007fbb0(loop!=0), flag1007fbf0(0), play1007faf0(local256).",
         "ASM доказывает четвёртый аргумент setter: duration сохранён до GetClientTime, затем три остальных аргумента и cleanup16. C ошибочно относит duration к callback и теряет его в setter. EAX=1 в хвосте; C void не отражает результат.",
-        "Play пишет +d4/+d8, но producer1007fd50 при замене трека очищает +cc/+d0/+d4/+d8. Это не доказанный fade-in. Если c4!=0, producer сохраняет raw pointer на local256 в+c8; достижимость и срок жизни требуют ненулевого writer+c4."
+        "Play пишет +d4/+d8, но producer1007fd50 при замене трека очищает +cc/+d0/+d4/+d8. Это не доказанный fade-in. Если c4!=0, producer сохраняет raw pointer на local256 в+c8; достижимость и срок жизни требуют ненулевого writer+c4.",
+        "Штатный original engine variable message имеетpayload<=192; BYTE/BYTE/COORD занимают4байта, NUL1, значитпереданныйwriterимятрека<=187байт. В этоммаршруте strncpy256 получаетterminator; malformed/directcallback отдельно. Приsize3 shortreaderошибка-.125 не двигаетcursor2, иоставшийсябайтможетстатьначаломSTRING; handlerbadreadнепроверяет."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-music-message/000-pseudocode.c",
@@ -21,7 +22,11 @@
         "decompiled/client/captures/graphics-music-wire/001-pseudocode.c",
         "decompiled/client/captures/graphics-music-wire/002-pseudocode.c",
         "decompiled/client/captures/graphics-music-client/010-pseudocode.c",
-        "analysis/graphics/music-message-contract.md"
+        "analysis/graphics/music-message-contract.md",
+        "analysis/graphics/engine-wire-client-boundaries.md",
+        "analysis/graphics/engine-wire-contract.md",
+        "decompiled/engine/captures/graphics-engine-wire/010-pseudocode.c",
+        "decompiled/server/captures/chat-server-core/002-pseudocode.c"
       ]
     },
     {
@@ -68,12 +73,17 @@
       "confidence": "high",
       "details_ru": [
         "Вызывает10080a10, преобразует signed int во float и умножает на1/8. Диапазон корректного16-bit wire значения: -4096..4095.875 с шагом0.125.",
-        "Ошибка short reader(-1) превращается в -0.125; wrapper отдельно не проверяет bad-read. Значение само по себе не позволяет отличить ошибку от корректного wire short=-1. Это decoder, не доказательство округления/переполнения серверного WRITE_COORD."
+        "Ошибка short reader(-1) превращается в -0.125; wrapper отдельно не проверяет bad-read. Значение само по себе не позволяет отличить ошибку от корректного wire short=-1. Это decoder, не доказательство округления/переполнения серверного WRITE_COORD.",
+        "Независимый native engine01da68ad/01e7163c/01d47080 теперь доказывает writer: finite x,abs(8*x)<2^63 безexception → truncTowardZero(8*x),low16 little-endian. Decoder signed16/8; например4096 превращаетсяв-4096, clamp нет. Специальные x87 случаи не раскрыты."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-music-wire/001-pseudocode.c",
         "decompiled/client/captures/graphics-music-wire/002-pseudocode.c",
-        "analysis/graphics/music-message-contract.md"
+        "analysis/graphics/music-message-contract.md",
+        "analysis/graphics/engine-wire-client-boundaries.md",
+        "analysis/graphics/engine-wire-contract.md",
+        "decompiled/engine/captures/graphics-engine-wire/010-pseudocode.c",
+        "decompiled/server/captures/chat-server-core/002-pseudocode.c"
       ]
     },
     {

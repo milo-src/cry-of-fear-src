@@ -1,0 +1,131 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100ead70",
+      "proposed_name": "CBasePlayer_PostThink",
+      "subsystem": "movement",
+      "summary_ru": "Большой PostThink: ранее разобраны landing/stamina; дополнительно раскрыта доставка pending PlayMP3 и её два участка.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Landing требуетground200+HP>0. ПриfallSpeed22c4>=350,watertype!=-3,строгоspeed>580:rulesvirtual44(player),damage>0→FallOver затемvirtual64 TakeDamage(world,world,damage,0x20). Asm100eeef0..100eef10 доказаларгументы. Приdamage>HPстрогопроигрываетbodysplat. Grounded очищает22c4;SPsound>64проверяетсяпосле мутирующегоfallhelper. Такжеcall100f4d70; всёгигантскоетело не исчерпано.",
+        "Music sender в C lines339–357 и2232–2250: path!=0 → MSG_ONE PlayMP3 BYTE(loop),BYTE1,WRITE_COORD(playFade+2320),WRITE_STRING(base+path); path0 → BYTE0,BYTE0,COORD(stopFade+2318),STRING nothing. Оба очищают pending+2314; stop также очищает2318.",
+        "Первый sender после gate DAT10222f04!=0 || virtual+bc()==0; gate уходит к финальномуLAB100ef068, где второй sender остаётся доступен. Pending clear предотвращает простой повтор одного запроса; промежуточные callees могут поставить новый.",
+        "Остальные ветви огромного метода не считаются раскрытыми музыкальным разбором.",
+        "Native asm100eb864 и100ef0da закрывает stop адресат: MessageBegin(1,[10226544],0,[[player+4]+20c]). Общие со play аргументы подготовлены до условного jump; Ghidra потерял их на stop branches. Это MSG_ONE конкретному player, не broadcast."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100ead70.c",
+        "analysis/movement/health-stamina.md",
+        "analysis/movement/health-evidence/capture.json",
+        "analysis/graphics/music-server-protocol.md",
+        "analysis/abi/GiveFnptrsToDll.asm",
+        "external/hlsdk-portable/engine/eiface.h",
+        "decompiled/server/partial-pass/functions/0x100ea5c0.c",
+        "decompiled/server/partial-pass/functions/0x100ea600.c",
+        "analysis/graphics/music-server-state-contract.md",
+        "analysis/graphics/music-server-state-evidence.json",
+        "analysis/graphics/music-server-state-stop-early.asm",
+        "analysis/graphics/music-server-state-stop-late.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101084f0",
+      "proposed_name": "CTriggerMP3_Factory",
+      "subsystem": "music",
+      "summary_ru": "Фабрика семейства музыкальных trigger: подтверждён путь numeric vtable→Use.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Существующий private data возвращается; ветка создания запрашивает0xdc. По10108538 bytes c70038441e10 назначают vtable101e4438, затем object+4=entvars.",
+        "Raw vtable+e8 (101e4520) содержит101148b0, ранее разобранный Use. Контрольные +2c=1000e220,+34=1000dba0 не означают полного разбора методов.",
+        "E9 rel32 export thunks ambient_fmodstream10115c80,trigger_mp310115f20,trigger_mp3audio10115f30 вычисляются в101084f0; имя CTriggerMP3 рабочее, numeric link независим от него."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/music-server-state-contract.md",
+        "analysis/graphics/music-server-state-evidence.json",
+        "decompiled/server/partial-pass/functions/0x101084f0.c",
+        "decompiled/server/partial-pass/functions/0x101148b0.c",
+        "analysis/graphics/music-server-state-factory.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101148b0",
+      "proposed_name": "CAmbientFmodStream_Use",
+      "subsystem": "music",
+      "summary_ru": "Ставит музыкальный path игроку или всем доступным игрокам; fade берётся из native pev.frags, не health.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Требует message path; выбирает activator-player либо player1; flag2 loop, frags+0x168 fade (native field table; прежнее health исправлено), flag1 удаляет entity. Multiplayer также публикует sv_coop_music и обходит игроков; это серверная очередь, не FMOD playback engine.",
+        "Native entvars field table record1021add0 доказывает float frags offset168; health находится164. Message+1d8 и spawnflags+1a4 также подтверждены таблицей.",
+        "Нулевой message немедленно возвращает до remove. При ненулевом message flag1 удаляет entity даже если player не найден. Activator принимается через virtual+d0, иначе player index1 с engine fallback0.",
+        "Rules virtual20!=0: sv_coop_music и globals loop10222f18/fade10222f1c обновляются всегда; цикл1..maxClients ставит очередь лишь найденным private data и при10222f20==0. UseType не выбирает toggle/stop.",
+        "Factory family101084f0 / ambient_fmodstream10115c80 / trigger_mp310115f20 / trigger_mp3audio10115f30 назначает CTriggerMP3::vftable. Прежнее CAmbientFmodStream — proposed name; numeric vtable→Use связь закрыта новым music-server-state evidence:101e4438+e8→101148b0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/menu-switch-music/000-pseudocode.c",
+        "decompiled/server/partial-pass/functions/0x101148b0.c",
+        "analysis/menu/switching.md",
+        "analysis/graphics/music-server-protocol.md",
+        "analysis/doors/capture.json",
+        "analysis/doors/review.md",
+        "decompiled/server/partial-pass/functions/0x10119680.c",
+        "decompiled/server/partial-pass/functions/0x101084f0.c",
+        "analysis/graphics/music-server-state-contract.md",
+        "analysis/graphics/music-server-state-evidence.json",
+        "analysis/graphics/music-server-state-factory.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100f1940",
+      "proposed_name": "CBasePlayer_Save",
+      "subsystem": "music",
+      "summary_ru": "Вызывает сохранение PLAYER по native таблице207 полей; четыре музыкальных поля доказаны raw metadata.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "После успешного100c1ec0 вызов1011adc0 получает cPLAYER,PLAYER,object,10217fe8,count0xcf; затем player+4c8=0. Смысл прочих207 полей этим разбором не исчерпывается.",
+        "Таблица: record10218298 m_strCurrentMp3+2310 type1;102182d8 m_fMp3FadeTime+2318 type0;102182e8 m_bMp3ShouldLoop+231c type12;102182f8 m_fMp3FadeInTime+2320 type0; все count1 flags0. Среди всех207 offsets нет pending+2314.",
+        "Native size table1021b140 даёт4 bytes дляtype0,1,12. Writer1011b320 сохраняет path как NUL string через base+offset; type12 идёт в1011b190 count*4, хотя wire bool читает младший байт. Нулевые поля writer пропускает; внешний save format полностью не разобран."
+      ],
+      "evidence_paths": [
+        "analysis/graphics/music-server-state-contract.md",
+        "analysis/graphics/music-server-state-evidence.json",
+        "decompiled/server/partial-pass/functions/0x100f1940.c",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c",
+        "decompiled/server/partial-pass/functions/0x1011b320.c",
+        "decompiled/server/partial-pass/functions/0x1011b190.c",
+        "decompiled/server/partial-pass/functions/0x10116420.c",
+        "analysis/graphics/music-server-state-save.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100f14c0",
+      "proposed_name": "CBasePlayer_Restore",
+      "subsystem": "movement",
+      "summary_ru": "Restore: ранее раскрыты physics keys; при ненулевом сохранённом music path повторно ставит loop1 и fade1.0.",
+      "confidence": "средняя; часть смысла восстановлена по контексту",
+      "details_ru": [
+        "Веткаslj получает0/1 изplayer24ec; вSP low получает0/1 изplayer43c; затемsteptime cvars→physics keys. Большое тело восстановления/геометрии не полностью аннотировано здесь.",
+        "После restore/sync physics и health helper проверяет player+2310!=0 и QueueMusic(path,1,0x3f800000). Не сохраняет буквально прежние loop/fade для повторной доставки.",
+        "Native asm100f14e0..100f14f2: после успешного100c19a0 reader10117010 получает PLAYER,object,10217fe8,count207. Таблица сохраняет path2310,stopFade2318,loop231c,playFade2320; pending2314 отсутствует именно в этой PLAYER table.",
+        "Native100f176e..100f1785 подтверждает path!=0→QueueMusic(path,1,1.0f), заново pending1, с заменой сохранённых loop/playFade. Path0 пропускает вызов: эта ветка не отправляет stop. StopFade не очищается данным requeue.",
+        "Reader10117010 очищает перечисленные поля поtype/count/flags перед чтением;10116c50 type1 восстанавливает непустойpath через engine AllocString10223054, пустой→0. Это не восстановление playback cursor внешнего audio backend; иные lifecycle пути pending приpath0 здесь не исчерпаны."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100f14c0.c",
+        "analysis/movement/health-stamina.md",
+        "analysis/graphics/music-server-protocol.md",
+        "decompiled/server/partial-pass/functions/0x100ea5c0.c",
+        "analysis/graphics/music-server-state-contract.md",
+        "analysis/graphics/music-server-state-evidence.json",
+        "analysis/graphics/music-server-state-restore.asm",
+        "decompiled/server/partial-pass/functions/0x10117010.c",
+        "decompiled/server/partial-pass/functions/0x10116c50.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}

@@ -10,20 +10,20 @@
     "not_captured_function_total": "null: unknown; saved C counts cannot measure all absent functions."
   },
   "totals": {
-    "c_files": 8723,
-    "unique_address_records": 8612,
-    "reviewed": 862,
-    "unreviewed": 7750,
+    "c_files": 8734,
+    "unique_address_records": 8623,
+    "reviewed": 875,
+    "unreviewed": 7748,
     "additional_c_files_for_existing_addresses": 111,
     "addresses_with_multiple_c_files": 105,
-    "selector_mismatch_files": 160,
-    "unconfirmed_entry_records": 12,
+    "selector_mismatch_files": 161,
+    "unconfirmed_entry_records": 13,
     "status_counts": {
-      "reviewed": 862,
+      "reviewed": 875,
       "structural_template": 1437,
       "ghidra_library_label": 1583,
       "symbol_only": 314,
-      "unreviewed_unknown": 4416
+      "unreviewed_unknown": 4414
     }
   },
   "modules": {
@@ -49,12 +49,12 @@
     },
     "engine": {
       "binary_sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
-      "c_files": 14,
-      "unique_address_records": 14,
-      "reviewed": 14,
+      "c_files": 25,
+      "unique_address_records": 25,
+      "reviewed": 25,
       "unreviewed": 0,
       "status_counts": {
-        "reviewed": 14,
+        "reviewed": 25,
         "structural_template": 0,
         "ghidra_library_label": 0,
         "symbol_only": 0,
@@ -62,8 +62,8 @@
       },
       "additional_c_files_for_existing_addresses": 0,
       "addresses_with_multiple_c_files": 0,
-      "selector_mismatch_files": 4,
-      "unconfirmed_entry_records": 0,
+      "selector_mismatch_files": 5,
+      "unconfirmed_entry_records": 1,
       "discovered_function_total": null,
       "not_captured_function_total": null
     },
@@ -111,14 +111,14 @@
       "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
       "c_files": 8074,
       "unique_address_records": 8000,
-      "reviewed": 292,
-      "unreviewed": 7708,
+      "reviewed": 294,
+      "unreviewed": 7706,
       "status_counts": {
-        "reviewed": 292,
+        "reviewed": 294,
         "structural_template": 1435,
         "ghidra_library_label": 1583,
         "symbol_only": 312,
-        "unreviewed_unknown": 4378
+        "unreviewed_unknown": 4376
       },
       "additional_c_files_for_existing_addresses": 74,
       "addresses_with_multiple_c_files": 71,
@@ -163,5 +163,5 @@
     "Discovered != captured != reviewed != implemented != verified original behavior.",
     "decompiled/inventory.json is a historical file-count snapshot, not the current denominator."
   ],
-  "catalog_sha256": "b142c32ec451fcdff38102705f9fb91f9acc32a0db391c33d106c8c50539f2e9"
+  "catalog_sha256": "49910861fefa84a448bbfc442b8a68a764e818031ca58678b3c9b3a8b56334b2"
 }

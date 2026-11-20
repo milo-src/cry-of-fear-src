@@ -1,0 +1,2374 @@
+{
+  "schema": 1,
+  "method": "Static PE byte reads and bounded objdump disassembly; no target execution or new REA session.",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "objdump": "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+  "objdump_version": "GNU objdump (Binutils for MinGW-W64 x86_64, built by Brecht Sanders, r2) 2.46.0.20260210",
+  "range_convention": "VA start inclusive, end exclusive; file offsets refer to the exact SHA-256-pinned original.",
+  "assembly": [
+    {
+      "va": "0x100eb83a",
+      "end_exclusive": "0x100eb917",
+      "length": 221,
+      "file_offset": "0xeac3a",
+      "section": ".text",
+      "bytes_hex": "83bf14230000000f84d000000083bf10230000008b47048b800c020000506a00ff35446522106a01754cff15003022106a00ff15083022106a00ff1508302210f30f10871823000083c414f30f110424ff151c30221068f08b1a10ff152030221083c408ff1504302210c7871823000000000000eb5dff150030221083c41080bf1c2300000074046a01eb026a00ff150830221083c4046a01ff1508302210f30f108720230000f30f110424ff151c302210a1883122108b809800000003871023000050ff152030221083c408ff1504302210c7871423000000000000",
+      "sha256": "7d62507e04e478d68d42b6487e228f7444d171c716bd95b87278f2b083947be1",
+      "reason": "First PostThink music sender, pending/path guards and both stop/play branches.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100eb83a",
+        "--stop-address=0x100eb917",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/graphics/music-server-state-stop-early.asm",
+      "assembly_sha256": "c93efe99f55f4b6c5957190d701ef148e415cd7ee64c1ddb90f599472f9db66f"
+    },
+    {
+      "va": "0x100ef0b0",
+      "end_exclusive": "0x100ef190",
+      "length": 224,
+      "file_offset": "0xee4b0",
+      "section": ".text",
+      "bytes_hex": "83bf14230000000f84d300000083bf10230000008b47048b800c020000506a00ff35446522106a01754fff15003022106a00ff15083022106a00ff1508302210f30f10871823000083c414f30f110424ff151c30221068f08b1a10ff152030221083c408ff1504302210c7871823000000000000e95d000000ff150030221083c41080bf1c2300000074046a01eb026a00ff150830221083c4046a01ff1508302210f30f108720230000f30f110424ff151c302210a1883122108b809800000003871023000050ff152030221083c408ff1504302210c7871423000000000000",
+      "sha256": "97301470875af12486987d5324977cb85c713223e6d727493fc708ae62d29a2d",
+      "reason": "Second PostThink music sender, pending/path guards and both stop/play branches.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100ef0b0",
+        "--stop-address=0x100ef190",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/graphics/music-server-state-stop-late.asm",
+      "assembly_sha256": "8c7767bf160df14c3552f39894df00490ad271dcbf9431eba4352fcaa02104e4"
+    },
+    {
+      "va": "0x101084f0",
+      "end_exclusive": "0x1010854c",
+      "length": 92,
+      "file_offset": "0x1078f0",
+      "section": ".text",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c0752768dc00000051ff154430221083c40889450885c0740cc70038441e108970045e5dc333c08970045e5dc3",
+      "sha256": "5e2610ca11e7e5e5e4088ec965f6c4acbd25faf0eae82c86f921054335adfa3e",
+      "reason": "Complete allocated factory block through ret; excludes following function.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x101084f0",
+        "--stop-address=0x1010854c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/graphics/music-server-state-factory.asm",
+      "assembly_sha256": "0ec56f975d080e3cb9cca882ff8a6484fefa1690c5b3b0b93919475c73e53b65"
+    },
+    {
+      "va": "0x100f1940",
+      "end_exclusive": "0x100f1983",
+      "length": 67,
+      "file_offset": "0xf0d40",
+      "section": ".text",
+      "bytes_hex": "558bec56ff75088bf1e87205fdff85c075055e5dc204008b4d0868cf00000068e87f21105668e4b51d1068ecb51d10e84c940200c786c8040000000000005e5dc20400",
+      "sha256": "dd112e73334ec7012626e20716c81afb92103415825959e8ddb944223faa7bc6",
+      "reason": "Complete contiguous saved-Ghidra Save range, including PLAYER table/count caller.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100f1940",
+        "--stop-address=0x100f1983",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/graphics/music-server-state-save.asm",
+      "assembly_sha256": "3e7ccc6f55988c401f7f043b176d4bac9c82badca590d4ed2c6e947c610e537e"
+    },
+    {
+      "va": "0x100f14c0",
+      "end_exclusive": "0x100f17da",
+      "length": 794,
+      "file_offset": "0xf08c0",
+      "section": ".text",
+      "bytes_hex": "558bec83ec18568b750857568bf9e8cd04fdff85c075085f5e8be55dc204005368cf00000068e87f21105768e4b51d108bcee8195b02008b0d883122108bd88b899c00000083b92c050000000f85a100000081c1300500005168f4b51d106a01ff153c30221057e854dcfeff8bd083c41085d2750933c9be80000000eb088d8a800000008bf1f30f1051080f57c0f30f10490cf30f58d0f30f58c8f30f104110f30f580590131a108b4f040f14d1660fd65108f30f1145f08b45f089411033c08b4f0485d20f44f0f30f7e4650660fd641508b46588941588b4f04f30f7e4108660fd687180600008b4110898720060000eb038b4f04c7417c000000008b4f04f30f7e4174660fd641508b417c8941588b4704c780a0000000010000008b4704c7871c030000f70000008b80b4000000a3f82e22108b4704f780a80100000040000074338d4df4c745f40000804151c745f8000080418d4de8c745fc00009041c745e8000080c1c745ec000080c1c745f0000090c1eb318d4de8c745e80000804151c745ec000080418d4df4c745f000001042c745f4000080c1c745f8000080c1c745fc000010c25150e8c18902008b470483c40c68f4e91b106884b51d10ffb00c020000ff15283122108b470483c40c83bfec240000008b800c020000740768f4e91b10eb056834121a1068741d1a1050ff15283122108b0de42e221083c40c85c974368b01ff502085c0752d80bf3c040000008b47048b800c02000075076834121a10eb0568f4e91b106870141a1050ff152831221083c40c8b47046828b71c108bb00c020000ff153030221050688c1c1a1056ff15283122108b47046840b71c108bb00c020000ff15303022105068901c1a1056ff15283122108b47046854b71c108bb00c020000ff15303022105068941c1a1056ff152831221083c4308bcfffb734230000e8722200008b871023000085c0741251c704240000803f8bcf6a0150e8368effffa1883122106804b61d10f30f1000f30f110578642210ff152c302210a18831221083c404d91d641f2310c6057664221001f30f10008bc35bf30f118714060000f30f1187380400005f5e8be55dc20400",
+      "sha256": "8a753b81460337df0c447590464ee3a310ed22e980cb06bf332158be288c2ca7",
+      "reason": "Complete contiguous saved-Ghidra Restore range, table/count and music requeue.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100f14c0",
+        "--stop-address=0x100f17da",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "path": "analysis/graphics/music-server-state-restore.asm",
+      "assembly_sha256": "720455184023bde8faa140111aa5bea8ab62e98560afc64e571514965797b996"
+    }
+  ],
+  "raw": [
+    {
+      "va": "0x101d99bc",
+      "end_exclusive": "0x101d99cc",
+      "length": 16,
+      "file_offset": "0x1d8dbc",
+      "section": ".rdata",
+      "bytes_hex": "6d5f73747243757272656e744d703300",
+      "sha256": "797d1ee6fec5e699a7684ed519cee63c2d9796e18b9fc3d91b51bafaf782afdb",
+      "ascii": "m_strCurrentMp3"
+    },
+    {
+      "va": "0x101d9a1c",
+      "end_exclusive": "0x101d9a2b",
+      "length": 15,
+      "file_offset": "0x1d8e1c",
+      "section": ".rdata",
+      "bytes_hex": "6d5f664d70334661646554696d6500",
+      "sha256": "9b30447629682537600e36fb2af03789555bebc6a9368ba7dac5ab3abc4f59cd",
+      "ascii": "m_fMp3FadeTime"
+    },
+    {
+      "va": "0x101d9a2c",
+      "end_exclusive": "0x101d9a3d",
+      "length": 17,
+      "file_offset": "0x1d8e2c",
+      "section": ".rdata",
+      "bytes_hex": "6d5f624d703353686f756c644c6f6f7000",
+      "sha256": "27a4447e39006931e62ae5adc353ab29a3a4b5b110500ee47f3bb67baa651f4d",
+      "ascii": "m_bMp3ShouldLoop"
+    },
+    {
+      "va": "0x101d9a40",
+      "end_exclusive": "0x101d9a51",
+      "length": 17,
+      "file_offset": "0x1d8e40",
+      "section": ".rdata",
+      "bytes_hex": "6d5f664d703346616465496e54696d6500",
+      "sha256": "47dc26b6822018abc2dd1b6e7a6b81a4846dc7a8328aaef05808b5ea5e6e6a61",
+      "ascii": "m_fMp3FadeInTime"
+    },
+    {
+      "va": "0x10217fe8",
+      "end_exclusive": "0x10218cd8",
+      "length": 3312,
+      "file_offset": "0x216fe8",
+      "section": ".data",
+      "bytes_hex": "0f000000fc961d10a4220000010000000a00000010971d10a8220000010000000a00000020971d10ac220000010000000a00000030971d10b0220000010000000a00000044971d10b4220000010000000a00000058971d10c8220000050000000a00000064971d10e4220000010000000f00000078971d106c230000010000000f0000008c971d1070230000010000000f000000a0971d1074230000010000000f000000b0971d1078230000010000000f000000c0971d107c230000010000000f000000d4971d1080230000010000000a000000e4971d1084230000040000000a000000f8971d1094230000010000000a00000008981d1098230000200000000f0000001c981d1018240000200000000a00000034981d1098240000010000000300000048981d101425000006000000030000005c981d102c25000001000000030000006c981d1034250000010000000300000078981d1038250000010000000300000084981d103c250000010000000300000098981d10f0030000010000000a000000b4981d1040250000200000000a000000c0981d10c0240000010000000a000000cc981d10c4240000010000000f000000e0981d10f0240000010000000a000000ec981d10d4240000010000000a000000f8981d10c8240000010000000000000008991d10c4220000010000000a0000001c991d1090220000010000000a0000002c991d1094220000010000000a0000003c991d1098220000010000000a00000050991d109c220000010000000c00000060991d10ec240000010000000c0000006c991d10cc240000010000000f00000078991d109c240000010000000c00000084991d1078220000010000000400000094991d10dc240000010000000a0000009c991d1000250000010000000a000000a8991d10082500000100000003000000b0991d100c2300000100000001000000bc991d10102300000100000001000000cc991d10242300000100000001000000e4991d10282300000100000001000000009a1d102c23000001000000000000001c9a1d1018230000010000000c0000002c9a1d101c2300000100000000000000409a1d1020230000010000000a000000549a1d1034230000010000000a000000649a1d10dc270000010000000000000018fd1b10e0270000010000000000000024fd1b10e4270000010000000000000000fd1b10e827000001000000000000000cfd1b10ec270000010000000a000000789a1d10f02700000100000000000000949a1d10f42700000100000000000000a89a1d10f82700000100000000000000bc9a1d10fc2700000100000000000000d09a1d1000280000010000000f000000e49a1d1004280000010000000f000000f49a1d10082800000100000000000000089b1d1038230000010000000c000000189b1d10a41e000001000000010000002c9b1d10fc21000007000000010000003c9b1d10182200000700000001000000509b1d1034220000070000000a000000689b1d10a81e0000010000000a000000789b1d10b41e0000010000000a000000849b1d10bc1e0000010000000c000000949b1d10c01e0000010000000c000000a09b1d10d82100000100000000000000ac9b1d10f0210000010000000f000000b89b1d10f4210000010000000f000000d09b1d10f8210000010000000c000000e89b1d10e8210000010000000c000000fc9b1d10e9210000010000000c000000109c1d10ea210000010000000a000000209c1d1040200000010000000a000000309c1d1038200000010000000e000000409c1d104c200000800000000e000000509c1d10cc200000800000000e000000609c1d104c210000800000000c000000709c1d106c220000010000000f000000849c1d1074220000010000000f000000989c1d107c220000010000000a000000a89c1d1014280000010000000a000000b89c1d1018280000010000000a000000c49c1d10c41e0000010000000c000000d49c1d10c81e0000010000000f000000e09c1d10cc1e0000010000000c000000f09c1d10d01e00000100000007000000049d1d10d41e0000010000000c000000149d1d10e01e0000010000000f000000249d1d10e41e0000010000000c000000389d1d10e81e00000100000003000000489d1d1010250000010000000c000000549d1d10e91e0000010000000f000000689d1d10ec1e0000010000000c000000849d1d10ea1e0000010000000c000000989d1d109c1e00000100000004000000a89d1d10482300000100000004000000bc9d1d1050230000010000000a000000c89d1d1058230000050000000a000000dc9d1d10f01e0000010000000a000000f09d1d10f41e0000010000000c000000fc9d1d10f91e0000010000000a000000189e1d10fc1e00000100000000000000289e1d10001f0000010000000c000000409e1d10041f0000010000000a000000509e1d10081f00000100000004000000649e1d100c1f0000010000000a0000007c9e1d10141f0000010000000c000000909e1d101c1f0000010000000f0000009c9e1d10201f0000010000000c000000b49e1d102a1f00000100000001000000c49e1d1024060000010000000a000000dc9e1d102c0600000100000007000000f49e1d1018060000010000000f000000089f1d1014060000010000000e000000249f1d1038060000500000000a000000309f1d10f0050000010000000c000000409f1d10f40500000100000001000000549f1d10f80500000100000001000000649f1d10fc0500000100000001000000749f1d1008060000010000000a000000809f1d1000060000010000000a000000949f1d1004060000010000000a000000ac9f1d100c060000010000000a000000bc9f1d1044200000010000000f000000cc9f1d1010060000010000000a000000d89f1d10dc050000010000000a000000f09f1d10e0050000010000000100000008a01d10ec050000010000000a00000018a01d10d0050000010000000c0000002ca01d10c8050000010000000a00000038a01d10981e0000010000000a0000004ca01d10701e0000010000000a00000060a01d10741e0000010000000f00000078a01d10d8050000010000000a00000090a01d10cc050000010000000e000000a0a01d10a8070000200100000e000000b4a01d10c8080000200100000e000000c8a01d10e8090000200100000e000000dca01d10080b0000200100000e000000f0a01d10280c0000200100000e00000004a11d10480d0000200100000e00000018a11d10680e0000200100000e0000002ca11d10880f0000200100000e00000040a11d10a8100000200100000e00000054a11d10c8110000200100000e00000068a11d10e8120000200100000e0000007ca11d1008140000200100000e00000090a11d1028150000200100000e000000a4a11d1048160000200100000e000000b8a11d1068170000200100000e000000cca11d10881800002001000001000000e0a11d10a81900003300000007000000fca11d10741a0000330000000100000018a21d10d81c0000330000000a00000034a21d10a41d000033000000040000004ca21d1080030000010000000400000054a21d1088030000010000000400000068a21d1090030000010000000f00000078a21d10dc210000010000000c00000094a21d10e0210000010000000c000000a4a21d10e1210000010000000c000000b4a21d10e2210000010000000f000000cca21d10e4210000010000000a000000dca21d10b4050000010000000a000000eca21d10b0050000010000000c000000fca21d10a9050000010000000c00000010a31d10a8050000010000000f00000024a31d1098050000010000000f00000038a31d109405000001000000070000004ca31d109c05000001000000030000005ca31d10ac050000010000000c00000068a31d100c05000001000000010000007ca31d1010050000210000000f0000008ca31d10d0040000010000000f000000a4a31d10d4040000010000000c000000bca31d103c040000010000000f000000cca31d1040040000010000000f000000e8a31d1070220000010000000f000000f8a31d1038040000010000000a00000010a41d1044040000200000000f00000024a41d10c4040000010000000a00000038a41d10c8040000010000000c0000004ca41d10cd040000010000000c00000068a41d10ce040000010000000c00000080a41d10cf040000010000000f0000009ca41d10941e0000010000000a000000b8a41d1024040000010000000a000000cca41d102c040000010000000c000000dca41d10f4030000210000000a000000eca41d1018040000010000000a00000008a51d101c040000010000000100000028a51d10901e0000010000000f0000003ca51d10ec030000010000000c00000054a51d1034040000010000000a00000068a51d10d8030000040000000a0000007ca51d1000230000010000000c0000008ca51d10aa030000010000000f0000009ca51d10ac030000010000000f000000b4a51d1020040000010000000c000000c8a51d109903000001000000",
+      "sha256": "772070bbb6b603da4bec59f74e582d796091e9a6299134c66117ce99e53e6a4c",
+      "name": "PLAYER save fields",
+      "stride": 16,
+      "count": 207,
+      "record_layout": "little-endian <IIIhh: type, name VA, object offset, count, flags; count/stride corroborated by Save/Restore and field helpers.",
+      "fields": [
+        {
+          "index": 0,
+          "record_va": "0x10217fe8",
+          "type": 15,
+          "name_va": "0x101d96fc",
+          "name": "m_flFlashLightTime",
+          "object_offset": "0x22a4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 1,
+          "record_va": "0x10217ff8",
+          "type": 10,
+          "name_va": "0x101d9710",
+          "name": "m_iFlashBattery",
+          "object_offset": "0x22a8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 2,
+          "record_va": "0x10218008",
+          "type": 10,
+          "name_va": "0x101d9720",
+          "name": "m_afButtonLast",
+          "object_offset": "0x22ac",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 3,
+          "record_va": "0x10218018",
+          "type": 10,
+          "name_va": "0x101d9730",
+          "name": "m_afButtonPressed",
+          "object_offset": "0x22b0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 4,
+          "record_va": "0x10218028",
+          "type": 10,
+          "name_va": "0x101d9744",
+          "name": "m_afButtonReleased",
+          "object_offset": "0x22b4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 5,
+          "record_va": "0x10218038",
+          "type": 10,
+          "name_va": "0x101d9758",
+          "name": "m_rgItems",
+          "object_offset": "0x22c8",
+          "count": 5,
+          "flags": 0
+        },
+        {
+          "index": 6,
+          "record_va": "0x10218048",
+          "type": 10,
+          "name_va": "0x101d9764",
+          "name": "m_afPhysicsFlags",
+          "object_offset": "0x22e4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 7,
+          "record_va": "0x10218058",
+          "type": 15,
+          "name_va": "0x101d9778",
+          "name": "m_flTimeStepSound",
+          "object_offset": "0x236c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 8,
+          "record_va": "0x10218068",
+          "type": 15,
+          "name_va": "0x101d978c",
+          "name": "m_flTimeWeaponIdle",
+          "object_offset": "0x2370",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 9,
+          "record_va": "0x10218078",
+          "type": 15,
+          "name_va": "0x101d97a0",
+          "name": "m_flSwimTime",
+          "object_offset": "0x2374",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 10,
+          "record_va": "0x10218088",
+          "type": 15,
+          "name_va": "0x101d97b0",
+          "name": "m_flDuckTime",
+          "object_offset": "0x2378",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 11,
+          "record_va": "0x10218098",
+          "type": 15,
+          "name_va": "0x101d97c0",
+          "name": "m_flWallJumpTime",
+          "object_offset": "0x237c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 12,
+          "record_va": "0x102180a8",
+          "type": 15,
+          "name_va": "0x101d97d4",
+          "name": "m_flSuitUpdate",
+          "object_offset": "0x2380",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 13,
+          "record_va": "0x102180b8",
+          "type": 10,
+          "name_va": "0x101d97e4",
+          "name": "m_rgSuitPlayList",
+          "object_offset": "0x2384",
+          "count": 4,
+          "flags": 0
+        },
+        {
+          "index": 14,
+          "record_va": "0x102180c8",
+          "type": 10,
+          "name_va": "0x101d97f8",
+          "name": "m_iSuitPlayNext",
+          "object_offset": "0x2394",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 15,
+          "record_va": "0x102180d8",
+          "type": 10,
+          "name_va": "0x101d9808",
+          "name": "m_rgiSuitNoRepeat",
+          "object_offset": "0x2398",
+          "count": 32,
+          "flags": 0
+        },
+        {
+          "index": 16,
+          "record_va": "0x102180e8",
+          "type": 15,
+          "name_va": "0x101d981c",
+          "name": "m_rgflSuitNoRepeatTime",
+          "object_offset": "0x2418",
+          "count": 32,
+          "flags": 0
+        },
+        {
+          "index": 17,
+          "record_va": "0x102180f8",
+          "type": 10,
+          "name_va": "0x101d9834",
+          "name": "m_lastDamageAmount",
+          "object_offset": "0x2498",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 18,
+          "record_va": "0x10218108",
+          "type": 3,
+          "name_va": "0x101d9848",
+          "name": "m_rgpPlayerItems",
+          "object_offset": "0x2514",
+          "count": 6,
+          "flags": 0
+        },
+        {
+          "index": 19,
+          "record_va": "0x10218118",
+          "type": 3,
+          "name_va": "0x101d985c",
+          "name": "m_pActiveItem",
+          "object_offset": "0x252c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 20,
+          "record_va": "0x10218128",
+          "type": 3,
+          "name_va": "0x101d986c",
+          "name": "m_pLastItem",
+          "object_offset": "0x2534",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 21,
+          "record_va": "0x10218138",
+          "type": 3,
+          "name_va": "0x101d9878",
+          "name": "m_pNextItem",
+          "object_offset": "0x2538",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 22,
+          "record_va": "0x10218148",
+          "type": 3,
+          "name_va": "0x101d9884",
+          "name": "m_pStoredActionItem",
+          "object_offset": "0x253c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 23,
+          "record_va": "0x10218158",
+          "type": 3,
+          "name_va": "0x101d9898",
+          "name": "m_pStoredNightVisionWeapon",
+          "object_offset": "0x3f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 24,
+          "record_va": "0x10218168",
+          "type": 10,
+          "name_va": "0x101d98b4",
+          "name": "m_rgAmmo",
+          "object_offset": "0x2540",
+          "count": 32,
+          "flags": 0
+        },
+        {
+          "index": 25,
+          "record_va": "0x10218178",
+          "type": 10,
+          "name_va": "0x101d98c0",
+          "name": "m_idrowndmg",
+          "object_offset": "0x24c0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 26,
+          "record_va": "0x10218188",
+          "type": 10,
+          "name_va": "0x101d98cc",
+          "name": "m_idrownrestored",
+          "object_offset": "0x24c4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 27,
+          "record_va": "0x10218198",
+          "type": 15,
+          "name_va": "0x101d98e0",
+          "name": "m_tSneaking",
+          "object_offset": "0x24f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 28,
+          "record_va": "0x102181a8",
+          "type": 10,
+          "name_va": "0x101d98ec",
+          "name": "m_iTrain",
+          "object_offset": "0x24d4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 29,
+          "record_va": "0x102181b8",
+          "type": 10,
+          "name_va": "0x101d98f8",
+          "name": "m_bitsHUDDamage",
+          "object_offset": "0x24c8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 30,
+          "record_va": "0x102181c8",
+          "type": 0,
+          "name_va": "0x101d9908",
+          "name": "m_flFallVelocity",
+          "object_offset": "0x22c4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 31,
+          "record_va": "0x102181d8",
+          "type": 10,
+          "name_va": "0x101d991c",
+          "name": "m_iTargetVolume",
+          "object_offset": "0x2290",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 32,
+          "record_va": "0x102181e8",
+          "type": 10,
+          "name_va": "0x101d992c",
+          "name": "m_iWeaponVolume",
+          "object_offset": "0x2294",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 33,
+          "record_va": "0x102181f8",
+          "type": 10,
+          "name_va": "0x101d993c",
+          "name": "m_iExtraSoundTypes",
+          "object_offset": "0x2298",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 34,
+          "record_va": "0x10218208",
+          "type": 10,
+          "name_va": "0x101d9950",
+          "name": "m_iWeaponFlash",
+          "object_offset": "0x229c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 35,
+          "record_va": "0x10218218",
+          "type": 12,
+          "name_va": "0x101d9960",
+          "name": "m_fLongJump",
+          "object_offset": "0x24ec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 36,
+          "record_va": "0x10218228",
+          "type": 12,
+          "name_va": "0x101d996c",
+          "name": "m_fInitHUD",
+          "object_offset": "0x24cc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 37,
+          "record_va": "0x10218238",
+          "type": 15,
+          "name_va": "0x101d9978",
+          "name": "m_tbdPrev",
+          "object_offset": "0x249c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 38,
+          "record_va": "0x10218248",
+          "type": 12,
+          "name_va": "0x101d9984",
+          "name": "m_bIsTripping",
+          "object_offset": "0x2278",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 39,
+          "record_va": "0x10218258",
+          "type": 4,
+          "name_va": "0x101d9994",
+          "name": "m_pTank",
+          "object_offset": "0x24dc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 40,
+          "record_va": "0x10218268",
+          "type": 10,
+          "name_va": "0x101d999c",
+          "name": "m_iHideHUD",
+          "object_offset": "0x2500",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 41,
+          "record_va": "0x10218278",
+          "type": 10,
+          "name_va": "0x101d99a8",
+          "name": "m_iFOV",
+          "object_offset": "0x2508",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 42,
+          "record_va": "0x10218288",
+          "type": 3,
+          "name_va": "0x101d99b0",
+          "name": "m_pSpecTank",
+          "object_offset": "0x230c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 43,
+          "record_va": "0x10218298",
+          "type": 1,
+          "name_va": "0x101d99bc",
+          "name": "m_strCurrentMp3",
+          "object_offset": "0x2310",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 44,
+          "record_va": "0x102182a8",
+          "type": 1,
+          "name_va": "0x101d99cc",
+          "name": "m_strCurrentGoalName",
+          "object_offset": "0x2324",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 45,
+          "record_va": "0x102182b8",
+          "type": 1,
+          "name_va": "0x101d99e4",
+          "name": "m_strCurrentGoalImageName",
+          "object_offset": "0x2328",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 46,
+          "record_va": "0x102182c8",
+          "type": 1,
+          "name_va": "0x101d9a00",
+          "name": "m_strCurrentGoalTitleName",
+          "object_offset": "0x232c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 47,
+          "record_va": "0x102182d8",
+          "type": 0,
+          "name_va": "0x101d9a1c",
+          "name": "m_fMp3FadeTime",
+          "object_offset": "0x2318",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 48,
+          "record_va": "0x102182e8",
+          "type": 12,
+          "name_va": "0x101d9a2c",
+          "name": "m_bMp3ShouldLoop",
+          "object_offset": "0x231c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 49,
+          "record_va": "0x102182f8",
+          "type": 0,
+          "name_va": "0x101d9a40",
+          "name": "m_fMp3FadeInTime",
+          "object_offset": "0x2320",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 50,
+          "record_va": "0x10218308",
+          "type": 10,
+          "name_va": "0x101d9a54",
+          "name": "m_iJumpHeight",
+          "object_offset": "0x2334",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 51,
+          "record_va": "0x10218318",
+          "type": 10,
+          "name_va": "0x101d9a64",
+          "name": "Rain_dripsPerSecond",
+          "object_offset": "0x27dc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 52,
+          "record_va": "0x10218328",
+          "type": 0,
+          "name_va": "0x101bfd18",
+          "name": "Rain_windX",
+          "object_offset": "0x27e0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 53,
+          "record_va": "0x10218338",
+          "type": 0,
+          "name_va": "0x101bfd24",
+          "name": "Rain_windY",
+          "object_offset": "0x27e4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 54,
+          "record_va": "0x10218348",
+          "type": 0,
+          "name_va": "0x101bfd00",
+          "name": "Rain_randX",
+          "object_offset": "0x27e8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 55,
+          "record_va": "0x10218358",
+          "type": 0,
+          "name_va": "0x101bfd0c",
+          "name": "Rain_randY",
+          "object_offset": "0x27ec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 56,
+          "record_va": "0x10218368",
+          "type": 10,
+          "name_va": "0x101d9a78",
+          "name": "Rain_ideal_dripsPerSecond",
+          "object_offset": "0x27f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 57,
+          "record_va": "0x10218378",
+          "type": 0,
+          "name_va": "0x101d9a94",
+          "name": "Rain_ideal_windX",
+          "object_offset": "0x27f4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 58,
+          "record_va": "0x10218388",
+          "type": 0,
+          "name_va": "0x101d9aa8",
+          "name": "Rain_ideal_windY",
+          "object_offset": "0x27f8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 59,
+          "record_va": "0x10218398",
+          "type": 0,
+          "name_va": "0x101d9abc",
+          "name": "Rain_ideal_randX",
+          "object_offset": "0x27fc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 60,
+          "record_va": "0x102183a8",
+          "type": 0,
+          "name_va": "0x101d9ad0",
+          "name": "Rain_ideal_randY",
+          "object_offset": "0x2800",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 61,
+          "record_va": "0x102183b8",
+          "type": 15,
+          "name_va": "0x101d9ae4",
+          "name": "Rain_endFade",
+          "object_offset": "0x2804",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 62,
+          "record_va": "0x102183c8",
+          "type": 15,
+          "name_va": "0x101d9af4",
+          "name": "Rain_nextFadeUpdate",
+          "object_offset": "0x2808",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 63,
+          "record_va": "0x102183d8",
+          "type": 0,
+          "name_va": "0x101d9b08",
+          "name": "m_fLightlevel",
+          "object_offset": "0x2338",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 64,
+          "record_va": "0x102183e8",
+          "type": 12,
+          "name_va": "0x101d9b18",
+          "name": "b_GoingThroughADoor",
+          "object_offset": "0x1ea4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 65,
+          "record_va": "0x102183f8",
+          "type": 1,
+          "name_va": "0x101d9b2c",
+          "name": "inventorySlot",
+          "object_offset": "0x21fc",
+          "count": 7,
+          "flags": 0
+        },
+        {
+          "index": 66,
+          "record_va": "0x10218408",
+          "type": 1,
+          "name_va": "0x101d9b3c",
+          "name": "inventorySlotModels",
+          "object_offset": "0x2218",
+          "count": 7,
+          "flags": 0
+        },
+        {
+          "index": 67,
+          "record_va": "0x10218418",
+          "type": 1,
+          "name_va": "0x101d9b50",
+          "name": "inventorySlotClassname",
+          "object_offset": "0x2234",
+          "count": 7,
+          "flags": 0
+        },
+        {
+          "index": 68,
+          "record_va": "0x10218428",
+          "type": 10,
+          "name_va": "0x101d9b68",
+          "name": "m_iFlashlight",
+          "object_offset": "0x1ea8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 69,
+          "record_va": "0x10218438",
+          "type": 10,
+          "name_va": "0x101d9b78",
+          "name": "m_DrawBars",
+          "object_offset": "0x1eb4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 70,
+          "record_va": "0x10218448",
+          "type": 10,
+          "name_va": "0x101d9b84",
+          "name": "m_iBlurActive",
+          "object_offset": "0x1ebc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 71,
+          "record_va": "0x10218458",
+          "type": 12,
+          "name_va": "0x101d9b94",
+          "name": "m_UnreadSMS",
+          "object_offset": "0x1ec0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 72,
+          "record_va": "0x10218468",
+          "type": 12,
+          "name_va": "0x101d9ba0",
+          "name": "m_bHasSaved",
+          "object_offset": "0x21d8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 73,
+          "record_va": "0x10218478",
+          "type": 0,
+          "name_va": "0x101d9bac",
+          "name": "m_fStamina",
+          "object_offset": "0x21f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 74,
+          "record_va": "0x10218488",
+          "type": 15,
+          "name_va": "0x101d9bb8",
+          "name": "m_fStaminaChargeCyle",
+          "object_offset": "0x21f4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 75,
+          "record_va": "0x10218498",
+          "type": 15,
+          "name_va": "0x101d9bd0",
+          "name": "m_fStaminaBreatheCyle",
+          "object_offset": "0x21f8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 76,
+          "record_va": "0x102184a8",
+          "type": 12,
+          "name_va": "0x101d9be8",
+          "name": "m_bInfiniteStamina",
+          "object_offset": "0x21e8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 77,
+          "record_va": "0x102184b8",
+          "type": 12,
+          "name_va": "0x101d9bfc",
+          "name": "m_bInfiniteHealth",
+          "object_offset": "0x21e9",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 78,
+          "record_va": "0x102184c8",
+          "type": 12,
+          "name_va": "0x101d9c10",
+          "name": "m_bInfiniteAmmo",
+          "object_offset": "0x21ea",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 79,
+          "record_va": "0x102184d8",
+          "type": 10,
+          "name_va": "0x101d9c20",
+          "name": "m_iKeypadNumber",
+          "object_offset": "0x2040",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 80,
+          "record_va": "0x102184e8",
+          "type": 10,
+          "name_va": "0x101d9c30",
+          "name": "m_iViewEntIndex",
+          "object_offset": "0x2038",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 81,
+          "record_va": "0x102184f8",
+          "type": 14,
+          "name_va": "0x101d9c40",
+          "name": "m_sQuickSel1",
+          "object_offset": "0x204c",
+          "count": 128,
+          "flags": 0
+        },
+        {
+          "index": 82,
+          "record_va": "0x10218508",
+          "type": 14,
+          "name_va": "0x101d9c50",
+          "name": "m_sQuickSel2",
+          "object_offset": "0x20cc",
+          "count": 128,
+          "flags": 0
+        },
+        {
+          "index": 83,
+          "record_va": "0x10218518",
+          "type": 14,
+          "name_va": "0x101d9c60",
+          "name": "m_sQuickSel3",
+          "object_offset": "0x214c",
+          "count": 128,
+          "flags": 0
+        },
+        {
+          "index": 84,
+          "record_va": "0x10218528",
+          "type": 12,
+          "name_va": "0x101d9c70",
+          "name": "m_bUsedFirstSyringe",
+          "object_offset": "0x226c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 85,
+          "record_va": "0x10218538",
+          "type": 15,
+          "name_va": "0x101d9c84",
+          "name": "m_fMorphineTripTime",
+          "object_offset": "0x2274",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 86,
+          "record_va": "0x10218548",
+          "type": 15,
+          "name_va": "0x101d9c98",
+          "name": "m_fTrippingTime",
+          "object_offset": "0x227c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 87,
+          "record_va": "0x10218558",
+          "type": 10,
+          "name_va": "0x101d9ca8",
+          "name": "m_iViewValue",
+          "object_offset": "0x2814",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 88,
+          "record_va": "0x10218568",
+          "type": 10,
+          "name_va": "0x101d9cb8",
+          "name": "m_iMoValue",
+          "object_offset": "0x2818",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 89,
+          "record_va": "0x10218578",
+          "type": 10,
+          "name_va": "0x101d9cc4",
+          "name": "m_ClientLadder",
+          "object_offset": "0x1ec4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 90,
+          "record_va": "0x10218588",
+          "type": 12,
+          "name_va": "0x101d9cd4",
+          "name": "m_OnStairs",
+          "object_offset": "0x1ec8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 91,
+          "record_va": "0x10218598",
+          "type": 15,
+          "name_va": "0x101d9ce0",
+          "name": "m_fFallingTime",
+          "object_offset": "0x1ecc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 92,
+          "record_va": "0x102185a8",
+          "type": 12,
+          "name_va": "0x101d9cf0",
+          "name": "m_bShouldFallFreeze",
+          "object_offset": "0x1ed0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 93,
+          "record_va": "0x102185b8",
+          "type": 7,
+          "name_va": "0x101d9d04",
+          "name": "m_LadderAngles",
+          "object_offset": "0x1ed4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 94,
+          "record_va": "0x102185c8",
+          "type": 12,
+          "name_va": "0x101d9d14",
+          "name": "m_bNightmare",
+          "object_offset": "0x1ee0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 95,
+          "record_va": "0x102185d8",
+          "type": 15,
+          "name_va": "0x101d9d24",
+          "name": "m_fPhoneCallTime",
+          "object_offset": "0x1ee4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 96,
+          "record_va": "0x102185e8",
+          "type": 12,
+          "name_va": "0x101d9d38",
+          "name": "m_bInPhoneCall",
+          "object_offset": "0x1ee8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 97,
+          "record_va": "0x102185f8",
+          "type": 3,
+          "name_va": "0x101d9d48",
+          "name": "m_pCamera",
+          "object_offset": "0x2510",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 98,
+          "record_va": "0x10218608",
+          "type": 12,
+          "name_va": "0x101d9d54",
+          "name": "m_bDodgeDisabled",
+          "object_offset": "0x1ee9",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 99,
+          "record_va": "0x10218618",
+          "type": 15,
+          "name_va": "0x101d9d68",
+          "name": "m_fNextScaredBreathingTime",
+          "object_offset": "0x1eec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 100,
+          "record_va": "0x10218628",
+          "type": 12,
+          "name_va": "0x101d9d84",
+          "name": "m_bScaredBreathing",
+          "object_offset": "0x1eea",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 101,
+          "record_va": "0x10218638",
+          "type": 12,
+          "name_va": "0x101d9d98",
+          "name": "m_bThreeSlots",
+          "object_offset": "0x1e9c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 102,
+          "record_va": "0x10218648",
+          "type": 4,
+          "name_va": "0x101d9da8",
+          "name": "m_hCurrentCamera",
+          "object_offset": "0x2348",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 103,
+          "record_va": "0x10218658",
+          "type": 4,
+          "name_va": "0x101d9dbc",
+          "name": "m_pPadlock",
+          "object_offset": "0x2350",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 104,
+          "record_va": "0x10218668",
+          "type": 10,
+          "name_va": "0x101d9dc8",
+          "name": "m_iPadlockNumber",
+          "object_offset": "0x2358",
+          "count": 5,
+          "flags": 0
+        },
+        {
+          "index": 105,
+          "record_va": "0x10218678",
+          "type": 10,
+          "name_va": "0x101d9ddc",
+          "name": "m_iBlackAndWhite",
+          "object_offset": "0x1ef0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 106,
+          "record_va": "0x10218688",
+          "type": 10,
+          "name_va": "0x101d9df0",
+          "name": "m_iTapes",
+          "object_offset": "0x1ef4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 107,
+          "record_va": "0x10218698",
+          "type": 12,
+          "name_va": "0x101d9dfc",
+          "name": "m_bWeaponWaitingToDeploy",
+          "object_offset": "0x1ef9",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 108,
+          "record_va": "0x102186a8",
+          "type": 10,
+          "name_va": "0x101d9e18",
+          "name": "m_iHintAmount",
+          "object_offset": "0x1efc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 109,
+          "record_va": "0x102186b8",
+          "type": 0,
+          "name_va": "0x101d9e28",
+          "name": "m_fNextHeartBeatTime",
+          "object_offset": "0x1f00",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 110,
+          "record_va": "0x102186c8",
+          "type": 12,
+          "name_va": "0x101d9e40",
+          "name": "m_bNearStranger",
+          "object_offset": "0x1f04",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 111,
+          "record_va": "0x102186d8",
+          "type": 10,
+          "name_va": "0x101d9e50",
+          "name": "m_iSwitchbladeCuts",
+          "object_offset": "0x1f08",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 112,
+          "record_va": "0x102186e8",
+          "type": 4,
+          "name_va": "0x101d9e64",
+          "name": "m_pLastAttackedEnemy",
+          "object_offset": "0x1f0c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 113,
+          "record_va": "0x102186f8",
+          "type": 10,
+          "name_va": "0x101d9e7c",
+          "name": "m_iPhoneDisabled",
+          "object_offset": "0x1f14",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 114,
+          "record_va": "0x10218708",
+          "type": 12,
+          "name_va": "0x101d9e90",
+          "name": "m_bPhoneLow",
+          "object_offset": "0x1f1c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 115,
+          "record_va": "0x10218718",
+          "type": 15,
+          "name_va": "0x101d9e9c",
+          "name": "m_fNextPhoneWarnTime",
+          "object_offset": "0x1f20",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 116,
+          "record_va": "0x10218728",
+          "type": 12,
+          "name_va": "0x101d9eb4",
+          "name": "m_bNoDeadFade",
+          "object_offset": "0x1f2a",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 117,
+          "record_va": "0x10218738",
+          "type": 1,
+          "name_va": "0x101d9ec4",
+          "name": "m_sDualWieldViewModel",
+          "object_offset": "0x624",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 118,
+          "record_va": "0x10218748",
+          "type": 10,
+          "name_va": "0x101d9edc",
+          "name": "m_bMirroredDualWield",
+          "object_offset": "0x62c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 119,
+          "record_va": "0x10218758",
+          "type": 7,
+          "name_va": "0x101d9ef4",
+          "name": "m_vPreviousOrigin",
+          "object_offset": "0x618",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 120,
+          "record_va": "0x10218768",
+          "type": 15,
+          "name_va": "0x101d9f08",
+          "name": "m_flNextDistanceCheckTime",
+          "object_offset": "0x614",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 121,
+          "record_va": "0x10218778",
+          "type": 14,
+          "name_va": "0x101d9f24",
+          "name": "playerstats",
+          "object_offset": "0x638",
+          "count": 80,
+          "flags": 0
+        },
+        {
+          "index": 122,
+          "record_va": "0x10218788",
+          "type": 10,
+          "name_va": "0x101d9f30",
+          "name": "m_iGoodPoints",
+          "object_offset": "0x5f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 123,
+          "record_va": "0x10218798",
+          "type": 12,
+          "name_va": "0x101d9f40",
+          "name": "m_bBossHealthBar",
+          "object_offset": "0x5f4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 124,
+          "record_va": "0x102187a8",
+          "type": 1,
+          "name_va": "0x101d9f54",
+          "name": "m_sBossBarEmpty",
+          "object_offset": "0x5f8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 125,
+          "record_va": "0x102187b8",
+          "type": 1,
+          "name_va": "0x101d9f64",
+          "name": "m_sBossBarFull",
+          "object_offset": "0x5fc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 126,
+          "record_va": "0x102187c8",
+          "type": 1,
+          "name_va": "0x101d9f74",
+          "name": "m_sBossName",
+          "object_offset": "0x608",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 127,
+          "record_va": "0x102187d8",
+          "type": 10,
+          "name_va": "0x101d9f80",
+          "name": "m_iBossMaxHealth",
+          "object_offset": "0x600",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 128,
+          "record_va": "0x102187e8",
+          "type": 10,
+          "name_va": "0x101d9f94",
+          "name": "m_iBossCurrentHealth",
+          "object_offset": "0x604",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 129,
+          "record_va": "0x102187f8",
+          "type": 10,
+          "name_va": "0x101d9fac",
+          "name": "m_iHealthCap",
+          "object_offset": "0x60c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 130,
+          "record_va": "0x10218808",
+          "type": 10,
+          "name_va": "0x101d9fbc",
+          "name": "m_iKeypadType",
+          "object_offset": "0x2044",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 131,
+          "record_va": "0x10218818",
+          "type": 15,
+          "name_va": "0x101d9fcc",
+          "name": "m_fUseTime",
+          "object_offset": "0x610",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 132,
+          "record_va": "0x10218828",
+          "type": 10,
+          "name_va": "0x101d9fd8",
+          "name": "m_iDualWeaponLeftAmmo",
+          "object_offset": "0x5dc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 133,
+          "record_va": "0x10218838",
+          "type": 10,
+          "name_va": "0x101d9ff0",
+          "name": "m_iDualWeaponRightAmmo",
+          "object_offset": "0x5e0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 134,
+          "record_va": "0x10218848",
+          "type": 1,
+          "name_va": "0x101da008",
+          "name": "g_iDoorSound",
+          "object_offset": "0x5ec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 135,
+          "record_va": "0x10218858",
+          "type": 10,
+          "name_va": "0x101da018",
+          "name": "m_iFlashlightFlags",
+          "object_offset": "0x5d0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 136,
+          "record_va": "0x10218868",
+          "type": 12,
+          "name_va": "0x101da02c",
+          "name": "m_bInWater",
+          "object_offset": "0x5c8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 137,
+          "record_va": "0x10218878",
+          "type": 10,
+          "name_va": "0x101da038",
+          "name": "m_iMobileFlashMode",
+          "object_offset": "0x1e98",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 138,
+          "record_va": "0x10218888",
+          "type": 10,
+          "name_va": "0x101da04c",
+          "name": "m_iDualWeaponLeftID",
+          "object_offset": "0x1e70",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 139,
+          "record_va": "0x10218898",
+          "type": 10,
+          "name_va": "0x101da060",
+          "name": "m_iDualWeaponRightID",
+          "object_offset": "0x1e74",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 140,
+          "record_va": "0x102188a8",
+          "type": 15,
+          "name_va": "0x101da078",
+          "name": "m_flQuickSlotTimeDecay",
+          "object_offset": "0x5d8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 141,
+          "record_va": "0x102188b8",
+          "type": 10,
+          "name_va": "0x101da090",
+          "name": "m_iPhoneMessage",
+          "object_offset": "0x5cc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 142,
+          "record_va": "0x102188c8",
+          "type": 14,
+          "name_va": "0x101da0a0",
+          "name": "documentsstruct[1]",
+          "object_offset": "0x7a8",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 143,
+          "record_va": "0x102188d8",
+          "type": 14,
+          "name_va": "0x101da0b4",
+          "name": "documentsstruct[2]",
+          "object_offset": "0x8c8",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 144,
+          "record_va": "0x102188e8",
+          "type": 14,
+          "name_va": "0x101da0c8",
+          "name": "documentsstruct[3]",
+          "object_offset": "0x9e8",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 145,
+          "record_va": "0x102188f8",
+          "type": 14,
+          "name_va": "0x101da0dc",
+          "name": "documentsstruct[4]",
+          "object_offset": "0xb08",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 146,
+          "record_va": "0x10218908",
+          "type": 14,
+          "name_va": "0x101da0f0",
+          "name": "documentsstruct[5]",
+          "object_offset": "0xc28",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 147,
+          "record_va": "0x10218918",
+          "type": 14,
+          "name_va": "0x101da104",
+          "name": "documentsstruct[6]",
+          "object_offset": "0xd48",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 148,
+          "record_va": "0x10218928",
+          "type": 14,
+          "name_va": "0x101da118",
+          "name": "documentsstruct[7]",
+          "object_offset": "0xe68",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 149,
+          "record_va": "0x10218938",
+          "type": 14,
+          "name_va": "0x101da12c",
+          "name": "documentsstruct[8]",
+          "object_offset": "0xf88",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 150,
+          "record_va": "0x10218948",
+          "type": 14,
+          "name_va": "0x101da140",
+          "name": "documentsstruct[9]",
+          "object_offset": "0x10a8",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 151,
+          "record_va": "0x10218958",
+          "type": 14,
+          "name_va": "0x101da154",
+          "name": "documentsstruct[10]",
+          "object_offset": "0x11c8",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 152,
+          "record_va": "0x10218968",
+          "type": 14,
+          "name_va": "0x101da168",
+          "name": "documentsstruct[11]",
+          "object_offset": "0x12e8",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 153,
+          "record_va": "0x10218978",
+          "type": 14,
+          "name_va": "0x101da17c",
+          "name": "documentsstruct[12]",
+          "object_offset": "0x1408",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 154,
+          "record_va": "0x10218988",
+          "type": 14,
+          "name_va": "0x101da190",
+          "name": "documentsstruct[13]",
+          "object_offset": "0x1528",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 155,
+          "record_va": "0x10218998",
+          "type": 14,
+          "name_va": "0x101da1a4",
+          "name": "documentsstruct[14]",
+          "object_offset": "0x1648",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 156,
+          "record_va": "0x102189a8",
+          "type": 14,
+          "name_va": "0x101da1b8",
+          "name": "documentsstruct[15]",
+          "object_offset": "0x1768",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 157,
+          "record_va": "0x102189b8",
+          "type": 14,
+          "name_va": "0x101da1cc",
+          "name": "documentsstruct[16]",
+          "object_offset": "0x1888",
+          "count": 288,
+          "flags": 0
+        },
+        {
+          "index": 158,
+          "record_va": "0x102189c8",
+          "type": 1,
+          "name_va": "0x101da1e0",
+          "name": "transferredentity_message",
+          "object_offset": "0x19a8",
+          "count": 51,
+          "flags": 0
+        },
+        {
+          "index": 159,
+          "record_va": "0x102189d8",
+          "type": 7,
+          "name_va": "0x101da1fc",
+          "name": "transferredentity_origin",
+          "object_offset": "0x1a74",
+          "count": 51,
+          "flags": 0
+        },
+        {
+          "index": 160,
+          "record_va": "0x102189e8",
+          "type": 1,
+          "name_va": "0x101da218",
+          "name": "transferredentity_classname",
+          "object_offset": "0x1cd8",
+          "count": 51,
+          "flags": 0
+        },
+        {
+          "index": 161,
+          "record_va": "0x102189f8",
+          "type": 10,
+          "name_va": "0x101da234",
+          "name": "transferredentity_clip",
+          "object_offset": "0x1da4",
+          "count": 51,
+          "flags": 0
+        },
+        {
+          "index": 162,
+          "record_va": "0x10218a08",
+          "type": 4,
+          "name_va": "0x101da24c",
+          "name": "m_pBoat",
+          "object_offset": "0x380",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 163,
+          "record_va": "0x10218a18",
+          "type": 4,
+          "name_va": "0x101da254",
+          "name": "m_pAttachedCamera",
+          "object_offset": "0x388",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 164,
+          "record_va": "0x10218a28",
+          "type": 4,
+          "name_va": "0x101da268",
+          "name": "m_pWheelchair",
+          "object_offset": "0x390",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 165,
+          "record_va": "0x10218a38",
+          "type": 15,
+          "name_va": "0x101da278",
+          "name": "m_fUnderwaterBreatheTime",
+          "object_offset": "0x21dc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 166,
+          "record_va": "0x10218a48",
+          "type": 12,
+          "name_va": "0x101da294",
+          "name": "m_bWasDrowning",
+          "object_offset": "0x21e0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 167,
+          "record_va": "0x10218a58",
+          "type": 12,
+          "name_va": "0x101da2a4",
+          "name": "m_bSubmerged",
+          "object_offset": "0x21e1",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 168,
+          "record_va": "0x10218a68",
+          "type": 12,
+          "name_va": "0x101da2b4",
+          "name": "m_bWasInShallowWater",
+          "object_offset": "0x21e2",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 169,
+          "record_va": "0x10218a78",
+          "type": 15,
+          "name_va": "0x101da2cc",
+          "name": "m_flRippleTime",
+          "object_offset": "0x21e4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 170,
+          "record_va": "0x10218a88",
+          "type": 10,
+          "name_va": "0x101da2dc",
+          "name": "m_iDeathBits",
+          "object_offset": "0x5b4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 171,
+          "record_va": "0x10218a98",
+          "type": 10,
+          "name_va": "0x101da2ec",
+          "name": "m_iDoctorWeapon",
+          "object_offset": "0x5b0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 172,
+          "record_va": "0x10218aa8",
+          "type": 12,
+          "name_va": "0x101da2fc",
+          "name": "m_bWaterVoiceCancel",
+          "object_offset": "0x5a9",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 173,
+          "record_va": "0x10218ab8",
+          "type": 12,
+          "name_va": "0x101da310",
+          "name": "m_bStartedDrowning",
+          "object_offset": "0x5a8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 174,
+          "record_va": "0x10218ac8",
+          "type": 15,
+          "name_va": "0x101da324",
+          "name": "m_flTurnVectorTime",
+          "object_offset": "0x598",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 175,
+          "record_va": "0x10218ad8",
+          "type": 15,
+          "name_va": "0x101da338",
+          "name": "m_flTurnAroundTime",
+          "object_offset": "0x594",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 176,
+          "record_va": "0x10218ae8",
+          "type": 7,
+          "name_va": "0x101da34c",
+          "name": "m_vTurnVector",
+          "object_offset": "0x59c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 177,
+          "record_va": "0x10218af8",
+          "type": 3,
+          "name_va": "0x101da35c",
+          "name": "pDeathScene",
+          "object_offset": "0x5ac",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 178,
+          "record_va": "0x10218b08",
+          "type": 12,
+          "name_va": "0x101da368",
+          "name": "m_bWaitingToFall",
+          "object_offset": "0x50c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 179,
+          "record_va": "0x10218b18",
+          "type": 1,
+          "name_va": "0x101da37c",
+          "name": "m_strHintsShown",
+          "object_offset": "0x510",
+          "count": 33,
+          "flags": 0
+        },
+        {
+          "index": 180,
+          "record_va": "0x10218b28",
+          "type": 15,
+          "name_va": "0x101da38c",
+          "name": "m_flCylinderRotateTime",
+          "object_offset": "0x4d0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 181,
+          "record_va": "0x10218b38",
+          "type": 15,
+          "name_va": "0x101da3a4",
+          "name": "m_flNextHeartbeatTime",
+          "object_offset": "0x4d4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 182,
+          "record_va": "0x10218b48",
+          "type": 12,
+          "name_va": "0x101da3bc",
+          "name": "m_bLowHealth",
+          "object_offset": "0x43c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 183,
+          "record_va": "0x10218b58",
+          "type": 15,
+          "name_va": "0x101da3cc",
+          "name": "m_flNextMorphineDreamTime",
+          "object_offset": "0x440",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 184,
+          "record_va": "0x10218b68",
+          "type": 15,
+          "name_va": "0x101da3e8",
+          "name": "m_fVomitTime",
+          "object_offset": "0x2270",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 185,
+          "record_va": "0x10218b78",
+          "type": 15,
+          "name_va": "0x101da3f8",
+          "name": "m_flNextTimeTakenCheck",
+          "object_offset": "0x438",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 186,
+          "record_va": "0x10218b88",
+          "type": 10,
+          "name_va": "0x101da410",
+          "name": "m_iOwnedWeaponsList",
+          "object_offset": "0x444",
+          "count": 32,
+          "flags": 0
+        },
+        {
+          "index": 187,
+          "record_va": "0x10218b98",
+          "type": 15,
+          "name_va": "0x101da424",
+          "name": "m_flNextPunchTime",
+          "object_offset": "0x4c4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 188,
+          "record_va": "0x10218ba8",
+          "type": 10,
+          "name_va": "0x101da438",
+          "name": "m_iPlayerSaveLock",
+          "object_offset": "0x4c8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 189,
+          "record_va": "0x10218bb8",
+          "type": 12,
+          "name_va": "0x101da44c",
+          "name": "m_b_Ending_RoofBossKilled",
+          "object_offset": "0x4cd",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 190,
+          "record_va": "0x10218bc8",
+          "type": 12,
+          "name_va": "0x101da468",
+          "name": "m_b_Ending_GivenP345",
+          "object_offset": "0x4ce",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 191,
+          "record_va": "0x10218bd8",
+          "type": 12,
+          "name_va": "0x101da480",
+          "name": "m_b_Ending_DeliveredPackage",
+          "object_offset": "0x4cf",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 192,
+          "record_va": "0x10218be8",
+          "type": 15,
+          "name_va": "0x101da49c",
+          "name": "m_flOutOfBreathDisableTime",
+          "object_offset": "0x1e94",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 193,
+          "record_va": "0x10218bf8",
+          "type": 10,
+          "name_va": "0x101da4b8",
+          "name": "m_iUnlockedClothes",
+          "object_offset": "0x424",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 194,
+          "record_va": "0x10218c08",
+          "type": 10,
+          "name_va": "0x101da4cc",
+          "name": "m_iFoundHoodies",
+          "object_offset": "0x42c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 195,
+          "record_va": "0x10218c18",
+          "type": 12,
+          "name_va": "0x101da4dc",
+          "name": "m_bFirstDeploy",
+          "object_offset": "0x3f4",
+          "count": 33,
+          "flags": 0
+        },
+        {
+          "index": 196,
+          "record_va": "0x10218c28",
+          "type": 10,
+          "name_va": "0x101da4ec",
+          "name": "m_iCurrentWeaponAnimation",
+          "object_offset": "0x418",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 197,
+          "record_va": "0x10218c38",
+          "type": 10,
+          "name_va": "0x101da508",
+          "name": "m_iCurrentWeaponAnimationDual",
+          "object_offset": "0x41c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 198,
+          "record_va": "0x10218c48",
+          "type": 1,
+          "name_va": "0x101da528",
+          "name": "m_sObjectiveText",
+          "object_offset": "0x1e90",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 199,
+          "record_va": "0x10218c58",
+          "type": 15,
+          "name_va": "0x101da53c",
+          "name": "m_flNextNightVisionTime",
+          "object_offset": "0x3ec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 200,
+          "record_va": "0x10218c68",
+          "type": 12,
+          "name_va": "0x101da554",
+          "name": "m_bHasNightVision",
+          "object_offset": "0x434",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 201,
+          "record_va": "0x10218c78",
+          "type": 10,
+          "name_va": "0x101da568",
+          "name": "m_iQuickSlotSlot",
+          "object_offset": "0x3d8",
+          "count": 4,
+          "flags": 0
+        },
+        {
+          "index": 202,
+          "record_va": "0x10218c88",
+          "type": 10,
+          "name_va": "0x101da57c",
+          "name": "m_iHeadShieldOn",
+          "object_offset": "0x2300",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 203,
+          "record_va": "0x10218c98",
+          "type": 12,
+          "name_va": "0x101da58c",
+          "name": "m_bJustJumped",
+          "object_offset": "0x3aa",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 204,
+          "record_va": "0x10218ca8",
+          "type": 15,
+          "name_va": "0x101da59c",
+          "name": "m_flMaxJustJumpedTime",
+          "object_offset": "0x3ac",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 205,
+          "record_va": "0x10218cb8",
+          "type": 15,
+          "name_va": "0x101da5b4",
+          "name": "m_sCustomObjectives",
+          "object_offset": "0x420",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "index": 206,
+          "record_va": "0x10218cc8",
+          "type": 12,
+          "name_va": "0x101da5c8",
+          "name": "m_bUsedVanNumber",
+          "object_offset": "0x399",
+          "count": 1,
+          "flags": 0
+        }
+      ],
+      "pending_0x2314_records": []
+    },
+    {
+      "va": "0x1021b140",
+      "end_exclusive": "0x1021b188",
+      "length": 72,
+      "file_offset": "0x21a140",
+      "section": ".data",
+      "bytes_hex": "040000000400000004000000040000000400000004000000040000000c0000000c000000040000000400000004000000040000000200000001000000040000000400000004000000",
+      "sha256": "78176844a64afaf56abe870bfef40e2146eeed5a3025c44f19eb586623b0119a",
+      "name": "Native save-field type sizes",
+      "type_sizes": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        12,
+        12,
+        4,
+        4,
+        4,
+        4,
+        2,
+        1,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "va": "0x101e4464",
+      "end_exclusive": "0x101e4468",
+      "length": 4,
+      "file_offset": "0x1e3864",
+      "section": ".rdata",
+      "bytes_hex": "20e20010",
+      "sha256": "8a50ab662629e4a89860714f364d99f696167fdc464dc27ed8bb79567a830c44",
+      "name": "Factory-assigned vtable101e4438 slot+2c",
+      "target": "0x1000e220"
+    },
+    {
+      "va": "0x101e446c",
+      "end_exclusive": "0x101e4470",
+      "length": 4,
+      "file_offset": "0x1e386c",
+      "section": ".rdata",
+      "bytes_hex": "a0db0010",
+      "sha256": "ea36619417fab7ca6d2d0dd15a65dfd23b0579d2c762748bf8bfaf3572a5f5cc",
+      "name": "Factory-assigned vtable101e4438 slot+34",
+      "target": "0x1000dba0"
+    },
+    {
+      "va": "0x101e4520",
+      "end_exclusive": "0x101e4524",
+      "length": 4,
+      "file_offset": "0x1e3920",
+      "section": ".rdata",
+      "bytes_hex": "b0481110",
+      "sha256": "7e67d697e0a1c7e7cc06f9bb1b227a96d529b9f0befd4a6d4136957e6ec11806",
+      "name": "Factory-assigned vtable101e4438 slot+e8",
+      "target": "0x101148b0"
+    },
+    {
+      "va": "0x101a8bf0",
+      "end_exclusive": "0x101a8bf8",
+      "length": 8,
+      "file_offset": "0x1a7ff0",
+      "section": ".rdata",
+      "bytes_hex": "6e6f7468696e6700",
+      "sha256": "acc99bcc4067de466acb1875fc2489e1144655898288041a1edb43cdb6d4fa80",
+      "ascii": "nothing"
+    },
+    {
+      "va": "0x101db5e4",
+      "end_exclusive": "0x101db5eb",
+      "length": 7,
+      "file_offset": "0x1da9e4",
+      "section": ".rdata",
+      "bytes_hex": "504c4159455200",
+      "sha256": "70f9a80ad0dd785b637816adfd1428e2c6ff36e271de03e4af9d2b42d300780f",
+      "ascii": "PLAYER"
+    },
+    {
+      "va": "0x101db5ec",
+      "end_exclusive": "0x101db5f4",
+      "length": 8,
+      "file_offset": "0x1da9ec",
+      "section": ".rdata",
+      "bytes_hex": "63504c4159455200",
+      "sha256": "2dc9cc24c0dc43c4b7cd1acb1a69efbeb90d7cc2cec63d7e5223b659b6474cf9",
+      "ascii": "cPLAYER"
+    },
+    {
+      "va": "0x10115c80",
+      "end_exclusive": "0x10115c85",
+      "length": 5,
+      "file_offset": "0x115080",
+      "section": ".text",
+      "bytes_hex": "e96b28ffff",
+      "sha256": "20309b8ea3a50b5008155d64864ee1ae840ff2e5e3226fbbb499e7da0ccdabed",
+      "name": "ambient_fmodstream",
+      "encoding": "E9 rel32 jump",
+      "target": "0x101084f0"
+    },
+    {
+      "va": "0x10115f20",
+      "end_exclusive": "0x10115f25",
+      "length": 5,
+      "file_offset": "0x115320",
+      "section": ".text",
+      "bytes_hex": "e9cb25ffff",
+      "sha256": "cdae67ddde2cf3e055d2ad4ac4263012b61a8151288726ea50837e3092290138",
+      "name": "trigger_mp3",
+      "encoding": "E9 rel32 jump",
+      "target": "0x101084f0"
+    },
+    {
+      "va": "0x10115f30",
+      "end_exclusive": "0x10115f35",
+      "length": 5,
+      "file_offset": "0x115330",
+      "section": ".text",
+      "bytes_hex": "e9bb25ffff",
+      "sha256": "fdb188d7071ec0dffce8a42004a9180aa0ade936c5659b20deb834905fcccb35",
+      "name": "trigger_mp3audio",
+      "encoding": "E9 rel32 jump",
+      "target": "0x101084f0"
+    }
+  ]
+}

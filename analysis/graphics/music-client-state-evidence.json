@@ -1,0 +1,264 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "new_rea_process": false,
+  "method": "Read-only extraction from retained GNU objdump listing, each bounded range compared byte-for-byte with original PE",
+  "source_listing": "analysis/local/music-state-client-text.asm",
+  "source_listing_sha256": "fdf5a6a09539335fc42892b84367c4b204716d8a3784e49e0ea7ca6661c75bf9",
+  "candidate_listing": "analysis/local/music-state-field-candidates.txt",
+  "candidate_listing_sha256": "14faf788da7f9a796a00d679a2f59f0072fb2f184972e3c9bb1d8d484c0c77ec",
+  "ranges": [
+    {
+      "start": "0x10002340",
+      "end_exclusive": "0x1000241a",
+      "file": "analysis/graphics/music-client-state-assembly/ui-constructor.asm",
+      "sha256": "1301cd73e3fb96b7ff89e13915c5c86dbd9993eb22cedfa4be805220a16adccc",
+      "binary_range_sha256": "ba866d35be79327f8e12f672e584505c2d68a3b09827198f2abd42d2b256af7d",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x10003b20",
+      "end_exclusive": "0x10003b35",
+      "file": "analysis/graphics/music-client-state-assembly/ui-setter.asm",
+      "sha256": "a7e796a3e0cdf43d0ec0821ebcc478e39e25f9a8eecf4b84fc6d8e4915197868",
+      "binary_range_sha256": "bce27727527148c881d87d71fcd1c6a5491ebaaa543733a71c2b1cfa807d4e4b",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x1003f850",
+      "end_exclusive": "0x1003f9d4",
+      "file": "analysis/graphics/music-client-state-assembly/difficulty-owner.asm",
+      "sha256": "3c44fe1713b656b769f04aa36ff882c0eca8074004e5c2cad074d952bb5f5a6b",
+      "binary_range_sha256": "d109d34bcccc964962e2c61614080163f6d139c281db7ba5a998ae9f5f02f3d4",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x100338a0",
+      "end_exclusive": "0x10033a65",
+      "file": "analysis/graphics/music-client-state-assembly/telephone-owner.asm",
+      "sha256": "625964230f946403516925248856623ab1c72d6bad24eb27c2086f1f4de24683",
+      "binary_range_sha256": "40653d93de676e7a737a104de2096ba7c4fd30d5ff1fda890fee12be4a9276fb",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x1007f8fa",
+      "end_exclusive": "0x1007f940",
+      "file": "analysis/graphics/music-client-state-assembly/audio-override.asm",
+      "sha256": "e0c24ccbd46664869da7732e670efb17c58e6bac8d3f474084c531250c016ce5",
+      "binary_range_sha256": "42368b1592d7dc04da66274691c4be57b73cf05ee0e2b76663311e27f0c59327",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x1007f940",
+      "end_exclusive": "0x1007fc30",
+      "file": "analysis/graphics/music-client-state-assembly/audio-owner-lifetime.asm",
+      "sha256": "1ce2bcbc9f56c72658125731e68662333dc8b4cfcb96a278c0cc219865b1dd91",
+      "binary_range_sha256": "89f3acac405aea70d55471c595f0bf6a0bc0665806166b6912756581eea17dda",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x1008011f",
+      "end_exclusive": "0x100801d5",
+      "file": "analysis/graphics/music-client-state-assembly/music-state-producer.asm",
+      "sha256": "fb923a7d483047302ba4821908efd565da6bb4e65a6d1726e42b6b3eed122d3b",
+      "binary_range_sha256": "32dcb5d1fa3a62a228d62b535877dcffc3ae98dbb1437f10547179ba1871b5b9",
+      "all_disassembly_bytes_match_binary": true
+    },
+    {
+      "start": "0x10080780",
+      "end_exclusive": "0x10080850",
+      "file": "analysis/graphics/music-client-state-assembly/music-state-stop.asm",
+      "sha256": "08ef12ac7b75978e1d41e723a2bc117bcfa52d9f6691eb31ef6411bee3978f46",
+      "binary_range_sha256": "e65df27d80b4b30038eed6d72d3bdcd9d6d5e231970b7535e7b6f46f1426d731",
+      "all_disassembly_bytes_match_binary": true
+    }
+  ],
+  "c4_byte_candidates": [
+    {
+      "address": "0x100023b1",
+      "entry": "0x10002340",
+      "owner": "UI embedded control; difficulty panel+0xcc in proven caller",
+      "value": "1",
+      "audio_owner_proven": false
+    },
+    {
+      "address": "0x10003b26",
+      "entry": "0x10003b20",
+      "owner": "same UI control at proven difficulty caller",
+      "value": "argument low byte",
+      "audio_owner_proven": false
+    },
+    {
+      "address": "0x100338ca",
+      "entry": "0x100338a0",
+      "owner": "*(DAT101b2600+0x147c), telephone panel",
+      "value": "0",
+      "audio_owner_proven": false
+    },
+    {
+      "address": "0x100339e0",
+      "entry": "0x100338a0",
+      "owner": "*(DAT101b2600+0x147c), telephone panel",
+      "value": "1 if message mode3",
+      "audio_owner_proven": false
+    },
+    {
+      "address": "0x1007f99c",
+      "entry": "0x1007f940",
+      "owner": "audio105440a4 via activation wrapper",
+      "value": "0",
+      "audio_owner_proven": true
+    },
+    {
+      "address": "0x100807c6",
+      "entry": "0x10080780",
+      "owner": "audio105440a4 via1007fc10",
+      "value": "AL=0: CheckParm result EAX is tested at100807af; JNE bypasses write, fallthrough preserves zero through MOV byte+dd=1",
+      "audio_owner_proven": true
+    }
+  ],
+  "audio_span": {
+    "start": "0x1007f6e0",
+    "end_exclusive": "0x10080850",
+    "literal_field_accesses": [
+      {
+        "address": "0x1007f8fa",
+        "instruction": "1007f8fa:\t80 be c4 00 00 00 00 \tcmp    BYTE PTR [esi+0xc4],0x0"
+      },
+      {
+        "address": "0x1007f907",
+        "instruction": "1007f907:\t66 0f 6e 86 c0 00 00 \tmovd   xmm0,DWORD PTR [esi+0xc0]"
+      },
+      {
+        "address": "0x1007f950",
+        "instruction": "1007f950:\tc7 81 c8 00 00 00 00 \tmov    DWORD PTR [ecx+0xc8],0x0"
+      },
+      {
+        "address": "0x1007f992",
+        "instruction": "1007f992:\tc7 81 c0 00 00 00 00 \tmov    DWORD PTR [ecx+0xc0],0x0"
+      },
+      {
+        "address": "0x1007f99c",
+        "instruction": "1007f99c:\tc6 81 c4 00 00 00 00 \tmov    BYTE PTR [ecx+0xc4],0x0"
+      },
+      {
+        "address": "0x1007f9b7",
+        "instruction": "1007f9b7:\tc7 81 d4 00 00 00 00 \tmov    DWORD PTR [ecx+0xd4],0x0"
+      },
+      {
+        "address": "0x1007f9c1",
+        "instruction": "1007f9c1:\tc7 81 d8 00 00 00 00 \tmov    DWORD PTR [ecx+0xd8],0x0"
+      },
+      {
+        "address": "0x1007fb8d",
+        "instruction": "1007fb8d:\tf3 0f 11 88 d4 00 00 \tmovss  DWORD PTR [eax+0xd4],xmm1"
+      },
+      {
+        "address": "0x1007fb9f",
+        "instruction": "1007fb9f:\tf3 0f 11 88 d8 00 00 \tmovss  DWORD PTR [eax+0xd8],xmm1"
+      },
+      {
+        "address": "0x1008011f",
+        "instruction": "1008011f:\t80 bf c4 00 00 00 00 \tcmp    BYTE PTR [edi+0xc4],0x0"
+      },
+      {
+        "address": "0x10080128",
+        "instruction": "10080128:\t89 b7 c8 00 00 00    \tmov    DWORD PTR [edi+0xc8],esi"
+      },
+      {
+        "address": "0x10080143",
+        "instruction": "10080143:\t8b 87 c8 00 00 00    \tmov    eax,DWORD PTR [edi+0xc8]"
+      },
+      {
+        "address": "0x100801c1",
+        "instruction": "100801c1:\tc7 87 d4 00 00 00 00 \tmov    DWORD PTR [edi+0xd4],0x0"
+      },
+      {
+        "address": "0x100801cb",
+        "instruction": "100801cb:\tc7 87 d8 00 00 00 00 \tmov    DWORD PTR [edi+0xd8],0x0"
+      },
+      {
+        "address": "0x100807be",
+        "instruction": "100807be:\t38 86 c4 00 00 00    \tcmp    BYTE PTR [esi+0xc4],al"
+      },
+      {
+        "address": "0x100807c6",
+        "instruction": "100807c6:\t88 86 c4 00 00 00    \tmov    BYTE PTR [esi+0xc4],al"
+      }
+    ]
+  },
+  "literal_global105440a4_references": [
+    {
+      "address": "0x1007fa04",
+      "instruction": "1007fa04:\ta3 a4 40 54 10       \tmov    ds:0x105440a4,eax"
+    },
+    {
+      "address": "0x1007fa2d",
+      "instruction": "1007fa2d:\tc7 05 a4 40 54 10 00 \tmov    DWORD PTR ds:0x105440a4,0x0"
+    },
+    {
+      "address": "0x1007fa61",
+      "instruction": "1007fa61:\ta1 a4 40 54 10       \tmov    eax,ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fa78",
+      "instruction": "1007fa78:\tc7 05 a4 40 54 10 00 \tmov    DWORD PTR ds:0x105440a4,0x0"
+    },
+    {
+      "address": "0x1007fa91",
+      "instruction": "1007fa91:\t8b 35 a4 40 54 10    \tmov    esi,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fac0",
+      "instruction": "1007fac0:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fad0",
+      "instruction": "1007fad0:\ta1 a4 40 54 10       \tmov    eax,ds:0x105440a4"
+    },
+    {
+      "address": "0x1007faf3",
+      "instruction": "1007faf3:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fb13",
+      "instruction": "1007fb13:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fb53",
+      "instruction": "1007fb53:\ta1 a4 40 54 10       \tmov    eax,ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fbb3",
+      "instruction": "1007fbb3:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fbd3",
+      "instruction": "1007fbd3:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fbf3",
+      "instruction": "1007fbf3:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    },
+    {
+      "address": "0x1007fc13",
+      "instruction": "1007fc13:\t8b 0d a4 40 54 10    \tmov    ecx,DWORD PTR ds:0x105440a4"
+    }
+  ],
+  "limitations": [
+    "Literal displacement/address search is not alias analysis.",
+    "Does not exclude adjusted-base writes, bulk copies, indexed addresses, external/virtual writes, wider stores or undecoded/indirect code.",
+    "UI caller establishes a concrete non-audio owner, not proof all possible callers have the same receiver.",
+    "No runtime activation or audible behavior tested."
+  ],
+  "evidence_paths": [
+    "decompiled/client/captures/vgui-menu-first/005-pseudocode.c",
+    "decompiled/client/captures/vgui-menu-messages/008-pseudocode.c",
+    "decompiled/client/captures/graphics-audio-activation/000-pseudocode.c",
+    "decompiled/client/captures/graphics-audio-activation/001-pseudocode.c",
+    "decompiled/client/captures/graphics-hud-lifetime-producers/000-pseudocode.c",
+    "decompiled/client/captures/graphics-hud-lifetime-owners/000-pseudocode.c",
+    "analysis/graphics/music-client-contract.md"
+  ]
+}

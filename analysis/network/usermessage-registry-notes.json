@@ -1,0 +1,28 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100e5fc0",
+      "proposed_name": "LinkUserMessages",
+      "subsystem": "network",
+      "summary_ru": "Регистрирует155 user messages; полный индекс имён, sizes и ID-слотов дополнен bounded saved-C навигацией.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Health→102264d0 size3; Stamina→1022657c size3; HoldBreath→102266c4 size1; FallOver→102265b4 variable; CameraZoom→102265cc variable; HealthCap→1022661c size1. Регистрация не доказывает все sender/receiver branches.",
+        "PlayMP3 literal регистрируется size-1, ID сохраняется10226544. Payload определяется sender/receiver, а не одной variable-size регистрацией.",
+        "Весь registration block под DAT1022649c==0: 155 уникальных имён/слотов, fixed78 включая zero9, variable77. ID=runtime return RegUserMsg10223074, не адрес глобала.",
+        "Пять &DAT labels разрешены hash-pinned PE strings: &DAT_101dabe4=MOTD, &DAT_101dad34=Blur, &DAT_101dad90=Save, &DAT_101dae88=Bomb, &DAT_101daf40=Boat.",
+        "usermessage-registry.json сохраняет lexical server references и явные MessageBegin args отдельно; client literal и hook calls также различаются. Это навигация по8000 partial-pass C и существующим clientcaptures, не полный native callgraph/доказательство использования или полного payload."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100e5fc0.c",
+        "analysis/movement/health-stamina.md",
+        "analysis/graphics/music-server-protocol.md",
+        "analysis/network/usermessage-registry.json",
+        "analysis/network/usermessage-registry.md",
+        "analysis/network/build-usermessage-registry.py"
+      ]
+    }
+  ],
+  "subsystems": []
+}

@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-20",
+  "scope": "Static music save fields, stop recipient, numeric factory Use route and bounded client owner audit",
+  "target_executed": false,
+  "runtime_or_visual_validation": false,
+  "game_code_or_runtime_files_changed": false,
+  "original_resources_changed": false,
+  "checks": {
+    "new_C_files": 0,
+    "newly_reviewed": 2,
+    "existing_review_updates": 3,
+    "unrelated_reviews_preserved": 859,
+    "prior_evidence_paths_preserved": true,
+    "synchronized_note_occurrences": 8,
+    "server_raw_ranges_checked": 20,
+    "server_assembly_hashes_checked": 5,
+    "player_field_records_checked": 207,
+    "catalog_and_progress_regeneration_idempotent": true,
+    "progress_accounting_tests": 4,
+    "git_diff_check": "passed",
+    "original_DLL_hashes_unchanged": true,
+    "client_assembly_hash_and_bytes_checked": 8
+  },
+  "catalog": {
+    "c_files": 8723,
+    "unique_address_records": 8612,
+    "reviewed": 864,
+    "unreviewed": 7748,
+    "additional_c_files_for_existing_addresses": 111,
+    "addresses_with_multiple_c_files": 105,
+    "selector_mismatch_files": 160,
+    "unconfirmed_entry_records": 12,
+    "status_counts": {
+      "reviewed": 864,
+      "structural_template": 1437,
+      "ghidra_library_label": 1583,
+      "symbol_only": 314,
+      "unreviewed_unknown": 4414
+    }
+  },
+  "remaining": [
+    "Exact engine WRITE_COORD encoding and external save serializer behavior",
+    "Nonzero audio c0/c4 writers, pending c8 lifetime, d4/d8 consumers; literal-offset search is not alias analysis",
+    "External irrKlang ownership, alternate producer caller",
+    "Full game function count unknown; REVIEW count is not completed reconstruction"
+  ],
+  "artifact_sha256": {
+    "analysis/graphics/music-client-contract.md": "e16d500d945b292666b842d05503482e83a7fc9d723107819abfd1e79f30adf2",
+    "analysis/graphics/music-client-state-assembly/audio-override.asm": "e0c24ccbd46664869da7732e670efb17c58e6bac8d3f474084c531250c016ce5",
+    "analysis/graphics/music-client-state-assembly/audio-owner-lifetime.asm": "1ce2bcbc9f56c72658125731e68662333dc8b4cfcb96a278c0cc219865b1dd91",
+    "analysis/graphics/music-client-state-assembly/difficulty-owner.asm": "3c44fe1713b656b769f04aa36ff882c0eca8074004e5c2cad074d952bb5f5a6b",
+    "analysis/graphics/music-client-state-assembly/music-state-producer.asm": "fb923a7d483047302ba4821908efd565da6bb4e65a6d1726e42b6b3eed122d3b",
+    "analysis/graphics/music-client-state-assembly/music-state-stop.asm": "08ef12ac7b75978e1d41e723a2bc117bcfa52d9f6691eb31ef6411bee3978f46",
+    "analysis/graphics/music-client-state-assembly/telephone-owner.asm": "625964230f946403516925248856623ab1c72d6bad24eb27c2086f1f4de24683",
+    "analysis/graphics/music-client-state-assembly/ui-constructor.asm": "1301cd73e3fb96b7ff89e13915c5c86dbd9993eb22cedfa4be805220a16adccc",
+    "analysis/graphics/music-client-state-assembly/ui-setter.asm": "a7e796a3e0cdf43d0ec0821ebcc478e39e25f9a8eecf4b84fc6d8e4915197868",
+    "analysis/graphics/music-client-state-audit.md": "1de17457f76eaafc678567521531c3a4e9a8434b612fb09523c45cd4cccdbf51",
+    "analysis/graphics/music-client-state-evidence.json": "e4fa093fac8d43c68fa811108fe97b71853d15df74f6e671f146ac35e38247fe",
+    "analysis/graphics/music-server-notes.json": "98ed358d8cef4cd84f7cff9f2d9dc98805a344f1faf6c64d52a033bf70b5ae55",
+    "analysis/graphics/music-server-protocol.md": "4c5167f6e417ec3fa3555d6515e299ae261c0f14422f360b6d2dbbc4b758e194",
+    "analysis/graphics/music-server-state-capture.py": "b5a273a138a673ae542acd04e75aa475f29a88ecb394c4c4c91cd9313f2431b4",
+    "analysis/graphics/music-server-state-contract.md": "f8bbe1825ade096e74bc3227dcedb244fd64f663a6cf232fa66edc97a3868be7",
+    "analysis/graphics/music-server-state-evidence.json": "127cce85d4035c580127b8875dd2a4d2c8ae47140cee1e5b399c223dd0f443aa",
+    "analysis/graphics/music-server-state-factory.asm": "0ec56f975d080e3cb9cca882ff8a6484fefa1690c5b3b0b93919475c73e53b65",
+    "analysis/graphics/music-server-state-notes.json": "fc10f39f9b562e515bdddcb9059624e46bbd22d359f1719a22e05b273eef951c",
+    "analysis/graphics/music-server-state-restore.asm": "720455184023bde8faa140111aa5bea8ab62e98560afc64e571514965797b996",
+    "analysis/graphics/music-server-state-save.asm": "3e7ccc6f55988c401f7f043b176d4bac9c82badca590d4ed2c6e947c610e537e",
+    "analysis/graphics/music-server-state-stop-early.asm": "c93efe99f55f4b6c5957190d701ef148e415cd7ee64c1ddb90f599472f9db66f",
+    "analysis/graphics/music-server-state-stop-late.asm": "8c7767bf160df14c3552f39894df00490ad271dcbf9431eba4352fcaa02104e4",
+    "decompiled/FUNCTION_CATALOG.txt": "624d1e52884748140728455dd6f778c42118ee69736eb6abfad98d1c8f2154fc",
+    "decompiled/PROGRESS.json": "010cd4210b0665f08fe6e5a161399f1e4c32d3e6fc72c87410523cc9a09d2f90"
+  }
+}

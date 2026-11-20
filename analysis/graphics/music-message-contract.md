@@ -112,8 +112,11 @@ Ghidra не признала этот label процедурой: отказ с�
 - Потребители+d4/+d8; существование параметра сообщения не доказывает fade-in.
 - Внешние backend virtual targets, release/drop всех retained handles и
   корректность повторного engine shutdown. Из одного client caller это не следует.
-- Точный серверный engine WRITE_COORD и пределы пакета; клиентский decoder
-  определяет приём, но не все случаи формирования на сервере.
+- Оригинальный WRITE_COORD и framing теперь связаны в `engine-wire-contract.md`,
+  `engine-message-buffer-contract.md`, `engine-wire-client-boundaries.md`. Открыты
+  специальные x87/error paths и полный transport; для обычного variable PlayMP3
+  payload cap192 даёт до187 байт имени перед NUL. Эти ограничения не являются
+  локальной проверкой произвольного callback(buffer,size).
 
 ## Доказательства
 

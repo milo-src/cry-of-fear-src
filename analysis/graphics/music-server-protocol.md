@@ -3,7 +3,8 @@
 Статический разбор сохранённых C и ABI evidence, 2026-11-20. Оригинальный
 `hl.dll` SHA256:
 `751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641`.
-Игра, REA-сессия и сборка не запускались; общий каталог не изменён.
+Игра и сборка не запускались. Дополнение о сохранении и числовых связях:
+[music-server-state-contract.md](music-server-state-contract.md).
 Адреса и offsets относятся к оригинальной DLL, не к SDK-порту.
 
 ## Быстрый маршрут
@@ -25,8 +26,9 @@ Commentary1002c4b0 / game-over -> непосредственный PlayMP3, ми
 исходный C++ class. Factories101084f0 и exports10115c80/10115f20/10115f30
 назначают `CTriggerMP3::vftable` и выделяют0xdc байт. У экспортных thunks
 machine ranges всего5 байт; развёрнутое C не следует считать их машинным телом.
-Числовое vtable-slot доказательство связи с Use здесь не добавлялось; прежний
-Use контракт проверен по самому101148b0.
+Числовая связь теперь подтверждена: factory101084f0 записывает vtable101e4438;
+её слот+e8 содержит101148b0. Байты и границы чтения сохранены в
+`music-server-state-contract.md`.
 
 ## Владение состоянием
 
@@ -69,14 +71,17 @@ Restore100f14c0 при path!=0 вызывает QueueMusic(path,1,1.0): loop и 
 | завершение | MESSAGE_END; pending=0 | MESSAGE_END; stopFade=0; pending=0 |
 
 Fade передаётся через **WRITE_COORD**, не32-bit wire float. Клиентский decoder теперь раскрыт: signed16 little-endian *0.125;
-см. [music-message-contract.md](music-message-contract.md). Точные rounding/overflow
-правила оригинального engine writer остаются отдельно не исследованы. Нет серверного clamp fade или
-проверки длины пути в рассмотренных helpers/senders.
+см. [music-message-contract.md](music-message-contract.md). Native writer теперь раскрыт:
+finite float умножается на8, дробная часть отбрасывается к нулю, low16 пишутся
+little-endian без clamp; специальные x87 случаи ограничены отдельно. См.
+[engine-wire-contract.md](engine-wire-contract.md). Серверные helpers не
+ограничивают fade/путь; End оригинального engine отбрасывает variable payload>192.
 
-Play ветви явно вызывают MessageBegin(1,10226544,0,player.pev.pContainingEntity):
-адресат — один игрок. В обеих stop ветвях Ghidra показывает MessageBegin()
-без аргументов. Байты payload видны, но **точный recipient/type вызова stop
-не подтверждён этим C**; нельзя молча копировать аргументы соседней ветви.
+Play и обе stop ветви вызывают MessageBegin(1,10226544,0,player.pev.pContainingEntity):
+адресат — один игрок. В C аргументы stop потеряны; bounded assembly доказывает
+общую подготовку четырёх аргументов до выбора play/stop и stop calls100eb864,
+100ef0da. См. `music-server-state-contract.md`; это исправление пробела
+декомпиляции, а не предположение по соседней ветви.
 
 Имена engine callbacks подтверждаются ABI, не только похожими вызовами:
 `analysis/abi/GiveFnptrsToDll.asm` копирует0x90 DWORD в10222f48.
@@ -162,15 +167,18 @@ order, регистрация ID, два sender участка, spawnflag зна
 suppression, frags correction, restore/commentary повторная доставка и
 существование immediate senders.
 
-Открыто: точные MessageBegin аргументы двух stop ветвей; engine writer COORD,
-фактическая длина engine packet/string, полный engine dispatcher→player virtual
-route и его cadence; числовая factory-vtable→Use связь; полная save-field таблица
-music fields. Наличие reviewed большого метода не закрывает все его ветви.
+Дополнительно закрыты: аргументы обеих stop MessageBegin, числовая
+factory→vtable+e8→Use связь и музыкальные записи PLAYER save table10217fe8.
+Save/Restore используют207 записей; четыре музыкальных поля сохранены,
+pending+2314 не входит в эту таблицу. Restore при ненулевом path заново
+ставит запрос с loop=1, fade=1.0. Подробности и границы вывода —
+[music-server-state-contract.md](music-server-state-contract.md).
 
-Минимальное дальнейшее native evidence при необходимости: bounded assembly
-внутри100ead70 вокруг первого music sender и диапазона100ef068..100ef1a3;
-factory101084f0 assembly плюс vtable+e8; serialized PLAYER table10217fe8
-для полей2310..2320. Это запросы доказательств, не текущие вызовы REA.
+COORD writer, исходная staging capacity512 и variable payload cap192
+теперь описаны в `engine-wire-contract.md` и `engine-message-buffer-contract.md`.
+Открыто: специальные x87/error paths, downstream transport, полный engine
+dispatcher→player virtual route и его cadence. Наличие
+REVIEW большого метода не закрывает все его ветви или внешнюю сериализацию.
 
 Клиентская зацепка уже сохранена:1006cf00 в
 `decompiled/client/captures/graphics-client-first/005-pseudocode.c` регистрирует

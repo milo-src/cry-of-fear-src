@@ -1,0 +1,723 @@
+{
+  "schema": 1,
+  "method": "Read-only original PE bytes and bounded objdump. No target load/execution; no new REA process.",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/hw.dll",
+  "binary_sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+  "image_base": "0x1d00000",
+  "sections": [
+    {
+      "name": ".text",
+      "rva": "0x1000",
+      "virtual_size": 1611750,
+      "raw_offset": 4096,
+      "raw_size": 1613824
+    },
+    {
+      "name": ".rdata",
+      "rva": "0x18b000",
+      "virtual_size": 117724,
+      "raw_offset": 1617920,
+      "raw_size": 118784
+    },
+    {
+      "name": ".data",
+      "rva": "0x1a8000",
+      "virtual_size": 17904056,
+      "raw_offset": 1736704,
+      "raw_size": 204800
+    },
+    {
+      "name": ".rsrc",
+      "rva": "0x12bc000",
+      "virtual_size": 15968,
+      "raw_offset": 1941504,
+      "raw_size": 16384
+    },
+    {
+      "name": ".reloc",
+      "rva": "0x12c0000",
+      "virtual_size": 161032,
+      "raw_offset": 1957888,
+      "raw_size": 163840
+    }
+  ],
+  "range_convention": "Preferred-image VA start inclusive/end exclusive. File offsets refer to the pinned original PE. Raw pointer values may be relocated at runtime.",
+  "objdump": "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+  "objdump_version": "GNU objdump (Binutils for MinGW-W64 x86_64, built by Brecht Sanders, r2) 2.46.0.20260210",
+  "assembly": [
+    {
+      "va": "0x1df396e",
+      "end_exclusive": "0x1df39a6",
+      "length": 56,
+      "file_offset": "0xf396e",
+      "section": ".text",
+      "bytes_hex": "68f0f4ec018b45f850ff15b4b2e8018945fc837dfc0075138b4d08516800f5ec01e80571f5ff83c408eb6e68c0f351026818edec01ff55fc",
+      "sha256": "b575de5e155e80be13fc7c1a8ab37582008f1ed7e33105c09726de789e6dcb45",
+      "reason": "Bounded GiveFnptrsToDll symbol lookup and callback-table/globalvars handoff, not the full loader.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1df396e",
+        "--stop-address=0x1df39a6",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "path": "analysis/graphics/engine-wire-assembly/loader.asm",
+      "assembly_sha256": "d6aa19221f02084ac857494a491d0d19693d8e8f4c65f10aaeb13615670cf51b"
+    },
+    {
+      "va": "0x1da68ad",
+      "end_exclusive": "0x1da68e4",
+      "length": 55,
+      "file_offset": "0xa68ad",
+      "section": ".text",
+      "bytes_hex": "558bec833d00f3420200750d686827ec01e893bd040083c404d94508d80d48cce801e868ad0c005068981aec01e8a107faff83c4085dc3",
+      "sha256": "8594eadb9f74e2f74cfe02ef1f0ff039a605e52426ec0c30ce6199092195df1c",
+      "reason": "COORD wrapper, MessageBegin guard, float multiply, truncation helper, short writer.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1da68ad",
+        "--stop-address=0x1da68e4",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "path": "analysis/graphics/engine-wire-assembly/write-coord.asm",
+      "assembly_sha256": "5758474d025ce68b9ee158d374f616412b630779e0e20c21db2f3dc3474dc078"
+    },
+    {
+      "va": "0x1e7163c",
+      "end_exclusive": "0x1e71663",
+      "length": 39,
+      "file_offset": "0x17163c",
+      "section": ".text",
+      "bytes_hex": "558bec83c4f49bd97dfe9b668b45fe80cc0c668945fcd96dfcdf7df4d96dfe8b45f48b55f8c9c3",
+      "sha256": "d0a2aca68648a0ae9d5cbfae1b276d4a64d4f797fc0c60f28b64096cdfa3148c",
+      "reason": "x87 control word save/change to truncate/FISTP qword/restore and EDX:EAX return.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1e7163c",
+        "--stop-address=0x1e71663",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "path": "analysis/graphics/engine-wire-assembly/ftol.asm",
+      "assembly_sha256": "16e7c0f963cdcd4e3bf0266d7ac7b8c29f15c994c9e5ae258fee0d941bc314e2"
+    },
+    {
+      "va": "0x1d47080",
+      "end_exclusive": "0x1d470b3",
+      "length": 51,
+      "file_offset": "0x47080",
+      "section": ".text",
+      "bytes_hex": "558bec516a028b450850e85913000083c4088945fc8b4d0c81e1ff0000008b55fc880a8b450cc1f8088b4dfc8841018be55dc3",
+      "sha256": "6ce42d3a05763aac0d375466ab62ea6d992f983e965be4c6233620a1a8a26268",
+      "reason": "Two-byte buffer reservation and explicit little-endian low16 stores.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1d47080",
+        "--stop-address=0x1d470b3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "path": "analysis/graphics/engine-wire-assembly/write-short.asm",
+      "assembly_sha256": "335a4dca6c857ca7cf93b4f8b9e9c83add7c3b795855c2a11781ddc72e1e74f8"
+    },
+    {
+      "va": "0x1da68e4",
+      "end_exclusive": "0x1da6910",
+      "length": 44,
+      "file_offset": "0xa68e4",
+      "section": ".text",
+      "bytes_hex": "558bec833d00f3420200750d689827ec01e85cbd040083c4048b45085068981aec01e86608faff83c4085dc3",
+      "sha256": "a4b0ee0341b88cf9e4ed0cf35f9151a98ac8051e59f960ad9b881cf35db0d15a",
+      "reason": "STRING callback, MessageBegin guard and common message-buffer handoff.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1da68e4",
+        "--stop-address=0x1da6910",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "path": "analysis/graphics/engine-wire-assembly/write-string-wrapper.asm",
+      "assembly_sha256": "384e61a527f3b96ccc878d5113e736054aed1baf33bdc1e3df1beb6000966360"
+    },
+    {
+      "va": "0x1d47171",
+      "end_exclusive": "0x1d471b1",
+      "length": 64,
+      "file_offset": "0x47171",
+      "section": ".text",
+      "bytes_hex": "558bec837d0c0075156a0168cc9b07028b450850e8cd13000083c40ceb208b4d0c51e82af5ffff83c40483c001508b550c528b450850e8ab13000083c40c5dc3",
+      "sha256": "abcf3162e5479faace2506e0f481dde592fc8ebad8574636f512057f857c4e5a",
+      "reason": "Null source writes one byte from2079bcc; nonnull source calls length helper then writes length+1.",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1d47171",
+        "--stop-address=0x1d471b1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "path": "analysis/graphics/engine-wire-assembly/write-string.asm",
+      "assembly_sha256": "6ab09f87153c32001b61e1b72de5b52a486747a1f46d7872e06aa201910d2e72"
+    }
+  ],
+  "raw": [
+    {
+      "va": "0x1eced18",
+      "end_exclusive": "0x1ecee48",
+      "length": 304,
+      "file_offset": "0x1ced18",
+      "section": ".data",
+      "bytes_hex": "8d50da014c46da019627da017d28da018e28da015027da01c86bda017b6bda01c087da01462ada01d32ada017c58de01a45bda01945cda019644da018a45da013c40da01853ada01853dda01e023da01e0bdd801bb41da015842da01ce41da013c69da012b58da011c56da016055da011024da01ab2cda010f2bda01e22dda015537da013c38da01d12eda01c42fda01f433da01b22fda014d58da01fe3fda013240da01263fda01e82ada017e57da013357da013c58da01bd63da01aa64da01d167da01fd67da012968da015568da018168da01ad68da01e468da011069da018387da012687da013787da015987da016e87da01ca3adf01b63adf013485da016985da017e85da01bb86da01a987da01c886da01fb85da010886da011686da015d86da01d586da010d88da01440ede01",
+      "sha256": "9dfd8735ae072f4d2598042bed071f943d9aaf0306e13f428b12997eafc2bdcc",
+      "name": "Engine callback table prefix, first76 slots only",
+      "stride": 4,
+      "count": 76,
+      "limitation": "This bounded prefix proves the requested slots; it does not claim the complete table has76 entries.",
+      "slots": [
+        {
+          "index": 0,
+          "offset": "0x0",
+          "va": "0x1eced18",
+          "target": "0x1da508d"
+        },
+        {
+          "index": 1,
+          "offset": "0x4",
+          "va": "0x1eced1c",
+          "target": "0x1da464c"
+        },
+        {
+          "index": 2,
+          "offset": "0x8",
+          "va": "0x1eced20",
+          "target": "0x1da2796"
+        },
+        {
+          "index": 3,
+          "offset": "0xc",
+          "va": "0x1eced24",
+          "target": "0x1da287d"
+        },
+        {
+          "index": 4,
+          "offset": "0x10",
+          "va": "0x1eced28",
+          "target": "0x1da288e"
+        },
+        {
+          "index": 5,
+          "offset": "0x14",
+          "va": "0x1eced2c",
+          "target": "0x1da2750"
+        },
+        {
+          "index": 6,
+          "offset": "0x18",
+          "va": "0x1eced30",
+          "target": "0x1da6bc8"
+        },
+        {
+          "index": 7,
+          "offset": "0x1c",
+          "va": "0x1eced34",
+          "target": "0x1da6b7b"
+        },
+        {
+          "index": 8,
+          "offset": "0x20",
+          "va": "0x1eced38",
+          "target": "0x1da87c0"
+        },
+        {
+          "index": 9,
+          "offset": "0x24",
+          "va": "0x1eced3c",
+          "target": "0x1da2a46"
+        },
+        {
+          "index": 10,
+          "offset": "0x28",
+          "va": "0x1eced40",
+          "target": "0x1da2ad3"
+        },
+        {
+          "index": 11,
+          "offset": "0x2c",
+          "va": "0x1eced44",
+          "target": "0x1de587c"
+        },
+        {
+          "index": 12,
+          "offset": "0x30",
+          "va": "0x1eced48",
+          "target": "0x1da5ba4"
+        },
+        {
+          "index": 13,
+          "offset": "0x34",
+          "va": "0x1eced4c",
+          "target": "0x1da5c94"
+        },
+        {
+          "index": 14,
+          "offset": "0x38",
+          "va": "0x1eced50",
+          "target": "0x1da4496"
+        },
+        {
+          "index": 15,
+          "offset": "0x3c",
+          "va": "0x1eced54",
+          "target": "0x1da458a"
+        },
+        {
+          "index": 16,
+          "offset": "0x40",
+          "va": "0x1eced58",
+          "target": "0x1da403c"
+        },
+        {
+          "index": 17,
+          "offset": "0x44",
+          "va": "0x1eced5c",
+          "target": "0x1da3a85"
+        },
+        {
+          "index": 18,
+          "offset": "0x48",
+          "va": "0x1eced60",
+          "target": "0x1da3d85"
+        },
+        {
+          "index": 19,
+          "offset": "0x4c",
+          "va": "0x1eced64",
+          "target": "0x1da23e0"
+        },
+        {
+          "index": 20,
+          "offset": "0x50",
+          "va": "0x1eced68",
+          "target": "0x1d8bde0"
+        },
+        {
+          "index": 21,
+          "offset": "0x54",
+          "va": "0x1eced6c",
+          "target": "0x1da41bb"
+        },
+        {
+          "index": 22,
+          "offset": "0x58",
+          "va": "0x1eced70",
+          "target": "0x1da4258"
+        },
+        {
+          "index": 23,
+          "offset": "0x5c",
+          "va": "0x1eced74",
+          "target": "0x1da41ce"
+        },
+        {
+          "index": 24,
+          "offset": "0x60",
+          "va": "0x1eced78",
+          "target": "0x1da693c"
+        },
+        {
+          "index": 25,
+          "offset": "0x64",
+          "va": "0x1eced7c",
+          "target": "0x1da582b"
+        },
+        {
+          "index": 26,
+          "offset": "0x68",
+          "va": "0x1eced80",
+          "target": "0x1da561c"
+        },
+        {
+          "index": 27,
+          "offset": "0x6c",
+          "va": "0x1eced84",
+          "target": "0x1da5560"
+        },
+        {
+          "index": 28,
+          "offset": "0x70",
+          "va": "0x1eced88",
+          "target": "0x1da2410"
+        },
+        {
+          "index": 29,
+          "offset": "0x74",
+          "va": "0x1eced8c",
+          "target": "0x1da2cab"
+        },
+        {
+          "index": 30,
+          "offset": "0x78",
+          "va": "0x1eced90",
+          "target": "0x1da2b0f"
+        },
+        {
+          "index": 31,
+          "offset": "0x7c",
+          "va": "0x1eced94",
+          "target": "0x1da2de2"
+        },
+        {
+          "index": 32,
+          "offset": "0x80",
+          "va": "0x1eced98",
+          "target": "0x1da3755"
+        },
+        {
+          "index": 33,
+          "offset": "0x84",
+          "va": "0x1eced9c",
+          "target": "0x1da383c"
+        },
+        {
+          "index": 34,
+          "offset": "0x88",
+          "va": "0x1eceda0",
+          "target": "0x1da2ed1"
+        },
+        {
+          "index": 35,
+          "offset": "0x8c",
+          "va": "0x1eceda4",
+          "target": "0x1da2fc4"
+        },
+        {
+          "index": 36,
+          "offset": "0x90",
+          "va": "0x1eceda8",
+          "target": "0x1da33f4"
+        },
+        {
+          "index": 37,
+          "offset": "0x94",
+          "va": "0x1ecedac",
+          "target": "0x1da2fb2"
+        },
+        {
+          "index": 38,
+          "offset": "0x98",
+          "va": "0x1ecedb0",
+          "target": "0x1da584d"
+        },
+        {
+          "index": 39,
+          "offset": "0x9c",
+          "va": "0x1ecedb4",
+          "target": "0x1da3ffe"
+        },
+        {
+          "index": 40,
+          "offset": "0xa0",
+          "va": "0x1ecedb8",
+          "target": "0x1da4032"
+        },
+        {
+          "index": 41,
+          "offset": "0xa4",
+          "va": "0x1ecedbc",
+          "target": "0x1da3f26"
+        },
+        {
+          "index": 42,
+          "offset": "0xa8",
+          "va": "0x1ecedc0",
+          "target": "0x1da2ae8"
+        },
+        {
+          "index": 43,
+          "offset": "0xac",
+          "va": "0x1ecedc4",
+          "target": "0x1da577e"
+        },
+        {
+          "index": 44,
+          "offset": "0xb0",
+          "va": "0x1ecedc8",
+          "target": "0x1da5733"
+        },
+        {
+          "index": 45,
+          "offset": "0xb4",
+          "va": "0x1ecedcc",
+          "target": "0x1da583c"
+        },
+        {
+          "index": 46,
+          "offset": "0xb8",
+          "va": "0x1ecedd0",
+          "target": "0x1da63bd",
+          "abi_label": "MessageBegin"
+        },
+        {
+          "index": 47,
+          "offset": "0xbc",
+          "va": "0x1ecedd4",
+          "target": "0x1da64aa",
+          "abi_label": "MessageEnd"
+        },
+        {
+          "index": 48,
+          "offset": "0xc0",
+          "va": "0x1ecedd8",
+          "target": "0x1da67d1",
+          "abi_label": "WriteByte"
+        },
+        {
+          "index": 49,
+          "offset": "0xc4",
+          "va": "0x1eceddc",
+          "target": "0x1da67fd"
+        },
+        {
+          "index": 50,
+          "offset": "0xc8",
+          "va": "0x1ecede0",
+          "target": "0x1da6829"
+        },
+        {
+          "index": 51,
+          "offset": "0xcc",
+          "va": "0x1ecede4",
+          "target": "0x1da6855"
+        },
+        {
+          "index": 52,
+          "offset": "0xd0",
+          "va": "0x1ecede8",
+          "target": "0x1da6881"
+        },
+        {
+          "index": 53,
+          "offset": "0xd4",
+          "va": "0x1ecedec",
+          "target": "0x1da68ad",
+          "abi_label": "WriteCoord"
+        },
+        {
+          "index": 54,
+          "offset": "0xd8",
+          "va": "0x1ecedf0",
+          "target": "0x1da68e4",
+          "abi_label": "WriteString"
+        },
+        {
+          "index": 55,
+          "offset": "0xdc",
+          "va": "0x1ecedf4",
+          "target": "0x1da6910"
+        },
+        {
+          "index": 56,
+          "offset": "0xe0",
+          "va": "0x1ecedf8",
+          "target": "0x1da8783"
+        },
+        {
+          "index": 57,
+          "offset": "0xe4",
+          "va": "0x1ecedfc",
+          "target": "0x1da8726"
+        },
+        {
+          "index": 58,
+          "offset": "0xe8",
+          "va": "0x1ecee00",
+          "target": "0x1da8737"
+        },
+        {
+          "index": 59,
+          "offset": "0xec",
+          "va": "0x1ecee04",
+          "target": "0x1da8759"
+        },
+        {
+          "index": 60,
+          "offset": "0xf0",
+          "va": "0x1ecee08",
+          "target": "0x1da876e"
+        },
+        {
+          "index": 61,
+          "offset": "0xf4",
+          "va": "0x1ecee0c",
+          "target": "0x1df3aca"
+        },
+        {
+          "index": 62,
+          "offset": "0xf8",
+          "va": "0x1ecee10",
+          "target": "0x1df3ab6"
+        },
+        {
+          "index": 63,
+          "offset": "0xfc",
+          "va": "0x1ecee14",
+          "target": "0x1da8534"
+        },
+        {
+          "index": 64,
+          "offset": "0x100",
+          "va": "0x1ecee18",
+          "target": "0x1da8569"
+        },
+        {
+          "index": 65,
+          "offset": "0x104",
+          "va": "0x1ecee1c",
+          "target": "0x1da857e"
+        },
+        {
+          "index": 66,
+          "offset": "0x108",
+          "va": "0x1ecee20",
+          "target": "0x1da86bb"
+        },
+        {
+          "index": 67,
+          "offset": "0x10c",
+          "va": "0x1ecee24",
+          "target": "0x1da87a9"
+        },
+        {
+          "index": 68,
+          "offset": "0x110",
+          "va": "0x1ecee28",
+          "target": "0x1da86c8"
+        },
+        {
+          "index": 69,
+          "offset": "0x114",
+          "va": "0x1ecee2c",
+          "target": "0x1da85fb"
+        },
+        {
+          "index": 70,
+          "offset": "0x118",
+          "va": "0x1ecee30",
+          "target": "0x1da8608"
+        },
+        {
+          "index": 71,
+          "offset": "0x11c",
+          "va": "0x1ecee34",
+          "target": "0x1da8616"
+        },
+        {
+          "index": 72,
+          "offset": "0x120",
+          "va": "0x1ecee38",
+          "target": "0x1da865d"
+        },
+        {
+          "index": 73,
+          "offset": "0x124",
+          "va": "0x1ecee3c",
+          "target": "0x1da86d5"
+        },
+        {
+          "index": 74,
+          "offset": "0x128",
+          "va": "0x1ecee40",
+          "target": "0x1da880d"
+        },
+        {
+          "index": 75,
+          "offset": "0x12c",
+          "va": "0x1ecee44",
+          "target": "0x1de0e44",
+          "abi_label": "RegUserMsg"
+        }
+      ]
+    },
+    {
+      "va": "0x1e8cc48",
+      "end_exclusive": "0x1e8cc4c",
+      "length": 4,
+      "file_offset": "0x18cc48",
+      "section": ".rdata",
+      "bytes_hex": "00000041",
+      "sha256": "03e3c2420f5066a5fa6e36735ed8cc4f6a251046263e1a6024f009deeee3b952",
+      "name": "WriteCoord x87 FMUL m32 constant",
+      "float32_le": 8.0
+    },
+    {
+      "va": "0x1ec2768",
+      "end_exclusive": "0x1ec2797",
+      "length": 47,
+      "file_offset": "0x1c2768",
+      "section": ".data",
+      "bytes_hex": "50465f5772697465436f6f72645f492063616c6c65642077697468206e6f20616374697665206d6573736167650a00",
+      "sha256": "5d9f428fb18184c337141fec95812b2bd18ed588c37d3fd2e0ad84ff15e7e856",
+      "ascii": "PF_WriteCoord_I called with no active message\n",
+      "role": "WriteCoord missing MessageBegin diagnostic"
+    },
+    {
+      "va": "0x1ec2798",
+      "end_exclusive": "0x1ec27c8",
+      "length": 48,
+      "file_offset": "0x1c2798",
+      "section": ".data",
+      "bytes_hex": "50465f5772697465537472696e675f492063616c6c65642077697468206e6f20616374697665206d6573736167650a00",
+      "sha256": "3336250122d8d4a2183fadd5af6162c24895e1662b857a090547d27685f3a9d3",
+      "ascii": "PF_WriteString_I called with no active message\n",
+      "role": "WriteString missing MessageBegin diagnostic"
+    },
+    {
+      "va": "0x1ecf4f0",
+      "end_exclusive": "0x1ecf500",
+      "length": 16,
+      "file_offset": "0x1cf4f0",
+      "section": ".data",
+      "bytes_hex": "47697665466e70747273546f446c6c00",
+      "sha256": "63fc1fdd60586ca22a79e6f7998d03682f133907054e4198eab1a73751ff35f9",
+      "ascii": "GiveFnptrsToDll",
+      "role": "Loader export lookup name"
+    },
+    {
+      "va": "0x1ecf500",
+      "end_exclusive": "0x1ecf524",
+      "length": 36,
+      "file_offset": "0x1cf500",
+      "section": ".data",
+      "bytes_hex": "436f756c646e2774206765742047697665466e70747273546f446c6c20696e2025730a00",
+      "sha256": "af283d5468695715e81476a3ebefda328cec37ba4eab0cfb0f9d4df76ffcc465",
+      "ascii": "Couldn't get GiveFnptrsToDll in %s\n",
+      "role": "Loader lookup-failure diagnostic"
+    }
+  ],
+  "virtual_only": [
+    {
+      "va": "0x2079bcc",
+      "length": 1,
+      "section": ".data",
+      "section_delta": "0x1d1bcc",
+      "section_raw_size": 204800,
+      "section_virtual_size": 17904056,
+      "file_offset": null,
+      "raw_backed": false,
+      "initial_mapping": "PE virtual-only tail: initially zero-filled by image loader.",
+      "runtime_limitation": "No current/runtime value or immutability proven. Null STRING writer reads this address; this pass does not trace all writers."
+    }
+  ]
+}

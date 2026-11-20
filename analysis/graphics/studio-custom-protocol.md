@@ -40,7 +40,10 @@ CustomSlv→1006e600. Сервер100e5fc0 регистрирует эти со�
 этот слой сам не доказывает безопасность входа длиной>=256. Обычная семантика
 strncpy для короткого источника дополняет оставшиеся байты нулями. Новый ReadString10080a60 допускает до2047символов, то есть его cap
 сам по себе не защищает256-байтный destination. Sender и фактический
-engine packet-size limit остаются отдельными границами.
+engine packet-size limit проверены отдельно в `engine-wire-client-boundaries.md`: оригинальный
+variable usermsg ограничен192 байтами payload, то есть до191 байта перед NUL
+для этих однострочных сообщений. Это условная гарантия штатного маршрута,
+а не добавленная проверка внутри reader.
 
 Bounded assembly1006e5c0.asm теперь закрывает все три wrappers. Они берут
 входные `(name,size,buffer)`, передают на стеке `(0x1018a0c0,name,size,buffer)`
@@ -199,11 +202,13 @@ string_t не равнозначен любой пустой строке: ре�
 
 1. MPModel1003a170 связан с registration10038900; payload не читается.
    Server event timing этого отдельного сообщения ещё не следует из client body.
-2. Sender maximum string length и engine WRITE_STRING(NULL) serialization;
-   world KeyValue, dynamic resend, join reset и deploy latch уже прослежены.
+2. WRITE_STRING и framing раскрыты в `engine-wire-contract.md` и
+   `engine-wire-client-boundaries.md`: strlen+1, NULL→один byte по02079bcc
+   (initial zero-fill, runtime immutability открыта), variable payload<=192.
+   World KeyValue, dynamic resend, join reset и deploy latch уже прослежены.
 3. ReadString cap2047, signed-byte decoding, error/cursor и trailing NUL
-   закрыты. Реальная кодировка filename и допускаемый packet size engine
-   не выводятся из этого низкоуровневого reader.
+   закрыты. Реальная кодировка filename, произвольные callback inputs и
+   downstream transport остаются отдельными вопросами.
 4. Синхронизация player+424 / local selector1018ca20 и server cvar flags:
    не приписывать обычному CvarSetString доказанную репликацию.
 5. Другие writers в буферы, ready и renderer lifetime. Точный direct xref

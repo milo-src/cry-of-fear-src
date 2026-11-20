@@ -33,7 +33,8 @@
         "Безусловно очищает ready 104d26c7, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
         "Полная цепочка подтверждена: registration CustomFng→wrapper1006e5c0→reader1006fb40, explicit object1018a0c0→destination1018a1dc. Reader получает name отдельным callback argument; payload — ReadString result.",
-        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer.",
+        "Регистрация custom message size=-1; originalengineEnd дляuser ID>58 отбрасываетpayload>192. ПриоднойNULстрокеимя<=191байта: штатныймаршрутдаётNULв256destination. Этоограничениеframing, неguardданногоreader; cap2047/произвольныйcallback самиэтогонегарантируют."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/004-pseudocode.c",
@@ -43,7 +44,11 @@
         "analysis/graphics/studio-flow-assembly/capture.json",
         "analysis/graphics/studio-custom-protocol.md",
         "decompiled/client/captures/graphics-studio-flow-entry/000-pseudocode.c",
-        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+        "analysis/graphics/engine-wire-client-boundaries.md",
+        "analysis/graphics/engine-wire-contract.md",
+        "decompiled/engine/captures/graphics-engine-wire/010-pseudocode.c",
+        "decompiled/server/captures/chat-server-core/002-pseudocode.c"
       ]
     },
     {
@@ -79,7 +84,8 @@
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
         "Полная цепочка подтверждена: registration CustomGlv→wrapper1006e5e0→reader1006fbb0, explicit object1018a0c0→destination1018a2dc. Reader получает name отдельным callback argument; payload — ReadString result.",
         "Короткий CustomGlv также выключает10542bb1, а mesh10065ef0 требует этот флаг. Поэтому helper short-path ECX особенность не является доказанным результатом обычного empty CustomGlv draw.",
-        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer.",
+        "Регистрация custom message size=-1; originalengineEnd дляuser ID>58 отбрасываетpayload>192. ПриоднойNULстрокеимя<=191байта: штатныймаршрутдаётNULв256destination. Этоограничениеframing, неguardданногоreader; cap2047/произвольныйcallback самиэтогонегарантируют."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/005-pseudocode.c",
@@ -89,7 +95,11 @@
         "analysis/graphics/studio-flow-assembly/capture.json",
         "analysis/graphics/studio-custom-protocol.md",
         "decompiled/client/captures/graphics-studio-flow-entry/001-pseudocode.c",
-        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+        "analysis/graphics/engine-wire-client-boundaries.md",
+        "analysis/graphics/engine-wire-contract.md",
+        "decompiled/engine/captures/graphics-engine-wire/010-pseudocode.c",
+        "decompiled/server/captures/chat-server-core/002-pseudocode.c"
       ]
     },
     {
@@ -123,7 +133,8 @@
         "Безусловно очищает ready 104d26c6 и104d26d3, даже если строка пустая; GL name сохраняется. Это внешний invalidation для последующего lazy loader, без немедленной загрузки.",
         "Нет явного принудительного NUL в последнем байте256-байтного буфера перед scan; безопасное восстановление должно учитывать это ограничение исходного reader.",
         "Полная цепочка подтверждена: registration CustomSlv→wrapper1006e600→reader1006fc20, explicit object1018a0c0→destination1018a0dc. Reader получает name отдельным callback argument; payload — ReadString result.",
-        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer."
+        "Новый ReadString10080a60 cap2047 не гарантирует NUL при strncpy256 в этот destination. Точная граница требует engine packet-size evidence, не предположения из размера local buffer.",
+        "Регистрация custom message size=-1; originalengineEnd дляuser ID>58 отбрасываетpayload>192. ПриоднойNULстрокеимя<=191байта: штатныймаршрутдаётNULв256destination. Этоограничениеframing, неguardданногоreader; cap2047/произвольныйcallback самиэтогонегарантируют."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-studio-texture-loader/006-pseudocode.c",
@@ -133,7 +144,11 @@
         "analysis/graphics/studio-flow-assembly/capture.json",
         "analysis/graphics/studio-custom-protocol.md",
         "decompiled/client/captures/graphics-studio-flow-entry/002-pseudocode.c",
-        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c"
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+        "analysis/graphics/engine-wire-client-boundaries.md",
+        "analysis/graphics/engine-wire-contract.md",
+        "decompiled/engine/captures/graphics-engine-wire/010-pseudocode.c",
+        "decompiled/server/captures/chat-server-core/002-pseudocode.c"
       ]
     },
     {
