@@ -1,0 +1,2957 @@
+{
+  "schema": 1,
+  "module": "server",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "method": "Saved Ghidra C and bounded static PE/objdump; original DLL not executed; no REA process, runtime, game, build.",
+  "range_convention": "ASM VA start-inclusive/end-exclusive; saved C inclusive.",
+  "source_c": [
+    {
+      "address": "0x1000e8b0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e8b0.c",
+      "sha256": "993443ea6b4600ce855156babb9c5271763487508dd803a89a28042c46e2d28a",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000e8b0",
+        "0x1000e8cf"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e8b0",
+          "0x1000e8cf"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000e8d0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e8d0.c",
+      "sha256": "f4446fc165485c133c3742def2967048a7bb36d5806df7c2eb94a76783b935c6",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000e8d0",
+        "0x1000e943"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e8d0",
+          "0x1000e943"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000e950",
+      "path": "decompiled/server/partial-pass/functions/0x1000e950.c",
+      "sha256": "f581f96a77893662b449ebb06bfd043dbed8fe1289e18f7cec650f0cd5065930",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000e950",
+        "0x1000e978"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e950",
+          "0x1000e978"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000e980",
+      "path": "decompiled/server/partial-pass/functions/0x1000e980.c",
+      "sha256": "26907f24eafa0860bd00e59ce2d7753b2659f67d641a65aa0edcbb2c7d89dd84",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000e980",
+        "0x1000e9a8"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e980",
+          "0x1000e9a8"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000e9b0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e9b0.c",
+      "sha256": "01eada57f8c4c115e5dd00d14f8d8449c878008ea46fc1e89d1b2c9bb0848a8d",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000e9b0",
+        "0x1000e9d1"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e9b0",
+          "0x1000e9d1"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000e9e0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e9e0.c",
+      "sha256": "9ee3dab79a7a34e167ac3c45c743068dece0c8494a2e35d721b87d4d0e13d60f",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000e9e0",
+        "0x1000ea51"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e9e0",
+          "0x1000ea51"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000ea60",
+      "path": "decompiled/server/partial-pass/functions/0x1000ea60.c",
+      "sha256": "37bb237627f2ab172797e6953a454701c77804da04a008f4f36bcbf7a99982c1",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000ea60",
+        "0x1000ea90"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000ea60",
+          "0x1000ea90"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000eaa0",
+      "path": "decompiled/server/partial-pass/functions/0x1000eaa0.c",
+      "sha256": "9d05d3962eb8fdc864713d6620a59f684dd7a8e08ea7bec37f985314884868c5",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000eaa0",
+        "0x1000eafe"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000eaa0",
+          "0x1000eafe"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000eb00",
+      "path": "decompiled/server/partial-pass/functions/0x1000eb00.c",
+      "sha256": "ef295176c15de79cb06bec5f0cefd1f7c7a95883bd8746d22409f3fb7d780c3f",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000eb00",
+        "0x1000eb32"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000eb00",
+          "0x1000eb32"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000eb40",
+      "path": "decompiled/server/partial-pass/functions/0x1000eb40.c",
+      "sha256": "5a9469c6cdab644a287aeb26ba5341974f04c7ea976239ab5cc244c77793b904",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000eb40",
+        "0x1000eb68"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000eb40",
+          "0x1000eb68"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000eb70",
+      "path": "decompiled/server/partial-pass/functions/0x1000eb70.c",
+      "sha256": "c82a7d03ee07c8fa01133ef0974e07a2180f9645ac37eeda2a00f685723b1410",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000eb70",
+        "0x1000eba2"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000eb70",
+          "0x1000eba2"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000ebb0",
+      "path": "decompiled/server/partial-pass/functions/0x1000ebb0.c",
+      "sha256": "dc3bafed49a1f1b3e7c6cda84911e5af122e72476745a7be003d74a26ce870be",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000ebb0",
+        "0x1000ebd7"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000ebb0",
+          "0x1000ebd7"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f250",
+      "path": "decompiled/server/partial-pass/functions/0x1000f250.c",
+      "sha256": "f2af8344660523b217410925c06cf2d58bb7d44dac3600ffedbb8a03a88ac443",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000f250",
+        "0x1000f280"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f250",
+          "0x1000f280"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f290",
+      "path": "decompiled/server/partial-pass/functions/0x1000f290.c",
+      "sha256": "7cecac0e737277c060d662f8ba1a09c530430f2c26ab6b24a0d7f989f0d2ed28",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000f290",
+        "0x1000f380"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f290",
+          "0x1000f380"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f450",
+      "path": "decompiled/server/partial-pass/functions/0x1000f450.c",
+      "sha256": "1f74ebe90128ecd112dc2c52d3dea5d65add4e3976777a4b2210ef86bf82fc32",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f450",
+        "0x1000f4c3"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f450",
+          "0x1000f4c3"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f4d0",
+      "path": "decompiled/server/partial-pass/functions/0x1000f4d0.c",
+      "sha256": "19333af6d246636adf85baa217cb843904ab2d7ef6f7547e358de20a63f8966c",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f4d0",
+        "0x1000f523"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f4d0",
+          "0x1000f523"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f530",
+      "path": "decompiled/server/partial-pass/functions/0x1000f530.c",
+      "sha256": "1c3f2a431e5270ca84a2b653321ef8805f00ea7064355d774b6ce2e6e7fca4ca",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f530",
+        "0x1000f581"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f530",
+          "0x1000f581"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f670",
+      "path": "decompiled/server/partial-pass/functions/0x1000f670.c",
+      "sha256": "c886d050f9da640c73604e08a09294fea689f0a80e8e7e448074465e6617b969",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f670",
+        "0x1000f7ba"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f670",
+          "0x1000f7ba"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f7c0",
+      "path": "decompiled/server/partial-pass/functions/0x1000f7c0.c",
+      "sha256": "fcb8351927cc7ca681cb73574fb07cfb4c8ceb7676d6becb91183f8b348120e4",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f7c0",
+        "0x1000f812"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f7c0",
+          "0x1000f812"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f820",
+      "path": "decompiled/server/partial-pass/functions/0x1000f820.c",
+      "sha256": "d568b74ef64a756d1ee31f8e24e8abf2a4ff16351697f73ee19ad61e4034e651",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f820",
+        "0x1000f87f"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f820",
+          "0x1000f87f"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000f880",
+      "path": "decompiled/server/partial-pass/functions/0x1000f880.c",
+      "sha256": "17c85e3bc93307fceeb1888e081ffa0d67dc07380bf34fca647d9838fec0a50d",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000f880",
+        "0x1000fa34"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000f880",
+          "0x1000fa34"
+        ]
+      ]
+    },
+    {
+      "address": "0x10102850",
+      "path": "decompiled/server/partial-pass/functions/0x10102850.c",
+      "sha256": "0f7bf8c3133868302fd64ac2dcf3d4f719e2ba957fcf3755eb742a7faac50b68",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10102850",
+        "0x10102880"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10102850",
+          "0x10102880"
+        ]
+      ]
+    },
+    {
+      "address": "0x10102ac0",
+      "path": "decompiled/server/partial-pass/functions/0x10102ac0.c",
+      "sha256": "4d4a17df8f0c815e42e1c7ad90317f74d39550525c3c65f006c1fab164593d5a",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10102ac0",
+        "0x10102b1e"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10102ac0",
+          "0x10102b1e"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b4aa0",
+      "path": "decompiled/server/partial-pass/functions/0x100b4aa0.c",
+      "sha256": "e2bf7a43a37bf66561f8a88da81d14cf0b31098d5914c5c082328ae55d78381a",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b4aa0",
+        "0x100b4ac1"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b4aa0",
+          "0x100b4ac1"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b05e0",
+      "path": "decompiled/server/partial-pass/functions/0x100b05e0.c",
+      "sha256": "e5dd7f0161d9251b1ec14395abacb2b584c40c72913783dc5a18e7b7b092e5fb",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b05e0",
+        "0x100b063b"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b05e0",
+          "0x100b063b"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b0f30",
+      "path": "decompiled/server/partial-pass/functions/0x100b0f30.c",
+      "sha256": "27a00e23661182e8493fb51b3d7c264c2114880143a2877d98f76f116bb85a6c",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b0f30",
+        "0x100b0f34"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b0f30",
+          "0x100b0f34"
+        ]
+      ]
+    },
+    {
+      "address": "0x10102b20",
+      "path": "decompiled/server/partial-pass/functions/0x10102b20.c",
+      "sha256": "6f3380b4ab49645723f32fe3717663257bfb8e29f816f206b602d88b28f90a0c",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10102b20",
+        "0x10102b7e"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10102b20",
+          "0x10102b7e"
+        ]
+      ]
+    },
+    {
+      "address": "0x10102890",
+      "path": "decompiled/server/partial-pass/functions/0x10102890.c",
+      "sha256": "389ecb2813341394eda83d884ac81480fbccd304f624af972de05deff196f3b4",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10102890",
+        "0x101028c0"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10102890",
+          "0x101028c0"
+        ]
+      ]
+    }
+  ],
+  "assembly": [
+    {
+      "start": "0x1000e8b0",
+      "end_exclusive": "0x1000e8d0",
+      "file_offset": "0xdcb0",
+      "bytes_hex": "568bf18b4604ffb00c020000ff1570302210ff760450e88509000083c40c5ec3",
+      "sha256": "d7bd07b576b11812b88d10735473f150b336440cc9001514f063646eaad4f5c9",
+      "path": "analysis/server-animation-state/1000e8b0.asm",
+      "assembly_sha256": "faf488b3b9d0df463430c18bc8cf02a2e664536ebaf91ac06e5e1e991b76c952",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e8b0",
+        "--stop-address=0x1000e8d0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000e8d0",
+      "end_exclusive": "0x1000e944",
+      "file_offset": "0xdcd0",
+      "bytes_hex": "56578bf98b4704ffb00c020000ff1570302210c70424000000008bf06a00ff770456e8890f000083c40cddd8c70424000000006a01ff770456e8720f000083c40cddd8c70424000000006a02ff770456e85b0f000083c40cddd8c70424000000006a03ff770456e8440f000083c410ddd85f5ec3",
+      "sha256": "59709ec09d04a2fad37469b92ae7985df63a4b6ca050f5d80310a722c9608419",
+      "path": "analysis/server-animation-state/1000e8d0.asm",
+      "assembly_sha256": "177dfdd422134e8d99e7ed6ceade4ca351df380f2a3a24357eddd93da0587a2a",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e8d0",
+        "--stop-address=0x1000e944",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000e950",
+      "end_exclusive": "0x1000e979",
+      "file_offset": "0xdd50",
+      "bytes_hex": "558bec568bf18b4604ffb00c020000ff1570302210ff7508ff760450e8df0a000083c4105e5dc20400",
+      "sha256": "091cd1f047338ef7bdf30f3408a357c43dc0852e9339ecbecc21fc33cd7f9ecc",
+      "path": "analysis/server-animation-state/1000e950.asm",
+      "assembly_sha256": "74fcceea249502326edd762b48a31ec42337b37b086143a238799291e8ec1e75",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e950",
+        "--stop-address=0x1000e979",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000e980",
+      "end_exclusive": "0x1000e9a9",
+      "file_offset": "0xdd80",
+      "bytes_hex": "558bec568bf18b4604ffb00c020000ff1570302210ff7508ff760450e82f0b000083c4105e5dc20400",
+      "sha256": "0747db1c2ab05abe87e7f469d3fbefb34b55e11c697a7ea81da81b50b1e8cf9a",
+      "path": "analysis/server-animation-state/1000e980.asm",
+      "assembly_sha256": "b800a3edfe8b854d87d3cb64930ed078230a9da458757fa7b6f944e4fe3922c0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e980",
+        "--stop-address=0x1000e9a9",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000e9b0",
+      "end_exclusive": "0x1000e9d2",
+      "file_offset": "0xddb0",
+      "bytes_hex": "558bec8b4104ffb00c020000ff1570302210ff750850e8650b000083c40c5dc20400",
+      "sha256": "b21a2f16137b0f173e9929ad613ce3ce4e928a10b1ba0e155523bc73c9f13378",
+      "path": "analysis/server-animation-state/1000e9b0.asm",
+      "assembly_sha256": "2f046d978c677946435319060b708e75a4c7063b5f076e4c1a115bd99aac713c",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e9b0",
+        "--stop-address=0x1000e9d2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000e9e0",
+      "end_exclusive": "0x1000ea52",
+      "file_offset": "0xdde0",
+      "bytes_hex": "568bf18b4604ffb00c020000ff15703022108d96f0000000528d8eec00000051ff760450e88708000083c4148bcee89dfeffff8b4e0483e0018986fc000000a1883122108b008981380100008b4604c7803c0100000000803fc786f800000000000000a1883122108b008986f40000005ec3",
+      "sha256": "2956047e2d36457de38b57509e4b628f5fa1fede39b1651efe00a4c6bb9198a6",
+      "path": "analysis/server-animation-state/1000e9e0.asm",
+      "assembly_sha256": "2b2a6464a183617316c7c1e5927dafef42d5731bd95718320336e13cc3c27a4f",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e9e0",
+        "--stop-address=0x1000ea52",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000ea60",
+      "end_exclusive": "0x1000ea91",
+      "file_offset": "0xde60",
+      "bytes_hex": "558bec56ff75088bf1e8e23d0f0085c075055e5dc204008b4d086a0568781121105668382e1a10e8848510005e5dc20400",
+      "sha256": "4918fed62810cb155d0c0b04c85464f57b1d758f56e6b3bd380df17892fab68e",
+      "path": "analysis/server-animation-state/1000ea60.asm",
+      "assembly_sha256": "14e15a8e56fb189d10fbf096f338a28b60c6c5fe21d1be75e4b079da5f818af4",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000ea60",
+        "--stop-address=0x1000ea91",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000eaa0",
+      "end_exclusive": "0x1000eaff",
+      "file_offset": "0xdea0",
+      "bytes_hex": "558bec56578b7d088bf157e810400f0085c075065f5e5dc204008b4e04a1883122106a0568781121108b91d00100008b80980000005668382e1a1085d2741003c28bcf50e8d7c210005f5e5dc2040003018bcf50e8c7c210005f5e5dc20400",
+      "sha256": "4956420c9a449fe2a242c12c18fd3fc19d026b4405a735b6ad6247006cc39915",
+      "path": "analysis/server-animation-state/1000eaa0.asm",
+      "assembly_sha256": "767ff65660ed91958a27b40e9b9b5e2dbc87473828934871da3da776159e10ec",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000eaa0",
+        "--stop-address=0x1000eaff",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000eb00",
+      "end_exclusive": "0x1000eb33",
+      "file_offset": "0xdf00",
+      "bytes_hex": "558bec568bf18b4604ffb00c020000ff1570302210f30f10450cf30f110424ff7508ff760450e8450b000083c4105e5dc20800",
+      "sha256": "0f18d3ece3f2fb7bcec3068ac3e1b9728c5800b6dbd218d3a80f1a1b1107292c",
+      "path": "analysis/server-animation-state/1000eb00.asm",
+      "assembly_sha256": "dd2d48ddfea1ae9eb3a107687ef21a02eba93464f06c0ed7e70fb28f135ab42d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000eb00",
+        "--stop-address=0x1000eb33",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000eb40",
+      "end_exclusive": "0x1000eb69",
+      "file_offset": "0xdf40",
+      "bytes_hex": "558becff750c8b4104ff750850ffb00c020000ff157030221083c40450e85e0c000083c4105dc20800",
+      "sha256": "b2ee97b0cd6893e4ac4c57e401cc97af2aaf1bdccd2d03aca4dbd81bdc8893ca",
+      "path": "analysis/server-animation-state/1000eb40.asm",
+      "assembly_sha256": "0827c9624be9497259e4f86413203cf6ca8292e34da4f742c15f857037994e5a",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000eb40",
+        "--stop-address=0x1000eb69",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000eb70",
+      "end_exclusive": "0x1000eba3",
+      "file_offset": "0xdf70",
+      "bytes_hex": "558bec568bf18b4604ffb00c020000ff1570302210f30f10450cf30f110424ff7508ff760450e8e50c000083c4105e5dc20800",
+      "sha256": "4a8871510f7a46db898915c56f9507b891c7b05c40ced3a1d144bec5616c710b",
+      "path": "analysis/server-animation-state/1000eb70.asm",
+      "assembly_sha256": "8839213b1bb823f38c4b2f05f259847e6f6c94422fc5624d9a1d275976dbb6a1",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000eb70",
+        "--stop-address=0x1000eba3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000ebb0",
+      "end_exclusive": "0x1000ebd8",
+      "file_offset": "0xdfb0",
+      "bytes_hex": "558becff750c8b4104ff7508ffb00c020000ff157030221083c40450e84f0c000083c40c5dc20800",
+      "sha256": "2f0478005ebe38e349f101c74fe9a5e2ab3f930551b348fbf88329701a5eac32",
+      "path": "analysis/server-animation-state/1000ebb0.asm",
+      "assembly_sha256": "a0921b020ecf139168d9cd8d1df588e095b7b5869f0d8ee7c3115f4181e1b13e",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000ebb0",
+        "--stop-address=0x1000ebd8",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f250",
+      "end_exclusive": "0x1000f281",
+      "file_offset": "0xe650",
+      "bytes_hex": "558bec8b550885d274238b4d0c8b812c0100003b82a40000007d1269c0b00000000382a80000008b4410245dc333c05dc3",
+      "sha256": "8cfca2297567fc10a843d0cca2834bb7455f3999c52be978e1de5304995e0d62",
+      "path": "analysis/server-animation-state/1000f250.asm",
+      "assembly_sha256": "2f373fe2c220ad7f3f366aedc19a508c4089370155cda3c50339cba4c225ff09",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f250",
+        "--stop-address=0x1000f281",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f290",
+      "end_exclusive": "0x1000f381",
+      "file_offset": "0xe690",
+      "bytes_hex": "558bec83e4f8518b4d085685c90f84d90000008b450c8b802c0100003b81a40000007c178b4510c700000000008b4514c700000000005e8be55dc369f0b000000003b1a800000003f18b463883f8010f8e85000000f30f104e2048f30f590d84131a100f57c0f30f2ac08b4510f30f5ec8f30f1108f30f104e50f30f10564cf30f104654f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e851cb15008b4d140f57c9f20f5ac8f30f11098b4638f30f594e2048660f6ec00f5bc0f30f5ec8f30f11095e8be55dc38b4510c700000080438b4514c700000000005e8be55dc3",
+      "sha256": "459f4e9c7cc288fa1289afe581068d66cc5a3fec7cff82281c770e4f1692f063",
+      "path": "analysis/server-animation-state/1000f290.asm",
+      "assembly_sha256": "0420029746cb787f2cd281b3477995cf68b8eff9765e075405d1b7386b8a9f1f",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f290",
+        "--stop-address=0x1000f381",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f450",
+      "end_exclusive": "0x1000f4c4",
+      "file_offset": "0xe850",
+      "bytes_hex": "558bec518b450885c075048be55dc353568bb0a800000033db5783c9ff83c62c33ff894dfc3998a40000007e3e03f0908b55103956fc7524031e74168d43ff506a00ff15b030221083c4083b068b45087d078bcf894dfceb038b4dfc4781c6b00000003bb8a40000007cc55f5e8bc15b8be55dc3",
+      "sha256": "72b7b77c1aabc91c1c7fc9017225870a368dba99952fc4982ff1653b14dd4177",
+      "path": "analysis/server-animation-state/1000f450.asm",
+      "assembly_sha256": "479a10ffa61cab27401d94f2ce777eb1e8ea33375927d0a29171240a0ee6d6c2",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f450",
+        "--stop-address=0x1000f4c4",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f4d0",
+      "end_exclusive": "0x1000f524",
+      "file_offset": "0xe8d0",
+      "bytes_hex": "558bec8b450885c075025dc38b88a800000033d2538b98a400000083c12c565733f683cfff85db7e2403c88b451066903941fc750d8b013bc67e048bf08bfa8b45104281c1b00000003bd37ce38bc75f5e5b5dc3",
+      "sha256": "16a7c4cd080cc97f533474677122487cc9e7688a14f6744b1f887c5570848a1d",
+      "path": "analysis/server-animation-state/1000f4d0.asm",
+      "assembly_sha256": "0166fa010688edfa81957176cb8663942386148d3b98dd67bc8c63ece7c22017",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f4d0",
+        "--stop-address=0x1000f524",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f530",
+      "end_exclusive": "0x1000f582",
+      "file_offset": "0xe930",
+      "bytes_hex": "558bec538b5d0885db750533c05b5dc356578bbba800000033f603fb39b3a40000007e1fff750c57e85ec7160083c40885c074174681c7b00000003bb3a40000007ce15f5e83c8ff5b5dc35f8bc65e5b5dc3",
+      "sha256": "49f38915f001fde9dacb1e6b2812f8efbf73027ea19eec4849df179cd164fe52",
+      "path": "analysis/server-animation-state/1000f530.asm",
+      "assembly_sha256": "0b2776c83a8c1b36b9e4aa99fad64105eeebe59e64baa455668c569c51209841",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f530",
+        "--stop-address=0x1000f582",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f670",
+      "end_exclusive": "0x1000f7bb",
+      "file_offset": "0xea70",
+      "bytes_hex": "558bec8b4508565785c00f84340100008b7d0c8b751069972c010000b00000000390a800000003d08b84b28000000085c00f840d010000f30f105514a838747ef30f10a4b290000000f30f109cb2880000000f2fdc76070f5715e0131a100f5acb0f5ac4f20f580dd0331a10660f2fc8724cf30f58dc0f57c9f20f1025a8131a10f30f5aca0f5adbf20f591d481e1a100f28c3f20f58c4660f2fc8f30f100dcc131a107604f30f5cd10f57c0f20f5cdcf30f5ac2660f2fd87604f30f58d1f30f108cb28800000033c9f30f1084b290000000f30f5cd1f30f5cc1f30f5915c0221a10f30f5ed0f30f2cc285c00f49c8b8ff0000003bc80f4fc8888c3744010000f30f1094b288000000f30f1084b290000000f30f5cc25f5e0f5ac8660f6ec1f30fe6c0f20f5905c8331a10f20f59c80f5ac2f20f58c8660f5ac1f30f114508d945085dc3d945145f5e5dc3",
+      "sha256": "686ccf1f8e68977afd710eb87b8dffdc903cba5eb9499a63b2906647e7fe0d32",
+      "path": "analysis/server-animation-state/1000f670.asm",
+      "assembly_sha256": "6259904260dd8881bb6c3030258bcf9a01fe00cf5ce7721f1fc5082c1fa5472b",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f670",
+        "--stop-address=0x1000f7bb",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f7c0",
+      "end_exclusive": "0x1000f813",
+      "file_offset": "0xebc0",
+      "bytes_hex": "558bec8b4d0885c974478b45103b81cc0000007f3c8b91d00000006bc04c538b5d1403d08b440a408945083bd87d218b4c0a44578b7d0c8b871401000099f7f999f77d082bda0fafd9019f140100005f5b5dc3",
+      "sha256": "632e9f9f975a6a3504e5fd48828ac16f272e8e20cb9d205eb5617f9ef5236e18",
+      "path": "analysis/server-animation-state/1000f7c0.asm",
+      "assembly_sha256": "fc0039fdfc50c27860a584ba292ad99f5ea6ef065d2b31f75ae40407c5d84514",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f7c0",
+        "--stop-address=0x1000f813",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f820",
+      "end_exclusive": "0x1000f880",
+      "file_offset": "0xec20",
+      "bytes_hex": "558bec8b450885c0751268a8331a106a04ff153c30221083c4085dc38b889000000003c88b808c000000568b75103bc60f4cf085f67e268b550c83c14483c2088b42f88d520c8941fc8d49708b42f08941908b42f489419483ee0175e35e5dc3",
+      "sha256": "ee7a2febc3ad944505e71950484ce1bd3e8fc4f619b42ec458f8a4ed1b1eb7d6",
+      "path": "analysis/server-animation-state/1000f820.asm",
+      "assembly_sha256": "2dfa33fd1c2dd959cb2caa58a4550ba4e3c49b859af9f066ce859153998e075b",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f820",
+        "--stop-address=0x1000f880",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000f880",
+      "end_exclusive": "0x1000fa35",
+      "file_offset": "0xec80",
+      "bytes_hex": "558bec8b4d085685c90f84a00100008b919800000033c08b751003d18b899400000085c97e0d39721474104083c2183bc17cf33bc10f8d74010000f6420438f30f1055140f84f0000000f30f10620cf30f105a080f2fdc76070f5715e0131a100f5acb0f5ac4f20f580dd0331a10660f2fc8724ef30f58dc0f57c9f20f1025a8131a10f30f5aca0f5adbf20f591d481e1a100f28c3f20f58c4660f2fc8f30f100dcc131a107604f30f5cd10f57c0f20f5cdcf30f5ac2660f2fd8767ef30f58d1eb780f2f15cc131a10762df30f5ad20f28c2f20f5e05b8131a10f20f2cc0660f6ec0f30fe6c0f20f5905b8131a10f20f5cd0f20f5ad2eb420f57c00f2fc2763a0f57dbf20f1005781e1a10f30f5ada0f28cbf20f5e0db8131a10f20f5cc1f20f2cc0660f6ec0f30fe6c0f20f5905b8131a10f20f58c3660f5ad0f30f5c5208f30f10420c33c9f30f5c4208f30f5915c0221a10f30f5ed0f30f2cc285c00f49c8b8ff0000003bc80f4fc88b450c888c3040010000f30f105208f30f10420cf30f5cc25e0f5ac8660f6ec1f30fe6c0f20f5905c8331a10f20f59c80f5ac2f20f58c8660f5ac1f30f114508d945085dc3d945145e5dc3",
+      "sha256": "e102308389c9c11117f3d4649c009bbb7c9d593b39bc45ecd05c9b9b661a80a3",
+      "path": "analysis/server-animation-state/1000f880.asm",
+      "assembly_sha256": "c364aba4f2465982980a8c71431c02d1dfa834586a756526f4b280aa67b0ff43",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000f880",
+        "--stop-address=0x1000fa35",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10102850",
+      "end_exclusive": "0x10102881",
+      "file_offset": "0x101c50",
+      "bytes_hex": "558bec56ff75088bf1e8d256f1ff85c075055e5dc204008b4d086a0368689a211056687cf41d10e8944701005e5dc20400",
+      "sha256": "d40bfc7cb71b0a7bb1fe902876b77e33ccfdc15f3438fdbeec0eed09f872f19c",
+      "path": "analysis/server-animation-state/10102850.asm",
+      "assembly_sha256": "db387ffc68e549f545350db6c72877b389f74cda0da88be3fb0788d2ae96d771",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10102850",
+        "--stop-address=0x10102881",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10102ac0",
+      "end_exclusive": "0x10102b1f",
+      "file_offset": "0x101ec0",
+      "bytes_hex": "558bec56578b7d088bf157e83055f1ff85c075065f5e5dc204008b4e04a1883122106a0368689a21108b91d00100008b809800000056687cf41d1085d2741003c28bcf50e8b78201005f5e5dc2040003018bcf50e8a78201005f5e5dc20400",
+      "sha256": "db25a9321abd42f6f388cd2f123b2d1ac199646da8ae3ecc4a36147af1304f6b",
+      "path": "analysis/server-animation-state/10102ac0.asm",
+      "assembly_sha256": "c7dbb3e57bcf7539a09c8bba1ceb1c2799890eaf9d480af4a0ea45c80427c2e8",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10102ac0",
+        "--stop-address=0x10102b1f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b4aa0",
+      "end_exclusive": "0x100b4ac2",
+      "file_offset": "0xb3ea0",
+      "bytes_hex": "558bec8b450cb990000000568b750857bf482f2210f3a55fa3883122105e5dc20800",
+      "sha256": "00dcba5c35371689824d0501163044c51b9696901a81b165141b5141d0a418bf",
+      "path": "analysis/server-animation-state/100b4aa0.asm",
+      "assembly_sha256": "18657330e2408616d1895ed34953a7595720fb7cf7df79c0df9eb45a4e005c93",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b4aa0",
+        "--stop-address=0x100b4ac2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b05e0",
+      "end_exclusive": "0x100b063c",
+      "file_offset": "0xaf9e0",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c07527687803000051ff154430221083c40889450885c0740cc7006ce31c108970045e5dc333c08970045e5dc3",
+      "sha256": "383b23ccf70e73fb454a17803f968c8bf9e62a5f1d3c16ddc9a1295f4ceb6036",
+      "path": "analysis/server-animation-state/100b05e0.asm",
+      "assembly_sha256": "08c7e8e27f983e3311a19bdc34f72a12698ea5bb5c497074403a5201517a031d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b05e0",
+        "--stop-address=0x100b063c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b0f30",
+      "end_exclusive": "0x100b0f35",
+      "file_offset": "0xb0330",
+      "bytes_hex": "e9abf6ffff",
+      "sha256": "a18537d48a942a1bf76b1232de76568a57a122956d2b8c3836d91a95d6853572",
+      "path": "analysis/server-animation-state/100b0f30.asm",
+      "assembly_sha256": "90c46b14119f58db454f5773c0c50f05fa2207cdde91af3f47123f3d78d36be0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b0f30",
+        "--stop-address=0x100b0f35",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10102b20",
+      "end_exclusive": "0x10102b7f",
+      "file_offset": "0x101f20",
+      "bytes_hex": "558bec56578b7d088bf157e870bff0ff85c075065f5e5dc204008b4e04a1883122106a1468989a21108b91d00100008b80980000005668e0f41d1085d2741003c28bcf50e8578201005f5e5dc2040003018bcf50e8478201005f5e5dc20400",
+      "sha256": "3508a5ac33d61be3511f9885ee1f78c5e59d4173faa6c06f77e450763aa2a514",
+      "path": "analysis/server-animation-state/10102b20.asm",
+      "assembly_sha256": "2568ca23a70268935f9fb1880de417a28af8621c69c7973c49a201df4c38ac1d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10102b20",
+        "--stop-address=0x10102b7f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10102890",
+      "end_exclusive": "0x101028c1",
+      "file_offset": "0x101c90",
+      "bytes_hex": "558bec56ff75088bf1e8c2c1f0ff85c075055e5dc204008b4d086a1468989a21105668e0f41d10e8544701005e5dc20400",
+      "sha256": "a6570eaf04239644ec02825e6ee50e3462888984cd4b545e26ee676a872ecf85",
+      "path": "analysis/server-animation-state/10102890.asm",
+      "assembly_sha256": "3ef36526ba4499d85ee50e17747974023871f3d2e083f9d38003f9e5fa90750f",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10102890",
+        "--stop-address=0x101028c1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "start": "0x101a1384",
+      "end_exclusive": "0x101a1388",
+      "file_offset": "0x1a0784",
+      "bytes_hex": "00008043",
+      "sha256": "c65c6602640bff581e75467aa3d034c2cb7487f01511ad9eb50ea0b8d087ac15",
+      "name": "literal operand DWORD",
+      "floating_value": 256.0
+    },
+    {
+      "start": "0x101a13e0",
+      "end_exclusive": "0x101a13f0",
+      "file_offset": "0x1a07e0",
+      "bytes_hex": "00000080000000800000008000000080",
+      "sha256": "df141773470ba96aff5d6e9264a0bd638c9c6f3bb7ad30881cf4db943b5dd021",
+      "name": "literal operand XMMWORD"
+    },
+    {
+      "start": "0x101a33d0",
+      "end_exclusive": "0x101a33d8",
+      "file_offset": "0x1a27d0",
+      "bytes_hex": "0000000000707640",
+      "sha256": "61fa6f46818b69654e928df37157a436930b843f1749c0893c811e4018f4d446",
+      "name": "literal operand QWORD",
+      "floating_value": 359.0
+    },
+    {
+      "start": "0x101a13a8",
+      "end_exclusive": "0x101a13b0",
+      "file_offset": "0x1a07a8",
+      "bytes_hex": "0000000000806640",
+      "sha256": "fab4c4415b50601e97f6b89f2f92021b61bf2dd3bdb9d1f5ffb6e8de92046e01",
+      "name": "literal operand QWORD",
+      "floating_value": 180.0
+    },
+    {
+      "start": "0x101a1e48",
+      "end_exclusive": "0x101a1e50",
+      "file_offset": "0x1a1248",
+      "bytes_hex": "000000000000e03f",
+      "sha256": "4cfa5b42ca669328764e67cd9a34bb8f90b16ed7ca8d85e8443783d7ccce15ed",
+      "name": "literal operand QWORD",
+      "floating_value": 0.5
+    },
+    {
+      "start": "0x101a13cc",
+      "end_exclusive": "0x101a13d0",
+      "file_offset": "0x1a07cc",
+      "bytes_hex": "0000b443",
+      "sha256": "82a72eeef4f720c75f627f5ccf9f2963cceb6210f66318ec6362722e29a564f9",
+      "name": "literal operand DWORD",
+      "floating_value": 360.0
+    },
+    {
+      "start": "0x101a22c0",
+      "end_exclusive": "0x101a22c4",
+      "file_offset": "0x1a16c0",
+      "bytes_hex": "00007f43",
+      "sha256": "270696d298cc689d8e5bd75897918aa617a25a5030ccae98017053dddd974995",
+      "name": "literal operand DWORD",
+      "floating_value": 255.0
+    },
+    {
+      "start": "0x101a33c8",
+      "end_exclusive": "0x101a33d0",
+      "file_offset": "0x1a27c8",
+      "bytes_hex": "101010101010703f",
+      "sha256": "5c5c7b344f58f743f85764d6a1bc7ffd7196d9c28719c5058302ef84251b5468",
+      "name": "literal operand QWORD",
+      "floating_value": 0.00392156862745098
+    },
+    {
+      "start": "0x101a13b8",
+      "end_exclusive": "0x101a13c0",
+      "file_offset": "0x1a07b8",
+      "bytes_hex": "0000000000807640",
+      "sha256": "75d5e30899fa765ee54cdfc8bb3ce6f946bc64852dc33dc8f7e978e8ddcd6f00",
+      "name": "literal operand QWORD",
+      "floating_value": 360.0
+    },
+    {
+      "start": "0x101a1e78",
+      "end_exclusive": "0x101a1e80",
+      "file_offset": "0x1a1278",
+      "bytes_hex": "000000000000f03f",
+      "sha256": "6c3c396ed6b5c36dcae172271f462051b1266b851e92df3deea8ac65478fd712",
+      "name": "literal operand QWORD",
+      "floating_value": 1.0
+    },
+    {
+      "start": "0x10211178",
+      "end_exclusive": "0x102111c8",
+      "file_offset": "0x210178",
+      "bytes_hex": "00000000dc2d1a10ec0000000100000000000000ec2d1a10f0000000010000000f000000fc2d1a10f4000000010000000c000000102e1a10f8000000010000000c000000242e1a10fc00000001000000",
+      "sha256": "052e6c861b244137431edd3b71f1143a0c779822557fd13aabe61886c5ffe55d",
+      "name": "CBaseAnimating native descriptors",
+      "fields": [
+        {
+          "type_id": 0,
+          "name": "m_flFrameRate",
+          "offset": "0xec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "m_flGroundSpeed",
+          "offset": "0xf0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flLastEventCheck",
+          "offset": "0xf4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 12,
+          "name": "m_fSequenceFinished",
+          "offset": "0xf8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 12,
+          "name": "m_fSequenceLoops",
+          "offset": "0xfc",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "start": "0x10219a68",
+      "end_exclusive": "0x10219a98",
+      "file_offset": "0x218a68",
+      "bytes_hex": "000000000c491a10dc0000000100000001000000a0f01d10e00000000100000004000000b0f01d10e400000001000000",
+      "sha256": "2b2539bbdb0e56323e16bc19fdaafa0d23a16f60323e7b85ed081cc94ca6ee98",
+      "name": "CBaseDelay native descriptors",
+      "fields": [
+        {
+          "type_id": 0,
+          "name": "m_flDelay",
+          "offset": "0xdc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 1,
+          "name": "m_iszKillTarget",
+          "offset": "0xe0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 4,
+          "name": "m_hActivator",
+          "offset": "0xe4",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "start": "0x1021aae0",
+      "end_exclusive": "0x1021b140",
+      "file_offset": "0x219ae0",
+      "bytes_hex": "01000000fc721a10000000000100000001000000f4601a1004000000010001000800000018511e1008000000010000000800000020511e101400000001000000070000002c511e1020000000010000000700000038511e102c000000010000000700000048511e1044000000010000000700000050511e1050000000010000000700000058511e105c000000010000000700000064511e1068000000010000000700000070511e1074000000010000000000000078511e10a0000000010000000000000084511e10a4000000010000000000000090511e10a800000001000000000000009c511e10ac0000000100000000000000a8511e10b0000000010000000a000000b4511e10b40000000100000010000000cc841a10b80000000100010010000000c0511e10bc0000000100000010000000cc511e10c00000000100000008000000d8511e10c40000000100000008000000e0511e10d00000000100000007000000e8511e10dc0000000100010007000000f0511e10e8000000010001000700000014b51c10f4000000010001000f000000f8511e1000010000010000000f00000000521e1004010000010000000a00000088151e100c010000010000000a0000000c521e1008010000010000000a000000603c1a1010010000010000000a00000018521e1014010000010000000a00000020521e1018010000010000000000000028521e101c010000010000000000000030521e102001000001000000000000003c521e1024010000010000000000000048521e1034010000010000000000000050521e1048010000010000000a00000058521e102c010000010000000f00000064521e1038010000010000000000000070521e103c010000010000000a0000007c521e1040010000010000000a00000088521e1044010000010000000a00000094521e104c0100000100000000000000a0521e10500100000100000007000000ac521e1054010000010000000a000000b8521e10600100000100000000000000c4521e10640100000100000000000000cc521e1068010000010000000a000000d4521e106c0100000100000000000000dc521e10700100000100000000000000e8521e10740100000100000007000000f4521e1078010000010000000a00000000531e1084010000010000000a00000008531e1088010000010000000600000010531e108c010000010000000600000018531e1090010000010000000600000028531e1094010000010000000600000030531e1098010000010000000600000038531e109c010000010000000600000040531e10a0010000010000000a00000050531e10a401000001000000000000005c531e10a8010000010000000a00000064531e10ac010000010000000a0000008cfb1d10b0010000010000000000000070531e10b4010000010000000f0000007c531e10b801000001000000000000008c531e10bc010000010000000000000098531e10c0010000010000000a000000a4531e10c4010000010000000a000000b0531e10c80100000100000001000000c8541e10cc0100000100010001000000bc541e10d0010000010001000100000080f01d10d40100000100000001000000bc531e10d80100000100000000000000c4531e10dc0100000100000000000000d0531e10e00100000100000000000000dc531e10e4010000010000000f000000e0531e10e80100000100000011000000e8531e10ec0100000100000011000000f0531e10f00100000100000011000000f8531e10f4010000010000001100000000541e10f80100000100000000000000a4791d10fc010000010000000f00000008541e1000020000010000000f00000018541e1004020000010000000f00000028541e1008020000010000000a0000003c541e1048020000010000000a00000044541e104c020000010000000a0000004c541e1050020000010000000a00000054541e105402000001000000000000005c541e1058020000010000000000000064541e105c02000001000000000000006c541e1060020000010000000000000074541e106402000001000000070000007c541e1068020000010000000700000084541e107402000001000000070000008c541e1080020000010000000700000094541e108c02000001000000060000009c541e10980200000100000006000000a4541e109c0200000100000006000000ac541e10a00200000100000006000000b4541e10a402000001000000",
+      "sha256": "0bd3cea94f17d887f333ad4e063d11f62a714a2f517afc559664569d12e2c510",
+      "name": "ENTVARS native descriptors",
+      "fields": [
+        {
+          "type_id": 1,
+          "name": "classname",
+          "offset": "0x0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 1,
+          "name": "globalname",
+          "offset": "0x4",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 8,
+          "name": "origin",
+          "offset": "0x8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "oldorigin",
+          "offset": "0x14",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "velocity",
+          "offset": "0x20",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "basevelocity",
+          "offset": "0x2c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "movedir",
+          "offset": "0x44",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "angles",
+          "offset": "0x50",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "avelocity",
+          "offset": "0x5c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "punchangle",
+          "offset": "0x68",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "v_angle",
+          "offset": "0x74",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "fixangle",
+          "offset": "0xa0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "idealpitch",
+          "offset": "0xa4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "pitch_speed",
+          "offset": "0xa8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "ideal_yaw",
+          "offset": "0xac",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "yaw_speed",
+          "offset": "0xb0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "modelindex",
+          "offset": "0xb4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 16,
+          "name": "model",
+          "offset": "0xb8",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 16,
+          "name": "viewmodel",
+          "offset": "0xbc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 16,
+          "name": "weaponmodel",
+          "offset": "0xc0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "absmin",
+          "offset": "0xc4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "absmax",
+          "offset": "0xd0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "mins",
+          "offset": "0xdc",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 7,
+          "name": "maxs",
+          "offset": "0xe8",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 7,
+          "name": "size",
+          "offset": "0xf4",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 15,
+          "name": "ltime",
+          "offset": "0x100",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "nextthink",
+          "offset": "0x104",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "solid",
+          "offset": "0x10c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "movetype",
+          "offset": "0x108",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "skin",
+          "offset": "0x110",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "body",
+          "offset": "0x114",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "effects",
+          "offset": "0x118",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "gravity",
+          "offset": "0x11c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "friction",
+          "offset": "0x120",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "light_level",
+          "offset": "0x124",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "frame",
+          "offset": "0x134",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "scale",
+          "offset": "0x148",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "sequence",
+          "offset": "0x12c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "animtime",
+          "offset": "0x138",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "framerate",
+          "offset": "0x13c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "controller",
+          "offset": "0x140",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "blending",
+          "offset": "0x144",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "rendermode",
+          "offset": "0x14c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "renderamt",
+          "offset": "0x150",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "rendercolor",
+          "offset": "0x154",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "renderfx",
+          "offset": "0x160",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "health",
+          "offset": "0x164",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "frags",
+          "offset": "0x168",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "weapons",
+          "offset": "0x16c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "takedamage",
+          "offset": "0x170",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "deadflag",
+          "offset": "0x174",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "view_ofs",
+          "offset": "0x178",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "button",
+          "offset": "0x184",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "impulse",
+          "offset": "0x188",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "chain",
+          "offset": "0x18c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "dmg_inflictor",
+          "offset": "0x190",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "enemy",
+          "offset": "0x194",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "aiment",
+          "offset": "0x198",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "owner",
+          "offset": "0x19c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "groundentity",
+          "offset": "0x1a0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "spawnflags",
+          "offset": "0x1a4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "flags",
+          "offset": "0x1a8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "colormap",
+          "offset": "0x1ac",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "team",
+          "offset": "0x1b0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "max_health",
+          "offset": "0x1b4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "teleport_time",
+          "offset": "0x1b8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "armortype",
+          "offset": "0x1bc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "armorvalue",
+          "offset": "0x1c0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "waterlevel",
+          "offset": "0x1c4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "watertype",
+          "offset": "0x1c8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 1,
+          "name": "target",
+          "offset": "0x1cc",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 1,
+          "name": "targetname",
+          "offset": "0x1d0",
+          "count": 1,
+          "flags": 1
+        },
+        {
+          "type_id": 1,
+          "name": "netname",
+          "offset": "0x1d4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 1,
+          "name": "message",
+          "offset": "0x1d8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "dmg_take",
+          "offset": "0x1dc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "dmg_save",
+          "offset": "0x1e0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "dmg",
+          "offset": "0x1e4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "dmgtime",
+          "offset": "0x1e8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 17,
+          "name": "noise",
+          "offset": "0x1ec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 17,
+          "name": "noise1",
+          "offset": "0x1f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 17,
+          "name": "noise2",
+          "offset": "0x1f4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 17,
+          "name": "noise3",
+          "offset": "0x1f8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "speed",
+          "offset": "0x1fc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "air_finished",
+          "offset": "0x200",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "pain_finished",
+          "offset": "0x204",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "radsuit_finished",
+          "offset": "0x208",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "iuser1",
+          "offset": "0x248",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "iuser2",
+          "offset": "0x24c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "iuser3",
+          "offset": "0x250",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "iuser4",
+          "offset": "0x254",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "fuser1",
+          "offset": "0x258",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "fuser2",
+          "offset": "0x25c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "fuser3",
+          "offset": "0x260",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "fuser4",
+          "offset": "0x264",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "vuser1",
+          "offset": "0x268",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "vuser2",
+          "offset": "0x274",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "vuser3",
+          "offset": "0x280",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "vuser4",
+          "offset": "0x28c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "euser1",
+          "offset": "0x298",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "euser2",
+          "offset": "0x29c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "euser3",
+          "offset": "0x2a0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 6,
+          "name": "euser4",
+          "offset": "0x2a4",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "start": "0x101ce36c",
+      "end_exclusive": "0x101ce5a8",
+      "file_offset": "0x1cd76c",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001060320110c0da001070d80010500b0b10c0080b1070070b10e0090b1040090b1020df00105072011080df0010a072011050060b1080d50010d0d90010c0221010d0c4081050bc081040c3081030a3081010290110e0c70810f03e011010df0010c0020110e0d30010f0d30010d0d30010e0df001020da0010f00101109035011070df00103076011010e2001070e2001080e2001060df001090db00105035011000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010b00e0b1000d40010f0df0010d0e2001010da0b10a0d40010f0d50010a0d500102029011090da001050820810c0820810e0e1001070060b1060f80b1050fc0b1070290c10b0230c10c0cd0b1030040c10f0f70b1000020c1070030c10d076081050240c10e0c70b1080810810a080081090d50b1050070c10700e0c1090230c1010350110d055011050d80b1090d80b10b0d70b1010d80b1060cd081060bc0010f0b2001070ca0810f0ab0010204b011000cd0b108032011050150c1010150c10201f0c10c0270c10501f0c1000170c1000d10b1080df0b10400a0b1040c90b10e0e50b1080340110b032011050da0b109032011080f80b10a0e50b1040da0b10a0060b1000140c1010130c103035011090c70b10b0c70b1010200c10a045011080ed0b1090960810409d081090060b10b0a2081080a208107084081050210c10f0ee0b10c0320110f02801104035011050400110",
+      "sha256": "5c89a2a1d3e80b86dc837e577e0f40d31a09ad43bd231801b5492dab64f018be",
+      "name": "CGenericMonster vtable from factory100b05e0",
+      "dwords_hex": [
+        "0x1000d590",
+        "0x10017110",
+        "0x1000e1f0",
+        "0x100171b0",
+        "0x1000d3b0",
+        "0x10017210",
+        "0x1000d450",
+        "0x1000d480",
+        "0x10013260",
+        "0x1000dac0",
+        "0x1000d870",
+        "0x100b0b50",
+        "0x100b08c0",
+        "0x100b0770",
+        "0x100b09e0",
+        "0x100b0940",
+        "0x1000df20",
+        "0x10017250",
+        "0x1000df80",
+        "0x100172a0",
+        "0x100b0650",
+        "0x1000d580",
+        "0x1000d9d0",
+        "0x101022c0",
+        "0x1008c4d0",
+        "0x1008bc50",
+        "0x1008c340",
+        "0x1008a330",
+        "0x10012910",
+        "0x1008c7e0",
+        "0x10013ef0",
+        "0x1000df10",
+        "0x100102c0",
+        "0x1000d3e0",
+        "0x1000d3f0",
+        "0x1000d3d0",
+        "0x1000dfe0",
+        "0x1000da20",
+        "0x100101f0",
+        "0x10013590",
+        "0x1000df70",
+        "0x10017630",
+        "0x1000e210",
+        "0x1000e270",
+        "0x1000e280",
+        "0x1000df60",
+        "0x1000db90",
+        "0x10013550",
+        "0x1000db00",
+        "0x1000dfa0",
+        "0x1000da30",
+        "0x10017660",
+        "0x1000db80",
+        "0x1000db70",
+        "0x1000e290",
+        "0x100176f0",
+        "0x1000e2a0",
+        "0x1000e2b0",
+        "0x100b0eb0",
+        "0x1000d400",
+        "0x1000dff0",
+        "0x1000e2d0",
+        "0x100bda10",
+        "0x1000d4a0",
+        "0x1000d5f0",
+        "0x1000d5a0",
+        "0x10012920",
+        "0x1000da90",
+        "0x10088250",
+        "0x100882c0",
+        "0x1000e1e0",
+        "0x100b0670",
+        "0x100bf860",
+        "0x100bfc50",
+        "0x100c2970",
+        "0x100c23b0",
+        "0x100bcdc0",
+        "0x100c0430",
+        "0x100bf7f0",
+        "0x100c0200",
+        "0x100c0370",
+        "0x100876d0",
+        "0x100c2450",
+        "0x100bc7e0",
+        "0x10088180",
+        "0x100880a0",
+        "0x100bd590",
+        "0x100c0750",
+        "0x100c0e70",
+        "0x100c2390",
+        "0x10013510",
+        "0x100155d0",
+        "0x100bd850",
+        "0x100bd890",
+        "0x100bd7b0",
+        "0x100bd810",
+        "0x1008cd60",
+        "0x1000bc60",
+        "0x1000b2f0",
+        "0x1008ca70",
+        "0x1000abf0",
+        "0x10014b20",
+        "0x100bcd00",
+        "0x10013280",
+        "0x100c1550",
+        "0x100c1510",
+        "0x100c1f20",
+        "0x100c27c0",
+        "0x100c1f50",
+        "0x100c1700",
+        "0x100bd100",
+        "0x100bdf80",
+        "0x100b0a40",
+        "0x100bc940",
+        "0x100be5e0",
+        "0x10013480",
+        "0x100132b0",
+        "0x100bda50",
+        "0x10013290",
+        "0x100bf880",
+        "0x100be5a0",
+        "0x100bda40",
+        "0x100b06a0",
+        "0x100c1400",
+        "0x100c1310",
+        "0x10013530",
+        "0x100bc790",
+        "0x100bc7b0",
+        "0x100c2010",
+        "0x100145a0",
+        "0x100bed80",
+        "0x10089690",
+        "0x10089d40",
+        "0x100b0690",
+        "0x1008a2b0",
+        "0x1008a280",
+        "0x10088470",
+        "0x100c2150",
+        "0x100beef0",
+        "0x100132c0",
+        "0x100128f0",
+        "0x10013540",
+        "0x10014050"
+      ]
+    }
+  ],
+  "strings": [
+    {
+      "start": "0x101a2e38",
+      "end_exclusive": "0x101a2e47",
+      "file_offset": "0x1a2238",
+      "bytes_hex": "4342617365416e696d6174696e6700",
+      "sha256": "b416e3bbcf8dd4427f7f69072456377425f43e7c1c441a142f901d5f81396554",
+      "ascii": "CBaseAnimating"
+    },
+    {
+      "start": "0x101a33a8",
+      "end_exclusive": "0x101a33c1",
+      "file_offset": "0x1a27a8",
+      "bytes_hex": "4261642068656164657220696e20536574426f6e6573210a00",
+      "sha256": "b0ae497f7278317f46302c1d5b89d3fcb39c06a825bf28777ea19c84056d811a",
+      "ascii": "Bad header in SetBones!\n"
+    },
+    {
+      "start": "0x101df47c",
+      "end_exclusive": "0x101df487",
+      "file_offset": "0x1de87c",
+      "bytes_hex": "434261736544656c617900",
+      "sha256": "88a0b392a98ff4525c5f013f194fe9c4059eaaa51aa7f2fed6ecb75e31d7e50f",
+      "ascii": "CBaseDelay"
+    },
+    {
+      "start": "0x101df4e0",
+      "end_exclusive": "0x101df4ec",
+      "file_offset": "0x1de8e0",
+      "bytes_hex": "4342617365546f67676c6500",
+      "sha256": "5851efb9ef32b572a91ecea6ae5165c6ff945b5d167526258919153fee1f5cbb",
+      "ascii": "CBaseToggle"
+    },
+    {
+      "start": "0x101a2ddc",
+      "end_exclusive": "0x101a2dea",
+      "file_offset": "0x1a21dc",
+      "bytes_hex": "6d5f666c4672616d655261746500",
+      "sha256": "7a5003d0d3dbcf11498645406fab70bff79fcb30c59a6b54abfb01c5e10897a4",
+      "ascii": "m_flFrameRate"
+    },
+    {
+      "start": "0x101a2dec",
+      "end_exclusive": "0x101a2dfc",
+      "file_offset": "0x1a21ec",
+      "bytes_hex": "6d5f666c47726f756e64537065656400",
+      "sha256": "c642fbaf38b31a65dff70a92f1190b87933f26d70327c8d4a025bc83265e5dfd",
+      "ascii": "m_flGroundSpeed"
+    },
+    {
+      "start": "0x101a2dfc",
+      "end_exclusive": "0x101a2e0f",
+      "file_offset": "0x1a21fc",
+      "bytes_hex": "6d5f666c4c6173744576656e74436865636b00",
+      "sha256": "689a970d151e8e4ca80340cfed658a6f7a2f0dbae193ba87e2cb1c1c8936d20e",
+      "ascii": "m_flLastEventCheck"
+    },
+    {
+      "start": "0x101a2e10",
+      "end_exclusive": "0x101a2e24",
+      "file_offset": "0x1a2210",
+      "bytes_hex": "6d5f6653657175656e636546696e697368656400",
+      "sha256": "ba052b29108b4041bc6e11b6043686158cefb5eefd0189d948fa89b3b7adf2a5",
+      "ascii": "m_fSequenceFinished"
+    },
+    {
+      "start": "0x101a2e24",
+      "end_exclusive": "0x101a2e35",
+      "file_offset": "0x1a2224",
+      "bytes_hex": "6d5f6653657175656e63654c6f6f707300",
+      "sha256": "1fcbc6843f68b63caab79fc36654f424e4ea8e9bc49d37feac749db63a199b56",
+      "ascii": "m_fSequenceLoops"
+    },
+    {
+      "start": "0x101a490c",
+      "end_exclusive": "0x101a4916",
+      "file_offset": "0x1a3d0c",
+      "bytes_hex": "6d5f666c44656c617900",
+      "sha256": "2885d5db60140cb1146fd8cb35dbc3e7a4bb906bf6324837e1b9774cd23e9e96",
+      "ascii": "m_flDelay"
+    },
+    {
+      "start": "0x101df0a0",
+      "end_exclusive": "0x101df0b0",
+      "file_offset": "0x1de4a0",
+      "bytes_hex": "6d5f69737a4b696c6c54617267657400",
+      "sha256": "f868c5f22f49907811cb76184593dc16f0ab1126e215264c83f2850e48eb92ad",
+      "ascii": "m_iszKillTarget"
+    },
+    {
+      "start": "0x101df0b0",
+      "end_exclusive": "0x101df0bd",
+      "file_offset": "0x1de4b0",
+      "bytes_hex": "6d5f68416374697661746f7200",
+      "sha256": "6f95a5831b164531a835e52c215e3b6d48dc69c2867b7817ac2fae53a9228600",
+      "ascii": "m_hActivator"
+    },
+    {
+      "start": "0x101a72fc",
+      "end_exclusive": "0x101a7306",
+      "file_offset": "0x1a66fc",
+      "bytes_hex": "636c6173736e616d6500",
+      "sha256": "973d7e1f8e207cec9064628d7d1a62284d0e6d61c43a6d0b1de06f7a3752a7f4",
+      "ascii": "classname"
+    },
+    {
+      "start": "0x101a60f4",
+      "end_exclusive": "0x101a60ff",
+      "file_offset": "0x1a54f4",
+      "bytes_hex": "676c6f62616c6e616d6500",
+      "sha256": "7bfd57869c937ffb17ee2f7af26164f431f7aa2224685a06e08c86743a794183",
+      "ascii": "globalname"
+    },
+    {
+      "start": "0x101e5118",
+      "end_exclusive": "0x101e511f",
+      "file_offset": "0x1e4518",
+      "bytes_hex": "6f726967696e00",
+      "sha256": "fa8f5303715e2cc9d39c5e2908903aff508a7366dff11ee110e5c8b7fde8bae1",
+      "ascii": "origin"
+    },
+    {
+      "start": "0x101e5120",
+      "end_exclusive": "0x101e512a",
+      "file_offset": "0x1e4520",
+      "bytes_hex": "6f6c646f726967696e00",
+      "sha256": "73a914778a11546240ac4185e79a0b00aaa69527b4f9b9fbd0df79f132118216",
+      "ascii": "oldorigin"
+    },
+    {
+      "start": "0x101e512c",
+      "end_exclusive": "0x101e5135",
+      "file_offset": "0x1e452c",
+      "bytes_hex": "76656c6f6369747900",
+      "sha256": "4c4b4566d01df209d751694169f2d219f57108fbcf43d3bcc9924fd1cb78ba92",
+      "ascii": "velocity"
+    },
+    {
+      "start": "0x101e5138",
+      "end_exclusive": "0x101e5145",
+      "file_offset": "0x1e4538",
+      "bytes_hex": "6261736576656c6f6369747900",
+      "sha256": "611b52638bae81f76223f96bc342088b471240be95f686174d965c5f6277f535",
+      "ascii": "basevelocity"
+    },
+    {
+      "start": "0x101e5148",
+      "end_exclusive": "0x101e5150",
+      "file_offset": "0x1e4548",
+      "bytes_hex": "6d6f766564697200",
+      "sha256": "679b7ba75f9938f4eb61b2dbf38088db179365828c17a94294d9c01bfb494452",
+      "ascii": "movedir"
+    },
+    {
+      "start": "0x101e5150",
+      "end_exclusive": "0x101e5157",
+      "file_offset": "0x1e4550",
+      "bytes_hex": "616e676c657300",
+      "sha256": "3a76da7c7ec862e02a5636a4de5407e736bea6ac5b84a046cf990eb602525099",
+      "ascii": "angles"
+    },
+    {
+      "start": "0x101e5158",
+      "end_exclusive": "0x101e5162",
+      "file_offset": "0x1e4558",
+      "bytes_hex": "6176656c6f6369747900",
+      "sha256": "6b2c46a844fabf9f8b98c40609188c1c2a622dbe9026361b8a428a5937597597",
+      "ascii": "avelocity"
+    },
+    {
+      "start": "0x101e5164",
+      "end_exclusive": "0x101e516f",
+      "file_offset": "0x1e4564",
+      "bytes_hex": "70756e6368616e676c6500",
+      "sha256": "e37f92359399fa9757e6c04e11af3307ec7391033e63f8cfb45fafda0ed20834",
+      "ascii": "punchangle"
+    },
+    {
+      "start": "0x101e5170",
+      "end_exclusive": "0x101e5178",
+      "file_offset": "0x1e4570",
+      "bytes_hex": "765f616e676c6500",
+      "sha256": "43a10f298a89baaec68ff764189c3adda1127f20a3c58655b29e7c05ba998ea5",
+      "ascii": "v_angle"
+    },
+    {
+      "start": "0x101e5178",
+      "end_exclusive": "0x101e5181",
+      "file_offset": "0x1e4578",
+      "bytes_hex": "666978616e676c6500",
+      "sha256": "d554f1896123bdcb8637d3d803d75a1ccb60caf03a6f96dc60e34430519708ab",
+      "ascii": "fixangle"
+    },
+    {
+      "start": "0x101e5184",
+      "end_exclusive": "0x101e518f",
+      "file_offset": "0x1e4584",
+      "bytes_hex": "696465616c706974636800",
+      "sha256": "02706b9ee57a91016398bd9b91e3c90f0820fbe68dc46b5698189f91a63e5a54",
+      "ascii": "idealpitch"
+    },
+    {
+      "start": "0x101e5190",
+      "end_exclusive": "0x101e519c",
+      "file_offset": "0x1e4590",
+      "bytes_hex": "70697463685f737065656400",
+      "sha256": "6c9777755912c6c1490d9ca9f79e50c988e9b23daf2cffb1b5c7cbc86c6dc64b",
+      "ascii": "pitch_speed"
+    },
+    {
+      "start": "0x101e519c",
+      "end_exclusive": "0x101e51a6",
+      "file_offset": "0x1e459c",
+      "bytes_hex": "696465616c5f79617700",
+      "sha256": "f449b73c5f76a42e2527a48e7a58dabeaf1ac3062f294123952621ab64f2403f",
+      "ascii": "ideal_yaw"
+    },
+    {
+      "start": "0x101e51a8",
+      "end_exclusive": "0x101e51b2",
+      "file_offset": "0x1e45a8",
+      "bytes_hex": "7961775f737065656400",
+      "sha256": "91c3ec704a528f812235c96215c3a617d41bb941eba6435d54d3a8f1adb6dc07",
+      "ascii": "yaw_speed"
+    },
+    {
+      "start": "0x101e51b4",
+      "end_exclusive": "0x101e51bf",
+      "file_offset": "0x1e45b4",
+      "bytes_hex": "6d6f64656c696e64657800",
+      "sha256": "3e6eb58b518c7ecca07e65e86bc20960fbe176f5090306ebe616bf40b3707a3f",
+      "ascii": "modelindex"
+    },
+    {
+      "start": "0x101a84cc",
+      "end_exclusive": "0x101a84d2",
+      "file_offset": "0x1a78cc",
+      "bytes_hex": "6d6f64656c00",
+      "sha256": "c24b9890cf3b4c43df4ade497fa147e6843623238ffe28468b0d486e86e8e51b",
+      "ascii": "model"
+    },
+    {
+      "start": "0x101e51c0",
+      "end_exclusive": "0x101e51ca",
+      "file_offset": "0x1e45c0",
+      "bytes_hex": "766965776d6f64656c00",
+      "sha256": "76dc06e98fa1fd677a4e66ae857c2d5d1d8b84cbed56c7c1e07cbd96ad928179",
+      "ascii": "viewmodel"
+    },
+    {
+      "start": "0x101e51cc",
+      "end_exclusive": "0x101e51d8",
+      "file_offset": "0x1e45cc",
+      "bytes_hex": "776561706f6e6d6f64656c00",
+      "sha256": "3255bf0097b130ed547d077821e4b7623180cd0fb289ce915866b61dba65679f",
+      "ascii": "weaponmodel"
+    },
+    {
+      "start": "0x101e51d8",
+      "end_exclusive": "0x101e51df",
+      "file_offset": "0x1e45d8",
+      "bytes_hex": "6162736d696e00",
+      "sha256": "7847c7e4b98cb14b9bcd64948a099b44844560aa17895384e5c7987823551810",
+      "ascii": "absmin"
+    },
+    {
+      "start": "0x101e51e0",
+      "end_exclusive": "0x101e51e7",
+      "file_offset": "0x1e45e0",
+      "bytes_hex": "6162736d617800",
+      "sha256": "12eae34bca57c932118f3c23731b6718f3a38ddad935ff5dc7cf39ee33acc4d4",
+      "ascii": "absmax"
+    },
+    {
+      "start": "0x101e51e8",
+      "end_exclusive": "0x101e51ed",
+      "file_offset": "0x1e45e8",
+      "bytes_hex": "6d696e7300",
+      "sha256": "f79cb658c2ec870313fc14912d94ed25aa0a38fd5b243ffd59b44f753d926dfd",
+      "ascii": "mins"
+    },
+    {
+      "start": "0x101e51f0",
+      "end_exclusive": "0x101e51f5",
+      "file_offset": "0x1e45f0",
+      "bytes_hex": "6d61787300",
+      "sha256": "42846bcf08ba77ac209913f1894a3f425cfa9a49a44132719fef95ef0e523730",
+      "ascii": "maxs"
+    },
+    {
+      "start": "0x101cb514",
+      "end_exclusive": "0x101cb519",
+      "file_offset": "0x1ca914",
+      "bytes_hex": "73697a6500",
+      "sha256": "ce5eff7ff93e4d42dcba643e5958a4bf37f71631d0fce0f5ecadc50e0344a2d6",
+      "ascii": "size"
+    },
+    {
+      "start": "0x101e51f8",
+      "end_exclusive": "0x101e51fe",
+      "file_offset": "0x1e45f8",
+      "bytes_hex": "6c74696d6500",
+      "sha256": "30c7e313abcc8a2ea5008d65a2f57783e4f2ed1df32a757e545d5f2b5b187042",
+      "ascii": "ltime"
+    },
+    {
+      "start": "0x101e5200",
+      "end_exclusive": "0x101e520a",
+      "file_offset": "0x1e4600",
+      "bytes_hex": "6e6578747468696e6b00",
+      "sha256": "08b1bb340ada3c3c99166f97ea86a04a903dc5d2f52cf07396c60d873cd6fd21",
+      "ascii": "nextthink"
+    },
+    {
+      "start": "0x101e1588",
+      "end_exclusive": "0x101e158e",
+      "file_offset": "0x1e0988",
+      "bytes_hex": "736f6c696400",
+      "sha256": "c406f4457dd06489feddc1745d71fde1673d503c453826d2af85e82fdc249ee1",
+      "ascii": "solid"
+    },
+    {
+      "start": "0x101e520c",
+      "end_exclusive": "0x101e5215",
+      "file_offset": "0x1e460c",
+      "bytes_hex": "6d6f76657479706500",
+      "sha256": "0f65cd4f01893d2859815c48a426f105ed06f7cff595b8290b5a56ffd973c81d",
+      "ascii": "movetype"
+    },
+    {
+      "start": "0x101a3c60",
+      "end_exclusive": "0x101a3c65",
+      "file_offset": "0x1a3060",
+      "bytes_hex": "736b696e00",
+      "sha256": "940675fb3e6a75ec841e5197fb36e25c1af8dc3ef6eb9af453ec08694980336e",
+      "ascii": "skin"
+    },
+    {
+      "start": "0x101e5218",
+      "end_exclusive": "0x101e521d",
+      "file_offset": "0x1e4618",
+      "bytes_hex": "626f647900",
+      "sha256": "533efb51d04e310a7fb38f1446b4218823f48bc5485d7409fdb05098736512c9",
+      "ascii": "body"
+    },
+    {
+      "start": "0x101e5220",
+      "end_exclusive": "0x101e5228",
+      "file_offset": "0x1e4620",
+      "bytes_hex": "6566666563747300",
+      "sha256": "1f74c0b5c829fc35dbe360e294eecdaa64509627c98d3d84749f77777ae222df",
+      "ascii": "effects"
+    },
+    {
+      "start": "0x101e5228",
+      "end_exclusive": "0x101e5230",
+      "file_offset": "0x1e4628",
+      "bytes_hex": "6772617669747900",
+      "sha256": "0b6f37c64cd8bc779b9e21efa8b778d8ff97177ee8f6f575a9ce2d12d81c2ce6",
+      "ascii": "gravity"
+    },
+    {
+      "start": "0x101e5230",
+      "end_exclusive": "0x101e5239",
+      "file_offset": "0x1e4630",
+      "bytes_hex": "6672696374696f6e00",
+      "sha256": "585e42ecd6c1dca6300a9a9e93190a2865fcd54fae51229b22ac2da20bdbe1e5",
+      "ascii": "friction"
+    },
+    {
+      "start": "0x101e523c",
+      "end_exclusive": "0x101e5248",
+      "file_offset": "0x1e463c",
+      "bytes_hex": "6c696768745f6c6576656c00",
+      "sha256": "a9469b167e938da3f1902948f10ee4466871787c048fa8019ac13d40738dea8b",
+      "ascii": "light_level"
+    },
+    {
+      "start": "0x101e5248",
+      "end_exclusive": "0x101e524e",
+      "file_offset": "0x1e4648",
+      "bytes_hex": "6672616d6500",
+      "sha256": "4b3d85774cefcc94025ff014719410b4c9dd878992fa5edfe99bbde146a1e183",
+      "ascii": "frame"
+    },
+    {
+      "start": "0x101e5250",
+      "end_exclusive": "0x101e5256",
+      "file_offset": "0x1e4650",
+      "bytes_hex": "7363616c6500",
+      "sha256": "f1d13499a6cd3b4d4a5a6dec02b1341f808709861237127922810db410ecdce0",
+      "ascii": "scale"
+    },
+    {
+      "start": "0x101e5258",
+      "end_exclusive": "0x101e5261",
+      "file_offset": "0x1e4658",
+      "bytes_hex": "73657175656e636500",
+      "sha256": "610f78f9f16ce7158631d70382f9b398d71a49bfdb13cfa7905a586b8368225b",
+      "ascii": "sequence"
+    },
+    {
+      "start": "0x101e5264",
+      "end_exclusive": "0x101e526d",
+      "file_offset": "0x1e4664",
+      "bytes_hex": "616e696d74696d6500",
+      "sha256": "a2f01ba49a5bdff603dc591e1045a07868a4a46b3a9cc3216f2382e1b35fb799",
+      "ascii": "animtime"
+    },
+    {
+      "start": "0x101e5270",
+      "end_exclusive": "0x101e527a",
+      "file_offset": "0x1e4670",
+      "bytes_hex": "6672616d657261746500",
+      "sha256": "3e84e64b73fc05d6ba71094fbdb900d4ed07b88cd88d3789dafc6258bd6167fd",
+      "ascii": "framerate"
+    },
+    {
+      "start": "0x101e527c",
+      "end_exclusive": "0x101e5287",
+      "file_offset": "0x1e467c",
+      "bytes_hex": "636f6e74726f6c6c657200",
+      "sha256": "e0372b04b7dabe5a3cb27858428d9a75b87ffdb0c0ac7d2b321eb63fcfbd1aea",
+      "ascii": "controller"
+    },
+    {
+      "start": "0x101e5288",
+      "end_exclusive": "0x101e5291",
+      "file_offset": "0x1e4688",
+      "bytes_hex": "626c656e64696e6700",
+      "sha256": "fff3ebea0af40a061ba995eb0e4b824dac72397acfc398e0ba8264e46dd2e03d",
+      "ascii": "blending"
+    },
+    {
+      "start": "0x101e5294",
+      "end_exclusive": "0x101e529f",
+      "file_offset": "0x1e4694",
+      "bytes_hex": "72656e6465726d6f646500",
+      "sha256": "6da38b5218761e4e2b3017b7e05f31c5d3c9f83aff0a73b4b1e9f25b0bafafe3",
+      "ascii": "rendermode"
+    },
+    {
+      "start": "0x101e52a0",
+      "end_exclusive": "0x101e52aa",
+      "file_offset": "0x1e46a0",
+      "bytes_hex": "72656e646572616d7400",
+      "sha256": "eeb1745eea5959391acf5e7f5a9e5b830b3b654a496baaebde2551d5d4b17136",
+      "ascii": "renderamt"
+    },
+    {
+      "start": "0x101e52ac",
+      "end_exclusive": "0x101e52b8",
+      "file_offset": "0x1e46ac",
+      "bytes_hex": "72656e646572636f6c6f7200",
+      "sha256": "76c9f24556cc6496516f9beae12932187d754f39da31d2293d3536ba6dae58f3",
+      "ascii": "rendercolor"
+    },
+    {
+      "start": "0x101e52b8",
+      "end_exclusive": "0x101e52c1",
+      "file_offset": "0x1e46b8",
+      "bytes_hex": "72656e646572667800",
+      "sha256": "13598622dc09f4763a4982c6c86785f03326bc1ea76798ffecb94f61d46a93c1",
+      "ascii": "renderfx"
+    },
+    {
+      "start": "0x101e52c4",
+      "end_exclusive": "0x101e52cb",
+      "file_offset": "0x1e46c4",
+      "bytes_hex": "6865616c746800",
+      "sha256": "c8cd96766bc7b72fb82d0a585bf921b1655b5dea0d5ed6d9c1b09440ad892a52",
+      "ascii": "health"
+    },
+    {
+      "start": "0x101e52cc",
+      "end_exclusive": "0x101e52d2",
+      "file_offset": "0x1e46cc",
+      "bytes_hex": "667261677300",
+      "sha256": "bd1560a1a22135c7d8bbf45f9e244dd122c3c47c17ad0bca65751a2dc7fc8f8e",
+      "ascii": "frags"
+    },
+    {
+      "start": "0x101e52d4",
+      "end_exclusive": "0x101e52dc",
+      "file_offset": "0x1e46d4",
+      "bytes_hex": "776561706f6e7300",
+      "sha256": "c77145bec7601622f68d9f17366775323a6ea9022033e33bcbcbcd06a368de9c",
+      "ascii": "weapons"
+    },
+    {
+      "start": "0x101e52dc",
+      "end_exclusive": "0x101e52e7",
+      "file_offset": "0x1e46dc",
+      "bytes_hex": "74616b6564616d61676500",
+      "sha256": "4511b8697b45be452aad734300e1a8121be60c7d2fcfa9415e1218cce30c9aad",
+      "ascii": "takedamage"
+    },
+    {
+      "start": "0x101e52e8",
+      "end_exclusive": "0x101e52f1",
+      "file_offset": "0x1e46e8",
+      "bytes_hex": "64656164666c616700",
+      "sha256": "cfbb664bfe9af5d4f516959694e6374626346e53e155da4eda70bdd30b39e73e",
+      "ascii": "deadflag"
+    },
+    {
+      "start": "0x101e52f4",
+      "end_exclusive": "0x101e52fd",
+      "file_offset": "0x1e46f4",
+      "bytes_hex": "766965775f6f667300",
+      "sha256": "634b9f49fd30b8016aab624d1445ecfac5e348732b58239cb87e0957470e2d63",
+      "ascii": "view_ofs"
+    },
+    {
+      "start": "0x101e5300",
+      "end_exclusive": "0x101e5307",
+      "file_offset": "0x1e4700",
+      "bytes_hex": "627574746f6e00",
+      "sha256": "71fa8f77879bff8291212adf6d9588f522cb25a084d0a3628fcdcacb4fd3233f",
+      "ascii": "button"
+    },
+    {
+      "start": "0x101e5308",
+      "end_exclusive": "0x101e5310",
+      "file_offset": "0x1e4708",
+      "bytes_hex": "696d70756c736500",
+      "sha256": "01babad6069f30f845fa048de677f26e75df3c2c9df9ea5a5823b08987c80456",
+      "ascii": "impulse"
+    },
+    {
+      "start": "0x101e5310",
+      "end_exclusive": "0x101e5316",
+      "file_offset": "0x1e4710",
+      "bytes_hex": "636861696e00",
+      "sha256": "0fdbb1690ca5542d35198d43fc94217c4a0137bb22359f1a4ce1a4b27d04b63f",
+      "ascii": "chain"
+    },
+    {
+      "start": "0x101e5318",
+      "end_exclusive": "0x101e5326",
+      "file_offset": "0x1e4718",
+      "bytes_hex": "646d675f696e666c6963746f7200",
+      "sha256": "dd030b7b311c72d5297ab1a1212f33c7f77ad9679bfb7acb9b8b037077095279",
+      "ascii": "dmg_inflictor"
+    },
+    {
+      "start": "0x101e5328",
+      "end_exclusive": "0x101e532e",
+      "file_offset": "0x1e4728",
+      "bytes_hex": "656e656d7900",
+      "sha256": "1dc31a8e8ffaa7774adf7ae19a8789fc8df69743c9ae47dc513bd812eb0fdc79",
+      "ascii": "enemy"
+    },
+    {
+      "start": "0x101e5330",
+      "end_exclusive": "0x101e5337",
+      "file_offset": "0x1e4730",
+      "bytes_hex": "61696d656e7400",
+      "sha256": "93c37e721838cc45ba16fbe84d112cb91b3ba77c7a92bb0ae2608f6e74dea9cb",
+      "ascii": "aiment"
+    },
+    {
+      "start": "0x101e5338",
+      "end_exclusive": "0x101e533e",
+      "file_offset": "0x1e4738",
+      "bytes_hex": "6f776e657200",
+      "sha256": "d5c3bb195d700ac9dc06d770f72e81a385fcb1983961f44840c86559c568864b",
+      "ascii": "owner"
+    },
+    {
+      "start": "0x101e5340",
+      "end_exclusive": "0x101e534d",
+      "file_offset": "0x1e4740",
+      "bytes_hex": "67726f756e64656e7469747900",
+      "sha256": "2487b1c904cfa9fbc65a538fd25a3fe4fe13c69d522623c7f1fee20f1f12e900",
+      "ascii": "groundentity"
+    },
+    {
+      "start": "0x101e5350",
+      "end_exclusive": "0x101e535b",
+      "file_offset": "0x1e4750",
+      "bytes_hex": "737061776e666c61677300",
+      "sha256": "468379b5361cde4d631ead3b18ca8d7c7328d932da347085e0ca8b1276486aa1",
+      "ascii": "spawnflags"
+    },
+    {
+      "start": "0x101e535c",
+      "end_exclusive": "0x101e5362",
+      "file_offset": "0x1e475c",
+      "bytes_hex": "666c61677300",
+      "sha256": "e14d5a63e5efd35f5f028ad10c54cd468c67f5e1f4575c52fa2b39dd042f2474",
+      "ascii": "flags"
+    },
+    {
+      "start": "0x101e5364",
+      "end_exclusive": "0x101e536d",
+      "file_offset": "0x1e4764",
+      "bytes_hex": "636f6c6f726d617000",
+      "sha256": "1ea659b62aab383034272ceb922834e66dfdae9fd8abd4c027d3873b215c048c",
+      "ascii": "colormap"
+    },
+    {
+      "start": "0x101dfb8c",
+      "end_exclusive": "0x101dfb91",
+      "file_offset": "0x1def8c",
+      "bytes_hex": "7465616d00",
+      "sha256": "814f390df32129b311484b7bc1efe91360282b819e272ad329d68fdb932e0078",
+      "ascii": "team"
+    },
+    {
+      "start": "0x101e5370",
+      "end_exclusive": "0x101e537b",
+      "file_offset": "0x1e4770",
+      "bytes_hex": "6d61785f6865616c746800",
+      "sha256": "5bddf8d3e4d46582fb3ffd3f1bd2f6a07298e9c07d0999a6456909ba05048df7",
+      "ascii": "max_health"
+    },
+    {
+      "start": "0x101e537c",
+      "end_exclusive": "0x101e538a",
+      "file_offset": "0x1e477c",
+      "bytes_hex": "74656c65706f72745f74696d6500",
+      "sha256": "b1fad09d19bf079f70237686cb9b68829410b0e16c1bd20e953770673758a0cd",
+      "ascii": "teleport_time"
+    },
+    {
+      "start": "0x101e538c",
+      "end_exclusive": "0x101e5396",
+      "file_offset": "0x1e478c",
+      "bytes_hex": "61726d6f727479706500",
+      "sha256": "63dc04e7002e3817a701989f0b86ac32b91fccc1520bde32d7883c0dbde9f07f",
+      "ascii": "armortype"
+    },
+    {
+      "start": "0x101e5398",
+      "end_exclusive": "0x101e53a3",
+      "file_offset": "0x1e4798",
+      "bytes_hex": "61726d6f7276616c756500",
+      "sha256": "8c56397350b09c93f1b84c16d714ecde6849ab7d715fbbfa07b7385a8470909a",
+      "ascii": "armorvalue"
+    },
+    {
+      "start": "0x101e53a4",
+      "end_exclusive": "0x101e53af",
+      "file_offset": "0x1e47a4",
+      "bytes_hex": "77617465726c6576656c00",
+      "sha256": "8654203cc9927f42a072139b3781e07e839a49fc4d3a77315b0321697b7f9ce3",
+      "ascii": "waterlevel"
+    },
+    {
+      "start": "0x101e53b0",
+      "end_exclusive": "0x101e53ba",
+      "file_offset": "0x1e47b0",
+      "bytes_hex": "77617465727479706500",
+      "sha256": "241c7bbd0fb2140ddad619e8fc322f012cb03f36f386b34cbe1b03589956923a",
+      "ascii": "watertype"
+    },
+    {
+      "start": "0x101e54c8",
+      "end_exclusive": "0x101e54cf",
+      "file_offset": "0x1e48c8",
+      "bytes_hex": "74617267657400",
+      "sha256": "f7117ad754602040c399fd8c556f7b852fa7de86f90138f336cab48167955943",
+      "ascii": "target"
+    },
+    {
+      "start": "0x101e54bc",
+      "end_exclusive": "0x101e54c7",
+      "file_offset": "0x1e48bc",
+      "bytes_hex": "7461726765746e616d6500",
+      "sha256": "2870ff7c3718d8995f166482cdd55f703f99705e7f537d1a0c8c486a9af0d24a",
+      "ascii": "targetname"
+    },
+    {
+      "start": "0x101df080",
+      "end_exclusive": "0x101df088",
+      "file_offset": "0x1de480",
+      "bytes_hex": "6e65746e616d6500",
+      "sha256": "080af986b41b9f224baf958d1c44fe4e85a492d99a3d15dc96391f3e0d53ddf9",
+      "ascii": "netname"
+    },
+    {
+      "start": "0x101e53bc",
+      "end_exclusive": "0x101e53c4",
+      "file_offset": "0x1e47bc",
+      "bytes_hex": "6d65737361676500",
+      "sha256": "b58d3a8f292c29af94c1f30f46b2692f7b7915f8d532890d8dac339dc9daf90c",
+      "ascii": "message"
+    },
+    {
+      "start": "0x101e53c4",
+      "end_exclusive": "0x101e53cd",
+      "file_offset": "0x1e47c4",
+      "bytes_hex": "646d675f74616b6500",
+      "sha256": "55eaa63bbded506d7b42885e712d141dd767efc29d1829c708d69d8769eac746",
+      "ascii": "dmg_take"
+    },
+    {
+      "start": "0x101e53d0",
+      "end_exclusive": "0x101e53d9",
+      "file_offset": "0x1e47d0",
+      "bytes_hex": "646d675f7361766500",
+      "sha256": "6cf4bb949d87f8f8658f61e35fac0e473b43bde17ae1ccab1ec77a43699fad3a",
+      "ascii": "dmg_save"
+    },
+    {
+      "start": "0x101e53dc",
+      "end_exclusive": "0x101e53e0",
+      "file_offset": "0x1e47dc",
+      "bytes_hex": "646d6700",
+      "sha256": "2ca1b8652e1db702be2eb4f43c91d890dded775ec9807a9e5bd999a62b94725e",
+      "ascii": "dmg"
+    },
+    {
+      "start": "0x101e53e0",
+      "end_exclusive": "0x101e53e8",
+      "file_offset": "0x1e47e0",
+      "bytes_hex": "646d6774696d6500",
+      "sha256": "2fdea4d80405c10117ea00f328922633cd483c0b0a391efa862294392aa2d076",
+      "ascii": "dmgtime"
+    },
+    {
+      "start": "0x101e53e8",
+      "end_exclusive": "0x101e53ee",
+      "file_offset": "0x1e47e8",
+      "bytes_hex": "6e6f69736500",
+      "sha256": "a6e101faf5be295eda8294eeeb8fc1822b81c6c3269dd4c487bf6c489b4c228d",
+      "ascii": "noise"
+    },
+    {
+      "start": "0x101e53f0",
+      "end_exclusive": "0x101e53f7",
+      "file_offset": "0x1e47f0",
+      "bytes_hex": "6e6f6973653100",
+      "sha256": "ce454cdfde02d3464ea2a748ed83ae6971023be344ec3911af5eefb0be0b35fd",
+      "ascii": "noise1"
+    },
+    {
+      "start": "0x101e53f8",
+      "end_exclusive": "0x101e53ff",
+      "file_offset": "0x1e47f8",
+      "bytes_hex": "6e6f6973653200",
+      "sha256": "f1ae4efbde495e967c1a27f9218f25a7a4c15f130b98f096916d73c66ff3c61e",
+      "ascii": "noise2"
+    },
+    {
+      "start": "0x101e5400",
+      "end_exclusive": "0x101e5407",
+      "file_offset": "0x1e4800",
+      "bytes_hex": "6e6f6973653300",
+      "sha256": "90d443f2557d15b898f9aa64a949b4137c753823ac3376a3d6cb5828339d8b9e",
+      "ascii": "noise3"
+    },
+    {
+      "start": "0x101d79a4",
+      "end_exclusive": "0x101d79aa",
+      "file_offset": "0x1d6da4",
+      "bytes_hex": "737065656400",
+      "sha256": "e51026639479b15fcf43fce5d22a2b3db4529b22564f40f129439d71899ddec1",
+      "ascii": "speed"
+    },
+    {
+      "start": "0x101e5408",
+      "end_exclusive": "0x101e5415",
+      "file_offset": "0x1e4808",
+      "bytes_hex": "6169725f66696e697368656400",
+      "sha256": "7cbe5e176ccce535bbe3248afc171b0f25c90f3c58f5ce64c1c5639f5e64a31f",
+      "ascii": "air_finished"
+    },
+    {
+      "start": "0x101e5418",
+      "end_exclusive": "0x101e5426",
+      "file_offset": "0x1e4818",
+      "bytes_hex": "7061696e5f66696e697368656400",
+      "sha256": "d9f40b52ecf9638a7cc24b1de4e8f9e54f347961335a50eaa60bc6e2e29d28e5",
+      "ascii": "pain_finished"
+    },
+    {
+      "start": "0x101e5428",
+      "end_exclusive": "0x101e5439",
+      "file_offset": "0x1e4828",
+      "bytes_hex": "726164737569745f66696e697368656400",
+      "sha256": "8d59c420fabd275b97db74504be41e1fc704c9afcf572427d5328d78502c737f",
+      "ascii": "radsuit_finished"
+    },
+    {
+      "start": "0x101e543c",
+      "end_exclusive": "0x101e5443",
+      "file_offset": "0x1e483c",
+      "bytes_hex": "69757365723100",
+      "sha256": "9b93d3da99bc51976f6d04c297f328c6b63b9f71c8796b0841e2087ca7d02a90",
+      "ascii": "iuser1"
+    },
+    {
+      "start": "0x101e5444",
+      "end_exclusive": "0x101e544b",
+      "file_offset": "0x1e4844",
+      "bytes_hex": "69757365723200",
+      "sha256": "b9ca867f56df9bb45d729f449290605ce8fffa8b4d096b89f8f08d1714d55a56",
+      "ascii": "iuser2"
+    },
+    {
+      "start": "0x101e544c",
+      "end_exclusive": "0x101e5453",
+      "file_offset": "0x1e484c",
+      "bytes_hex": "69757365723300",
+      "sha256": "9fd31fee9694953e69a8cdeadce1a13b22290c498dcf9f5e1c01c99e2e98a7fa",
+      "ascii": "iuser3"
+    },
+    {
+      "start": "0x101e5454",
+      "end_exclusive": "0x101e545b",
+      "file_offset": "0x1e4854",
+      "bytes_hex": "69757365723400",
+      "sha256": "314161fd474a03733c54f1090f5580b5620189f88cbaa732d7347cdb06a357d1",
+      "ascii": "iuser4"
+    },
+    {
+      "start": "0x101e545c",
+      "end_exclusive": "0x101e5463",
+      "file_offset": "0x1e485c",
+      "bytes_hex": "66757365723100",
+      "sha256": "85563130d78f5d77f85af8a4dab7568c586d52457c4b29a22eea1dc60cb16ebf",
+      "ascii": "fuser1"
+    },
+    {
+      "start": "0x101e5464",
+      "end_exclusive": "0x101e546b",
+      "file_offset": "0x1e4864",
+      "bytes_hex": "66757365723200",
+      "sha256": "835c34ba31502b3cb91adf8bead455a290c74d75ecc1ad7eb5a601833cbb2f66",
+      "ascii": "fuser2"
+    },
+    {
+      "start": "0x101e546c",
+      "end_exclusive": "0x101e5473",
+      "file_offset": "0x1e486c",
+      "bytes_hex": "66757365723300",
+      "sha256": "d3b2ea0276de796421a06a6d6615c77c70fad09b9547752cf9f61e1562e9c8dc",
+      "ascii": "fuser3"
+    },
+    {
+      "start": "0x101e5474",
+      "end_exclusive": "0x101e547b",
+      "file_offset": "0x1e4874",
+      "bytes_hex": "66757365723400",
+      "sha256": "b3801de0edd8d5e30cd0aa3f1ee07f261044c14ca9c87946a8bbca45fb9df25c",
+      "ascii": "fuser4"
+    },
+    {
+      "start": "0x101e547c",
+      "end_exclusive": "0x101e5483",
+      "file_offset": "0x1e487c",
+      "bytes_hex": "76757365723100",
+      "sha256": "b86021ae92220fdc3044ec5af5f013ead9c8ae69ecb13255a56511fa22a1367d",
+      "ascii": "vuser1"
+    },
+    {
+      "start": "0x101e5484",
+      "end_exclusive": "0x101e548b",
+      "file_offset": "0x1e4884",
+      "bytes_hex": "76757365723200",
+      "sha256": "3cb1dde2f80745cd40b0f0772a80de4ca4c0371c87689ff177bfe5f5dd3de7a0",
+      "ascii": "vuser2"
+    },
+    {
+      "start": "0x101e548c",
+      "end_exclusive": "0x101e5493",
+      "file_offset": "0x1e488c",
+      "bytes_hex": "76757365723300",
+      "sha256": "1507df4ba611bcdb7396ff8be93a0b120aa866ced85caadbc383aaa63bddd221",
+      "ascii": "vuser3"
+    },
+    {
+      "start": "0x101e5494",
+      "end_exclusive": "0x101e549b",
+      "file_offset": "0x1e4894",
+      "bytes_hex": "76757365723400",
+      "sha256": "55fddad53e49f366c73c0a1a797d05c6217aa049028088ac45527623832b9340",
+      "ascii": "vuser4"
+    },
+    {
+      "start": "0x101e549c",
+      "end_exclusive": "0x101e54a3",
+      "file_offset": "0x1e489c",
+      "bytes_hex": "65757365723100",
+      "sha256": "c54c08f3230273f801fafdbf50f9f4db96f3ce49ecb270f7bf49e70d42e29292",
+      "ascii": "euser1"
+    },
+    {
+      "start": "0x101e54a4",
+      "end_exclusive": "0x101e54ab",
+      "file_offset": "0x1e48a4",
+      "bytes_hex": "65757365723200",
+      "sha256": "c672a87b50fc68e62ffb2eb6112ef183b7a7a2d7ac02a0534feee661969e84d6",
+      "ascii": "euser2"
+    },
+    {
+      "start": "0x101e54ac",
+      "end_exclusive": "0x101e54b3",
+      "file_offset": "0x1e48ac",
+      "bytes_hex": "65757365723300",
+      "sha256": "83168e8786467ad4a8a6cbe1a729336b94b15763707d89928b5a311281f16fd7",
+      "ascii": "euser3"
+    },
+    {
+      "start": "0x101e54b4",
+      "end_exclusive": "0x101e54bb",
+      "file_offset": "0x1e48b4",
+      "bytes_hex": "65757365723400",
+      "sha256": "86dd9f6a113959d3e36c00a0741112c3565ad5a8a6453736e9096c1d93670db1",
+      "ascii": "euser4"
+    }
+  ],
+  "cross_references": [
+    {
+      "path": "analysis/server-serializer/1011adc0.asm",
+      "sha256": "5591c2b1f819c4d2644414502190322d4ef01c97806796f3a0bb3a49f1e8fcba",
+      "role": "previous native serializer capture or SDK layout comparison; SDK not native proof alone"
+    },
+    {
+      "path": "analysis/server-serializer/10117010.asm",
+      "sha256": "d3d41c5fdef691ca63238fac8b11cdf6367e928a1d43f8a16f150ff9717ca4ce",
+      "role": "previous native serializer capture or SDK layout comparison; SDK not native proof alone"
+    },
+    {
+      "path": "external/hlsdk-portable/engine/studio.h",
+      "sha256": "0be814cb0c55b58c8aace47dfa7bcdd4c3175c404cc235e953165ec56434ee18",
+      "role": "previous native serializer capture or SDK layout comparison; SDK not native proof alone"
+    },
+    {
+      "path": "external/hlsdk-portable/engine/eiface.h",
+      "sha256": "5a2b1a37d25364b173d312cdb26cf11e8b6dae3e0a3d495cde735fc025e910a5",
+      "role": "previous native serializer capture or SDK layout comparison; SDK not native proof alone"
+    }
+  ],
+  "api_binding": {
+    "native_initializer": "0x100b4aa0",
+    "native_engine_table": "0x10222f48",
+    "native_callback": "0x10223070",
+    "slot_decimal": 74,
+    "compatible_header_symbol": "pfnGetModelPtr",
+    "inference": "Native binding location and call stack proven; symbol is SDK layout comparison, not recovered native PDB"
+  },
+  "verification": {
+    "assembly_rows_matched_to_original_pe": 918,
+    "original_sha_checked_before_and_after": true
+  }
+}

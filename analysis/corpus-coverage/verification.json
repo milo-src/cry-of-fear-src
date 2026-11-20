@@ -1,0 +1,297 @@
+{
+  "checks": {
+    "client_source_exact_match": true,
+    "client_partition_saved_hashes_unresolved_not_promoted": true,
+    "client_session_success_close_reset_exit0_hash": true,
+    "engine_source_exact_match": true,
+    "engine_partition_saved_hashes_unresolved_not_promoted": true,
+    "engine_session_success_close_reset_exit0_hash": true,
+    "gameui_source_exact_match": true,
+    "gameui_partition_saved_hashes_unresolved_not_promoted": true,
+    "gameui_session_success_close_reset_exit0_hash": true,
+    "opengl_source_exact_match": true,
+    "opengl_partition_saved_hashes_unresolved_not_promoted": true,
+    "opengl_session_success_close_reset_exit0_hash": true,
+    "server_source_exact_match": true,
+    "server_partition_saved_hashes_unresolved_not_promoted": true,
+    "vgui2_source_exact_match": true,
+    "vgui2_partition_saved_hashes_unresolved_not_promoted": true,
+    "vgui2_session_success_close_reset_exit0_hash": true,
+    "server_journal_profile_target_match": true,
+    "published_hook_matches_full_evidence_and_info": true,
+    "available_original_DLL_hashes_match": true
+  },
+  "counts": {
+    "client": {
+      "discovered": 9664,
+      "confirmed_saved": 468,
+      "local_without_confirmed_C": 8448,
+      "external": 748,
+      "unresolved_C": 6
+    },
+    "engine": {
+      "discovered": 10281,
+      "confirmed_saved": 44,
+      "local_without_confirmed_C": 9550,
+      "external": 687,
+      "unresolved_C": 1
+    },
+    "gameui": {
+      "discovered": 6140,
+      "confirmed_saved": 126,
+      "local_without_confirmed_C": 5895,
+      "external": 119,
+      "unresolved_C": 0
+    },
+    "opengl": {
+      "discovered": 385,
+      "confirmed_saved": 0,
+      "local_without_confirmed_C": 371,
+      "external": 14,
+      "unresolved_C": 5
+    },
+    "server": {
+      "discovered": 10398,
+      "confirmed_saved": 8000,
+      "local_without_confirmed_C": 2292,
+      "external": 106,
+      "unresolved_C": 0
+    },
+    "vgui2": {
+      "discovered": 2358,
+      "confirmed_saved": 5,
+      "local_without_confirmed_C": 2128,
+      "external": 225,
+      "unresolved_C": 0
+    }
+  },
+  "target_executed_by_verifier": false,
+  "REA_session_opened_by_verifier": false,
+  "files": [
+    {
+      "path": "analysis/corpus-coverage/client-discovered-evidence.json",
+      "sha256": "9777cea71d32f301afbda91b91173ebce07eb02d9b22a0e99b136b40bfd85834",
+      "bytes": 3932902
+    },
+    {
+      "path": "analysis/corpus-coverage/client-inventory-session.json",
+      "sha256": "2590adce547eb6839699d2f7870952e0602bafe2db2950b0e37f1d5af171486f",
+      "bytes": 9613
+    },
+    {
+      "path": "analysis/corpus-coverage/client-local-without-confirmed-c.json",
+      "sha256": "2ea2956ac9bd635262f1f89d410874f1b5e71faec2dea710f8a8472b833e6669",
+      "bytes": 3159706
+    },
+    {
+      "path": "analysis/corpus-coverage/client-saved-confirmed-addresses.json",
+      "sha256": "05a65f6d6bb0fe3ea2f3609edcf4e899f5b1e688f5da16e427e3dd6ceedf5e25",
+      "bytes": 209707
+    },
+    {
+      "path": "analysis/corpus-coverage/client-unresolved-c.json",
+      "sha256": "4e6245adc00b79115b48faebc16e1636ae25b3e0387eb2b0881f72cf42fe717e",
+      "bytes": 3838
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-discovered-evidence.json",
+      "sha256": "41da9ebe6ca729f241723c108143d13590eaa8a049a9ab8a3848f9adf4b479b1",
+      "bytes": 4063445
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-inventory-session.json",
+      "sha256": "fd06272b963185aa54926c6cc0f3ba0751954094600ca51f3d0260efe87fc27d",
+      "bytes": 45148
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-local-without-confirmed-c.json",
+      "sha256": "8f1eceb1f0631305ccc47d3fdb31e6fc6385fe09c2ecff222aea28ee6205c677",
+      "bytes": 3449499
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-saved-confirmed-addresses.json",
+      "sha256": "ff9c90b464e24f098c44f5eca897eef63215d4b19a54652d80f8d9a45a357b3a",
+      "bytes": 18290
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-unresolved-c.json",
+      "sha256": "088fd23cbc6ec34d27b8b8f6f1ec1016f3912cbf8ff9a2bd2bb1ba6fe3a8365e",
+      "bytes": 741
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-discovered-evidence.json",
+      "sha256": "0bc6d7396085e59a65e91e014ac9634fdddb569d28f55cff21fbf071bf540651",
+      "bytes": 2422732
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-inventory-session.json",
+      "sha256": "0275343fa46ad484b4c1e4e1634d4d7d9d9aec1232c6076d31735a10da9302da",
+      "bytes": 45224
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-local-without-confirmed-c.json",
+      "sha256": "387695f0a3af1abc308f63066dd37023d354a861e4229642a4f9fe7709b98e76",
+      "bytes": 2130286
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-saved-confirmed-addresses.json",
+      "sha256": "0d9c1c4dd8e1f353a18675611be12e81477be09aa19d152b049b6737bbb7be9d",
+      "bytes": 52994
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-unresolved-c.json",
+      "sha256": "d7b019577bff585c3421f7d2821df1700b4f85f257c1c84ac22721631338ab75",
+      "bytes": 139
+    },
+    {
+      "path": "analysis/corpus-coverage/input-hash-verification.json",
+      "sha256": "14addd95b34ee824ece7cb3ac91800324b7ba453ca15d278e0a66d452facd168",
+      "bytes": 1653
+    },
+    {
+      "path": "analysis/corpus-coverage/inventory-requests.json",
+      "sha256": "bd1ea975926e5e2889e34b7cc70ec01a728598c7e4f07d0d29f33be4cfd34000",
+      "bytes": 103
+    },
+    {
+      "path": "analysis/corpus-coverage/inventory.json",
+      "sha256": "3f9a2c52725367e1cdcd3b524201f46e9fb47440f222c60bd92697aa76a18e83",
+      "bytes": 65786
+    },
+    {
+      "path": "analysis/corpus-coverage/inventory.md",
+      "sha256": "d6a953a67af33228eddbcd2f47f69db0e15ffd632ccd6b8f9613e9458a8d6f7f",
+      "bytes": 13673
+    },
+    {
+      "path": "analysis/corpus-coverage/inventory.py",
+      "sha256": "a4e52e3c422a6ad297b9439a822c26f84829717241cd62dcd26e7021b75c4735",
+      "bytes": 15812
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-discovered-evidence.json",
+      "sha256": "c6041e6b901fc3ba54eb11ccedc29afb40bde169da2aca564c3bc2423c8f8629",
+      "bytes": 157635
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-inventory-session.json",
+      "sha256": "a02bc7739958568561e2f8a8f89a364063d19d19267c7b316fa9cef1545624e2",
+      "bytes": 45158
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-local-without-confirmed-c.json",
+      "sha256": "d9642ed8462d2f144ff748bc8bcab31d228e88151238c12ef418a62c41b123cd",
+      "bytes": 135007
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-saved-confirmed-addresses.json",
+      "sha256": "cec5b3334fe15869d374e3ad62c4eecdeb2db7176ebce0739a41f61fa2999967",
+      "bytes": 38
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-unresolved-c.json",
+      "sha256": "fb1beaf0b6ffb5c8139aec1180ed0f30b40148fb78a99cf1179d1f704d396733",
+      "bytes": 3158
+    },
+    {
+      "path": "analysis/corpus-coverage/profont-hook-evidence.json",
+      "sha256": "313ae8ce3df03f5c3f5547b22dc9aeae7cbed65068e90bc1908e45bc8e4e339e",
+      "bytes": 26795
+    },
+    {
+      "path": "analysis/corpus-coverage/requests-plan.md",
+      "sha256": "cf58ff36d8c1f156cd5ce41342c242210a334b2047c93568e8b0da91ba684e48",
+      "bytes": 7294
+    },
+    {
+      "path": "analysis/corpus-coverage/retain_session.py",
+      "sha256": "828a8b2ab1d2fd4d0fae0f90ee25d7020571b632ccdd2743238ec5415b681737",
+      "bytes": 2356
+    },
+    {
+      "path": "analysis/corpus-coverage/saved-tool-schemas.json",
+      "sha256": "c59e07b2226ea6973ff63ce5245f6b17683860f941aca13b4a361333ecb0e7d3",
+      "bytes": 78052
+    },
+    {
+      "path": "analysis/corpus-coverage/server-discovered-evidence.json",
+      "sha256": "e7a75d529d78ab3c8c3deba696c81ce0b8bc195900d6c1764001fd6291b1b05e",
+      "bytes": 4177338
+    },
+    {
+      "path": "analysis/corpus-coverage/server-export-journal-summary.json",
+      "sha256": "a87dc236568fb0fab5e3722cab6b050d1adfb14c7646529d840a18af2e19a8ab",
+      "bytes": 6985
+    },
+    {
+      "path": "analysis/corpus-coverage/server-local-without-c.json",
+      "sha256": "5e852a00da299d8fbca2cd5ddd3b838472001f5109ab2550fe837d3633dcc5b2",
+      "bytes": 852536
+    },
+    {
+      "path": "analysis/corpus-coverage/server-local-without-confirmed-c.json",
+      "sha256": "5e852a00da299d8fbca2cd5ddd3b838472001f5109ab2550fe837d3633dcc5b2",
+      "bytes": 852536
+    },
+    {
+      "path": "analysis/corpus-coverage/server-next-25-requests.json",
+      "sha256": "7414500d596e263c222acbee75b53ebec073c5e0be2ab1cab3e758e00379aefc",
+      "bytes": 3555
+    },
+    {
+      "path": "analysis/corpus-coverage/server-saved-addresses.json",
+      "sha256": "934a84cec924bf5fed802660e128818f228d404fd8d4bb85c981e4238955ac0b",
+      "bytes": 3090094
+    },
+    {
+      "path": "analysis/corpus-coverage/server-saved-confirmed-addresses.json",
+      "sha256": "934a84cec924bf5fed802660e128818f228d404fd8d4bb85c981e4238955ac0b",
+      "bytes": 3090094
+    },
+    {
+      "path": "analysis/corpus-coverage/server-unresolved-c.json",
+      "sha256": "d7b019577bff585c3421f7d2821df1700b4f85f257c1c84ac22721631338ab75",
+      "bytes": 139
+    },
+    {
+      "path": "analysis/corpus-coverage/verify.py",
+      "sha256": "a7d250e7e45705bfc96b62d2bf042a832e5a0cbbe51deb3e3c061809c2b5a7d1",
+      "bytes": 4372
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-discovered-evidence.json",
+      "sha256": "a61f73efca999622628a8b8e9a78f7f076b38b1b818ec9cf9636aab9bce48995",
+      "bytes": 937252
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-inventory-session.json",
+      "sha256": "9ce935c7a2268828ff4394cf0feec0e9962864b4f5ac2f1abbaa21c2551a31d6",
+      "bytes": 45139
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-local-without-confirmed-c.json",
+      "sha256": "c4fe76b60b8cb8b58b95747ff39b2bc5bc1ec13d7d790d3a01ce47512f8a3fce",
+      "bytes": 769589
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-saved-confirmed-addresses.json",
+      "sha256": "0eb8d35bc3207d2d0c7afa5c816b7b18b6f23fb69b8e61fb86a18058c4674251",
+      "bytes": 2159
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-unresolved-c.json",
+      "sha256": "d7b019577bff585c3421f7d2821df1700b4f85f257c1c84ac22721631338ab75",
+      "bytes": 139
+    },
+    {
+      "path": "decompiled/client/captures/profont-pass02/001-pseudocode.c",
+      "sha256": "b3b3b42776474196e099f20374664a67517578b86eb270a6c8f3924d20eaad7c",
+      "bytes": 164
+    },
+    {
+      "path": "decompiled/client/captures/profont-pass02/capture.json",
+      "sha256": "32c9d5ad411a4ba40c25e583b312e0cb81516bb21997c2da8e5e99a40ab3c877",
+      "bytes": 1313
+    }
+  ]
+}

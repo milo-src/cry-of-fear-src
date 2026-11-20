@@ -1,0 +1,313 @@
+{
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [
+    {
+      "file": "s01-000-pseudocode.c",
+      "sha256": "9f02ec8809e460c7ef203d114ca8859e318c04818cb27176bbc5a5038aed788d",
+      "procedure": "ram:0x1006cb10",
+      "actual_entry": "0x1006cb10",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1006cb10",
+            "end": "0x1006cdbb"
+          }
+        ],
+        "total_bytes": 684,
+        "span_bytes": 684,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_1ca1e784bb87d98b778e5944e57d52cf607e53737b413ae04cc988111a0ef9af",
+      "procedure_info_evidence_id": "ev_99495257fad9400c6fdc082beebc521ad669f88c72671a9d10f4e8097042b885",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-01.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-02/000-procedure_info.json",
+        "sha256": "4d5763f530632cd638bb38fc30923bddfe4a8fccc0a910ca96fbcc5f985ef4c3"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-02.json"
+    },
+    {
+      "file": "s01-002-pseudocode.c",
+      "sha256": "46ab19c75d2f8bcc210be0c5dcfde7c09d16a0791f2e51a3e03bea527220422a",
+      "procedure": "ram:0x1000c900",
+      "actual_entry": "0x1000c900",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1000c900",
+            "end": "0x1000c930"
+          }
+        ],
+        "total_bytes": 49,
+        "span_bytes": 49,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_b3ee43b021434b646c48c9e6a40e2a379ba5b2b1b34421dcdb1041a401756bf5",
+      "procedure_info_evidence_id": "ev_b83f6be72241d7bfc14b07364a7fcf359deb070cbf85cab78da86d8333f55349",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-01.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-02/001-procedure_info.json",
+        "sha256": "84d61a0629cfe33d848d658d98813a7cf927979efd697529cd3b965e6803f30a"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-02.json"
+    },
+    {
+      "file": "s01-004-pseudocode.c",
+      "sha256": "d6c9446411f5fab6a76a4895c9abe36c0e6f7f7ec5c1b493247ba6b33457a681",
+      "procedure": "ram:0x100fe800",
+      "actual_entry": "0x100fe800",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100fe800",
+            "end": "0x100fe923"
+          }
+        ],
+        "total_bytes": 292,
+        "span_bytes": 292,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_0626feb1d1ec01b11ef3a6d2604471f99fc14123731ce2f05a69fcee96342f49",
+      "procedure_info_evidence_id": "ev_31e7a6abf3ecb99f33af52531146f39cdff9f81e36e215e65bfb713c92c0b706",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-01.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-02/002-procedure_info.json",
+        "sha256": "a7aefc6eaeef819468bc0ce13a44ca3f927137d7ed2261efb1248cf6dac03ddd"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-02.json"
+    },
+    {
+      "file": "s02-005-pseudocode.c",
+      "sha256": "737b504ab34dee321d9a0b97f58b1b0c713017034a589ffd7efc7f16de92b533",
+      "procedure": "ram:0x100a4010",
+      "actual_entry": "0x100a4010",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x100a4010",
+            "end": "0x100a4c14"
+          }
+        ],
+        "total_bytes": 3077,
+        "span_bytes": 3077,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_cf027330b3dde0298b3de6e855efc559e0aedd6f49f0d614c950c83595196197",
+      "procedure_info_evidence_id": "ev_6718f641662985a05397ea5f9923da4b2f8beb8fce3e69be64472cc19aff7c4f",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-02.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-02/006-procedure_info.json",
+        "sha256": "28b1405bb02bfd53363045f59de86fbcb18af3dc967e69190439584833ae0ec7"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-02.json"
+    },
+    {
+      "file": "s02-007-pseudocode.c",
+      "sha256": "48380ac92209c09c203f79c03195dbbb0c68674f055c3c75cd591a4de8a9b21b",
+      "procedure": "ram:0x10098980",
+      "actual_entry": "0x10098930",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x10098930",
+            "end": "0x100989d8"
+          }
+        ],
+        "total_bytes": 169,
+        "span_bytes": 169,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_6480711a1fcc86ddef414d88d17bfaba2cddfffe291c5cc872c7187fc1e27bd5",
+      "procedure_info_evidence_id": "ev_45c98226836c05e6c48ff65c91a6ebb6daf32730b64f85cf4b73564ec2620c4e",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-02.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-02/008-procedure_info.json",
+        "sha256": "b1a3e184651bdf40738f2ba2e39d79892c655a700642da49e0b9c46288cf1bf5"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-02.json"
+    },
+    {
+      "file": "s02-009-pseudocode.c",
+      "sha256": "4b0dbe90798cabf05ce60ccaa85e63f9dc36d10cb5b0ddfef82e357bd554c4aa",
+      "procedure": "ram:0x10006e40",
+      "actual_entry": "0x10006e40",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x10006e40",
+            "end": "0x10006e45"
+          }
+        ],
+        "total_bytes": 6,
+        "span_bytes": 6,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_f73aac452a25f65c70631714b5a3c4a5b34444547a345d3c1334871d429c0a92",
+      "procedure_info_evidence_id": "ev_8e112b7ed707d65a33c93a907e0f4ad8391e37271adc95480d284ca8e3c6c0cf",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-02.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-02/010-procedure_info.json",
+        "sha256": "8d7f449263405e0336be2555f5c1b50f3cd10fbdf697c95c688b7fc09d2bac28"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-02.json"
+    },
+    {
+      "file": "s03-000-pseudocode.c",
+      "sha256": "045e95bcbaf530b207540ecf8bb89fcd22bee2e369e30ebe0166e3f1740baacc",
+      "procedure": "ram:0x1003b0c0",
+      "actual_entry": "0x1003b0c0",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1003b0c0",
+            "end": "0x1003bb7f"
+          }
+        ],
+        "total_bytes": 2752,
+        "span_bytes": 2752,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_562329f53804fc4b07c90530ef8e0fca0119ed420c59976ae95e1dd787f3fc07",
+      "procedure_info_evidence_id": "ev_11de7661c808d2a8a38c5d29389c83553c53a547ff8118b059e9d2be76655b25",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-03.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-03/001-procedure_info.json",
+        "sha256": "6203cf23b18bccc2a9607919071668d7e27c55b8b96a06d805f95424817184aa"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-03.json"
+    },
+    {
+      "file": "s03-002-pseudocode.c",
+      "sha256": "ce60e6f078f600209cc505256c49c86aea4e0bd7e4803c496fc6581b0d5a8c11",
+      "procedure": "ram:0x10038df0",
+      "actual_entry": "0x10038df0",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x10038df0",
+            "end": "0x10039206"
+          }
+        ],
+        "total_bytes": 1047,
+        "span_bytes": 1047,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_d67cc2b096e7fde2103bad3924804db47cc4ef371bf5acdc098bac6aaaf8194a",
+      "procedure_info_evidence_id": "ev_6a6dc7d9253c738e63b5b9d4e8536e701d68d935fc34d5b3240a5cf347231b80",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-03.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-03/003-procedure_info.json",
+        "sha256": "c45d97f215542ef89c387f125104382613d84fd85ae4f60b458af14357764853"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-03.json"
+    },
+    {
+      "file": "s03-004-pseudocode.c",
+      "sha256": "2e7f7d991788a998a8c46c58b1d082a3e6df2c30c0ea40dfe46d3dc38b4d30b7",
+      "procedure": "ram:0x1003bf00",
+      "actual_entry": "0x1003bf00",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1003bf00",
+            "end": "0x1003bf04"
+          }
+        ],
+        "total_bytes": 5,
+        "span_bytes": 5,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "evidence_id": "ev_2234e53ba7471574f8201cfdbbbdff4f3aab3147cff29808ec5ce0f39f8647ad",
+      "procedure_info_evidence_id": "ev_148651a71b319f7cbeb1c03e05b90b47d83aae1af2f3d3efd49123e2f83a5257",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+      "portable_evidence": "analysis/client-profont-dependencies/provider-03.json",
+      "procedure_info_source": {
+        "path": "analysis/local/profont-dependencies-pass04-03/005-procedure_info.json",
+        "sha256": "6a2aee5e8a80ce1615f601dafa2d007e9eaa9ed499d6a79fd55d2ce06f536649"
+      },
+      "procedure_info_portable_evidence": "analysis/client-profont-dependencies/provider-03.json"
+    }
+  ]
+}

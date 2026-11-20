@@ -1,0 +1,644 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100017e0",
+      "proposed_name": "PM_DebugDrawBounds",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Рисует грани заданного AABB через отладочные частицы.",
+      "details_ru": [
+        "cdecl(mins,maxs,origin,color,life): строит восемь углов; для установленного бита оси берёт mins, иначе maxs, затем прибавляет origin. Шесть групп индексов из10211028 вызывают10002420.",
+        "Не создаёт collision geometry. Рёбра общие для соседних граней повторяются; локальный массив8 vec3 и cookie, нет сохранённого владения."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100017e0.c",
+        "analysis/server-pm-foundation/100017e0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002420.c",
+        "decompiled/server/partial-pass/functions/0x100024c0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100018f0",
+      "proposed_name": "PM_DebugDrawPhysentBounds",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Строит и показывает отладочную коробку физической сущности.",
+      "details_ru": [
+        "cdecl(index,color,life); допускает только0<index<pm.numphysent(+24c), physents база+250 stridee0. При model(+30) получает mins/maxs callback+4f598; ненулевые angles(+54) вращают восемь углов через10002ca0. Затем прибавляет origin(+24).",
+        "При modelNULL берёт physent.mins(+38)/maxs(+44), origin и не вращает поangles. Шесть quad10002420, параметрыcolor/life прокидываются без изменений. Index0/world исключён; callback/null/global guards здесь отсутствуют."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100018f0.c",
+        "analysis/server-pm-foundation/100018f0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002ca0.c",
+        "decompiled/server/partial-pass/functions/0x10002420.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002420",
+      "proposed_name": "PM_DebugDrawQuad",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Вызывает четыре линии частиц по периметру четырёхугольника.",
+      "details_ru": [
+        "cdecl(tl,bl,tr,br,color,life), порядок рёбер tl→bl→br→tr→tl; каждый100024c0 с vert=0.",
+        "Не заливает грань и не строит mesh. Повторные конечные точки и одинаковые рёбра других quad не устраняются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002420.c",
+        "analysis/server-pm-foundation/10002420.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100024c0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100024c0",
+      "proposed_name": "PM_DebugParticleLine",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Размещает отладочные частицы с шагом2 вдоль отрезка.",
+      "details_ru": [
+        "cdecl(start,end,color,life,float vert). delta=end-start; Normalize100033d0 возвращает length и нормируетdelta. Для t=0,2,...<=length вызывает pm+4f55c(position=start+t*delta,color,life,0,truncToInt(vert)); ASM CVTTSS2SI подтверждает последнийint.",
+        "При нулевой длине выдаёт одну частицу; конец достигается только при подходящей длине. Callback соответствует PM_Particle по ABI. Нет лимита числа частиц/проверки pmNULL; NaN length пропускаетloop."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100024c0.c",
+        "analysis/server-pm-foundation/100024c0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100033d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100026e0",
+      "proposed_name": "PM_MathAngleBetween_NativeOrder",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Вычисляет angle-like значение с нестандартным порядком acos и нормировки.",
+      "details_ru": [
+        "cdecl(a,b), float вST0. Нулевая длина любого вектора→0. Иначе фактически acos(float dot(a,b)) / float(length(a)*length(b)), затем float-округление, *180f и /double pi, float результат. CALL1016b5e0 стоит ДО DIVSD1000275d.",
+        "Это НЕ acos(dot/(la*lb)): SDK формулу нельзя переносить поверх native. Domain clamp отсутствует; неединичные векторы могут дать иной результат/CRT domain path. CRT acos подтверждён fallback101827ff и строкой101ef4f0, runtime достижимость этого helper не установлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100026e0.c",
+        "analysis/server-pm-foundation/100026e0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002fd0.c",
+        "decompiled/server/partial-pass/functions/0x1016b5e0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100027a0",
+      "proposed_name": "PM_MathAngleInverseMatrix",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Строит обратную вращательную3x4 матрицу из Euler angles.",
+      "details_ru": [
+        "cdecl(angles,out12floats). Углы[pitch,yaw,roll] вградусах; каждый double multiply(pi/180) округляется вfloat перед sin/cos, результаты тожеfloat. Строки равны forward, -right, up; столбец translation[3,7,11]=0.",
+        "Ровно transpose3x3 функции10002940. Не принимаетposition, не проверяетNULL. Формулы и порядок матрицы приведены вcontract; sin/cos CRTABI вход/выходXMM0, не ложные pointer/void типыGhidra."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100027a0.c",
+        "analysis/server-pm-foundation/100027a0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1016bcc0.c",
+        "decompiled/server/partial-pass/functions/0x1016bb00.c",
+        "decompiled/server/partial-pass/functions/0x10002940.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002940",
+      "proposed_name": "PM_MathAngleMatrix",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Строит вращательную3x4 матрицу Euler с нулевой трансляцией.",
+      "details_ru": [
+        "cdecl(angles,out): первый столбецforward, второй-right, третийup; transpose3x3 относительно100027a0. out[3,7,11]=0. При angles0 получаемidentity.",
+        "Тригонометрические roundings такие же как100027a0; направление вращения подтверждено всеми assignments и SDKсравнением, не названием файла. Это не матрица с translation или scale."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002940.c",
+        "analysis/server-pm-foundation/10002940.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100027a0.c",
+        "decompiled/server/partial-pass/functions/0x1016bcc0.c",
+        "decompiled/server/partial-pass/functions/0x1016bb00.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002ae0",
+      "proposed_name": "PM_MathAngleVectors",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Преобразует Euler angles в направления forward/right/up.",
+      "details_ru": [
+        "cdecl(angles,forwardOrNull,rightOrNull,upOrNull). Строит три basis по pitch/yaw/roll sin/cos; любой output можетбытьNULL независимо. При нулевыхangles: forward(1,0,0),right(0,-1,0),up(0,0,1).",
+        "Все триsin/cos пары вычисляются до outputNULLguards. Формулы вcontract; right имеет обратный знак второго столбца AngleMatrix. Используется PMdispatcher и CalcRoll10003bb0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002ae0.c",
+        "analysis/server-pm-foundation/10002ae0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10008a00.c",
+        "decompiled/server/partial-pass/functions/0x10003bb0.c",
+        "decompiled/server/partial-pass/functions/0x1016bcc0.c",
+        "decompiled/server/partial-pass/functions/0x1016bb00.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002ca0",
+      "proposed_name": "PM_MathAngleVectorsTranspose",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Возвращает строки вращательной матрицы как три независимых вектора.",
+      "details_ru": [
+        "cdecl(angles,row0OrNull,row1OrNull,row2OrNull): результаты соответствуют трём строкам10002940, а не обычнымforward/right/up. Каждый destinationNULL допустим.",
+        "Используется100018f0: dot(localCorner,rowN) даётповёрнутую координатуN. Приangles0 результатidentity, в отличие от правого basis10002ae0 с y=-1."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002ca0.c",
+        "analysis/server-pm-foundation/10002ca0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100018f0.c",
+        "decompiled/server/partial-pass/functions/0x10002940.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002e30",
+      "proposed_name": "PM_MathCrossProduct",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Пишет векторное произведение a×b.",
+      "details_ru": [
+        "cdecl(a,b,out), триfloat SSE произведения/разности. out.x=ay*bz-az*by, out.y=az*bx-ax*bz, out.z=ax*by-ay*bx.",
+        "Запись идёт последовательно без общего временного вектора: out==a или out==b не гарантирован безопасным. Нет нормировки/NULLguard. ИспользуетсяVectorMatrix10003320."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002e30.c",
+        "analysis/server-pm-foundation/10002e30.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10003320.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002e90",
+      "proposed_name": "PM_MathVectorDistance",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Возвращает длину разности b-a через ST0.",
+      "details_ru": [
+        "cdecl(a,b); строит локальныйvec3 и зовёт10002fd0. Ghidravoid неверен: callee оставляетfloat вST0, cookie checker1013dbb3 на обычном пути его не снимает.",
+        "Исходные векторы не меняет; no squared-distance result. Float arithmetic/sqrt такие же как Length; отдельного EAXstatus нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002e90.c",
+        "analysis/server-pm-foundation/10002e90.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002fd0.c",
+        "decompiled/server/partial-pass/functions/0x1013dbb3.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002ef0",
+      "proposed_name": "PM_MathInterpolateAngles",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Интерполирует три угла по короткой дуге и изменяет исходные angles.",
+      "details_ru": [
+        "cdecl(start,end,out,t). Сначала10003040(start) и10003040(end) IN PLACE; для каждого delta=end-start применяет один±360 при выходе за±180, out=start+t*delta; затем10003040(out).",
+        "t неclamp[0,1]. Нормализация одношаговая, не modulo для произвольно больших углов; ±180 не изменяются. Это Euler interpolation, не quaternion/slerp."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002ef0.c",
+        "analysis/server-pm-foundation/10002ef0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10003040.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10002fd0",
+      "proposed_name": "PM_MathVectorLength",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Возвращает Евклидову длину трёх float-компонент.",
+      "details_ru": [
+        "cdecl(vec3), floatST0. Сумма квадратов вычисляетсяSSEfloat, расширяетсяdouble для SQRTSD, затем сноваfloat. Отрицательный/аномальный путь вызывает CRTsqrt1016be90.",
+        "Не меняет вектор и не нормирует его; не проверяетNULL/finite. Не путать с Normalize100033d0, который возвращает длину и мутируетinput."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10002fd0.c",
+        "analysis/server-pm-foundation/10002fd0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003040",
+      "proposed_name": "PM_MathNormalizeAnglesOnce",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Один раз поправляет каждую компоненту Euler на±360.",
+      "details_ru": [
+        "cdecl(float[3]), in place: >180 subtract360, <-180 add360, иначеоставить. Трикомпоненты отдельно; нетloop/modulo.",
+        "720→360, поэтому названиеNormalize не означает гарантированный[-180,180] для любого input. ±180 остаютсякакесть; caller10002ef0 меняет оба input черезэтотhelper."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003040.c",
+        "analysis/server-pm-foundation/10003040.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002ef0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100030e0",
+      "proposed_name": "PM_MathIntegerLog2SignedShift",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Считает число арифметических сдвигов до нуля.",
+      "details_ru": [
+        "cdecl(intvalue), EAXcount. Сначала SAR1; пока значение!=0 incrementcount и SAR1. Для положительногоn даётfloor(log2(n)), для0/1→0.",
+        "Отрицательные аргументы зацикливаются на-1: SAR, не SHR. Это не безопасный unsigned bit-scan и не определённый log2 для всей областиint."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100030e0.c",
+        "analysis/server-pm-foundation/100030e0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003100",
+      "proposed_name": "PM_MathVectorAngles",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Получает pitch/yaw вградусах из направления, roll=0.",
+      "details_ru": [
+        "cdecl(direction,outAngles). Еслиx=y=0: yaw0,pitch90 приz>0 иначе270 (включаянулевойвектор). Иначеyaw=atan2(y,x)*180/pi, pitch=atan2(z,float(sqrt(x*x+y*y)))*180/pi; отрицательнымрезультатам добавляет360.",
+        "Знакpitch здесь положительный вверх: не объявлять строгообратной10002ae0 безучётаconvention. CRT1016b5d0 используетx87 аргументы иdescriptor101ef400 сименемatan2; noNULL/finite/zerovectorerror."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003100.c",
+        "analysis/server-pm-foundation/10003100.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1016b5d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003250",
+      "proposed_name": "PM_MathVectorCompareExact",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Сравнивает три float без epsilon и возвращает0/1.",
+      "details_ru": [
+        "cdecl(a,b), EAX1 толькоесликаждаякомпонента float-equal. SSE UCOMISS+LAHF/TESTAH44 различаетunordered: NaN даёт0.",
+        "Это неmemcmp: +0 и-0 равны. При первомнесовпадении раннийreturn0; все3равныreturn1."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003250.c",
+        "analysis/server-pm-foundation/10003250.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003290",
+      "proposed_name": "PM_MathVectorNegateInPlace",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Меняет знаковые биты трёх float-компонент.",
+      "details_ru": [
+        "cdecl(vec3), каждыйDWORD XOR80000000. Мутируетровно12bytes, безарифметики.",
+        "Знаковые нули иpayloadNaN сохраняются, меняетсятолькознак. Не принимаетотдельногоoutput."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003290.c",
+        "analysis/server-pm-foundation/10003290.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100032d0",
+      "proposed_name": "PM_MathVectorMA",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Вычисляет out=a+scale*b по трём осям.",
+      "details_ru": [
+        "cdecl(a,float scale,b,out): триfloat MULSS/ADDSS последовательныезаписи. Не нормирует и не ограничиваетрезультат.",
+        "Обычныйout==a илиout==b допустим покомпонентно, но произвольное частичное перекрытие не гарантируется. Support water-current10004990 вызываетсbasevelocity какinput/output."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100032d0.c",
+        "analysis/server-pm-foundation/100032d0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10004990.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003320",
+      "proposed_name": "PM_MathVectorMatrix",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Строит right/up через cross products с отдельной вертикальной веткой.",
+      "details_ru": [
+        "cdecl(forward,right,up). Обычноright=normalize(forward×(0,0,1));up=normalize(right×forward). Исходныйforward не нормируется.",
+        "Еслиforward.x=forward.y=0, пишетright=(1,0,0),up=(-forward.z,0,0). Этаособаяветкадаётпараллельныеoutputs приz!=0; не заменять еёвоображаемымортонормальнымbasis. ВозвратыNormalize явно снимаютсяST0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003320.c",
+        "analysis/server-pm-foundation/10003320.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002e30.c",
+        "decompiled/server/partial-pass/functions/0x100033d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100033d0",
+      "proposed_name": "PM_MathVectorNormalize",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Нормирует vec3 на месте и возвращает первоначальную длину.",
+      "details_ru": [
+        "cdecl(vec3), floatST0. Читает3компоненты, sqrt суммыквадратов, округляетlengthfloat. Еслиlength!=0, умножаетсохранённыекомпоненты наfloat(1/length); иначеоставляетвектор.",
+        "Нулевойvector неизменен. Нет epsilon/finiteguard; NaN/overflow поведение определяетсяfloatоперациями. НельзяиспользоватьEAXкак длину. ParticleLine использует оба результата."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100033d0.c",
+        "analysis/server-pm-foundation/100033d0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100024c0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003490",
+      "proposed_name": "PM_MathVectorScale",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Умножает vec3 на scalar.",
+      "details_ru": [
+        "cdecl(input,floatscale,out), триfloat MULSS и последовательныезаписи. out==input допустим, отдельноговременногоvec3нет.",
+        "Не делит на длину, неограничиваетзначения, не выделяетпамять."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003490.c",
+        "analysis/server-pm-foundation/10003490.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100034d0",
+      "proposed_name": "PM_MathVectorTransform3x4",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Применяет три строки матрицы3x4 к точке.",
+      "details_ru": [
+        "cdecl(point,matrix,out): out[i]=dot(point,row[i].xyz)+row[i].w. Row-major3x4, translation входит врасчёт.",
+        "Записиout.x/y/z чередуются с повторнымчтениемpoint: out==point не гарантирован безопасным. Этоpointtransform, неpure rotate/normal inverse-transpose."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100034d0.c",
+        "analysis/server-pm-foundation/100034d0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003570",
+      "proposed_name": "PM_MathDotProductX87",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Возвращает скалярное произведение векторов через x87.",
+      "details_ru": [
+        "cdecl(a,b), ST0=(ay*by+ax*bx)+az*bz; арифметикаFMUL/FADDP, безпромежуточнойSSEfloatзаписи.",
+        "Результатостаётсярасширеннымx87 доокругленияcaller; не обещаетbit-identical SSEdot. Никакоговыходногобуфера/нормировки."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003570.c",
+        "analysis/server-pm-foundation/10003570.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003590",
+      "proposed_name": "PM_MathVectorAdd",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Складывает два vec3.",
+      "details_ru": [
+        "cdecl(a,b,out), out[i]=a[i]+b[i], floatSSE. Пооднойоси: точноеaliasout==a/b допустимо.",
+        "Ровно3компоненты; noallocation/normalization/bounds check."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003590.c",
+        "analysis/server-pm-foundation/10003590.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100035d0",
+      "proposed_name": "PM_MathVectorCopyBits",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Копирует12bytes вектора тремя DWORDоперациями.",
+      "details_ru": [
+        "cdecl(source,destination). MOV дляx,y,z, неfloatconversion; сохраняетNaNpayload иsignedzero.",
+        "Неmemmove: произвольное частичноеперекрытие можетизменить последующиечтения; source==destination допустим."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100035d0.c",
+        "analysis/server-pm-foundation/100035d0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100035f0",
+      "proposed_name": "PM_MathVectorSubtract",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Вычитает второй vec3 из первого.",
+      "details_ru": [
+        "cdecl(a,b,out), out[i]=a[i]-b[i] floatSSE, втакомпорядке. Три последовательныекомпоненты.",
+        "Точноеaliasout==a/b допустимо, произвольноеперекрытие не гарантируется; noallocation/normalization."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100035f0.c",
+        "analysis/server-pm-foundation/100035f0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003630",
+      "proposed_name": "PM_MathAngleModQuantized16",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Квантует и заворачивает угол через16битный индекс.",
+      "details_ru": [
+        "cdecl(floatangle), floatST0. Double(angle)*double(65536/360), CVTTSD2SI кsignedint сtruncationtowardzero, MOVZXAX, умножениеdouble(360/65536), округлениеfloat.",
+        "Дляобычныхfiniteinput диапазон[0,360) сшагом360/65536; неfmod и нетroundtonearest. Out-of-range/NaN следуютCVTTSD2SI иFPenvironment, отдельногoguardнет. Ghidrafloatконстантыскрываютdoubleарифметику."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003630.c",
+        "analysis/server-pm-foundation/10003630.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100037d0",
+      "proposed_name": "PM_AddFullGravity",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Применяет полный шаг гравитации и вертикальный basevelocity.",
+      "details_ru": [
+        "pm=global10220c50. gravityScale=pm+c0, нользаменяется1; velocity.z -= movevars.gravity *scale*frametime; затем velocity.z += basevelocity.z*frametime; basevelocity.z=0; tailJMP10004880 CheckVelocity.",
+        "В отличие отhalfgravity10003730 здесь НЕТwaterjumptime guard и НЕТкоэффициента0.5. Непереноситorigin и не обновляетground; последующийcheckможетисправить/ограничитьvelocity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100037d0.c",
+        "analysis/server-pm-foundation/100037d0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10003730.c",
+        "decompiled/server/partial-pass/functions/0x10004880.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003840",
+      "proposed_name": "PM_AddTouchDeduplicated",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Добавляетtrace вtouchindex, исключаяповторныйent и подставляяimpactvelocity.",
+      "details_ru": [
+        "cdecl(pmtrace_t trace BY VALUE0x44,vec3 velocityPointer), результатEAX0/1. Ищетtrace.ent(+30) средиpm.touchindex(+45494,stride44),count+45490. Duplicate→0 безобновленияданных; новыйкопируетtrace, заменяетdeltavelocity(+34..3c) указаннымvec3, сохраняетhitgroup(+40),count++,return1.",
+        "Приcount>=600 печатаетToo many entities were touched!, но НЕобрываетдобавление и неclamp. Velocitypointer требуетсятолькодляновогокасания. При signed count<0 возвращает EAX0 без добавления; NULL не проверяет; отфильтровкуworld/ent<=0 выполняютотдельныеcallers."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003840.c",
+        "analysis/server-pm-foundation/10003840.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10003c70.c",
+        "decompiled/server/partial-pass/functions/0x1013dbb3.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003bb0",
+      "proposed_name": "PM_CalcRollFromLateralVelocity",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Возвращаетнаклонкамеры отскоростивдольright.",
+      "details_ru": [
+        "cdecl(angles,velocity,rollangle,rollspeed), floatST0, несмотрянаvoidGhidra. rightстроит10002ae0;side=dot(velocity,right);sign=side>=0?1:-1;приabs(side)<rollspeed return sign*(abs(side)*rollangle/rollspeed), иначesign*rollangle.",
+        "Этоpurecalc: не пишетpm.punchangle/anglesсамостоятельно. 10004170 используетreturn дляroll; threshold<=0 не делит и даётполнуюамплитуду. Событияcookiechecker вC неозначаютпотерюfloatreturn."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003bb0.c",
+        "analysis/server-pm-foundation/10003bb0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10002ae0.c",
+        "decompiled/server/partial-pass/functions/0x10004170.c",
+        "decompiled/server/partial-pass/functions/0x1013dbb3.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003c70",
+      "proposed_name": "PM_CategorizePositionGround",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Обновляетwater/ground и приусловияхприжимаетorigin кповерхности.",
+      "details_ru": [
+        "Сначала10004990 watercheck. Приvelocity.z>180 ставитonground=-1 ивыходит. ИначеPlayerTracecallback+4f584(origin,origin-(0,0,2),flags0,ignore-1), hiddenreturnbuffer0x44. Еслиdouble(trace.normal.z)<double0.7 →ground=-1, иначetrace.ent.",
+        "Приground!=-1 сбрасываетwaterjumptime; приwaterlevel<2 и!startsolid&&!allsolid заменяетorigin наtrace.endpos. Независимоотвыбранногоground, приоригинальномtrace.ent>0 вызываетAddTouch стекущейvelocity: крутойсклонможетtouchбезground. Fraction1 не проверяетсялокально."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003c70.c",
+        "analysis/server-pm-foundation/10003c70.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10004990.c",
+        "decompiled/server/partial-pass/functions/0x10003840.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10003de0",
+      "proposed_name": "PM_CategorizeGroundTexture",
+      "subsystem": "movement",
+      "confidence": "high",
+      "summary_ru": "Определяеткороткоеимятекстурыподигроком и кодматериала.",
+      "details_ru": [
+        "Устанавливаетpm.sztexturename[0]=0 иchtexturetype(+1f0)=C(43). TraceTexturecallback+4f5bc(onground,origin,origin-(0,0,64));NULLоставляетdefaults. Пропускает2символа приleading+/- (анимационныйprefix), затемодин{,! ,~илиspace.",
+        "КопируетNULстроку вpm+f0 безлокальноголимита, ПОСЛЕкопии пишетNULв+fc (12символов), потом100056f0 case-insensitive lookup первых12 →materialchar. Это неboundedcopy: длинныйимяможетбытьскопированполностьюпередусечением. Никакогопроигрываниязвукавсамойфункции."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10003de0.c",
+        "analysis/server-pm-foundation/10003de0.asm",
+        "analysis/server-pm-foundation/contract.md",
+        "analysis/server-pm-foundation/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100056f0.c"
+      ]
+    }
+  ],
+  "subsystems": [
+    {
+      "name": "PM foundation",
+      "summary_ru": "33 функции: отладочные bounds/particles, точная векторная математика и Euler ABI, full gravity, touch dedup, ground/texture categorization. CRT math и SDK используются как подтверждающие зависимости; runtime parity не проверена."
+    }
+  ]
+}

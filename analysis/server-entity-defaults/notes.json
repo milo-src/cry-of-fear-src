@@ -1,0 +1,449 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1000d3b0",
+      "proposed_name": "Entity_SetNextThink_DefaultFlag",
+      "subsystem": "entity-core",
+      "summary_ru": "Передаёт время в виртуальный scheduler с дополнительным нулевым флагом.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, один DWORD времени на стеке читается MOVSS и передаётся без арифметического изменения; CALL [vtable+0c](time,0), затем RET4. Никакой собственной записи nextthink или проверки this нет; гарантированный bool результата не устанавливается.",
+        "В шести исследованных таблицах +0c=100171b0: при отсутствии parent/children записывает pev.nextthink и cached/desired times; иначе обновляет desired и вызывает scheduler. Второй нулевой параметр wrapper доходит до100c4880 через этот callee. Возможные другие overrides +0c сохраняют dispatch.",
+        "Подтверждённые native vtable slots: CPointEntity 0x10, CBaseAlias 0x10, CInfoGroup 0x10, CMultiAlias 0x10, CInfoAlias 0x10, CTriggerChangeAlias 0x10. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d3b0.c",
+        "analysis/server-entity-defaults/1000d3b0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100171b0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d3d0",
+      "proposed_name": "Entity_Virtual8c_ConstantZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает 0 из общего виртуального слота +8c.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело устанавливает весь EAX=0 через XOR EAX,EAX; RET4 удаляет 4 байт исходных аргументов.",
+        "ECX и переданные значения не читаются, память не меняется, callbacks не вызываются. Конкретные предметные имена и типы аргументов этого слота данным телом не доказаны; это постоянный default для перечисленных owner tables, не характеристика всех overrides.",
+        "Подтверждённые native vtable slots: CPointEntity 0x8c, CBaseAlias 0x8c, CInfoGroup 0x8c, CMultiAlias 0x8c, CInfoAlias 0x8c, CTriggerChangeAlias 0x8c. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d3d0.c",
+        "analysis/server-entity-defaults/1000d3d0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d3e0",
+      "proposed_name": "Entity_Virtual84_NoOp",
+      "subsystem": "entity-core",
+      "summary_ru": "Пустой общий виртуальный метод +84 с native cleanup 8 байт.",
+      "confidence": "high",
+      "details_ru": [
+        "Всё тело — RET 8. Не читает ECX/аргументы, не изменяет память, EAX или x87 результат и не вызывает функции. Удаляет 8 байт аргументов, хотя Ghidra показывает void(void). Сохранение входного EAX не является определённым возвращаемым значением.",
+        "Роль предметного callback за пределами слота не установлена. В частности slot0/1000d590 не освобождает объект или entvars; положение первым в таблице само по себе не доказывает destructor. Нельзя объединять разные адреса только по одинаковому RET.",
+        "Подтверждённые native vtable slots: CPointEntity 0x84, CBaseAlias 0x84, CInfoGroup 0x84, CMultiAlias 0x84, CInfoAlias 0x84, CTriggerChangeAlias 0x84. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d3e0.c",
+        "analysis/server-entity-defaults/1000d3e0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d3f0",
+      "proposed_name": "Entity_Virtual88_NoOp",
+      "subsystem": "entity-core",
+      "summary_ru": "Пустой общий виртуальный метод +88 с native cleanup 8 байт.",
+      "confidence": "high",
+      "details_ru": [
+        "Всё тело — RET 8. Не читает ECX/аргументы, не изменяет память, EAX или x87 результат и не вызывает функции. Удаляет 8 байт аргументов, хотя Ghidra показывает void(void). Сохранение входного EAX не является определённым возвращаемым значением.",
+        "Роль предметного callback за пределами слота не установлена. В частности slot0/1000d590 не освобождает объект или entvars; положение первым в таблице само по себе не доказывает destructor. Нельзя объединять разные адреса только по одинаковому RET.",
+        "Подтверждённые native vtable slots: CPointEntity 0x88, CBaseAlias 0x88, CInfoGroup 0x88, CMultiAlias 0x88, CInfoAlias 0x88, CTriggerChangeAlias 0x88. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d3f0.c",
+        "analysis/server-entity-defaults/1000d3f0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d420",
+      "proposed_name": "Entity_Virtual70_ConstantMinusOne",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает -1 из общего виртуального слота +70.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело устанавливает весь EAX=0xffffffff через OR EAX,-1; plain RET, без удаления аргументов.",
+        "ECX и переданные значения не читаются, память не меняется, callbacks не вызываются. Конкретные предметные имена и типы аргументов этого слота данным телом не доказаны; это постоянный default для перечисленных owner tables, не характеристика всех overrides.",
+        "Подтверждённые native vtable slots: CPointEntity 0x70, CBaseAlias 0x70, CInfoGroup 0x70, CMultiAlias 0x70, CInfoAlias 0x70, CTriggerChangeAlias 0x70. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d420.c",
+        "analysis/server-entity-defaults/1000d420.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d430",
+      "proposed_name": "Entity_BodyTarget_DefaultCenter",
+      "subsystem": "entity-core",
+      "summary_ru": "Заполняет возвращаемый вектор через виртуальный Center, игнорируя дополнительный вход.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; первый stack DWORD — caller-owned out[3], второй DWORD не читается. Вызывает virtual+fc(out), затем явно возвращает первый pointer в EAX и RET8. Это struct-return-подобный ABI с дополнительным входом, не одна функция pointer→pointer из псевдокода.",
+        "Во всех шести таблицах +fc=1000d4a0, поэтому default возвращает центр absmin/absmax. Вызов остаётся виртуальным: override +fc изменит результат без замены этого wrapper. Аналитическое BodyTarget согласуется с SDK, но тип игнорируемого аргумента и исходное имя независимо не восстановлены.",
+        "Подтверждённые native vtable slots: CPointEntity 0x108, CBaseAlias 0x108, CInfoGroup 0x108, CMultiAlias 0x108, CInfoAlias 0x108, CTriggerChangeAlias 0x108. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d430.c",
+        "analysis/server-entity-defaults/1000d430.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000d4a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d450",
+      "proposed_name": "Entity_ReadOrigin_IgnoreContext",
+      "subsystem": "entity-core",
+      "summary_ru": "Копирует текущий origin в caller-owned возвращаемый вектор.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; entvars pointer берётся из this+4. DWORD-компоненты pev+0x8/0xc/0x10 копируются в out[3] без float arithmetic. Native ENTVARS descriptor подтверждает поле origin. EAX=out, RET8: второй входной DWORD существует по cleanup, но не читается.",
+        "Нет вычисления позиции на время, parent transform, интерполяции или выделения нового вектора. This/pev/out не проверяются; нулевой входной pointer не безопасен. Последовательное копирование не даёт общего memmove-контракта для частичного overlap.",
+        "Подтверждённые native vtable slots: CPointEntity 0x18, CBaseAlias 0x18, CInfoGroup 0x18, CMultiAlias 0x18, CInfoAlias 0x18, CTriggerChangeAlias 0x18. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d450.c",
+        "analysis/server-entity-defaults/1000d450.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d470",
+      "proposed_name": "Entity_Virtual20_FloatZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает вещественный ноль через x87 из virtual+20.",
+      "confidence": "high",
+      "details_ru": [
+        "Native FLDZ; RET4, игнорируемый DWORD аргумента. Результат ST0=+0; EAX не устанавливается. ECX/память не читаются, side effects отсутствуют кроме x87 stack/возврата.",
+        "Это не integer false и не pointer NULL. Предметная роль слота остаётся ограничена owner tables; аналогия GetDelay для +98 не заменяет доказательство original method name.",
+        "Подтверждённые native vtable slots: CPointEntity 0x20, CBaseAlias 0x20, CInfoGroup 0x20, CMultiAlias 0x20, CInfoAlias 0x20, CTriggerChangeAlias 0x20. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d470.c",
+        "analysis/server-entity-defaults/1000d470.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d480",
+      "proposed_name": "Entity_ReadVelocity_IgnoreContext",
+      "subsystem": "entity-core",
+      "summary_ru": "Копирует текущий velocity в caller-owned возвращаемый вектор.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; entvars pointer берётся из this+4. DWORD-компоненты pev+0x20/0x24/0x28 копируются в out[3] без float arithmetic. Native ENTVARS descriptor подтверждает поле velocity. EAX=out, RET8: второй входной DWORD существует по cleanup, но не читается.",
+        "Нет вычисления позиции на время, parent transform, интерполяции или выделения нового вектора. This/pev/out не проверяются; нулевой входной pointer не безопасен. Последовательное копирование не даёт общего memmove-контракта для частичного overlap.",
+        "Подтверждённые native vtable slots: CPointEntity 0x1c, CBaseAlias 0x1c, CInfoGroup 0x1c, CMultiAlias 0x1c, CInfoAlias 0x1c, CTriggerChangeAlias 0x1c. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d480.c",
+        "analysis/server-entity-defaults/1000d480.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d4a0",
+      "proposed_name": "Entity_CenterFromAbsoluteBounds",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает середину мирового axis-aligned bounding box.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; первый stack DWORD — out[3], EAX=out, RET4. Для каждой оси SSE ADDSS(absmax,absmin), затем MULSS на raw float0.5@101a1dd8. Поля pev+c4 и+d0 подтверждены native ENTVARS как absmin/absmax.",
+        "Не использует origin/mins/maxs модели и не пересчитывает collision bounds. Все записи только в out; актуальность absbounds обеспечивает внешний producer. Нет finite/overflow защиты: сумма сначала округляется как float. Вызывается virtual+fc, в том числе wrapper1000d430.",
+        "Подтверждённые native vtable slots: CPointEntity 0xfc, CBaseAlias 0xfc, CInfoGroup 0xfc, CMultiAlias 0xfc, CInfoAlias 0xfc, CTriggerChangeAlias 0xfc. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d4a0.c",
+        "analysis/server-entity-defaults/1000d4a0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000d430.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d570",
+      "proposed_name": "Entity_Virtual50_ConstantZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает 0 из общего виртуального слота +50.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело устанавливает весь EAX=0 через XOR EAX,EAX; plain RET, без удаления аргументов.",
+        "ECX и переданные значения не читаются, память не меняется, callbacks не вызываются. Конкретные предметные имена и типы аргументов этого слота данным телом не доказаны; это постоянный default для перечисленных owner tables, не характеристика всех overrides.",
+        "Подтверждённые native vtable slots: CPointEntity 0x50, CBaseAlias 0x50, CInfoGroup 0x50, CMultiAlias 0x50, CInfoAlias 0x50, CTriggerChangeAlias 0x50. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d570.c",
+        "analysis/server-entity-defaults/1000d570.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d580",
+      "proposed_name": "Entity_Virtual54_NoOp",
+      "subsystem": "entity-core",
+      "summary_ru": "Пустой общий виртуальный метод +54 с native cleanup 4 байт.",
+      "confidence": "high",
+      "details_ru": [
+        "Всё тело — RET 4. Не читает ECX/аргументы, не изменяет память, EAX или x87 результат и не вызывает функции. Удаляет 4 байт аргументов, хотя Ghidra показывает void(void). Сохранение входного EAX не является определённым возвращаемым значением.",
+        "Роль предметного callback за пределами слота не установлена. В частности slot0/1000d590 не освобождает объект или entvars; положение первым в таблице само по себе не доказывает destructor. Нельзя объединять разные адреса только по одинаковому RET.",
+        "Подтверждённые native vtable slots: CPointEntity 0x54, CBaseAlias 0x54, CInfoGroup 0x54, CMultiAlias 0x54, CInfoAlias 0x54, CTriggerChangeAlias 0x54. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d580.c",
+        "analysis/server-entity-defaults/1000d580.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d590",
+      "proposed_name": "Entity_Virtual00_NoOp",
+      "subsystem": "entity-core",
+      "summary_ru": "Пустой общий виртуальный метод +00 с native cleanup 0 байт.",
+      "confidence": "high",
+      "details_ru": [
+        "Всё тело — RET 0. Не читает ECX/аргументы, не изменяет память, EAX или x87 результат и не вызывает функции. Сохранение входного EAX не является определённым возвращаемым значением.",
+        "Роль предметного callback за пределами слота не установлена. В частности slot0/1000d590 не освобождает объект или entvars; положение первым в таблице само по себе не доказывает destructor. Нельзя объединять разные адреса только по одинаковому RET.",
+        "Подтверждённые native vtable slots: CPointEntity 0x0, CBaseAlias 0x0, CInfoGroup 0x0, CMultiAlias 0x0, CInfoAlias 0x0, CTriggerChangeAlias 0x0. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d590.c",
+        "analysis/server-entity-defaults/1000d590.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d5f0",
+      "proposed_name": "Entity_EyePosition_Default",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает origin плюс view_ofs без дополнительного преобразования.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; pev=this+4; out[axis]=float(pev.view_ofs[axis]+pev.origin[axis]) через ADDSS. Поля+178 и+8 установлены native ENTVARS descriptors. EAX=out, RET4, хотя Ghidra void; out принадлежит caller.",
+        "Virtual+100 одинаков у шести таблиц. Соседний +104=1000d5a0 имеет те же операции, но является отдельным entry; одно равенство тел не доказывает взаимозаменяемость всех overrides. Ни recoil, ни angles, ни parent matrix здесь не применяются.",
+        "Подтверждённые native vtable slots: CPointEntity 0x100, CBaseAlias 0x100, CInfoGroup 0x100, CMultiAlias 0x100, CInfoAlias 0x100, CTriggerChangeAlias 0x100. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d5f0.c",
+        "analysis/server-entity-defaults/1000d5f0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000d5a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d640",
+      "proposed_name": "Entity_Virtualf8_ConstantZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает 0 из общего виртуального слота +f8.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело устанавливает весь EAX=0 через XOR EAX,EAX; plain RET, без удаления аргументов.",
+        "ECX и переданные значения не читаются, память не меняется, callbacks не вызываются. Конкретные предметные имена и типы аргументов этого слота данным телом не доказаны; это постоянный default для перечисленных owner tables, не характеристика всех overrides.",
+        "Подтверждённые native vtable slots: CPointEntity 0xf8, CBaseAlias 0xf8, CInfoGroup 0xf8, CMultiAlias 0xf8, CInfoAlias 0xf8, CTriggerChangeAlias 0xf8. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d640.c",
+        "analysis/server-entity-defaults/1000d640.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d6b0",
+      "proposed_name": "BaseAlias_ResolveNext_DefaultNull",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает отсутствие следующей alias-сущности в базовом классе.",
+      "confidence": "high",
+      "details_ru": [
+        "XOR EAX,EAX; RET4. Не читает this или исходный аргумент, не касается dirty queue/target state, не делает поиска и не выделяет память.",
+        "RTTI CBaseAlias vtable101a25bc +11c содержит этот entry. CInfoAlias101a296c переопределяет +11c на1000d6c0, CMultiAlias101a2830 на1000d6f0: они вызывают target search и возвращают entity pointer. Поэтому нулевой базовый result здесь — отсутствие найденного entity, а не bool успешного flush. CPointEntity/Group/ChangeAlias короткие таблицы не имеют этого слота.",
+        "Подтверждённые native vtable slots: CBaseAlias 0x11c. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d6b0.c",
+        "analysis/server-entity-defaults/1000d6b0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000d6c0.c",
+        "decompiled/server/partial-pass/functions/0x1000d6f0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d870",
+      "proposed_name": "Entity_Virtual28_NoOp",
+      "subsystem": "entity-core",
+      "summary_ru": "Пустой общий виртуальный метод +28 с native cleanup 4 байт.",
+      "confidence": "high",
+      "details_ru": [
+        "Всё тело — RET 4. Не читает ECX/аргументы, не изменяет память, EAX или x87 результат и не вызывает функции. Удаляет 4 байт аргументов, хотя Ghidra показывает void(void). Сохранение входного EAX не является определённым возвращаемым значением.",
+        "Роль предметного callback за пределами слота не установлена. В частности slot0/1000d590 не освобождает объект или entvars; положение первым в таблице само по себе не доказывает destructor. Нельзя объединять разные адреса только по одинаковому RET.",
+        "Подтверждённые native vtable slots: CPointEntity 0x28, CBaseAlias 0x28, CInfoGroup 0x28, CMultiAlias 0x28, CInfoAlias 0x28, CTriggerChangeAlias 0x28. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d870.c",
+        "analysis/server-entity-defaults/1000d870.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d880",
+      "proposed_name": "Entity_Virtual98_FloatZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает вещественный ноль через x87 из virtual+98.",
+      "confidence": "high",
+      "details_ru": [
+        "Native FLDZ; plain RET, аргументов по cleanup нет. Результат ST0=+0; EAX не устанавливается. ECX/память не читаются, side effects отсутствуют кроме x87 stack/возврата.",
+        "Это не integer false и не pointer NULL. Предметная роль слота остаётся ограничена owner tables; аналогия GetDelay для +98 не заменяет доказательство original method name.",
+        "Подтверждённые native vtable slots: CPointEntity 0x98, CBaseAlias 0x98, CInfoGroup 0x98, CMultiAlias 0x98, CInfoAlias 0x98, CTriggerChangeAlias 0x98. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d880.c",
+        "analysis/server-entity-defaults/1000d880.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000da10",
+      "proposed_name": "Entity_Virtual80_ConstantZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает 0 из общего виртуального слота +80.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело устанавливает весь EAX=0 через XOR EAX,EAX; plain RET, без удаления аргументов.",
+        "ECX и переданные значения не читаются, память не меняется, callbacks не вызываются. Конкретные предметные имена и типы аргументов этого слота данным телом не доказаны; это постоянный default для перечисленных owner tables, не характеристика всех overrides.",
+        "Подтверждённые native vtable slots: CPointEntity 0x80, CBaseAlias 0x80, CInfoGroup 0x80, CMultiAlias 0x80, CInfoAlias 0x80, CTriggerChangeAlias 0x80. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000da10.c",
+        "analysis/server-entity-defaults/1000da10.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000da20",
+      "proposed_name": "Entity_Virtual94_ConstantMinusOne",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает -1 из общего виртуального слота +94.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело устанавливает весь EAX=0xffffffff через OR EAX,-1; RET16 удаляет 16 байт исходных аргументов.",
+        "ECX и переданные значения не читаются, память не меняется, callbacks не вызываются. Конкретные предметные имена и типы аргументов этого слота данным телом не доказаны; это постоянный default для перечисленных owner tables, не характеристика всех overrides. Четыре DWORD cleanup у +94 не совпадают с трёхаргументным GiveAmmo стандартного SDK; такой прототип здесь не переносится.",
+        "Подтверждённые native vtable slots: CPointEntity 0x94, CBaseAlias 0x94, CInfoGroup 0x94, CMultiAlias 0x94, CInfoAlias 0x94, CTriggerChangeAlias 0x94. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000da20.c",
+        "analysis/server-entity-defaults/1000da20.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000da30",
+      "proposed_name": "Entity_TargetnameEqualsStringId",
+      "subsystem": "entity-core",
+      "summary_ru": "Сравнивает входной string_t с собственным targetname по содержимому.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; один DWORD string_t. Разрешает обе строки как gpGlobals+98 string pool base плюс string_t; собственный ID берётся pev+1d0, подтверждённый native field targetname. Побайтовое case-sensitive сравнение до NUL, без wildcard/alias resolution; возвращает полный EAX0/1, RET4.",
+        "Это не сравнение ID и не pev.target(+1cc). Разные ID с одинаковыми строками совпадут. ID0 не имеет special case: тоже адресует pool base. NULL/длина/валидность string_t не проверяются; функция не владеет строками.",
+        "Подтверждённые native vtable slots: CPointEntity 0xc8, CBaseAlias 0xc8, CInfoGroup 0xc8, CMultiAlias 0xc8, CInfoAlias 0xc8, CTriggerChangeAlias 0xc8. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000da30.c",
+        "analysis/server-entity-defaults/1000da30.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000da90",
+      "proposed_name": "Entity_Illumination_EngineQuery",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает engine illumination для собственного edict.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; читает pev=this+4, передаёт pev.containingEntity(+20c) в callback10222f84, удаляет один callback argument и plain RET. Callback EAX сохраняется; Ghidra void теряет результат.",
+        "GiveFnptrsToDll100b4aa0 копирует144 DWORD в10222f48. Смещение callback+3c означает slot15, совпадающий с pfnGetEntityIllum в enginefuncs_s. Это query illumination, не RemoveEntity (другой slot). Точный диапазон/вычисление освещённости остаётся engine callback boundary; локального cache/ownership transfer нет.",
+        "Подтверждённые native vtable slots: CPointEntity 0x10c, CBaseAlias 0x10c, CInfoGroup 0x10c, CMultiAlias 0x10c, CInfoAlias 0x10c, CTriggerChangeAlias 0x10c. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000da90.c",
+        "analysis/server-entity-defaults/1000da90.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000dad0",
+      "proposed_name": "Entity_IsAlive_Default",
+      "subsystem": "entity-core",
+      "summary_ru": "Проверяет deadflag и положительное здоровье в текущих entvars.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; EAX1 только если pev.deadflag(+174)==0 и pev.health(+164)>float0.0, иначе EAX0. COMISS/JBE также направляет unordered health в false; +Infinity проходит, NaN нет. Plain RET, без аргументов и мутаций.",
+        "Шесть native таблиц связывают entry с virtual+bc. DispatchSave10016ab0 использует этот virtual predicate для некоторых monster classnames, но может получить другой override; нельзя распространять default на все monsters. Не учитывает takedamage, classname, frozen flag, spectator или respawn timers.",
+        "Подтверждённые native vtable slots: CPointEntity 0xbc, CBaseAlias 0xbc, CInfoGroup 0xbc, CMultiAlias 0xbc, CInfoAlias 0xbc, CTriggerChangeAlias 0xbc. RTTI задаёт классы; это не инвентаризация всех subclasses игры."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000dad0.c",
+        "analysis/server-entity-defaults/1000dad0.asm",
+        "analysis/server-entity-defaults/contract.md",
+        "analysis/server-entity-defaults/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10016ab0.c"
+      ]
+    }
+  ]
+}

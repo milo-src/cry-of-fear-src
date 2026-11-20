@@ -1,0 +1,204 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100be5b0",
+      "proposed_name": "CBaseMonster_IsYawAligned",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет достигнут ли ideal yaw с нативным порогом 0.006.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без stack arguments, полный EAX0/1, RET. Вызывает 100bed20, округляет ST0 до float, ANDPS7fffffff снимает знак, затем расширяет в double и сравнивает <= rawdouble0.006 (101d54b0). Это не float0.006, расширенный в double.",
+        "COMISD/SETAE даёт 0 для NaN. Поля monster/entvars не меняются. RunTask использует результат для completion поворотов, но сама функция task не завершает."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100be5b0.c",
+        "analysis/server-monster-navigation/100be5b0.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bed20",
+      "proposed_name": "CBaseMonster_GetYawDelta",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает разницу ideal yaw и обработанного текущего yaw.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, без аргументов, результат ST0. Current= float-rounded10117420(pev.angles.y+54); desired=pev.ideal_yaw+ac. Exact equality даёт+0.0, иначе 10117360(desired, current). Не меняет ни current, ни desired.",
+        "Support10117360: float d=desired-current; при desired>current и d>=180 вычитает 360, иначе при desired<=current и d<=-180 прибавляет 360. Максимум одна коррекция; полного wrapping произвольных углов не гарантирует.",
+        "Особенность 10117420 подтверждена ASM/raw: отрицательная ветка (1-trunc(a/-360))*360+a, именно SUB, а не плюс. При a=-90 → 270, -360 → -360, -450 → -450. Поэтому аналитическое имя AngleMod нельзя интерпретировать как стандартный modulo. NaN/Inf/int overflow не считаются обычным угловым диапазоном."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bed20.c",
+        "analysis/server-monster-navigation/100bed20.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json",
+        "analysis/server-monster-navigation/10117420.asm",
+        "analysis/server-monster-navigation/10117360.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c00f0",
+      "proposed_name": "CBaseMonster_MakeIdealYaw",
+      "subsystem": "monsters",
+      "summary_ru": "Вычисляет ideal yaw к цели с особыми ограничениями классов и movementActivity.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(Vector BY VALUE), три float на stack, RET12; не Vector*. Exact classname monster_slowerstuck либо monster_spitter, либо BYTEthis+9!=0 → без записей. Смысл byte9 отдельно не установлен.",
+        "Для movementActivity+2d0==b входные абсолютные координаты(x, y, z) заменяет(-y, x, z); для c → (y, x, z) без negate x; иначе исходные. Затем subtract self.origin по 3 компонентам. Это не поворот target-origin; порядок преобразования существенен.",
+        "Передаёт pointer временного Vector в 1011a930; thunk → enginefuncs10222f48 slot9=VecToYaw, доказаны initializer100b4aa0 и SDK API slot. ST0 float записывает в pev.ideal_yaw+ac. Angles, yaw_speed, task/status не меняет; сглаживания нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c00f0.c",
+        "analysis/server-monster-navigation/100c00f0.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json",
+        "analysis/server-monster-navigation/1011a930.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1ab0",
+      "proposed_name": "CBaseMonster_ResetRouteHead",
+      "subsystem": "monsters",
+      "summary_ru": "Сбрасывает sentinel первой точки маршрута и текущий индекс.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, без stack аргументов, RET: this+244=0 (route[0].flags), this+2bc=0(index). Нет memset; coordinates и остальные 7flags сохраняются.",
+        "Не очищает goalKind+2b8, moveGoal+2c4, activity+2d0 или wait+2c0. Встроенный route array не выделяется/освобождается. BuildRoute и RefreshRoute используют этот узкий reset."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c1ab0.c",
+        "analysis/server-monster-navigation/100c1ab0.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1a70",
+      "proposed_name": "CBaseMonster_ClearRouteState",
+      "subsystem": "monsters",
+      "summary_ru": "Очищает заголовок маршрута, цель движения и один memory bit.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без аргументов; вызывает 100c1ab0, затем pev+130=0, memory+2ec&=~20, goalKind+2b8=0, movementActivity+2d0=1. Native descriptors подтверждают memory/activity; native sequence находится+12c, не+130. Смежное animation DWORD130 здесь не выдаётся за sequence.",
+        "Не меняет velocity, currentActivity+214, idealActivity+218, moveGoal, wait/taskstatus. Следовательно это сброс route state, а не доказанная полная остановка физики. Restore и taskcompletion вызывают этот helper; встроенная память и entityownership не освобождаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c1a70.c",
+        "analysis/server-monster-navigation/100c1a70.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1080",
+      "proposed_name": "CBaseMonster_MoveToLocation",
+      "subsystem": "monsters",
+      "summary_ru": "Задаёт местоположение цели и возвращает результат обновления маршрута.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(int activity, float wait, Vector* goal), RET12. Пишет this+2d0=activity, +2c0=wait, +2b8=40, копирует 12bytes goal → +2c4. Pointer не проверяется.",
+        "Вызывает 100bddb0, EAX сохраняется через POP EBP/RET; фактический возврат 0/1, Ghidra void ошибочен. Callers StartTask и FindCover проверяют его.",
+        "Failure не откатывает activity/wait/goalKind/goal. Сам helper не двигает origin и не ставит taskfail; дополнительные route mutations происходятв RefreshRoute."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c1080.c",
+        "analysis/server-monster-navigation/100c1080.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1120",
+      "proposed_name": "CBaseMonster_MoveToTarget",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает target EHANDLE как цель и обновляет маршрут.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(int activity, float wait), RET8. Записывает this+2d0=activity, +2c0=wait, +2b8=1, вызывает 100bddb0. ReturnEAX передаётся без изменений, не void.",
+        "Сам не копирует m_vecMoveGoal и не принимает target параметром: RefreshRoute берёт EHANDLEthis+18c. Проверка target и route success происходит там; новые state fields остаются при failure. Нет automatic rollback/physicalmove/taskfailure."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c1120.c",
+        "analysis/server-monster-navigation/100c1120.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bddb0",
+      "proposed_name": "CBaseMonster_RefreshRoute",
+      "subsystem": "monsters",
+      "summary_ru": "Перестраивает маршрут по точному типу сохранённой цели.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без аргументов, EAX0/1. Всегда 100c1ab0, затем switch exact goalKind+2b8. Raw6targettable100bded8 и 64byteremap100bdef0 подтверждены; комбинация битов не считается несколькими целями.",
+        "Goal1: EHANDLEtarget+18c должен пройти 10017780; затем BuildRoute(target.origin, 1, target) через 10017790/100177a0. Invalid → 0. Goal2: BuildRoute(enemyLKP+2f4, 2, EHANDLEenemy+184), enemy pointer может NULL. Goal40: BuildRoute(&moveGoal+2c4, 40, NULL). EAXcallee возвращается.",
+        "Goal10: от borrowedentitythis+0c до 8 звеньев; копирует entity.pev.origin в route[i], flags10, next через virtual+dc. Если nextNULL, OR80 в текущий flags. Возвращает 1 даже при начальном NULL/пустом route; при цепи длиннее 8 последний flags без 80. this+0c не обновляет, циклы не отслеживает.",
+        "Goal20:100bdc10(moveGoal BY VALUE), передаёт его EAX; helper реально 0/1 несмотря Cvoid. Othergoal → 0 после reset. BuildRoute ветки повторяют RouteNew; прежние remaining flags не очищены. Наличие success1 не доказывает конечную точку route или проходимость всего пути."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bddb0.c",
+        "analysis/server-monster-navigation/100bddb0.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json",
+        "analysis/server-monster-navigation/100bdc10.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bcbc0",
+      "proposed_name": "CBaseMonster_BuildRoute",
+      "subsystem": "monsters",
+      "summary_ru": "Пробует прямой проход, detour и графовый маршрут с разными кодами local-move.",
+      "confidence": "medium",
+      "details_ru": [
+        "Thiscall(Vector* goal, uintflags, entity*target), RET12, EAX0/1. RouteNew; 100c1a20 выбирает приоритетный bit1, 2, 10, 20, 40 → goalKind+2b8, иначе 0. route[0]=goal, flags=flags|80; inputflag bits не ограничиваются.",
+        "Virtual158(&origin, goal, target, &distance) получает pointer выходного float: caller переиспользует stackslot входного goalpointer, сохранив goal в EDI. Return2 → немедленный success1; return1 → сразу graphfallback; остальные → virtual1bc(&origin, goal, distance, target, &apex). Не сводить localcode к bool.",
+        "Detourtrue:route[0]=apex, flags=flags|8; route[1]=goal, flags=flags|80; 100c1ad0(target), return1. Detourfalse или localcode1:100bdc10(goalVector BY VALUE); false → 0, nonzero → moveGoal=goal, 100c1ad0(target), return1.",
+        "Direct/detour ветки сами moveGoal не копируют; failure сохраняет начальные goalKind/route0 и индекс reset. Не инициализированный отдельно distance ожидает callee write. Ни универсальных NULLguards, ни rollback нет.",
+        "CGenericMonster vtable101ce36c:158=100bd590, 1bc=100bdf80. Their full geometry, graph pathfinder и simplifier100c1ad0 требуют отдельных REVIEW; local branching и ABI здесь подтверждены ASM. Overrides других classes могут менять смысл callback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bcbc0.c",
+        "analysis/server-monster-navigation/100bcbc0.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json",
+        "analysis/server-monster-navigation/100c1a20.asm",
+        "analysis/server-monster-navigation/100bdc10.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100be5e0",
+      "proposed_name": "CBaseMonster_FindCover",
+      "subsystem": "monsters",
+      "summary_ru": "Отбирает узлы укрытия по расстоянию, trace, route cost и попытке MoveToLocation.",
+      "confidence": "medium",
+      "details_ru": [
+        "Thiscall(Vector source, VectorviewOffset, floatmin, floatmax), оба VectorBYVALUE, RET32, EAX0/1. maxexact0 → 784.0; min>double(max)*.5 → float(max*.5), другог oclamp нет. Graph102238b0/+4zero → severity2 и 0. Nearestself==-1 → severity2 и 0; nearestsource==-1 → self; hullselector получает this.",
+        "Nodecount102238c8<=0 → 0; nodes102238bc, stride58. Каждая iterationi вычисляет index=(global10225978+i) signedremainder count, сразу global=index+1. Неравномерный перебор:count4, cursor0 → 0, 2, 1, 1 при полном проходе, узел 3 не посещён. Отдельного negativecursor/overflowguard нет.",
+        "Distance3Dself → node:float сумма квадратов, doubleSQRT, floatrounding; принять min<=d<max. Trace(node+viewOffset, source+viewOffset, 1, 1, self.edict, &tr) через 1011a820, engineTraceLineflags101. Лишь tr.fraction+10 !=1 разрешает дальше; blocker/прочие traceflags не проверяются.",
+        "Если nearestself!=nearestsource, сравнивает float-roundedgraphcosts100ceaa0(self, candidate, hull, capabilities) и(source, candidate, ...). Sourcecost<selfcost или unordered → skip. Error0 в costhelper отдельно не обрабатывается, это не proof достижимости.",
+        "Затем virtual1cc(nodepointer) nonzero и MoveToLocation(4, 0, node) nonzero → return1; иначе continue. Concretegeneric1cc=10013480 даёт EAX1 RET4, но derivedoverride возможен. После callbackpaths перечитывает count, ++i, i<count; исчерпание 0. Cursor и возможные изменения route/activity после неудачных MoveTo сохраняются.",
+        "Все localbranches/байты проверены; graphnearest/cost/pathfinder и engineTrace semantics за этим интерфейсом не полностью разобраны. Sharedmutablegraph lifetime/валидность indices/pointers предполагаются. Никакой runtime/visual verification данным пакетом не заявляется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100be5e0.c",
+        "analysis/server-monster-navigation/100be5e0.asm",
+        "analysis/server-monster-navigation/contract.md",
+        "analysis/server-monster-navigation/evidence.json",
+        "analysis/server-monster-navigation/1011a820.asm",
+        "analysis/server-monster-navigation/10013480.asm"
+      ]
+    }
+  ]
+}

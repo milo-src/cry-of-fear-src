@@ -1,0 +1,62 @@
+{
+  "scope": "Independent static peer review of pass05 contracts; no target execution or runtime validation",
+  "reviews": [
+    {
+      "package": "analysis/server-studio-events",
+      "author": "/root/server_catalog",
+      "reviewer": "/root/client_catalog",
+      "primary_functions": 12,
+      "result": "PASS",
+      "focus": "FrameAdvance double threshold/wrap, event inclusive/exclusive bounds and loops, transition direction fallback, eye helper no-write, sound precache empty string",
+      "provenance_checked": "27 C, 27 ASM, 1062 byte rows, 11 tables, 115 strings, 4 cross references",
+      "findings": []
+    },
+    {
+      "package": "analysis/server-graph-helpers",
+      "author": "/root/client_catalog",
+      "reviewer": "/root/server_catalog",
+      "primary_functions": 10,
+      "result": "PASS after wording correction",
+      "focus": "Heap NaN/count, candidate generation ordering, integer bucket bounds, hull triples, dynamic door virtual state and flags",
+      "provenance_checked": "21 C, 21 ASM, 1559 byte rows, 116 literals, 2 vtables, 1 save table, 4 support hashes",
+      "findings": [
+        {"address": "0x100cef50", "finding": "Caller pop guard is count != 0, not signed count > 0", "resolution": "Author corrected notes and contract; evidence unchanged"}
+      ]
+    },
+    {
+      "package": "analysis/server-graph-precompute",
+      "author": "/root/shader_inventory",
+      "reviewer": "/root/server_catalog",
+      "primary_functions": 5,
+      "result": "PASS",
+      "focus": "Encoder identity128/tag80, missing delta, strict dedup bound, validator NaN, graph/viewer ECX and diagnostic wire",
+      "provenance_checked": "12 C, 13 ASM, 2575 byte rows, 16 raw, 4 support hashes and index",
+      "findings": []
+    },
+    {
+      "package": "analysis/server-graph-lifecycle",
+      "author": "/root",
+      "reviewer": "/root/client_catalog",
+      "primary_functions": 11,
+      "result": "PASS after address wording correction",
+      "focus": "Cached pivot and start255, load cache/partial readiness, flags1a8, hash steps, NodeEntity early return without removal",
+      "provenance_checked": "22 C, 22 ASM, 3249 byte rows, 269 raw including tables, 2 support hashes",
+      "findings": [
+        {"address": "0x100cb740", "finding": "Saved end100cb9a9 is final byte of JMP at100cb9a8, not its start", "resolution": "Root corrected notes and contract; extended ASM boundary unchanged"}
+      ]
+    },
+    {
+      "package": "analysis/server-graph-lifecycle",
+      "author": "/root",
+      "reviewer": "/root/shader_inventory",
+      "scope": "Load/save/clear and world/player caller composition with route producer",
+      "result": "PASS; implications clarified",
+      "provenance_checked": "6 C/ASM, 1002 byte rows",
+      "clarifications_added": [
+        "Save gate does not validate cached flag or pool/count coherence; malformed state need not round-trip",
+        "Loader copies row offsets/tags/delta without semantic validation",
+        "Late failure may retain serialized ready flags; world allocation fallback does not clear them"
+      ]
+    }
+  ]
+}

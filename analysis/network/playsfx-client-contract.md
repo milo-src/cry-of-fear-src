@@ -146,3 +146,7 @@ producer,ReadShort,ReadCoord. Все извлечённые opcode bytes све�
 Там же сохранены literal paths, fire/shoot,format,volume и doubles0.125/1.0.
 Исходные C для adapter/producer переиспользованы из `weapons-client-core/007`
 и `weapons-client-effects/000`; карточки обновлены и синхронизированы при интеграции этого этапа.
+
+## Уточнение зависимости formatter (pass04)
+
+`1000c900` разобран в [client-profont-dependencies](../client-profont-dependencies/contract.md): cdecl varargs wrapper передаёт размер `size_t(-1)` в общий printf backend. Это не bounded snprintf и не ограничение размером локального массива. Полный `100efb51` backend остаётся открытым; остальные ограничения PlaySFX выше сохраняются.

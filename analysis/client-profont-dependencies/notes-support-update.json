@@ -1,0 +1,26 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1003bf00",
+      "proposed_name": "Imported_vgui_Panel_paintBackground_1003bf00",
+      "subsystem": "menu",
+      "summary_ru": "Подтверждённый thunk пересылает вызов в импорт vgui::Panel::paintBackground.",
+      "confidence": "high",
+      "details_ru": [
+        "Уточнение существующей selector-only карточки: procedure_info подтверждает actual entry1003bf00 и body5bytes. Native JMP100b3704; там FF25[1013a958], PE import vgui.dll!?paintBackground@Panel@vgui@@MAEXXZ.",
+        "CHUDControl vtable101452cc+1bc ссылается на этот thunk. ECX/stack пересылаются без локальной обработки. Ghidra показывает перенаправленный pseudo target; это не самостоятельная рекурсивная реализация. Поведение external paintBackground отдельно не восстановлено."
+      ],
+      "evidence_paths": [
+        "analysis/client-profont-dependencies/contract.md",
+        "analysis/client-profont-dependencies/evidence.json",
+        "analysis/client-profont-dependencies/layout-evidence.json",
+        "decompiled/client/captures/profont-dependencies-pass04/s03-004-pseudocode.c",
+        "analysis/client-profont-dependencies/1003bf00-0.asm",
+        "analysis/client-profont-dependencies/provider-03.json",
+        "decompiled/client/captures/vgui-menu-actions/026-pseudocode.c",
+        "analysis/menu/vgui.md"
+      ]
+    }
+  ]
+}

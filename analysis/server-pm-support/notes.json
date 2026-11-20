@@ -1,0 +1,527 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100044b0",
+      "proposed_name": "PM_CheckStuck",
+      "subsystem": "movement",
+      "summary_ru": "Проверяет solid-позицию и пытается освободить игрока ограниченным перебором смещений.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI cdecl без аргументов: EAX=0 при свободной/успешно исправленной позиции, EAX=1 при оставшемся stuck или throttled проверке; Ghidra void неверен. PM_TestPlayerPosition по +4f560 возвращает -1 для свободной позиции.",
+        "Если исходная позиция свободна, сбрасывает счётчик (player_index,server). На client side server==0 и hit==0 либо physent.model!=NULL пробует все54 offset от исходного origin, начиная с reset; при успехе переносит origin и возвращает0.",
+        "Общий путь использует float(Sys_FloatTime), last[player][server?0:1]; разрешён только last < now-0.05. Тогда записывает now, вызывает StuckTouch(hit,trace), пробует один offset. Свободный offset возвращает0, но origin меняется только при index>=27.",
+        "Если кандидат всё ещё блокируется, buttons&7 и hit physent.player!=0 включают дополнительную сетку x,y=-8,0,8; z=0,18,36,54,72 относительно исходного origin. Первый свободный вариант принят. Индексы player/entity здесь не валидируются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100044b0.c",
+        "analysis/server-pm-support/100044b0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10006120.c",
+        "decompiled/server/partial-pass/functions/0x100090c0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10004880",
+      "proposed_name": "PM_CheckVelocity",
+      "subsystem": "movement",
+      "summary_ru": "Обнуляет нечисловые/бесконечные компоненты origin и velocity; ограничивает скорость по каждой оси.",
+      "confidence": "high",
+      "details_ru": [
+        "Для каждой из3 осей маска (bits&0x7f800000)==0x7f800000 ловит не только NaN, но и +/-Infinity; соответствующее значение становится0, печатается диагностика.",
+        "Затем velocity ограничивается диапазоном [-movevars.maxvelocity,+movevars.maxvelocity] по +34; origin лишь проверяется на exponent mask. NULL PM/movevars не защищены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10004880.c",
+        "analysis/server-pm-support/10004880.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10004990",
+      "proposed_name": "PM_CheckWater",
+      "subsystem": "movement",
+      "summary_ru": "Вычисляет уровень жидкости по трём пробам и добавляет течение к basevelocity.",
+      "confidence": "high",
+      "details_ru": [
+        "ABI cdecl без аргументов, EAX=(waterlevel>1), а не void. Начинает waterlevel=0, watertype=-1; XY пробы — середина hull, Z первой — origin.z+mins[hull].z+1.",
+        "Ноги/середина признают contents -14..-3 либо -19..-17; голова признаёт -14..-3 либо только -19. Последовательно выставляются уровни1/2/3; watertype сохраняет первый contents. Голова Z=origin.z+view_ofs.z.",
+        "Truecontents первой пробы -14..-9 добавляет basevelocity += direction[-9-truecontents]*(50*waterlevel). Таблица направлений +X,+Y,-X,-Y,+Z,-Z подтверждена raw10211090. Повторный вызов может снова добавить течение: собственного обнуления basevelocity нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10004990.c",
+        "analysis/server-pm-support/10004990.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100032d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10004bd0",
+      "proposed_name": "PM_CheckWaterJump",
+      "subsystem": "movement",
+      "summary_ru": "Проверяет край перед игроком и запускает импульс выхода из воды.",
+      "confidence": "high",
+      "details_ru": [
+        "Вход только waterjumptime==0 и velocity.z>=-180. Нормализует горизонтальные velocity и forward; ненулевая скорость, направленная назад (dot<0), запрещает пробу.",
+        "Трасса point hull2 идёт от origin+(0,0,8) вперёд24. Нужны fraction<1 и abs(normal.z)<float(0.1). Затем верхняя проба начинается на origin.z+oldHullMax.z; до её результата movedir уже записан как sharedVector10220c40-50*первая normal.",
+        "Если верхняя trace.fraction==1: waterjumptime=2000, velocity.z=225, oldbuttons|=2, flags|=0x800. Usehull восстанавливается после трасс независимо от успеха второй; failed upper probe всё равно оставляет movedir. Проверки waterlevel внутри нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10004bd0.c",
+        "analysis/server-pm-support/10004bd0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100033d0.c",
+        "decompiled/server/partial-pass/functions/0x100032d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10004eb0",
+      "proposed_name": "PM_ClipVelocity",
+      "subsystem": "movement",
+      "summary_ru": "Проецирует скорость относительно нормали с overbounce и возвращает маску типа поверхности.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(in[3],normal[3],out[3],float overbounce), полный EAX: bit1 (значение1) при normal.z>0, bit2 при normal.z==0; при z<0 возвращает0. Не BYTE-only, MOV EAX,ECX подтверждён ASM.",
+        "backoff=dot(in,normal)*overbounce; out=in-normal*backoff. Каждая компонента обнуляется только при -0.1<out<0.1. Нормаль не нормализуется. Вызов in==out поддерживается вычислением dot до записи."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10004eb0.c",
+        "analysis/server-pm-support/10004eb0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10004fa0",
+      "proposed_name": "PM_CreateStuckOffsets",
+      "subsystem": "movement",
+      "summary_ru": "Создаёт общую таблицу54 трёхмерных кандидатов для исправления stuck.",
+      "confidence": "high",
+      "details_ru": [
+        "Обнуляет 0x288 байт с10220c60. Записывает сначала9 осевых смещений -0.125/0/+0.125, затем8 углов (+/-0.125)^3, затем Z=0/1/6, затем по3 осевых Y/X=-2/0/2, затем27 комбинаций XY=-2/0/2 и Z=0/1/6.",
+        "Итого явно заполняет53 записи; последняя54-я остаётся нулевой после memset. Дубликаты нуля сохраняются; таблица не является54 уникальными направлениями. Счётчики10220ee8 здесь не очищаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10004fa0.c",
+        "analysis/server-pm-support/10004fa0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100056f0",
+      "proposed_name": "PM_FindTextureType",
+      "subsystem": "movement",
+      "summary_ru": "Ищет код материала по имени текстуры в отсортированной таблице.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(char*name), возвращает только AL (MOV AL), upper EAX не гарантирован. Бинарный поиск по count10220fe8; strnicmp сравнивает первые12 байт имени, строки таблицы stride13.",
+        "Найденный код берётся из102229f0[index]; если нет записи или count<=0 — C(0x43). NULL name и некорректный count не защищены. Порядок обеспечивает100090e0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100056f0.c",
+        "analysis/server-pm-support/100056f0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100090e0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10005750",
+      "proposed_name": "PM_FixPlayerCrouchStuck",
+      "subsystem": "movement",
+      "summary_ru": "Сдвигает origin вертикально до выхода из solid, иначе восстанавливает исходную позицию.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(int step): если PM_TestPlayerPosition(origin,NULL)==-1, сразу выходит. Иначе до36 итераций origin.z+=float(step), затем повторная проверка.",
+        "Первый свободный origin оставляется; если все36 неудачны, восстанавливаются все3 исходные координаты. Step не обязан быть +/-1 и здесь не ограничен. Возвращаемого bool контракт не устанавливает."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10005750.c",
+        "analysis/server-pm-support/10005750.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100060f0",
+      "proposed_name": "PM_GetPhysEntInfo",
+      "subsystem": "movement",
+      "summary_ru": "Возвращает поле info физической сущности по индексу с включительной верхней границей.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(int index), полный EAX. Проверка signed 0<=index<=pm.numphysent(+24c), затем DWORD pm+2a0+index*e0 (physent.info); иначе -1.",
+        "Index==count разрешён именно native CMP/JG; не исправлять на стандартное index<count в описании. PM pointer не проверяется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100060f0.c",
+        "analysis/server-pm-support/100060f0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10006120",
+      "proposed_name": "PM_GetRandomStuckOffsets",
+      "subsystem": "movement",
+      "summary_ru": "Выдаёт следующий циклический offset для пары игрок/сторона исполнения.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(player,server,outVec), EAX=index. Counter10220ee8[2*player+server] увеличивается, старое signed значение %54 выбирает triplet10220c60[index].",
+        "Это детерминированный цикл, не RNG. Player/server/out и отрицательный/переполненный counter не валидируются; signed remainder может дать отрицательный индекс."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10006120.c",
+        "analysis/server-pm-support/10006120.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10006180",
+      "proposed_name": "PM_GetVisEntInfo",
+      "subsystem": "movement",
+      "summary_ru": "Возвращает info из списка видимых physent, включая индекс равный count.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(int index): signed 0<=index<=DWORD(pm+24754), возвращает DWORD(pm+247a8+index*e0), иначе -1. Полный EAX.",
+        "Включительная граница count подтверждена JG, дополнительных проверок массива/NULL нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10006180.c",
+        "analysis/server-pm-support/10006180.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100061b0",
+      "proposed_name": "PM_InWaterExceptSpecialContents",
+      "subsystem": "movement",
+      "summary_ru": "Сообщает глубокое погружение с исключением contents -19.",
+      "confidence": "high",
+      "details_ru": [
+        "Полный EAX=1 только при signed waterlevel>1 и watertype!=-19, иначе0. Отличается от PM_CheckWater10004990, чей результат зависит только от уровня."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100061b0.c",
+        "analysis/server-pm-support/100061b0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100061d0",
+      "proposed_name": "PM_Init",
+      "subsystem": "movement",
+      "summary_ru": "Привязывает общий PM pointer, подготавливает stuck offsets и таблицу материалов.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(pm*): записывает10220c50, вызывает10004fa0 затем10006200, устанавливает DWORD10220c58=1. Вызовы не обёрнуты success-check; material loader может оставить таблицу пустой.",
+        "Повторный Init снова создаёт offsets, но material loader использует собственный guard10220c5c. Сброс всех PM глобалов или выделение памяти здесь не происходит."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100061d0.c",
+        "analysis/server-pm-support/100061d0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10004fa0.c",
+        "decompiled/server/partial-pass/functions/0x10006200.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10006200",
+      "proposed_name": "PM_InitTextureTypes",
+      "subsystem": "movement",
+      "summary_ru": "Загружает и сортирует до512 кодов материалов из materials.txt либо physinfo mtl.",
+      "confidence": "high",
+      "details_ru": [
+        "Guard10220c5c!=0 — выход. При начале очищает512 имён по13 байт,512 кодов и count. Physinfo key mtl: NULL/strlen<3 использует sound/materials.txt; иначе custom path. COM_FileSize, COM_LoadFile(path,5,NULL); custom diagnostic печатается даже при load failure.",
+        "NULL file оставляет loaded flag0. Ненулевой файл читается memfgets с512-byte local buffer и limit511. Пропускает whitespace, пустые строки, slash-first и первый неалфавитный символ; первый символ uppercase становится кодом.",
+        "Имя после кода/whitespace копируется только если найдены непустой token И ненулевой delimiter после него. Последний token, заканчивающийся непосредственно NUL без whitespace, не принимается. Имя обрезается до12 байт +NUL; максимум512 записей. Затем FreeFile, sort100090e0, loaded=1 даже при0 принятых строк.",
+        "Зависимость locale/CRT isspace/isalpha и фактическое содержимое ресурсов этим статическим проходом не проверялись."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10006200.c",
+        "analysis/server-pm-support/10006200.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100090e0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10006e30",
+      "proposed_name": "PM_MaterialCodeToStepType",
+      "subsystem": "movement",
+      "summary_ru": "Преобразует байтовую букву материала в тип шага.",
+      "confidence": "high",
+      "details_ru": [
+        "Полный EAX: B→19,D→2,F→11,G→4,H→17,I→13,M→1,O→14,P→15,R→18,S→6,T→5,U→12,V→3,W→9,Y→16,Z→10; всё остальное0. Только low-byte аргумента, регистр значим; lowercase не преобразуется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10006e30.c",
+        "analysis/server-pm-support/10006e30.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100070a0",
+      "proposed_name": "PM_PhysicsToss",
+      "subsystem": "movement",
+      "summary_ru": "Обрабатывает перемещение toss/bounce с водой, gravity, trace и отскоком.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала CheckWater; velocity.z>0 снимает onground. Если на земле и velocity/basevelocity равны sharedVector10220c40, ранний выход. CheckVelocity; gravity helper100037d0 кроме movetype5/11/9.",
+        "Добавляет basevelocity для displacement=(velocity+basevelocity)*frametime, затем вычитает её из velocity перед PushEntity10008ef0. Allsolid устанавливает onground=trace.ent и velocity=sharedVector, затем немедленно возвращает без второго CheckWater.",
+        "При fraction!=1 clipping: overbounce=2-friction для type10,2 для11,1 иначе. Для normal.z>0.7: z ниже gravity*dt устанавливает землю и z=0; speed²<900 либо тип не10/11 останавливает все компоненты. Иначе ещё PushEntity((1-fraction)*dt*0.9*velocity). Обычный оставшийся путь снова вызывает CheckWater; ранние stationary и allsolid выходы его не вызывают.",
+        "Трассы и список касаний принадлежат внешним PM callbacks; отрицательные dt/friction здесь не нормализуются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100070a0.c",
+        "analysis/server-pm-support/100070a0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10003250.c",
+        "decompiled/server/partial-pass/functions/0x10003490.c",
+        "decompiled/server/partial-pass/functions/0x100037d0.c",
+        "decompiled/server/partial-pass/functions/0x10008ef0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10007470",
+      "proposed_name": "PM_PlayCustomStepSound",
+      "subsystem": "movement",
+      "summary_ru": "Подставляет вариант в первый знак ? и воспроизводит пользовательский звук шага.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(path,variant,float volume). Без ? играет исходную строку; иначе копирует всю строку включая NUL в global10222bf0 без length-check и меняет только первый ?:0→1,1→3,2→2,3→4,default→#.",
+        "PM_PlaySound(channel4,path,volume,0.8,flags0,pitch100). Shared scratch не thread-local; допустимая длина producer этим helper не обеспечивается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10007470.c",
+        "analysis/server-pm-support/10007470.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10007550",
+      "proposed_name": "PM_PlayStepSound",
+      "subsystem": "movement",
+      "summary_ru": "Выбирает шаги, custom sound overrides, водные эффекты и импульс камеры.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(int step,float volume). Сначала toggles iStepLeft(+98), даже если затем fuser3!=0 либо runfuncs==0 запрещает всё остальное. Reload flag10233900==1 сбрасывает material guard, вызывает loader и принудительно ставит guard1 даже при failure.",
+        "При waterlevel<3 играет equipment_movement (MP) или bag_movement (SP), channel0, pitch100+RandomLong(-30,30), volume0.7 только buttons1000 && flags40000, иначе0.1. Это происходит до MP footsteps-disable check.",
+        "SP и waterlevel<3: через10009dd0 camera impulse (-3,1,roll) при sprint-condition, иначе(-0.75,0.5,roll); roll0 при atoi(low)==0, иначе stepLeft? -2:1. Затем variant=RandomLong(0,1)+2*stepLeft. Только после этого MP && !movevars.footsteps возвращает.",
+        "Custom keys по raw PE: type6 psnd;7 wsnd;8 lsnd; остальные ssnd. Непустые длиной>=2 идут10007470 и возвращают. Для wsnd global10220fec cycle0→1(skip),1→2(play),2→3(play),3→0(play). Если custom отсутствует, лишь обычная ветка читает stype: -1→0, ненулевой→override,0→сохранить type.",
+        "Crouch flags4000 && waterlevel<3 добавляет crawl1..4, channel0,volume0.7,pitch100; не заменяет основной шаг. Таблица stock families/pitches и exact type19 twig ABI приведены в contract.md. Step6 записывает10226704=stepLeft?1:2; step7 при level<=2 записывает3, при level>=3 возвращает.",
+        "Результаты внешнего RNG и PlaySound не проверяются. Владельцы10233900/10226704 вне этой функции не закрыты; не заявляется runtime-частота или паритет воспроизведения."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10007550.c",
+        "analysis/server-pm-support/10007550.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10006200.c",
+        "decompiled/server/partial-pass/functions/0x10007470.c",
+        "decompiled/server/partial-pass/functions/0x10009dd0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10008ef0",
+      "proposed_name": "PM_PushEntity",
+      "subsystem": "movement",
+      "summary_ru": "Трассирует смещение, переносит origin в endpos и регистрирует столкновение.",
+      "confidence": "high",
+      "details_ru": [
+        "Native ABI cdecl(outTrace*,displacement*) и EAX=outTrace; source-level это struct-return helper. Ghidra void теряет выход. Вызывает PM_PlayerTrace с hidden result buffer, start=origin,end=origin+displacement,flags0,ignore-1.",
+        "Копирует68 байт trace, всегда устанавливает origin=endpos. При fraction<1 и !allsolid передаёт trace BY VALUE (68 байт) и velocity* в10003840; startsolid отдельно не исключается. Трасса возвращается даже при allsolid."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10008ef0.c",
+        "analysis/server-pm-support/10008ef0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10003840.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100090c0",
+      "proposed_name": "PM_ResetStuckOffsets",
+      "subsystem": "movement",
+      "summary_ru": "Обнуляет индекс stuck-кандидата для пары player/server.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(player,server): DWORD10220ee8[2*player+server]=0. Ни границ, ни других сбросов состояния/timestamp."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100090c0.c",
+        "analysis/server-pm-support/100090c0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100090e0",
+      "proposed_name": "PM_SortTextureTypes",
+      "subsystem": "movement",
+      "summary_ru": "Сортирует имена материалов с сохранением соответствия байтовых типов.",
+      "confidence": "high",
+      "details_ru": [
+        "Вложенные циклы i=0..count-1 и j=i+1..count-1, stricmp(name[i],name[j])>0 вызывает10009510. Сравнение без учёта регистра; count<=0 no-op.",
+        "Ничего не выделяет; worst-case квадратичная сортировка. Это не qsort и не дедупликация; равные имена остаются несколькими записями."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100090e0.c",
+        "analysis/server-pm-support/100090e0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10009510.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10009150",
+      "proposed_name": "PM_SpectatorMove",
+      "subsystem": "movement",
+      "summary_ru": "Обрабатывает режим свободного наблюдателя либо привязку к наблюдаемой сущности.",
+      "confidence": "high",
+      "details_ru": [
+        "iuser1==3: speed=length(velocity); speed<1 обнуляет velocity; иначе scale=max(0,speed-max(speed,stopspeed)*friction*1.5*dt)/speed. Нормализует PM forward/right in place, wish=forward*forwardmove+right*sidemove+(0,0,upmove), wishdir нормализован.",
+        "Wishspeed ограничивает spectatormaxspeed. addspeed=wishspeed-dot(velocity,wishdir); ТОЛЬКО addspeed>0 выполняет velocity+=min(addspeed,accelerate*dt*wishspeed)*wishdir и origin+=dt*velocity. При addspeed<=0 origin не интегрируется в этой функции; не переносить безусловную интеграцию из SDK.",
+        "Иначе iuser2>0 ищется первый physent.info==iuser2 в count; при успехе PM angles/origin копируются из physent и velocity=sharedVector10220c40. Если target не найден или iuser2<=0, позиция остаётся прежней."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10009150.c",
+        "analysis/server-pm-support/10009150.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100033d0.c",
+        "decompiled/server/partial-pass/functions/0x10003490.c",
+        "decompiled/server/partial-pass/functions/0x100032d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100094d0",
+      "proposed_name": "PM_SplineFraction",
+      "subsystem": "movement",
+      "summary_ru": "Вычисляет кубическое сглаживание произведения двух аргументов без clamp.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(float a,float b); t=a*b, результат3*t²-2*t³, float арифметика SSE, затем FLD и возврат ST0. Никакой защиты t вне[0,1] и деления наduration внутри нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100094d0.c",
+        "analysis/server-pm-support/100094d0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10009510",
+      "proposed_name": "PM_SwapTextureTypes",
+      "subsystem": "movement",
+      "summary_ru": "Меняет местами две записи имя/код таблицы материалов.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(i,j). Три NUL-copy через local16 меняют строки stride13, затем соответствующие BYTE коды102229f0. Длину/индексы здесь не проверяет; корректные <=12 имена обеспечивает parser10006200. Cookies не заменяют bounds-check."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10009510.c",
+        "analysis/server-pm-support/10009510.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100097a0",
+      "proposed_name": "PM_DuckStateUpdate_NativeBranches",
+      "subsystem": "movement",
+      "summary_ru": "Обновляет crouch bookkeeping и переходные поля с необычными native условиями.",
+      "confidence": "high",
+      "details_ru": [
+        "Всегда копирует button4 в oldbuttons перед ранними выходами; iuser3!=0 или dead!=0 запрещают дальнейшие изменения. При fuser3==0 release duck сразу возвращает; press edge без flags4000 запускает ducktime1000 и bInDuck1. fuser3!=0 также принудительно запускает эти два поля.",
+        "Ключевая native ветка: тело интерполяции выполняется ТОЛЬКО bInDuck==0 (JNE100099d3). Grounded и ducktime/1000>0.4 и fuser3==0: h=Spline(max(0,1-ducktime/1000),float(1/0.6)); viewZ=(1-h)*28+h*66.",
+        "Иначе usehull=0,viewZ=28,flags&=~4000,bInDuck=1; grounded дополнительно origin+=mins[1]-mins[0], FixCrouchStuck(-1),CategorizePosition. Это не стандартный SDK duck switch: условия и числа не исправлены по ожиданию; общая достижимость зависит от callers/писателей bInDuck.",
+        "Это отдельная альтернативная функция: actual dispatcher10008a00 вызывает10005400, не100097a0. Лексический поиск среди8000 partial-pass C нашёл100097a0 только в её собственном объявлении; это не доказательство отсутствия косвенных callers."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100097a0.c",
+        "analysis/server-pm-support/100097a0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100094d0.c",
+        "decompiled/server/partial-pass/functions/0x10005750.c",
+        "decompiled/server/partial-pass/functions/0x10003c70.c",
+        "decompiled/server/partial-pass/functions/0x100095b0.c",
+        "decompiled/server/partial-pass/functions/0x10005400.c",
+        "decompiled/server/partial-pass/functions/0x10008a00.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10009dd0",
+      "proposed_name": "PM_AddCameraImpulse",
+      "subsystem": "movement",
+      "summary_ru": "В одиночной игре добавляет импульс к PM пружине punchangle.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(float pitch,float yaw,float roll). Только multiplayer(+8)==0: vuser3(+234,+238,+23c)+=(-pitch,+yaw,+roll)*20. В MP no-op; clamping и интеграции здесь нет, consumer10005260 разобран ранее."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10009dd0.c",
+        "analysis/server-pm-support/10009dd0.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10005260.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000a590",
+      "proposed_name": "PM_WaterJump",
+      "subsystem": "movement",
+      "summary_ru": "Уменьшает waterjump timer и поддерживает принудительную горизонтальную скорость.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала cap waterjumptime сверху10000. При ненулевом timer вычитает unsigned BYTE cmd.msec; если результат<0 ИЛИ waterlevel==0, timer=0 и flags&=~800.",
+        "Даже в кадр очистки timer копирует movedir.x/y в velocity.x/y; z не меняется. Результат ровно0 при ненулевом waterlevel не очищает flag800; следующий вызов с timer0 тоже не зайдёт в ветку. Отдельного bool результата нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000a590.c",
+        "analysis/server-pm-support/1000a590.asm",
+        "analysis/server-pm-support/contract.md",
+        "analysis/server-pm-support/evidence.json"
+      ]
+    }
+  ]
+}

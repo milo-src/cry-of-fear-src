@@ -65,8 +65,8 @@ TOPICS = {
                "Начать с действия игрока → проверки оружия → боеприпас/урон/лечение → анимация и сообщение.",
                "Числовые аргументы урона/дальности, cooldown, расход предмета, режимы и отказ действия.", ""),
     "monsters": ("Монстры и создание NPC", "monster, AI, spawn, schedule, task, boss",
-                 "Разделить создание объекта и поведение NPC; затем раскрыть Think/AI через конкретную vtable.",
-                 "Условия создания, принадлежность virtual methods, расписания и переходы жив/мёртв.", ""),
+                 "Начать с analysis/server-monster-scheduler/contract.md → state/navigation → analysis/server-monster-pathfinding/contract.md. Продолжение: server-graph-helpers → server-graph-lifecycle → server-graph-precompute. Анимация: server-animation-state → server-studio-controls → server-studio-events.",
+                 "Think/AI по конкретной vtable, условия создания, расписания, маршруты, кеш/граф и переходы жив/мёртв.", "analysis/server-monster-pathfinding/contract.md"),
     "saving": ("Сохранения и жизненный цикл игрока", "save, restore, death, revive, respawn",
                "Типизировать таблицу полей → формат чтения/записи → восстановление ссылок и состояния игрока.",
                "Отсутствующие/неизвестные поля, ссылки на сущности, смерть, загрузка и совместимость формата.", ""),
@@ -110,8 +110,8 @@ TOPICS = {
                 "Включение/выключение, масштаб параметров, границы области, утечки и сброс при смене карты.",
                 "analysis/graphics/weather.md"),
     "models": ("Модели и анимация", "model, animation, sequence, bounds",
-               "Precache/поиск → создание/настройка модели → sequence и bounding box → освобождение.",
-               "Имена ресурсов, индексы последовательностей, координаты и callback обновления bounds.", ""),
+               "Сервер: analysis/server-animation-state/contract.md → analysis/server-studio-controls/contract.md → analysis/server-studio-events/contract.md; клиентский draw разобран отдельно в analysis/graphics/studio-existing-audit.md.",
+               "Sequence/activity, native model layout, controller/blending, события, bounds, engine attachments и время жизни модели.", "analysis/server-studio-controls/contract.md"),
     "camera": ("Камера и вид игрока", "camera, refdef, view, cutscene, FOV",
                "Входной режим → origin/angles/FOV → ограничения → возврат обычного управления.",
                "Переходы режимов, интерполяция, столкновения, сохранение и восстановление управления.", ""),
@@ -207,18 +207,44 @@ def fields(text):
     }
 
 
+def confirmed_capture_entry(meta, function, documents):
+    """Use retained procedure_info, never a selector or unverified metadata label."""
+    if not function.get("actual_entry"):
+        return None
+    evidence_path = function.get("procedure_info_portable_evidence", function.get("portable_evidence"))
+    assert evidence_path and function.get("procedure_info_evidence_id"), "Actual entry needs portable info"
+    if evidence_path not in documents:
+        documents[evidence_path] = json.loads((ROOT / evidence_path).read_text(encoding="utf-8"))
+    matches = [row["result"]["structuredContent"]
+               for row in documents[evidence_path]["records"].values()
+               if row["result"].get("structuredContent", {}).get("evidence_id")
+               == function["procedure_info_evidence_id"]]
+    assert len(matches) == 1, "Missing or duplicate procedure_info evidence"
+    info = matches[0]
+    assert info["operation"] == "procedure_info"
+    assert info["subject"]["digest"]["sha256"] == meta["binary_sha256"]
+    assert info["parameters"]["procedure"] == function["procedure"]
+    assert info["normalized_result"]["body"] == function["body"]
+    entry = info["normalized_result"]["entrypoint"].lower()
+    assert entry == function["actual_entry"].lower()
+    return entry
+
+
 def load_sources():
     sources = []
     identities = defaultdict(set)
+    documents = {}
     for path in sorted((ROOT / "decompiled").rglob("capture.json")):
         meta = json.loads(path.read_text(encoding="utf-8"))
         module = path.relative_to(ROOT / "decompiled").parts[0]
         identities[module].add(meta["binary_sha256"])
         for f in meta["functions"]:
+            entry = confirmed_capture_entry(meta, f, documents)
             sources.append({"path": path.parent / f["file"], "module": module,
                             "requested": f["procedure"].split(":")[-1].lower(),
                             "sha256": f["sha256"], "evidence": f.get("evidence_id"),
-                            "metadata": path.relative_to(ROOT).as_posix(), "entry": None})
+                            "metadata": path.relative_to(ROOT).as_posix(), "entry": entry,
+                            "address_basis": "procedure_info из сохранённого Evidence" if entry else None})
     path = ROOT / "decompiled/server/partial-pass/index.json"
     meta = json.loads(path.read_text(encoding="utf-8"))
     identities["server"].add(meta["target_sha256"])
@@ -250,7 +276,9 @@ def load_exports():
 def resolve(sources, exports):
     by_name = defaultdict(set)
     for s in sources:
-        if s["entry"]:
+        # A captured thunk may have its target's name. Its confirmed address
+        # must not relocate other captures with the same forwarded symbol.
+        if s["entry"] and s.get("address_basis") != "procedure_info из сохранённого Evidence":
             by_name[(s["module"], s["name"])].add(s["entry"])
     for (module, addr), rows in exports.items():
         for row in rows:
@@ -262,7 +290,7 @@ def resolve(sources, exports):
     groups = defaultdict(list)
     for s in sources:
         if s["entry"]:
-            s["address_basis"] = "индекс Ghidra"
+            s["address_basis"] = s.get("address_basis") or "индекс Ghidra"
         elif re.fullmatch(r"(?:thunk_)?FUN_[0-9a-fA-F]+", s["name"]):
             s["entry"] = "0x" + s["name"].split("_")[-1].lower()
             s["address_basis"] = "имя FUN в объявлении тела"
@@ -428,9 +456,9 @@ def progress_lines(progress):
         lines.append("    Статусы: " + "; ".join(f"{label}={row['status_counts'][key]}" for label, key in STATUS_KEYS.items()))
     partial = progress["server_partial_pass"]
     lines += [f"  В старом server partial-pass: {partial['exported_c_files']} C из {partial['selected_functions']} выбранных; {partial['not_exported_in_this_pass']} не выгружены именно тем проходом.",
-              "  Это не число отсутствующих сегодня функций: отдельные captures могут закрывать часть старой выборки, полного списка выбранных адресов нет.",
+              "  Это не число отсутствующих сегодня функций: отдельные captures и внешние импорты учитываются отдельно в analysis/corpus-coverage/inventory.md и inventory.json.",
               f"  Повторные captures/варианты: {total['additional_c_files_for_existing_addresses']} дополнительных C; {total['unconfirmed_entry_records']} записей имеют только неподтверждённый selector как вход.",
-              "  Полное число обнаруженных/ещё не снятых функций по DLL неизвестно. Assembly-only доказательства сюда не входят.",
+              "  Полные найденные описи Ghidra и точные разности адресов: analysis/corpus-coverage/. Они не доказывают обнаружение всего кода; этот раздел считает только сохранённые C, без assembly-only доказательств.",
               "  REVIEW может быть частичным. Шаблон, символ и метка Ghidra не считаются ручным разбором; реализация и runtime-паритет здесь не измеряются.",
               "  Машинная сводка: decompiled/PROGRESS.json; catalog_sha256 связывает её с точной версией этого файла.",
               "[/SECTION progress]", ""]

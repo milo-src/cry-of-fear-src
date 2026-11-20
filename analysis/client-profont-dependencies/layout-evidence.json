@@ -1,0 +1,488 @@
+{
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "slots": [
+    {
+      "offset": "0x0",
+      "target": "0x100b346a",
+      "iat": "0x1013aba4",
+      "dll": "vgui.dll",
+      "symbol": "?setPos@Panel@vgui@@UAEXHH@Z"
+    },
+    {
+      "offset": "0x4",
+      "target": "0x100b3470",
+      "iat": "0x1013aba0",
+      "dll": "vgui.dll",
+      "symbol": "?getPos@Panel@vgui@@UAEXAAH0@Z"
+    },
+    {
+      "offset": "0x8",
+      "target": "0x100b3476",
+      "iat": "0x1013ab9c",
+      "dll": "vgui.dll",
+      "symbol": "?setSize@Panel@vgui@@UAEXHH@Z"
+    },
+    {
+      "offset": "0xc",
+      "target": "0x100b347c",
+      "iat": "0x1013ab98",
+      "dll": "vgui.dll",
+      "symbol": "?getSize@Panel@vgui@@UAEXAAH0@Z"
+    },
+    {
+      "offset": "0x24",
+      "target": "0x100b34a0",
+      "iat": "0x1013ab80",
+      "dll": "vgui.dll",
+      "symbol": "?setVisible@Panel@vgui@@UAEX_N@Z"
+    },
+    {
+      "offset": "0x28",
+      "target": "0x100b34a6",
+      "iat": "0x1013ab7c",
+      "dll": "vgui.dll",
+      "symbol": "?isVisible@Panel@vgui@@UAE_NXZ"
+    },
+    {
+      "offset": "0x40",
+      "target": "0x100b34ca",
+      "iat": "0x1013ab64",
+      "dll": "vgui.dll",
+      "symbol": "?setParent@Panel@vgui@@UAEXPAV12@@Z"
+    },
+    {
+      "offset": "0x120",
+      "target": "0x100b3620",
+      "iat": "0x1013aa80",
+      "dll": "vgui.dll",
+      "symbol": "?setFgColor@Panel@vgui@@UAEXHHHH@Z"
+    },
+    {
+      "offset": "0x138",
+      "target": "0x100b362c",
+      "iat": "0x1013aa78",
+      "dll": "vgui.dll",
+      "symbol": "?getFgColor@Panel@vgui@@UAEXAAH000@Z"
+    },
+    {
+      "offset": "0x188",
+      "target": "0x100b36b6",
+      "iat": "0x1013a9a0",
+      "dll": "vgui.dll",
+      "symbol": "?drawSetTextFont@Panel@vgui@@MAEXPAVFont@2@@Z"
+    },
+    {
+      "offset": "0x190",
+      "target": "0x100b36c2",
+      "iat": "0x1013a998",
+      "dll": "vgui.dll",
+      "symbol": "?drawSetTextColor@Panel@vgui@@MAEXHHHH@Z"
+    },
+    {
+      "offset": "0x198",
+      "target": "0x100b36c8",
+      "iat": "0x1013a994",
+      "dll": "vgui.dll",
+      "symbol": "?drawSetTextPos@Panel@vgui@@MAEXHH@Z"
+    },
+    {
+      "offset": "0x1b8",
+      "target": "0x1003bf20"
+    },
+    {
+      "offset": "0x1bc",
+      "target": "0x1003bf00"
+    },
+    {
+      "offset": "0x1c0",
+      "target": "0x1003bc10"
+    }
+  ],
+  "paint_background_import": {
+    "iat": "0x1013a958",
+    "dll": "vgui.dll",
+    "symbol": "?paintBackground@Panel@vgui@@MAEXXZ"
+  },
+  "raw": [
+    {
+      "address": "0x101452cc",
+      "bytes_hex": "6a340b10",
+      "sha256": "b199e6af5b072cf444b870bd8b3be39adbff13b5bbfae78cfd8b20f92cf10d52",
+      "label": "CHUDControl vtable slot 0x0"
+    },
+    {
+      "address": "0x100b346a",
+      "bytes_hex": "ff25a4ab1310",
+      "sha256": "867ae4980e7c448c731dad906b872d226b542dc49e786afebe46f365a376aa10",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013aba4",
+      "bytes_hex": "da2c1800",
+      "sha256": "ca97657621e69e52b8d0bbeebfc231d5fe32d37222957c40ed4096dc24879724",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182cda",
+      "bytes_hex": "8c043f736574506f734050616e656c40766775694040554145584848405a00",
+      "sha256": "29377d5dc48d13bae41f4d4e49386b8c4b23831a70a88b5ba57607484aebde95",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x101452d0",
+      "bytes_hex": "70340b10",
+      "sha256": "9c37c62f2546ab9633ba7f12259abee9a11263efba2a80be0a16f9b160944696",
+      "label": "CHUDControl vtable slot 0x4"
+    },
+    {
+      "address": "0x100b3470",
+      "bytes_hex": "ff25a0ab1310",
+      "sha256": "3045634e730f2e2192419ff11e29d5478ee684dd55c97e050d67128359502d76",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013aba0",
+      "bytes_hex": "fa2c1800",
+      "sha256": "1249ec5814b78a4d51ac1990a9f908a7412d733a822261104a5acad43a791f15",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182cfa",
+      "bytes_hex": "a1023f676574506f734050616e656c407667756940405541455841414830405a00",
+      "sha256": "22cd62722498b2e28830c3faac6b5f8b6e6d88d8498bb6984bcef3513f4918eb",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x101452d4",
+      "bytes_hex": "76340b10",
+      "sha256": "8a436c46d5e94c6f6929450ccf8eb8367ae442d0b59fce52390da2fb7abd763d",
+      "label": "CHUDControl vtable slot 0x8"
+    },
+    {
+      "address": "0x100b3476",
+      "bytes_hex": "ff259cab1310",
+      "sha256": "e94d77edb98f2a1a8a03867960a233a118e5428d3d56c63c673094653948f812",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013ab9c",
+      "bytes_hex": "1c2d1800",
+      "sha256": "e7bcd5dbe4ac13fcaca6b1368e626e92884c968853b78fc609886a81ed53ba26",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182d1c",
+      "bytes_hex": "a8043f73657453697a654050616e656c40766775694040554145584848405a00",
+      "sha256": "5af5143907748a82400b5eb1ae3fb1752d388c16e567a58ff63fe5ed31a1018b",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x101452d8",
+      "bytes_hex": "7c340b10",
+      "sha256": "0d8db939a55f8e8a765f2c27340251b04a8fedafaa8c12cc0e65279ef1b40214",
+      "label": "CHUDControl vtable slot 0xc"
+    },
+    {
+      "address": "0x100b347c",
+      "bytes_hex": "ff2598ab1310",
+      "sha256": "5e0b0d56866c4cd1b946fd371f8ea3d3f44dc7878a9cbeecd1145c7a142c2a22",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013ab98",
+      "bytes_hex": "3c2d1800",
+      "sha256": "88c3fec25953869dea1d5012e114b3f07d2c513a74cec58a7bb1328e96a8bf93",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182d3c",
+      "bytes_hex": "af023f67657453697a654050616e656c407667756940405541455841414830405a00",
+      "sha256": "87290bfac36714fba866392291baddfbf7d71ae8645741b3715707a3d05ae665",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x101452f0",
+      "bytes_hex": "a0340b10",
+      "sha256": "b530c584dec3216cfcb97e5d02e9f639944d3dc74f0c8a33bd663dc49c61b78b",
+      "label": "CHUDControl vtable slot 0x24"
+    },
+    {
+      "address": "0x100b34a0",
+      "bytes_hex": "ff2580ab1310",
+      "sha256": "7d1a1a7b2d836ead0efbd296acef6dd50fd419a67bfad709cf40f8af3ed8fafc",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013ab80",
+      "bytes_hex": "0a2e1800",
+      "sha256": "c877b5802a7b00227528558fbf2a3b01ac39bfbdc70994b113000af178ffdb49",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182e0a",
+      "bytes_hex": "c3043f73657456697369626c654050616e656c40766775694040554145585f4e405a00",
+      "sha256": "2c1d294cd5827170aff30e3d9afc4b92ec571ccaead7a27535c6bfedae2dfd4b",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x101452f4",
+      "bytes_hex": "a6340b10",
+      "sha256": "e2f3870ca2ae1cc400efe99d2f7fbbcb338e6041fd59ac6be3cc473c37ff9dcd",
+      "label": "CHUDControl vtable slot 0x28"
+    },
+    {
+      "address": "0x100b34a6",
+      "bytes_hex": "ff257cab1310",
+      "sha256": "c023cdfa3be1c2f72081ca95f698d6c2df571bd56e62932b9c3d08239139254f",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013ab7c",
+      "bytes_hex": "2e2e1800",
+      "sha256": "e8ae5cfeae9742e06e48de8f94b5f72bbae529f05fc41bdcf9af53a8edfb2fe9",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182e2e",
+      "bytes_hex": "2f033f697356697369626c654050616e656c407667756940405541455f4e585a00",
+      "sha256": "fdb699c34e7906d0b3f40fea9951b42845ad2b9c1d5485e837503e1868d5ef81",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x1014530c",
+      "bytes_hex": "ca340b10",
+      "sha256": "e30fe3295eaaf8495bb80e5dbee14f6642da72b53261e159290f47692b376615",
+      "label": "CHUDControl vtable slot 0x40"
+    },
+    {
+      "address": "0x100b34ca",
+      "bytes_hex": "ff2564ab1310",
+      "sha256": "87c7685b1837e4d2359c2fad9e98457501fa6855bd32b89fb1c42ea325f7c0c9",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013ab64",
+      "bytes_hex": "062f1800",
+      "sha256": "d873547658b19abcecc34d309e030b6cadd1cfa0159586412160bb5fa2fa6ffd",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10182f06",
+      "bytes_hex": "89043f736574506172656e744050616e656c4076677569404055414558504156313240405a00",
+      "sha256": "958b82994d2a339707d63981e765c880796e7e7cf0daa03e87bd69b9dc03cb97",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x101453ec",
+      "bytes_hex": "20360b10",
+      "sha256": "3b689b74077fc2e095ec95b5a05cb82b1382d432359a6f36124e4db6052b4264",
+      "label": "CHUDControl vtable slot 0x120"
+    },
+    {
+      "address": "0x100b3620",
+      "bytes_hex": "ff2580aa1310",
+      "sha256": "c5309b519afc5da45f7efe185fef5c8766a9478cb9f0ddb168ffb7d53c7e7383",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013aa80",
+      "bytes_hex": "3a391800",
+      "sha256": "e098489c405d98bc92111004e0158eb2c92e8ce8b2b23be5f750fba8738fc478",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x1018393a",
+      "bytes_hex": "55043f7365744667436f6c6f724050616e656c407667756940405541455848484848405a00",
+      "sha256": "d43d0fc3766455f28a2d73ef3275bcace664ff633cbd7ba4120ecf290fb6ef0a",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x10145404",
+      "bytes_hex": "2c360b10",
+      "sha256": "48d5e90d22b6f24df116db70986b8dc3f5c4063a4b9f246f3b5e177ebf27f830",
+      "label": "CHUDControl vtable slot 0x138"
+    },
+    {
+      "address": "0x100b362c",
+      "bytes_hex": "ff2578aa1310",
+      "sha256": "5ae70ff4f4e24e8079094f41e8cb49113214f924918728e11703604a51c8c726",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013aa78",
+      "bytes_hex": "86391800",
+      "sha256": "9a8bed345cf72c7b08bfa6fb262484916a7b04669a57b8011df470402012bc8c",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10183986",
+      "bytes_hex": "7f023f6765744667436f6c6f724050616e656c4076677569404055414558414148303030405a00",
+      "sha256": "b9a09c139c4488eb39df67f803f325104d031d1306a427c8adedeb7b582eec9c",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x10145454",
+      "bytes_hex": "b6360b10",
+      "sha256": "4e5d716ebff6da3fcc947837fc3a752c7b1afe26fbb5762ec4461ca71ff5d918",
+      "label": "CHUDControl vtable slot 0x188"
+    },
+    {
+      "address": "0x100b36b6",
+      "bytes_hex": "ff25a0a91310",
+      "sha256": "437ac7d7135a00e66b4bb8c1cbe3e0d6996550c8ba67e195e8b7b2e90cd0caf9",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013a9a0",
+      "bytes_hex": "7a3d1800",
+      "sha256": "f688b95444dec45adaf3683d1af92d213b8e2d8161600848f0d2bb14c0ee253a",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10183d7a",
+      "bytes_hex": "0e023f6472617753657454657874466f6e744050616e656c407667756940404d414558504156466f6e74403240405a00",
+      "sha256": "68330509582ffa16adea9c3da1f209bc901882adc2bb457fe482e57fe64322d8",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x1014545c",
+      "bytes_hex": "c2360b10",
+      "sha256": "7f765aabdd907d21c2cbc6d20015b89fda755b970c3c910058f61d38eab693d8",
+      "label": "CHUDControl vtable slot 0x190"
+    },
+    {
+      "address": "0x100b36c2",
+      "bytes_hex": "ff2598a91310",
+      "sha256": "51e3c7ae77a0225a719c37babed75b109d7f5175844c1831e0ffe93fdaf375ff",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013a998",
+      "bytes_hex": "e83d1800",
+      "sha256": "314051877e1526bb7ce43b78da7f3d968c08743ab79baf323519d2cb73185e76",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10183de8",
+      "bytes_hex": "09023f6472617753657454657874436f6c6f724050616e656c407667756940404d41455848484848405a00",
+      "sha256": "ea5c143a8638614a8761b37d46ef31a25150bb67bf7ddde98c6c7feaf18847f9",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x10145464",
+      "bytes_hex": "c8360b10",
+      "sha256": "ca09067c9b2dcdaba87eaa4e18de59124d98f6d973215f32b2e16fbd8a52d3c7",
+      "label": "CHUDControl vtable slot 0x198"
+    },
+    {
+      "address": "0x100b36c8",
+      "bytes_hex": "ff2594a91310",
+      "sha256": "a20600f1a951b20ccf8daf06fc4e896373564ebe65e4387c2f1dc226b3522552",
+      "label": "IAT jump"
+    },
+    {
+      "address": "0x1013a994",
+      "bytes_hex": "143e1800",
+      "sha256": "c023182b88534aac82735955bfc9daa757ef35ec4338d5e1d8567b70300f589e",
+      "label": "IAT initial name RVA"
+    },
+    {
+      "address": "0x10183e14",
+      "bytes_hex": "13023f6472617753657454657874506f734050616e656c407667756940404d4145584848405a00",
+      "sha256": "b82cf7b5a2cf65728f027f30a9403d5fa9ab1b06667223cbd90453706d429253",
+      "label": "import hint/name"
+    },
+    {
+      "address": "0x10145484",
+      "bytes_hex": "20bf0310",
+      "sha256": "c274d5f3a602f4619471bf6a274cdc18ad100964cb3786656cf803630f4a5805",
+      "label": "CHUDControl vtable slot 0x1b8"
+    },
+    {
+      "address": "0x10145488",
+      "bytes_hex": "00bf0310",
+      "sha256": "928eb96618b6f33c0127e0b4c6ea646be8a3b04366f3e9a85b3d349a8c78f1ca",
+      "label": "CHUDControl vtable slot 0x1bc"
+    },
+    {
+      "address": "0x1014548c",
+      "bytes_hex": "10bc0310",
+      "sha256": "bde34a1fc9d1382ecd74d8809d7be3e3b06cfab926239608528242e88c35f562",
+      "label": "CHUDControl vtable slot 0x1c0"
+    },
+    {
+      "address": "0x1016f3a4",
+      "bytes_hex": "00000000000000000000000088201910b8f31610",
+      "sha256": "e345620a11741da9cc2c9204b9b1687cfdf1adb78652365347fdb580378e7b1b",
+      "label": "CHUDControl complete object locator"
+    },
+    {
+      "address": "0x10192088",
+      "bytes_hex": "70a61510000000002e3f415643485544436f6e74726f6c404000",
+      "sha256": "08f2e8b7038bf65384b8bf4b5f19b9d8ecfa8a9aba658e5bde7c95b97cf6c873",
+      "label": "CHUDControl RTTI type descriptor"
+    },
+    {
+      "address": "0x101468c8",
+      "bytes_hex": "0000000000001040",
+      "sha256": "400c52dd5bd0047d64c0582af027b387a7938a64283d0d4f727331140cb6462c",
+      "label": "paint constant double",
+      "float64": 4.0
+    },
+    {
+      "address": "0x101468e0",
+      "bytes_hex": "0000000000e06f40",
+      "sha256": "729bef532e854760af95391c84e7ba32d372f3384227e6d952a809b8b7f35eb5",
+      "label": "paint constant double",
+      "float64": 255.0
+    },
+    {
+      "address": "0x101468e8",
+      "bytes_hex": "0000000000407f40",
+      "sha256": "35ba779625877df3fea7b5cc8f8c8b7842a6fb8ebb44f00d39aaa18c342c4575",
+      "label": "paint constant double",
+      "float64": 500.0
+    },
+    {
+      "address": "0x1014ed64",
+      "bytes_hex": "2f636f6e6669672e63666700",
+      "sha256": "d8c6ee27cb8ff1cb389fd5682d6e658925ab7cb45afc66cb6b47ec751d651468",
+      "label": "literal",
+      "ascii": "/config.cfg"
+    },
+    {
+      "address": "0x1014ed70",
+      "bytes_hex": "62696e6400",
+      "sha256": "794b701663e5ae00ffdad341a27e143b1f3f8a07c8461142bf8e0bfc2c7cefd7",
+      "label": "literal",
+      "ascii": "bind"
+    },
+    {
+      "address": "0x10146804",
+      "bytes_hex": "636c5f7375627469746c657300",
+      "sha256": "e122b520bab9d54595535115f6879c5d90b175713774f724a4a27e920290bf0b",
+      "label": "literal",
+      "ascii": "cl_subtitles"
+    },
+    {
+      "address": "0x100b3704",
+      "bytes_hex": "ff2558a91310",
+      "sha256": "7693ab7380e28972439ed74c9ba3eed369da8982a5c148d59fb826493f6e65aa",
+      "label": "paintBackground import thunk"
+    },
+    {
+      "address": "0x1013a958",
+      "bytes_hex": "a03f1800",
+      "sha256": "8c1606728a8de6969d8d0259797391a305bc8de1e47261cd9576e66b6a3fe49f",
+      "label": "paintBackground IAT"
+    },
+    {
+      "address": "0x10183fa0",
+      "bytes_hex": "5a033f7061696e744261636b67726f756e644050616e656c407667756940404d414558585a00",
+      "sha256": "5b19ee84d556b1b864b9f037cfc8d61c4e0f5eb94e2293505efee49ad9265f6f",
+      "label": "paintBackground import hint/name"
+    }
+  ]
+}

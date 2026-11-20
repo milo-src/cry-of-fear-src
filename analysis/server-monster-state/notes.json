@@ -1,0 +1,277 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1008ca70",
+      "proposed_name": "CBaseMonster_GetScheduleOfType",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает статический schedule по type; scripted/null-controller и случайный active-idle имеют отдельные ветви.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall(DWORD type), RET4; полный EAX schedule* либо NULL. Native GenericMonster vtable101ce36c+18c указывает сюда. Не устанавливает current schedule самостоятельно.",
+        "Dispatch raw1008cc9c: unsigned(type-1)<=29. Default включая holes/0/negative пишет Alert1 GetScheduleOfType No CASE и возвращает IdleStand102131e4. Полная таблица типов и 39 native schedule records/task arrays приведена в contract/evidence.",
+        "Type1: callback102230b0(0,e); только result0 вызывает virtual1e4. При его nonzero возвращает Active Idle102133d4, иначе IdleStand. Реализация распределения RNG не установлена этим телом.",
+        "Type28: pCine+34c NULL→Alert2 Script failed for classname, cleanup100fa530, затем virtual18c(1) с динамическим возвратом; нельзя подменять статическим IdleStand. Cleanup имеет мутации состояния/физики, его полная ветвистая семантика отдельный scope.",
+        "pCine nonnull: DWORD+384 0→WaitForScript,1→WalkToScript,2→RunToScript,4/6→TeleportToScript,5→FaceScript;3 и outside0..6→NULL без default diagnostic. Type2a→Rush Target10213a1c;d/29→Fail102131d0.",
+        "Конкретные derived virtual overrides и runtime валидность pCine не доказаны. Native names/offsets здесь из PE, не из SDK."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x1008ca70.c",
+        "analysis/server-monster-state/1008ca70.asm",
+        "decompiled/server/partial-pass/functions/0x100b05e0.c",
+        "analysis/server-monster-state/100b05e0.asm",
+        "decompiled/server/partial-pass/functions/0x100fa530.c",
+        "analysis/server-monster-state/100fa530.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c26f0",
+      "proposed_name": "CBaseMonster_TaskIsRunning",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет статус задачи: только состояния 2 и 4 считаются не выполняющимися.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET; EAX0 iff DWORD[this+22c]==4 или2, иначе полный EAX1. Нет range validation, поэтому0/negative/неизвестные значения дают1.",
+        "Не читает schedule/task pointer и не пишет поля. Native descriptor10216e08 называет +22c m_iTaskStatus; связь с MaintainSchedule описана в предыдущем scheduler-пакете."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100c26f0.c",
+        "analysis/server-monster-state/100c26f0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c2a70",
+      "proposed_name": "CBaseMonster_SetState",
+      "subsystem": "monsters",
+      "summary_ru": "Записывает current и ideal state; при state1 удаляет только валидный enemy handle.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, stack DWORD state, RET4; meaningful return не обещается. Для любого state записывает current+224 и ideal+228 без enum guard.",
+        "Только state1 проверяет EHANDLE+184 через10017780→10017ba0: edict!=NULL и serial match. Valid→10017740(NULL) обнуляет edict/serial, Alert2 Stripped; stale/invalid handle эта ветвь оставляет как есть.",
+        "Это handle-validity, не проверка enemy alive или private data. Условия, task, schedule setter не очищает. Native descriptor подтверждает имена state/ideal/enemy."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100c2a70.c",
+        "analysis/server-monster-state/100c2a70.asm",
+        "decompiled/server/partial-pass/functions/0x10017740.c",
+        "analysis/server-monster-state/10017740.asm",
+        "decompiled/server/partial-pass/functions/0x10017780.c",
+        "analysis/server-monster-state/10017780.asm",
+        "decompiled/server/partial-pass/functions/0x10017ba0.c",
+        "analysis/server-monster-state/10017ba0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1010b540",
+      "proposed_name": "CStartRush_ResolveTarget",
+      "subsystem": "monsters",
+      "summary_ru": "Разрешает message как имя цели рывка; при пустом имени или ненайденной цели возвращает сам управляющий объект.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET, полный EAX entity*. Ghidra void опровергнут MOV EAX,ESI в fallback и сохранением EAX lookup при успехе.",
+        "message=DWORD[pev+1d8] string_t. Zero→this. Nonzero→10118590(NULL,stringBase+message); found→entity, notfound→Alert1 scripted_startrush cant find entity %s, затемthis. Не возвращает NULL для обычной ненайденной цели.",
+        "Никаких cache/message writes или type checks. Native export scripted_startrush10115d80→factory10107d70→vtable101e0104/RTTI CStartRush подтверждает класс контекста; прямой virtual slot для этого helper не заявлен.",
+        "Callers GetSchedule1000abf0/RunTask1000b2f0 разрешают m_hRushEntity+358 как string ID, затем передают найденный entity в ECX и сохраняют helper result в target EHANDLE+18c. Класс найденного объекта не проверяют. Полный target/alias lookup — отдельный контракт."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x1010b540.c",
+        "analysis/server-monster-state/1010b540.asm",
+        "decompiled/server/partial-pass/functions/0x10118590.c",
+        "analysis/server-monster-state/10118590.asm",
+        "decompiled/server/partial-pass/functions/0x10115d80.c",
+        "analysis/server-monster-state/10115d80.asm",
+        "decompiled/server/partial-pass/functions/0x10107d70.c",
+        "analysis/server-monster-state/10107d70.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1010f330",
+      "proposed_name": "CStartRush_OnTargetReached",
+      "subsystem": "monsters",
+      "summary_ru": "Посылает netname-цели событие достижения rush target с monster-activator и управляющим caller.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, stack entity* activator, RET4, void. netname=DWORD[pev+1d4] string_t; zero→без вызовов.",
+        "ASM восстанавливает пять cdecl args FireTargets10101ff0(stringBase+netname,stackActivator,this,3,0.0f). Ghidra показывает только два args; caller/usetype/value доказаны PUSH1010f345..35c.",
+        "Не очищает netname и не удаляет controller. StartTask1000bc60/RunTask1000b2f0 передают monster после собственных очисток rush name+358/target handle. При отсутствующем controller caller пишет ERROR reached target but no rush entity и helper не вызывает.",
+        "Downstream FireTargets поддерживает prefixes/alias/activator override и может изменить эффективный useType; фиксируются именно исходные arguments, не универсальный результат на каждом target. CStartRush ownership контекстный, без runtime class guard."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x1010f330.c",
+        "analysis/server-monster-state/1010f330.asm",
+        "decompiled/server/partial-pass/functions/0x10101ff0.c",
+        "analysis/server-monster-state/10101ff0.asm",
+        "decompiled/server/partial-pass/functions/0x10107d70.c",
+        "analysis/server-monster-state/10107d70.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c19a0",
+      "proposed_name": "CBaseMonster_Restore",
+      "subsystem": "monsters",
+      "summary_ru": "Читает 49 полей монстра и принудительно сбрасывает маршрут/расписание даже после ошибки собственного reader-блока.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, stack reader*, RET4, полный EAX. Inherited10102890(CBaseToggle) result0→немедленно0 без собственного reader/cleanup.",
+        "Иначе ECX=reader, ReadFields10117010(\"CBaseMonster\",this,10216e08,49decimal). Сохраняет EAX результата и независимо от него вызывает100c1a70, затем schedule+230=0,status+22c=0,currentActivity+214=0.",
+        "Route cleanup100c1a70→100c1ab0: route[0].flags+244=0,index+2bc=0,pev+130=0,memory+2ec&=~20,movementGoal+2b8=0,movementActivity+2d0=1; не весь route array и не velocity.",
+        "Enemy EHANDLE+184 invalid→conditions+180=0; valid→условия не сбрасывает. Invalid handle сам не обнуляется. Return сохранённый reader EAX даже при0; ошибка не rollback.",
+        "ScheduleIndex+234/idealActivity+218 не сбрасываются этой функцией; собственная table содержит их, в отличие от schedule pointer230/route array/index/goal/deadline364. 49 native descriptors полностью сохранены. m_hRushEntity+358 имеет type1 STRING, enemy+184 type4, pCine34c type3.",
+        "Inherited цепь и общая serializer relocation/error семантика имеют отдельные reviewed contracts; derived postprocessing не распространяется на всех монстров."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100c19a0.c",
+        "analysis/server-monster-state/100c19a0.asm",
+        "decompiled/server/partial-pass/functions/0x10102890.c",
+        "analysis/server-monster-state/10102890.asm",
+        "decompiled/server/partial-pass/functions/0x1000ea60.c",
+        "analysis/server-monster-state/1000ea60.asm",
+        "decompiled/server/partial-pass/functions/0x100c1a70.c",
+        "analysis/server-monster-state/100c1a70.asm",
+        "decompiled/server/partial-pass/functions/0x100c1ab0.c",
+        "analysis/server-monster-state/100c1ab0.asm",
+        "decompiled/server/partial-pass/functions/0x10017780.c",
+        "analysis/server-monster-state/10017780.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1ec0",
+      "proposed_name": "CBaseMonster_Save",
+      "subsystem": "monsters",
+      "summary_ru": "Сохраняет наследуемое состояние и native 49-field блок CBaseMonster, возвращая результат writer.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, stack writer*, RET4; Ghidra void неверен: полный EAX preserved. Inherited10102b20(CBaseToggle)0→ранний0; иначе WriteFields1011adc0 EAX возвращается напрямую. Core writer на обычном возврате всегда ставит1 (ASM1011b097), даже после overflow/warnings; это не проверка целостности записи.",
+        "ECX=writer; stack args diagnosticOwner,\"CBaseMonster\",this,table10216e08,count31hex=49decimal. diagnosticOwner=stringBase+targetname(pev1d0) если ID!=0, иначе stringBase+classname(pev0). Это диагностический аргумент, не дополнительное serializable field.",
+        "Table stride10hex: typeDWORD,nameptr,offsetDWORD,countWORD,flagsWORD. Полные49 записей в evidence; собственный блок не включает runtime schedule230/route/index2bc/deadline364. Descriptor m_hRushEntity+358=STRING type1 несмотря на имя.",
+        "Не гарантирует атомарность writer/context или последующее успешное восстановление; общие token/field/type правила зафиксированы в server-serializer. Generic Save100b09e0 вызывает этот базовый слой перед своими четырьмя полями."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100c1ec0.c",
+        "analysis/server-monster-state/100c1ec0.asm",
+        "decompiled/server/partial-pass/functions/0x10102b20.c",
+        "analysis/server-monster-state/10102b20.asm",
+        "decompiled/server/partial-pass/functions/0x1000eaa0.c",
+        "analysis/server-monster-state/1000eaa0.asm",
+        "decompiled/server/partial-pass/functions/0x100b09e0.c",
+        "analysis/server-monster-state/100b09e0.asm",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/1011adc0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c27c0",
+      "proposed_name": "CBaseMonster_GetIdealState",
+      "subsystem": "monsters",
+      "summary_ru": "Обновляет ideal state из маски прерывания расписания, enemy handle и выбранного sound, сохраняя порядок приоритетов.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET, EAX фактический ideal+228. M=1000b000(): NULL schedule→0, иначе conditions180&schedule.interruptMask+8. Switch по current+224; не использует все conditions без маски.",
+        "State1: M&10000→ideal2; else M&300→MakeIdealYaw(enemyLKP2f4),ideal3; else M&20000→virtual1ec:NULL сохраняетideal,nonNULL→yaw(sound.xyz), BYTE(sound+c)&21→ideal3. Только если нет hear-mask проверяетM&40040→3.",
+        "State2: invalid enemyEHANDLE184→ideal3+Alert2 Combat state with no enemy; valid сохраняетideal. State3: M&10010→2; иначеM&20000 сначалаideal3, затемsound/yaw еслиnonnull. ПоэтомуNULL sound сохраняет3 только в state3, не в state1.",
+        "State6 приM&40000300 вызывает100fab90, игнорирует bool и перечитываетideal. Helper raw DWORD pev.deadflag174==1→ideal8/return0; иначеpCine!=NULL→100fa4b0,return1. Native descriptor deadflag type0 не меняет того, что сравнение integer bits1.",
+        "State8→ideal8; прочие сохраняютideal. MakeIdealYaw получает Vector BYVALUE12bytes; helper exclusions не позволяют обещать обязательный yaw write. Полная script-cancel цепь и derived BestSound overrides остаются отдельным scope."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100c27c0.c",
+        "analysis/server-monster-state/100c27c0.asm",
+        "decompiled/server/partial-pass/functions/0x1000b000.c",
+        "analysis/server-monster-state/1000b000.asm",
+        "decompiled/server/partial-pass/functions/0x100c00f0.c",
+        "analysis/server-monster-state/100c00f0.asm",
+        "decompiled/server/partial-pass/functions/0x100fab90.c",
+        "analysis/server-monster-state/100fab90.asm",
+        "decompiled/server/partial-pass/functions/0x10017780.c",
+        "analysis/server-monster-state/10017780.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1f50",
+      "proposed_name": "CBaseMonster_SetActivity",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает sequence, условно сохраняет frame, обновляет sequence-info и activity; при ошибке lookup применяет упрощённый fallback.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, stack DWORD activity, RET4. Lookup1000e950→1000f450 возвращает sequence>=0 либоnegative. NULL model возвращает0 и проходит success, не error.",
+        "Success frame=0 iff(oldSequence!=seq || sequenceLoops+fc==0) && !(oldActivity214 in{3,4} && new in{3,4}). Иначе frame сохраняется, включаяпереход3↔4 и тотже looping sequence.",
+        "Затем pev.sequence12c=seq,ResetSequenceInfo1000e9e0,virtual1c0,idealActivity218=new,current214=new. Generic vtable1c0=100b0a40 пишет yaw_speed+b0=90.0f; другие overrides не исследованы.",
+        "ResetSequenceInfo: обновляет FrameRateec/GroundSpeedf0 черезmodelhelper1000f290; loopsfc=flags&1,pev.animtime138=now,framerate13c=1.0,finishedf8=0,lastEventCheckf4=now. ПриNULL model1000f290 не обновляетec/f0; остальные записи остаются.",
+        "Lookup<0→Alert1 classname has no sequence for act,sequence=0,ideal=current=new. Frame/reset-info/virtual1c0 вэтойветви не меняет. Нет проверки enum или гарантии пригодности model; native CBaseAnimating table подтверждает имена полей."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100c1f50.c",
+        "analysis/server-monster-state/100c1f50.asm",
+        "decompiled/server/partial-pass/functions/0x1000e950.c",
+        "analysis/server-monster-state/1000e950.asm",
+        "decompiled/server/partial-pass/functions/0x1000f450.c",
+        "analysis/server-monster-state/1000f450.asm",
+        "decompiled/server/partial-pass/functions/0x1000e9e0.c",
+        "analysis/server-monster-state/1000e9e0.asm",
+        "decompiled/server/partial-pass/functions/0x1000f290.c",
+        "analysis/server-monster-state/1000f290.asm",
+        "decompiled/server/partial-pass/functions/0x1000e8b0.c",
+        "analysis/server-monster-state/1000e8b0.asm",
+        "decompiled/server/partial-pass/functions/0x1000f250.c",
+        "analysis/server-monster-state/1000f250.asm",
+        "decompiled/server/partial-pass/functions/0x100b0a40.c",
+        "analysis/server-monster-state/100b0a40.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bdf30",
+      "proposed_name": "CBaseMonster_RouteIsClear",
+      "subsystem": "monsters",
+      "summary_ru": "Чистый предикат наличия активного маршрута; не выполняет очистку route.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET; первый readDWORD[this+244+16*DWORD(this+2bc)] = flags текущего route slot. Толькоеслиnonnull читаетmovementGoal2b8. EAX0 iff оба ненулевые, иначе1.",
+        "Нет null/indexbounds guard: route-slot читается дажееслиgoal0. Нет writes/calls. Не путать с100c1a70 RouteClear, который действительно очищает start/index/goal.",
+        "Названия route/index/goal подтверждены соседними читателями/писателями; точная структура всех route flags и валидность индекса зависят от navigation-контракта."
+      ],
+      "evidence_paths": [
+        "analysis/server-monster-state/contract.md",
+        "analysis/server-monster-state/evidence.json",
+        "analysis/server-monster-state/capture.py",
+        "decompiled/server/partial-pass/functions/0x100bdf30.c",
+        "analysis/server-monster-state/100bdf30.asm"
+      ]
+    }
+  ],
+  "subsystems": []
+}

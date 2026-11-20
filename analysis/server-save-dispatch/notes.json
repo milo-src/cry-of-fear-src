@@ -1,0 +1,134 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10016ab0",
+      "proposed_name": "DispatchSave",
+      "subsystem": "saving",
+      "summary_ru": "Фильтрует сущность, корректирует pusher timers и сохраняет её в текущую запись entity table.",
+      "confidence": "high",
+      "details_ru": [
+        "EntityAPI slot7; NULL edict/private/data возвращает. Record=data.table28+index1c*18hex; несовпадение record.edict+4 только диагностируется, без раннего выхода.",
+        "Отрицательный virtual+40 запрещает Save. При classname search(\"monster_\") и не monster_generic требуются virtual+bc!=0 и BYTE private+9==0; имя predicate не доказано.",
+        "Movetype7: delta=time-ltime, ltime+=delta,nextthink+=delta, cached+5c=nextthink, desired+58+=delta. Меняется исходный объект, без rollback.",
+        "Record+8=data.used, record+14=classname; local writer bind, virtual+38(writer), record+c=data.used-record+8. Save result игнорируется; record ID не назначается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016ab0.c",
+        "analysis/server-save-dispatch/10016ab0.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017030",
+      "proposed_name": "SaveWriteFields_Callback",
+      "subsystem": "saving",
+      "summary_ru": "Оборачивает WriteFields в локальный контекст с diagnostic owner label SWF.",
+      "confidence": "high",
+      "details_ru": [
+        "EntityAPI slot10, пять cdecl аргументов: data,blockName,base,descriptors,count. BindData10116020;1011adc0(\"SWF\",blockName,base,table,count);10116080.",
+        "SWF подтверждено raw строкой101a6158; это owner diagnostic, не имя блока. API void; EAX core не проверяется, no-op cleanup не означает commit/rollback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017030.c",
+        "analysis/server-save-dispatch/10017030.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100170a0",
+      "proposed_name": "SaveReadFields_Callback",
+      "subsystem": "saving",
+      "summary_ru": "Оборачивает ReadFields с выключенным global overlay и разрешённым precache.",
+      "confidence": "high",
+      "details_ru": [
+        "EntityAPI slot11; local context data+0,flag+4=0,flag+8=1. Ghidra пропускает две явные DWORD инициализации, они подтверждены ASM.",
+        "Вызывает10117010(blockName,base,table,count), затем no-op10116080. API void; специальных проверок ошибок/отката нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100170a0.c",
+        "analysis/server-save-dispatch/100170a0.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116080",
+      "proposed_name": "SaveRestoreContext_NoOpCleanup",
+      "subsystem": "saving",
+      "summary_ru": "Пустая точка cleanup локальных save/restore contexts.",
+      "confidence": "high",
+      "details_ru": [
+        "Native тело C2 00 00 (RET0): не читает this, не меняет EAX/память, не освобождает data или token/entity tables.",
+        "Вызовы из field/global/entity wrappers не доказывают ownership или успешную очистку engine container."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116080.c",
+        "analysis/server-save-dispatch/10116080.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116570",
+      "proposed_name": "EntvarsKeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Разбирает map key по первой совпавшей native ENTVARS descriptor.",
+      "confidence": "high",
+      "details_ru": [
+        "102 descriptors table1021aae0,stride16; __stricmp имени. Нет совпадения: handled не меняется.",
+        "Types0/15 float parse,1/16/17 AllocString,7/8 vector parse,10 atoi; остальные diagnostic. Все matched cases, даже bad type, выставляют handled=1. Raw switch tables включены в evidence.",
+        "В отличие от serializer нет relative time/landmark/precache. Descriptor flags/count игнорируются; аргументы и длины строк не проверяются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116570.c",
+        "analysis/server-save-dispatch/10116570.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011a6c0",
+      "proposed_name": "UTIL_StringToVector",
+      "subsystem": "entity-core",
+      "summary_ru": "Парсит до трёх чисел со сканером только по ASCII space и обнулением остатка.",
+      "confidence": "high",
+      "details_ru": [
+        "Перед разбором копирует NUL string в stack buffer128 без capacity guard. Читает байты, а не wchar_t из Ghidra.",
+        "Каждая итерация вызывает numeric conversion, затем сканирует до первого space/NUL; последовательность пробелов не пропускает целиком. Поэтому обычное \"1  2\" даёт выводимые из алгоритма1,2,2, а tab-only delimiter не разделяет компоненты.",
+        "После NUL оставшиеся компоненты записывает нулевымиDWORD; максимум3. Полный CRT locale/invalid-number contract и runtime не проверены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011a6c0.c",
+        "analysis/server-save-dispatch/1011a6c0.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011a760",
+      "proposed_name": "UTIL_StripDuplicateKeySuffix",
+      "subsystem": "entity-core",
+      "summary_ru": "Копирует map key до первого # и завершает результат NUL.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(source,destination); пустая строка даёт пустой результат. # и suffix не копируются; allocation и case folding отсутствуют.",
+        "Нет capacity/null/overlap guard. Связан с group/multi_alias KV, но сам не разбирает номер повторения."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011a760.c",
+        "analysis/server-save-dispatch/1011a760.asm",
+        "analysis/server-save-dispatch/contract.md",
+        "analysis/server-save-dispatch/evidence.json"
+      ]
+    }
+  ]
+}

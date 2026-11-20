@@ -1,0 +1,3442 @@
+{
+  "module": "server",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "target_executed": false,
+  "method": "Saved C, static objdump and PE byte reads; no REA session or target execution.",
+  "source_c": [
+    {
+      "address": "0x1000db00",
+      "path": "decompiled/server/partial-pass/functions/0x1000db00.c",
+      "sha256": "dc484924afbd6a679c1e175ac9a099d3988574c6599851c9ec645a93dc7cee53",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000db20",
+      "path": "decompiled/server/partial-pass/functions/0x1000db20.c",
+      "sha256": "d2581144c4b6d07028ccf7e4556eeb2bbcfd2096ba55cc7495873151ddea4b73",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000db70",
+      "path": "decompiled/server/partial-pass/functions/0x1000db70.c",
+      "sha256": "d15e679cfcefab6551373aa72951dd3c9f209c8b3734a803f5b4ded50e0eee68",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000db80",
+      "path": "decompiled/server/partial-pass/functions/0x1000db80.c",
+      "sha256": "1882ed844b758c57ad0014d477ba0169b30d0df2ab26081dc44ba335da3d249f",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000db90",
+      "path": "decompiled/server/partial-pass/functions/0x1000db90.c",
+      "sha256": "2fce289a25830a41b43d849291caf601e456c1b2751a456b25327fedeabf8b70",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000df00",
+      "path": "decompiled/server/partial-pass/functions/0x1000df00.c",
+      "sha256": "a24814ca863e6ce933540cfe2d40ab38cc0bb6e955d8520f7a7306227e253f88",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000df10",
+      "path": "decompiled/server/partial-pass/functions/0x1000df10.c",
+      "sha256": "febdb84f940dc7f846dc941ca147ad5c5515d1c1f6d523e4d0c4f523af4254d6",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000df60",
+      "path": "decompiled/server/partial-pass/functions/0x1000df60.c",
+      "sha256": "d86e28b1719dd9ad9137d0122b1659104bc666fde355984949b6a1a12c8ac501",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000df70",
+      "path": "decompiled/server/partial-pass/functions/0x1000df70.c",
+      "sha256": "0ef852175864522858c15d730720bd354640922e2c66ab7cb27628b78e98dd68",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000df80",
+      "path": "decompiled/server/partial-pass/functions/0x1000df80.c",
+      "sha256": "90599c1f04378a8c0c4ddbe45d86741bb7822ec349b8a959a1d19c659ea704ff",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000df90",
+      "path": "decompiled/server/partial-pass/functions/0x1000df90.c",
+      "sha256": "dbd6127e8f8c31f6302a5b7cbe907af7eea53d672ebde5025f65c1045c30cc61",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000dfa0",
+      "path": "decompiled/server/partial-pass/functions/0x1000dfa0.c",
+      "sha256": "2b53a2bbf7dbff23c44cee1b32b2a87fb073e630844cd63a44971aec6351bfcf",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000dfe0",
+      "path": "decompiled/server/partial-pass/functions/0x1000dfe0.c",
+      "sha256": "ca3f0507aae2641c3c60b2f66fde933112384235d622afa34b2b90a9948ec941",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000dff0",
+      "path": "decompiled/server/partial-pass/functions/0x1000dff0.c",
+      "sha256": "a70e8f0722053ab12111ee4d824d55aeab921ca2a6e4fc40cd2c5b0d66f3313d",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e1e0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e1e0.c",
+      "sha256": "3334feb710048be775ddce20ae6c835f189b2d496442cb5fe2d4b50d781c84c0",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e1f0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e1f0.c",
+      "sha256": "0782147c522dd73a33e77fa9aafc1ae8dfe8886465425ebec817d6ff292e8db4",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e210",
+      "path": "decompiled/server/partial-pass/functions/0x1000e210.c",
+      "sha256": "f582086b17c5a28e239645b2ce8013e802f0b72d5805750efe3eb86a322e6ada",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e220",
+      "path": "decompiled/server/partial-pass/functions/0x1000e220.c",
+      "sha256": "4153265e04d90225bea41faa08fd24ab0be347396d0d931a73ca62c67f8cdeb9",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e260",
+      "path": "decompiled/server/partial-pass/functions/0x1000e260.c",
+      "sha256": "eabb2fb7fb68d23753c2c6463d8927f2b2f256e6a4a05c559b9f6e521941106d",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e270",
+      "path": "decompiled/server/partial-pass/functions/0x1000e270.c",
+      "sha256": "9a74c0a5cca83f60bca1c67864c70f64ff0dbdcb5f0056ee649fe6560ff83c59",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e280",
+      "path": "decompiled/server/partial-pass/functions/0x1000e280.c",
+      "sha256": "6d3c3c9feadfa56941ff223800fe128b609d14b211b7eb64723a875cfaa0f947",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e290",
+      "path": "decompiled/server/partial-pass/functions/0x1000e290.c",
+      "sha256": "7d8d02b21f16384fd34b64a26bdb45333aee82df3c2ed4b85e41297b0fd61895",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e2d0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e2d0.c",
+      "sha256": "f8b95fb36f647614577636607c2ddaf4b3986edcc81e509e814cfe381c2ea6fd",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e5a0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e5a0.c",
+      "sha256": "b89475066608d6017661f6ebffc7a87f7e4b17a8f7e596c4c8f5e9d4fe8e5d3d",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e5b0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e5b0.c",
+      "sha256": "576731ef174cb4177101f784b81984833eab678c786872f2cba7bc10562fd56e",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e5c0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e5c0.c",
+      "sha256": "3743d9e40536858d7d508ae0cea7eaea6fb0bc0f4bd9e3a72332f4f93ef06ef0",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000e5d0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e5d0.c",
+      "sha256": "3aa6ac3a347b8ef6467dd8c156c56c22247fc8e13c8dfdcf1e2b61ce9f2cfde7",
+      "role": "primary"
+    },
+    {
+      "address": "0x1000d230",
+      "path": "decompiled/server/partial-pass/functions/0x1000d230.c",
+      "sha256": "acb09df84a82aa1fd6105bc743c33587cb0b5e88741a863b86fe5a0d500a8173",
+      "role": "support"
+    },
+    {
+      "address": "0x1000d290",
+      "path": "decompiled/server/partial-pass/functions/0x1000d290.c",
+      "sha256": "ca7bb8200b399852a40a2115840ddc09a30d50de20c9e6b7810794833e403e4b",
+      "role": "support"
+    },
+    {
+      "address": "0x1000d2f0",
+      "path": "decompiled/server/partial-pass/functions/0x1000d2f0.c",
+      "sha256": "c0fbdfab9efe22385f387be5dd8ec5d0687ea83eac71cccabb50ff06d64d3e6b",
+      "role": "support"
+    },
+    {
+      "address": "0x1000d350",
+      "path": "decompiled/server/partial-pass/functions/0x1000d350.c",
+      "sha256": "fc2063e3e68664a0a75314f763e442b92b8971ed159b8c51bc9cfd9a51e521bc",
+      "role": "support"
+    },
+    {
+      "address": "0x10017110",
+      "path": "decompiled/server/partial-pass/functions/0x10017110.c",
+      "sha256": "616bad5d18aeefb5feb3e3ead87e42064b279ec59283cfd2ff3f74f25cab050d",
+      "role": "support"
+    },
+    {
+      "address": "0x100b4aa0",
+      "path": "decompiled/server/partial-pass/functions/0x100b4aa0.c",
+      "sha256": "e2bf7a43a37bf66561f8a88da81d14cf0b31098d5914c5c082328ae55d78381a",
+      "role": "support"
+    }
+  ],
+  "ranges": [
+    {
+      "path": "analysis/server-entity-predicates/1000db00.asm",
+      "start": "0x1000db00",
+      "end_exclusive": "0x1000db1e",
+      "sha256": "359a7afd22efa819472ec402be877daa64b896f0db8eb0c1daea785dedc071a7",
+      "binary_range_sha256": "5adabed295e80eb86f3db567efda6382e3898dfcbccf8f8e0bafc70bab6718fe",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000db00",
+        "--stop-address=0x1000db1e",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000db20.asm",
+      "start": "0x1000db20",
+      "end_exclusive": "0x1000db62",
+      "sha256": "ff78102846c6db9bd5d63efee224f920b354efb65a21232d1ecfab68a72926cf",
+      "binary_range_sha256": "128db11a2804721d489c6ff4617746073a943416a953ac904f1355688ef26a78",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000db20",
+        "--stop-address=0x1000db62",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000db70.asm",
+      "start": "0x1000db70",
+      "end_exclusive": "0x1000db73",
+      "sha256": "079842b4a0e1be536c9ae961065ce96d84349f0e1ffc6c2301d05ce7c217dfdc",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000db70",
+        "--stop-address=0x1000db73",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000db80.asm",
+      "start": "0x1000db80",
+      "end_exclusive": "0x1000db83",
+      "sha256": "3a8019f7d126982cdf87d17e4bcd575ec1813568a18bd29d83a76885a2779e6c",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000db80",
+        "--stop-address=0x1000db83",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000db90.asm",
+      "start": "0x1000db90",
+      "end_exclusive": "0x1000db93",
+      "sha256": "3ceac7221ee19e7a5bba26bc8074b39411408991f8fc629c6b48595595055a44",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000db90",
+        "--stop-address=0x1000db93",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000df00.asm",
+      "start": "0x1000df00",
+      "end_exclusive": "0x1000df03",
+      "sha256": "d6aa954cd1e8e86038ea1b1c80405c19aa158f640156c4dd39d277671844b3e5",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000df00",
+        "--stop-address=0x1000df03",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000df10.asm",
+      "start": "0x1000df10",
+      "end_exclusive": "0x1000df13",
+      "sha256": "035eadcd185b5802b734602bbc86cb1fd65f5d330ea6e5abe25037e823ed0211",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000df10",
+        "--stop-address=0x1000df13",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000df60.asm",
+      "start": "0x1000df60",
+      "end_exclusive": "0x1000df65",
+      "sha256": "05cb62199e48baafbd17467da56f2cfbf7fd928ce053c378ef3d9179e79ae083",
+      "binary_range_sha256": "5fed5afb29946811bf02359627a94bc01d08d31b779528feaadde3866af9c855",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000df60",
+        "--stop-address=0x1000df65",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000df70.asm",
+      "start": "0x1000df70",
+      "end_exclusive": "0x1000df73",
+      "sha256": "1d78cea12797b70ab1ca55a96a986df4c31f1af92b82db7e1b71c9b81cfcb053",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000df70",
+        "--stop-address=0x1000df73",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000df80.asm",
+      "start": "0x1000df80",
+      "end_exclusive": "0x1000df83",
+      "sha256": "defa16c585d03abf82459ab67f6840751cdb25f11394a1d479e81beef7ffeb29",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000df80",
+        "--stop-address=0x1000df83",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000df90.asm",
+      "start": "0x1000df90",
+      "end_exclusive": "0x1000df93",
+      "sha256": "9484a12b12fda56abe9f60ce8e85f33fc517e1cf2d3957456ebc0ee329637d0b",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000df90",
+        "--stop-address=0x1000df93",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000dfa0.asm",
+      "start": "0x1000dfa0",
+      "end_exclusive": "0x1000dfd2",
+      "sha256": "fefd9f081b2b444495d6893a0b3524534cd3734ef42fe1c1679d7553c073f8e2",
+      "binary_range_sha256": "e1df3b2c425ad3d7e6b2ec80b6aad4fb3f9eeacc9ef24fd719f6ee058d0e7dd8",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000dfa0",
+        "--stop-address=0x1000dfd2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000dfe0.asm",
+      "start": "0x1000dfe0",
+      "end_exclusive": "0x1000dfe5",
+      "sha256": "4f2689a3d6225b17865d524160d88275e1ab7bd3d8777b87a3eb501b972d3960",
+      "binary_range_sha256": "5fed5afb29946811bf02359627a94bc01d08d31b779528feaadde3866af9c855",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000dfe0",
+        "--stop-address=0x1000dfe5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000dff0.asm",
+      "start": "0x1000dff0",
+      "end_exclusive": "0x1000dff3",
+      "sha256": "bc7e109ae5fc79d58b0467805ec54826a4f11f487f888fc1e998d49f404d0306",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000dff0",
+        "--stop-address=0x1000dff3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e1e0.asm",
+      "start": "0x1000e1e0",
+      "end_exclusive": "0x1000e1e3",
+      "sha256": "642b5edd3cd9b778602cf7faaba583c056680ca7daf6c431d78712926d4b92aa",
+      "binary_range_sha256": "e598d0c3ba86d917b177d7adde0556aa99bc355543c57aee0a3e50b684dd7e99",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e1e0",
+        "--stop-address=0x1000e1e3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e1f0.asm",
+      "start": "0x1000e1f0",
+      "end_exclusive": "0x1000e209",
+      "sha256": "f5c3d3caa5fe51029018790813af7344fb56f3a417efb2f6e4052f717dc81d13",
+      "binary_range_sha256": "e7c84d8dca05282e4a79056d9cc98fb93bd48c5dad920ee905c624d1f587d432",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e1f0",
+        "--stop-address=0x1000e209",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e210.asm",
+      "start": "0x1000e210",
+      "end_exclusive": "0x1000e213",
+      "sha256": "0dac58355ae2e502c391e9b9685a997e62ac9ce31176cd349390c34f7633620b",
+      "binary_range_sha256": "e598d0c3ba86d917b177d7adde0556aa99bc355543c57aee0a3e50b684dd7e99",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e210",
+        "--stop-address=0x1000e213",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e220.asm",
+      "start": "0x1000e220",
+      "end_exclusive": "0x1000e223",
+      "sha256": "f7fcce85dd75a1047b148add42268ef13e2a35c9eea667e529dcc3f5b291f811",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e220",
+        "--stop-address=0x1000e223",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e260.asm",
+      "start": "0x1000e260",
+      "end_exclusive": "0x1000e263",
+      "sha256": "fa5ec6566495a7a5cc63a8447df82ad058e1a97846979cfa6ee75608c0a2371d",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e260",
+        "--stop-address=0x1000e263",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e270.asm",
+      "start": "0x1000e270",
+      "end_exclusive": "0x1000e273",
+      "sha256": "66c2f19309192d507d01b897754c8ed35f175075e37575b9e1289fc864979393",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e270",
+        "--stop-address=0x1000e273",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e280.asm",
+      "start": "0x1000e280",
+      "end_exclusive": "0x1000e283",
+      "sha256": "71146c98fb7bfbcfee49fb235e4f0ecfab1d4a25ad55e7f69e1ba6f43203f5e7",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e280",
+        "--stop-address=0x1000e283",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e290.asm",
+      "start": "0x1000e290",
+      "end_exclusive": "0x1000e296",
+      "sha256": "1d0eb8d11ce066ca7fbfdc0a4eb05d43f6a146fdf9d8c777bd054e9083d9a771",
+      "binary_range_sha256": "3079626ad9c382a360fb49ded175747b9a0e95b4f5a4a4fbf7619c093565bc2b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e290",
+        "--stop-address=0x1000e296",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e2d0.asm",
+      "start": "0x1000e2d0",
+      "end_exclusive": "0x1000e2d3",
+      "sha256": "0b2fbe047d613c05a7250943a3a0bd511f7d3fe513158140e9e5e8cee50f3327",
+      "binary_range_sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e2d0",
+        "--stop-address=0x1000e2d3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e5a0.asm",
+      "start": "0x1000e5a0",
+      "end_exclusive": "0x1000e5a5",
+      "sha256": "2e70edf30792561bfcb3e55172d7e27be7a095fd853c1a754ae88370d0cfdedf",
+      "binary_range_sha256": "c37e30deb3e8b4c2f027d77087a6e59480ce63935ec0248d4b7777d0bee2d25e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e5a0",
+        "--stop-address=0x1000e5a5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e5b0.asm",
+      "start": "0x1000e5b0",
+      "end_exclusive": "0x1000e5b5",
+      "sha256": "0a6d124826c57c792cf2261860723dbe0dbef1de2686d089e0c282193efd3fa0",
+      "binary_range_sha256": "ea9cf64a091cf3857ca5b77aaad59f44da442b44c9a1e6a7e07d96b62aeeb953",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e5b0",
+        "--stop-address=0x1000e5b5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e5c0.asm",
+      "start": "0x1000e5c0",
+      "end_exclusive": "0x1000e5c5",
+      "sha256": "701f2465d34421015d992e9a604b6c081970239cdba4ab01a1a7b1cec2c196be",
+      "binary_range_sha256": "964eafbe4a3112b3fd235b9e47ccb1de5f683c8a4e9bab6fd178fe63b77d6418",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e5c0",
+        "--stop-address=0x1000e5c5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000e5d0.asm",
+      "start": "0x1000e5d0",
+      "end_exclusive": "0x1000e5d5",
+      "sha256": "26d31dddef77a22dbd7d44c0b8f34d57c1e2a7d20bcba9f24ee219661d5827a0",
+      "binary_range_sha256": "1c595d27f5f765d5f9849b92350cba35b2b7b507f9fcf01ccbf702386ac7119a",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e5d0",
+        "--stop-address=0x1000e5d5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000d230.asm",
+      "start": "0x1000d230",
+      "end_exclusive": "0x1000d28c",
+      "sha256": "f94038b4da23a374573789fc7e3718b4f42d0bdab10960ef832fd527d1e9e29a",
+      "binary_range_sha256": "280910fdb25938b7bb24d00a02e7795b7196455d51f8c160825bb537fe6353b7",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000d230",
+        "--stop-address=0x1000d28c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000d290.asm",
+      "start": "0x1000d290",
+      "end_exclusive": "0x1000d2ec",
+      "sha256": "ec0151bcf8cf9072ea9f13a4970b1e6884b15970e43e12c15a420ac7c2d4bb57",
+      "binary_range_sha256": "d3410920a769585bfa28c7361f4bea15dd8d9ecbfd7819dbb63ca3e1231068e4",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000d290",
+        "--stop-address=0x1000d2ec",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000d2f0.asm",
+      "start": "0x1000d2f0",
+      "end_exclusive": "0x1000d34c",
+      "sha256": "88a306cfacafa1b0cccea97023c06f96f5192f5541ed158c87fa1e86365c6bc3",
+      "binary_range_sha256": "302fd0fccbaf6fe140ea71b20558336bb985eb800204fb7b2172d961455dbec7",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000d2f0",
+        "--stop-address=0x1000d34c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/1000d350.asm",
+      "start": "0x1000d350",
+      "end_exclusive": "0x1000d3ac",
+      "sha256": "7a6775a6a3ca8b3e868084d2f8b8abc3dd2834067e8d41f1ab0b4f7224a443be",
+      "binary_range_sha256": "79b5b684bd19a18deed01cbd67c85a2a75d694f60be5e8491a403f7c217b7db9",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000d350",
+        "--stop-address=0x1000d3ac",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/10017110.asm",
+      "start": "0x10017110",
+      "end_exclusive": "0x100171ad",
+      "sha256": "80243a96a52e0ed40746dc22ecf057f73caa71fc959b9772804bd560b4451f27",
+      "binary_range_sha256": "4a86725b7983a0fa928767cbeb62fc421282a6a2bc505e95d0c4b4b0681f70da",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10017110",
+        "--stop-address=0x100171ad",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-entity-predicates/100b4aa0.asm",
+      "start": "0x100b4aa0",
+      "end_exclusive": "0x100b4ac2",
+      "sha256": "18657330e2408616d1895ed34953a7595720fb7cf7df79c0df9eb45a4e005c93",
+      "binary_range_sha256": "00dcba5c35371689824d0501163044c51b9696901a81b165141b5141d0a418bf",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b4aa0",
+        "--stop-address=0x100b4ac2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x101a2498",
+      "end_exclusive": "0x101a249c",
+      "file_offset": "0x1a1898",
+      "bytes_hex": "68841f10",
+      "sha256": "2559de196868df9c1476fdca3e2a802794c563986292191f9e5edeea6638f84c"
+    },
+    {
+      "address": "0x101f8468",
+      "end_exclusive": "0x101f847c",
+      "file_offset": "0x1f7868",
+      "bytes_hex": "000000000000000000000000d4c521104c841f10",
+      "sha256": "d3bb61bcf9b0eb558ca853fa4c0d436fc3788073f2a3bb47e3f74b5887d9b7cd"
+    },
+    {
+      "address": "0x1021c5d4",
+      "end_exclusive": "0x1021c5dc",
+      "file_offset": "0x21b5d4",
+      "bytes_hex": "40b51e1000000000",
+      "sha256": "353cd2cf392422393eb8be87227d8fe8657a7638eb7c8bbac465fb6eb43417d8"
+    },
+    {
+      "address": "0x1021c5dc",
+      "end_exclusive": "0x1021c5ef",
+      "file_offset": "0x21b5dc",
+      "bytes_hex": "2e3f415643506f696e74456e74697479404000",
+      "sha256": "1bed51bda20df5162a719d9c22935de6a243674e1684cd1f1f083612445d21ac",
+      "ascii": ".?AVCPointEntity@@"
+    },
+    {
+      "address": "0x101f844c",
+      "end_exclusive": "0x101f845c",
+      "file_offset": "0x1f784c",
+      "bytes_hex": "0000000000000000020000005c841f10",
+      "sha256": "0855568a837bb816eab0f2df54d5584afe6b9b22fa95d48947a081b4bb5f845b"
+    },
+    {
+      "address": "0x101f845c",
+      "end_exclusive": "0x101f8464",
+      "file_offset": "0x1f785c",
+      "bytes_hex": "30841f10c4831f10",
+      "sha256": "a503280ef14de01d1a6e4417dc86cc96ab8120eb239167b13784120c3dc25ac5"
+    },
+    {
+      "address": "0x101f8430",
+      "end_exclusive": "0x101f8448",
+      "file_offset": "0x1f7830",
+      "bytes_hex": "d4c521100100000000000000ffffffff0000000040000000",
+      "sha256": "2e5c3c30c1360253706e07f2b2edd0d80d6af0ba978a6d3b5a0240ee8970093c"
+    },
+    {
+      "address": "0x101f83c4",
+      "end_exclusive": "0x101f83dc",
+      "file_offset": "0x1f77c4",
+      "bytes_hex": "9cc521100000000000000000ffffffff0000000040000000",
+      "sha256": "73edaf6190289247019bcc9aba9313293c1c38b54941f8d923e473540891a7cf"
+    },
+    {
+      "address": "0x1021c5a4",
+      "end_exclusive": "0x1021c5b6",
+      "file_offset": "0x21b5a4",
+      "bytes_hex": "2e3f41564342617365456e74697479404000",
+      "sha256": "9375c49bcc9e9d5cb996b6f1ca4aaa521904547a2d057860550e9986b16da1c6",
+      "ascii": ".?AVCBaseEntity@@"
+    },
+    {
+      "address": "0x101a25b8",
+      "end_exclusive": "0x101a25bc",
+      "file_offset": "0x1a19b8",
+      "bytes_hex": "e0831f10",
+      "sha256": "740abed228cb53f165438e6f1c7272ec885093a8b05a05107dfcdcb9d8170eda"
+    },
+    {
+      "address": "0x101f83e0",
+      "end_exclusive": "0x101f83f4",
+      "file_offset": "0x1f77e0",
+      "bytes_hex": "000000000000000000000000b8c52110f4831f10",
+      "sha256": "0cf8ecc17b33d89718e42d5126bed96cb9799f5c0e835abe76458f0eb8c4cf5f"
+    },
+    {
+      "address": "0x1021c5b8",
+      "end_exclusive": "0x1021c5c0",
+      "file_offset": "0x21b5b8",
+      "bytes_hex": "40b51e1000000000",
+      "sha256": "353cd2cf392422393eb8be87227d8fe8657a7638eb7c8bbac465fb6eb43417d8"
+    },
+    {
+      "address": "0x1021c5c0",
+      "end_exclusive": "0x1021c5d1",
+      "file_offset": "0x21b5c0",
+      "bytes_hex": "2e3f41564342617365416c696173404000",
+      "sha256": "6b6067e1ad0cb15c06d4f1d0e6a64da27b07190a96451053fb1a5e60105596d5",
+      "ascii": ".?AVCBaseAlias@@"
+    },
+    {
+      "address": "0x101f83f4",
+      "end_exclusive": "0x101f8404",
+      "file_offset": "0x1f77f4",
+      "bytes_hex": "00000000000000000300000004841f10",
+      "sha256": "9b9f3b730628748bef19f679d76df007579b56147db9a324e44505229ef76fd8"
+    },
+    {
+      "address": "0x101f8404",
+      "end_exclusive": "0x101f8410",
+      "file_offset": "0x1f7804",
+      "bytes_hex": "14841f1030841f10c4831f10",
+      "sha256": "74d9b01aeda66a8597f3d85d2dc75b1a24e9ae22ab50d52abca061a0413ada60"
+    },
+    {
+      "address": "0x101f8414",
+      "end_exclusive": "0x101f842c",
+      "file_offset": "0x1f7814",
+      "bytes_hex": "b8c521100200000000000000ffffffff0000000040000000",
+      "sha256": "c626ab842ef5c7fa973ecb502c6e0bd292c0bddf4171eda2e743eacc041850ab"
+    },
+    {
+      "address": "0x101a270c",
+      "end_exclusive": "0x101a2710",
+      "file_offset": "0x1a1b0c",
+      "bytes_hex": "7c841f10",
+      "sha256": "a3400f5ec45f117a6c8638cb6a724c0c9b69011bd2f2e262ddc0c69fe93dda0a"
+    },
+    {
+      "address": "0x101f847c",
+      "end_exclusive": "0x101f8490",
+      "file_offset": "0x1f787c",
+      "bytes_hex": "000000000000000000000000f0c5211090841f10",
+      "sha256": "6753d56065f75f7fc6d71995be38118d552089d4cc286a953326460f2cf0bbd9"
+    },
+    {
+      "address": "0x1021c5f0",
+      "end_exclusive": "0x1021c5f8",
+      "file_offset": "0x21b5f0",
+      "bytes_hex": "40b51e1000000000",
+      "sha256": "353cd2cf392422393eb8be87227d8fe8657a7638eb7c8bbac465fb6eb43417d8"
+    },
+    {
+      "address": "0x1021c5f8",
+      "end_exclusive": "0x1021c609",
+      "file_offset": "0x21b5f8",
+      "bytes_hex": "2e3f415643496e666f47726f7570404000",
+      "sha256": "f236fe37bf42108caa4839f8340ebadd6ec351cd1f0352f7e640158678b69252",
+      "ascii": ".?AVCInfoGroup@@"
+    },
+    {
+      "address": "0x101f8490",
+      "end_exclusive": "0x101f84a0",
+      "file_offset": "0x1f7890",
+      "bytes_hex": "000000000000000003000000a0841f10",
+      "sha256": "c026c02b3897b6d27d92d2b6cbf5e5312f4237c0008d8d06776050a5db09b9bb"
+    },
+    {
+      "address": "0x101f84a0",
+      "end_exclusive": "0x101f84ac",
+      "file_offset": "0x1f78a0",
+      "bytes_hex": "b0841f1030841f10c4831f10",
+      "sha256": "24f1509c21f307ce6eb3e5e19c308745fb90d82e3b6f7d566fd148c29b73944b"
+    },
+    {
+      "address": "0x101f84b0",
+      "end_exclusive": "0x101f84c8",
+      "file_offset": "0x1f78b0",
+      "bytes_hex": "f0c521100200000000000000ffffffff0000000040000000",
+      "sha256": "c13f852fcf46230dda89792994333fc9908feafd846f82632f0a26ad10704d0a"
+    },
+    {
+      "address": "0x101a282c",
+      "end_exclusive": "0x101a2830",
+      "file_offset": "0x1a1c2c",
+      "bytes_hex": "cc841f10",
+      "sha256": "9fb895c121600fa3f30e64204b381842a9ab306628c5c75e14327934b99328d3"
+    },
+    {
+      "address": "0x101f84cc",
+      "end_exclusive": "0x101f84e0",
+      "file_offset": "0x1f78cc",
+      "bytes_hex": "0000000000000000000000000cc62110e0841f10",
+      "sha256": "24564f281bfc99c3d1107af8d1cf8040a22292a1e26991257aaa235a7e677f1a"
+    },
+    {
+      "address": "0x1021c60c",
+      "end_exclusive": "0x1021c614",
+      "file_offset": "0x21b60c",
+      "bytes_hex": "40b51e1000000000",
+      "sha256": "353cd2cf392422393eb8be87227d8fe8657a7638eb7c8bbac465fb6eb43417d8"
+    },
+    {
+      "address": "0x1021c614",
+      "end_exclusive": "0x1021c626",
+      "file_offset": "0x21b614",
+      "bytes_hex": "2e3f4156434d756c7469416c696173404000",
+      "sha256": "f62b8ac786b0b0ce66e73f0df43ed738b4a26ebe62667a7de53fad23d5901113",
+      "ascii": ".?AVCMultiAlias@@"
+    },
+    {
+      "address": "0x101f84e0",
+      "end_exclusive": "0x101f84f0",
+      "file_offset": "0x1f78e0",
+      "bytes_hex": "000000000000000004000000f0841f10",
+      "sha256": "539a16e27a3783e44adc984bcae57e2d6035e549c3cef076b38c40df6284498c"
+    },
+    {
+      "address": "0x101f84f0",
+      "end_exclusive": "0x101f8500",
+      "file_offset": "0x1f78f0",
+      "bytes_hex": "04851f1014841f1030841f10c4831f10",
+      "sha256": "3a0407f6ba5b925cbc905e0d49a034f28fca8dbb63b18981bd32b5f2b8e081c2"
+    },
+    {
+      "address": "0x101f8504",
+      "end_exclusive": "0x101f851c",
+      "file_offset": "0x1f7904",
+      "bytes_hex": "0cc621100300000000000000ffffffff0000000040000000",
+      "sha256": "0ca3d6b32d28991fe5767bcde5be0b64599c7ea32f44507247e65ea1125ff7a8"
+    },
+    {
+      "address": "0x101a2968",
+      "end_exclusive": "0x101a296c",
+      "file_offset": "0x1a1d68",
+      "bytes_hex": "20851f10",
+      "sha256": "7eb1b7eeb2c928c823d6289365fb7c1ebdf7791e922b7d75211f32f2a9a52f80"
+    },
+    {
+      "address": "0x101f8520",
+      "end_exclusive": "0x101f8534",
+      "file_offset": "0x1f7920",
+      "bytes_hex": "00000000000000000000000028c6211034851f10",
+      "sha256": "b2135bd76383c0f6f1f8325794ff67b5d868561d43413770dda2b7e3f317b402"
+    },
+    {
+      "address": "0x1021c628",
+      "end_exclusive": "0x1021c630",
+      "file_offset": "0x21b628",
+      "bytes_hex": "40b51e1000000000",
+      "sha256": "353cd2cf392422393eb8be87227d8fe8657a7638eb7c8bbac465fb6eb43417d8"
+    },
+    {
+      "address": "0x1021c630",
+      "end_exclusive": "0x1021c641",
+      "file_offset": "0x21b630",
+      "bytes_hex": "2e3f415643496e666f416c696173404000",
+      "sha256": "5173fb101830610a1478fcb2008bfdca6048745eb03be69351c1ccac3ff85a80",
+      "ascii": ".?AVCInfoAlias@@"
+    },
+    {
+      "address": "0x101f8534",
+      "end_exclusive": "0x101f8544",
+      "file_offset": "0x1f7934",
+      "bytes_hex": "00000000000000000400000044851f10",
+      "sha256": "4a8a6ffbb09e5a1f89ea22130c6dadc60d15a29b388bfb52936568888753b2da"
+    },
+    {
+      "address": "0x101f8544",
+      "end_exclusive": "0x101f8554",
+      "file_offset": "0x1f7944",
+      "bytes_hex": "58851f1014841f1030841f10c4831f10",
+      "sha256": "d4326cb2b6f34381709331d5fba96913c64268b25bf5dfbf255e129cbdea55da"
+    },
+    {
+      "address": "0x101f8558",
+      "end_exclusive": "0x101f8570",
+      "file_offset": "0x1f7958",
+      "bytes_hex": "28c621100300000000000000ffffffff0000000040000000",
+      "sha256": "10d7a2a43193d705128ab297c25de9f4c17a0d267e536dad8029c35be479be31"
+    },
+    {
+      "address": "0x101a2c6c",
+      "end_exclusive": "0x101a2c70",
+      "file_offset": "0x1a206c",
+      "bytes_hex": "74851f10",
+      "sha256": "4baf467acabab9c8041fda59cba3a64d0db0fcbb11c750ae1f2563871118e8fc"
+    },
+    {
+      "address": "0x101f8574",
+      "end_exclusive": "0x101f8588",
+      "file_offset": "0x1f7974",
+      "bytes_hex": "00000000000000000000000044c6211088851f10",
+      "sha256": "d8935fecd298510885f500391910f8ab16e48e01966e8381e26123ca102bf8b8"
+    },
+    {
+      "address": "0x1021c644",
+      "end_exclusive": "0x1021c64c",
+      "file_offset": "0x21b644",
+      "bytes_hex": "40b51e1000000000",
+      "sha256": "353cd2cf392422393eb8be87227d8fe8657a7638eb7c8bbac465fb6eb43417d8"
+    },
+    {
+      "address": "0x1021c64c",
+      "end_exclusive": "0x1021c666",
+      "file_offset": "0x21b64c",
+      "bytes_hex": "2e3f415643547269676765724368616e6765416c696173404000",
+      "sha256": "e70be1e386b2297718057a5de1c753797daf546748e0169350c478689a1b6728",
+      "ascii": ".?AVCTriggerChangeAlias@@"
+    },
+    {
+      "address": "0x101f8588",
+      "end_exclusive": "0x101f8598",
+      "file_offset": "0x1f7988",
+      "bytes_hex": "00000000000000000200000098851f10",
+      "sha256": "cd6752ba484fc9d22f2838e708d509b828fc3a6f3efdd8f75daa7e098b9cbc48"
+    },
+    {
+      "address": "0x101f8598",
+      "end_exclusive": "0x101f85a0",
+      "file_offset": "0x1f7998",
+      "bytes_hex": "a4851f10c4831f10",
+      "sha256": "fa4227485f3120abd9fd553b136974eb7fcdcfb49efebae79a15417f4a15c427"
+    },
+    {
+      "address": "0x101f85a4",
+      "end_exclusive": "0x101f85bc",
+      "file_offset": "0x1f79a4",
+      "bytes_hex": "44c621100100000000000000ffffffff0000000040000000",
+      "sha256": "9e0c7db8d7b358069527af1b4229f501ff6c1a79aceac593b005496963ddd93a"
+    },
+    {
+      "address": "0x101e512c",
+      "end_exclusive": "0x101e5135",
+      "file_offset": "0x1e452c",
+      "bytes_hex": "76656c6f6369747900",
+      "sha256": "4c4b4566d01df209d751694169f2d219f57108fbcf43d3bcc9924fd1cb78ba92",
+      "ascii": "velocity"
+    },
+    {
+      "address": "0x101e1588",
+      "end_exclusive": "0x101e158e",
+      "file_offset": "0x1e0988",
+      "bytes_hex": "736f6c696400",
+      "sha256": "c406f4457dd06489feddc1745d71fde1673d503c453826d2af85e82fdc249ee1",
+      "ascii": "solid"
+    },
+    {
+      "address": "0x101e520c",
+      "end_exclusive": "0x101e5215",
+      "file_offset": "0x1e460c",
+      "bytes_hex": "6d6f76657479706500",
+      "sha256": "0f65cd4f01893d2859815c48a426f105ed06f7cff595b8290b5a56ffd973c81d",
+      "ascii": "movetype"
+    },
+    {
+      "address": "0x101e52dc",
+      "end_exclusive": "0x101e52e7",
+      "file_offset": "0x1e46dc",
+      "bytes_hex": "74616b6564616d61676500",
+      "sha256": "4511b8697b45be452aad734300e1a8121be60c7d2fcfa9415e1218cce30c9aad",
+      "ascii": "takedamage"
+    },
+    {
+      "address": "0x101a2496",
+      "end_exclusive": "0x101a2497",
+      "file_offset": "0x1a1896",
+      "bytes_hex": "00",
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "ascii": ""
+    },
+    {
+      "address": "0x101a1370",
+      "end_exclusive": "0x101a1374",
+      "file_offset": "0x1a0770",
+      "bytes_hex": "00000000",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "address": "0x10208af0",
+      "end_exclusive": "0x10208b18",
+      "file_offset": "0x207ef0",
+      "bytes_hex": "00000000ffffffff0000000024ac2000010000004e0300004e030000188b20005098200088a52000",
+      "sha256": "6ecf2d50fa6a2a72679a4c6a2d1e073ddf03f18310307e90d975009ff1360e91"
+    },
+    {
+      "address": "0x1020a1fc",
+      "end_exclusive": "0x1020a200",
+      "file_offset": "0x2095fc",
+      "bytes_hex": "1ff22000",
+      "sha256": "177bd76eb76545bfa47608d13d6cbcc655f6f1171a64b2e68200a4df8a28f4fe"
+    },
+    {
+      "address": "0x1020f21f",
+      "end_exclusive": "0x1020f22a",
+      "file_offset": "0x20e61f",
+      "bytes_hex": "696e666f5f616c69617300",
+      "sha256": "805579583621670a571a83eb81842781e7358d99d62397406d8ff1de49e7efb0",
+      "ascii": "info_alias"
+    },
+    {
+      "address": "0x1020aa5e",
+      "end_exclusive": "0x1020aa60",
+      "file_offset": "0x209e5e",
+      "bytes_hex": "6b02",
+      "sha256": "7990207d22bd99f6b520e2dcf4ece7d6f1ec49fb1f91581694057e9c934e508d"
+    },
+    {
+      "address": "0x102094c4",
+      "end_exclusive": "0x102094c8",
+      "file_offset": "0x2088c4",
+      "bytes_hex": "a0e50000",
+      "sha256": "e7e84d9934202df78e26a11a8f321b42317885231cf47431bb6483842a90a941"
+    },
+    {
+      "address": "0x1000e5a0",
+      "end_exclusive": "0x1000e5a5",
+      "file_offset": "0xd9a0",
+      "bytes_hex": "e98becffff",
+      "sha256": "c37e30deb3e8b4c2f027d77087a6e59480ce63935ec0248d4b7777d0bee2d25e"
+    },
+    {
+      "address": "0x1020a204",
+      "end_exclusive": "0x1020a208",
+      "file_offset": "0x209604",
+      "bytes_hex": "42f22000",
+      "sha256": "915fbf8bc1c34fc2df6f5aa0b2c742a80842572524824006850066f8eeac32f8"
+    },
+    {
+      "address": "0x1020f242",
+      "end_exclusive": "0x1020f24d",
+      "file_offset": "0x20e642",
+      "bytes_hex": "696e666f5f67726f757000",
+      "sha256": "1dd375d0fef6b0304aa8adf395f03cf56a79723c770353798e645fc7ea28582d",
+      "ascii": "info_group"
+    },
+    {
+      "address": "0x1020aa62",
+      "end_exclusive": "0x1020aa64",
+      "file_offset": "0x209e62",
+      "bytes_hex": "6d02",
+      "sha256": "bfd071c81f190f9f8760ac3ee50a33fb4fec65bb7df775a0002b883cebf03841"
+    },
+    {
+      "address": "0x102094cc",
+      "end_exclusive": "0x102094d0",
+      "file_offset": "0x2088cc",
+      "bytes_hex": "b0e50000",
+      "sha256": "1750ac38bda1b129bcfa65103fedc0712e92ca1b1e4d22be4a3b450d05dc0ad7"
+    },
+    {
+      "address": "0x1000e5b0",
+      "end_exclusive": "0x1000e5b5",
+      "file_offset": "0xd9b0",
+      "bytes_hex": "e9dbecffff",
+      "sha256": "ea9cf64a091cf3857ca5b77aaad59f44da442b44c9a1e6a7e07d96b62aeeb953"
+    },
+    {
+      "address": "0x1020a388",
+      "end_exclusive": "0x1020a38c",
+      "file_offset": "0x209788",
+      "bytes_hex": "7af82000",
+      "sha256": "18b1c514761d387433e52763b42e1ae1e184a6a6edc6da1cbe1e4d7ebb4d1d4e"
+    },
+    {
+      "address": "0x1020f87a",
+      "end_exclusive": "0x1020f886",
+      "file_offset": "0x20ec7a",
+      "bytes_hex": "6d756c74695f616c69617300",
+      "sha256": "b5dca08804cfd983f77102871d969e7c9d29fe17697abf7e2d42de85745229b4",
+      "ascii": "multi_alias"
+    },
+    {
+      "address": "0x1020ab24",
+      "end_exclusive": "0x1020ab26",
+      "file_offset": "0x209f24",
+      "bytes_hex": "ce02",
+      "sha256": "3ab3b25d455bc5a1c6e56fcf5588c988aa67d644cd9fb03b8c5189be21b4b66d"
+    },
+    {
+      "address": "0x10209650",
+      "end_exclusive": "0x10209654",
+      "file_offset": "0x208a50",
+      "bytes_hex": "c0e50000",
+      "sha256": "0d98b81c3ed37d52b119dc9be0833579d634e445c5681d197c20d43051af1fdb"
+    },
+    {
+      "address": "0x1000e5c0",
+      "end_exclusive": "0x1000e5c5",
+      "file_offset": "0xd9c0",
+      "bytes_hex": "e92bedffff",
+      "sha256": "964eafbe4a3112b3fd235b9e47ccb1de5f683c8a4e9bab6fd178fe63b77d6418"
+    },
+    {
+      "address": "0x1020a444",
+      "end_exclusive": "0x1020a448",
+      "file_offset": "0x209844",
+      "bytes_hex": "2afb2000",
+      "sha256": "2f2846740f36440b42ececa2a1125112f8ec22f568a4f62c9075a1a1631414cf"
+    },
+    {
+      "address": "0x1020fb2a",
+      "end_exclusive": "0x1020fb3e",
+      "file_offset": "0x20ef2a",
+      "bytes_hex": "747269676765725f6368616e6765616c69617300",
+      "sha256": "3d59f6fc1e49dc0c6392ffc820d3b06aea9eee218ce7050cc2d072981a712bbf",
+      "ascii": "trigger_changealias"
+    },
+    {
+      "address": "0x1020ab82",
+      "end_exclusive": "0x1020ab84",
+      "file_offset": "0x209f82",
+      "bytes_hex": "fd02",
+      "sha256": "8fe7e9e07960bc5c4eb4a7332ef3e81f4baf5bb23754e881776d2b76ec5fe2ba"
+    },
+    {
+      "address": "0x1020970c",
+      "end_exclusive": "0x10209710",
+      "file_offset": "0x208b0c",
+      "bytes_hex": "d0e50000",
+      "sha256": "95816a4abea6c830de62bffa175a4e68b9fcc5bc8329bafd0dd1e789e73837e6"
+    },
+    {
+      "address": "0x1000e5d0",
+      "end_exclusive": "0x1000e5d5",
+      "file_offset": "0xd9d0",
+      "bytes_hex": "e97bedffff",
+      "sha256": "1c595d27f5f765d5f9849b92350cba35b2b7b507f9fcf01ccbf702386ac7119a"
+    }
+  ],
+  "vtables": [
+    {
+      "address": "0x101a249c",
+      "end_exclusive": "0x101a25b8",
+      "file_offset": "0x1a189c",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d80010402c101090df0010a0db001000800110307f011040df00105072011080df0010a072011070d5001080d50010d0d90010e0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010e0e2001000d40010f0df0010d0e2001040d60010a0d40010f0d50010a0d5001030d4001090da001050820810c0820810e0e10010",
+      "sha256": "8b7155d2a781538ded593148e4d8f8c21458ee8149b8d0b97c61af1da2d974ac",
+      "class_name": "CPointEntity",
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x10102c40"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x1000dba0"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x10018000"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x10017f30"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9e0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e2e0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        },
+        {
+          "offset": "0xf4",
+          "target": "0x1000e2d0"
+        },
+        {
+          "offset": "0xf8",
+          "target": "0x1000d640"
+        },
+        {
+          "offset": "0xfc",
+          "target": "0x1000d4a0"
+        },
+        {
+          "offset": "0x100",
+          "target": "0x1000d5f0"
+        },
+        {
+          "offset": "0x104",
+          "target": "0x1000d5a0"
+        },
+        {
+          "offset": "0x108",
+          "target": "0x1000d430"
+        },
+        {
+          "offset": "0x10c",
+          "target": "0x1000da90"
+        },
+        {
+          "offset": "0x110",
+          "target": "0x10088250"
+        },
+        {
+          "offset": "0x114",
+          "target": "0x100882c0"
+        },
+        {
+          "offset": "0x118",
+          "target": "0x1000e1e0"
+        }
+      ],
+      "rtti": {
+        "col": "0x101f8468",
+        "type_descriptor": "0x1021c5d4",
+        "name": ".?AVCPointEntity@@",
+        "base_classes": [
+          {
+            "descriptor": "0x101f8430",
+            "name": ".?AVCPointEntity@@",
+            "contained_count": 1,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f83c4",
+            "name": ".?AVCBaseEntity@@",
+            "contained_count": 0,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          }
+        ]
+      }
+    },
+    {
+      "address": "0x101a25bc",
+      "end_exclusive": "0x101a26e8",
+      "file_offset": "0x1a19bc",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010b0da001070d80010402c101090df0010a0db0010c0e0001000e0001040df00105072011080df0010a072011070d5001080d50010d0d90010e0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010e0e2001000d40010f0df0010d0e2001040d60010a0d40010f0d50010a0d5001030d4001090da001050820810c0820810e0e10010b0d6001030d5001000d5001050d60010",
+      "sha256": "786e711ce94684b18688891d17aed3301134defdb720d1da30bac045e0c1f88f",
+      "class_name": "CBaseAlias",
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dab0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x10102c40"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x1000dba0"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x1000e0c0"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x1000e000"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9e0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e2e0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        },
+        {
+          "offset": "0xf4",
+          "target": "0x1000e2d0"
+        },
+        {
+          "offset": "0xf8",
+          "target": "0x1000d640"
+        },
+        {
+          "offset": "0xfc",
+          "target": "0x1000d4a0"
+        },
+        {
+          "offset": "0x100",
+          "target": "0x1000d5f0"
+        },
+        {
+          "offset": "0x104",
+          "target": "0x1000d5a0"
+        },
+        {
+          "offset": "0x108",
+          "target": "0x1000d430"
+        },
+        {
+          "offset": "0x10c",
+          "target": "0x1000da90"
+        },
+        {
+          "offset": "0x110",
+          "target": "0x10088250"
+        },
+        {
+          "offset": "0x114",
+          "target": "0x100882c0"
+        },
+        {
+          "offset": "0x118",
+          "target": "0x1000e1e0"
+        },
+        {
+          "offset": "0x11c",
+          "target": "0x1000d6b0"
+        },
+        {
+          "offset": "0x120",
+          "target": "0x1000d530"
+        },
+        {
+          "offset": "0x124",
+          "target": "0x1000d500"
+        },
+        {
+          "offset": "0x128",
+          "target": "0x1000d650"
+        }
+      ],
+      "rtti": {
+        "col": "0x101f83e0",
+        "type_descriptor": "0x1021c5b8",
+        "name": ".?AVCBaseAlias@@",
+        "base_classes": [
+          {
+            "descriptor": "0x101f8414",
+            "name": ".?AVCBaseAlias@@",
+            "contained_count": 2,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f8430",
+            "name": ".?AVCPointEntity@@",
+            "contained_count": 1,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f83c4",
+            "name": ".?AVCBaseEntity@@",
+            "contained_count": 0,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          }
+        ]
+      }
+    },
+    {
+      "address": "0x101a2710",
+      "end_exclusive": "0x101a282c",
+      "file_offset": "0x1a1b10",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d80010402c101090df0010b0dc001020e1001040e0001040df00105072011080df0010a072011070d5001080d50010d0d90010e0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010c0e3001000d40010f0df0010d0e2001040d60010a0d40010f0d50010a0d5001030d4001090da001050820810c0820810e0e10010",
+      "sha256": "e2799bcd812044d148a8ebb63415ad413f481dc954a12a1e2a4fcb5aa9131efe",
+      "class_name": "CInfoGroup",
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x10102c40"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x1000dcb0"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x1000e120"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x1000e040"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9e0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e3c0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        },
+        {
+          "offset": "0xf4",
+          "target": "0x1000e2d0"
+        },
+        {
+          "offset": "0xf8",
+          "target": "0x1000d640"
+        },
+        {
+          "offset": "0xfc",
+          "target": "0x1000d4a0"
+        },
+        {
+          "offset": "0x100",
+          "target": "0x1000d5f0"
+        },
+        {
+          "offset": "0x104",
+          "target": "0x1000d5a0"
+        },
+        {
+          "offset": "0x108",
+          "target": "0x1000d430"
+        },
+        {
+          "offset": "0x10c",
+          "target": "0x1000da90"
+        },
+        {
+          "offset": "0x110",
+          "target": "0x10088250"
+        },
+        {
+          "offset": "0x114",
+          "target": "0x100882c0"
+        },
+        {
+          "offset": "0x118",
+          "target": "0x1000e1e0"
+        }
+      ],
+      "rtti": {
+        "col": "0x101f847c",
+        "type_descriptor": "0x1021c5f0",
+        "name": ".?AVCInfoGroup@@",
+        "base_classes": [
+          {
+            "descriptor": "0x101f84b0",
+            "name": ".?AVCInfoGroup@@",
+            "contained_count": 2,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f8430",
+            "name": ".?AVCPointEntity@@",
+            "contained_count": 1,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f83c4",
+            "name": ".?AVCBaseEntity@@",
+            "contained_count": 0,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          }
+        ]
+      }
+    },
+    {
+      "address": "0x101a2830",
+      "end_exclusive": "0x101a295c",
+      "file_offset": "0x1a1c30",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010b0da001070d80010402c101090df0010d0dd001080e1001080e0001040df00105072011080df0010a072011070d5001080d50010d0d90010e0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010e0e2001000d40010f0df0010d0e2001040d60010a0d40010f0d50010a0d5001030d4001090da001050820810c0820810e0e10010f0d6001030d5001000d5001050d60010",
+      "sha256": "2d0ad702cd285008e6b12fd9e6ac16309bde10fc26cb91b4d38485b024168315",
+      "class_name": "CMultiAlias",
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dab0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x10102c40"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x1000ddd0"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x1000e180"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x1000e080"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9e0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e2e0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        },
+        {
+          "offset": "0xf4",
+          "target": "0x1000e2d0"
+        },
+        {
+          "offset": "0xf8",
+          "target": "0x1000d640"
+        },
+        {
+          "offset": "0xfc",
+          "target": "0x1000d4a0"
+        },
+        {
+          "offset": "0x100",
+          "target": "0x1000d5f0"
+        },
+        {
+          "offset": "0x104",
+          "target": "0x1000d5a0"
+        },
+        {
+          "offset": "0x108",
+          "target": "0x1000d430"
+        },
+        {
+          "offset": "0x10c",
+          "target": "0x1000da90"
+        },
+        {
+          "offset": "0x110",
+          "target": "0x10088250"
+        },
+        {
+          "offset": "0x114",
+          "target": "0x100882c0"
+        },
+        {
+          "offset": "0x118",
+          "target": "0x1000e1e0"
+        },
+        {
+          "offset": "0x11c",
+          "target": "0x1000d6f0"
+        },
+        {
+          "offset": "0x120",
+          "target": "0x1000d530"
+        },
+        {
+          "offset": "0x124",
+          "target": "0x1000d500"
+        },
+        {
+          "offset": "0x128",
+          "target": "0x1000d650"
+        }
+      ],
+      "rtti": {
+        "col": "0x101f84cc",
+        "type_descriptor": "0x1021c60c",
+        "name": ".?AVCMultiAlias@@",
+        "base_classes": [
+          {
+            "descriptor": "0x101f8504",
+            "name": ".?AVCMultiAlias@@",
+            "contained_count": 3,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f8414",
+            "name": ".?AVCBaseAlias@@",
+            "contained_count": 2,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f8430",
+            "name": ".?AVCPointEntity@@",
+            "contained_count": 1,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f83c4",
+            "name": ".?AVCBaseEntity@@",
+            "contained_count": 0,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          }
+        ]
+      }
+    },
+    {
+      "address": "0x101a296c",
+      "end_exclusive": "0x101a2a98",
+      "file_offset": "0x1a1d6c",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010b0da001070d8001030e2001090df0010a0db0010c0e0001000e0001040df00105072011080df0010a072011070d5001080d50010d0d90010f0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e2001010e3001000d40010f0df0010d0e2001040d60010a0d40010f0d50010a0d5001030d4001090da001050820810c0820810e0e10010c0d6001030d5001050d5001060d60010",
+      "sha256": "8ecd37e1805c92e9a773108db4cb4916ba24df79d51d267ec8b74a37bad14969",
+      "class_name": "CInfoAlias",
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dab0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x1000e230"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x1000dba0"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x1000e0c0"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x1000e000"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9f0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e310"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        },
+        {
+          "offset": "0xf4",
+          "target": "0x1000e2d0"
+        },
+        {
+          "offset": "0xf8",
+          "target": "0x1000d640"
+        },
+        {
+          "offset": "0xfc",
+          "target": "0x1000d4a0"
+        },
+        {
+          "offset": "0x100",
+          "target": "0x1000d5f0"
+        },
+        {
+          "offset": "0x104",
+          "target": "0x1000d5a0"
+        },
+        {
+          "offset": "0x108",
+          "target": "0x1000d430"
+        },
+        {
+          "offset": "0x10c",
+          "target": "0x1000da90"
+        },
+        {
+          "offset": "0x110",
+          "target": "0x10088250"
+        },
+        {
+          "offset": "0x114",
+          "target": "0x100882c0"
+        },
+        {
+          "offset": "0x118",
+          "target": "0x1000e1e0"
+        },
+        {
+          "offset": "0x11c",
+          "target": "0x1000d6c0"
+        },
+        {
+          "offset": "0x120",
+          "target": "0x1000d530"
+        },
+        {
+          "offset": "0x124",
+          "target": "0x1000d550"
+        },
+        {
+          "offset": "0x128",
+          "target": "0x1000d660"
+        }
+      ],
+      "rtti": {
+        "col": "0x101f8520",
+        "type_descriptor": "0x1021c628",
+        "name": ".?AVCInfoAlias@@",
+        "base_classes": [
+          {
+            "descriptor": "0x101f8558",
+            "name": ".?AVCInfoAlias@@",
+            "contained_count": 3,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f8414",
+            "name": ".?AVCBaseAlias@@",
+            "contained_count": 2,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f8430",
+            "name": ".?AVCPointEntity@@",
+            "contained_count": 1,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f83c4",
+            "name": ".?AVCBaseEntity@@",
+            "contained_count": 0,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          }
+        ]
+      }
+    },
+    {
+      "address": "0x101a2c70",
+      "end_exclusive": "0x101a2d8c",
+      "file_offset": "0x1a2070",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d8001060e2001090df0010a0db001000800110307f011050df00105072011080df0010a072011070d5001080d50010d0d90010e0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e2001090e4001000d40010f0df0010d0e2001040d60010a0d40010f0d50010a0d5001030d4001090da001050820810c0820810e0e10010",
+      "sha256": "a5bfe75dc70c3bf69d2972f9aa8388b2e8041fdd2a9c0eb65cfea2e8c16a8f0d",
+      "class_name": "CTriggerChangeAlias",
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x1000e260"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x1000dba0"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x10018000"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x10017f30"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df50"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9e0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e490"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        },
+        {
+          "offset": "0xf4",
+          "target": "0x1000e2d0"
+        },
+        {
+          "offset": "0xf8",
+          "target": "0x1000d640"
+        },
+        {
+          "offset": "0xfc",
+          "target": "0x1000d4a0"
+        },
+        {
+          "offset": "0x100",
+          "target": "0x1000d5f0"
+        },
+        {
+          "offset": "0x104",
+          "target": "0x1000d5a0"
+        },
+        {
+          "offset": "0x108",
+          "target": "0x1000d430"
+        },
+        {
+          "offset": "0x10c",
+          "target": "0x1000da90"
+        },
+        {
+          "offset": "0x110",
+          "target": "0x10088250"
+        },
+        {
+          "offset": "0x114",
+          "target": "0x100882c0"
+        },
+        {
+          "offset": "0x118",
+          "target": "0x1000e1e0"
+        }
+      ],
+      "rtti": {
+        "col": "0x101f8574",
+        "type_descriptor": "0x1021c644",
+        "name": ".?AVCTriggerChangeAlias@@",
+        "base_classes": [
+          {
+            "descriptor": "0x101f85a4",
+            "name": ".?AVCTriggerChangeAlias@@",
+            "contained_count": 1,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          },
+          {
+            "descriptor": "0x101f83c4",
+            "name": ".?AVCBaseEntity@@",
+            "contained_count": 0,
+            "mdisp": 0,
+            "pdisp": 4294967295,
+            "vdisp": 0,
+            "attributes": 64
+          }
+        ]
+      }
+    }
+  ],
+  "save_tables": [
+    {
+      "address": "0x1021aae0",
+      "end_exclusive": "0x1021b140",
+      "file_offset": "0x219ae0",
+      "bytes_hex": "01000000fc721a10000000000100000001000000f4601a1004000000010001000800000018511e1008000000010000000800000020511e101400000001000000070000002c511e1020000000010000000700000038511e102c000000010000000700000048511e1044000000010000000700000050511e1050000000010000000700000058511e105c000000010000000700000064511e1068000000010000000700000070511e1074000000010000000000000078511e10a0000000010000000000000084511e10a4000000010000000000000090511e10a800000001000000000000009c511e10ac0000000100000000000000a8511e10b0000000010000000a000000b4511e10b40000000100000010000000cc841a10b80000000100010010000000c0511e10bc0000000100000010000000cc511e10c00000000100000008000000d8511e10c40000000100000008000000e0511e10d00000000100000007000000e8511e10dc0000000100010007000000f0511e10e8000000010001000700000014b51c10f4000000010001000f000000f8511e1000010000010000000f00000000521e1004010000010000000a00000088151e100c010000010000000a0000000c521e1008010000010000000a000000603c1a1010010000010000000a00000018521e1014010000010000000a00000020521e1018010000010000000000000028521e101c010000010000000000000030521e102001000001000000000000003c521e1024010000010000000000000048521e1034010000010000000000000050521e1048010000010000000a00000058521e102c010000010000000f00000064521e1038010000010000000000000070521e103c010000010000000a0000007c521e1040010000010000000a00000088521e1044010000010000000a00000094521e104c0100000100000000000000a0521e10500100000100000007000000ac521e1054010000010000000a000000b8521e10600100000100000000000000c4521e10640100000100000000000000cc521e1068010000010000000a000000d4521e106c0100000100000000000000dc521e10700100000100000000000000e8521e10740100000100000007000000f4521e1078010000010000000a00000000531e1084010000010000000a00000008531e1088010000010000000600000010531e108c010000010000000600000018531e1090010000010000000600000028531e1094010000010000000600000030531e1098010000010000000600000038531e109c010000010000000600000040531e10a0010000010000000a00000050531e10a401000001000000000000005c531e10a8010000010000000a00000064531e10ac010000010000000a0000008cfb1d10b0010000010000000000000070531e10b4010000010000000f0000007c531e10b801000001000000000000008c531e10bc010000010000000000000098531e10c0010000010000000a000000a4531e10c4010000010000000a000000b0531e10c80100000100000001000000c8541e10cc0100000100010001000000bc541e10d0010000010001000100000080f01d10d40100000100000001000000bc531e10d80100000100000000000000c4531e10dc0100000100000000000000d0531e10e00100000100000000000000dc531e10e4010000010000000f000000e0531e10e80100000100000011000000e8531e10ec0100000100000011000000f0531e10f00100000100000011000000f8531e10f4010000010000001100000000541e10f80100000100000000000000a4791d10fc010000010000000f00000008541e1000020000010000000f00000018541e1004020000010000000f00000028541e1008020000010000000a0000003c541e1048020000010000000a00000044541e104c020000010000000a0000004c541e1050020000010000000a00000054541e105402000001000000000000005c541e1058020000010000000000000064541e105c02000001000000000000006c541e1060020000010000000000000074541e106402000001000000070000007c541e1068020000010000000700000084541e107402000001000000070000008c541e1080020000010000000700000094541e108c02000001000000060000009c541e10980200000100000006000000a4541e109c0200000100000006000000ac541e10a00200000100000006000000b4541e10a402000001000000",
+      "sha256": "0bd3cea94f17d887f333ad4e063d11f62a714a2f517afc559664569d12e2c510",
+      "class_name": "ENTVARS",
+      "fields": [
+        {
+          "type_id": 7,
+          "name": "velocity",
+          "offset": "0x20",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "solid",
+          "offset": "0x10c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "movetype",
+          "offset": "0x108",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "takedamage",
+          "offset": "0x170",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    }
+  ],
+  "export_thunks": [
+    {
+      "name": "info_alias",
+      "ordinal": 620,
+      "address": "0x1000e5a0",
+      "target": "0x1000d230",
+      "native_bytes": "e98becffff"
+    },
+    {
+      "name": "info_group",
+      "ordinal": 622,
+      "address": "0x1000e5b0",
+      "target": "0x1000d290",
+      "native_bytes": "e9dbecffff"
+    },
+    {
+      "name": "multi_alias",
+      "ordinal": 719,
+      "address": "0x1000e5c0",
+      "target": "0x1000d2f0",
+      "native_bytes": "e92bedffff"
+    },
+    {
+      "name": "trigger_changealias",
+      "ordinal": 766,
+      "address": "0x1000e5d0",
+      "target": "0x1000d350",
+      "native_bytes": "e97bedffff"
+    }
+  ],
+  "api_binding": {
+    "initializer": "0x100b4aa0",
+    "base": "0x10222f48",
+    "copied_dwords": 144,
+    "slot15": {
+      "name": "pfnGetEntityIllum",
+      "address": "0x10222f84"
+    },
+    "header": "external/hlsdk-portable/engine/eiface.h",
+    "header_sha256": "5a2b1a37d25364b173d312cdb26cf11e8b6dae3e0a3d495cde735fc025e910a5"
+  },
+  "virtual_globals": [
+    {
+      "address": "0x10222f34",
+      "size": 12,
+      "meaning": "comparison vector; no raw file backing, runtime writes not audited"
+    }
+  ],
+  "pe_sections": [
+    {
+      "name": ".text",
+      "rva": "0x1000",
+      "virtual_size": 1703532,
+      "raw_offset": 1024,
+      "raw_size": 1703936
+    },
+    {
+      "name": ".rdata",
+      "rva": "0x1a1000",
+      "virtual_size": 457238,
+      "raw_offset": 1704960,
+      "raw_size": 457728
+    },
+    {
+      "name": ".data",
+      "rva": "0x211000",
+      "virtual_size": 141588,
+      "raw_offset": 2162688,
+      "raw_size": 64512
+    },
+    {
+      "name": ".rsrc",
+      "rva": "0x234000",
+      "virtual_size": 480,
+      "raw_offset": 2227200,
+      "raw_size": 512
+    },
+    {
+      "name": ".reloc",
+      "rva": "0x235000",
+      "virtual_size": 185640,
+      "raw_offset": 2227712,
+      "raw_size": 185856
+    }
+  ],
+  "supporting_sources": [
+    {
+      "path": "external/hlsdk-portable/engine/eiface.h",
+      "sha256": "5a2b1a37d25364b173d312cdb26cf11e8b6dae3e0a3d495cde735fc025e910a5"
+    },
+    {
+      "path": "external/hlsdk-portable/dlls/cbase.h",
+      "sha256": "d200ba137c5bc67a1b26b7031ff947c7a943cfaa3dc5da77358a0a1542ba7e2c"
+    },
+    {
+      "path": "external/hlsdk-portable/common/const.h",
+      "sha256": "a2e3bcd0b233f975616110febe6dcf231fda619cff6843f833aa1aeda5c88fbc"
+    }
+  ]
+}

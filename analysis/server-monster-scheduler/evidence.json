@@ -1,0 +1,4629 @@
+{
+  "schema": 1,
+  "module": "server",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "method": "Saved Ghidra C and bounded static PE/objdump; original DLL not executed; no REA process, runtime, game, build.",
+  "range_convention": "ASM VA start-inclusive/end-exclusive; saved C inclusive.",
+  "source_c": [
+    {
+      "address": "0x1000aa50",
+      "path": "decompiled/server/partial-pass/functions/0x1000aa50.c",
+      "sha256": "e3847e477b24309e25edc3c1da49d61e3f580af540a0bb6d24b094910a0c3e02",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000aa50",
+        "0x1000aac6"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000aa50",
+          "0x1000aac6"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000aad0",
+      "path": "decompiled/server/partial-pass/functions/0x1000aad0.c",
+      "sha256": "dde1fc64edd71fa9da7043f99c98d0f282acae8d8c78fa181a37551f9de9acff",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000aad0",
+        "0x1000aaee"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000aad0",
+          "0x1000aaee"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000aaf0",
+      "path": "decompiled/server/partial-pass/functions/0x1000aaf0.c",
+      "sha256": "8e34106ee75afe94fb8ab6f57ffd169b52ab6e85e8d2e13f5d57f9a9626f2876",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000aaf0",
+        "0x1000ab3a"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000aaf0",
+          "0x1000ab3a"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000ab50",
+      "path": "decompiled/server/partial-pass/functions/0x1000ab50.c",
+      "sha256": "4e330f22de28ad81138fb922fab519558f034103caa5189622075a48db2391ba",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000ab50",
+        "0x1000ab64"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000ab50",
+          "0x1000ab64"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000ab70",
+      "path": "decompiled/server/partial-pass/functions/0x1000ab70.c",
+      "sha256": "6250ef09077a185d6fce4f2b451e25cc8c5285adf71f4662906695fe5ac35e01",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000ab70",
+        "0x1000ab92"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000ab70",
+          "0x1000ab92"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000abf0",
+      "path": "decompiled/server/partial-pass/functions/0x1000abf0.c",
+      "sha256": "607ca6ca70ad035c54823354eaa505f9bffa82f67be4efd877655cf292b8b73d",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000abf0",
+        "0x1000afbb"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000abf0",
+          "0x1000afbb"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000afe0",
+      "path": "decompiled/server/partial-pass/functions/0x1000afe0.c",
+      "sha256": "a27ef23ef92f7e75588355dff5f6fc952f44b8c1daa32d4d99d81a7ff4e810ee",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000afe0",
+        "0x1000affd"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000afe0",
+          "0x1000affd"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000b000",
+      "path": "decompiled/server/partial-pass/functions/0x1000b000.c",
+      "sha256": "0d2cb912558b8d06d87c9ce06ff704772836a32fb294921a5cac98786e1b7ff7",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000b000",
+        "0x1000b014"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000b000",
+          "0x1000b014"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000b020",
+      "path": "decompiled/server/partial-pass/functions/0x1000b020.c",
+      "sha256": "fa41c43dc3e09b3d51365628c5f030dd5d6a03679181830951dd422f3e49087e",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000b020",
+        "0x1000b068"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000b020",
+          "0x1000b068"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000b070",
+      "path": "decompiled/server/partial-pass/functions/0x1000b070.c",
+      "sha256": "8b0491a153723b83884b6f54c1c11fd6a8faf94bcce2e6b9593635207146fdbc",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000b070",
+        "0x1000b223"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000b070",
+          "0x1000b223"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000b230",
+      "path": "decompiled/server/partial-pass/functions/0x1000b230.c",
+      "sha256": "85e4983c8a66187977005d41774ac5d7e9487384f4f5d70d11908dbf0886ac27",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000b230",
+        "0x1000b257"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000b230",
+          "0x1000b257"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000b260",
+      "path": "decompiled/server/partial-pass/functions/0x1000b260.c",
+      "sha256": "dba9981034b0d182a7024b5b915bfeb49643fcc6a0e0f0eaa03fb4fd30eb3f5c",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000b260",
+        "0x1000b2ee"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000b260",
+          "0x1000b2ee"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000b2f0",
+      "path": "decompiled/server/partial-pass/functions/0x1000b2f0.c",
+      "sha256": "8ea74e6a9b47d9e81a1a34428d37d29d4d28ab56f97bab179d4a98b21a795fb3",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000b2f0",
+        "0x1000bb47"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000b2f0",
+          "0x1000bb47"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000bbf0",
+      "path": "decompiled/server/partial-pass/functions/0x1000bbf0.c",
+      "sha256": "7821139e3d84dc75281f0592ba0c8c737eb4c385dcdebb58f320b87c3f03712c",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000bbf0",
+        "0x1000bc54"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000bbf0",
+          "0x1000bc54"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000bc60",
+      "path": "decompiled/server/partial-pass/functions/0x1000bc60.c",
+      "sha256": "62d7e714c398572ef96c10a69b2ae91512f102db2d36d0dddb5bc825db66b87b",
+      "role": "primary",
+      "saved_range_inclusive": [
+        "0x1000bc60",
+        "0x1000d098"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000bc60",
+          "0x1000d098"
+        ]
+      ]
+    },
+    {
+      "address": "0x100c26f0",
+      "path": "decompiled/server/partial-pass/functions/0x100c26f0.c",
+      "sha256": "6712ccfdc82e5ab8deddcd5ca390f4d1baac6d74aa48989d1c1c72e75b1fab26",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100c26f0",
+        "0x100c2708"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100c26f0",
+          "0x100c2708"
+        ]
+      ]
+    },
+    {
+      "address": "0x100bdf30",
+      "path": "decompiled/server/partial-pass/functions/0x100bdf30.c",
+      "sha256": "896511dc01070aeda5f866d1ae43632b66b47f2cdafcf07b099a3c96d6494457",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100bdf30",
+        "0x100bdf53"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100bdf30",
+          "0x100bdf53"
+        ]
+      ]
+    },
+    {
+      "address": "0x100be5b0",
+      "path": "decompiled/server/partial-pass/functions/0x100be5b0.c",
+      "sha256": "e7f0645e9909ce53ec59a279e52b149464beb37bf3a171cec6f01e7312ea8616",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100be5b0",
+        "0x100be5df"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100be5b0",
+          "0x100be5df"
+        ]
+      ]
+    },
+    {
+      "address": "0x100bed20",
+      "path": "decompiled/server/partial-pass/functions/0x100bed20.c",
+      "sha256": "96856e445f7eb053dca933ca462601e4f734f774629a5800e5d96d8549fc3f7d",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100bed20",
+        "0x100bed79"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100bed20",
+          "0x100bed79"
+        ]
+      ]
+    },
+    {
+      "address": "0x100c1a70",
+      "path": "decompiled/server/partial-pass/functions/0x100c1a70.c",
+      "sha256": "2369178acf561089b92075a4440d3e0d1f468c1952a45e2638ab55b67cb6a1f3",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100c1a70",
+        "0x100c1aa1"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100c1a70",
+          "0x100c1aa1"
+        ]
+      ]
+    },
+    {
+      "address": "0x1010b540",
+      "path": "decompiled/server/partial-pass/functions/0x1010b540.c",
+      "sha256": "6bed39432916eb13bcf52712265a0930ce5bc773e2995e1f644e827f5e9a7841",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1010b540",
+        "0x1010b594"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1010b540",
+          "0x1010b594"
+        ]
+      ]
+    },
+    {
+      "address": "0x1010f330",
+      "path": "decompiled/server/partial-pass/functions/0x1010f330.c",
+      "sha256": "14cc8637aaf145c58787bc8ed496c1a4585e9d46a07e281c7d3e81b22a6fe070",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1010f330",
+        "0x1010f367"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1010f330",
+          "0x1010f367"
+        ]
+      ]
+    },
+    {
+      "address": "0x10017780",
+      "path": "decompiled/server/partial-pass/functions/0x10017780.c",
+      "sha256": "53dc0658096d3c94a5bfff7383a67baade6b23a55a37bd0bd8f75d6576637d6e",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10017780",
+        "0x1001778b"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10017780",
+          "0x1001778b"
+        ]
+      ]
+    },
+    {
+      "address": "0x10017790",
+      "path": "decompiled/server/partial-pass/functions/0x10017790.c",
+      "sha256": "4dcab867b18249debc88b7e8bd5619c8dd5292be05d1f645be99c33723c09e31",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10017790",
+        "0x1001779f"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10017790",
+          "0x1001779f"
+        ]
+      ]
+    },
+    {
+      "address": "0x100177a0",
+      "path": "decompiled/server/partial-pass/functions/0x100177a0.c",
+      "sha256": "0d6e0e29145c88b5915644d8085d0cf51066e1da44e145ea494d434596e19abe",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100177a0",
+        "0x100177af"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100177a0",
+          "0x100177af"
+        ]
+      ]
+    },
+    {
+      "address": "0x100c2a70",
+      "path": "decompiled/server/partial-pass/functions/0x100c2a70.c",
+      "sha256": "22b06669ce2d051cff2b59cd8bf757e8e4772cda353fc92051c0b0adf9a5a341",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100c2a70",
+        "0x100c2ad2"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100c2a70",
+          "0x100c2ad2"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000aba0",
+      "path": "decompiled/server/partial-pass/functions/0x1000aba0.c",
+      "sha256": "1720678fca058e4beea1dc150e70fe3d0431dbcdbb575e065451eeba3b5cca73",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000aba0",
+        "0x1000abe4"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000aba0",
+          "0x1000abe4"
+        ]
+      ]
+    },
+    {
+      "address": "0x1000e950",
+      "path": "decompiled/server/partial-pass/functions/0x1000e950.c",
+      "sha256": "f581f96a77893662b449ebb06bfd043dbed8fe1289e18f7cec650f0cd5065930",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1000e950",
+        "0x1000e978"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1000e950",
+          "0x1000e978"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b0f30",
+      "path": "decompiled/server/partial-pass/functions/0x100b0f30.c",
+      "sha256": "27a00e23661182e8493fb51b3d7c264c2114880143a2877d98f76f116bb85a6c",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b0f30",
+        "0x100b0f34"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b0f30",
+          "0x100b0f34"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b05e0",
+      "path": "decompiled/server/partial-pass/functions/0x100b05e0.c",
+      "sha256": "e5dd7f0161d9251b1ec14395abacb2b584c40c72913783dc5a18e7b7b092e5fb",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b05e0",
+        "0x100b063b"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b05e0",
+          "0x100b063b"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b09e0",
+      "path": "decompiled/server/partial-pass/functions/0x100b09e0.c",
+      "sha256": "08c0d1ef69bb74213633fe2746fa9e82142aa778110a455cc71ce8501fad13e8",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b09e0",
+        "0x100b0a3e"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b09e0",
+          "0x100b0a3e"
+        ]
+      ]
+    },
+    {
+      "address": "0x100b0940",
+      "path": "decompiled/server/partial-pass/functions/0x100b0940.c",
+      "sha256": "1e1104735ff5bdd0bd354565101dfb516882db2e6f5f54b43370597a6656016f",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100b0940",
+        "0x100b0970"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100b0940",
+          "0x100b0970"
+        ]
+      ]
+    },
+    {
+      "address": "0x100c1ec0",
+      "path": "decompiled/server/partial-pass/functions/0x100c1ec0.c",
+      "sha256": "fc06498ac09808e096109b46735ee4246a58c46cd4e17235c97a17ecd6f1e03f",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100c1ec0",
+        "0x100c1f1e"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100c1ec0",
+          "0x100c1f1e"
+        ]
+      ]
+    },
+    {
+      "address": "0x100c19a0",
+      "path": "decompiled/server/partial-pass/functions/0x100c19a0.c",
+      "sha256": "94d224fb9ceca7d3c70e53f4d79ca6f2f3ae79689e941397e3cc1d67937949fc",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100c19a0",
+        "0x100c1a11"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100c19a0",
+          "0x100c1a11"
+        ]
+      ]
+    },
+    {
+      "address": "0x1008ca70",
+      "path": "decompiled/server/partial-pass/functions/0x1008ca70.c",
+      "sha256": "ec02fba1361be1d6dab2029bddfe728dbfeef7c35524bd4da7efdec9f0e8d0b9",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x1008ca70",
+        "0x1008cc9b"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x1008ca70",
+          "0x1008cc9b"
+        ]
+      ]
+    },
+    {
+      "address": "0x10014b20",
+      "path": "decompiled/server/partial-pass/functions/0x10014b20.c",
+      "sha256": "156acf7008b65a02a5bad2399fc6dd1817e9931cb8e875f7db1f9cc5a6c53d95",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x10014b20",
+        "0x10014b22"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x10014b20",
+          "0x10014b22"
+        ]
+      ]
+    },
+    {
+      "address": "0x100132b0",
+      "path": "decompiled/server/partial-pass/functions/0x100132b0.c",
+      "sha256": "d658adc167f3885c197a40a70884426020c35db429769f024aaf277aec3ac2a7",
+      "role": "support",
+      "saved_range_inclusive": [
+        "0x100132b0",
+        "0x100132b6"
+      ],
+      "all_saved_ranges_inclusive": [
+        [
+          "0x100132b0",
+          "0x100132b6"
+        ]
+      ]
+    }
+  ],
+  "assembly": [
+    {
+      "start": "0x1000aa50",
+      "end_exclusive": "0x1000aac7",
+      "file_offset": "0x9e50",
+      "bytes_hex": "558bec8b4508898130020000c7813402000000000000c7812c02000000000000c7818001000000000000c78120030000000000008b480881e100000200741a83780c00751a68b01f1a106a02ff153c30221083c4085dc2040083780c00741485c9751068d81f1a106a02ff153c30221083c4085dc20400",
+      "sha256": "489d6652b174d3dddd8f6632b2520d21b9b355e1bf36608a1d12be57bec94f56",
+      "path": "analysis/server-monster-scheduler/1000aa50.asm",
+      "assembly_sha256": "d78a87ce960c032421f35a3f876df7bb7ee3ae5a30f33982e8176fa7abe97cb2",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000aa50",
+        "--stop-address=0x1000aac7",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000aad0",
+      "end_exclusive": "0x1000aaef",
+      "file_offset": "0x9ed0",
+      "bytes_hex": "c7812c02000000000000c7813002000000000000c7813402000000000000c3",
+      "sha256": "12914d1cd44a67be2ea7b1f9e76b4e6b15e50cad2faaeda325600567333f2781",
+      "path": "analysis/server-monster-scheduler/1000aad0.asm",
+      "assembly_sha256": "1d16d580e90617f8a07fb5f0bf54d83f03682038748bb3296b6efa77b1fb5ddf",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000aad0",
+        "--stop-address=0x1000aaef",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000aaf0",
+      "end_exclusive": "0x1000ab3b",
+      "file_offset": "0x9ef0",
+      "bytes_hex": "558beca1883122108b550c8b88980000008b450803088a013a02752184c074128a41013a4201751583c10283c20284c075e433c933c085c90f94c05dc31bc933c083c90185c90f94c05dc3",
+      "sha256": "e47435f3a5366f316a116cc3acb9601a7bb283c84994b7ab1fb6a002ebe2eb7a",
+      "path": "analysis/server-monster-scheduler/1000aaf0.asm",
+      "assembly_sha256": "1fb6a118ea3cb1ce7d4495cb960add45a2d629e3197eb8eb9d7f381a71a5481d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000aaf0",
+        "--stop-address=0x1000ab3b",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000ab50",
+      "end_exclusive": "0x1000ab65",
+      "file_offset": "0x9f50",
+      "bytes_hex": "8b913002000033c08b89340200003b4a040f94c0c3",
+      "sha256": "dc8dd606173838903f06969ac8b439a4e3e6e2ea300f086ec82230e2178cf509",
+      "path": "analysis/server-monster-scheduler/1000ab50.asm",
+      "assembly_sha256": "192d7a97d224736f65acbd1c73522fcb4d9c62f4d0cf7b60f59e10e6f3b65ddf",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000ab50",
+        "--stop-address=0x1000ab65",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000ab70",
+      "end_exclusive": "0x1000ab93",
+      "file_offset": "0x9f70",
+      "bytes_hex": "8b813002000085c074168b40080d000000c08581800100007506b801000000c333c0c3",
+      "sha256": "7d3847cea3447a68ebd091b45fdccd588cd7834abbe78c0de381274887873346",
+      "path": "analysis/server-monster-scheduler/1000ab70.asm",
+      "assembly_sha256": "c0bb905ae5fa39a1881a8bcf7f15760cb0f45ec0c38283d404a6315c356ab2ff",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000ab70",
+        "--stop-address=0x1000ab93",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000abf0",
+      "end_exclusive": "0x1000afbc",
+      "file_offset": "0x9ff0",
+      "bytes_hex": "558bec51568bf18b862402000083f8080f879c030000ff2485bcaf00108b066a268b808c010000ffd05e8be55dc3683c221a10e97f0300008b8e5803000085c9746b8b1588312210f30f108e64030000f30f10020f2fc176540f2e0dd0131a109ff6c4447b478b829800000003c1506a00e82ad9100083c40885c074268bc8e8cc081000508d8e8c010000e8c0ca00008b068bce6a2a8b808c010000ffd05e8be55dc3c78664030000000080bff78680010000000002008bce74118b066a058b808c010000ffd05e8be55dc3e86f320b008b0e8b918c0100008bce85c074096a01ffd25e8be55dc36a02ffd25e8be55dc38b8e5803000085c974498b1588312210f30f108e64030000f30f10020f2fc176320f2e0dd0131a109ff6c4447b258b829800000003c1506a00e871d8100083c40885c00f8543ffffffc78664030000000080bff786800100000000100074216a418bcee8073c000083f8ff74138b068bce6a0e8b808c010000ffd05e8be55dc38b86800100008bcea9000300007458e8ab3f0b00f20f100d781e1a108bce8b06d95dfcf30f1045fc0f5405801f1a108b808c0100000f5ad0f30f1086080200000f5ac0f20f5cc8f20f590db0221a10660f2fca76096a14ffd05e8be55dc36a06ffd05e8be55dc3a9000002008b068b808c01000074096a05ffd05e8be55dc36a08ffd05e8be55dc38b8680010000a90000100074506a008d8e84010000e83dc900008b068bce8b8008020000ffd08bce85c074198b0681a680010000ffffefff8b8090010000ffd05e8be55dc36a03e83b7c0b008b068bce8b8090010000ffd05e8be55dc3a90000010074118b066a038b808c010000ffd05e8be55dc3a900010000741af686ec0200004075118b066a118b808c010000ffd05e8be55dc3a810751ea8208b068b808c01000074096a0cffd05e8be55dc36a0affd05e8be55dc3a90004000074118b066a188b808c010000ffd05e8be55dc3a90010000074118b066a198b808c010000ffd05e8be55dc3a90008000074118b066a168b808c010000ffd05e8be55dc3a90020000074118b066a178b808c010000ffd05e8be55dc3a9000c000075118b066a0c8b808c010000ffd05e8be55dc3e892360b0085c075138b068bce6a0a8b808c010000ffd05e8be55dc36854221a10eb6b8b066a218b808c010000ffd05e8be55dc383be4c03000000753b8b46048b08a188312210038898000000516874221a106a02ff153c30221083c40c8bcee8b2f50e008b068bce6a018b808c010000ffd05e8be55dc38b066a288b808c010000ffd05e8be55dc3688c221a106a02ff153c30221083c408b8103321105e8be55dc3",
+      "sha256": "206c7a92d075b928b4c38221eb2bfb6af56ef64acdef0df14ea66fff72e1882e",
+      "path": "analysis/server-monster-scheduler/1000abf0.asm",
+      "assembly_sha256": "6dc082b683edef0b8a82e24ed7094fa3e7721155a4c0fa2a85e8b7ef27825258",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000abf0",
+        "--stop-address=0x1000afbc",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000afe0",
+      "end_exclusive": "0x1000affe",
+      "file_offset": "0xa3e0",
+      "bytes_hex": "8b913402000085d278118b81300200003b50047d068b008d04d0c333c0c3",
+      "sha256": "d32d960a73989eaf4f02011f8666ae4630bf915775c41e1372a32cd3add92486",
+      "path": "analysis/server-monster-scheduler/1000afe0.asm",
+      "assembly_sha256": "7e1d558665d602930acf2bb218a5c84766b87aec4c7dd285ba12086926821656",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000afe0",
+        "--stop-address=0x1000affe",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000b000",
+      "end_exclusive": "0x1000b015",
+      "file_offset": "0xa400",
+      "bytes_hex": "8b813002000085c07501c38b4008238180010000c3",
+      "sha256": "c69fd86f66ce66c5bc0e7fb09823c5724a9077189871b36b4605d77d88dedf7e",
+      "path": "analysis/server-monster-scheduler/1000b000.asm",
+      "assembly_sha256": "dfa5384589d153ceebaf7aed75a19b2646049185f8919beeaaffc2dc07858bb9",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000b000",
+        "--stop-address=0x1000b015",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000b020",
+      "end_exclusive": "0x1000b069",
+      "file_offset": "0xa420",
+      "bytes_hex": "8b4104baa01f1a108b0d883122108b000381980000008a083a0a752084c974128a48013a4a01751483c00283c20284c975e433c933c085c90f94c0c31bc933c083c90185c90f94c0c3",
+      "sha256": "fed48d069e655551bae54a56754c0d04bb3dc6326a06d90d5c932f8f58b3df97",
+      "path": "analysis/server-monster-scheduler/1000b020.asm",
+      "assembly_sha256": "bea4733a340cf0d027c594f626fdaad372c042e8a408a1b4931b2a428877a54b",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000b020",
+        "--stop-address=0x1000b069",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000b070",
+      "end_exclusive": "0x1000b224",
+      "file_offset": "0xa470",
+      "bytes_hex": "53568bf133db578b862c0200000f1f0083be3002000000740c83f80475078bcee89b0100008bcee8d4faffff85c074128b86240200003b86280200000f84e10000008b068bceff90940100008b862802000083f808744b83f8067508398624020000753e8b868001000085c0740279288b863002000085c07406837808007c1883be240200000275198d8e84010000e87cc6000085c0750a8b068bceff90ac010000f78680010000000000408b8628020000743c39862402000075348b8e200300008b0685c9740351eb026a298bceff908c010000ffb6340200008bf86800201a106a02ff153c30221083c40c57eb2c508bcee808790b008b862402000083f806741183f808740c8b068bceff9090010000eb078bcee865faffff508bcee8bdf8ffff83be2c02000000751c8bcee83dfeffff8b168bce50c7862c02000001000000ff92840100008b8e18020000398e14020000740b8b06518bceff90b00100008b862c02000083f804740485c0750a4383fb0a0f8c96feffff8bcee8ff740b0085c074128bcee8e4fdffff8b168bce50ff92880100008b8e18020000398e14020000740b8b06518bceff90b00100005f5e5bc3",
+      "sha256": "b544faeef487afb8051c43f5e2c3eb5dfbe9097e4373943e709979bc0d6ef0ed",
+      "path": "analysis/server-monster-scheduler/1000b070.asm",
+      "assembly_sha256": "8fd6fa50fc76e599743339426c52ba8d2f51e4a1962800a3519e97f9c3fcdfac",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000b070",
+        "--stop-address=0x1000b224",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000b230",
+      "end_exclusive": "0x1000b258",
+      "file_offset": "0xa630",
+      "bytes_hex": "568bf1ff8634020000c7862c02000000000000e808f9ffff85c0740a818e80010000000000805ec3",
+      "sha256": "2afde929bf8739eed84575a8d12912d0c75f85ea6500a658ea9339595c582a9f",
+      "path": "analysis/server-monster-scheduler/1000b230.asm",
+      "assembly_sha256": "795e0a7bcc41ad8cb2e41bf3519742a4bd53f501253eab647254ecdbc1d559ae",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000b230",
+        "--stop-address=0x1000b258",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000b260",
+      "end_exclusive": "0x1000b2ef",
+      "file_offset": "0xa660",
+      "bytes_hex": "558bec83e4f851568bf1f30f100ef30f104604f30f59c9f30f59c0f30f58c80f5ac10f57c9660f2ec87706f20f51c0eb05e8fa0b16008b4d080f57c9f20f5ac80f57c00f2ec89ff6c4448bc17a14c70100000000c74104000000005e8be55dc20400f30f100590131a10f30f5ec1f30f100ef30f59c8f30f1109f30f104e04f30f59c85ef30f1149048be55dc20400",
+      "sha256": "cd00f76dcdf1c43a92d5767ee9e8dc4eee698b80b21c1cdcaa6621747915cd23",
+      "path": "analysis/server-monster-scheduler/1000b260.asm",
+      "assembly_sha256": "43b6f3336a6d9a7eb03181c6ca56edf88c2a9c09b10a3599bd81a1e6901c8fbb",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000b260",
+        "--stop-address=0x1000b2ef",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000b2f0",
+      "end_exclusive": "0x1000bb48",
+      "file_offset": "0xa6f0",
+      "bytes_hex": "558bec83e4f883ec245356578b7d088bf18b178d42ff83f85b77470fb68088bb0010ff248548bb00108b46048b16f30f2c80b0000000508b8230010000ffd08bceddd8e878320b0085c07416f7868001000000000040750ac7862c020000040000005f5e5b8be55dc2040033c983fa410f94c18d0ccd8401000003cee81fc4000085c074668b40048b4e04f30f10500cf30f104810f30f1040088d442418f30f5c510cf30f5c4910f30f5c410850f30f11542420f30f114c2424f30f1144241ce87bf510008b460483c4048bced998ac0000008b46048b16f30f2c80b0000000508b8230010000ffd0ddd883bef800000000e953ffffff8b86f402000083ec0c8bcc89018b86f80200008941048b86fc0200008941088bcee8e34c0b008bcee905ffffff8b4604ffb00c020000ff158c2f221083c40485c00f8424ffffff50ff156030221083c404e9fbfeffff8b86f402000083ec0c8bcc89018b86f80200008941048b86fc0200008941088bcee88d4c0b008b46048bce8b16f30f2c80b0000000508b8230010000ffd0ddd8a188312210f30f10000f2f860c0200000f82bffeffffe9a4feffff8d8e8c010000e8ddc2000085c07513818e80010000000000405f5e5b8be55dc204008b4604f30f108ec4020000f30f1086c8020000f30f5c400cf30f5c4808f30f59c0f30f59c9f30f58c10f57c90f5ac0660f2ec87706f20f51c0eb05e8960916000f57c9f20f5ac8f30f1047040f2fc1f30f114c24100f878c0000008d8e8c010000e880c20000f30f108ec4020000f30f1096c8020000f30f1086cc0200008b4004f30f105f04f30f115c2414f30f5c500cf30f5c4808f30f5c4010f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e810091600f20f5ac00f57c9f30f5ac8f30f1047040f5ac0f20f5905481e1a10660f2fc8767f8d8e8c010000e8f4c100008b4004f30f7e4008660fd686c40200008b40108986cc0200008b4604f30f108ec4020000f30f1086c8020000f30f5c400cf30f5c4808f30f59c0f30f59c9f30f58c10f57c90f5ac0660f2ec87706f20f51c0eb05e88b0816000f57c98bcef20f5ac8f30f114c2410e897270b00f30f104704eb06f30f10442414f30f104c24100f2fc17626f7868001000000000040750ac7862c020000040000008bcee822640b005f5e5b8be55dc20400f30f1005bc221a100f2fc1761c83bed0020000037413c786d0020000030000005f5e5b8be55dc204000f2f0dc8131a100f82c5fcffff83bed0020000040f84b8fcffffc786d0020000040000005f5e5b8be55dc204008d8e8c010000e8c8c0000085c00f84e7fdffff8b4604f30f108ec4020000f30f1086c8020000f30f5c400cf30f5c4808f30f59c0f30f59c9f30f58c10f57c90f5ac0660f2ec87706f20f51c0eb05e8900716000f57c9f20f5ac8f30f1086600300000f2fc1f30f114c24100f87960000008d8e8c010000e877c00000f30f108ec4020000f30f1096c8020000f30f1086cc0200008b4004f30f109e60030000f30f115c2414f30f5c500cf30f5c4808f30f5c4010f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e804071600f20f5ac00f57c9f30f5ac8f30f1086600300000f5ac0f20f5905481e1a10660f2fc80f86b2000000a1883122108b8e58030000038898000000516a00e8c3cd100083c40885c074138bc8e865fd0f00508d8e8c010000e859bf00008d8e8c010000e8aebf00008b4004f30f7e4008660fd686c40200008b40108986cc0200008b4604f30f108ec4020000f30f1086c8020000f30f5c400cf30f5c4808f30f59c0f30f59c9f30f58c10f57c90f5ac0660f2ec87706f20f51c0eb05e845061600f20f5ac08bcef30f11442410e854250b00f30f108660030000eb06f30f104424140f2f4424100f86dbfafffff7868001000000000040750ac7862c020000040000008bcee8dc610b00a1883122108b8098000000038658030000506a00e8e3cc100083c408c78658030000000000008d8e8c0100008bd86a00e877be000085db7411568bcbe85b3a10005f5e5b8be55dc204006818201a106a01ff153c30221083c4085f5e5b8be55dc2040083beb8020000000f854efafffff7868001000000000040750ac7862c02000004000000e851610b005f5e5b8be55dc2040083bef8000000000f841dfaffff8b4604f30f1080340100000f2f05c0221a100f8205faffffc78074010000020000008b0651c74678a07a0110c704240000a041ff50088b46048bcec7803c01000000000000e8710a0b008b4e0485c075378944242c8d44241850c744241c000080408d442428c744242000008040c74424240000803fc7442428000080c0c744242c000080c0eb65f30f1089e40000008d442424f30f1091ec000000f30f1081e8000000f30f580d90131a10f30f11442424f30f11542428508d44241cf30f114c2430f30f1089e0000000f30f1091e4000000f30f1081dc000000f30f1144241cf30f114c2420f30f115424245051e807e610008b0683c40c8bceff902c01000085c074108bcee80ff207005f5e5b8be55dc204008b460451c704240000f04183c0086880010000506a08e8bb4d0f0083c4105f5e5b8be55dc204008b86f402000083ec0c8bcc89018b86f80200008941048b86fc0200008941088bcee859460b008b46048bce8b16f30f2c80b0000000508b8230010000ffd0ddd883bef8000000000f8494f8ffffc7861402000000000000e96ff8ffff8b8e4c03000083b9a8030000000f8f72f8ffffa188312210f30f10000f2f81ac0300000f825cf8ffffe941f8ffff83bef8000000000f844af8ffff8b8e4c0300008b819c03000085c00f8e20f8ffff4889819c0300008b864c0300008b4e048b80a00300008981340100008bcee8a12e00005f5e5b8be55dc20400",
+      "sha256": "fe1309a8308923c7e154adc30e5a50341d57fb94ceaaba3e6329cba4e235c0c7",
+      "path": "analysis/server-monster-scheduler/1000b2f0.asm",
+      "assembly_sha256": "603adce05fe97340e2f905ab4ff98aa24a3afaa3c3a5eb1cb494fe54d06cf608",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000b2f0",
+        "--stop-address=0x1000bb48",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000bbf0",
+      "end_exclusive": "0x1000bc55",
+      "file_offset": "0xaff0",
+      "bytes_hex": "558bec51568bf1e824310b00f30f1005c4221a10d95dfc0f2f45fc721d6a108bcee83a2d000083f8ff740fc78618020000100000005e8be55dc3f30f1045fc0f2f05b8221a1076186a0f8bcee80f2d000083f8ff740ac786180200000f0000005e8be55dc3",
+      "sha256": "6284e0b1ea1a4669768e9bfbf1179f2d9b11ba5f7fc5223f33140d727b7b7b19",
+      "path": "analysis/server-monster-scheduler/1000bbf0.asm",
+      "assembly_sha256": "64fefe35ae4d83ad09ef6634e8a6c0e0ec116c71e3736f74477127adb92f9ede",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000bbf0",
+        "--stop-address=0x1000bc55",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000bc60",
+      "end_exclusive": "0x1000d099",
+      "file_offset": "0xb060",
+      "bytes_hex": "558bec83e4f883ec1c53568b7508578bf98b06894424148d48ff83f95b0f87fc130000ff248d9cd000108b470451f30f104054f30f110424e883b71000d95c2410f30f10442410f30f5c4604f30f110424e86ab710008b470483c404d998ac0000008bcfe827ffffff5f5e5b8be55dc204008b470451f30f104054f30f110424e83bb71000f30f104604d95c2410f30f58442410ebb6f30f2c46040987ec020000f78780010000000000400f857f130000c7872c020000040000005f5e5b8be55dc20400f30f2c4604f7d02187ec020000ebce8bcfe8a62b0b008b8f800100008987e802000083f8ff7408f7c100000040ebb881c900000040898f800100005f5e5b8be55dc204008b4704f30f7e4008660fd687dc0200008b40108987e4020000e97bfffffff30f7e05342f2210660fd687dc020000a13c2f22108987e4020000e95bffffffc787e8020000ffffffffe94cffffff8b87180200003b87d002000075108b078bcfff90680100008987180200008bcfe8965c0b00e922fffffff30f2c46048987180200005f5e5b8be55dc204006b8fe802000058a1bc3822100fbf4401528987180200005f5e5b8be55dc20400f30f2c46048b178bcf50ff928c01000085c00f84f3040000508bcfe81decffff5f5e5b8be55dc204008d8f84010000e839b9000085c00f84cf040000f30f10460483ec08f30f11442404c70424000000008d8f84010000e831b9000083ec0c8d8f840100008bd48b70048b867801000089028b867c0100008942048b8680010000894208e804b9000083ec0c8bcc8b50048b420889018b420c8941048b42108941088bcf8b07ff90c80100008b8f8001000085c00f8486fefffff7c100000040e933feffff8d8f84010000e89db8000085c00f84330400008b078bcf8b80d0010000ffd083ec08d95c2414f30f10442414f30f11442404f30f104604f30f110424e94bffffff8d8f84010000e85cb8000085c00f84f20300008b078bcf8b80d0010000ffd0d95c240cf30f1044240ce90dffffff8d8f84010000e82eb8000085c075058b4704eb0e8d8f84010000e83ab800008b40048d98780100008bcf83c00853508944241ce8e12a0b0085c075648b078bcf8b80d0010000ffd08b0383ec148b5424288bccd95c2420f30f10442420f30f1144241089018b43048941048b43088941088b02c744240c0000000083ec0c8bcc89018b42048941048b42088941088bcf8b07ff90c801000085c00f8437030000a188312210f30f104604f30f5800f30f118710020000e9fffcffff8b078bcf8b80d0010000ffd08b570483ec148bccd95c2428f30f104424288b827801000089018b827c0100008941048b82800100008941088b5704f30f11442410c744240c0000000083ec0c8bcc8b420889018b420c8941048b4210e96fffffff8b078bcfff90ec0100008bd885db0f84a70200008b178bcf8b92d0010000ffd283ec14d95c2428f30f104424288bc4f30f11442410660f6e43100f5bc0f30f1144240c83ec0cf30f1005342f22108bccf30f1100f30f1005382f2210f30f114004f30f10053c2f2210f30f1140088b0389018b43048941048b4308e9effeffff6b8fe802000058a1bc3822108b57048b4401548bcf8982ac000000e8edfaffff5f5e5b8be55dc204008b87dc02000083ec0c8bcc89018b87e00200008941048b87e40200008941088bcfe8be3f0b008bcfe8b7faffff5f5e5b8be55dc204008d8f8c010000e833b6000085c00f84c90100008d8f8c010000e840b6000083ec0c8bcc8b50048b420889018b420c8941048b42108941088bcfe8703f0b008bcfe869faffff5f5e5b8be55dc204008b87f402000083ec0c8bcc89018b87f80200008941048b87fc0200008941088bcfe83a3f0b008bcfe833faffff5f5e5b8be55dc204008bcfe8631d0b0085c0740a6844201a10e9860500008b97bc02000083ec0c03d28bcc8b84d73802000089018b84d73c0200008941048b84d7400200008941088bcfe8e43e0b008bcfe8ddf9ffff5f5e5b8be55dc20400a188312210f30f104604f30f5800f30f11870c0200005f5e5b8be55dc20400f30f10460483ec08f30f11442404c70424cdcccc3dff15b4302210a18831221083c408d800d99f0c0200005f5e5b8be55dc204008b77048d8f8c010000e823b500008b4004f30f104808f30f10500cf30f5c560cf30f5c4e08f30f104010f30f5c4610f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e8c7fb15000f57c9f20f5ac8f30f100590131a100f2fc10f8720faffff8d8f8c010000e8b4b4000051c704240000003f8bcf6a038b4004f30f7e4008660fd687c40200008b40108987cc020000e80a4e0b0085c00f85720d0000818f80010000000000405f5e5b8be55dc204008b77048d8f8c010000e861b400008b4004f30f104808f30f10400cf30f5c460cf30f5c4e08f30f59c0f30f59c9f30f58c10f57c90f5ac0660f2ec87706f20f51c0eb05e817fb15000f57c9f20f5ac8f30f1087600300000f2fc17679f7878001000000000040750ac7872c02000004000000a1883122108b8098000000038758030000506a00e8d4c1100083c408c78758030000000000008d8f8c0100008bf06a00e868b3000085f67411578bcee84c2f10005f5e5b8be55dc204006818201a106a01ff153c30221083c4085f5e5b8be55dc204008d8f8c010000e88fb300008b9f5c0300008bcff7db8b40041bdb83c30453f30f7e4008660fd687c40200008b40108987cc020000e81125000083f8ff752fa18831221033db399f5c0300008b4f040f95c38b809800000083c3030301506858201a106a02ff153c30221083c40c51c704240000003f8bcf53e89d4c0b0085c00f85050c0000a188312210f30f1000f30f5805a01e1a10818f8001000000000040f30f1187640300005f5e5b8be55dc204008b470c85c00f84170100008b40048b4f04f30f104808f30f10500cf30f5c510cf30f5c4908f30f104010f30f5c4110f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e87ff915000f57c9f20f5ac8f30f100590131a100f2fc10f87b000000033db8bcf837c2414050f95c383c30353e81224000083f8ff0f84920000008b470c85c074548b4004f30f7e4008660fd644241c8b4010894424248d44241c5051c70424000000408bcf53e8084b0b0085c00f8581f7ffff818f8001000000000040a1883122108b4f048b80980000000301506898201a10eb20818f8001000000000040a1883122108b4f048b809800000003015068b8201a106a02ff153c30221083c40c8bcfe89c540b00e928f7fffff78780010000000000400f85a70a0000c7872c02000004000000e909f7ffffa1883122108b00898710020000e9f7f6ffffc787180200001e0000005f5e5b8be55dc20400c787180200001f0000005f5e5b8be55dc20400c787180200001c0000005f5e5b8be55dc20400c787180200001d0000005f5e5b8be55dc20400c78718020000200000005f5e5b8be55dc20400c787180200003c0000005f5e5b8be55dc20400c787180200003d0000005f5e5b8be55dc20400f30f2c4604898718020000e962f6ffff6a006a408d9ff40200008bcf53e80f050b0085c00f8548f6ffff8b7704f30f100bf30f105304f30f104308f30f5c560cf30f5c4e08f30f5c4610f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e88cf715008b867801000083ec148bccf20f5ac089018b867c0100008941048b86800100008941088b03f30f11442410c744240c0000000083ec0c8bcc89018b43048941048b43088941088bcf8b07ff90c401000085c00f85a5f5ffff68d8201a106a02ff153c30221083c408818f80010000000000405f5e5b8be55dc204008d8f84010000e806b000008bd885db0f848afbffff8b43048bcf536a0283c00850e81b040b0085c00f8554f5ffff8b73048b4704f30f104e08f30f10560cf30f5c500cf30f5c4808f30f104610f30f5c4010f30f59d2f30f59c9f30f59c0f30f58d10f57c9f30f58d00f5ac2660f2ec87706f20f51c0eb05e894f615008b867801000083ec148bccf20f5ac089018b867c0100008941048b86800100008941088b5304f30f11442410c744240c0000000083ec0c8bcc8b420889018b420c8941048b42108941088bcf8b07ff90c401000085c00f85a9f4ffff68f4201a10e9fffeffff8b470483c05050e8b2ca1000a18831221083c404f30f1015041f1a108bcff30f1087f4020000f30f104828f30f10582cf30f1060308d44241cf30f59ca6a00f30f59da6a40f30f5cc1f30f59e250f30f11442428f30f1087f8020000f30f5cc3f30f1144242cf30f1087fc020000f30f5cc4f30f11442430e8e1020b0085c00f851af4ffff6810211a10e970feffff6830211a106a00e863bb100083c4088bcf506a408d87c402000050e8af020b0085c00f85e8f3ffff6838211a10e93efeffff8bcfe846510b008d8f8c010000e84bae000085c074e051c704240000803f8bcfffb7d0020000e8d2470b0085c074c7e9aaf3ffff8bcfe812510b008b874c03000085c074b18b400483c0085051c704240000803f8bcfffb7d0020000e8fc460b0085c07491e974f3ffff6b87e8020000580305bc3822105051c70424000000408bcfffb7d0020000e8d0460b0085c00f8549f3ffff6850211a10e99ffdfffff30f7e87dc0200008d8fc40200008b87e40200005151660fd601c7042400000040ffb7d00200008941088bcfe88d460b0085c00f8506f3ffff686c211a10e95cfdffff8b078bcfff90ec01000085c0741e5051c70424000000408bcfffb7d0020000e857460b0085c00f85d0f2ffff688c211a10e926fdffff8b078bcfff90f001000085c0741e5051c70424000000408bcfffb7d0020000e821460b0085c00f859af2ffff68ac211a10e9f0fcffff6a048bcfe8d61e000033c983f8ff0f95c183c103898fd0020000e971f2ffff8b470483b80801000005750ac787d0020000050000006a038bcfe8a11e000040f7d81bc083c0048987d0020000e93ff2ffff8b470483c05050e852c810008b47048d4c2418f30f108f3802000083c404f30f10873c020000f30f5c4808f30f5c400c8d44240c50f30f114c2418f30f1144241ce858e7ffff8bf08d4c2414a188312210f30f104040f30f11442414f30f1040448d44241c50f30f1144241ce82de7fffff30f1000f30f10480433c0f30f594e04f30f5906f30f58c80f2f0d70131a100f97c083c00b8987d0020000e99ef1ffff8bcfe8c6130b0085c00f841e050000e98af1fffff30f104604518bcff30f110424e8670e0b00e973f1ffff8b770468cc211a1056e854dfffff83c40885c0740d83be10010000010f84e004000068e4211a1056e835dfffff83c40885c00f85ca04000068f8211a1056e81fdfffff83c40885c00f85b4040000680c221a1056e809dfffff83c40885c0740d83be10010000010f84950400008bcfe87ed0070083f83b0f84f6f0ffff8bcfe86ed007008987180200005f5e5b8be55dc204008bcfc6470900e8444e0b008b078bcfff900c0200008987180200008b4704c78074010000010000005f5e5b8be55dc204008b078bcfff9030020000e9a0f0ffff8b078bcfc687fc01000001ff902c020000e98af0ffff8b078bcfff9034020000e97bf0ffff80bffc010000000f85fd0300008b078bcfff9038020000e95ff0ffff8bb74c03000083bea8030000007f16a188312210f30f10000f2f86ac0300000f833af0ffff8bcee852e3ffff85c075618b8e6c03000085c974578b066a0051578bceff90480200008b974c030000a1883122108b88980000008b827003000003c1508b826c03000003c150e88edeffff83c40885c00f84730300008b4704c7803c010000000000005f5e5b8be55dc20400c78718020000010000005f5e5b8be55dc204008bb74c0300008bcee8cde2ffff85c00f84aa0000008b868c03000083f8077765ff24850cd20010c787180200001c000000eb52c787180200001d000000eb46c787180200001e000000eb3ac787180200001f000000eb2ec787180200003c000000eb22c787180200003d000000eb16c7871802000020000000eb0ac78718020000070000008b4704c7803c0100000000803f8b4704c78008010000050000008b470481a0a8010000fffdffffc78748030000000000005f5e5b8be55dc204008b068bce6a01ffb67003000057ff904802000083bff80000000074078bcfe8a8dcffff8b4704c7803c0100000000803fc78748030000000000005f5e5b8be55dc204008b8f4c0300006a00e83bdb0e00e9a7eeffff8b8f4c03000057e8baec0e00e996eeffff8b874c03000085c00f8488eeffff8b888403000083f904740983f9060f85d20000008b808803000085c075198d8f8c010000e8fea800008b4f048b40048b4054894154eb5983f80175548b77048d8f8c010000e8dda800008b4004f30f10500cf30f104810f30f1040088d44241cf30f5c560cf30f5c4e10f30f5c460850f30f11542424f30f114c2428f30f11442420e830da10008b470483c404d958548b4f040f57c90f57c0c7442424000000000f14c10f14c98b41548981ac0000008b4f048b442424c744242400000000660fd6415c8941648b4f048b442424660fd649208941288b4704838818010000208b874c03000083b884030000060f8495edffff8b470c8b4f048b4004f30f7e4008660fd641088b4010894110e977edffff8b8f4c03000085c90f848800000083b98403000000747f8b818803000083e800744983e801756f8d8f8c010000e8c4a7000085c0742d8d8f8c010000e8d5a700008b500483ec0c8bcc8b420889018b420c8941048b42108941088bcfe805310b00eb338b874c030000ebd68b410451f30f104054f30f110424e818a410008b470483c404d95c2414f30f10442414f30f1180ac000000f7878001000000000040750ac7872c020000040000008bcfc7871802000001000000e8294a0b005f5e5b8be55dc20400f30f2c4604898728020000e9a1ecfffff30f2c4604898720030000e991ecffffc7872003000000000000e982ecffff506820221a106a02ff153c30221083c40c5f5e5b8be55dc20400",
+      "sha256": "dcb0337495f5a2cec95ec516ead3f16819b04d2fc52bfd5707ac311afc4ec12e",
+      "path": "analysis/server-monster-scheduler/1000bc60.asm",
+      "assembly_sha256": "65ccac96be04edea045f8af4b042a14e4bc539b4df23d208583d3cfdf5d5c6b7",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000bc60",
+        "--stop-address=0x1000d099",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100c26f0",
+      "end_exclusive": "0x100c2709",
+      "file_offset": "0xc1af0",
+      "bytes_hex": "8b812c02000083f804740b83f8027406b801000000c333c0c3",
+      "sha256": "a2cda7524efce20350f99287b50332c6b790f7ea0c7d49f7eb945137ca5a5b68",
+      "path": "analysis/server-monster-scheduler/100c26f0.asm",
+      "assembly_sha256": "acef78dd87f827c2514616b7e5769ad69b7460bccc0a508e61a4973c19d060f9",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c26f0",
+        "--stop-address=0x100c2709",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100bdf30",
+      "end_exclusive": "0x100bdf54",
+      "file_offset": "0xbd330",
+      "bytes_hex": "8b81bc02000003c083bcc14402000000740c83b9b802000000740333c0c3b801000000c3",
+      "sha256": "43060ad539a40480ec241a7eb919e3693309bfb82f63314648e8f7489a7e337a",
+      "path": "analysis/server-monster-scheduler/100bdf30.asm",
+      "assembly_sha256": "bde9a81a3d309449013ce2741fd14de8dbac9978873fd8c5006b33dd70cc3525",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100bdf30",
+        "--stop-address=0x100bdf54",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100be5b0",
+      "end_exclusive": "0x100be5e0",
+      "file_offset": "0xbd9b0",
+      "bytes_hex": "558bec51e867070000d95dfcf30f1045fc33c00f5405801f1a100f5ac8f20f1005b0541d10660f2fc10f93c08be55dc3",
+      "sha256": "e0caeb491744c98e222c7cfc97a6925bcf717e487e2ed2250ac7b25610256cbc",
+      "path": "analysis/server-monster-scheduler/100be5b0.asm",
+      "assembly_sha256": "c001ec5b004c6b80ad69dc9690ad372c2b6fcc7c3a4a792de233f7effa187632",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100be5b0",
+        "--stop-address=0x100be5e0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100bed20",
+      "end_exclusive": "0x100bed7a",
+      "file_offset": "0xbe120",
+      "bytes_hex": "558bec51568bf1518b4604f30f104054f30f110424e8e68605008b460483c404d95dfcf30f1045fcf30f1088ac0000000f2ec15e9ff6c4447a06d9ee8be55dc383ec08f30f11442404f30f110c24e8ed85050083c4088be55dc3",
+      "sha256": "8d3b7a938a3e270a195792422784b6b6022238073c8562f7f2565ada618eef64",
+      "path": "analysis/server-monster-scheduler/100bed20.asm",
+      "assembly_sha256": "3ba78ef0a0fb54a1680e06c48cf0c78acfed17d3a727e9ab9cd0c09e29655a49",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100bed20",
+        "--stop-address=0x100bed7a",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100c1a70",
+      "end_exclusive": "0x100c1aa2",
+      "file_offset": "0xc0e70",
+      "bytes_hex": "568bf1e8380000008b4604c780300100000000000083a6ec020000dfc786b802000000000000c786d0020000010000005ec3",
+      "sha256": "a040d08da910a1fc5cfb3dfb3275dea1a3661131a5bd62c5a3ecfc7ef034dc6c",
+      "path": "analysis/server-monster-scheduler/100c1a70.asm",
+      "assembly_sha256": "249fb12e01a5714013ec4f946c725dd603bb6dc1e039aca62659146915703b37",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c1a70",
+        "--stop-address=0x100c1aa2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1010b540",
+      "end_exclusive": "0x1010b595",
+      "file_offset": "0x10a940",
+      "bytes_hex": "568bf18b46048b88d801000085c97441a1883122108b809800000003c1506a00e82bd0000083c40885c07527a1883122108b4e048b80980000000381d80100005068b8461e106a01ff153c30221083c40c8bc65ec3",
+      "sha256": "f8f4493215c234c6a4c7ead9bfc10f2820e385f84e1bae9ea4fa4f837d98ed2e",
+      "path": "analysis/server-monster-scheduler/1010b540.asm",
+      "assembly_sha256": "9c92acbbdb044cd464324c4b55748e85c8334e942b0dd3beeef595fe8f2da30c",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1010b540",
+        "--stop-address=0x1010b595",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1010f330",
+      "end_exclusive": "0x1010f368",
+      "file_offset": "0x10e730",
+      "bytes_hex": "558bec8b41048b90d401000085d27424a18831221051c70424000000006a038b809800000051ff750803c250e88f2cffff83c4145dc20400",
+      "sha256": "e48966b75406038e732e36f3baa3caaa93418de8299ef0f74b82b1ef33f9a614",
+      "path": "analysis/server-monster-scheduler/1010f330.asm",
+      "assembly_sha256": "6d83d9b66cd02d6904d075cb0c05f2c33c324f7441ecd7e29c89475a71d7168e",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1010f330",
+        "--stop-address=0x1010f368",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10017780",
+      "end_exclusive": "0x1001778c",
+      "file_offset": "0x16b80",
+      "bytes_hex": "e81b040000f7d81bc0f7d8c3",
+      "sha256": "6ede1972b3d72232baa0fa671ec6d9bb11eb696d4333dead65c6ed5f242d272d",
+      "path": "analysis/server-monster-scheduler/10017780.asm",
+      "assembly_sha256": "579e9bc0f56536d42a85f8a6688a68c61f6877942cbac0905f7e0847198cf251",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10017780",
+        "--stop-address=0x1001778c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10017790",
+      "end_exclusive": "0x100177a0",
+      "file_offset": "0x16b90",
+      "bytes_hex": "e80b04000085c074048b407cc333c0c3",
+      "sha256": "8dcf5ada03cdb586ce6142149eaa1f9103b43a83eab2ae937714e6c2414c0277",
+      "path": "analysis/server-monster-scheduler/10017790.asm",
+      "assembly_sha256": "a683b07be261b23f676e67571b9e75bca40359222b2c764386453f151a656433",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10017790",
+        "--stop-address=0x100177a0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100177a0",
+      "end_exclusive": "0x100177b0",
+      "file_offset": "0x16ba0",
+      "bytes_hex": "e8fb03000085c074048b407cc333c0c3",
+      "sha256": "5279286b145b860394013396f903703d204550b565c28ac952f2b032aa427084",
+      "path": "analysis/server-monster-scheduler/100177a0.asm",
+      "assembly_sha256": "e461098a455d95c688a0747ef422de56d5cc2395ba43d0121633a69236262576",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100177a0",
+        "--stop-address=0x100177b0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100c2a70",
+      "end_exclusive": "0x100c2ad3",
+      "file_offset": "0xc1e70",
+      "bytes_hex": "558bec568b75088bc6578bf983e8017540538d8f84010000e8f34cf5ff85c0741d6a008d8f84010000e8a24cf5ff68bc541d106a02ff153c30221083c4085b89b72402000089b7280200005f5e5dc2040089b72402000089b7280200005f5e5dc20400",
+      "sha256": "52239d5cc1da313295e4c6926b022f01faab1cdfb8fde3e7a900f2b1912cfcda",
+      "path": "analysis/server-monster-scheduler/100c2a70.asm",
+      "assembly_sha256": "36c3a2f5d565771458fd30b9b55d7d008e89fd165caababda5cfc69eac150104",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c2a70",
+        "--stop-address=0x100c2ad3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000aba0",
+      "end_exclusive": "0x1000abe5",
+      "file_offset": "0x9fa0",
+      "bytes_hex": "558bec8b4d0c8b45080f1f80000000008a103a11752184d274128a50013a5101751583c00283c10284d275e433c933c085c90f94c05dc31bc933c083c90185c90f94c05dc3",
+      "sha256": "b02b7af43c7427a30fe05fd7c0c754fecc70cf47fc8790615e2a2be1d9592d9c",
+      "path": "analysis/server-monster-scheduler/1000aba0.asm",
+      "assembly_sha256": "fa2084ab6b299921292f0b4d53597f7162a79045604b187c6bc6bb6c2b9c8805",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000aba0",
+        "--stop-address=0x1000abe5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1000e950",
+      "end_exclusive": "0x1000e979",
+      "file_offset": "0xdd50",
+      "bytes_hex": "558bec568bf18b4604ffb00c020000ff1570302210ff7508ff760450e8df0a000083c4105e5dc20400",
+      "sha256": "091cd1f047338ef7bdf30f3408a357c43dc0852e9339ecbecc21fc33cd7f9ecc",
+      "path": "analysis/server-monster-scheduler/1000e950.asm",
+      "assembly_sha256": "74fcceea249502326edd762b48a31ec42337b37b086143a238799291e8ec1e75",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000e950",
+        "--stop-address=0x1000e979",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b0f30",
+      "end_exclusive": "0x100b0f35",
+      "file_offset": "0xb0330",
+      "bytes_hex": "e9abf6ffff",
+      "sha256": "a18537d48a942a1bf76b1232de76568a57a122956d2b8c3836d91a95d6853572",
+      "path": "analysis/server-monster-scheduler/100b0f30.asm",
+      "assembly_sha256": "90c46b14119f58db454f5773c0c50f05fa2207cdde91af3f47123f3d78d36be0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b0f30",
+        "--stop-address=0x100b0f35",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b05e0",
+      "end_exclusive": "0x100b063c",
+      "file_offset": "0xaf9e0",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c07527687803000051ff154430221083c40889450885c0740cc7006ce31c108970045e5dc333c08970045e5dc3",
+      "sha256": "383b23ccf70e73fb454a17803f968c8bf9e62a5f1d3c16ddc9a1295f4ceb6036",
+      "path": "analysis/server-monster-scheduler/100b05e0.asm",
+      "assembly_sha256": "08c7e8e27f983e3311a19bdc34f72a12698ea5bb5c497074403a5201517a031d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b05e0",
+        "--stop-address=0x100b063c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b09e0",
+      "end_exclusive": "0x100b0a3f",
+      "file_offset": "0xafde0",
+      "bytes_hex": "558bec56578b7d088bf157e8d014010085c075065f5e5dc204008b4e04a1883122106a0468786921108b91d00100008b80980000005668b0e51c1085d2741003c28bcf50e897a306005f5e5dc2040003018bcf50e887a306005f5e5dc20400",
+      "sha256": "3d480441e4c883c3bc634e5672470860882c4d1448e346c166ce59ab03b02cba",
+      "path": "analysis/server-monster-scheduler/100b09e0.asm",
+      "assembly_sha256": "9a3942173ab8ef113e776a10d774f75b7dd50737c789cd1de373db2128095556",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b09e0",
+        "--stop-address=0x100b0a3f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100b0940",
+      "end_exclusive": "0x100b0971",
+      "file_offset": "0xafd40",
+      "bytes_hex": "558bec56ff75088bf1e85210010085c075055e5dc204008b4d086a0468786921105668b0e51c10e8a46606005e5dc20400",
+      "sha256": "a69e64ec8171f8ec4f6edddd58b7e80ee926e1f4752efee67116dcea35bac9b9",
+      "path": "analysis/server-monster-scheduler/100b0940.asm",
+      "assembly_sha256": "ba37ba8f07a0dd61cd87b032dcb6f262eb65e317dbcc867933c6160cb770b1d2",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b0940",
+        "--stop-address=0x100b0971",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100c1ec0",
+      "end_exclusive": "0x100c1f1f",
+      "file_offset": "0xc12c0",
+      "bytes_hex": "558bec56578b7d088bf157e8500c040085c075065f5e5dc204008b4e04a1883122106a3168086e21108b91d00100008b80980000005668fc4d1d1085d2741003c28bcf50e8b78e05005f5e5dc2040003018bcf50e8a78e05005f5e5dc20400",
+      "sha256": "5b88c2ec02ad84448ce6dcb19f95eb9239c543380abe2f5078c2593d9389d52e",
+      "path": "analysis/server-monster-scheduler/100c1ec0.asm",
+      "assembly_sha256": "45d81779c989d58afa1fd9935c519cb0d4b478c5d17f7951141c1ceb73f2aab5",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c1ec0",
+        "--stop-address=0x100c1f1f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100c19a0",
+      "end_exclusive": "0x100c1a12",
+      "file_offset": "0xc0da0",
+      "bytes_hex": "558bec56578b7d088bf157e8e00e040085c075065f5e5dc204006a3168086e21105668fc4d1d108bcfe8425605008bce8bf8e8990000008d8e84010000c7863002000000000000c7862c02000000000000c7861402000000000000e8805df5ff85c075068986800100008bc75f5e5dc20400",
+      "sha256": "8a4915129cf553ed19a75b9621764c63c45e9ce2097afb9aa3afd5f642720532",
+      "path": "analysis/server-monster-scheduler/100c19a0.asm",
+      "assembly_sha256": "8975e2452a238c5fa678c499bde3120bb4be45ee51929151fb01ba56df9d52b4",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100c19a0",
+        "--stop-address=0x100c1a12",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x1008ca70",
+      "end_exclusive": "0x1008cc9c",
+      "file_offset": "0x8be70",
+      "bytes_hex": "558bec8b4508568bf18d48ff83f9290f87fc010000ff248d9ccc08108b864c03000085c075398b46048b08a188312210038898000000516874221a106a02ff153c30221083c40c8bcee872da06008b068bce6a01ff908c0100005e5dc204008b808403000083f8067739ff248544cd0810b84c3321105e5dc20400b8203821105e5dc20400b8243321105e5dc20400b8383321105e5dc20400b8343821105e5dc2040033c05e5dc204006a0e6a00ff15b030221083c40885c00f85630100008b068bceff90e401000085c00f8451010000b8d43321105e5dc20400b80c3221105e5dc20400b8f83121105e5dc20400b8203221105e5dc20400b8343221105e5dc20400b8483221105e5dc20400b85c3221105e5dc20400b8703221105e5dc20400b8d43221105e5dc20400b8e83221105e5dc20400b8a03421105e5dc20400b8843221105e5dc20400b8b43521105e5dc20400b8903521105e5dc20400b8983221105e5dc20400b8ac3221105e5dc20400b8203621105e5dc20400b84c3621105e5dc20400b8783621105e5dc20400b8a43621105e5dc20400b8c03221105e5dc20400b8003a21105e5dc20400b8383921105e5dc20400b8c03321105e5dc20400b8a83721105e5dc20400b8dc3721105e5dc20400b8d43421105e5dc20400b8fc3221105e5dc20400b87c3921105e5dc20400b8743721105e5dc20400b8d03121105e5dc20400b81c3a21105e5dc204005068f0f11b106a01ff153c30221083c40cb8e43121105e5dc20400",
+      "sha256": "8be55b4b8b233d6e40ea89821254cf63fc7ea4096e131f3c93b69f40ffb2f4ec",
+      "path": "analysis/server-monster-scheduler/1008ca70.asm",
+      "assembly_sha256": "8ae8a98a2ca5d3890260006bccb60ae0677370bb6db92ca04978e3040b4717a3",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1008ca70",
+        "--stop-address=0x1008cc9c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x10014b20",
+      "end_exclusive": "0x10014b23",
+      "file_offset": "0x13f20",
+      "bytes_hex": "c20000",
+      "sha256": "b6cbececf1b07e74f37d57710c68c31f0b92cb08d51093252b321b07542e177b",
+      "path": "analysis/server-monster-scheduler/10014b20.asm",
+      "assembly_sha256": "ad7b35e6ab2d1cdbb1b8f97b5ff0bc548fb2f60da4fa2cf831abbf2954811bfa",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10014b20",
+        "--stop-address=0x10014b23",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "start": "0x100132b0",
+      "end_exclusive": "0x100132b7",
+      "file_offset": "0x126b0",
+      "bytes_hex": "d905205e1a10c3",
+      "sha256": "b298f2c4305f37a48219e1f429727d921d24751b4626d557dd903e04633b9cef",
+      "path": "analysis/server-monster-scheduler/100132b0.asm",
+      "assembly_sha256": "3dda08323feea28007d5b5dddfdddcd74f83903df1d00c3bfeb38f74760938fa",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100132b0",
+        "--stop-address=0x100132b7",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "start": "0x101a13d0",
+      "end_exclusive": "0x101a13d4",
+      "file_offset": "0x1a07d0",
+      "bytes_hex": "000080bf",
+      "sha256": "c68830a25204a09f8e77aada6bc5807f607cccaaa0ebb2a7122d317584478a8b",
+      "name": "literal operand DWORD",
+      "floating_value": -1.0
+    },
+    {
+      "start": "0x101a1e78",
+      "end_exclusive": "0x101a1e80",
+      "file_offset": "0x1a1278",
+      "bytes_hex": "000000000000f03f",
+      "sha256": "6c3c396ed6b5c36dcae172271f462051b1266b851e92df3deea8ac65478fd712",
+      "name": "literal operand QWORD",
+      "floating_value": 1.0
+    },
+    {
+      "start": "0x101a1f80",
+      "end_exclusive": "0x101a1f90",
+      "file_offset": "0x1a1380",
+      "bytes_hex": "ffffff7fffffff7fffffff7fffffff7f",
+      "sha256": "c66856d3622ef1af1acca8762554ca873b9ea946fc38967d2d42caba297dc8d7",
+      "name": "literal operand XMMWORD"
+    },
+    {
+      "start": "0x101a22b0",
+      "end_exclusive": "0x101a22b8",
+      "file_offset": "0x1a16b0",
+      "bytes_hex": "0000000000004e40",
+      "sha256": "e39fe0de715a254739f2fbe0a728301100c99ce75fc20c3fa22a49eb772f3b5f",
+      "name": "literal operand QWORD",
+      "floating_value": 60.0
+    },
+    {
+      "start": "0x101a1390",
+      "end_exclusive": "0x101a1394",
+      "file_offset": "0x1a0790",
+      "bytes_hex": "0000803f",
+      "sha256": "e00e5eb9444182f352323374ef4e08ebcb784725fdd4fd612d7730540b3e0c8c",
+      "name": "literal operand DWORD",
+      "floating_value": 1.0
+    },
+    {
+      "start": "0x101a1e48",
+      "end_exclusive": "0x101a1e50",
+      "file_offset": "0x1a1248",
+      "bytes_hex": "000000000000e03f",
+      "sha256": "4cfa5b42ca669328764e67cd9a34bb8f90b16ed7ca8d85e8443783d7ccce15ed",
+      "name": "literal operand QWORD",
+      "floating_value": 0.5
+    },
+    {
+      "start": "0x101a22bc",
+      "end_exclusive": "0x101a22c0",
+      "file_offset": "0x1a16bc",
+      "bytes_hex": "00003e43",
+      "sha256": "9bf75a794a6e50d03d2e92238eaaccdea5fd7cd03c91a50b52bd632c5d801454",
+      "name": "literal operand DWORD",
+      "floating_value": 190.0
+    },
+    {
+      "start": "0x101a13c8",
+      "end_exclusive": "0x101a13cc",
+      "file_offset": "0x1a07c8",
+      "bytes_hex": "00008743",
+      "sha256": "bf468802e9b1411096c2fc6962ae294bf3db49743c89646aa12f1033110bd775",
+      "name": "literal operand DWORD",
+      "floating_value": 270.0
+    },
+    {
+      "start": "0x101a22c0",
+      "end_exclusive": "0x101a22c4",
+      "file_offset": "0x1a16c0",
+      "bytes_hex": "00007f43",
+      "sha256": "270696d298cc689d8e5bd75897918aa617a25a5030ccae98017053dddd974995",
+      "name": "literal operand DWORD",
+      "floating_value": 255.0
+    },
+    {
+      "start": "0x101a22c4",
+      "end_exclusive": "0x101a22c8",
+      "file_offset": "0x1a16c4",
+      "bytes_hex": "000034c2",
+      "sha256": "4be682e8be02506cb8c55e1a850db407338bbf4613dad23ca6d62e70780bb187",
+      "name": "literal operand DWORD",
+      "floating_value": -45.0
+    },
+    {
+      "start": "0x101a22b8",
+      "end_exclusive": "0x101a22bc",
+      "file_offset": "0x1a16b8",
+      "bytes_hex": "00003442",
+      "sha256": "9f026d3444cc513ec1ff6522fa56bf3e019d158c785f07c12be84096715db94e",
+      "name": "literal operand DWORD",
+      "floating_value": 45.0
+    },
+    {
+      "start": "0x101a1ea0",
+      "end_exclusive": "0x101a1ea4",
+      "file_offset": "0x1a12a0",
+      "bytes_hex": "00004040",
+      "sha256": "ea2845900b5856c9bf354b1aa9761b5aa6888e5ed61738fe9579ca42bc0f6054",
+      "name": "literal operand DWORD",
+      "floating_value": 3.0
+    },
+    {
+      "start": "0x101a1f04",
+      "end_exclusive": "0x101a1f08",
+      "file_offset": "0x1a1304",
+      "bytes_hex": "00008042",
+      "sha256": "8568e5a1fe347c4aa003af9f44d1f42d104b5e40ea0502e869357877af7fb537",
+      "name": "literal operand DWORD",
+      "floating_value": 64.0
+    },
+    {
+      "start": "0x101a1370",
+      "end_exclusive": "0x101a1374",
+      "file_offset": "0x1a0770",
+      "bytes_hex": "00000000",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "name": "literal operand DWORD",
+      "floating_value": 0.0
+    },
+    {
+      "start": "0x101a5e20",
+      "end_exclusive": "0x101a5e24",
+      "file_offset": "0x1a5220",
+      "bytes_hex": "00004444",
+      "sha256": "f441e34f1241bba7b6843fd78868325d744db364e9444311f22530ef789079a8",
+      "name": "literal operand DWORD",
+      "floating_value": 784.0
+    },
+    {
+      "start": "0x101ce36c",
+      "end_exclusive": "0x101ce5a8",
+      "file_offset": "0x1cd76c",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001060320110c0da001070d80010500b0b10c0080b1070070b10e0090b1040090b1020df00105072011080df0010a072011050060b1080d50010d0d90010c0221010d0c4081050bc081040c3081030a3081010290110e0c70810f03e011010df0010c0020110e0d30010f0d30010d0d30010e0df001020da0010f00101109035011070df00103076011010e2001070e2001080e2001060df001090db00105035011000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010b00e0b1000d40010f0df0010d0e2001010da0b10a0d40010f0d50010a0d500102029011090da001050820810c0820810e0e1001070060b1060f80b1050fc0b1070290c10b0230c10c0cd0b1030040c10f0f70b1000020c1070030c10d076081050240c10e0c70b1080810810a080081090d50b1050070c10700e0c1090230c1010350110d055011050d80b1090d80b10b0d70b1010d80b1060cd081060bc0010f0b2001070ca0810f0ab0010204b011000cd0b108032011050150c1010150c10201f0c10c0270c10501f0c1000170c1000d10b1080df0b10400a0b1040c90b10e0e50b1080340110b032011050da0b109032011080f80b10a0e50b1040da0b10a0060b1000140c1010130c103035011090c70b10b0c70b1010200c10a045011080ed0b1090960810409d081090060b10b0a2081080a208107084081050210c10f0ee0b10c0320110f02801104035011050400110",
+      "sha256": "5c89a2a1d3e80b86dc837e577e0f40d31a09ad43bd231801b5492dab64f018be",
+      "name": "CGenericMonster vtable from factory100b05e0",
+      "dwords_hex": [
+        "0x1000d590",
+        "0x10017110",
+        "0x1000e1f0",
+        "0x100171b0",
+        "0x1000d3b0",
+        "0x10017210",
+        "0x1000d450",
+        "0x1000d480",
+        "0x10013260",
+        "0x1000dac0",
+        "0x1000d870",
+        "0x100b0b50",
+        "0x100b08c0",
+        "0x100b0770",
+        "0x100b09e0",
+        "0x100b0940",
+        "0x1000df20",
+        "0x10017250",
+        "0x1000df80",
+        "0x100172a0",
+        "0x100b0650",
+        "0x1000d580",
+        "0x1000d9d0",
+        "0x101022c0",
+        "0x1008c4d0",
+        "0x1008bc50",
+        "0x1008c340",
+        "0x1008a330",
+        "0x10012910",
+        "0x1008c7e0",
+        "0x10013ef0",
+        "0x1000df10",
+        "0x100102c0",
+        "0x1000d3e0",
+        "0x1000d3f0",
+        "0x1000d3d0",
+        "0x1000dfe0",
+        "0x1000da20",
+        "0x100101f0",
+        "0x10013590",
+        "0x1000df70",
+        "0x10017630",
+        "0x1000e210",
+        "0x1000e270",
+        "0x1000e280",
+        "0x1000df60",
+        "0x1000db90",
+        "0x10013550",
+        "0x1000db00",
+        "0x1000dfa0",
+        "0x1000da30",
+        "0x10017660",
+        "0x1000db80",
+        "0x1000db70",
+        "0x1000e290",
+        "0x100176f0",
+        "0x1000e2a0",
+        "0x1000e2b0",
+        "0x100b0eb0",
+        "0x1000d400",
+        "0x1000dff0",
+        "0x1000e2d0",
+        "0x100bda10",
+        "0x1000d4a0",
+        "0x1000d5f0",
+        "0x1000d5a0",
+        "0x10012920",
+        "0x1000da90",
+        "0x10088250",
+        "0x100882c0",
+        "0x1000e1e0",
+        "0x100b0670",
+        "0x100bf860",
+        "0x100bfc50",
+        "0x100c2970",
+        "0x100c23b0",
+        "0x100bcdc0",
+        "0x100c0430",
+        "0x100bf7f0",
+        "0x100c0200",
+        "0x100c0370",
+        "0x100876d0",
+        "0x100c2450",
+        "0x100bc7e0",
+        "0x10088180",
+        "0x100880a0",
+        "0x100bd590",
+        "0x100c0750",
+        "0x100c0e70",
+        "0x100c2390",
+        "0x10013510",
+        "0x100155d0",
+        "0x100bd850",
+        "0x100bd890",
+        "0x100bd7b0",
+        "0x100bd810",
+        "0x1008cd60",
+        "0x1000bc60",
+        "0x1000b2f0",
+        "0x1008ca70",
+        "0x1000abf0",
+        "0x10014b20",
+        "0x100bcd00",
+        "0x10013280",
+        "0x100c1550",
+        "0x100c1510",
+        "0x100c1f20",
+        "0x100c27c0",
+        "0x100c1f50",
+        "0x100c1700",
+        "0x100bd100",
+        "0x100bdf80",
+        "0x100b0a40",
+        "0x100bc940",
+        "0x100be5e0",
+        "0x10013480",
+        "0x100132b0",
+        "0x100bda50",
+        "0x10013290",
+        "0x100bf880",
+        "0x100be5a0",
+        "0x100bda40",
+        "0x100b06a0",
+        "0x100c1400",
+        "0x100c1310",
+        "0x10013530",
+        "0x100bc790",
+        "0x100bc7b0",
+        "0x100c2010",
+        "0x100145a0",
+        "0x100bed80",
+        "0x10089690",
+        "0x10089d40",
+        "0x100b0690",
+        "0x1008a2b0",
+        "0x1008a280",
+        "0x10088470",
+        "0x100c2150",
+        "0x100beef0",
+        "0x100132c0",
+        "0x100128f0",
+        "0x10013540",
+        "0x10014050"
+      ]
+    },
+    {
+      "start": "0x1000afbc",
+      "end_exclusive": "0x1000afe0",
+      "file_offset": "0xa3bc",
+      "bytes_hex": "1eac001028ac0010e9ad0010e1ac0010a2af00100dac00104daf0010a2af00103caf0010",
+      "sha256": "15cb0ccbd756f35e392dee89334c03e6ce7c6d66f84c8f383177cdb6c0057a7f",
+      "name": "GetSchedule state switch",
+      "dwords_hex": [
+        "0x1000ac1e",
+        "0x1000ac28",
+        "0x1000ade9",
+        "0x1000ace1",
+        "0x1000afa2",
+        "0x1000ac0d",
+        "0x1000af4d",
+        "0x1000afa2",
+        "0x1000af3c"
+      ]
+    },
+    {
+      "start": "0x1000bb48",
+      "end_exclusive": "0x1000bb88",
+      "file_offset": "0xaf48",
+      "bytes_hex": "7db400103db4001014b4001098b40010adb60010dbb3001019b30010e7b3001071ba0010b1ba00105bb3001028b90010cdba0010fbba0010f7b8001052b30010",
+      "sha256": "5a06c65d9e4b53857fec49d040d1f3edad7a83970d21cb20f61d5ebcdb9d080c",
+      "name": "RunTask targets",
+      "dwords_hex": [
+        "0x1000b47d",
+        "0x1000b43d",
+        "0x1000b414",
+        "0x1000b498",
+        "0x1000b6ad",
+        "0x1000b3db",
+        "0x1000b319",
+        "0x1000b3e7",
+        "0x1000ba71",
+        "0x1000bab1",
+        "0x1000b35b",
+        "0x1000b928",
+        "0x1000bacd",
+        "0x1000bafb",
+        "0x1000b8f7",
+        "0x1000b352"
+      ]
+    },
+    {
+      "start": "0x1000bb88",
+      "end_exclusive": "0x1000bbe4",
+      "file_offset": "0xaf88",
+      "bytes_hex": "0001020f0f0f03040f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f050f0f050606070606060808080808090909090908080f0f0f0f0f0f0f0f0f0f0f0f0f0f0f050a0a0f0f0f0f0f0f0f0f0f0f0f0f0b0c0d0f0f0f0f000f0f06060f0f0e",
+      "sha256": "84e1f4c045ca2c4825e0648e80d3b96936a895cf434e90857fb9e923c1a186c2",
+      "name": "RunTask byte remap task1..92",
+      "dwords_hex": [
+        "0xf020100",
+        "0x4030f0f",
+        "0xf0f0f0f",
+        "0xf0f0f0f",
+        "0xf0f0f0f",
+        "0xf0f0f0f",
+        "0xf0f050f",
+        "0x7060605",
+        "0x8060606",
+        "0x8080808",
+        "0x9090909",
+        "0xf080809",
+        "0xf0f0f0f",
+        "0xf0f0f0f",
+        "0xf0f0f0f",
+        "0xa050f0f",
+        "0xf0f0f0a",
+        "0xf0f0f0f",
+        "0xf0f0f0f",
+        "0xd0c0b0f",
+        "0xf0f0f0f",
+        "0x60f0f00",
+        "0xe0f0f06"
+      ]
+    },
+    {
+      "start": "0x1000d09c",
+      "end_exclusive": "0x1000d20c",
+      "file_offset": "0xc49c",
+      "bytes_hex": "1cc200101cc2001090d0001050d00010b7c40010b7c400106fc2001031c300107fc700109fc6001062c800107fd00010f1c8001023c9001057c900108dc90010c2c9001005ca00103bca001071ca001090ca0010c2ca0010f8c5001068bd001086bd0010f3bd001033bd0010a6bd00108ecb0010c2bc0010c6c1001090c10010e3c0001042c100100cc1001030c6001043c600100ac600101dc6001056c6001030c6001043c600100ac600101dc6001056c6001069c600107cc600107fd000107fd000107fd000107fd000107fd000107fd000107fd000107fd000107fd0001001bd001061cc00108fc6001013be001060d0001070d00010dfbd0010dfbd0010dfbd001077cc001052cc001086cc001061cc001063c0001047bf00107fd0001019bf00103cbe0010d8be001002c0001077cb001021cc0010a2cc001046cd001048ce00106bce00108acf00105ace00103bc2001090d00010b5bd0010d2bc00108abc0010f6bc001024bd001063cb0010",
+      "sha256": "c7a308d15e1cabd89858139b51a04d2d3775d3d17702105388e544659b3deac4",
+      "name": "StartTask task1..92",
+      "dwords_hex": [
+        "0x1000c21c",
+        "0x1000c21c",
+        "0x1000d090",
+        "0x1000d050",
+        "0x1000c4b7",
+        "0x1000c4b7",
+        "0x1000c26f",
+        "0x1000c331",
+        "0x1000c77f",
+        "0x1000c69f",
+        "0x1000c862",
+        "0x1000d07f",
+        "0x1000c8f1",
+        "0x1000c923",
+        "0x1000c957",
+        "0x1000c98d",
+        "0x1000c9c2",
+        "0x1000ca05",
+        "0x1000ca3b",
+        "0x1000ca71",
+        "0x1000ca90",
+        "0x1000cac2",
+        "0x1000c5f8",
+        "0x1000bd68",
+        "0x1000bd86",
+        "0x1000bdf3",
+        "0x1000bd33",
+        "0x1000bda6",
+        "0x1000cb8e",
+        "0x1000bcc2",
+        "0x1000c1c6",
+        "0x1000c190",
+        "0x1000c0e3",
+        "0x1000c142",
+        "0x1000c10c",
+        "0x1000c630",
+        "0x1000c643",
+        "0x1000c60a",
+        "0x1000c61d",
+        "0x1000c656",
+        "0x1000c630",
+        "0x1000c643",
+        "0x1000c60a",
+        "0x1000c61d",
+        "0x1000c656",
+        "0x1000c669",
+        "0x1000c67c",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000d07f",
+        "0x1000bd01",
+        "0x1000cc61",
+        "0x1000c68f",
+        "0x1000be13",
+        "0x1000d060",
+        "0x1000d070",
+        "0x1000bddf",
+        "0x1000bddf",
+        "0x1000bddf",
+        "0x1000cc77",
+        "0x1000cc52",
+        "0x1000cc86",
+        "0x1000cc61",
+        "0x1000c063",
+        "0x1000bf47",
+        "0x1000d07f",
+        "0x1000bf19",
+        "0x1000be3c",
+        "0x1000bed8",
+        "0x1000c002",
+        "0x1000cb77",
+        "0x1000cc21",
+        "0x1000cca2",
+        "0x1000cd46",
+        "0x1000ce48",
+        "0x1000ce6b",
+        "0x1000cf8a",
+        "0x1000ce5a",
+        "0x1000c23b",
+        "0x1000d090",
+        "0x1000bdb5",
+        "0x1000bcd2",
+        "0x1000bc8a",
+        "0x1000bcf6",
+        "0x1000bd24",
+        "0x1000cb63"
+      ]
+    },
+    {
+      "start": "0x1000d20c",
+      "end_exclusive": "0x1000d22c",
+      "file_offset": "0xc60c",
+      "bytes_hex": "6dcd001079cd001085cd001091cd00109dcd0010a9cd0010b5cd0010c1cd0010",
+      "sha256": "d17848ead6b7309a985360ece1d93d434d72ea1d7f418cd6164f97727e0a3225",
+      "name": "script action activity switch",
+      "dwords_hex": [
+        "0x1000cd6d",
+        "0x1000cd79",
+        "0x1000cd85",
+        "0x1000cd91",
+        "0x1000cd9d",
+        "0x1000cda9",
+        "0x1000cdb5",
+        "0x1000cdc1"
+      ]
+    },
+    {
+      "start": "0x10216e08",
+      "end_exclusive": "0x10217118",
+      "file_offset": "0x215e08",
+      "bytes_hex": "04000000d44a1d10840100000100000004000000e04a1d108c0100000100000004000000f04a1d10940100000400000008000000fc4a1d10b4010000040000000a000000fcb11c1050030000010000000a0000000c4b1d105403000001000000000000001c4b1d1008020000010000000f0000002c4b1d100c020000010000000f000000404b1d1010020000010000000a000000584b1d1014020000010000000a000000644b1d1018020000010000000a000000744b1d101c020000010000000a000000844b1d1024020000010000000a000000944b1d1028020000010000000a000000a84b1d102c020000010000000a000000b84b1d1034020000010000000a000000cc4b1d10800100000100000008000000dc4b1d10c4020000010000000a000000ec4b1d10d00200000100000008000000004c1d10dc020000010000000a000000144c1d10e8020000010000000a000000204c1d10ec020000010000000a0000002c4c1d10f002000001000000080000003c4c1d10f4020000010000000a0000004c4c1d1000030000010000000a0000005c4c1d1004030000010000000f0000006c4c1d1008030000010000000a0000007c4c1d100c030000010000000e000000904c1d1010030000080000000a000000c0e51c101c030000010000000a000000a84c1d1020030000010000000f000000b84c1d10240300000100000000000000c84c1d10280300000100000000000000d84c1d102c030000010000000a000000e84c1d10300300000100000001000000fc4c1d10340300000100000007000000104d1d1038030000010000000a000000204d1d10480300000100000003000000304d1d104c0300000100000001000000384d1d1058030000010000000a000000484d1d105c0300000100000000000000584d1d1060030000010000000a0000006c4d1d10440300000100000007000000804d1d10e4010000010000000c000000944d1d1020020000010000000c000000a44d1d10fc010000010000000c000000b44d1d10f0010000010000000f000000cc4d1d10f4010000010000000f000000e44d1d10f801000001000000",
+      "sha256": "593691447ddb23359b00d67e15e6389cb337e97c388d77eeedae0988225e8da2",
+      "name": "native CBaseMonster save descriptors",
+      "fields": [
+        {
+          "type_id": 4,
+          "name": "m_hEnemy",
+          "offset": "0x184",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 4,
+          "name": "m_hTargetEnt",
+          "offset": "0x18c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 4,
+          "name": "m_hOldEnemy",
+          "offset": "0x194",
+          "count": 4,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "m_vecOldEnemy",
+          "offset": "0x1b4",
+          "count": 4,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iClass",
+          "offset": "0x350",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iPlayerReact",
+          "offset": "0x354",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "m_flFieldOfView",
+          "offset": "0x208",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flWaitFinished",
+          "offset": "0x20c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flMoveWaitFinished",
+          "offset": "0x210",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_Activity",
+          "offset": "0x214",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_IdealActivity",
+          "offset": "0x218",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_LastHitGroup",
+          "offset": "0x21c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_MonsterState",
+          "offset": "0x224",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_IdealMonsterState",
+          "offset": "0x228",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iTaskStatus",
+          "offset": "0x22c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iScheduleIndex",
+          "offset": "0x234",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_afConditions",
+          "offset": "0x180",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "m_vecMoveGoal",
+          "offset": "0x2c4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_movementActivity",
+          "offset": "0x2d0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "m_vecLastPosition",
+          "offset": "0x2dc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iHintNode",
+          "offset": "0x2e8",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_afMemory",
+          "offset": "0x2ec",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iMaxHealth",
+          "offset": "0x2f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 8,
+          "name": "m_vecEnemyLKP",
+          "offset": "0x2f4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_cAmmoLoaded",
+          "offset": "0x300",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_afCapability",
+          "offset": "0x304",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flNextAttack",
+          "offset": "0x308",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_bitsDamageType",
+          "offset": "0x30c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 14,
+          "name": "m_rgbTimeBasedDamage",
+          "offset": "0x310",
+          "count": 8,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_bloodColor",
+          "offset": "0x31c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_failSchedule",
+          "offset": "0x320",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flHungryTime",
+          "offset": "0x324",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "m_flDistTooFar",
+          "offset": "0x328",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "m_flDistLook",
+          "offset": "0x32c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iTriggerCondition",
+          "offset": "0x330",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 1,
+          "name": "m_iszTriggerTarget",
+          "offset": "0x334",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "m_HackedGunPos",
+          "offset": "0x338",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_scriptState",
+          "offset": "0x348",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 3,
+          "name": "m_pCine",
+          "offset": "0x34c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 1,
+          "name": "m_hRushEntity",
+          "offset": "0x358",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iRushMovetype",
+          "offset": "0x35c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 0,
+          "name": "m_flRushDistance",
+          "offset": "0x360",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 10,
+          "name": "m_iUseAlertAnims",
+          "offset": "0x344",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 7,
+          "name": "m_vOriginalOrigin",
+          "offset": "0x1e4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 12,
+          "name": "m_bUngibbable",
+          "offset": "0x220",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 12,
+          "name": "m_bWaitingToDie",
+          "offset": "0x1fc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 12,
+          "name": "m_bIsFlickerAppearing",
+          "offset": "0x1f0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flFlickerAppearTime",
+          "offset": "0x1f4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "type_id": 15,
+          "name": "m_flNextFlickerAppear",
+          "offset": "0x1f8",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "start": "0x102131d0",
+      "end_exclusive": "0x102131e4",
+      "file_offset": "0x2121d0",
+      "bytes_hex": "6033211004000000003c00000000000070ef1b10",
+      "sha256": "aa053cb882ceb12d983b6972fa4dfe4d80cf4c831f3d6338e3eff48286cfc7b9",
+      "name": "schedule",
+      "schedule_name": "Fail",
+      "task_pointer": "0x10213360",
+      "count": 4,
+      "interrupt_mask": "0x3c00",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213360",
+      "end_exclusive": "0x10213380",
+      "file_offset": "0x212360",
+      "bytes_hex": "57000000000000003b0000000000803f01000000000000400300000000000000",
+      "sha256": "d275e585ac657f8b940f8bdfb43d96fdf5d3e720c0ff030bf90aae3f4d331f85",
+      "name": "task array Fail",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 1,
+          "data": 2.0
+        },
+        {
+          "id": 3,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102131e4",
+      "end_exclusive": "0x102131f8",
+      "file_offset": "0x2121e4",
+      "bytes_hex": "8033211003000000448307007f00000078ef1b10",
+      "sha256": "e84f6c11fdb8832b874e43d854592b3802605ffe300a440cadc9c17a22f132de",
+      "name": "schedule",
+      "schedule_name": "IdleStand",
+      "task_pointer": "0x10213380",
+      "count": 3,
+      "interrupt_mask": "0x78344",
+      "sound_mask": "0x7f"
+    },
+    {
+      "start": "0x10213380",
+      "end_exclusive": "0x10213398",
+      "file_offset": "0x212380",
+      "bytes_hex": "57000000000000003b0000000000803f010000000000a040",
+      "sha256": "b84435f387eeefc99a4bccc096b121acfdb6e8a4bcf99091d6664998608a8466",
+      "name": "task array IdleStand",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 1,
+          "data": 5.0
+        }
+      ]
+    },
+    {
+      "start": "0x102131f8",
+      "end_exclusive": "0x1021320c",
+      "file_offset": "0x2121f8",
+      "bytes_hex": "8033211003000000000300000000000084ef1b10",
+      "sha256": "2e6f587a739798bbd44589ff3613c31c5e0dc85c7432eeb7cba071a95f300468",
+      "name": "schedule",
+      "schedule_name": "Idle Trigger",
+      "task_pointer": "0x10213380",
+      "count": 3,
+      "interrupt_mask": "0x300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213380",
+      "end_exclusive": "0x10213398",
+      "file_offset": "0x212380",
+      "bytes_hex": "57000000000000003b0000000000803f010000000000a040",
+      "sha256": "b84435f387eeefc99a4bccc096b121acfdb6e8a4bcf99091d6664998608a8466",
+      "name": "task array Idle Trigger",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 1,
+          "data": 5.0
+        }
+      ]
+    },
+    {
+      "start": "0x1021320c",
+      "end_exclusive": "0x10213220",
+      "file_offset": "0x21220c",
+      "bytes_hex": "9833211002000000408307005900000094ef1b10",
+      "sha256": "1f56782149a383c513c0f9d29ac800f30c46f48ac1bb9d626626eea58f0b3dfd",
+      "name": "schedule",
+      "schedule_name": "Idle Walk",
+      "task_pointer": "0x10213398",
+      "count": 2,
+      "interrupt_mask": "0x78340",
+      "sound_mask": "0x59"
+    },
+    {
+      "start": "0x10213398",
+      "end_exclusive": "0x102133a8",
+      "file_offset": "0x212398",
+      "bytes_hex": "15000000003c1c465c00000000000000",
+      "sha256": "9b32c9c038fc853d195b40291df3ccde72565be2a6d17b0f1b4717158a5b7964",
+      "name": "task array Idle Walk",
+      "tasks": [
+        {
+          "id": 21,
+          "data": 9999.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213220",
+      "end_exclusive": "0x10213234",
+      "file_offset": "0x212220",
+      "bytes_hex": "48342110040000000000000000000000b4ef1b10",
+      "sha256": "1c345b73651fc9bd7d2b1149a433c1b84ced12239d62adc368ba9d1a78851422",
+      "name": "schedule",
+      "schedule_name": "Wake Angry",
+      "task_pointer": "0x10213448",
+      "count": 4,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213448",
+      "end_exclusive": "0x10213468",
+      "file_offset": "0x212448",
+      "bytes_hex": "57000000000000003b0000000000803f43000000000000001e00000000000000",
+      "sha256": "617f2743412ab846ebe131b47eb58e4d6847196b4b2946e5654ffac7ea756f9d",
+      "name": "task array Wake Angry",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 67,
+          "data": 0.0
+        },
+        {
+          "id": 30,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213234",
+      "end_exclusive": "0x10213248",
+      "file_offset": "0x212234",
+      "bytes_hex": "68342110030000000483010000000000c0ef1b10",
+      "sha256": "d844659a0ef2d48c15f06c99a88179ecbb9eabad105555f8bef32efae413a62b",
+      "name": "schedule",
+      "schedule_name": "Alert Face",
+      "task_pointer": "0x10213468",
+      "count": 3,
+      "interrupt_mask": "0x18304",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213468",
+      "end_exclusive": "0x10213480",
+      "file_offset": "0x212468",
+      "bytes_hex": "57000000000000003b0000000000803f1e00000000000000",
+      "sha256": "6a6e68824bdb4377a4466a1b4aa27df612f3eff0949ac7f5cfb5f20678737267",
+      "name": "task array Alert Face",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 30,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213248",
+      "end_exclusive": "0x1021325c",
+      "file_offset": "0x212248",
+      "bytes_hex": "b434211004000000548307007f000000e0ef1b10",
+      "sha256": "65637bb8c5cbcb3774c125f06c4de230e2ce3abf3eae4867b5778d0c79ee699d",
+      "name": "schedule",
+      "schedule_name": "Alert Stand",
+      "task_pointer": "0x102134b4",
+      "count": 4,
+      "interrupt_mask": "0x78354",
+      "sound_mask": "0x7f"
+    },
+    {
+      "start": "0x102134b4",
+      "end_exclusive": "0x102134d4",
+      "file_offset": "0x2124b4",
+      "bytes_hex": "57000000000000003b0000000000803f010000000000a041040000000000803f",
+      "sha256": "ba49f82495979449a6aeb6c47d8967e2ed0fb9aef7175e99fc1289a59c1cde27",
+      "name": "task array Alert Stand",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 1,
+          "data": 20.0
+        },
+        {
+          "id": 4,
+          "data": 1.0
+        }
+      ]
+    },
+    {
+      "start": "0x1021325c",
+      "end_exclusive": "0x10213270",
+      "file_offset": "0x21225c",
+      "bytes_hex": "4835211003000000003f11000000000000f01b10",
+      "sha256": "5984c0920262530d21ece38dc6b765a7153f4ca220434051026ea658960bd105",
+      "name": "schedule",
+      "schedule_name": "Combat Stand",
+      "task_pointer": "0x10213548",
+      "count": 3,
+      "interrupt_mask": "0x113f00",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213548",
+      "end_exclusive": "0x10213560",
+      "file_offset": "0x212548",
+      "bytes_hex": "57000000000000003b0000000000803f5600000000000000",
+      "sha256": "0ca2621e447c58ffa8565ea17905b677cdb2bd580d14ed276083dfa97674e2c4",
+      "name": "task array Combat Stand",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 86,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213270",
+      "end_exclusive": "0x10213284",
+      "file_offset": "0x212270",
+      "bytes_hex": "6035211003000000003c11000000000010f01b10",
+      "sha256": "d7e4777f4954b5364287b4f5dba26758b3bba9752976d9aac421a0c2a5709e95",
+      "name": "schedule",
+      "schedule_name": "Combat Face",
+      "task_pointer": "0x10213560",
+      "count": 3,
+      "interrupt_mask": "0x113c00",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213560",
+      "end_exclusive": "0x10213578",
+      "file_offset": "0x212560",
+      "bytes_hex": "57000000000000003b0000000000803f2000000000000000",
+      "sha256": "f2fe2c727c703e12ab02821dc505519251b544115ad7eec0bb163bdbedd37f65",
+      "name": "task array Combat Face",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213284",
+      "end_exclusive": "0x10213298",
+      "file_offset": "0x212284",
+      "bytes_hex": "c835211002000000000200000000000034f01b10",
+      "sha256": "ffb26cb9acb76cba976257195b654890cfc97d396ffd5029cf7eddfb7dfad01a",
+      "name": "schedule",
+      "schedule_name": "Reload",
+      "task_pointer": "0x102135c8",
+      "count": 2,
+      "interrupt_mask": "0x200",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102135c8",
+      "end_exclusive": "0x102135d8",
+      "file_offset": "0x2125c8",
+      "bytes_hex": "57000000000000003f00000000000042",
+      "sha256": "61c6e276f5fb229378bbd82c10edb68f042e0b7c6294361a8342672845173a74",
+      "name": "task array Reload",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 32.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213298",
+      "end_exclusive": "0x102132ac",
+      "file_offset": "0x212298",
+      "bytes_hex": "d83521100300000021031300200000003cf01b10",
+      "sha256": "22bf2e2812ce17d2569e219907f1bed91258b5c166f6dfbe38433560c7487f5e",
+      "name": "schedule",
+      "schedule_name": "Range Attack1",
+      "task_pointer": "0x102135d8",
+      "count": 3,
+      "interrupt_mask": "0x130321",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x102135d8",
+      "end_exclusive": "0x102135f0",
+      "file_offset": "0x2125d8",
+      "bytes_hex": "570000000000000020000000000000002400000000000000",
+      "sha256": "acb7a4a797a9090dc1f13e525877e15660da5a0a9d1970bbf34716114b0b1cd6",
+      "name": "task array Range Attack1",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 36,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102132ac",
+      "end_exclusive": "0x102132c0",
+      "file_offset": "0x2122ac",
+      "bytes_hex": "f03521100300000020031300200000004cf01b10",
+      "sha256": "45eda2bde458cafed82d82a51f59f9c3504eb17605b9ce25f620a0dba838b3f4",
+      "name": "schedule",
+      "schedule_name": "Range Attack2",
+      "task_pointer": "0x102135f0",
+      "count": 3,
+      "interrupt_mask": "0x130320",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x102135f0",
+      "end_exclusive": "0x10213608",
+      "file_offset": "0x2125f0",
+      "bytes_hex": "570000000000000020000000000000002500000000000000",
+      "sha256": "e3b53481fa6d2cd9f68e9666d46af7f5dba12e8221a3402d1ae81338669f0fd9",
+      "name": "task array Range Attack2",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 37,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102132c0",
+      "end_exclusive": "0x102132d4",
+      "file_offset": "0x2122c0",
+      "bytes_hex": "9039211006000000000001000000000080f11b10",
+      "sha256": "87af04d23e2a4598bb95509e3af66fa86bd627cb160e9219d6e7226497f9502a",
+      "name": "schedule",
+      "schedule_name": "TakeCoverFromBestSound",
+      "task_pointer": "0x10213990",
+      "count": 6,
+      "interrupt_mask": "0x10000",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213990",
+      "end_exclusive": "0x102139c0",
+      "file_offset": "0x212990",
+      "bytes_hex": "5700000000000000460000000000000014000000000000005c000000000000005a000000000000405800000000003343",
+      "sha256": "5ac9bd3f49b83020f36bac9c22ee36f72805b70b74b113017962cdebac5d6211",
+      "name": "task array TakeCoverFromBestSound",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 70,
+          "data": 0.0
+        },
+        {
+          "id": 20,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 90,
+          "data": 2.0
+        },
+        {
+          "id": 88,
+          "data": 179.0
+        }
+      ]
+    },
+    {
+      "start": "0x102132d4",
+      "end_exclusive": "0x102132e8",
+      "file_offset": "0x2122d4",
+      "bytes_hex": "b836211004000000003c034020000000acf01b10",
+      "sha256": "8af855050beb8da47df6096e4b37b8e6bdd040a3916c88c8984f7f87521e7e95",
+      "name": "schedule",
+      "schedule_name": "Chase Enemy",
+      "task_pointer": "0x102136b8",
+      "count": 4,
+      "interrupt_mask": "0x40033c00",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x102136b8",
+      "end_exclusive": "0x102136d8",
+      "file_offset": "0x2126b8",
+      "bytes_hex": "3d00000000005041090000000000000014000000000000005c00000000000000",
+      "sha256": "bbef4689c4433db2a42fc42e0c993b1cd00b6a2e84b1b9551c1a67e89d528b5b",
+      "name": "task array Chase Enemy",
+      "tasks": [
+        {
+          "id": 61,
+          "data": 13.0
+        },
+        {
+          "id": 9,
+          "data": 0.0
+        },
+        {
+          "id": 20,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102132e8",
+      "end_exclusive": "0x102132fc",
+      "file_offset": "0x2122e8",
+      "bytes_hex": "2c372110030000000000000000000000ccf01b10",
+      "sha256": "594b5a724e14efb7f43e6d2cc78e106730b3d4391870bff1f532dfc341a1724c",
+      "name": "schedule",
+      "schedule_name": "Small Flinch",
+      "task_pointer": "0x1021372c",
+      "count": 3,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x1021372c",
+      "end_exclusive": "0x10213744",
+      "file_offset": "0x21272c",
+      "bytes_hex": "5a0000000000804257000000000000001d00000000000000",
+      "sha256": "deb9639dd35074a13a13e798c3ba3b160300120731996edac877697bd814fdd5",
+      "name": "task array Small Flinch",
+      "tasks": [
+        {
+          "id": 90,
+          "data": 64.0
+        },
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 29,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102132fc",
+      "end_exclusive": "0x10213310",
+      "file_offset": "0x2122fc",
+      "bytes_hex": "44372110030000000000000000000000dcf01b10",
+      "sha256": "0cfc01f0b967b129316c345866ce757c335e8507e2cbd29f4c7c1e1ae0cda620",
+      "name": "schedule",
+      "schedule_name": "Die",
+      "task_pointer": "0x10213744",
+      "count": 3,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213744",
+      "end_exclusive": "0x1021375c",
+      "file_offset": "0x212744",
+      "bytes_hex": "570000000000000045000000000000004e00000000000000",
+      "sha256": "5a5cd9e65b56367a9dc7eb429c2dc3916b64602761428627514f158b559126c0",
+      "name": "task array Die",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 69,
+          "data": 0.0
+        },
+        {
+          "id": 78,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213310",
+      "end_exclusive": "0x10213324",
+      "file_offset": "0x212310",
+      "bytes_hex": "f037211002000000000000000000000010f11b10",
+      "sha256": "5683b0adcff330b68f6d214c460455190fe27989f31f062d87ba4ca20b2c4225",
+      "name": "schedule",
+      "schedule_name": "Error",
+      "task_pointer": "0x102137f0",
+      "count": 2,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102137f0",
+      "end_exclusive": "0x10213800",
+      "file_offset": "0x2127f0",
+      "bytes_hex": "57000000000000005600000000000000",
+      "sha256": "921c733bb302c55b187deb59dc415d7550a4e2da797af1304c2d38f1ffdfb59d",
+      "name": "task array Error",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 86,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213324",
+      "end_exclusive": "0x10213338",
+      "file_offset": "0x212324",
+      "bytes_hex": "483821100900000000030000000000002cf11b10",
+      "sha256": "50aaadd00ce3ed65c36d0deee09e39848ca6bf92f4c4a25b2f9a10f35aa90a15",
+      "name": "schedule",
+      "schedule_name": "WalkToScript",
+      "task_pointer": "0x10213848",
+      "count": 9,
+      "interrupt_mask": "0x300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213848",
+      "end_exclusive": "0x10213890",
+      "file_offset": "0x212848",
+      "bytes_hex": "050000000000803f5c00000000000000520000000000000053000000000000001e0000000000000051000000000000004f0000000000000050000000000000005400000000000000",
+      "sha256": "aee5027bdca0c07ee634237394e48682a77ac1564749a2e4505cf4bb8ab3351c",
+      "name": "task array WalkToScript",
+      "tasks": [
+        {
+          "id": 5,
+          "data": 1.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 82,
+          "data": 0.0
+        },
+        {
+          "id": 83,
+          "data": 0.0
+        },
+        {
+          "id": 30,
+          "data": 0.0
+        },
+        {
+          "id": 81,
+          "data": 0.0
+        },
+        {
+          "id": 79,
+          "data": 0.0
+        },
+        {
+          "id": 80,
+          "data": 0.0
+        },
+        {
+          "id": 84,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213338",
+      "end_exclusive": "0x1021334c",
+      "file_offset": "0x212338",
+      "bytes_hex": "903821100900000000030000000000003cf11b10",
+      "sha256": "061d21ffac361ef761c87853bc75d55efd4532d46a97a3b342d03f036379ea1e",
+      "name": "schedule",
+      "schedule_name": "RunToScript",
+      "task_pointer": "0x10213890",
+      "count": 9,
+      "interrupt_mask": "0x300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213890",
+      "end_exclusive": "0x102138d8",
+      "file_offset": "0x212890",
+      "bytes_hex": "060000000000803f5c00000000000000520000000000000053000000000000001e0000000000000051000000000000004f0000000000000050000000000000005400000000000000",
+      "sha256": "19454e24a189611397a57bbf08f9ba9dd2c8824d96bd1d24f9b67074d94dee9f",
+      "name": "task array RunToScript",
+      "tasks": [
+        {
+          "id": 6,
+          "data": 1.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 82,
+          "data": 0.0
+        },
+        {
+          "id": 83,
+          "data": 0.0
+        },
+        {
+          "id": 30,
+          "data": 0.0
+        },
+        {
+          "id": 81,
+          "data": 0.0
+        },
+        {
+          "id": 79,
+          "data": 0.0
+        },
+        {
+          "id": 80,
+          "data": 0.0
+        },
+        {
+          "id": 84,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x1021334c",
+      "end_exclusive": "0x10213360",
+      "file_offset": "0x21234c",
+      "bytes_hex": "d838211004000000000300000000000048f11b10",
+      "sha256": "5dad10fa7d47fe4ec35fe87929881aacaf1c0f0a74dffc49f7f72685acab9662",
+      "name": "schedule",
+      "schedule_name": "WaitForScript",
+      "task_pointer": "0x102138d8",
+      "count": 4,
+      "interrupt_mask": "0x300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102138d8",
+      "end_exclusive": "0x102138f8",
+      "file_offset": "0x2128d8",
+      "bytes_hex": "57000000000000004f0000000000000050000000000000005400000000000000",
+      "sha256": "fa9575e690ddc6e11c2595b7e3d88a2e1d393dd43556e1988917f94b5c052bfd",
+      "name": "task array WaitForScript",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 79,
+          "data": 0.0
+        },
+        {
+          "id": 80,
+          "data": 0.0
+        },
+        {
+          "id": 84,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102133c0",
+      "end_exclusive": "0x102133d4",
+      "file_offset": "0x2123c0",
+      "bytes_hex": "a8332110030000000083010000000000a0ef1b10",
+      "sha256": "a47a8d18dbde44042ccd659a7414507bf9a4ac72cdafb143186be862edc0cc1f",
+      "name": "schedule",
+      "schedule_name": "Ambush",
+      "task_pointer": "0x102133a8",
+      "count": 3,
+      "interrupt_mask": "0x18300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102133a8",
+      "end_exclusive": "0x102133c0",
+      "file_offset": "0x2123a8",
+      "bytes_hex": "57000000000000003b0000000000803f5600000000000000",
+      "sha256": "0ca2621e447c58ffa8565ea17905b677cdb2bd580d14ed276083dfa97674e2c4",
+      "name": "task array Ambush",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 86,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102133d4",
+      "end_exclusive": "0x102133e8",
+      "file_offset": "0x2123d4",
+      "bytes_hex": "e83321100c0000000083030027000000a8ef1b10",
+      "sha256": "f90371a4a1d50c2cd02f32df7dcadf06c060dee29d43d322e524d00db6614b9b",
+      "name": "schedule",
+      "schedule_name": "Active Idle",
+      "task_pointer": "0x102133e8",
+      "count": 12,
+      "interrupt_mask": "0x38300",
+      "sound_mask": "0x27"
+    },
+    {
+      "start": "0x102133e8",
+      "end_exclusive": "0x10213448",
+      "file_offset": "0x2123e8",
+      "bytes_hex": "1b000000000000001000000000000000180000000000000015000000000000005c0000000000000021000000000000001a00000000000000110000000000000015000000000000005c0000000000000019000000000000001c00000000000000",
+      "sha256": "0392b396acc9437754e2d1f032d0599ad105e1dcab3ddeb67027b023ab766da4",
+      "name": "task array Active Idle",
+      "tasks": [
+        {
+          "id": 27,
+          "data": 0.0
+        },
+        {
+          "id": 16,
+          "data": 0.0
+        },
+        {
+          "id": 24,
+          "data": 0.0
+        },
+        {
+          "id": 21,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 33,
+          "data": 0.0
+        },
+        {
+          "id": 26,
+          "data": 0.0
+        },
+        {
+          "id": 17,
+          "data": 0.0
+        },
+        {
+          "id": 21,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 25,
+          "data": 0.0
+        },
+        {
+          "id": 28,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102134a0",
+      "end_exclusive": "0x102134b4",
+      "file_offset": "0x2124a0",
+      "bytes_hex": "80342110040000000000000000000000ccef1b10",
+      "sha256": "1ad3a505ee44c9419d95b26aa372343aace23166ac74ac48576f85a531a58edd",
+      "name": "schedule",
+      "schedule_name": "Alert Small Flinch",
+      "task_pointer": "0x10213480",
+      "count": 4,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213480",
+      "end_exclusive": "0x102134a0",
+      "file_offset": "0x212480",
+      "bytes_hex": "57000000000000005a000000000080421d000000000000003c0000000000a040",
+      "sha256": "c5c9b748420d996826ca25e38a7262412e4bf9280a44a23b80dd9f668c7a8c25",
+      "name": "task array Alert Small Flinch",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 90,
+          "data": 64.0
+        },
+        {
+          "id": 29,
+          "data": 0.0
+        },
+        {
+          "id": 60,
+          "data": 5.0
+        }
+      ]
+    },
+    {
+      "start": "0x102134d4",
+      "end_exclusive": "0x102134e8",
+      "file_offset": "0x2124d4",
+      "bytes_hex": "e83421100c0000000403030020000000ecef1b10",
+      "sha256": "11b2cc69229bda2781fef74bb8fcd23c9c9ce90ac0bb00850bd161fc5582cce4",
+      "name": "schedule",
+      "schedule_name": "InvestigateSound",
+      "task_pointer": "0x102134e8",
+      "count": 12,
+      "interrupt_mask": "0x30304",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x102134e8",
+      "end_exclusive": "0x10213548",
+      "file_offset": "0x2124e8",
+      "bytes_hex": "5700000000000000180000000000000012000000000000001e0000000000000015000000000000005c000000000000003f0000000000803f0100000000002041110000000000000015000000000000005c000000000000001900000000000000",
+      "sha256": "30a8de3934061e4026cef97f1469f08427b3db1a4e6e822d5ae8498585aa17eb",
+      "name": "task array InvestigateSound",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 24,
+          "data": 0.0
+        },
+        {
+          "id": 18,
+          "data": 0.0
+        },
+        {
+          "id": 30,
+          "data": 0.0
+        },
+        {
+          "id": 21,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 1.0
+        },
+        {
+          "id": 1,
+          "data": 10.0
+        },
+        {
+          "id": 17,
+          "data": 0.0
+        },
+        {
+          "id": 21,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 25,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213590",
+      "end_exclusive": "0x102135a4",
+      "file_offset": "0x212590",
+      "bytes_hex": "783521100300000000141300200000001cf01b10",
+      "sha256": "581c7c84630ae3a6e7c96eccfb6ee361831253bbae48a3ce38a8c9cdbd45526a",
+      "name": "schedule",
+      "schedule_name": "Standoff",
+      "task_pointer": "0x10213578",
+      "count": 3,
+      "interrupt_mask": "0x131400",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x10213578",
+      "end_exclusive": "0x10213590",
+      "file_offset": "0x212578",
+      "bytes_hex": "57000000000000003b0000000000803f0200000000000040",
+      "sha256": "d3ffc34b7d9ada523d4da330d40902a9715ce043794c15655e3b8952ca781d93",
+      "name": "task array Standoff",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 59,
+          "data": 1.0
+        },
+        {
+          "id": 2,
+          "data": 2.0
+        }
+      ]
+    },
+    {
+      "start": "0x102135b4",
+      "end_exclusive": "0x102135c8",
+      "file_offset": "0x2125b4",
+      "bytes_hex": "a435211002000000000000000000000028f01b10",
+      "sha256": "2330a02298866b83a524c77af5cbd19b48c4484fc1818e6a7cd01ad5efd44f53",
+      "name": "schedule",
+      "schedule_name": "Arm Weapon",
+      "task_pointer": "0x102135a4",
+      "count": 2,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102135a4",
+      "end_exclusive": "0x102135b4",
+      "file_offset": "0x2125a4",
+      "bytes_hex": "57000000000000003f00000000000442",
+      "sha256": "1c34a6181e090af7549e4e6b4217e07ca2762bd437551affeadbe79632e94b77",
+      "name": "task array Arm Weapon",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 33.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213620",
+      "end_exclusive": "0x10213634",
+      "file_offset": "0x212620",
+      "bytes_hex": "083621100300000020031100000000005cf01b10",
+      "sha256": "26bba78654135f75df3789e9db5db128bda26fb567a31d883dbb92f14ef6b374",
+      "name": "schedule",
+      "schedule_name": "Primary Melee Attack",
+      "task_pointer": "0x10213608",
+      "count": 3,
+      "interrupt_mask": "0x110320",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213608",
+      "end_exclusive": "0x10213620",
+      "file_offset": "0x212608",
+      "bytes_hex": "570000000000000020000000000000002600000000000000",
+      "sha256": "98d81097c29b9ec84c138a36338737dd48b7f3e21beca2839657bbe46b97f803",
+      "name": "task array Primary Melee Attack",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 38,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x1021364c",
+      "end_exclusive": "0x10213660",
+      "file_offset": "0x21264c",
+      "bytes_hex": "3436211003000000200311000000000074f01b10",
+      "sha256": "4fa4b3d81ad4ed8407da017815f97d19ad831f383d246139c1852d7646629f6a",
+      "name": "schedule",
+      "schedule_name": "Secondary Melee Attack",
+      "task_pointer": "0x10213634",
+      "count": 3,
+      "interrupt_mask": "0x110320",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213634",
+      "end_exclusive": "0x1021364c",
+      "file_offset": "0x212634",
+      "bytes_hex": "570000000000000020000000000000002700000000000000",
+      "sha256": "b63bae093dcd952ac37cde78f2ef17769111cdf6b3e865f21b408e85c0162964",
+      "name": "task array Secondary Melee Attack",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 39,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213678",
+      "end_exclusive": "0x1021368c",
+      "file_offset": "0x212678",
+      "bytes_hex": "603621100300000021031300200000008cf01b10",
+      "sha256": "66217910b4289512f390931340f6590d0ff02051a676ffc39ac8d3238c53e456",
+      "name": "schedule",
+      "schedule_name": "Special Attack1",
+      "task_pointer": "0x10213660",
+      "count": 3,
+      "interrupt_mask": "0x130321",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x10213660",
+      "end_exclusive": "0x10213678",
+      "file_offset": "0x212660",
+      "bytes_hex": "570000000000000020000000000000002e00000000000000",
+      "sha256": "eea6b7f5c23a5ca760484eff241c9f2c3743455d51312934714cee034b88cce3",
+      "name": "task array Special Attack1",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 46,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102136a4",
+      "end_exclusive": "0x102136b8",
+      "file_offset": "0x2126a4",
+      "bytes_hex": "8c3621100300000021031300200000009cf01b10",
+      "sha256": "1e1adea050c822f2a0fe41bfe8a8c345b051d7a8dbc494ff26e79928cd19b5a0",
+      "name": "schedule",
+      "schedule_name": "Special Attack2",
+      "task_pointer": "0x1021368c",
+      "count": 3,
+      "interrupt_mask": "0x130321",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x1021368c",
+      "end_exclusive": "0x102136a4",
+      "file_offset": "0x21268c",
+      "bytes_hex": "570000000000000020000000000000002f00000000000000",
+      "sha256": "405829c9ad05198f72ee61c2c5e50892cea3772baae95a6c5f305d976c7fc727",
+      "name": "task array Special Attack2",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 47,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213774",
+      "end_exclusive": "0x10213788",
+      "file_offset": "0x212774",
+      "bytes_hex": "5c372110030000000000000000000000e0f01b10",
+      "sha256": "31ae4fea0fa157c1eab3c6d3b50b5246e46b5116efb7dd595d8cecadadf6bea5",
+      "name": "schedule",
+      "schedule_name": "Victory Dance",
+      "task_pointer": "0x1021375c",
+      "count": 3,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x1021375c",
+      "end_exclusive": "0x10213774",
+      "file_offset": "0x21275c",
+      "bytes_hex": "57000000000000003f000000000082420100000000000000",
+      "sha256": "26887da8dad343c25762ec6685fd962cb152c2b52912f58f9779b8b4563765fb",
+      "name": "task array Victory Dance",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 65.0
+        },
+        {
+          "id": 1,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102137a8",
+      "end_exclusive": "0x102137bc",
+      "file_offset": "0x2127a8",
+      "bytes_hex": "88372110040000000000000000000000f0f01b10",
+      "sha256": "2ae531734bf417afe30f3d6d591081dd78a35593b26ae42e5fbeeb160faf4e11",
+      "name": "schedule",
+      "schedule_name": "Barnacle Victim",
+      "task_pointer": "0x10213788",
+      "count": 4,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213788",
+      "end_exclusive": "0x102137a8",
+      "file_offset": "0x212788",
+      "bytes_hex": "57000000000000003f000000000020423b000000000024425600000000000000",
+      "sha256": "7bf83c22598a6366c897b36bc61c88ca59b7919c6cf8ffb97d404204aef3cbd2",
+      "name": "task array Barnacle Victim",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 40.0
+        },
+        {
+          "id": 59,
+          "data": 41.0
+        },
+        {
+          "id": 86,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x102137dc",
+      "end_exclusive": "0x102137f0",
+      "file_offset": "0x2127dc",
+      "bytes_hex": "bc37211004000000000000000000000000f11b10",
+      "sha256": "1ed01a763817bb739737c4fc219aecdbd66b03cacc7ec8838eebd0096bf1012a",
+      "name": "schedule",
+      "schedule_name": "Barnacle Chomp",
+      "task_pointer": "0x102137bc",
+      "count": 4,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102137bc",
+      "end_exclusive": "0x102137dc",
+      "file_offset": "0x2127bc",
+      "bytes_hex": "57000000000000003f000000000028423b00000000002c425600000000000000",
+      "sha256": "91559e0ded62ddbab959e125cbc5cb0de76920d72ec685fe21805cd42029c1c5",
+      "name": "task array Barnacle Chomp",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 42.0
+        },
+        {
+          "id": 59,
+          "data": 43.0
+        },
+        {
+          "id": 86,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213820",
+      "end_exclusive": "0x10213834",
+      "file_offset": "0x212820",
+      "bytes_hex": "0038211004000000000300000000000018f11b10",
+      "sha256": "5dfa5b79c3cf6cd5f0b37e832411d67a0d7201ff305c76341200dc393db2495e",
+      "name": "schedule",
+      "schedule_name": "TeleportToScript",
+      "task_pointer": "0x10213800",
+      "count": 4,
+      "interrupt_mask": "0x300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213800",
+      "end_exclusive": "0x10213820",
+      "file_offset": "0x212800",
+      "bytes_hex": "52000000000000004f0000000000000050000000000000005400000000000000",
+      "sha256": "d7b871f0f7ec3af970ef1c041d9071e6237470d88fa6153406cca04d7245e034",
+      "name": "task array TeleportToScript",
+      "tasks": [
+        {
+          "id": 82,
+          "data": 0.0
+        },
+        {
+          "id": 79,
+          "data": 0.0
+        },
+        {
+          "id": 80,
+          "data": 0.0
+        },
+        {
+          "id": 84,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213834",
+      "end_exclusive": "0x10213848",
+      "file_offset": "0x212834",
+      "bytes_hex": "f838211006000000000300000000000058f11b10",
+      "sha256": "ed90d0dd6b77701a1fe6bb707a2b9030bec8ab4f9553819e724a2dd520e29cbc",
+      "name": "schedule",
+      "schedule_name": "FaceScript",
+      "task_pointer": "0x102138f8",
+      "count": 6,
+      "interrupt_mask": "0x300",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102138f8",
+      "end_exclusive": "0x10213928",
+      "file_offset": "0x2128f8",
+      "bytes_hex": "570000000000000053000000000000001e000000000000004f0000000000000050000000000000005400000000000000",
+      "sha256": "90d7958e9950e8fe9679b882610732bebe2a84644eac4e9e2688f20200f62e63",
+      "name": "task array FaceScript",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 83,
+          "data": 0.0
+        },
+        {
+          "id": 30,
+          "data": 0.0
+        },
+        {
+          "id": 79,
+          "data": 0.0
+        },
+        {
+          "id": 80,
+          "data": 0.0
+        },
+        {
+          "id": 84,
+          "data": 0.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213938",
+      "end_exclusive": "0x1021394c",
+      "file_offset": "0x212938",
+      "bytes_hex": "2839211002000000000000000000000064f11b10",
+      "sha256": "df9a7f1ee1518def86525295ffcdd049e906005a3099322dc426be686d8b13ba",
+      "name": "schedule",
+      "schedule_name": "Cower",
+      "task_pointer": "0x10213928",
+      "count": 2,
+      "interrupt_mask": "0x0",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x10213928",
+      "end_exclusive": "0x10213938",
+      "file_offset": "0x212928",
+      "bytes_hex": "57000000000000003f0000000000c841",
+      "sha256": "5cafea50682ae0f06cee289d8e168ad92946c2447b1eb3abdaaa7425173b686d",
+      "name": "task array Cower",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 63,
+          "data": 25.0
+        }
+      ]
+    },
+    {
+      "start": "0x1021397c",
+      "end_exclusive": "0x10213990",
+      "file_offset": "0x21297c",
+      "bytes_hex": "4c3921100600000000000100000000006cf11b10",
+      "sha256": "07dbae947d526569c917d9676ee9190d5d1f6fa2e5a24c6b41a0c677a1549a4f",
+      "name": "schedule",
+      "schedule_name": "TakeCoverFromOrigin",
+      "task_pointer": "0x1021394c",
+      "count": 6,
+      "interrupt_mask": "0x10000",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x1021394c",
+      "end_exclusive": "0x1021397c",
+      "file_offset": "0x21294c",
+      "bytes_hex": "57000000000000004c0000000000000014000000000000005c000000000000005a000000000000405800000000003343",
+      "sha256": "51177026ccc8fd0dcc783509f6784155f28c64290be1e402daaa607c3bb76bff",
+      "name": "task array TakeCoverFromOrigin",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 76,
+          "data": 0.0
+        },
+        {
+          "id": 20,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 90,
+          "data": 2.0
+        },
+        {
+          "id": 88,
+          "data": 179.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213a00",
+      "end_exclusive": "0x10213a14",
+      "file_offset": "0x212a00",
+      "bytes_hex": "c039211008000000000001000000000098f11b10",
+      "sha256": "506cbb195f636928f28aa14373f956c3bc8146e4f5c3cf4ac86f4a81c84410a3",
+      "name": "schedule",
+      "schedule_name": "tlTakeCoverFromEnemy",
+      "task_pointer": "0x102139c0",
+      "count": 8,
+      "interrupt_mask": "0x10000",
+      "sound_mask": "0x0"
+    },
+    {
+      "start": "0x102139c0",
+      "end_exclusive": "0x10213a00",
+      "file_offset": "0x2129c0",
+      "bytes_hex": "570000000000000001000000cdcc4c3e470000000000000014000000000000005c000000000000005a000000000000402000000000000000010000000000803f",
+      "sha256": "bc781c21de77b955082d2f910f25d544de2acf358ac12bbfb5756acb1a816e41",
+      "name": "task array tlTakeCoverFromEnemy",
+      "tasks": [
+        {
+          "id": 87,
+          "data": 0.0
+        },
+        {
+          "id": 1,
+          "data": 0.20000000298023224
+        },
+        {
+          "id": 71,
+          "data": 0.0
+        },
+        {
+          "id": 20,
+          "data": 0.0
+        },
+        {
+          "id": 92,
+          "data": 0.0
+        },
+        {
+          "id": 90,
+          "data": 2.0
+        },
+        {
+          "id": 32,
+          "data": 0.0
+        },
+        {
+          "id": 1,
+          "data": 1.0
+        }
+      ]
+    },
+    {
+      "start": "0x10213a1c",
+      "end_exclusive": "0x10213a30",
+      "file_offset": "0x212a1c",
+      "bytes_hex": "143a2110010000000083030020000000b0f11b10",
+      "sha256": "fd8cb87fed14e1a94a3f2600d9796d7af956b1adac896bbbbab8694826e362fe",
+      "name": "schedule",
+      "schedule_name": "Rush Target",
+      "task_pointer": "0x10213a14",
+      "count": 1,
+      "interrupt_mask": "0x38300",
+      "sound_mask": "0x20"
+    },
+    {
+      "start": "0x10213a14",
+      "end_exclusive": "0x10213a1c",
+      "file_offset": "0x212a14",
+      "bytes_hex": "0800000000000000",
+      "sha256": "6cc16abd70eefb90dc0ba0d14fb088630873b2c6ad943f7442356735984c35a3",
+      "name": "task array Rush Target",
+      "tasks": [
+        {
+          "id": 8,
+          "data": 0.0
+        }
+      ]
+    }
+  ],
+  "strings": [
+    {
+      "start": "0x101a1fb0",
+      "end_exclusive": "0x101a1fd5",
+      "file_offset": "0x1a13b0",
+      "bytes_hex": "434f4e445f484541525f534f554e442077697468206e6f20736f756e64206d61736b210a00",
+      "sha256": "c9821c2c17c802bef663c7bc8b3b2faa8cca49959a45b2d6e50cb9e5a58f9c55",
+      "ascii": "COND_HEAR_SOUND with no sound mask!\n"
+    },
+    {
+      "start": "0x101a1fd8",
+      "end_exclusive": "0x101a1ffd",
+      "file_offset": "0x1a13d8",
+      "bytes_hex": "536f756e64206d61736b20776974686f757420434f4e445f484541525f534f554e44210a00",
+      "sha256": "d61ab45cd19895a4e31254bbb6fbfec5d2e36883304bfb006cf567d9ece28863",
+      "ascii": "Sound mask without COND_HEAR_SOUND!\n"
+    },
+    {
+      "start": "0x101a223c",
+      "end_exclusive": "0x101a2253",
+      "file_offset": "0x1a163c",
+      "bytes_hex": "4d4f4e535445525354415445204953204e4f4e45210a00",
+      "sha256": "391d75590131147d05545b54d7411c5ec0cc503aa86b7f08d872d8871f446c7b",
+      "ascii": "MONSTERSTATE IS NONE!\n"
+    },
+    {
+      "start": "0x101a2254",
+      "end_exclusive": "0x101a2272",
+      "file_offset": "0x1a1654",
+      "bytes_hex": "4e6f207375697461626c6520636f6d626174207363686564756c65210a00",
+      "sha256": "6dba7b1bdd777af7d91c39c8dfd29ed790b9ae9092ad9f9cbb5fbc3731740cb1",
+      "ascii": "No suitable combat schedule!\n"
+    },
+    {
+      "start": "0x101a2274",
+      "end_exclusive": "0x101a228a",
+      "file_offset": "0x1a1674",
+      "bytes_hex": "536372697074206661696c656420666f722025730a00",
+      "sha256": "f447a228e331aaca49a2ec03d27db42c1c3619b919f1a2c70909ea4174039c47",
+      "ascii": "Script failed for %s\n"
+    },
+    {
+      "start": "0x101a228c",
+      "end_exclusive": "0x101a22ac",
+      "file_offset": "0x1a168c",
+      "bytes_hex": "496e76616c696420537461746520666f72204765745363686564756c65210a00",
+      "sha256": "1788bc30bb90e37a3aa38ee52e12d629940f25c7e9ba5ddd1bc521ea5e6a6960",
+      "ascii": "Invalid State for GetSchedule!\n"
+    },
+    {
+      "start": "0x101a1fa0",
+      "end_exclusive": "0x101a1fb0",
+      "file_offset": "0x1a13a0",
+      "bytes_hex": "73637269707465645f616374696f6e00",
+      "sha256": "e574cdf53bb429a89a9c4d9935c4ac0f9591d68e4fde91a0e8b5e7eb4784dedc",
+      "ascii": "scripted_action"
+    },
+    {
+      "start": "0x101a2000",
+      "end_exclusive": "0x101a2018",
+      "file_offset": "0x1a1400",
+      "bytes_hex": "5363686564756c65204661696c6564206174202564210a00",
+      "sha256": "1685919be02c0a0e7e165c498d99df5ade286cb00ab0418e22b7f4e830f6f548",
+      "ascii": "Schedule Failed at %d!\n"
+    },
+    {
+      "start": "0x101a2018",
+      "end_exclusive": "0x101a2044",
+      "file_offset": "0x1a1418",
+      "bytes_hex": "4552524f523a2072656163686564207461726765742c20627574206e6f207275736820656e74697479210a00",
+      "sha256": "b11c8f51b92e45fa1d83b0ff5ced292148db44f61256d175042843ce7ccf7b51",
+      "ascii": "ERROR: reached target, but no rush entity!\n"
+    },
+    {
+      "start": "0x101a2044",
+      "end_exclusive": "0x101a2057",
+      "file_offset": "0x1a1444",
+      "bytes_hex": "4e6f20726f75746520746f2066616365210a00",
+      "sha256": "94d18cba89051cddf10746a0c4b89331889250b48f1c098c09fb769c1090fecb",
+      "ascii": "No route to face!\n"
+    },
+    {
+      "start": "0x101a2058",
+      "end_exclusive": "0x101a2097",
+      "file_offset": "0x1a1458",
+      "bytes_hex": "52757368207461726765743a206d6f6e7374657220257320646f65736e7420737570706f72742074686973206d6f76656d656e742061637469766974790a00",
+      "sha256": "c18a0a0caf5cd8408268c6337857aa1c8bbe56622c2b637c7fa93e36abd32e7e",
+      "ascii": "Rush target: monster %s doesnt support this movement activity\n"
+    },
+    {
+      "start": "0x101a2098",
+      "end_exclusive": "0x101a20b6",
+      "file_offset": "0x1a1498",
+      "bytes_hex": "2573204661696c656420746f207265616368207363726970742121210a00",
+      "sha256": "92f8cbc3166e738d82378672441531cfe8b9762d621fad3845e5e07e5652a5a2",
+      "ascii": "%s Failed to reach script!!!\n"
+    },
+    {
+      "start": "0x101a20b8",
+      "end_exclusive": "0x101a20d6",
+      "file_offset": "0x1a14b8",
+      "bytes_hex": "25733a204d6f7665546172676574206973206d697373696e67213f210a00",
+      "sha256": "e8dc9ff1df0e57f0e3e9fe82e1b17bba102694a165bd1bf5f678852ec3b0a725",
+      "ascii": "%s: MoveTarget is missing!?!\n"
+    },
+    {
+      "start": "0x101a20d8",
+      "end_exclusive": "0x101a20f4",
+      "file_offset": "0x1a14d8",
+      "bytes_hex": "47657450617468546f456e656d794c4b50206661696c656421210a00",
+      "sha256": "0eb57a6ceb473a03c7919296cbfae272366c35a71ce994435be4d365a103db8d",
+      "ascii": "GetPathToEnemyLKP failed!!\n"
+    },
+    {
+      "start": "0x101a20f4",
+      "end_exclusive": "0x101a210d",
+      "file_offset": "0x1a14f4",
+      "bytes_hex": "47657450617468546f456e656d79206661696c656421210a00",
+      "sha256": "94d663ff8c6289541d2fd4ce68f0c3f1bb7249b06944ba633d74a6fabe6f5aa3",
+      "ascii": "GetPathToEnemy failed!!\n"
+    },
+    {
+      "start": "0x101a2110",
+      "end_exclusive": "0x101a212f",
+      "file_offset": "0x1a1510",
+      "bytes_hex": "47657450617468546f456e656d79436f72707365206661696c656421210a00",
+      "sha256": "fd54c99b525650a0b24cf11cb59e80c2a3df14a07467e97f0b254e99440c6c71",
+      "ascii": "GetPathToEnemyCorpse failed!!\n"
+    },
+    {
+      "start": "0x101a2130",
+      "end_exclusive": "0x101a2137",
+      "file_offset": "0x1a1530",
+      "bytes_hex": "706c6179657200",
+      "sha256": "94bbba7d7952a90ae616ab75115b589edff2cc79550eceda7666005c4196b09c",
+      "ascii": "player"
+    },
+    {
+      "start": "0x101a2138",
+      "end_exclusive": "0x101a2150",
+      "file_offset": "0x1a1538",
+      "bytes_hex": "47657450617468546f53706f74206661696c656421210a00",
+      "sha256": "8d856e177135a86df333a3ca9a292926631eadc8b0efba81c9252f903af58d7c",
+      "ascii": "GetPathToSpot failed!!\n"
+    },
+    {
+      "start": "0x101a2150",
+      "end_exclusive": "0x101a216c",
+      "file_offset": "0x1a1550",
+      "bytes_hex": "47657450617468546f48696e744e6f6465206661696c656421210a00",
+      "sha256": "5c2af44ba82a8df7b4eaa766bcfd4cb2d5c19e1aad428e5ce48ec38b1641de12",
+      "ascii": "GetPathToHintNode failed!!\n"
+    },
+    {
+      "start": "0x101a216c",
+      "end_exclusive": "0x101a218c",
+      "file_offset": "0x1a156c",
+      "bytes_hex": "47657450617468546f4c617374506f736974696f6e206661696c656421210a00",
+      "sha256": "733b68bf0ee450f1b022e136c95b8a6cc3103ca5a4e29b832b937832baf5a478",
+      "ascii": "GetPathToLastPosition failed!!\n"
+    },
+    {
+      "start": "0x101a218c",
+      "end_exclusive": "0x101a21a9",
+      "file_offset": "0x1a158c",
+      "bytes_hex": "47657450617468546f42657374536f756e64206661696c656421210a00",
+      "sha256": "40d2753ae5d542d8b13570582218f117c3aaa01e466d1c1240f716f2fcd0df76",
+      "ascii": "GetPathToBestSound failed!!\n"
+    },
+    {
+      "start": "0x101a21ac",
+      "end_exclusive": "0x101a21c9",
+      "file_offset": "0x1a15ac",
+      "bytes_hex": "47657450617468546f426573745363656e74206661696c656421210a00",
+      "sha256": "ba27897e13a4b56f0ee2517b665f459d87ce00b761bc5b58aa3870f5cfc9018a",
+      "ascii": "GetPathToBestScent failed!!\n"
+    },
+    {
+      "start": "0x101a21cc",
+      "end_exclusive": "0x101a21e1",
+      "file_offset": "0x1a15cc",
+      "bytes_hex": "6d6f6e737465725f626f7373636861696e73617700",
+      "sha256": "bf3f629c190f5686fd6b2117175f7eb4f540d948a1899fac7cd1e031e4913b3f",
+      "ascii": "monster_bosschainsaw"
+    },
+    {
+      "start": "0x101a21e4",
+      "end_exclusive": "0x101a21f6",
+      "file_offset": "0x1a15e4",
+      "bytes_hex": "6d6f6e737465725f626f6f6b73696d6f6e00",
+      "sha256": "295ce8d4df2d3768146438b9f85de6c74d0953e47bcde7ebb6c1176b3720c847",
+      "ascii": "monster_booksimon"
+    },
+    {
+      "start": "0x101a21f8",
+      "end_exclusive": "0x101a220b",
+      "file_offset": "0x1a15f8",
+      "bytes_hex": "6d6f6e737465725f646f63746f72626f737300",
+      "sha256": "219bf34d8ae62d8410291de9af6382e147f040ca913369c8f23ebe33436d665c",
+      "ascii": "monster_doctorboss"
+    },
+    {
+      "start": "0x101a220c",
+      "end_exclusive": "0x101a221e",
+      "file_offset": "0x1a160c",
+      "bytes_hex": "6d6f6e737465725f7365776572626f737300",
+      "sha256": "2cd83e0b77eb10ff8f3dbed50dc7a1afe3469dd3b7b6f945eec8b61840030a1e",
+      "ascii": "monster_sewerboss"
+    },
+    {
+      "start": "0x101a2220",
+      "end_exclusive": "0x101a223b",
+      "file_offset": "0x1a1620",
+      "bytes_hex": "4e6f2053746172745461736b20656e74727920666f722025640a00",
+      "sha256": "a9c5395f37d837470ee27155048a7e02fbf024a29c9270bf00279419610c4635",
+      "ascii": "No StartTask entry for %d\n"
+    },
+    {
+      "start": "0x101e46b8",
+      "end_exclusive": "0x101e46e0",
+      "file_offset": "0x1e3ab8",
+      "bytes_hex": "73637269707465645f7374617274727573682063616e742066696e6420656e746974792025730a00",
+      "sha256": "84c9c53b23f23370acc5d86d2b5a37c2450d0309bb40c5d32360e37628f2b29d",
+      "ascii": "scripted_startrush cant find entity %s\n"
+    },
+    {
+      "start": "0x101d54bc",
+      "end_exclusive": "0x101d54c6",
+      "file_offset": "0x1d48bc",
+      "bytes_hex": "53747269707065640a00",
+      "sha256": "3247d058a9c36e1b3ceabe52a4acf5469da8b3145433454f650f04cf9d084d20",
+      "ascii": "Stripped\n"
+    },
+    {
+      "start": "0x101ce5b0",
+      "end_exclusive": "0x101ce5c0",
+      "file_offset": "0x1cd9b0",
+      "bytes_hex": "4347656e657269634d6f6e7374657200",
+      "sha256": "896bda41deca9c9d1833813b00a6306190f0221f109208e7e7aa8aeff3c1adc3",
+      "ascii": "CGenericMonster"
+    },
+    {
+      "start": "0x101d4dfc",
+      "end_exclusive": "0x101d4e09",
+      "file_offset": "0x1d41fc",
+      "bytes_hex": "43426173654d6f6e7374657200",
+      "sha256": "f6bd5b44284ec2b66cf655aa1e1e2c33c1253f6a65cca7cc07b0545feb55a30e",
+      "ascii": "CBaseMonster"
+    },
+    {
+      "start": "0x101bf1f0",
+      "end_exclusive": "0x101bf223",
+      "file_offset": "0x1be5f0",
+      "bytes_hex": "4765745363686564756c654f665479706528290a4e6f204341534520666f72205363686564756c652054797065202564210a00",
+      "sha256": "fd871ba196d37087a3c32d294ab794386bfd8ffcf40b6ce98019b0cd5305e8c2",
+      "ascii": "GetScheduleOfType()\nNo CASE for Schedule Type %d!\n"
+    },
+    {
+      "start": "0x101d4ad4",
+      "end_exclusive": "0x101d4add",
+      "file_offset": "0x1d3ed4",
+      "bytes_hex": "6d5f68456e656d7900",
+      "sha256": "46e60aa67b86e6ce5c60711051799d669d071ae351eca0a42afdbbec0ef6d33a",
+      "ascii": "m_hEnemy"
+    },
+    {
+      "start": "0x101d4ae0",
+      "end_exclusive": "0x101d4aed",
+      "file_offset": "0x1d3ee0",
+      "bytes_hex": "6d5f68546172676574456e7400",
+      "sha256": "6257dcfc3258a7039c38897988b52c26fdfab7e19953581252c663bb1c5b9257",
+      "ascii": "m_hTargetEnt"
+    },
+    {
+      "start": "0x101d4af0",
+      "end_exclusive": "0x101d4afc",
+      "file_offset": "0x1d3ef0",
+      "bytes_hex": "6d5f684f6c64456e656d7900",
+      "sha256": "99ee1677a6a772ea54fc6932d37af7336dc84dc3a529d7ecf728d9d28d2c7885",
+      "ascii": "m_hOldEnemy"
+    },
+    {
+      "start": "0x101d4afc",
+      "end_exclusive": "0x101d4b0a",
+      "file_offset": "0x1d3efc",
+      "bytes_hex": "6d5f7665634f6c64456e656d7900",
+      "sha256": "6688bf6498d817f710a6fd76c6013cfe4d6ce72a3b096e2ff27a7b5e13e804ea",
+      "ascii": "m_vecOldEnemy"
+    },
+    {
+      "start": "0x101cb1fc",
+      "end_exclusive": "0x101cb205",
+      "file_offset": "0x1ca5fc",
+      "bytes_hex": "6d5f69436c61737300",
+      "sha256": "ed92255bc84684a4aba0ae7d3cec1713c213b2e2ab119be457dc275cecf2af0d",
+      "ascii": "m_iClass"
+    },
+    {
+      "start": "0x101d4b0c",
+      "end_exclusive": "0x101d4b1b",
+      "file_offset": "0x1d3f0c",
+      "bytes_hex": "6d5f69506c61796572526561637400",
+      "sha256": "68c7fba178e60a7cc10424991abf9061265b0213c821fbccc7967a303b1cf51e",
+      "ascii": "m_iPlayerReact"
+    },
+    {
+      "start": "0x101d4b1c",
+      "end_exclusive": "0x101d4b2c",
+      "file_offset": "0x1d3f1c",
+      "bytes_hex": "6d5f666c4669656c644f665669657700",
+      "sha256": "bde083bd40a26fd876b76fbc587312eebbb54a619a2b73bbf8c9887965ee079e",
+      "ascii": "m_flFieldOfView"
+    },
+    {
+      "start": "0x101d4b2c",
+      "end_exclusive": "0x101d4b3d",
+      "file_offset": "0x1d3f2c",
+      "bytes_hex": "6d5f666c5761697446696e697368656400",
+      "sha256": "b50f81cd75f471ae39d0bf35285e73ef357968bd5e79e43da3f4c36ce2efdad1",
+      "ascii": "m_flWaitFinished"
+    },
+    {
+      "start": "0x101d4b40",
+      "end_exclusive": "0x101d4b55",
+      "file_offset": "0x1d3f40",
+      "bytes_hex": "6d5f666c4d6f76655761697446696e697368656400",
+      "sha256": "800105e7b9951b6db5b7d4375c9f2d7dad6369922eda167917f7c774aa4f89ea",
+      "ascii": "m_flMoveWaitFinished"
+    },
+    {
+      "start": "0x101d4b58",
+      "end_exclusive": "0x101d4b63",
+      "file_offset": "0x1d3f58",
+      "bytes_hex": "6d5f416374697669747900",
+      "sha256": "1ac655382fac0e06abe4abf7b2acb39d9899998928dc895b3ad23896cf16f394",
+      "ascii": "m_Activity"
+    },
+    {
+      "start": "0x101d4b64",
+      "end_exclusive": "0x101d4b74",
+      "file_offset": "0x1d3f64",
+      "bytes_hex": "6d5f496465616c416374697669747900",
+      "sha256": "b7e7f6e7be0bebfb4cf4eb9933809eec02cf8a79e1f2b7340dcdf2df5f054040",
+      "ascii": "m_IdealActivity"
+    },
+    {
+      "start": "0x101d4b74",
+      "end_exclusive": "0x101d4b83",
+      "file_offset": "0x1d3f74",
+      "bytes_hex": "6d5f4c61737448697447726f757000",
+      "sha256": "3da3e26dd7631f16305d68a6430b95772ed9e16a7c1107065b430f4d46917912",
+      "ascii": "m_LastHitGroup"
+    },
+    {
+      "start": "0x101d4b84",
+      "end_exclusive": "0x101d4b93",
+      "file_offset": "0x1d3f84",
+      "bytes_hex": "6d5f4d6f6e73746572537461746500",
+      "sha256": "4c6fc921f3d5c6ab9c4f17470ed26403328578c6f332a3f52237d1f3527f3ad6",
+      "ascii": "m_MonsterState"
+    },
+    {
+      "start": "0x101d4b94",
+      "end_exclusive": "0x101d4ba8",
+      "file_offset": "0x1d3f94",
+      "bytes_hex": "6d5f496465616c4d6f6e73746572537461746500",
+      "sha256": "3fa5dd784492ddcdac9dacebbd1782b714ce469e61a86f1984b4843487c48ccc",
+      "ascii": "m_IdealMonsterState"
+    },
+    {
+      "start": "0x101d4ba8",
+      "end_exclusive": "0x101d4bb6",
+      "file_offset": "0x1d3fa8",
+      "bytes_hex": "6d5f695461736b53746174757300",
+      "sha256": "2f236b53f766cf702b7a538ec3ca62d327bb35ac91b5f246bc3f97514088fe5c",
+      "ascii": "m_iTaskStatus"
+    },
+    {
+      "start": "0x101d4bb8",
+      "end_exclusive": "0x101d4bc9",
+      "file_offset": "0x1d3fb8",
+      "bytes_hex": "6d5f695363686564756c65496e64657800",
+      "sha256": "51d127636ada35bb105cc5930675592dcf15796a97281bc1471586a9295a1d3e",
+      "ascii": "m_iScheduleIndex"
+    },
+    {
+      "start": "0x101d4bcc",
+      "end_exclusive": "0x101d4bdb",
+      "file_offset": "0x1d3fcc",
+      "bytes_hex": "6d5f6166436f6e646974696f6e7300",
+      "sha256": "0729022e06cd57ddb7fceed72b3b8781653ae8b9d05a69c37e9d903e953d21f7",
+      "ascii": "m_afConditions"
+    },
+    {
+      "start": "0x101d4bdc",
+      "end_exclusive": "0x101d4bea",
+      "file_offset": "0x1d3fdc",
+      "bytes_hex": "6d5f7665634d6f7665476f616c00",
+      "sha256": "55af485c90f92a4686ca56c42f866da60100357e07a9946950029ab9339206b3",
+      "ascii": "m_vecMoveGoal"
+    },
+    {
+      "start": "0x101d4bec",
+      "end_exclusive": "0x101d4bff",
+      "file_offset": "0x1d3fec",
+      "bytes_hex": "6d5f6d6f76656d656e74416374697669747900",
+      "sha256": "0a16dc9a9ede4e8e66fea47b39419688fb37729c00ea5fd177db209adf7a4496",
+      "ascii": "m_movementActivity"
+    },
+    {
+      "start": "0x101d4c00",
+      "end_exclusive": "0x101d4c12",
+      "file_offset": "0x1d4000",
+      "bytes_hex": "6d5f7665634c617374506f736974696f6e00",
+      "sha256": "2ebde483dda8a3bab1e989fbb31655a86f5833bd26003d1d389557c910427c46",
+      "ascii": "m_vecLastPosition"
+    },
+    {
+      "start": "0x101d4c14",
+      "end_exclusive": "0x101d4c20",
+      "file_offset": "0x1d4014",
+      "bytes_hex": "6d5f6948696e744e6f646500",
+      "sha256": "d9573b0728c2dc7ac007c70b59fed1d8920217229749065252c930effac6b418",
+      "ascii": "m_iHintNode"
+    },
+    {
+      "start": "0x101d4c20",
+      "end_exclusive": "0x101d4c2b",
+      "file_offset": "0x1d4020",
+      "bytes_hex": "6d5f61664d656d6f727900",
+      "sha256": "c0538fe766412d2107cbe6e4ac5e3ebd47482414786c592b9a91a60451120a96",
+      "ascii": "m_afMemory"
+    },
+    {
+      "start": "0x101d4c2c",
+      "end_exclusive": "0x101d4c39",
+      "file_offset": "0x1d402c",
+      "bytes_hex": "6d5f694d61784865616c746800",
+      "sha256": "2dd7d568271ac1333766185b3bd2591050eed45b3f463ac87b57835dd94d929d",
+      "ascii": "m_iMaxHealth"
+    },
+    {
+      "start": "0x101d4c3c",
+      "end_exclusive": "0x101d4c4a",
+      "file_offset": "0x1d403c",
+      "bytes_hex": "6d5f766563456e656d794c4b5000",
+      "sha256": "e9e8f06b347fc436cf61bb9f867c9f7e363ca31597f56d776b8c677c60c56c51",
+      "ascii": "m_vecEnemyLKP"
+    },
+    {
+      "start": "0x101d4c4c",
+      "end_exclusive": "0x101d4c5a",
+      "file_offset": "0x1d404c",
+      "bytes_hex": "6d5f63416d6d6f4c6f6164656400",
+      "sha256": "9deb7f2337c5ad336a9a0ebaad213f524c95093e4265ad9779ebe2c76d026951",
+      "ascii": "m_cAmmoLoaded"
+    },
+    {
+      "start": "0x101d4c5c",
+      "end_exclusive": "0x101d4c6b",
+      "file_offset": "0x1d405c",
+      "bytes_hex": "6d5f61664361706162696c69747900",
+      "sha256": "01bf99dce86e768fd9e30df3c7fb6423a9a2955ec00331864d48d5d50d9be7d2",
+      "ascii": "m_afCapability"
+    },
+    {
+      "start": "0x101d4c6c",
+      "end_exclusive": "0x101d4c7b",
+      "file_offset": "0x1d406c",
+      "bytes_hex": "6d5f666c4e65787441747461636b00",
+      "sha256": "f4ae01ac47a960db3ef3e01d58883818ceae241c986ccfc372b396aa2e4c262a",
+      "ascii": "m_flNextAttack"
+    },
+    {
+      "start": "0x101d4c7c",
+      "end_exclusive": "0x101d4c8d",
+      "file_offset": "0x1d407c",
+      "bytes_hex": "6d5f6269747344616d6167655479706500",
+      "sha256": "0d0c63ed16f6a590f18298a1647481a84d1e4ee0b0e00abec49ecada55adbe04",
+      "ascii": "m_bitsDamageType"
+    },
+    {
+      "start": "0x101d4c90",
+      "end_exclusive": "0x101d4ca5",
+      "file_offset": "0x1d4090",
+      "bytes_hex": "6d5f72676254696d65426173656444616d61676500",
+      "sha256": "d536980a7667da69c5ee7b4747a2f068646ca0df3e102a13a9fa3c1f17bb6253",
+      "ascii": "m_rgbTimeBasedDamage"
+    },
+    {
+      "start": "0x101ce5c0",
+      "end_exclusive": "0x101ce5cd",
+      "file_offset": "0x1cd9c0",
+      "bytes_hex": "6d5f626c6f6f64436f6c6f7200",
+      "sha256": "a9b13081c326b47d08bfbc807e29d2c9f5037b70bdc57f2ae37a2be6e8aa5be1",
+      "ascii": "m_bloodColor"
+    },
+    {
+      "start": "0x101d4ca8",
+      "end_exclusive": "0x101d4cb7",
+      "file_offset": "0x1d40a8",
+      "bytes_hex": "6d5f6661696c5363686564756c6500",
+      "sha256": "5eb37af76420de217195b21cb6753a53747e957e0ad18de137d6c42897b76114",
+      "ascii": "m_failSchedule"
+    },
+    {
+      "start": "0x101d4cb8",
+      "end_exclusive": "0x101d4cc7",
+      "file_offset": "0x1d40b8",
+      "bytes_hex": "6d5f666c48756e67727954696d6500",
+      "sha256": "a0e17696e9452babee20da15bb718d8e499e82e1a8f988eeae570b3926f5898b",
+      "ascii": "m_flHungryTime"
+    },
+    {
+      "start": "0x101d4cc8",
+      "end_exclusive": "0x101d4cd7",
+      "file_offset": "0x1d40c8",
+      "bytes_hex": "6d5f666c44697374546f6f46617200",
+      "sha256": "220a1eeb2253a2d33b518bbb85e09390ed1f6aa86175a35807c018f2724a261b",
+      "ascii": "m_flDistTooFar"
+    },
+    {
+      "start": "0x101d4cd8",
+      "end_exclusive": "0x101d4ce5",
+      "file_offset": "0x1d40d8",
+      "bytes_hex": "6d5f666c446973744c6f6f6b00",
+      "sha256": "ed56ef514aec2452d1ee1c2cce7bf341daf2da9d8c676c98b7d6f2bbce6a4708",
+      "ascii": "m_flDistLook"
+    },
+    {
+      "start": "0x101d4ce8",
+      "end_exclusive": "0x101d4cfc",
+      "file_offset": "0x1d40e8",
+      "bytes_hex": "6d5f6954726967676572436f6e646974696f6e00",
+      "sha256": "b1ea35e1d686d7f620580825c0c9eef857525455bee2eabde4d510ede13fd84f",
+      "ascii": "m_iTriggerCondition"
+    },
+    {
+      "start": "0x101d4cfc",
+      "end_exclusive": "0x101d4d0f",
+      "file_offset": "0x1d40fc",
+      "bytes_hex": "6d5f69737a5472696767657254617267657400",
+      "sha256": "99e071608fcf7c744e81e1259f82f8a882bf21bae311c8cb01402be97adb5690",
+      "ascii": "m_iszTriggerTarget"
+    },
+    {
+      "start": "0x101d4d10",
+      "end_exclusive": "0x101d4d1f",
+      "file_offset": "0x1d4110",
+      "bytes_hex": "6d5f4861636b656447756e506f7300",
+      "sha256": "b156a0ffadca46e36f9998517efb5507d83d15d5dda1c79187c35fe57f81dcfd",
+      "ascii": "m_HackedGunPos"
+    },
+    {
+      "start": "0x101d4d20",
+      "end_exclusive": "0x101d4d2e",
+      "file_offset": "0x1d4120",
+      "bytes_hex": "6d5f736372697074537461746500",
+      "sha256": "485ade62dc02e186ff199fab853657b9797b2b60a32fc8ef4eff3f8a3dd81ff3",
+      "ascii": "m_scriptState"
+    },
+    {
+      "start": "0x101d4d30",
+      "end_exclusive": "0x101d4d38",
+      "file_offset": "0x1d4130",
+      "bytes_hex": "6d5f7043696e6500",
+      "sha256": "527191c9a445cee32851237ef051aef8f802a5a2dc644fd57f03add84a4143c2",
+      "ascii": "m_pCine"
+    },
+    {
+      "start": "0x101d4d38",
+      "end_exclusive": "0x101d4d46",
+      "file_offset": "0x1d4138",
+      "bytes_hex": "6d5f6852757368456e7469747900",
+      "sha256": "d63f715a953f30b15303d3d49bcf96742d3219aad08da1cb274aae60f345c411",
+      "ascii": "m_hRushEntity"
+    },
+    {
+      "start": "0x101d4d48",
+      "end_exclusive": "0x101d4d58",
+      "file_offset": "0x1d4148",
+      "bytes_hex": "6d5f69527573684d6f76657479706500",
+      "sha256": "2cc7108c4e5123bf41f60fdde38c1b598277400fee67a505aa066f7e4052bbb5",
+      "ascii": "m_iRushMovetype"
+    },
+    {
+      "start": "0x101d4d58",
+      "end_exclusive": "0x101d4d69",
+      "file_offset": "0x1d4158",
+      "bytes_hex": "6d5f666c5275736844697374616e636500",
+      "sha256": "250985e5bcf411f99774f2f0920b65e8cdc95f1770470b20b21edaf935d342e6",
+      "ascii": "m_flRushDistance"
+    },
+    {
+      "start": "0x101d4d6c",
+      "end_exclusive": "0x101d4d7d",
+      "file_offset": "0x1d416c",
+      "bytes_hex": "6d5f69557365416c657274416e696d7300",
+      "sha256": "d0f4b29d6a2a0fc063e48f72997c479d58254e6d3271d95bfe489241c12554ce",
+      "ascii": "m_iUseAlertAnims"
+    },
+    {
+      "start": "0x101d4d80",
+      "end_exclusive": "0x101d4d92",
+      "file_offset": "0x1d4180",
+      "bytes_hex": "6d5f764f726967696e616c4f726967696e00",
+      "sha256": "905d11b51177a76a4b40622e07b52ee2c7cf9c2ff5ee875ed8986f1ab9515b1b",
+      "ascii": "m_vOriginalOrigin"
+    },
+    {
+      "start": "0x101d4d94",
+      "end_exclusive": "0x101d4da2",
+      "file_offset": "0x1d4194",
+      "bytes_hex": "6d5f62556e6769626261626c6500",
+      "sha256": "227e0e6e5e83950c8d8e3a539d0ac7c478b489a6a68d06d70297fa910a8e813c",
+      "ascii": "m_bUngibbable"
+    },
+    {
+      "start": "0x101d4da4",
+      "end_exclusive": "0x101d4db4",
+      "file_offset": "0x1d41a4",
+      "bytes_hex": "6d5f6257616974696e67546f44696500",
+      "sha256": "ee6ef2fdda9253c5a1d984a992177dcaf08d192409cd1ae11a1a5eda3afa386a",
+      "ascii": "m_bWaitingToDie"
+    },
+    {
+      "start": "0x101d4db4",
+      "end_exclusive": "0x101d4dca",
+      "file_offset": "0x1d41b4",
+      "bytes_hex": "6d5f624973466c69636b6572417070656172696e6700",
+      "sha256": "2778b2ac125988bfbbbb785a0a9f6e852b195fd39f437beb877e1ed4512e7b5a",
+      "ascii": "m_bIsFlickerAppearing"
+    },
+    {
+      "start": "0x101d4dcc",
+      "end_exclusive": "0x101d4de2",
+      "file_offset": "0x1d41cc",
+      "bytes_hex": "6d5f666c466c69636b657241707065617254696d6500",
+      "sha256": "89da171eced1eb23e84d790dfd2a6d3c7f704290ed9670561d4c81a6195394de",
+      "ascii": "m_flFlickerAppearTime"
+    },
+    {
+      "start": "0x101d4de4",
+      "end_exclusive": "0x101d4dfa",
+      "file_offset": "0x1d41e4",
+      "bytes_hex": "6d5f666c4e657874466c69636b657241707065617200",
+      "sha256": "9df7c7e7a3f1a91fd8e976066c04e657d76732b75b96125ce03ce4efa7e39c5c",
+      "ascii": "m_flNextFlickerAppear"
+    },
+    {
+      "start": "0x101bef70",
+      "end_exclusive": "0x101bef75",
+      "file_offset": "0x1be370",
+      "bytes_hex": "4661696c00",
+      "sha256": "ce1dc960954e05aacd9c0dcf7df6427b64cedb09a1cbdd78838b928055286574",
+      "ascii": "Fail"
+    },
+    {
+      "start": "0x101bef78",
+      "end_exclusive": "0x101bef82",
+      "file_offset": "0x1be378",
+      "bytes_hex": "49646c655374616e6400",
+      "sha256": "c22c7ba7a9d20853638b9b570aefd45c1518c086f91e4a702d3c514f4fda7877",
+      "ascii": "IdleStand"
+    },
+    {
+      "start": "0x101bef84",
+      "end_exclusive": "0x101bef91",
+      "file_offset": "0x1be384",
+      "bytes_hex": "49646c65205472696767657200",
+      "sha256": "7f516110290852b516cbede467ea98904273e65662bbbbd142f8a391381391be",
+      "ascii": "Idle Trigger"
+    },
+    {
+      "start": "0x101bef94",
+      "end_exclusive": "0x101bef9e",
+      "file_offset": "0x1be394",
+      "bytes_hex": "49646c652057616c6b00",
+      "sha256": "84dde7c9d55b1d0cb890b2e2a380f47221f0e4db00a11b1ffb9ce4f9d6f86263",
+      "ascii": "Idle Walk"
+    },
+    {
+      "start": "0x101befb4",
+      "end_exclusive": "0x101befbf",
+      "file_offset": "0x1be3b4",
+      "bytes_hex": "57616b6520416e67727900",
+      "sha256": "6b594e734fb3671863a2fc83eaeed379f08daa4945579ceb9541e7072013ff58",
+      "ascii": "Wake Angry"
+    },
+    {
+      "start": "0x101befc0",
+      "end_exclusive": "0x101befcb",
+      "file_offset": "0x1be3c0",
+      "bytes_hex": "416c657274204661636500",
+      "sha256": "e89a89d0bb3ae68d7e33ad25f939bf0bf59e02d9167185162e7883b8f7b5f28b",
+      "ascii": "Alert Face"
+    },
+    {
+      "start": "0x101befe0",
+      "end_exclusive": "0x101befec",
+      "file_offset": "0x1be3e0",
+      "bytes_hex": "416c657274205374616e6400",
+      "sha256": "8a38e86fdd9cf725c4a18cea8542a0b1fd3d416274a7f92d52fdfd03d09f75f5",
+      "ascii": "Alert Stand"
+    },
+    {
+      "start": "0x101bf000",
+      "end_exclusive": "0x101bf00d",
+      "file_offset": "0x1be400",
+      "bytes_hex": "436f6d626174205374616e6400",
+      "sha256": "64fb176f5ff83b6ac13fa0c05dadb9167d2905fee9da016e79369392ab3d520d",
+      "ascii": "Combat Stand"
+    },
+    {
+      "start": "0x101bf010",
+      "end_exclusive": "0x101bf01c",
+      "file_offset": "0x1be410",
+      "bytes_hex": "436f6d626174204661636500",
+      "sha256": "c57dd88b4655670eea8cee3555aed0d45cdf9a997179d469e4dd0dff58a99496",
+      "ascii": "Combat Face"
+    },
+    {
+      "start": "0x101bf034",
+      "end_exclusive": "0x101bf03b",
+      "file_offset": "0x1be434",
+      "bytes_hex": "52656c6f616400",
+      "sha256": "9164918963264e20b4276d954e3ac97db6f0d12c9488ac8ad407803a7e9079dc",
+      "ascii": "Reload"
+    },
+    {
+      "start": "0x101bf03c",
+      "end_exclusive": "0x101bf04a",
+      "file_offset": "0x1be43c",
+      "bytes_hex": "52616e67652041747461636b3100",
+      "sha256": "b77308502b54d185a001ef230e7a650a2c31d7fbb5a6e7c6ccd5d04f76ffca52",
+      "ascii": "Range Attack1"
+    },
+    {
+      "start": "0x101bf04c",
+      "end_exclusive": "0x101bf05a",
+      "file_offset": "0x1be44c",
+      "bytes_hex": "52616e67652041747461636b3200",
+      "sha256": "c9e708a601bddfb30fcef24671d9fabb8c135ca1a2a8c9fee1fe72ffacf54474",
+      "ascii": "Range Attack2"
+    },
+    {
+      "start": "0x101bf180",
+      "end_exclusive": "0x101bf197",
+      "file_offset": "0x1be580",
+      "bytes_hex": "54616b65436f76657246726f6d42657374536f756e6400",
+      "sha256": "023f2bcc03950bf7f0329bcd4d450cee51400e534bff134979ae421d122c1fff",
+      "ascii": "TakeCoverFromBestSound"
+    },
+    {
+      "start": "0x101bf0ac",
+      "end_exclusive": "0x101bf0b8",
+      "file_offset": "0x1be4ac",
+      "bytes_hex": "436861736520456e656d7900",
+      "sha256": "f68ba2da57a7c138b56e9ce31fb0d551e5590a4cfd0ba171ee820454d0f45f12",
+      "ascii": "Chase Enemy"
+    },
+    {
+      "start": "0x101bf0cc",
+      "end_exclusive": "0x101bf0d9",
+      "file_offset": "0x1be4cc",
+      "bytes_hex": "536d616c6c20466c696e636800",
+      "sha256": "dbc91aedbac9e3708e73778ff90c7e04e85460e5c01c36476b8901dab87019d9",
+      "ascii": "Small Flinch"
+    },
+    {
+      "start": "0x101bf0dc",
+      "end_exclusive": "0x101bf0e0",
+      "file_offset": "0x1be4dc",
+      "bytes_hex": "44696500",
+      "sha256": "c1816696a447d7e9b16e54d15ce2e8f459796bae750ae916e74b8c79e4c210d2",
+      "ascii": "Die"
+    },
+    {
+      "start": "0x101bf110",
+      "end_exclusive": "0x101bf116",
+      "file_offset": "0x1be510",
+      "bytes_hex": "4572726f7200",
+      "sha256": "e50d69ad5005ad7c4c25ae5f8965c0479a6e8a077c6015a8a6b380efccd8da72",
+      "ascii": "Error"
+    },
+    {
+      "start": "0x101bf12c",
+      "end_exclusive": "0x101bf139",
+      "file_offset": "0x1be52c",
+      "bytes_hex": "57616c6b546f53637269707400",
+      "sha256": "297593307f43176efcbd5faa99a7a36c50a0b78480ee0af077af12213434dfc8",
+      "ascii": "WalkToScript"
+    },
+    {
+      "start": "0x101bf13c",
+      "end_exclusive": "0x101bf148",
+      "file_offset": "0x1be53c",
+      "bytes_hex": "52756e546f53637269707400",
+      "sha256": "7e34a1e56dbed28e73f522c8fde6868df4aff2539174f4d4c604becdcdae3602",
+      "ascii": "RunToScript"
+    },
+    {
+      "start": "0x101bf148",
+      "end_exclusive": "0x101bf156",
+      "file_offset": "0x1be548",
+      "bytes_hex": "57616974466f7253637269707400",
+      "sha256": "92e3a0ddfdbf503988903b991717609ba6f46c2084e0450de287468b22d1f2b1",
+      "ascii": "WaitForScript"
+    },
+    {
+      "start": "0x101befa0",
+      "end_exclusive": "0x101befa7",
+      "file_offset": "0x1be3a0",
+      "bytes_hex": "416d6275736800",
+      "sha256": "88bcaad93e4ade343e8b2db035205e2bbfe7a32d5ca948d6cd689bfa19dbbe41",
+      "ascii": "Ambush"
+    },
+    {
+      "start": "0x101befa8",
+      "end_exclusive": "0x101befb4",
+      "file_offset": "0x1be3a8",
+      "bytes_hex": "4163746976652049646c6500",
+      "sha256": "adf0e7e67b065516d1cbc58acd5f3e0c308cd33d4f8630a1da5c7e312bb332db",
+      "ascii": "Active Idle"
+    },
+    {
+      "start": "0x101befcc",
+      "end_exclusive": "0x101befdf",
+      "file_offset": "0x1be3cc",
+      "bytes_hex": "416c65727420536d616c6c20466c696e636800",
+      "sha256": "ab1360f6742c68c34d8b71b01d5cfcaed01bd2ec74f58788b7ed7008217bcc8e",
+      "ascii": "Alert Small Flinch"
+    },
+    {
+      "start": "0x101befec",
+      "end_exclusive": "0x101beffd",
+      "file_offset": "0x1be3ec",
+      "bytes_hex": "496e766573746967617465536f756e6400",
+      "sha256": "2d605f8fdacbceb2a60b8076a013aa2c74cfa798ff88d03c23719e6836388dd6",
+      "ascii": "InvestigateSound"
+    },
+    {
+      "start": "0x101bf01c",
+      "end_exclusive": "0x101bf025",
+      "file_offset": "0x1be41c",
+      "bytes_hex": "5374616e646f666600",
+      "sha256": "972e308281940c1b3bee42207f1781bb54b20e0afbaa15163220a02d78506e67",
+      "ascii": "Standoff"
+    },
+    {
+      "start": "0x101bf028",
+      "end_exclusive": "0x101bf033",
+      "file_offset": "0x1be428",
+      "bytes_hex": "41726d20576561706f6e00",
+      "sha256": "ffc181bf3dd932880a735b7599db75be1e78ae34d9b9bbf8b43569151cce3dbf",
+      "ascii": "Arm Weapon"
+    },
+    {
+      "start": "0x101bf05c",
+      "end_exclusive": "0x101bf071",
+      "file_offset": "0x1be45c",
+      "bytes_hex": "5072696d617279204d656c65652041747461636b00",
+      "sha256": "7b8f548e259668ee8119df34eddab291a9231df2a62cae9f97878742e7e65324",
+      "ascii": "Primary Melee Attack"
+    },
+    {
+      "start": "0x101bf074",
+      "end_exclusive": "0x101bf08b",
+      "file_offset": "0x1be474",
+      "bytes_hex": "5365636f6e64617279204d656c65652041747461636b00",
+      "sha256": "86d31f837a33a0f74ff17ba66a39a70cb5b696ce550e4769c9d233fb50b071bd",
+      "ascii": "Secondary Melee Attack"
+    },
+    {
+      "start": "0x101bf08c",
+      "end_exclusive": "0x101bf09c",
+      "file_offset": "0x1be48c",
+      "bytes_hex": "5370656369616c2041747461636b3100",
+      "sha256": "2dab4faa7dc451d5a60c09084fc267259a68538a2cd9257cf255fe7ccb7405c8",
+      "ascii": "Special Attack1"
+    },
+    {
+      "start": "0x101bf09c",
+      "end_exclusive": "0x101bf0ac",
+      "file_offset": "0x1be49c",
+      "bytes_hex": "5370656369616c2041747461636b3200",
+      "sha256": "a9a359b6e2e996c8e885449613de13d19693feb8a97f0edb1ead5a13d611cf5e",
+      "ascii": "Special Attack2"
+    },
+    {
+      "start": "0x101bf0e0",
+      "end_exclusive": "0x101bf0ee",
+      "file_offset": "0x1be4e0",
+      "bytes_hex": "566963746f72792044616e636500",
+      "sha256": "6bd7246b4172981ca54935da73d2a9ae160f2aa4bcf24245fb4cf148d5c34107",
+      "ascii": "Victory Dance"
+    },
+    {
+      "start": "0x101bf0f0",
+      "end_exclusive": "0x101bf100",
+      "file_offset": "0x1be4f0",
+      "bytes_hex": "4261726e61636c652056696374696d00",
+      "sha256": "543d05e81450343be822e5d7f6febf0c6527d2d4d45cdfa61907f659be5af44f",
+      "ascii": "Barnacle Victim"
+    },
+    {
+      "start": "0x101bf100",
+      "end_exclusive": "0x101bf10f",
+      "file_offset": "0x1be500",
+      "bytes_hex": "4261726e61636c652043686f6d7000",
+      "sha256": "9510418918debf39345cc42a229da38f8d9d2d7598738be2e4a198656f311ff6",
+      "ascii": "Barnacle Chomp"
+    },
+    {
+      "start": "0x101bf118",
+      "end_exclusive": "0x101bf129",
+      "file_offset": "0x1be518",
+      "bytes_hex": "54656c65706f7274546f53637269707400",
+      "sha256": "73c7e2cc64df0cfd4d43713dd1bd40ca41649d2d1ad85aa33414108d6c850658",
+      "ascii": "TeleportToScript"
+    },
+    {
+      "start": "0x101bf158",
+      "end_exclusive": "0x101bf163",
+      "file_offset": "0x1be558",
+      "bytes_hex": "4661636553637269707400",
+      "sha256": "cd6449b4fc71c177e9296fa535a8f6f3015e02e2ccf1d3f6347e0da972a9d07e",
+      "ascii": "FaceScript"
+    },
+    {
+      "start": "0x101bf164",
+      "end_exclusive": "0x101bf16a",
+      "file_offset": "0x1be564",
+      "bytes_hex": "436f77657200",
+      "sha256": "7e6c2be4a23cf41fb389d696133eb362b2110526410b57b59f71f803dca20e0a",
+      "ascii": "Cower"
+    },
+    {
+      "start": "0x101bf16c",
+      "end_exclusive": "0x101bf180",
+      "file_offset": "0x1be56c",
+      "bytes_hex": "54616b65436f76657246726f6d4f726967696e00",
+      "sha256": "84b5fcc39b678b5c81d71f671604b49223b40b81a0df8596784def3710adeaa5",
+      "ascii": "TakeCoverFromOrigin"
+    },
+    {
+      "start": "0x101bf198",
+      "end_exclusive": "0x101bf1ad",
+      "file_offset": "0x1be598",
+      "bytes_hex": "746c54616b65436f76657246726f6d456e656d7900",
+      "sha256": "2ada98e137da41dc097c0564979f59e5506b912547258789a1d0da58b2070d32",
+      "ascii": "tlTakeCoverFromEnemy"
+    },
+    {
+      "start": "0x101bf1b0",
+      "end_exclusive": "0x101bf1bc",
+      "file_offset": "0x1be5b0",
+      "bytes_hex": "527573682054617267657400",
+      "sha256": "ef077518d52eb835207b7b8b29931791957ead756835725ed6dedf01e99efa82",
+      "ascii": "Rush Target"
+    }
+  ],
+  "navigation_sources": [
+    {
+      "path": "analysis/exports/hl.csv",
+      "sha256": "d7fad6894416689ec709fff0c7c1d29e6d9de43fb1982f36eb3e7e8960d805ab",
+      "role": "saved native export index; monster_generic=100b0f30"
+    }
+  ]
+}

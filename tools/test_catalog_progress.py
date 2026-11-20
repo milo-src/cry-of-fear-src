@@ -3,6 +3,7 @@
 Run: python -m unittest discover -s tools -p test_catalog_progress.py
 """
 from collections import defaultdict
+import copy
 from pathlib import Path
 import tempfile
 import unittest
@@ -12,6 +13,37 @@ import catalog_decompiled as catalog
 
 
 class ProgressTest(unittest.TestCase):
+    def test_actual_entry_uses_portable_info_not_interior_selector(self):
+        meta = {"binary_sha256": "a" * 64}
+        body = {"ranges": [{"start": "0x1000", "end": "0x1004"}]}
+        function = dict(actual_entry="0x1000", procedure="ram:0x1002", body=body,
+                        procedure_info_evidence_id="info1", portable_evidence="portable.json")
+        info = dict(evidence_id="info1", operation="procedure_info",
+                    subject={"digest": {"sha256": meta["binary_sha256"]}},
+                    parameters={"procedure": function["procedure"]},
+                    normalized_result={"entrypoint": "0x1000", "body": body})
+        documents = {"portable.json": {"records": {"info": {"result": {"structuredContent": info}}}}}
+        self.assertEqual(catalog.confirmed_capture_entry(meta, function, documents), "0x1000")
+        self.assertIsNone(catalog.confirmed_capture_entry(meta, {"procedure": "ram:0x1002"}, documents))
+        for field, wrong in (("actual_entry", "0x1002"), ("procedure", "ram:0x9999"),
+                             ("body", {}), ("procedure_info_evidence_id", "missing")):
+            bad = copy.deepcopy(function)
+            bad[field] = wrong
+            with self.subTest(field=field), self.assertRaises(AssertionError):
+                catalog.confirmed_capture_entry(meta, bad, documents)
+        with self.assertRaises(AssertionError):
+            catalog.confirmed_capture_entry({"binary_sha256": "b" * 64}, function, documents)
+
+    def test_confirmed_thunk_does_not_relocate_same_named_wrapper(self):
+        rows = [dict(module="client", entry="0x1000", requested="0x1000",
+                     name="vgui::Panel::paintBackground",
+                     address_basis="procedure_info из сохранённого Evidence"),
+                dict(module="client", entry=None, requested="0x2000",
+                     name="vgui::Panel::paintBackground")]
+        groups, _ = catalog.resolve(rows, {})
+        self.assertEqual(set(groups), {("client", "0x1000"), ("client", "0x2000")})
+        self.assertTrue(rows[1]["address_basis"].startswith("селектор"))
+
     def fixture(self):
         # Same VA in two DLLs is two records. An interior selector and a
         # second typing/capture of one entry must not inflate function count.

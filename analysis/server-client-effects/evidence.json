@@ -1,0 +1,463 @@
+{
+  "module": "server",
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll",
+  "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "target_executed": false,
+  "source_c": [
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119320.c",
+      "sha256": "7820f258aeb5ac150fa12f8c97f2b64614939e8ca093c8807e7267aad84a95e2"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1011a800.c",
+      "sha256": "4bc1ebc1f17b8d843409be2642193891eb13b3d7d8ce419712b89cc9997021aa"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119680.c",
+      "sha256": "99de35ab0355a105abb7557d0c8e934a9734842d0d7671cb40532931ff64b037"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119c00.c",
+      "sha256": "c775c9c8faf99053cb34fed623560f3f7d8094b2350cb333f8e80a33e9d3386a"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119de0.c",
+      "sha256": "560bf8a5625fcc327edd6db01f3d66e203868020a38498707dcfd4b01f04ff43"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119810.c",
+      "sha256": "8be8e524b47556b5c0081b7529596a5a8035234660727feab89a3663a8924130"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1011a7e0.c",
+      "sha256": "5b238e24dc80c208926203296763ba0b99733cf10f9526a9a1ff0cc50449ad99"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1011ab20.c",
+      "sha256": "5656ab47161bb0d0399ef4b923d496c1f4bfaeefbc3b0125ef8ee6c77ab6eee9"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119cc0.c",
+      "sha256": "98c2d9fcb15f7eac55dba6fcd56e3ec80e68fff2b7a3cca6bfa37df7c62ca09f"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119d40.c",
+      "sha256": "39f46b439d7b302c1b52c52916c7c56268f2d3de64bbf8ef2b5d94eab1f892fe"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x101166d0.c",
+      "sha256": "a314da7d304ad075c84598ebecfa8c251638fb205d185386bf9d5d108ade026b"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x101198a0.c",
+      "sha256": "681483000177e301290597073afd887f0219e3ac0f58c0ee68f932cf9a1cc730"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10119f60.c",
+      "sha256": "49bcf4571938c517d80d0783b0d5f5480b84a390f6e1afa9ecf30c0910138a0f"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100e5fc0.c",
+      "sha256": "9dee1dd77571fe01b42451837b3a9d0c3624cef77289ad83c177af0c66ed3a7b"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100941f0.c",
+      "sha256": "6a47e87b24c9d73a4ba07d350ccb129b7577a0a7dde8304c3518a85fd84be9c5"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100b4aa0.c",
+      "sha256": "e2bf7a43a37bf66561f8a88da81d14cf0b31098d5914c5c082328ae55d78381a"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1000db70.c",
+      "sha256": "d15e679cfcefab6551373aa72951dd3c9f209c8b3734a803f5b4ded50e0eee68"
+    },
+    {
+      "path": "external/hlsdk-portable/common/const.h",
+      "sha256": "a2e3bcd0b233f975616110febe6dcf231fda619cff6843f833aa1aeda5c88fbc"
+    },
+    {
+      "path": "external/hlsdk-portable/engine/progdefs.h",
+      "sha256": "0bd81e4cdea857c5dbeba32590613621916d87413d1acc4aab0a2e78f5af7cf8"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "sha256": "d9d1cf6174f7c3e31581ad06ae02592bd97504131f1fdc2d7d2fe885b8d4b434"
+    }
+  ],
+  "ranges": [
+    {
+      "path": "analysis/server-client-effects/10119320.asm",
+      "start": "0x10119320",
+      "end_exclusive": "0x10119326",
+      "sha256": "6af2db672c62f56ff0baf730174194b6dcfc671c845908c85f181c6372c92eca",
+      "binary_range_sha256": "0fbadb67fefbe3273673e6b28bf8fe1b42d60d4e70bbdda9897794a9bcc2f643",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119320",
+        "--stop-address=0x10119326",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/1011a800.asm",
+      "start": "0x1011a800",
+      "end_exclusive": "0x1011a816",
+      "sha256": "17e467757a294ac056e0c6fed6fff31ebb0d0f7ca9e2ca4a75c720cf1183f0bc",
+      "binary_range_sha256": "1581caee856d9b3977a72524de4aad6931cc24ed3e5dfaca9ea03078595823ce",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011a800",
+        "--stop-address=0x1011a816",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119680.asm",
+      "start": "0x10119680",
+      "end_exclusive": "0x101196b3",
+      "sha256": "5430b6c086f78be56d392b60ce080043eca27551dd953a11650485d30ec2eea7",
+      "binary_range_sha256": "27f7bceb0358afc51c7566b3f01d6d55c05d208d82e773483c9e79beb57f6344",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119680",
+        "--stop-address=0x101196b3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119c00.asm",
+      "start": "0x10119c00",
+      "end_exclusive": "0x10119c43",
+      "sha256": "d8f3d31f6e0b2cbddf88724515f8f4c5c3d9b74e67f2ba7c5059d68afbc09760",
+      "binary_range_sha256": "310f71e7fe2ce3e30feca7429c22056bc4b1bf9db7cb76108f3991d376dd2fd3",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119c00",
+        "--stop-address=0x10119c43",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119de0.asm",
+      "start": "0x10119de0",
+      "end_exclusive": "0x10119f53",
+      "sha256": "721a83d9ea1c7290957cf1212faff623da4fb2af5149b2070ebdc3edad25c175",
+      "binary_range_sha256": "6f396d5553905a5a46a674c0f0dd6c8912f382d1718d5f6386363db46160e8b1",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119de0",
+        "--stop-address=0x10119f53",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119810.asm",
+      "start": "0x10119810",
+      "end_exclusive": "0x10119896",
+      "sha256": "dc75fad3c95178ffd75abb50f7b8ed14c7d57e3ef3959484ad3f417d3cb30c0f",
+      "binary_range_sha256": "a4a0919ee19a670d59ad1fab5f4dca7850b5de8d59c261b9ff776173f8447243",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119810",
+        "--stop-address=0x10119896",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/1011a7e0.asm",
+      "start": "0x1011a7e0",
+      "end_exclusive": "0x1011a7f6",
+      "sha256": "6764b22d9b1c0cd36e13ca9a27ef0d9aa189db3c815a402ef71b0d183674932d",
+      "binary_range_sha256": "ed64fb774691041f7798e7228f5f489087f3f150799f2305afb545f220004887",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011a7e0",
+        "--stop-address=0x1011a7f6",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/1011ab20.asm",
+      "start": "0x1011ab20",
+      "end_exclusive": "0x1011ab28",
+      "sha256": "c102f8859222a8316a812958c038cf039af16386bcc2bd11a6ae84286d16d572",
+      "binary_range_sha256": "354fdac65c77b630fbc61ee59bf1ceff3edeaecb50609916a0d719ca6399fc84",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011ab20",
+        "--stop-address=0x1011ab28",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119cc0.asm",
+      "start": "0x10119cc0",
+      "end_exclusive": "0x10119d3f",
+      "sha256": "67ea9a385a028b9f32066e76dd4b6e65cfaa3fda5146412d8699b103e460e72c",
+      "binary_range_sha256": "5dcbf3f8e69ead08ed8155ac309b2f9a96cb48700149ee0530cc96e90c41fc41",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119cc0",
+        "--stop-address=0x10119d3f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119d40.asm",
+      "start": "0x10119d40",
+      "end_exclusive": "0x10119dd3",
+      "sha256": "7d2fd8a611c4542a9c8d70c6e2f660fc32d1cf17cd1a753fdb2925017e4c15d7",
+      "binary_range_sha256": "22683d3834a50f7ed9e223fe340801be83d868b192a6c3244fc947c442547105",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119d40",
+        "--stop-address=0x10119dd3",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/101166d0.asm",
+      "start": "0x101166d0",
+      "end_exclusive": "0x101166f4",
+      "sha256": "fc66c3a333b897d92ed392ff9fdad9f45d059ea9f898dac05f08b0f79ae95614",
+      "binary_range_sha256": "c9710b3895da8fc620f9f08180ba0b3b2f27742be1547ef827f63f680c0f31c8",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x101166d0",
+        "--stop-address=0x101166f4",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/101198a0.asm",
+      "start": "0x101198a0",
+      "end_exclusive": "0x101198f9",
+      "sha256": "28c1222684cb9d00ec4ddd41c43cc7020221d72cb893efc405a234e85b98d000",
+      "binary_range_sha256": "5aa60e95c6838cbbdc5ed92d4b21765292f92aa4569e8519c1015f0ac1b04416",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x101198a0",
+        "--stop-address=0x101198f9",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/10119f60.asm",
+      "start": "0x10119f60",
+      "end_exclusive": "0x10119f9b",
+      "sha256": "0b92991f7a4b275e9f952c7e1efede6b4e3c70884115e9d5ea1892c930918294",
+      "binary_range_sha256": "329b31fc74ce221e2b79b3c7de01ca487b1d84785d827d9a1ab25ca323027199",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10119f60",
+        "--stop-address=0x10119f9b",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/100e5fc0.asm",
+      "start": "0x100e5fc0",
+      "end_exclusive": "0x100e6af0",
+      "sha256": "4ef279470d55ab668f1e12615ca86de07887862eddc833a3a142b0dbd8976f7b",
+      "binary_range_sha256": "59e6184b4af0510d910b70a2d3c57bd701f39a421fe26377303cd34c391c84ef",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100e5fc0",
+        "--stop-address=0x100e6af0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/100941f0.asm",
+      "start": "0x100941f0",
+      "end_exclusive": "0x1009425d",
+      "sha256": "d30e617a37e69ea83808ac12f554752834431a70bcc02370eced4617e8461d5e",
+      "binary_range_sha256": "c40f65fb639939e339ee8063e291e7ab77b313dc201e6315b053a1d94290d301",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100941f0",
+        "--stop-address=0x1009425d",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/100b4aa0.asm",
+      "start": "0x100b4aa0",
+      "end_exclusive": "0x100b4ac2",
+      "sha256": "1e9658c1b3436b414836a7bd89a6565138b9f7573f25259ec6b9ad45e2504daf",
+      "binary_range_sha256": "00dcba5c35371689824d0501163044c51b9696901a81b165141b5141d0a418bf",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b4aa0",
+        "--stop-address=0x100b4ac2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-client-effects/1000db70.asm",
+      "start": "0x1000db70",
+      "end_exclusive": "0x1000db73",
+      "sha256": "24e11e319e75fe532ee199c411be8d0ab6a57f94b01ba622b78b69482ae7aa53",
+      "binary_range_sha256": "4bc724f3b1d0caf4fe369c18cba3102e6c4ea057f63fe1587e3973134a7f755e",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1000db70",
+        "--stop-address=0x1000db73",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x101dac3c",
+      "bytes_hex": "53637265656e5368616b6500",
+      "ascii": "ScreenShake"
+    },
+    {
+      "address": "0x101dac48",
+      "bytes_hex": "53637265656e4661646500",
+      "ascii": "ScreenFade"
+    },
+    {
+      "address": "0x101dad0c",
+      "bytes_hex": "50726f466f6e7400",
+      "ascii": "ProFont"
+    }
+  ],
+  "api_binding": {
+    "header": "external/hlsdk-portable/engine/eiface.h",
+    "header_sha256": "5a2b1a37d25364b173d312cdb26cf11e8b6dae3e0a3d495cde735fc025e910a5",
+    "base": "0x10222f48",
+    "slots": [
+      {
+        "index": 19,
+        "address": "0x10222f94",
+        "sdk_name": "pfnMakeVectors"
+      },
+      {
+        "index": 31,
+        "address": "0x10222fc4",
+        "sdk_name": "pfnTraceLine"
+      },
+      {
+        "index": 34,
+        "address": "0x10222fd0",
+        "sdk_name": "pfnTraceHull"
+      },
+      {
+        "index": 72,
+        "address": "0x10223068",
+        "sdk_name": "pfnPEntityOfEntIndex"
+      },
+      {
+        "index": 46,
+        "address": "0x10223000",
+        "sdk_name": "pfnMessageBegin"
+      },
+      {
+        "index": 47,
+        "address": "0x10223004",
+        "sdk_name": "pfnMessageEnd"
+      },
+      {
+        "index": 48,
+        "address": "0x10223008",
+        "sdk_name": "pfnWriteByte"
+      },
+      {
+        "index": 50,
+        "address": "0x10223010",
+        "sdk_name": "pfnWriteShort"
+      },
+      {
+        "index": 54,
+        "address": "0x10223020",
+        "sdk_name": "pfnWriteString"
+      },
+      {
+        "index": 91,
+        "address": "0x102230b4",
+        "sdk_name": "pfnRandomFloat"
+      },
+      {
+        "index": 75,
+        "address": "0x10223074",
+        "sdk_name": "pfnRegUserMsg"
+      }
+    ],
+    "initializer": "0x100b4aa0",
+    "copied_dwords": 144
+  },
+  "limitations": [
+    "Engine callback names derive from previously verified table-copy ABI; engine implementation is outside this packet."
+  ]
+}

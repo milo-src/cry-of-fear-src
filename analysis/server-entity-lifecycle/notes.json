@@ -1,0 +1,466 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1001f1a0",
+      "proposed_name": "CKeypadNew_GetOrCreatePrivateObject",
+      "subsystem": "entity-core",
+      "summary_ru": "Создаёт private object KeypadNew либо возвращает существующий.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entvars), размер0x208, vtable0x101a9748. Если entvars==0, пытается CreateEntity и берёт edict+80; далее entvars+20c→edict, существующий private+7c возвращается без переинициализации.",
+        "При allocation ставит только vtable и object+4=entvars. Полное обнуление не доказано. CreateEntityNULL приводит к чтению через entvars0; allocatorNULL — XOR EAX,EAX и запись[EAX+4]. Export0x10020000 является JMP на это тело, отдельной новой карточки нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001f1a0.c",
+        "analysis/server-entity-lifecycle/asm/1001f1a0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020600",
+      "proposed_name": "CAnimatedCamera_GetOrCreatePrivateObject",
+      "subsystem": "entity-core",
+      "summary_ru": "Создаёт private object AnimatedCamera либо возвращает существующий.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entvars), размер0x368, vtable0x101a9b9c. Если entvars==0, пытается CreateEntity и берёт edict+80; далее entvars+20c→edict, существующий private+7c возвращается без переинициализации.",
+        "При allocation ставит только vtable и object+4=entvars. Полное обнуление не доказано. CreateEntityNULL приводит к чтению через entvars0; allocatorNULL — XOR EAX,EAX и запись[EAX+4]. Export0x10020fd0 является JMP на это тело, отдельной новой карточки нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020600.c",
+        "analysis/server-entity-lifecycle/asm/10020600.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020660",
+      "proposed_name": "CAnimatedCameraModel_GetOrCreatePrivateObject",
+      "subsystem": "entity-core",
+      "summary_ru": "Создаёт private object AnimatedCameraModel либо возвращает существующий.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entvars), размер0x3f4, vtable0x101a9e04. Если entvars==0, пытается CreateEntity и берёт edict+80; далее entvars+20c→edict, существующий private+7c возвращается без переинициализации.",
+        "При allocation ставит только vtable и object+4=entvars. Полное обнуление не доказано. CreateEntityNULL приводит к чтению через entvars0; allocatorNULL — XOR EAX,EAX и запись[EAX+4]. Export0x10020fe0 является JMP на это тело, отдельной новой карточки нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020660.c",
+        "analysis/server-entity-lifecycle/asm/10020660.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001f200",
+      "proposed_name": "CKeypadNew_AppendDigitAndCheckCode",
+      "subsystem": "entity-core",
+      "summary_ru": "Добавляет десятичное число к введённому коду, сравнивает и запускает цель при успехе.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(number), RET4. ltoa(number,stackBuffer4,10), затем небounded append сNUL в this+100; проверка strlen>=pev+250 происходит после копирования. Из KeypadThink передаются только1..9; общего безопасного контракта для произвольного number нет.",
+        "При достигнутой длине atoi(buffer) сравнивается с integer code pev+248. Успех: soundhelper100fc9f0(edict,3,noise3+1f8,1.0,2.0,0,100), затем при target и m_pPlayer!=NULL FireTargets10101ff0(target,player,player,3,0). Ошибка использует noise2+1f4 с теми же параметрами.",
+        "После обоих исходов buffer[0]=0, input deadline pev+258=time+1(floatADDSS). Успех сам по себе не запускает end_keypad и не выключает attach. Без достигнутой длины буфер остаётся."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001f200.c",
+        "analysis/server-entity-lifecycle/asm/1001f200.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001f340",
+      "proposed_name": "CKeypadNew_HandleAnimationSoundEvent",
+      "subsystem": "entity-core",
+      "summary_ru": "Озвучивает animation event1004.",
+      "confidence": "high",
+      "details_ru": [
+        "Если DWORD event[0]==0x3ec, передаёт event[1] как sample pointer в soundhelper100fc9f0(edict,4,sample,1.0,2.0,0,100). Остальные IDs игнорируются. Native keypad vtable+11c указывает сюда; pointer не превращается в stringID."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001f340.c",
+        "analysis/server-entity-lifecycle/asm/1001f340.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001f390",
+      "proposed_name": "CKeypadNew_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Обрабатывает integer code number и базовые movewith/skill/style ключи.",
+      "confidence": "high",
+      "details_ru": [
+        "Точное case-sensitive сравнение. number→atoi(value) в pev+248; movewith→AllocString(value) в object+18; skill→atoi в+60; style→atoi в+64. Успех пишет handled+0c=1, незнакомый ключ0 без вызова base KeyValue. Нет проверки диапазона/знака кода."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001f390.c",
+        "analysis/server-entity-lifecycle/asm/1001f390.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001f4f0",
+      "proposed_name": "CKeypadNew_KeypadThink",
+      "subsystem": "entity-core",
+      "summary_ru": "Обновляет анимацию, читает клавиши Windows и управляет завершением keypad.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала FrameAdvance1000eda0(0) и events1000e5f0 с возвращённым float. Потом GetAsyncKeyState(latchedKey+204): high bit удержан→сразу schedule virtual+8(0); иначе latch0. Это раньше exit deadline и input cooldown. PE IAT101a119c строго связан с USER32.GetAsyncKeyState.",
+        "При exitPending pev+24c!=0 и time>=pev+25c очищает EHANDLE player+5c0 и+388, keypad.pev.effects+114=0, player+1ea0=0. Посылает AttachCam(destination1,player): SHORT0,BYTE0; возвращается без перепланирования и без очистки this.think+78.",
+        "Если time<inputDeadline+258, только schedule0. Иначе Enter13/Escape27 выбирает end_keypad, pending1, deadline=time+1, но не прекращает дальнейшую проверку цифр этого же вызова.",
+        "Цифры1..9 проверяются независимо в возрастающем порядке: numpad61h..69h либо31h..39h, high bit. Каждый успех выбирает pressN, пишет inputDeadline=float(double(time)+0.2), exitDeadline=float(double(time)+0.33), запоминает нажатыйVK и вызывает AppendDigit. Нет обработки0/backspace; несколько одновременно нажатых цифр могут пройти за один вызов. В обычном конце virtual+8(0)."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001f4f0.c",
+        "analysis/server-entity-lifecycle/asm/1001f4f0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fb40",
+      "proposed_name": "CKeypadNew_KeypadUse",
+      "subsystem": "entity-core",
+      "summary_ru": "Подключает keypad к найденному player и посылает AttachCam.",
+      "confidence": "high",
+      "details_ru": [
+        "Полный thiscall Use, RET16. Требует activator!=NULL, но выбирает player через FindClassname10118460(0,\"player\"), не через activator. Проверяет найденного virtual+d0 и+bc ненулевыми, затем private-object lookup100125e0 и сохраняет this+200.",
+        "inputDeadline=time, exitPending0; schedule0.1; think+78=1001f4f0; pev.effects+114=1. EHANDLE::Set10017740(ECX=player+388,this); полученную паруDWORD копирует в player+5c0/+5c4; player+1ea0=1. Native descriptor подтверждает +388=m_pAttachedCamera.",
+        "AttachCam destination1: SHORT IndexOfEdict(resolved handle), BYTE0,BYTE0, LONG(int X),LONG(int Y),LONG(int Z); virtual+228(player,outVector) вызывается отдельно для каждой компоненты, CVTTSS2SI. Затем start_keypad и exitDeadline=time+1. Нет reset input buffer/latch или проверки reentry в этом теле."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fb40.c",
+        "analysis/server-entity-lifecycle/asm/1001fb40.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fd20",
+      "proposed_name": "CKeypadNew_ObjectCaps",
+      "subsystem": "entity-core",
+      "summary_ru": "Добавляет capability mask8 к унаследованному от parent биту2.",
+      "confidence": "high",
+      "details_ru": [
+        "Без parent+14 возвращает10. С parent вызывает virtual+40 сECX=parent и возвращает (result&2)|8. Native keypad vtable+40 связан с этим entry; downstream смысл битов не выводится только из этой функции."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fd20.c",
+        "analysis/server-entity-lifecycle/asm/1001fd20.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fd40",
+      "proposed_name": "CKeypadNew_Precache",
+      "subsystem": "entity-core",
+      "summary_ru": "Предзагружает выбранную модель и три поля звуков keypad.",
+      "confidence": "high",
+      "details_ru": [
+        "При ненулевых stringIDs вызывает modelprecache10116990(pev.model+b8), soundprecache10116a30(pev.noise+1ec), noise2+1f4, noise3+1f8. Каждое следующее поле читает актуальный pev. noise1+1f0 здесь не обрабатывается; нет собственного default sample."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fd40.c",
+        "analysis/server-entity-lifecycle/asm/1001fd40.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fdd0",
+      "proposed_name": "CKeypadNew_Restore",
+      "subsystem": "entity-core",
+      "summary_ru": "Читает собственную ссылку m_pPlayer после inherited animation Restore.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(reader),RET4/EAX result. Сначала1000ea60(reader); при0 возврат. Затем ECX=reader, ReadFields10117010(\"CKeypadNew\",this,10211f4c,1). Table type3 m_pPlayer+200 count1. Buffer+100 и latch+204 отсутствуют в собственном блоке; inherited ENTVARS/BASE/animation отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fdd0.c",
+        "analysis/server-entity-lifecycle/asm/1001fdd0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fe10",
+      "proposed_name": "CKeypadNew_Save",
+      "subsystem": "entity-core",
+      "summary_ru": "Записывает собственную ссылку m_pPlayer после inherited animation Save.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(writer),RET4. Сначала1000eaa0(writer), затем приnonzero ECX=writer и WriteFields1011adc0(ownerLabel,\"CKeypadNew\",this,10211f4c,1). OwnerLabel targetname иначе classname; EAX writer возвращается. Это не обещание transactional success core serializer."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fe10.c",
+        "analysis/server-entity-lifecycle/asm/1001fe10.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fe70",
+      "proposed_name": "CKeypadNew_SelectSequence",
+      "subsystem": "entity-core",
+      "summary_ru": "Выбирает анимацию keypad по имени и обновляет animation metadata.",
+      "confidence": "high",
+      "details_ru": [
+        "Lookup1000e9b0(name) получает model через engine GetModelPtr и ищет sequence. При result>=0: если sequence отличается либо looping+fc==0, frame pev+134=0; затем pev.sequence+12c=result и ResetSequenceInfo1000e9e0.",
+        "При отрицательном result severity2 diagnostic с оригинальным ошибочным format \"%s has no sequence named:%f\\n\" и name pointer как одним DWORD, затем sequence0. Не объявлять диагностический varargs корректным и не подменять format на%s в реконструкции без явного исправления."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fe70.c",
+        "analysis/server-entity-lifecycle/asm/1001fe70.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001fef0",
+      "proposed_name": "CKeypadNew_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Инициализирует кодовую панель с моделью либо планирует удаление.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала virtual+30 Precache. Если modelID!=0: SetModel, buffer[0] at+100=0; code pev+248==0 заменяется1111; ltoa(code) даёт requiredLength+250. inputDeadline=time; ASM10119fe0(this,&pev.origin), solid0, Use callback+80=1001fb40.",
+        "При modelID0 ставит think+78=SUB_Remove101028e0 и schedule0.1. Не инициализирует m_pPlayer/latch или exit pending в явном виде, не ограничивает код положительными цифрами1..9. Нулевая модель не превращается в models/null.mdl."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001fef0.c",
+        "analysis/server-entity-lifecycle/asm/1001fef0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100206c0",
+      "proposed_name": "CAnimatedCamera_CameraUse",
+      "subsystem": "entity-core",
+      "summary_ru": "Переключает вид игрока на camera entity и активирует именованную модель.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall Use RET16. Требует nonnull activator и его virtual+d0!=0. Если pev.message+1d8==0, выводит адресное сообщение об отсутствии model entity и возвращается. Caller/useType/value не управляют ветвлением.",
+        "Получает player через100125e0(activator.pev), EHANDLE::Set(player+2348,this), SetView wrapper10117180(player.edict,camera.edict), потом lookup10118590(0,message). Найденной entity вызывает virtual+e8(player,player,3,0). Native descriptor +2348=m_hCurrentCamera.",
+        "Проверка существования модели происходит ПОСЛЕ смены view. Если имя ненулевое, но lookupNULL, возврат без rollback. Wrapper10117180 также пишет player+2038=index(view) и посылает отдельное сообщение перед engine SetView; это не keypad AttachCam protocol."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100206c0.c",
+        "analysis/server-entity-lifecycle/asm/100206c0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100207a0",
+      "proposed_name": "CAnimatedCamera_Virtual50ReturnZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает ноль из virtual slot50 у CAnimatedCamera.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM XOR EAX,EAX;RET, без чтения полей. Native vtable связывает entry сoffset50. Более конкретное назначение этого virtual не доказывается одним return0; это не CameraUse/ModelUse guard и не factory status."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100207a0.c",
+        "analysis/server-entity-lifecycle/asm/100207a0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100207b0",
+      "proposed_name": "CAnimatedCameraModel_Virtual50ReturnZero",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает ноль из virtual slot50 у CAnimatedCameraModel.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM XOR EAX,EAX;RET, без чтения полей. Native vtable связывает entry сoffset50. Более конкретное назначение этого virtual не доказывается одним return0; это не CameraUse/ModelUse guard и не factory status."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100207b0.c",
+        "analysis/server-entity-lifecycle/asm/100207b0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100207c0",
+      "proposed_name": "CAnimatedCameraModel_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Задаёт animation1..16 и общий MoveWith/skill/style state.",
+      "confidence": "high",
+      "details_ru": [
+        "Case-sensitive animationN→AllocString в this+368+4*N, N1..16. Для всех этих ключей кромеanimation13 увеличивает m_iNumAnimations+3ec на1; animation13 сохраняет+39c и handled1 БЕЗ increment, подтвержденоASM10020adf..afc.",
+        "Повторный ключ перезаписывает slot, но повторно увеличивает count (кроме13); gaps/дубли не нормализуются. Нет resetcount, maxindex computation или ограничения count. movewith→+18,skill→+60,style→+64; незнакомый ключ handled0 без base KeyValue.",
+        "Save table сохраняет m_cAnimation+368 как33 stringIDs, хотя этот KV setter принимает только1..16. Count нельзя трактовать как гарантированное число непрерывно заполненных slot."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100207c0.c",
+        "analysis/server-entity-lifecycle/asm/100207c0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020cb0",
+      "proposed_name": "CAnimatedCameraModel_ModelCameraUse",
+      "subsystem": "entity-core",
+      "summary_ru": "Назначает StartNextAnimation после ненулевого activator.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall Use RET16. Если activator!=NULL: virtual+8(0.05f), затем think+78=10020f20. Не проверяет virtual IsPlayer, не сбрасывает current/count и не использует caller/useType/value. Повторный Use продолжает текущий index, а не restart playlist."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020cb0.c",
+        "analysis/server-entity-lifecycle/asm/10020cb0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020ce0",
+      "proposed_name": "CAnimatedCamera_Precache",
+      "subsystem": "entity-core",
+      "summary_ru": "Предзагружает models/null.mdl для camera entity.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственный вызов10116990(\"models/null.mdl\"); собственная модель изpev не проверяется. Camera vtable+30."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020ce0.c",
+        "analysis/server-entity-lifecycle/asm/10020ce0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020cf0",
+      "proposed_name": "CAnimatedCameraModel_Precache",
+      "subsystem": "entity-core",
+      "summary_ru": "Предзагружает указанную модель либо models/null.mdl.",
+      "confidence": "high",
+      "details_ru": [
+        "Если pev.model+b8 stringID!=0,10116990(pool+ID), иначе literal models/null.mdl. CameraModel vtable+30; это fallback отсутствующего имени, не проверка файла."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020cf0.c",
+        "analysis/server-entity-lifecycle/asm/10020cf0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020d20",
+      "proposed_name": "CAnimatedCameraModel_Restore",
+      "subsystem": "entity-core",
+      "summary_ru": "Читает три поля playlist после CBaseEntity Restore.",
+      "confidence": "high",
+      "details_ru": [
+        "Base10017f30(reader), приnonzero ReadFields10117010(\"CAnimatedCameraModel\",this,10211f5c,3) сECX=reader. В отличие от keypad wrapper, обходит animation-base1000ea60. Table: type10 NumAnimations+3ec,count1;type1 Animation+368,count33;type10 CurrentAnimation+3f0,count1.",
+        "Нет проверки current<=count или диапазона0..32 после чтения; нет повторения Spawn или пересчёта count. Возвращает nativeEAX,RET4."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020d20.c",
+        "analysis/server-entity-lifecycle/asm/10020d20.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020d60",
+      "proposed_name": "CAnimatedCameraModel_Save",
+      "subsystem": "entity-core",
+      "summary_ru": "Записывает playlist и оба счётчика после CBaseEntity Save.",
+      "confidence": "high",
+      "details_ru": [
+        "Base10018000(writer), приnonzero WriteFields1011adc0(ownerLabel,\"CAnimatedCameraModel\",this,10211f5c,3),ECX=writer. OwnerLabel targetname иначе classname. Именно BASE, не animation/monster save chain; scalar offsets+3ec/+3f0 и33 slots подтвержденыPE."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020d60.c",
+        "analysis/server-entity-lifecycle/asm/10020d60.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020dc0",
+      "proposed_name": "CAnimatedCamera_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Создаёт невидимую несолидную camera entity с callback CameraUse.",
+      "confidence": "high",
+      "details_ru": [
+        "Virtual Precache; SetModel models/null.mdl; SetSize1011a030(pev,(-16,-16,-36),(16,16,36)); solid0,movetype8; object+31c=-1,+224=0; use+80=100206c0. Не ставит think и не выбирает animation; неизвестные поля+31c/+224 не именуются только по типичному SDK."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020dc0.c",
+        "analysis/server-entity-lifecycle/asm/10020dc0.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020e60",
+      "proposed_name": "CAnimatedCameraModel_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Настраивает модель анимационной камеры и минимальный индекс1.",
+      "confidence": "high",
+      "details_ru": [
+        "Virtual Precache; SetModel указанной моделью либо models/null.mdl; bounds±16,±16,±36; solid0; object+31c=-1,+224=0; use+80=10020cb0. Здесь нет явного movetype8, в отличие от camera Spawn.",
+        "Если signed current+3f0<1, пишет1; остальные значения сохраняются. Не очищает playlist/count, не ограничивает current сверху и не запускает animation/think автоматически."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020e60.c",
+        "analysis/server-entity-lifecycle/asm/10020e60.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10020f20",
+      "proposed_name": "CAnimatedCameraModel_StartNextAnimation",
+      "subsystem": "entity-core",
+      "summary_ru": "Выбирает очередную sequence, вычисляет её длину и назначает следующий think.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала читает slot[this+368+4*current] и вызывает100c20c0(name) ДО проверки signed current<=NumAnimations. Поэтому count guard не защищает первое чтение и sequence change. Helper дополнительно вызывает model virtual+1c0; в этой vtable10014b30.",
+        "Если current<=count, ASM сохраняет name наstack через engine GetModelPtr(edict), затем вызывает1000f3e0(model,name). Ghidra ошибочно относит второй argument к GetModelPtr. Duration=float(numframes-1)/fps при model!=NULL, foundsequence>=0,numframes>1; иначе0; float returnedST0. Нет защиты fps0/отрицательных/NaN.",
+        "При ненулевой duration вызывает virtual+8(duration) и увеличивает current. При0 диагностирует Unable to find delay, тоже увеличивает current без requeue; при current>count также increment без requeue. Think callback не очищает, index не сбрасывает и не возвращает view игроку. Unordered floatcompareASM тоже идёт в schedule; finite-positive delay не гарантирован."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10020f20.c",
+        "analysis/server-entity-lifecycle/asm/10020f20.asm",
+        "analysis/server-entity-lifecycle/evidence.json",
+        "analysis/server-entity-lifecycle/contract.md"
+      ]
+    }
+  ]
+}

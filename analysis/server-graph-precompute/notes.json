@@ -1,0 +1,101 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100cbfe0",
+      "proposed_name": "Graph_BuildCompressedRoutes",
+      "subsystem": "monsters",
+      "summary_ru": "Строит и сжимает восемь вариантов next-hop таблицы, публикует offsets и включает cached поиск.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=graph, RET без установленного смыслового EAX. Для hull0..3 и modes0/1 (caps0/340h) обнуляет ushort N×N матрицу в ffff, источники идут вверх, цели вниз. Вызывает100cd5e0 только для незаполненных ячеек; path count<=1 помечает обе стороны self-hop, иначе для каждого пути заполняет все downstream пары следующим узлом. Hop сужается до ushort без ограничения N.",
+        "Временные массивы: 2*low32(N*N), N*4, N*2 и low32(N+N). У первых трёх MUL защищает только последний unsigned multiply насыщением до ffffffff; первоначальный IMUL N*N не защищён. Path capacity не передаётся поисковику. NULL guards не доказывают обычный возврат allocator при нехватке памяти:1013e5a8→1013e1e9 имеет retry/error пути.",
+        "Одинаковый hop: серия максимум127, тег length-1 плюс signed delta. Identity nextHop[d]==d: серия максимум128, byte -length; singleton identity может объединиться с последующим повтором. Delta выбирается по порядку hop-source, N-source+hop, hop-N-source при попадании в -128..127. При невыразимом delta печатает Nodes need sorting после уже записанного тега, пропускает delta и продолжает: сортировки/rollback нет.",
+        "Producer допускает byte80 для identity128 (100cc242 CMP128, INC, NEG BL). Native decoder100ce830 NEG CL/MOVSX трактует80 как -128 и увеличивает remaining, продолжая чтение. Это подтверждённое несоответствие формата; присутствие таких строк на оригинальных картах не проверялось.",
+        "graph+14 byte pool, +20 длина, node stride58 и row offset=node+28+hull*8+mode*4. Dedup ищет raw substring только при offset<oldSize-rowSize: последний возможный offset и равные размеры пропускаются. При append выделяет новый pool, копирует старый, освобождает старый, публикует новый и копирует строку; отсутствуют NULL guard результата/проверка сложения. Полная семантика helpers10171536/101714d1 остаётся вне пакета.",
+        "Не сбрасывает прежний pool или graph+8 перед поиском; supporting caller100ca860 устанавливает +0/+4=1,+8=0. На любом обычном завершении, включая пропуск по NULL guards, +8=1. Диагностический Size of Routes считает добавленные логические байты текущего вызова, не обязательно итоговый размер pool."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100cbfe0.c",
+        "analysis/server-graph-precompute/100cbfe0-0.asm",
+        "analysis/server-graph-precompute/evidence.json",
+        "analysis/server-graph-precompute/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100cfa30",
+      "proposed_name": "Graph_CheckCachedRouteCosts",
+      "subsystem": "monsters",
+      "summary_ru": "Сравнивает стоимость uncached и cached путей; печатает первое расхождение без исправления таблицы.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=graph, RET; два временных int[N]. Для hull0..3, caps0/340h, всех source/destination: graph+8=0 перед100cd5e0(A), затем +8=1 перед100cd5e0(B). Cached count==10 пропускает проверку. Предыдущее значение +8 не восстанавливается; если ни одной пары не обработано, остаётся прежним.",
+        "Стоимость — ADDSS первых matching outgoing links (stride18,target+4,cost+14) для соседних неравных node ID. Missing link лишь печатает No link. Пустые/равные элементы дают нулевой вклад; числа узлов и идентичность маршрутов отдельно не сравниваются.",
+        "Native100cfc1e..39: SUBSS сумм, CVTPS2PD, double sign-clear mask, COMISD double0.1, JA mismatch. Таким образом unordered NaN не вызывает mismatch при продолжающемся исполнении; Ghidra if(!(ABS<=0.1)) неверен для этой ветви. Stack local_34 переиспользуется: длина первого цикла integer count-1, не float.",
+        "На первом mismatch печатает варианты и оба пути, повторяет оба поиска с +8=0/1 и сразу освобождает массивы/возвращается. Это diagnostic, не reorder/repair. Нет capacity argument у поиска; cached cap10 не относится к uncached пути."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100cfa30.c",
+        "analysis/server-graph-precompute/100cfa30-0.asm",
+        "analysis/server-graph-precompute/evidence.json",
+        "analysis/server-graph-precompute/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100cd550",
+      "proposed_name": "NodeViewer_CollectNodeAndNeighborRoutes",
+      "subsystem": "monsters",
+      "summary_ru": "Добавляет next-hop ребро узла и next-hop рёбра каждого его непосредственного соседа в viewer.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(viewer,node), RET4. Для node вызывает100ce830 с ECX=102238b0 и args(node,viewer+dc destination,viewer+4e8 hull,0 mode); затем100ca700 с ECX=viewer и парой(node,result).",
+        "Перебирает node+20 исходящих links с первого индекса node+24; для link.target+4 повторяет decode/append. Global nodes102238bc stride58, links102238c0 stride18. Нет локального readiness/index/link-eligibility guard и нет очистки viewer count.",
+        "Сам метод не рекурсивен. Supporting Spawn100cf6c0 при N>=128 вызывает его сначала для destination, затем для концов набранных рёбер, пока count не стабилизируется. При N<128 caller обходит все узлы напрямую; эту внешнюю экспансию нельзя приписывать Collect."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100cd550.c",
+        "analysis/server-graph-precompute/100cd550-0.asm",
+        "analysis/server-graph-precompute/evidence.json",
+        "analysis/server-graph-precompute/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100ca700",
+      "proposed_name": "NodeViewer_AppendUniqueUndirectedEdge",
+      "subsystem": "monsters",
+      "summary_ru": "Добавляет уникальную неориентированную пару узлов в ограниченные массивы viewer.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(viewer,a,b), RET8, EAX не имеет установленного bool-контракта. Signed count+e4>=128 либо a==b дают ранний выход. Линейно отвергает обе ориентации уже имеющейся пары, иначе сохраняет a в +e8+4*count, b в +2e8+4*count и увеличивает count.",
+        "Массивы содержат по128 int; ориентация новой пары сохраняется. Нет проверки count>=0/node IDs: отрицательный count пропускает сканирование и адресует память перед массивами. Supporting100cf6c0 устанавливает count0 перед заполнением. Это дедупликация viewer, не изменение направленных links самого графа."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100ca700.c",
+        "analysis/server-graph-precompute/100ca700-0.asm",
+        "analysis/server-graph-precompute/evidence.json",
+        "analysis/server-graph-precompute/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100ce920",
+      "proposed_name": "CTestHull_PathFindDiagnostic",
+      "subsystem": "monsters",
+      "summary_ru": "Ищет фиксированный путь0→19 и отправляет TE_SHOWLINE для каждой его пары узлов.",
+      "confidence": "high",
+      "details_ru": [
+        "Экспорт CTestHull::PathFind, void no-arg RET, входной this не используется. Проверяет global graph102238b0/+4, затем ECX=globalgraph вызывает100cd5e0(stack50ints,0,19,0,0). Не проверяет N>=20 и не передаёт capacity50. Ненулевой count печатается через literal %d\\n; нулевой даёт No Path!, readiness failure Graph not ready!.",
+        "Для count-1 пар: MessageBegin(0,23,NULL,NULL), WriteByte102, шесть WriteCoord(A.x,A.y,A.z+8,B.x,B.y,B.z+8), MessageEnd. Callback base10222f48 и SDK slots46/47/48/53 доказаны support; byte102=TE_SHOWLINE, destination0=MSG_BROADCAST. Z ADDSS с raw float8. Это отправка debug effect, не перемещение игрока и не проверенная визуализация."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100ce920.c",
+        "analysis/server-graph-precompute/100ce920-0.asm",
+        "analysis/server-graph-precompute/evidence.json",
+        "analysis/server-graph-precompute/contract.md"
+      ]
+    }
+  ]
+}

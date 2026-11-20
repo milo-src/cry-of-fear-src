@@ -1,0 +1,309 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1000e8b0",
+      "proposed_name": "CBaseAnimating_GetSequenceFlags",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает полную маску флагов текущего sequence через model lookup.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, без stackargs, RET. GetModelPtr callback10223070 с одним edict аргументом pev+20c; затем cdecl1000f250(model,pev). EAX flags сохранён, Ghidra void неверен.",
+        "NULL model или signed sequence>=numseq →0; иначе нижний helper возвращает DWORD record+24. Нет lower-bound sequence guard, отрицательный индекс может пройти. Wrapper не сокращает flags до bool и не пишет поля.",
+        "Native engine table10222f48 initializer100b4aa0 подтверждает slot74; имя GetModelPtr сверено с SDK eiface.h, не является PDB-фактом. Полная native/model-layout граница описана в contract."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e8b0.c",
+        "analysis/server-animation-state/1000e8b0.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f250.c",
+        "analysis/server-animation-state/1000f250.asm",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c",
+        "analysis/server-animation-state/100b4aa0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e8d0",
+      "proposed_name": "CBaseAnimating_InitBoneControllers",
+      "subsystem": "monsters",
+      "summary_ru": "Последовательно устанавливает четыре bone controller в значение координаты 0.0, отбрасывая возвращённые значения.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET, void. Один GetModelPtr; четыре cdecl1000f880(model,pev,index,0.0f), index0,1,2,3. Model сохранён вESI, pev перечитывается перед каждым вызовом.",
+        "После каждого helper FSTP ST(0); это не float-return и не утечка x87 stack. Engine edict stackslot переиспользуется как очередной float0, итоговый cleanup корректен.",
+        "Не memset: helper ищет descriptor и квантует координату0 по его диапазону. Byte может оказаться ненулевым; descriptor.rest не используется. NULL model/missing descriptor оставляет соответствующиеbytes прежними, но все четыре calls всё равно выполняются.",
+        "Нет mouth/index4 call, нет сброса blending/body/sequence. Полный angular/quantization алгоритм1000f880 — соседний studio-controls; wrapper не добавляет новых guards."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e8d0.c",
+        "analysis/server-animation-state/1000e8d0.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f880.c",
+        "analysis/server-animation-state/1000f880.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e950",
+      "proposed_name": "CBaseAnimating_LookupActivity",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает weighted sequence для activity, сохраняя нативные NULL/no-match различия.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(int activity), RET4. GetModelPtr(pev.edict), затем1000f450(model,pev,activity), полный EAX возвращается без изменения; C void неверен.",
+        "NULL model→0; ненулевой model без подходящего sequence→-1. Lower helper выбирает совпадающее activity через signed weights/RNG; wrapper не превращает NULL вerror.",
+        "Не меняет pev.sequence/frame/activity. Activity и model data не проверяет. Полный selector/RNG contract отдельный; аргументpev передаётся несмотря на неиспользование в текущем lower body."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e950.c",
+        "analysis/server-animation-state/1000e950.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f450.c",
+        "analysis/server-animation-state/1000f450.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e980",
+      "proposed_name": "CBaseAnimating_LookupActivityHeaviest",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает первый sequence с максимальным положительным весом для activity.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(int activity), RET4. Callback model lookup, cdecl1000f4d0(model,pev,activity), полный EAX preserved; Ghidra void неверен.",
+        "Lower helper NULL model→0; иначе bestIndex=-1,bestWeight=0. Совпадающее activity заменяет победителя только при strictlygreater signed weight; tie оставляет первый. No match и только weights<=0 →-1.",
+        "Сам wrapper ничего не записывает, activity/index/buffer guard не добавляет. Native contract lower selector выделен в соседний пакет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e980.c",
+        "analysis/server-animation-state/1000e980.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f4d0.c",
+        "analysis/server-animation-state/1000f4d0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e9b0",
+      "proposed_name": "CBaseAnimating_LookupSequence",
+      "subsystem": "monsters",
+      "summary_ru": "Передаёт имя в поиск sequence и возвращает индекс через EAX.",
+      "confidence": "medium",
+      "details_ru": [
+        "Thiscall(const char*label), RET4. GetModelPtr(pev.edict), затем cdecl1000f530(model,label) — без pev. Cleanup12 включает оставшийся callback-argument; EAX сохранён.",
+        "NULL model→0, иначе первый нулевой результат comparator(modelSequenceLabel,inputLabel)→index. Comparator помечен Ghidra __stricmp; его точное case-folding/locale поведение отдельно не доказано. No match/numseq<=0 →-1. Wrapper не проверяет NULL label/длину/termination.",
+        "Не устанавливает sequence/frame и не загружает animation group самостоятельно. Полные lower-helper string/memory ограничения отдельны."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e9b0.c",
+        "analysis/server-animation-state/1000e9b0.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f530.c",
+        "analysis/server-animation-state/1000f530.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e9e0",
+      "proposed_name": "CBaseAnimating_ResetSequenceInfo",
+      "subsystem": "monsters",
+      "summary_ru": "Пересчитывает rate/speed, looping и временные параметры, не сбрасывая frame или sequence.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET, void. Первый GetModelPtr→1000f290(model,pev,&this+ec,&this+f0); затем1000e8b0 получает model повторным callback и loops+fc=flags&1.",
+        "Далее пишет pev.animtime138=now,pev.framerate13c=1.0f,finished+f8=0,lastEventCheck+f4=now. Время читается дважды; current frame134/sequence12c/activity не меняет.",
+        "Если оба callbacks даютNULL: f290 сохраняет прежние rate/speed, flagshelper даёт0, loops=0; timers/framerate/finished всё равно обновляются. Нет гарантии, что два callback вернули одинаковый буфер.",
+        "Native CBaseAnimating table10211178 даёт именаec/f0/f4/f8/fc; finished/loops записываютсяDWORD. model/pev validity и lifetime внешние; никаких bounds checks wrapper не добавляет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e9e0.c",
+        "analysis/server-animation-state/1000e9e0.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f290.c",
+        "analysis/server-animation-state/1000f290.asm",
+        "decompiled/server/partial-pass/functions/0x1000e8b0.c",
+        "analysis/server-animation-state/1000e8b0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000ea60",
+      "proposed_name": "CBaseAnimating_Restore",
+      "subsystem": "monsters",
+      "summary_ru": "Восстанавливает пять полей анимации после CBaseDelay, возвращая reader-result без пересчёта анимации.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(reader*), RET4, полный EAX. Сначала10102850(this,reader), result0→немедленный0. Иначе ECX=reader, ReadFields10117010(\"CBaseAnimating\",this,10211178,5).",
+        "Собственный readerEAX возвращается напрямую; нет ResetSequenceInfo, обнуления/нормализации полей или rollback приошибке. Partial restore следует serializer contract.",
+        "Native5 descriptors: ec FrameRate type0,f0 GroundSpeed0,f4 LastEventCheck15,f8 SequenceFinished12,fc SequenceLoops12; всеcount1 flags0. ENTVARS/остальные inherited save blocks находятся в других слоях.",
+        "Нельзя переносить сюда cleanup CBaseMonster_Restore: этот CBaseAnimating wrapper не очищает schedule/route или activity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000ea60.c",
+        "analysis/server-animation-state/1000ea60.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10102850.c",
+        "analysis/server-animation-state/10102850.asm",
+        "analysis/server-serializer/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000eaa0",
+      "proposed_name": "CBaseAnimating_Save",
+      "subsystem": "monsters",
+      "summary_ru": "Пишет пятиэлементный блок CBaseAnimating после наследуемого CBaseDelay и передаёт результат writer.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(writer*), RET4, полный EAX despite Ghidra void. Inherited10102ac0 result0→early0; иначе ECX=writer, WriteFields1011adc0(owner,\"CBaseAnimating\",this,table10211178,5).",
+        "Owner=stringBase+targetname(pev1d0) при ID!=0, иначеclassname(pev0). Это diagnostic string, не шестое сохраняемое поле. Native descriptors с точными type/count/offset сохранены.",
+        "Core WriteFields на обычном возврате всегдаEAX1 дажеwarning/overflow; wrapper не получает доказательства успешной целостной записи. Он лишь сохраняет EAXcallee. Внешний save context и inherited errors отдельно.",
+        "Frame/sequence не входят в эту пятиэлементную table, но это не утверждение об их отсутствии во всём save file; inherited ENTVARS слой существует."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000eaa0.c",
+        "analysis/server-animation-state/1000eaa0.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10102ac0.c",
+        "analysis/server-animation-state/10102ac0.asm",
+        "analysis/server-serializer/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000eb00",
+      "proposed_name": "CBaseAnimating_SetBlending",
+      "subsystem": "monsters",
+      "summary_ru": "Передаёт blend index/value в native quantizer и возвращает скорректированное значение через ST0.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(int index,floatvalue), RET8; callback10223070 получает толькоedict. Затем cdecl1000f670(model,pev,index,value); wrapper не трогает ST0 после call, float-valued return не void/EAX.",
+        "Lower helper NULL model или текущий sequence blendtype[index]==0 →входной value беззаписи. Иначе пишет quantized BYTE[pev+144+index], возвращает decoded value. Sequence/index guard wrapper отсутствует.",
+        "Нет обновления SequenceInfo/animationframe. Angular normalization, division/degenerate ranges и точная нижняяарифметика — контракт1000f670; эти дополнительные правила не приписаны wrapper."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000eb00.c",
+        "analysis/server-animation-state/1000eb00.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f670.c",
+        "analysis/server-animation-state/1000f670.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000eb40",
+      "proposed_name": "CBaseAnimating_SetBodygroup",
+      "subsystem": "monsters",
+      "summary_ru": "Изменяет packed body index через bodypart helper, сохраняя его слабые проверки диапазонов.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(intgroup,intvalue), RET8, void. Stack предварительно содержит value,group,pev; GetModelPtr получает толькоedict, ADD ESP4 удаляет его, PUSH EAX добавляетmodel. Итоговый cdecl1000f7c0(model,pev,group,value), cleanup16.",
+        "Ghidra ошибочно приписывает все четыре stack args GetModelPtr и одинarg f7c0; ASM доказывает реальное разделение.",
+        "Lower NULLmodel→no-op; signed group<=numbodyparts допускает equality/negative, value<nummodels без lower guard. Пишет pev.body114 через signed divisions/modulo base иnummodels; wrapper не защищает отzero div/rangeошибок.",
+        "Не возвращает bodyindex и не меняет model blob напрямую этим wrapper; fulllower details в studio-controls."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000eb40.c",
+        "analysis/server-animation-state/1000eb40.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f7c0.c",
+        "analysis/server-animation-state/1000f7c0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000eb70",
+      "proposed_name": "CBaseAnimating_SetBoneController",
+      "subsystem": "monsters",
+      "summary_ru": "Устанавливает controller coordinate и возвращает декодированное quantized значение через ST0.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(intindex,floatvalue), RET8. GetModelPtr(pev.edict), cdecl1000f880(model,pev,index,value); ST0 сохраняется, FSTP вwrapper нет. Ghidra void неверен.",
+        "Lowerhelper ищет первый descriptor с matchingindex; normalizes/quantizes и пишет BYTE[pev+140+index]. NULL model/missing descriptor→inputvalue без writes.",
+        "Wrapper не ограничиваетindex0..3, не добавляетmouthhandling, не обновляет sequence/frame. Полный f880 angular/clamp/exception contract соседний; корректность modelтаблиц не гарантируется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000eb70.c",
+        "analysis/server-animation-state/1000eb70.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f880.c",
+        "analysis/server-animation-state/1000f880.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000ebb0",
+      "proposed_name": "CBaseAnimating_SetBones",
+      "subsystem": "monsters",
+      "summary_ru": "Копирует входные bone vectors в borrowed model-data buffer через SetBones helper.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(Vector*values,intcount), RET8, void. Count иvalues приготовлены наstack доGetModelPtr; callback читает толькоedict. Затем cdecl1000f820(model,values,count), cleanup12; Ghidra привязкаargs ошибочна.",
+        "Lower NULLmodel→Alert4 Bad header in SetBones. Count ограничивается сверху signednumbones; nonpositive→no copies. Positive копирует3DWORD inputVector вbone+40/+44/+48 сstride70.",
+        "Destination — default position values внутри borrowed model blob, не per-entity runtime pose и не pev. Другиеbone values не пишутся. Inputs/alias/length не проверены; wrapper не выделяет/освобождает память.",
+        "Внешний engine cache lifetime определяет межобъектную видимость изменения; shared/global ownership не объявляется доказанным лишь по этому локальному телу."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000ebb0.c",
+        "analysis/server-animation-state/1000ebb0.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000f820.c",
+        "analysis/server-animation-state/1000f820.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000f250",
+      "proposed_name": "Studio_GetSequenceFlags",
+      "subsystem": "monsters",
+      "summary_ru": "Читает raw sequence flags по model header, проверяя NULL model и только signed верхнюю границу.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(model*,pev*), RET, полный EAX. NULL model→0 доreadpev. Иначе sequence=DWORD[pev+12c], signed sequence>=DWORD[model+a4]→0.",
+        "Приsequence<count читает DWORD[model+DWORD(model+a8)+sequence*b0+24] и возвращаетбезмаски. Negative sequence неотвергается; нетlength/magic/version/pevNULL guards.",
+        "Никаких writes/diagnostics. Native offsets соответствуют studiohdr numseq/seqindex иmstudioseqdesc flags; имена сверены с SDKheader и не выданы заPDBсимволы. Используется wrapper1000e8b0 иResetSequenceInfo."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000f250.c",
+        "analysis/server-animation-state/1000f250.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000f290",
+      "proposed_name": "Studio_GetSequenceInfo",
+      "subsystem": "monsters",
+      "summary_ru": "Вычисляет нормализованную скорость кадров и скорость linearmovement, сохраняя outputs при NULL model.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(model*,pev*,float*rate,float*speed), RET, void. NULLmodel→no writes иno pevread. NonNULL signedsequence>=numseq→rate0,speed0; нижнейпроверки нет, negativesequence проходит.",
+        "Sequence record=model+DWORD(model+a8)+sequence*b0. Signedframes(record38)<=1 →rate256.0,speed0. Приframes>1: rate=float(fps*256/(frames-1)); speed=float(float(sqrt(double(float(x*x+y*y+z*z))))*fps/(frames-1)). Scalar float roundings порядкаASM приведены вcontract; raw256 подтверждён.",
+        "Rate пишется первым; затем linearmovementxyz4c/50/54 float-squares/sums, doubleSQRT→float, предварительнаязаписьspeed=d, reloadfps/frames, finalspeed=d*fps/(frames-1). Negative doubleargument ветка вызываетmathhelper1016be90; exceptionsemantics внешние.",
+        "Outputs не проверяются наNULL/alias, modelboundsневалидируются. Intermediatewrite/reloads важныприalias: формула предполагает обычные раздельныеvalidoutputs и неизменныйmodel. НетвозвратаfloatвST0.",
+        "Native machineoperands доказывают offsets/stride/guards; studio.h даёт совместимые именаfps/numframes/linearmovement, ноне является единственным бинарнымдоказательством."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000f290.c",
+        "analysis/server-animation-state/1000f290.asm",
+        "analysis/server-animation-state/contract.md",
+        "analysis/server-animation-state/evidence.json"
+      ]
+    }
+  ],
+  "subsystems": []
+}

@@ -1,0 +1,42 @@
+{
+  "scope": "static original-server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1216,
+  "new_reviewed": 93,
+  "updated_existing": [],
+  "after_reviewed": 1309,
+  "remaining_unreviewed": 7336,
+  "server_reviewed": 664,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 135,
+    "assembly_ranges": 118,
+    "verified_assembly_byte_rows": 9811,
+    "raw_records": 297,
+    "decoded_save_fields": 4,
+    "review_evidence_references": 440,
+    "synchronized_note_occurrences": 93
+  },
+  "checks": {
+    "prior_unrelated_reviews_preserved": true,
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "........\n----------------------------------------------------------------------\nRan 8 tests in 0.004s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_and_decompiled": true
+  },
+  "artifacts": [
+    "analysis/server-pm-foundation/contract.md",
+    "analysis/server-pm-support/contract.md",
+    "analysis/server-entity-lifecycle/contract.md",
+    "analysis/server-save-dispatch/contract.md"
+  ],
+  "catalog_sha256": "0ef247c64f09231dfedf770c6027beb83c1645c5aab97334dafcce5c57cf99df",
+  "progress_sha256": "7c9852c80d077f95666f823bd2c7d142fa4cf6d39aed12f4ca2f428e78350093"
+}

@@ -1,0 +1,240 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10119320",
+      "proposed_name": "UTIL_MakeVectors_EngineTail",
+      "subsystem": "abi",
+      "summary_ru": "Передаёт angles в engine MakeVectors без локальных вычислений.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственная инструкция JMP [10222f94], engine slot19; аргументы и returnaddress остаются на исходном стеке. Нет NULL checks.",
+        "Initializer100b4aa0 копирует144 DWORD в10222f48. Изменение basis globals реализует callback движка, не этот thunk."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119320.c",
+        "analysis/server-client-effects/10119320.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011a800",
+      "proposed_name": "UTIL_TraceLine_NormalizeIgnoreMode",
+      "subsystem": "abi",
+      "summary_ru": "Нормализует третий аргумент сравнивая с1 и вызывает engine TraceLine.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(start,end,ignoreMode,skip,traceOut). Native [ebp+10]=(arg3==1) перед JMP [10222fc4],slot31; Ghidra потерял эту запись.",
+        "Все значения кроме1 превращаются в0, дополнительные биты не сохраняются. Другие аргументы передаются без изменений, проверок pointers и callback нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011a800.c",
+        "analysis/server-client-effects/1011a800.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011a7e0",
+      "proposed_name": "UTIL_TraceHull_NormalizeIgnoreMode",
+      "subsystem": "abi",
+      "summary_ru": "Нормализует ignoreMode и передаёт остальные параметры engine TraceHull.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(start,end,ignoreMode,hull,skip,traceOut). [ebp+10]=(arg3==1), затем JMP [10222fd0],slot34; не nonzero-проверка.",
+        "Нет проверки hull или output; движковая collision logic этой обёрткой не восстановлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011a7e0.c",
+        "analysis/server-client-effects/1011a7e0.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119680",
+      "proposed_name": "UTIL_PlayerPrivateByIndex",
+      "subsystem": "abi",
+      "summary_ru": "Возвращает private data активного edict в диапазоне клиентских индексов.",
+      "confidence": "high",
+      "details_ru": [
+        "Signed1<=index<=globals+90; callback PEntityOfEntIndex slot72; NULL/free!=0 ->EAX0, иначе EAX=*(DWORD*)(edict+0x7c).",
+        "Не проверяет classname, health или virtual IsPlayer; private data может бытьNULL. globals borrowed из10223188."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119680.c",
+        "analysis/server-client-effects/10119680.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011ab20",
+      "proposed_name": "UTIL_GlobalTime",
+      "subsystem": "abi",
+      "summary_ru": "Возвращает текущее globals.time через x87 ST0.",
+      "confidence": "high",
+      "details_ru": [
+        "MOV EAX,[10223188]; FLD DWORD[EAX]; RET. Без аргументов/преобразования часов/проверкиNULL; результат неEAX."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011ab20.c",
+        "analysis/server-client-effects/1011ab20.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101198a0",
+      "proposed_name": "UTIL_RandomUpperVector",
+      "subsystem": "abi",
+      "summary_ru": "Заполняет result-vector тремя последовательными engine RandomFloat.",
+      "confidence": "high",
+      "details_ru": [
+        "Стековый out получает float32 ST0 results от RandomFloat(-1,1),(-1,1),(0,1); EAX=out, caller cleanup.",
+        "Supporting100941f0 передаёт собственный vector returnbuffer. Нормализации/отбора по длине/локального PRNG нет; распределение engine не установлено."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101198a0.c",
+        "analysis/server-client-effects/101198a0.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101166d0",
+      "proposed_name": "FixedUnsigned16_ConvertThenClamp",
+      "subsystem": "abi",
+      "summary_ru": "Умножает float32, преобразует в signed32 и ограничивает результат диапазоном0..65535.",
+      "confidence": "high",
+      "details_ru": [
+        "MULSS;CVTTSS2SI;CMOVNS;CMOVG. Возврат полногоDWORD EAX, не толькоAX. Конечный представимый продукт усекается кнулю доclamp.",
+        "При masked SIMD invalid NaN/overflow даёт INT_MIN, далее0; это не floating saturation передconversion. Ambient MXCSR/unmasked exception остаются внешними."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101166d0.c",
+        "analysis/server-client-effects/101166d0.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119cc0",
+      "proposed_name": "UTIL_ScreenFadeBuild",
+      "subsystem": "camera",
+      "summary_ru": "Создаёт16-байтную структуру параметров затемнения.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(out,color,duration,hold,alpha,flags). +0=float32(U16Clamp(duration*4096)),+4=float32(U16Clamp(hold*4096)),+8 rawflags,+c..e lowbyte(CVTTSS2SI RGB),+f lowbytealpha.",
+        "RGB неclamp: толькоtruncate/lowbyte. Ghidra high32 synthetic result неверен: EDX=out сохраняется через известный helper101166d0. Нет pointer/alias guards."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119cc0.c",
+        "analysis/server-client-effects/10119cc0.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119d40",
+      "proposed_name": "UTIL_ScreenFadeWrite",
+      "subsystem": "camera",
+      "summary_ru": "Отправляет10-байтный ScreenFade подходящей сущности.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(fade,recipient), NULL или virtual+d4==0 ->return; MessageBegin(1,ID[10226720],NULL,recipient.pev+20c).",
+        "SHORT trunc(float0),SHORT trunc(float4),SHORT DWORD8,BYTE c,d,e,f; tailMessageEnd. Регистрация ScreenFade10 доказана native; флаги сужаются engine WriteShort.",
+        "Значение virtual+d4 трактуется только как eligibility; всеderived overrides/клиентское blending не установлены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119d40.c",
+        "analysis/server-client-effects/10119d40.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119c00",
+      "proposed_name": "UTIL_ScreenFade",
+      "subsystem": "camera",
+      "summary_ru": "Строит локальные параметры затемнения и вызывает отправку.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(recipient,color,duration,hold,alpha,flags), stack object16bytes;10119cc0 затем10119d40. Построение выполняется и приNULL recipient.",
+        "Без heapallocation/server scheduling; получатель и клиентская обработка — отдельные пути."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119c00.c",
+        "analysis/server-client-effects/10119c00.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119de0",
+      "proposed_name": "UTIL_ScreenShake",
+      "subsystem": "camera",
+      "summary_ru": "Отправляет ScreenShake стоящим на земле клиентам внутри заданного радиуса.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(origin,amplitude,frequency,duration,radius); индексы1..maxClients через10119680, требуются private иpev.flags&200hex. Радиус>0: strict distance<radius, без attenuation/LOS/health gate.",
+        "Для ordered radius<=0 spatialfilter пропускается; unordered входит, затем COMISS/JBE отклоняет unordered distance/radius. MaxClients перечитывается.",
+        "Ordered amplitude0 пропускает send; nonzero иunordered проходят LAHF/TEST44/JNP. Negative/NaN приmaskedconversion могут дать пакет amplitude0.",
+        "MSG_ONE1,ID[1022671c],SHORT encoded amplitude*4096,duration*4096,frequency*256;6bytes соответствует ScreenShake6. Duration/frequency вычисляются доцикла; amplitude накаждомsend."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119de0.c",
+        "analysis/server-client-effects/10119de0.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119f60",
+      "proposed_name": "UTIL_ScreenShakeAll_RadiusZero",
+      "subsystem": "camera",
+      "summary_ru": "Вызывает ScreenShake с отключённым пространственным фильтром.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт origin,amplitude,frequency,duration иliteral radius0; не обходит onground/amplitude gates. Origin фильтром неразыменовывается приradius0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119f60.c",
+        "analysis/server-client-effects/10119f60.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119810",
+      "proposed_name": "UTIL_ProFontMessage",
+      "subsystem": "hud",
+      "summary_ru": "Отправляет пользовательское текстовое сообщение ProFont с байтом стиля.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(recipient,text,style,broadcastByte); lowbytebroadcast!=0 ->MSG_ALL2,NULLrecipient; иначе NULL/virtual+d4==0 skip, подходящий ->MSG_ONE_UNRELIABLE8.",
+        "ID[10226568],BYTE style;STRING text; tailMessageEnd. Native registration ProFont,-1; это неTextMsg. Нет length/null/ID guards; обычная строкаNbytes даётN+2 payload.",
+        "При engine variable cap192 fitsN<=190, senderнеобрезает. Client hook1006e930 известен изинициализации, но его C нет; стиль/encoding/lifetime открыты."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119810.c",
+        "analysis/server-client-effects/10119810.asm",
+        "analysis/server-client-effects/contract.md",
+        "analysis/server-client-effects/evidence.json"
+      ]
+    }
+  ]
+}

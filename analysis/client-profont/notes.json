@@ -1,0 +1,55 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1006e930",
+      "proposed_name": "ProFont_MessageHook_Forward",
+      "subsystem": "hud",
+      "summary_ru": "Клиентский hook ProFont передаёт сообщение в обработчик100712a0.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl callback(name,size,buffer): wrapper кладёт stack аргументы (1018a0c0,name,size,buffer), CALL100712a0, ADD ESP,16; RET. Это дополнительный первый stack аргумент-контекст; всего четыре аргумента, не ECX thiscall.",
+        "Возвращаемый EAX после CALL сохраняется до RET. На штатном пути consumer возвращает1 даже при отсутствии панели; Ghidra void у обоих адресов не отражает native return.",
+        "Регистрация строки ProFont→1006e930 имеется в сохранённом client init; формат server10119810 — BYTE style + NUL-terminated STRING. Подлинный класс1018a0c0 и полный lifetime панели этим wrapper не раскрыты."
+      ],
+      "evidence_paths": [
+        "analysis/client-profont/contract.md",
+        "analysis/client-profont/evidence.json",
+        "analysis/client-profont/provider-evidence.json",
+        "analysis/client-profont/session.json",
+        "analysis/client-profont/1006e930.asm",
+        "decompiled/client/captures/profont-pass02/001-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/server-client-effects/contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100712a0",
+      "proposed_name": "ProFont_ReadNotificationAndRespawnHint",
+      "subsystem": "hud",
+      "summary_ru": "Читает стиль и текст ProFont, заменяет DEADNOTIFY подсказкой о возрождении и обновляет панель.",
+      "confidence": "medium",
+      "details_ru": [
+        "cdecl(context,name,size,buffer), обычный RET без callee cleanup. Первые два stack аргумента не читаются. BeginReader(buffer,size)→ReadUnsignedByte→ReadString2047. Результат byte сохраняется целым DWORD, включая возможный sentinelffffffff; parser error не проверяется.",
+        "strncpy(local256,readerString,256), затем case-sensitive substring helper100d3cf0 ищет DEADNOTIFY где угодно в строке, не exact/token match. При совпадении дважды вызывается1006cb10 с ECX1018a0c0 и строкой+jump (второй вызов только если первыйnonNULL). NonNULL-result форматируется в local128: Press %s to respawn (lose weapons) or wait to be revived. Иначе native literal Press jump to respawn (lose weapons) or wait to be revived. Полученное копируется в local256 черезstrncpy256.",
+        "Если global101b2600 и его child+142c nonNULL, копирует local256 в child+d4 побайтно вплоть доNUL, без отдельного destination capacity. Затем child+f18=255.0f (437f0000), byte+f1c=0,byte+f1d=0,DWORD+f20=0,DWORD+bc=результатReadByte. Эти offsets подтверждены, их полный UI смысл/lifetime ещё не установлен.",
+        "Нормальный эпилог MOV EAX,1 проходит через100b42c0; успешная cookie-ветка толькоCMP/JNE/RET и сохраняетEAX. Ошибка cookie уходит в100b4ab5; возврат из этой ветки не заявляется. Отсутствие панели не меняет штатный return1 и не отменяет уже выполненный parsing.",
+        "Нет гарантированного local256[255]=0 послеstrncpy; reader допускает длиннее256. Поэтому дальнейшие substring/NUL-copy нельзя описывать как безусловно bounded safe. Достижимость длинного payload зависит от transport, не проверялась. Lookup1006cb10, formatter1000c900, CRT copy100fe800, panel constructor/paint остаются зависимостями; полное UI поведение не объявляется восстановленным."
+      ],
+      "evidence_paths": [
+        "analysis/client-profont/contract.md",
+        "analysis/client-profont/evidence.json",
+        "analysis/client-profont/provider-evidence.json",
+        "analysis/client-profont/session.json",
+        "analysis/client-profont/100712a0.asm",
+        "decompiled/client/captures/profont-pass03/000-pseudocode.c",
+        "analysis/client-profont/100b42c0.asm",
+        "decompiled/client/captures/graphics-studio-flow-abi/001-pseudocode.c",
+        "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/000-pseudocode.c",
+        "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c"
+      ]
+    }
+  ]
+}

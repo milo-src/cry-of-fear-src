@@ -1,0 +1,1428 @@
+{
+  "schema_version": 2,
+  "scope": "All saved C plus retained provider-discovered inventories; not a claim of all machine-code functions.",
+  "no_target_execution_by_audit_script": true,
+  "no_REA_session_opened_by_inventory_script": true,
+  "address_comparison": "Default-space 0x entries compared numerically (leading zeroes removed); full provider records preserved unchanged.",
+  "sources": [
+    {
+      "path": "tools/catalog_decompiled.py",
+      "sha256": "f31b938ea39fd6f1692786a76504f0eee59dd10c04e3482e4ca46fe36ed12bdb"
+    },
+    {
+      "path": "decompiled/server/partial-pass/index.json",
+      "sha256": "26ee009f634397103deadcbdab5306eb2c63d9198079fc1cb9e503905364091e"
+    },
+    {
+      "path": "analysis/modules.json",
+      "sha256": "c471801d7e2a4eda8d87ccd15ccecf2d25f86101eac0c38b912285ec500a051d"
+    },
+    {
+      "path": "analysis/corpus-coverage/client-discovered-evidence.json",
+      "sha256": "9777cea71d32f301afbda91b91173ebce07eb02d9b22a0e99b136b40bfd85834"
+    },
+    {
+      "path": "analysis/corpus-coverage/client-inventory-session.json",
+      "sha256": "2590adce547eb6839699d2f7870952e0602bafe2db2950b0e37f1d5af171486f"
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-discovered-evidence.json",
+      "sha256": "41da9ebe6ca729f241723c108143d13590eaa8a049a9ab8a3848f9adf4b479b1"
+    },
+    {
+      "path": "analysis/corpus-coverage/engine-inventory-session.json",
+      "sha256": "fd06272b963185aa54926c6cc0f3ba0751954094600ca51f3d0260efe87fc27d"
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-discovered-evidence.json",
+      "sha256": "0bc6d7396085e59a65e91e014ac9634fdddb569d28f55cff21fbf071bf540651"
+    },
+    {
+      "path": "analysis/corpus-coverage/gameui-inventory-session.json",
+      "sha256": "0275343fa46ad484b4c1e4e1634d4d7d9d9aec1232c6076d31735a10da9302da"
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-discovered-evidence.json",
+      "sha256": "c6041e6b901fc3ba54eb11ccedc29afb40bde169da2aca564c3bc2423c8f8629"
+    },
+    {
+      "path": "analysis/corpus-coverage/opengl-inventory-session.json",
+      "sha256": "a02bc7739958568561e2f8a8f89a364063d19d19267c7b316fa9cef1545624e2"
+    },
+    {
+      "path": "analysis/corpus-coverage/server-discovered-evidence.json",
+      "sha256": "e7a75d529d78ab3c8c3deba696c81ce0b8bc195900d6c1764001fd6291b1b05e"
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-discovered-evidence.json",
+      "sha256": "a61f73efca999622628a8b8e9a78f7f076b38b1b818ec9cf9636aab9bce48995"
+    },
+    {
+      "path": "analysis/corpus-coverage/vgui2-inventory-session.json",
+      "sha256": "9ce935c7a2268828ff4394cf0feec0e9962864b4f5ac2f1abbaa21c2551a31d6"
+    }
+  ],
+  "modules": {
+    "client": {
+      "binary": "client.dll",
+      "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+      "captured_paths": [
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll"
+      ],
+      "capture_manifests": [
+        {
+          "path": "decompiled/client/captures/chat-client-core/capture.json",
+          "sha256": "6627911bd03f1b4bfd4926b7d71fdd8c39ffbba8c74ff932c06820d56ca63f3e"
+        },
+        {
+          "path": "decompiled/client/captures/chat-client-gates-font/capture.json",
+          "sha256": "601919133dfbbec48d99936fd07d4152f1f5ee20d3c3ae0c8ca538f9bfadf81e"
+        },
+        {
+          "path": "decompiled/client/captures/chat-client-init/capture.json",
+          "sha256": "24f77bd78bede576d6cac46a1565e5d7a8fbdad64663babad148452531af44bb"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-audio-activation/capture.json",
+          "sha256": "27da7b3e71d61524ab274034ccce400cd40f9ba97ad293634db198de8b8d464f"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-blur-material-routing/capture.json",
+          "sha256": "f218cd65b9bf983c491193aab00abc48ddd5d61627c30acea23c7be9b6d49018"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-blur-material-state/capture.json",
+          "sha256": "b4ec212e7fed1cf621929f213cc2bd3d38bb9ca432f32616ac5bfecc954fe924"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-blur-message/capture.json",
+          "sha256": "d272e4276aa7f36a9bea72a6bd9eca84e41e5be19bba9ac47dd186eeb6944db5"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-blur-triggers/capture.json",
+          "sha256": "0c85725aa17f62b638298e2ceb9c3471f36ab1ff2232c636703162fde7c377ad"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-blackwhite/capture.json",
+          "sha256": "43824d89462042b44810face36fdb38ebb7bb119d148a0924ce2285108e1dca4"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-colour/capture.json",
+          "sha256": "749cdfc71447dbad35cecfc79f0043b08f2bec8ad5f356e3595dd4ba5a6accf1"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-first/capture.json",
+          "sha256": "435cb449b61aadfdb45914b57c391f812e4bd941f446ff7c7d87587642e919a6"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-fog-colour/capture.json",
+          "sha256": "101d3ac2e3720d91af69c5a972cfa3c7468fb1f1a9e516004fbe9042202bc209"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-fog-waterlevel/capture.json",
+          "sha256": "c441be702e21b08479f02dc2a304e165ce9d9102936d76e511e6241be3aabd47"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-messages/capture.json",
+          "sha256": "f6318606f97dabb4f7ca81eca179111fda2025cdf27117e2fd460fdbcec1975d"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-client-second/capture.json",
+          "sha256": "529c06fb9c2b811923422f89baf1e0b951e4fbf42cb4f4be2ad7d14bffe7a58b"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-gl-capabilities/capture.json",
+          "sha256": "bccf4796833f0d94f2ce6dd7032cb730c8f7a107b92a59f01ff7706c2bf1f193"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-gl-cleanup-boundary/capture.json",
+          "sha256": "c3ac82c8ccb821c196dbe9c83a2344a9c603602b14f25fb39399aa9e55bf1f59"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-gl-lifecycle-followup/capture.json",
+          "sha256": "af1ab4f2c6e127db9ca9e4af27d4bc2bf9bd63990e04fbbc1c19c83284c923ca"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-hud-lifetime/capture.json",
+          "sha256": "ec0aabdf7250264a3846ee2e99706cbc7cc8e3599753ebfe4f3d4278e0d5c4be"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-hud-lifetime-owners/capture.json",
+          "sha256": "3a19c03c52ab74c8175dfecff698957cc444d14f38118695d3645d017e34d472"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-hud-lifetime-producers/capture.json",
+          "sha256": "a86406a5be894fab125e6c6d8a77cdba5a8391c440487241a154053c6cd0ebb1"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-lighting-core/capture.json",
+          "sha256": "e67f6fd0dc230bf0e77e3dc6c36cae09b8becf6ded18304d3db345533247c45f"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-lighting-entry/capture.json",
+          "sha256": "e0e50d16f315fbbfc7c1cdf7cbdd93b9c7988d3f60baea95b2fc1e5027dcfdb0"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-lighting-projection/capture.json",
+          "sha256": "a4a5dc21e25b9b19574fda565aea723a66ada6ad63643b24d96b51318b9d9896"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-lightmap-formulas/capture.json",
+          "sha256": "a0399ac5be8d5b68a1e2faa91db755e547146e7bdb6f7dd3967726625aa143a4"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-material-lifecycle/capture.json",
+          "sha256": "4704db0edc1ebc2cbe45205e8e7d6ce0264bd6a3eca8729a113b4c4cf9ef5269"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-material-reset/capture.json",
+          "sha256": "fde81d54677cf63a61bdbc6b60f55dfaf487b6b1dd242ef5a1143b576a7e03bb"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-music-client/capture.json",
+          "sha256": "e92388b3dcad72d0e92105ce233c31c4edf9020911473364c14f3c1636eb6020"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-music-message/capture.json",
+          "sha256": "66af9a7a83e3a5fc75c4ae90f9e03f6011a7301aa12ebb8591a99d37a01b8be8"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-music-routing/capture.json",
+          "sha256": "ebe6a0a4fe22172350ce34281121c20a927318a6c18486fd619c95cab7699aa0"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-music-wire/capture.json",
+          "sha256": "4f84cf97652d4605d9240a53ce150ea2fdacac32bc832b3173bb2a71369da9a1"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-draw-routing/capture.json",
+          "sha256": "07cc1f9fe84f60fab91ce64c6b8180deaa14789785cf21aa903365c6316578d2"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-flow-abi/capture.json",
+          "sha256": "7dbf2fdf6b9e21c0bfe040012f177e2db6758d3ff662f1967c9189ce38d81d1f"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-flow-entry/capture.json",
+          "sha256": "a1c7877bc70a7224de135e527e052b62a32d932c20a94a68ab182dc81d8150d4"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-flow-init/capture.json",
+          "sha256": "0d83f7aba44f67003eb935cbf9f68289e8761dc5d9f219bb1dbe18eb2ec0ac8a"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-flow-routing/capture.json",
+          "sha256": "29864c190703b3224ee7c5306459f90aafb324686f9e31c9a7150257577a0760"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-light-selection/capture.json",
+          "sha256": "a02553cef99533b1036e242b1b83ac3456e325b62ff32401cde0eefc1ec4172d"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-lighting/capture.json",
+          "sha256": "ba2bf83e586df69351165fd81e5933d3ecb15f39b60decff26849434f1d3d480"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-math-abi/capture.json",
+          "sha256": "c29075c84722820e21a831d3144af91aaf16fad249da4d1a9c66783dd1c2718e"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-mesh-materials/capture.json",
+          "sha256": "77648008e48e20d8da2017e237c9a8a4bf0dff837b6d00cbab4a34d975e0b806"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-normal-lighting/capture.json",
+          "sha256": "635087ba266d4384b4db58d29c29f21f03ff3d886e153b977ea5e9e4d6f45f8e"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-texture-final/capture.json",
+          "sha256": "bb27208c4ebdc06aead5e8e21db59a197833bb245a1f6e3c324b2ec61a923746"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-texture-lifecycle/capture.json",
+          "sha256": "024ce58c8d731acde8b0b294a8cd1bf6c0fdba1db7a46cedefeb0cb3285db6bc"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-texture-loader/capture.json",
+          "sha256": "88923cda5c3144b21145d271ada4f785e868539fc883535f8676d4b8d52cbeca"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-studio-texture-replacements/capture.json",
+          "sha256": "65a2c2519004183d4fdce3bd64b078b67cfbfd4d149b2ce5dac6132be98c3166"
+        },
+        {
+          "path": "decompiled/client/captures/graphics-surface-flags/capture.json",
+          "sha256": "0c91a5216d32d8cbc8157cb0deab01233ced5ddffac8e7e743ea0affccc7ec6f"
+        },
+        {
+          "path": "decompiled/client/captures/hud-entry/capture.json",
+          "sha256": "b14849c98d68a98662a44b12a874cc650f5b8bddc0e244f2232a120801d0448b"
+        },
+        {
+          "path": "decompiled/client/captures/hud-geometry/capture.json",
+          "sha256": "95d17ba6cf05336c8ab87df2181394228941f9a05d8088920abf9211b87dfa34"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-first/capture.json",
+          "sha256": "22ff7db75116c01df701e8cf62297cedacef94b8d71e12fe4977556bf6f73d28"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-input/capture.json",
+          "sha256": "c2b92aac4d3d7e1c929c13e9260f54be5670b34cac51305ac5d4c8ce0ead37a3"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-keys/capture.json",
+          "sha256": "51108d93b6e622679ed925f13e86a0c435454be1bded6193a820508bacbde824"
+        },
+        {
+          "path": "decompiled/client/captures/inventory-ui-message/capture.json",
+          "sha256": "8ed0328a852415eed2c752a9c51fe5e07a857e5f53826c456e40f5f2c7cc2d9d"
+        },
+        {
+          "path": "decompiled/client/captures/ladder-sound-client/capture.json",
+          "sha256": "fe217a8a9b84890bc408e054993783bbe4f4a23d8f87b491139879aa8eff6d56"
+        },
+        {
+          "path": "decompiled/client/captures/menu-sky-functions/capture.json",
+          "sha256": "e40690af393b07f82df7af91d26c73c09c445f06042d04bc8f488ccc9c0f1691"
+        },
+        {
+          "path": "decompiled/client/captures/menu-sky-render/capture.json",
+          "sha256": "a4e327d3c6131c2aa39f7fc6059ae6bed90e24b3b101a7c9eba288f6321fe16b"
+        },
+        {
+          "path": "decompiled/client/captures/menu-sky-transform-discovery/capture.json",
+          "sha256": "e3cfe5156447215596597f87ec2c3d558d6c42fd9d25e80ed08e4f3ec6b149b8"
+        },
+        {
+          "path": "decompiled/client/captures/menu-switch-initial/capture.json",
+          "sha256": "2fe839d3d75d46cdc687da4b961319845fc0c5c52e3b40af7a1c35de81bfa753"
+        },
+        {
+          "path": "decompiled/client/captures/menu-weather-impacts/capture.json",
+          "sha256": "635ef02286fe7845658db6ba64230db0f12780c32c376d5bf6387fcb21d0202e"
+        },
+        {
+          "path": "decompiled/client/captures/menu-weather-native/capture.json",
+          "sha256": "dd0746505d5bfb4172f582b53f61c196579ecbfc6b89c7166b8f11d11315d466"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-fov-audit/capture.json",
+          "sha256": "e785e32611c72a63c787713dae755cfb3606f9ec39c67911650d6ef0e7b62cc2"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-fov-think/capture.json",
+          "sha256": "da8154e2b1a22faf4031cf17e9d5f9cc62b1f4cf672e3b1e6366e24caefd6a28"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-pass1/capture.json",
+          "sha256": "cbc29172157d2360dbf08bda0ff1a26d0cd8c7512abd72b67e6273c4aeed4684"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-pass2/capture.json",
+          "sha256": "81fb08b9b7125a48bdbec29920782ce84e4107a9c7e37f29f118e2022796168e"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-pass3/capture.json",
+          "sha256": "a41875c86d33c078358d034ae4cec992e4231d5410cae84191ab5f53f30da365"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-physics/capture.json",
+          "sha256": "662d35bfb22b7a58d3d777df1c6324e96f91e5a454ee47ac5517477de9b64cf8"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-spring-audit/capture.json",
+          "sha256": "789e78f2fdd7af719cc0973b1195edfb9e6c6ac5a9a07f6e37b9bce825e883d3"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-spring-core/capture.json",
+          "sha256": "ac31504e57d4a5d5d3e25c17888ba5f365a3d0d94c526dddc280e46511555d3d"
+        },
+        {
+          "path": "decompiled/client/captures/movement-client-view-audit/capture.json",
+          "sha256": "6df9027a07b0a53e486f435d890d70c49abc7a020feaa57e04cb4706714bf1ff"
+        },
+        {
+          "path": "decompiled/client/captures/network-playsfx-client/capture.json",
+          "sha256": "17cc07c6c82b7b7f4667edefd326ec03ef504646dd312ff6f499774dd370f227"
+        },
+        {
+          "path": "decompiled/client/captures/profont-dependencies-pass04/capture.json",
+          "sha256": "7faa12bd3a926393e813b91d69bf8f0ae3eb12f09ee853e8595ba15efcd24275"
+        },
+        {
+          "path": "decompiled/client/captures/profont-pass02/capture.json",
+          "sha256": "32c9d5ad411a4ba40c25e583b312e0cb81516bb21997c2da8e5e99a40ab3c877"
+        },
+        {
+          "path": "decompiled/client/captures/profont-pass03/capture.json",
+          "sha256": "92457c54bb7932f7926126b22014da0aebaf19acfb6b5fb7bc31a12369a24174"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-bindings/capture.json",
+          "sha256": "0795428aafa4ba72b46abfa08384b2b9923d721b1946225705c4342bf7bd4a20"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-bump/capture.json",
+          "sha256": "60e5b6b80cda0d88900bf37d1bfc30a1a5b2e787a3c5b25dfc8aef1f06c16a38"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-core/capture.json",
+          "sha256": "df79ed7ea8990be5278e23b22424623f22c92f6a52b6eebcc64ac3c903f14690"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-inputs/capture.json",
+          "sha256": "1d8ea85a1ea8f53c9ec9f992112e346024e8f32efc0b772fb53de89be47d9905"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-routing/capture.json",
+          "sha256": "2a3f351b930475e74f721f99e9dd9d0f75f42cbff06024e88636d69737c2b78c"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-tangent-build/capture.json",
+          "sha256": "bcfc7396abbebd3179b69cf6b26fc953e3faf1918540664a655cbd3b9b76d6ca"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-tangent-constructor/capture.json",
+          "sha256": "6e2aa4d6a3bbc017125b90b8002cbeca84bfdf64089406391675ce69020c681f"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-tangents/capture.json",
+          "sha256": "a1b569cf4714273c0e33099d98a62da9aaa7381ad95af3909164b3326981ad5b"
+        },
+        {
+          "path": "decompiled/client/captures/shader-pass-vector-helpers/capture.json",
+          "sha256": "a0516c05b8593bb6c1d18afdccf81fa3e15cfab41693ad1e233bbeba4a9186d3"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-actions/capture.json",
+          "sha256": "fad89b22296a00cb4781c1901c8f9cbda9d64af7575835c9da60ad249bd5a897"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-first/capture.json",
+          "sha256": "1ed8526298855aa5365699130583db34cb00fefb2ecc871e922afc7a6a7af0bd"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-messages/capture.json",
+          "sha256": "9720b270b449f60ad0cbe1ee136bf4cf71d0944ede4529c26837eeffaa115d20"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-panels/capture.json",
+          "sha256": "cd303fff10110a7146a4dd172cddaca5caba6545deebd7ec39fedc72b7e7b130"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-protocol/capture.json",
+          "sha256": "3e22f7305f9b57bb980f7e1f4b212b8437013aa5a21ff31e60e5af04a2000ab6"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-routing/capture.json",
+          "sha256": "e6571811444b69f369336069b580cf7d904cc55f7e25d4fc6c1298911f957eca"
+        },
+        {
+          "path": "decompiled/client/captures/vgui-menu-second/capture.json",
+          "sha256": "7180e36a18530ecc6574878dfa10a4db0dee2ba35657ec80c168524a579df24b"
+        },
+        {
+          "path": "decompiled/client/captures/weapons-client-aim/capture.json",
+          "sha256": "5b7eacf2c1a678da17590436120f4357619094803c38f71043db2c93d1efd1b8"
+        },
+        {
+          "path": "decompiled/client/captures/weapons-client-core/capture.json",
+          "sha256": "81670bdfef7ee32c00d833805005f67abc9fb99c8e511e155c33f575d617df20"
+        },
+        {
+          "path": "decompiled/client/captures/weapons-client-effects/capture.json",
+          "sha256": "63265a2a2e7855971050ba5ead2b81cb2b9160313f651687c5d78dbd7d9fa768"
+        }
+      ],
+      "c_files": 510,
+      "unique_address_records": 474,
+      "confirmed_actual_entries": 468,
+      "unconfirmed_entry_records": 6,
+      "selector_mismatch_files": 112,
+      "address_min": "0x10006e40",
+      "address_max": "0x10139320",
+      "address_extent_is_coverage": false,
+      "profiles_from_saved_query_evidence": {
+        "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6": {
+          "count": 510,
+          "provider": {
+            "id": "ghidra",
+            "name": "Ghidra",
+            "version": "12.1.4"
+          },
+          "example": {
+            "path": "analysis/local/chat-client-core/000-procedure_pseudo_code.json",
+            "sha256": "8754bc31a1607544351f67329a3a37f576e1194860bc12e9cf30fa9dc2527eef"
+          },
+          "profile": {
+            "provider": {
+              "id": "ghidra",
+              "name": "Ghidra",
+              "version": "12.1.4"
+            },
+            "parameters": {
+              "target_kind": "executable",
+              "target_format": "pe",
+              "executable_role": "shared-library",
+              "managed": false,
+              "native_aot_metadata": {
+                "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+                "source_bytes": 134217728,
+                "work_units": 67108864,
+                "working_memory_bytes": 67108864,
+                "report_bytes": 4194304
+              },
+              "architecture": "x86",
+              "available_architectures": [
+                "x86"
+              ],
+              "import_mode": "ephemeral-source-immutable",
+              "pdb_observations": "program-info-v5",
+              "annotation_policy": "atomic-function-entry-metadata-v1",
+              "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+              "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+              "function_body_evidence": "complete-inclusive-ranges-v1",
+              "function_references": "complete-body-and-entry-reference-manager-v3",
+              "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+              "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+              "native_value_flow_projection": "accepted-runtime-budgets-v1",
+              "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+              "string_inventory_evidence": "defined-data-coverage-v1",
+              "inventory_search_projection": "provider-inventory-facts-v1",
+              "data_type_observations": "bit-field-base-and-lookup-v1",
+              "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+              "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+              "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+              "instruction_flow_evidence": "decoded-return-pcode-v1",
+              "instruction_status": "unlisted-and-containing-code-data-v3",
+              "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+              "byte_search_coverage": "separate-loaded-overlays-v1",
+              "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+              "no_return_repair": "disabled-windows-p0",
+              "process_launch": "official-headless-script-v1",
+              "jump_table_evidence": "typed-case-default-blocks-v1",
+              "decompiler_jump_loads": true,
+              "loader": "auto-from-header",
+              "language_id": "auto-from-header",
+              "compiler_spec_id": "auto-default",
+              "analyzer_preset": "ghidra-default",
+              "function_coordinate_context": {
+                "kind": "native-function-coordinate-context-v1",
+                "selected_image": null,
+                "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+              }
+            },
+            "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+          }
+        }
+      },
+      "profile_evidence_missing": [],
+      "export_inventory": {
+        "entries": 593,
+        "scope": "PE exports only",
+        "evidence_id": "ev_32aa6f0a8ab1f5251bafc0a8f15b1c9cf3e96ed5b06e38665f112f58ff030eeb"
+      },
+      "complete_discovered_inventory": true,
+      "discovered_count": 9664,
+      "local_without_confirmed_C": 8448,
+      "local_without_saved_C": null
+    },
+    "engine": {
+      "binary": "hw.dll",
+      "binary_sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+      "captured_paths": [
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll"
+      ],
+      "capture_manifests": [
+        {
+          "path": "decompiled/engine/captures/chat-input-modes/capture.json",
+          "sha256": "bedb2994b3cdeb7d54dc33c2e6c8d4002d5d339243b3808a3878c84db6d9f7a5"
+        },
+        {
+          "path": "decompiled/engine/captures/chat-input-render/capture.json",
+          "sha256": "91e80f7cb7101cb3b19355d63dd57e56130a1ebb27fbe61d0ed653942a67dbc8"
+        },
+        {
+          "path": "decompiled/engine/captures/engine-message-followup/capture.json",
+          "sha256": "f732b765270a9d0a0eb567ca9479f97b2a2e4b6cd05b5a4779a57733dd2383e5"
+        },
+        {
+          "path": "decompiled/engine/captures/graphics-engine-wire/capture.json",
+          "sha256": "89bff7757ca8f04b3f7017f5c3666222e44b8b39fd25f25a0b40b4324a818dca"
+        },
+        {
+          "path": "decompiled/engine/captures/queue-engine/capture.json",
+          "sha256": "8005cf28cdcc71cab80ae9c35c81b87a6f4487b4939a8e6438dd19dc5ccf3238"
+        },
+        {
+          "path": "decompiled/engine/captures/queue-engine-routing/capture.json",
+          "sha256": "2e74e01cde04f2ef3a92cefc15387f70b0f4ee349c64845ef09fd85ee61e1a67"
+        },
+        {
+          "path": "decompiled/engine/captures/ui-console-engine/capture.json",
+          "sha256": "48aea4832d6236639355e1dc1512d193ef56d9c57fd61ce1c429bc0e78eaf493"
+        }
+      ],
+      "c_files": 45,
+      "unique_address_records": 45,
+      "confirmed_actual_entries": 44,
+      "unconfirmed_entry_records": 1,
+      "selector_mismatch_files": 7,
+      "address_min": "0x1d010e6",
+      "address_max": "0x1e7163c",
+      "address_extent_is_coverage": false,
+      "profiles_from_saved_query_evidence": {
+        "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6": {
+          "count": 45,
+          "provider": {
+            "id": "ghidra",
+            "name": "Ghidra",
+            "version": "12.1.4"
+          },
+          "example": {
+            "path": "analysis/local/chat-input-modes/000-procedure_pseudo_code.json",
+            "sha256": "7414d18900d46c1b6160665074eac3e70c598b02d0da58d5a1194123bbfd6411"
+          },
+          "profile": {
+            "provider": {
+              "id": "ghidra",
+              "name": "Ghidra",
+              "version": "12.1.4"
+            },
+            "parameters": {
+              "target_kind": "executable",
+              "target_format": "pe",
+              "executable_role": "shared-library",
+              "managed": false,
+              "native_aot_metadata": {
+                "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+                "source_bytes": 134217728,
+                "work_units": 67108864,
+                "working_memory_bytes": 67108864,
+                "report_bytes": 4194304
+              },
+              "architecture": "x86",
+              "available_architectures": [
+                "x86"
+              ],
+              "import_mode": "ephemeral-source-immutable",
+              "pdb_observations": "program-info-v5",
+              "annotation_policy": "atomic-function-entry-metadata-v1",
+              "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+              "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+              "function_body_evidence": "complete-inclusive-ranges-v1",
+              "function_references": "complete-body-and-entry-reference-manager-v3",
+              "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+              "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+              "native_value_flow_projection": "accepted-runtime-budgets-v1",
+              "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+              "string_inventory_evidence": "defined-data-coverage-v1",
+              "inventory_search_projection": "provider-inventory-facts-v1",
+              "data_type_observations": "bit-field-base-and-lookup-v1",
+              "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+              "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+              "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+              "instruction_flow_evidence": "decoded-return-pcode-v1",
+              "instruction_status": "unlisted-and-containing-code-data-v3",
+              "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+              "byte_search_coverage": "separate-loaded-overlays-v1",
+              "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+              "no_return_repair": "disabled-windows-p0",
+              "process_launch": "official-headless-script-v1",
+              "jump_table_evidence": "typed-case-default-blocks-v1",
+              "decompiler_jump_loads": true,
+              "loader": "auto-from-header",
+              "language_id": "auto-from-header",
+              "compiler_spec_id": "auto-default",
+              "analyzer_preset": "ghidra-default",
+              "function_coordinate_context": {
+                "kind": "native-function-coordinate-context-v1",
+                "selected_image": null,
+                "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+              }
+            },
+            "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+          }
+        }
+      },
+      "profile_evidence_missing": [],
+      "export_inventory": {
+        "entries": null,
+        "scope": "PE exports only",
+        "evidence_id": null
+      },
+      "complete_discovered_inventory": true,
+      "discovered_count": 10281,
+      "local_without_confirmed_C": 9550,
+      "local_without_saved_C": null
+    },
+    "gameui": {
+      "binary": "GameUI.dll",
+      "binary_sha256": "9f6c7f955cd06e186591b46aaed111e59a1301b5a46a2ebc424d4b7f6cf29198",
+      "captured_paths": [
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\GameUI.dll"
+      ],
+      "capture_manifests": [
+        {
+          "path": "decompiled/gameui/captures/gameui-buttons/capture.json",
+          "sha256": "764344b287ac031a366a0052a941c39cb67a57cbcf982f535e67c15b7dbbe43e"
+        },
+        {
+          "path": "decompiled/gameui/captures/gameui-font-position/capture.json",
+          "sha256": "85cf7b889e16a3797760e8b7e138ab63bbc00db73e1178c40486abea5cf1070e"
+        },
+        {
+          "path": "decompiled/gameui/captures/gameui-hitboxes/capture.json",
+          "sha256": "77ae28bde6084808ebca1aa1599c1aac6b2d3c730f08d4b402163e27f6f232e8"
+        },
+        {
+          "path": "decompiled/gameui/captures/gameui-layout/capture.json",
+          "sha256": "75672bac3bf6e978f946be2696231bf94f6d47028d5da013b9d62dfdfe4723bd"
+        },
+        {
+          "path": "decompiled/gameui/captures/gameui-menu-geometry/capture.json",
+          "sha256": "3735da549cc4479c9c72ae9606c275d65f0d900e9e209877c76139de558f0cb7"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-button-scheme/capture.json",
+          "sha256": "71e81e3d4d2702f8a4e417d778d4577945c49f8d99c388b3f4fc571a55c9a12d"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-console-behavior/capture.json",
+          "sha256": "ca1ecf2671e5798c91a76137b12ae0cc5e30bde8e07686c40fe8b14d2453df60"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-console-core/capture.json",
+          "sha256": "258f14c9ac7a328744e14472c7cadaf48e6849ac92054d7c69c3b046f7cb183c"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-console-fonts/capture.json",
+          "sha256": "18f529d5436ef64844a1c9380fd2e8db3db6a7539f29005954ddbb8dc59830e9"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-console-history/capture.json",
+          "sha256": "23d1e1af990574e8f01a0ee5138442147ee7876bb918e0a537c680551328b8fe"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-options-actions/capture.json",
+          "sha256": "ae07937e17ee7d6301aef73b91f4cb443ff882dd3b9712961a2749cb386fb1e0"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-options-final/capture.json",
+          "sha256": "13b5925897d8d39db94fa23c978a9d5d02f77f32bcbffd2b18bf885f7c9c8eb9"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-options-first/capture.json",
+          "sha256": "aa5c16086030d0834f1003c987e38ae0ae218a0306f2b471480134a969b7f043"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-options-keyboard/capture.json",
+          "sha256": "d9db96e4aada82b20f362f350b81ca032ad178636433810a13d07d810126bafc"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-options-layout/capture.json",
+          "sha256": "c55c93a98bbcbf2e40f4a0293df7c08ea8bfd542fbcd96e7d525233d38d56ed8"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-options-second/capture.json",
+          "sha256": "4c96c0c63eddda0d896ca3891237be2aceb3a12914225846ac571077a5e6f2a6"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-scroll-arrows/capture.json",
+          "sha256": "d5bce348ab86f83e35731e55a2f776b783cb6a11659afb2356bde2c4fc9f4dc3"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-scroll-geometry/capture.json",
+          "sha256": "6191ed6edddcf4c147a6e3ba62439c179d310d81598a63414e3f6ad70af30ed8"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-scroll-layout/capture.json",
+          "sha256": "7e245e4bcca2bb7004587544cfbf0575c19d6275433341985ef85c9d53f744df"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-scroll-owner-input/capture.json",
+          "sha256": "cf55bede04aad260f011497c8ed72d0d79cd98ea1b2460e6698aec22dc3133f9"
+        },
+        {
+          "path": "decompiled/gameui/captures/ui-scroll-thumb/capture.json",
+          "sha256": "a9da44db08268edefff7333d738584f51d3ea033aaceda5f3a965f6bc4d36ab0"
+        }
+      ],
+      "c_files": 128,
+      "unique_address_records": 126,
+      "confirmed_actual_entries": 126,
+      "unconfirmed_entry_records": 0,
+      "selector_mismatch_files": 33,
+      "address_min": "0x10030698",
+      "address_max": "0x100a8cf8",
+      "address_extent_is_coverage": false,
+      "profiles_from_saved_query_evidence": {
+        "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6": {
+          "count": 128,
+          "provider": {
+            "id": "ghidra",
+            "name": "Ghidra",
+            "version": "12.1.4"
+          },
+          "example": {
+            "path": "analysis/local/menu-assets/gameui-buttons/000-procedure_pseudo_code.json",
+            "sha256": "131cf8631823d2ef343d348cb549a6ca5a13522b6570b7ec3834f64e653dad72"
+          },
+          "profile": {
+            "provider": {
+              "id": "ghidra",
+              "name": "Ghidra",
+              "version": "12.1.4"
+            },
+            "parameters": {
+              "target_kind": "executable",
+              "target_format": "pe",
+              "executable_role": "shared-library",
+              "managed": false,
+              "native_aot_metadata": {
+                "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+                "source_bytes": 134217728,
+                "work_units": 67108864,
+                "working_memory_bytes": 67108864,
+                "report_bytes": 4194304
+              },
+              "architecture": "x86",
+              "available_architectures": [
+                "x86"
+              ],
+              "import_mode": "ephemeral-source-immutable",
+              "pdb_observations": "program-info-v5",
+              "annotation_policy": "atomic-function-entry-metadata-v1",
+              "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+              "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+              "function_body_evidence": "complete-inclusive-ranges-v1",
+              "function_references": "complete-body-and-entry-reference-manager-v3",
+              "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+              "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+              "native_value_flow_projection": "accepted-runtime-budgets-v1",
+              "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+              "string_inventory_evidence": "defined-data-coverage-v1",
+              "inventory_search_projection": "provider-inventory-facts-v1",
+              "data_type_observations": "bit-field-base-and-lookup-v1",
+              "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+              "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+              "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+              "instruction_flow_evidence": "decoded-return-pcode-v1",
+              "instruction_status": "unlisted-and-containing-code-data-v3",
+              "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+              "byte_search_coverage": "separate-loaded-overlays-v1",
+              "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+              "no_return_repair": "disabled-windows-p0",
+              "process_launch": "official-headless-script-v1",
+              "jump_table_evidence": "typed-case-default-blocks-v1",
+              "decompiler_jump_loads": true,
+              "loader": "auto-from-header",
+              "language_id": "auto-from-header",
+              "compiler_spec_id": "auto-default",
+              "analyzer_preset": "ghidra-default",
+              "function_coordinate_context": {
+                "kind": "native-function-coordinate-context-v1",
+                "selected_image": null,
+                "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+              }
+            },
+            "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+          }
+        }
+      },
+      "profile_evidence_missing": [],
+      "export_inventory": {
+        "entries": 1,
+        "scope": "PE exports only",
+        "evidence_id": "ev_b2095171f77bb56899b1c58a5a46699dbcd8ebf66962bb6fecd7f5a195738aa0"
+      },
+      "complete_discovered_inventory": true,
+      "discovered_count": 6140,
+      "local_without_confirmed_C": 5895,
+      "local_without_saved_C": 5895
+    },
+    "opengl": {
+      "binary": "opengl32.dll",
+      "binary_sha256": "26732d7a9aeb8079f2d0c0920f7e433521a2fcc570017c7dafd45bdd30cdbeab",
+      "captured_paths": [
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\opengl32.dll"
+      ],
+      "capture_manifests": [
+        {
+          "path": "decompiled/opengl/captures/graphics-glproxy/capture.json",
+          "sha256": "630e1fd20f296d0c907e4ec7b82af6d93c08eb9baa501840b7aa27a1f7b373ea"
+        }
+      ],
+      "c_files": 5,
+      "unique_address_records": 5,
+      "confirmed_actual_entries": 0,
+      "unconfirmed_entry_records": 5,
+      "selector_mismatch_files": 0,
+      "address_min": "0x100011c3",
+      "address_max": "0x10001ed8",
+      "address_extent_is_coverage": false,
+      "profiles_from_saved_query_evidence": {
+        "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6": {
+          "count": 5,
+          "provider": {
+            "id": "ghidra",
+            "name": "Ghidra",
+            "version": "12.1.4"
+          },
+          "example": {
+            "path": "analysis/local/graphics-glproxy/000-procedure_pseudo_code.json",
+            "sha256": "63a4e8ff79ff2793481489d5826a5b6deaa777165ec9477d68c31e1161dc4ab4"
+          },
+          "profile": {
+            "provider": {
+              "id": "ghidra",
+              "name": "Ghidra",
+              "version": "12.1.4"
+            },
+            "parameters": {
+              "target_kind": "executable",
+              "target_format": "pe",
+              "executable_role": "shared-library",
+              "managed": false,
+              "native_aot_metadata": {
+                "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+                "source_bytes": 134217728,
+                "work_units": 67108864,
+                "working_memory_bytes": 67108864,
+                "report_bytes": 4194304
+              },
+              "architecture": "x86",
+              "available_architectures": [
+                "x86"
+              ],
+              "import_mode": "ephemeral-source-immutable",
+              "pdb_observations": "program-info-v5",
+              "annotation_policy": "atomic-function-entry-metadata-v1",
+              "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+              "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+              "function_body_evidence": "complete-inclusive-ranges-v1",
+              "function_references": "complete-body-and-entry-reference-manager-v3",
+              "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+              "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+              "native_value_flow_projection": "accepted-runtime-budgets-v1",
+              "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+              "string_inventory_evidence": "defined-data-coverage-v1",
+              "inventory_search_projection": "provider-inventory-facts-v1",
+              "data_type_observations": "bit-field-base-and-lookup-v1",
+              "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+              "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+              "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+              "instruction_flow_evidence": "decoded-return-pcode-v1",
+              "instruction_status": "unlisted-and-containing-code-data-v3",
+              "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+              "byte_search_coverage": "separate-loaded-overlays-v1",
+              "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+              "no_return_repair": "disabled-windows-p0",
+              "process_launch": "official-headless-script-v1",
+              "jump_table_evidence": "typed-case-default-blocks-v1",
+              "decompiler_jump_loads": true,
+              "loader": "auto-from-header",
+              "language_id": "auto-from-header",
+              "compiler_spec_id": "auto-default",
+              "analyzer_preset": "ghidra-default",
+              "function_coordinate_context": {
+                "kind": "native-function-coordinate-context-v1",
+                "selected_image": null,
+                "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+              }
+            },
+            "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+          }
+        }
+      },
+      "profile_evidence_missing": [],
+      "export_inventory": {
+        "entries": null,
+        "scope": "PE exports only",
+        "evidence_id": null
+      },
+      "complete_discovered_inventory": true,
+      "discovered_count": 385,
+      "local_without_confirmed_C": 371,
+      "local_without_saved_C": null
+    },
+    "server": {
+      "binary": "hl.dll",
+      "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+      "captured_paths": [
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ],
+      "capture_manifests": [
+        {
+          "path": "decompiled/server/captures/chat-server-core/capture.json",
+          "sha256": "345ea8f9ad2f679af6eb76a58493d130ce44fcdd397818e8420bdbe264fc6a84"
+        },
+        {
+          "path": "decompiled/server/captures/ghidra-inventory-batch/capture.json",
+          "sha256": "daefc6f2fd7405e94df2455096f48e808caa13992413bbd1d66490a85800c9ee"
+        },
+        {
+          "path": "decompiled/server/captures/ghidra-key-batch/capture.json",
+          "sha256": "69f9c121154178520f24781d2ce6557a16b534712e4d0a53e2dae21e1840a223"
+        },
+        {
+          "path": "decompiled/server/captures/graphics-blur-server/capture.json",
+          "sha256": "446bf25e025cdb8d244e1d60ece545430ba6950d4fab0443a61d33e3fc5518f6"
+        },
+        {
+          "path": "decompiled/server/captures/graphics-server-core/capture.json",
+          "sha256": "c60a163f5e0193ec5106cf42bd15edbbd37fb34a3ed193f5377680274362dc9f"
+        },
+        {
+          "path": "decompiled/server/captures/graphics-server-light-protocol/capture.json",
+          "sha256": "9365967e31bca3cb1a5337888f95f8f8de14d9f1ba38b559afafb868e0f409c0"
+        },
+        {
+          "path": "decompiled/server/captures/graphics-server-lights/capture.json",
+          "sha256": "70755f284b194e8596cd783b955b07e77c2536c7670aaef7c724ca2d85f0706a"
+        },
+        {
+          "path": "decompiled/server/captures/graphics-server-weather/capture.json",
+          "sha256": "b823334d9b6b52f656754f745211b8e45c2ad0013c46db376ed917fb10b1335a"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-camera/capture.json",
+          "sha256": "53f4c66f3688b954c038bc4b9f79f3127529fe569724535c06173bd0fb19157e"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-envmodel/capture.json",
+          "sha256": "ba13f0163fade5f30eb0553cb245895294fc20d5c67961bf2a8e1446f50ad2d9"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-envmodel-sequence/capture.json",
+          "sha256": "301137454fa0d3ad30629572c46c22673505ed43777e5976ae750208505ac2d3"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-gamestart/capture.json",
+          "sha256": "20915f563fac27cdd916abae679d69a49d293ca8e95fc7c9a11f3ccc5556d3de"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-music/capture.json",
+          "sha256": "9062ce2b2e483888dbc5deea0425b437acca9626fe8309978f00e18fbda51967"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-server/capture.json",
+          "sha256": "a2cc2d838cb0f60e3fc4e20beec57d50ac4fefe458a0290b57c6849783323ac6"
+        },
+        {
+          "path": "decompiled/server/captures/menu-switch-server-flow/capture.json",
+          "sha256": "e0806358229698e5c35aadea2e776a2299935a6f9f4d0ef71967b962fb18769b"
+        }
+      ],
+      "c_files": 8074,
+      "unique_address_records": 8000,
+      "confirmed_actual_entries": 8000,
+      "unconfirmed_entry_records": 0,
+      "selector_mismatch_files": 9,
+      "address_min": "0x100010a0",
+      "address_max": "0x1016d370",
+      "address_extent_is_coverage": false,
+      "profiles_from_saved_query_evidence": {
+        "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6": {
+          "count": 74,
+          "provider": {
+            "id": "ghidra",
+            "name": "Ghidra",
+            "version": "12.1.4"
+          },
+          "example": {
+            "path": "analysis/local/chat-server-core/000-procedure_pseudo_code.json",
+            "sha256": "a65503953d6c706b080f67905dc31f5f00848333ed9f5b33ab41992dc640917f"
+          },
+          "profile": {
+            "provider": {
+              "id": "ghidra",
+              "name": "Ghidra",
+              "version": "12.1.4"
+            },
+            "parameters": {
+              "target_kind": "executable",
+              "target_format": "pe",
+              "executable_role": "shared-library",
+              "managed": false,
+              "native_aot_metadata": {
+                "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+                "source_bytes": 134217728,
+                "work_units": 67108864,
+                "working_memory_bytes": 67108864,
+                "report_bytes": 4194304
+              },
+              "architecture": "x86",
+              "available_architectures": [
+                "x86"
+              ],
+              "import_mode": "ephemeral-source-immutable",
+              "pdb_observations": "program-info-v5",
+              "annotation_policy": "atomic-function-entry-metadata-v1",
+              "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+              "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+              "function_body_evidence": "complete-inclusive-ranges-v1",
+              "function_references": "complete-body-and-entry-reference-manager-v3",
+              "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+              "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+              "native_value_flow_projection": "accepted-runtime-budgets-v1",
+              "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+              "string_inventory_evidence": "defined-data-coverage-v1",
+              "inventory_search_projection": "provider-inventory-facts-v1",
+              "data_type_observations": "bit-field-base-and-lookup-v1",
+              "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+              "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+              "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+              "instruction_flow_evidence": "decoded-return-pcode-v1",
+              "instruction_status": "unlisted-and-containing-code-data-v3",
+              "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+              "byte_search_coverage": "separate-loaded-overlays-v1",
+              "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+              "no_return_repair": "disabled-windows-p0",
+              "process_launch": "official-headless-script-v1",
+              "jump_table_evidence": "typed-case-default-blocks-v1",
+              "decompiler_jump_loads": true,
+              "loader": "auto-from-header",
+              "language_id": "auto-from-header",
+              "compiler_spec_id": "auto-default",
+              "analyzer_preset": "ghidra-default",
+              "function_coordinate_context": {
+                "kind": "native-function-coordinate-context-v1",
+                "selected_image": null,
+                "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+              }
+            },
+            "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+          }
+        }
+      },
+      "profile_evidence_missing": [],
+      "export_inventory": {
+        "entries": 846,
+        "scope": "PE exports only",
+        "evidence_id": "ev_d4edd1dd254aef37e75f3bdfb0bc60500eefa5ad1fbfdde88f14ec4baf91ead0"
+      },
+      "complete_discovered_inventory": true,
+      "discovered_count": 10398,
+      "local_without_confirmed_C": 2292,
+      "local_without_saved_C": 2292
+    },
+    "vgui2": {
+      "binary": "vgui2.dll",
+      "binary_sha256": "42107e58ad018020de5b5b7253f512c7265d6e12ab3f68c45b00cd475011472b",
+      "captured_paths": [
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\vgui2.dll"
+      ],
+      "capture_manifests": [
+        {
+          "path": "decompiled/vgui2/captures/menu-switch-vgui-font/capture.json",
+          "sha256": "d14e680893d2f11f54c0efbabbbe141ad2fde22c10a5df024fb34cee4ccc301f"
+        },
+        {
+          "path": "decompiled/vgui2/captures/menu-switch-vgui-font-detail/capture.json",
+          "sha256": "5c32189de4f4e553bb491dc92cb8da20efcd3691c1e30971207527bc45b915f8"
+        }
+      ],
+      "c_files": 5,
+      "unique_address_records": 5,
+      "confirmed_actual_entries": 5,
+      "unconfirmed_entry_records": 0,
+      "selector_mismatch_files": 3,
+      "address_min": "0x100135cf",
+      "address_max": "0x100277b0",
+      "address_extent_is_coverage": false,
+      "profiles_from_saved_query_evidence": {
+        "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6": {
+          "count": 5,
+          "provider": {
+            "id": "ghidra",
+            "name": "Ghidra",
+            "version": "12.1.4"
+          },
+          "example": {
+            "path": "analysis/local/menu-switch-vgui-font/001-procedure_pseudo_code.json",
+            "sha256": "9dae1c8c312f3c63383dd9ad4bf68bf95a4a7d3fb01b27864cd6572029174e44"
+          },
+          "profile": {
+            "provider": {
+              "id": "ghidra",
+              "name": "Ghidra",
+              "version": "12.1.4"
+            },
+            "parameters": {
+              "target_kind": "executable",
+              "target_format": "pe",
+              "executable_role": "shared-library",
+              "managed": false,
+              "native_aot_metadata": {
+                "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+                "source_bytes": 134217728,
+                "work_units": 67108864,
+                "working_memory_bytes": 67108864,
+                "report_bytes": 4194304
+              },
+              "architecture": "x86",
+              "available_architectures": [
+                "x86"
+              ],
+              "import_mode": "ephemeral-source-immutable",
+              "pdb_observations": "program-info-v5",
+              "annotation_policy": "atomic-function-entry-metadata-v1",
+              "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+              "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+              "function_body_evidence": "complete-inclusive-ranges-v1",
+              "function_references": "complete-body-and-entry-reference-manager-v3",
+              "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+              "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+              "native_value_flow_projection": "accepted-runtime-budgets-v1",
+              "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+              "string_inventory_evidence": "defined-data-coverage-v1",
+              "inventory_search_projection": "provider-inventory-facts-v1",
+              "data_type_observations": "bit-field-base-and-lookup-v1",
+              "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+              "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+              "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+              "instruction_flow_evidence": "decoded-return-pcode-v1",
+              "instruction_status": "unlisted-and-containing-code-data-v3",
+              "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+              "byte_search_coverage": "separate-loaded-overlays-v1",
+              "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+              "no_return_repair": "disabled-windows-p0",
+              "process_launch": "official-headless-script-v1",
+              "jump_table_evidence": "typed-case-default-blocks-v1",
+              "decompiler_jump_loads": true,
+              "loader": "auto-from-header",
+              "language_id": "auto-from-header",
+              "compiler_spec_id": "auto-default",
+              "analyzer_preset": "ghidra-default",
+              "function_coordinate_context": {
+                "kind": "native-function-coordinate-context-v1",
+                "selected_image": null,
+                "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+              }
+            },
+            "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+          }
+        }
+      },
+      "profile_evidence_missing": [],
+      "export_inventory": {
+        "entries": null,
+        "scope": "PE exports only",
+        "evidence_id": null
+      },
+      "complete_discovered_inventory": true,
+      "discovered_count": 2358,
+      "local_without_confirmed_C": 2128,
+      "local_without_saved_C": 2128
+    }
+  },
+  "unknowns": [
+    "Provider discovery may miss, split or merge code; no percentage of all game functions is claimed.",
+    "Complete exports are not internal function inventories. REVIEW is not semantic completeness.",
+    "Unresolved C selectors are never counted as confirmed actual entries. Missing-confirmation sets can overlap such C.",
+    "Additional dependency DLLs and dynamic paths are outside these six corpus modules."
+  ],
+  "client_inventory": {
+    "evidence_id": "ev_edbc5a353e4d89fb6c35ab5e41b6b578dbe8f2cbf5a0599612c8da23974f6525",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "parameters": {},
+    "discovered_count": 9664,
+    "kinds": {
+      "external": 748,
+      "local_function": 8314,
+      "local_thunk": 602
+    },
+    "saved_address_records": 474,
+    "confirmed_saved_actual_entries": 468,
+    "confirmed_saved_in_inventory": 468,
+    "confirmed_saved_outside_inventory": [],
+    "confirmed_saved_kinds": {
+      "local_function": 465,
+      "local_thunk": 3
+    },
+    "unresolved_saved_records": 6,
+    "local_without_confirmed_C": 8448,
+    "local_without_confirmed_C_kinds": {
+      "local_function": 7849,
+      "local_thunk": 599
+    },
+    "definitely_unexported_count": null,
+    "qualification": "Entries without confirmed saved C, not necessarily never decompiled when unresolved bodies exist."
+  },
+  "engine_inventory": {
+    "evidence_id": "ev_31471ee65e43413aa555ac09930f998fb1dd033e930feceb23e2da4af3adaee2",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "parameters": {},
+    "discovered_count": 10281,
+    "kinds": {
+      "external": 687,
+      "local_function": 9556,
+      "local_thunk": 38
+    },
+    "saved_address_records": 45,
+    "confirmed_saved_actual_entries": 44,
+    "confirmed_saved_in_inventory": 44,
+    "confirmed_saved_outside_inventory": [],
+    "confirmed_saved_kinds": {
+      "local_function": 44
+    },
+    "unresolved_saved_records": 1,
+    "local_without_confirmed_C": 9550,
+    "local_without_confirmed_C_kinds": {
+      "local_function": 9512,
+      "local_thunk": 38
+    },
+    "definitely_unexported_count": null,
+    "qualification": "Entries without confirmed saved C, not necessarily never decompiled when unresolved bodies exist."
+  },
+  "gameui_inventory": {
+    "evidence_id": "ev_90c7aa7ce831d90dce4a24513971048c6e265ce879be3ef35cce4dfe48bea0c3",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "parameters": {},
+    "discovered_count": 6140,
+    "kinds": {
+      "external": 119,
+      "local_function": 6001,
+      "local_thunk": 20
+    },
+    "saved_address_records": 126,
+    "confirmed_saved_actual_entries": 126,
+    "confirmed_saved_in_inventory": 126,
+    "confirmed_saved_outside_inventory": [],
+    "confirmed_saved_kinds": {
+      "local_function": 126
+    },
+    "unresolved_saved_records": 0,
+    "local_without_confirmed_C": 5895,
+    "local_without_confirmed_C_kinds": {
+      "local_function": 5875,
+      "local_thunk": 20
+    },
+    "definitely_unexported_count": 5895,
+    "qualification": "Entries without confirmed saved C, not necessarily never decompiled when unresolved bodies exist."
+  },
+  "opengl_inventory": {
+    "evidence_id": "ev_f3c9eec4b9a518469ab14dca170abd4ae1a950ae466e535f640b8c1d369dcaff",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "parameters": {},
+    "discovered_count": 385,
+    "kinds": {
+      "external": 14,
+      "local_function": 367,
+      "local_thunk": 4
+    },
+    "saved_address_records": 5,
+    "confirmed_saved_actual_entries": 0,
+    "confirmed_saved_in_inventory": 0,
+    "confirmed_saved_outside_inventory": [],
+    "confirmed_saved_kinds": {},
+    "unresolved_saved_records": 5,
+    "local_without_confirmed_C": 371,
+    "local_without_confirmed_C_kinds": {
+      "local_function": 367,
+      "local_thunk": 4
+    },
+    "definitely_unexported_count": null,
+    "qualification": "Entries without confirmed saved C, not necessarily never decompiled when unresolved bodies exist."
+  },
+  "server_inventory": {
+    "evidence_id": "ev_cc94a8af5d80cf01457b5ce83bc6a8e0fec9efb3eff252fce12df1be7d67f095",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "parameters": {},
+    "discovered_count": 10398,
+    "kinds": {
+      "external": 106,
+      "local_function": 9799,
+      "local_thunk": 493
+    },
+    "saved_address_records": 8000,
+    "confirmed_saved_actual_entries": 8000,
+    "confirmed_saved_in_inventory": 8000,
+    "confirmed_saved_outside_inventory": [],
+    "confirmed_saved_kinds": {
+      "local_function": 7512,
+      "local_thunk": 488
+    },
+    "unresolved_saved_records": 0,
+    "local_without_confirmed_C": 2292,
+    "local_without_confirmed_C_kinds": {
+      "local_function": 2287,
+      "local_thunk": 5
+    },
+    "definitely_unexported_count": 2292,
+    "qualification": "Entries without confirmed saved C, not necessarily never decompiled when unresolved bodies exist.",
+    "saved_unique_actual_entries": 8000,
+    "saved_kinds": {
+      "local_function": 7512,
+      "local_thunk": 488
+    },
+    "partial_pass_entries": 8000,
+    "later_capture_new_actual_entries": [],
+    "local_without_C": 2292,
+    "local_without_C_kinds": {
+      "local_function": 2287,
+      "local_thunk": 5
+    },
+    "external_not_C": 106,
+    "missing_min": "0x1016d3fb",
+    "missing_max": "0x101a0e62"
+  },
+  "vgui2_inventory": {
+    "evidence_id": "ev_e30a7242779617c8dd07e5ed85dc25097dcb1b7bd965d2dbad38b82dd4a29e72",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "parameters": {},
+    "discovered_count": 2358,
+    "kinds": {
+      "external": 225,
+      "local_function": 2129,
+      "local_thunk": 4
+    },
+    "saved_address_records": 5,
+    "confirmed_saved_actual_entries": 5,
+    "confirmed_saved_in_inventory": 5,
+    "confirmed_saved_outside_inventory": [],
+    "confirmed_saved_kinds": {
+      "local_function": 5
+    },
+    "unresolved_saved_records": 0,
+    "local_without_confirmed_C": 2128,
+    "local_without_confirmed_C_kinds": {
+      "local_function": 2124,
+      "local_thunk": 4
+    },
+    "definitely_unexported_count": 2128,
+    "qualification": "Entries without confirmed saved C, not necessarily never decompiled when unresolved bodies exist."
+  }
+}

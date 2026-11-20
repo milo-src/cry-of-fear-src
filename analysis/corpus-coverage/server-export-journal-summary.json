@@ -1,0 +1,109 @@
+{
+  "source": {
+    "path": "analysis/local/full-decompile/server/export/decompile-index.json",
+    "sha256": "da27d5eaa4f372a50fa2e9bbf4412ac8d11c48c6f644e29ee56a02efa528e203"
+  },
+  "version": 1,
+  "target_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.4"
+  },
+  "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+  "layout": "address",
+  "layout_status": "address",
+  "latest_run": {
+    "resume": true,
+    "selected": 10398,
+    "excluded": 0,
+    "selection": {
+      "name": null,
+      "namespace": null,
+      "address_start": null,
+      "address_end": null,
+      "limit": 500
+    },
+    "inventory_limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+      "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+      "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+      "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+      "The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+    ]
+  },
+  "limitations": [],
+  "function_status_counts": {
+    "written": 8000
+  },
+  "progress_source": {
+    "path": "analysis/local/full-decompile/server/progress.json",
+    "sha256": "e83895953d9c046161defff83191614de51912481937049581755091f0eda38a"
+  },
+  "progress": {
+    "output_directory": "D:\\github\\cry-of-fear-src\\analysis\\local\\full-decompile\\server\\export",
+    "index_path": "D:\\github\\cry-of-fear-src\\analysis\\local\\full-decompile\\server\\export\\decompile-index.json",
+    "layout": "address",
+    "layout_status": "address",
+    "counts": {
+      "selected": 10398,
+      "excluded": 0,
+      "requested": 500,
+      "written": 500,
+      "failed": 0,
+      "external": 0,
+      "skipped": 7500,
+      "remaining": 2398
+    },
+    "failures": [],
+    "failures_omitted": 0,
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile_digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6",
+    "target_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+    "inventory_limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+      "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+      "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+      "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+      "The Ghidra Program references PDB hl.pdb (GUID 0df27cb6-7a64-4411-8b7f-c289db2bc9ff, age (hex) c, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+    ],
+    "limitations": [],
+    "resume": true
+  },
+  "request_source": {
+    "path": "analysis/local/full-decompile/server/request.json",
+    "sha256": "9b92f8c1f8f67f8381b339b4249767e0e44859ad2a3a797cf70fc01731f24488"
+  },
+  "request": {
+    "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll",
+    "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+    "target_executed": false,
+    "provider": "ghidra",
+    "scope": "all discovered functions; no name/address filters"
+  },
+  "open_source": {
+    "path": "analysis/local/full-decompile/server/open.json",
+    "sha256": "dadcfa32d44ac226b680ad01acff7e0c912b680af906f9394f9841cc3ac21652"
+  },
+  "open": {
+    "result": {
+      "path": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll",
+      "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+      "kind": "executable",
+      "format": "pe",
+      "architecture": "x86"
+    }
+  }
+}

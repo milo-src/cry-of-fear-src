@@ -1,0 +1,89 @@
+{
+  "module": "client",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "source_c": [
+    {
+      "path": "decompiled/client/captures/profont-pass02/001-pseudocode.c",
+      "sha256": "b3b3b42776474196e099f20374664a67517578b86eb270a6c8f3924d20eaad7c"
+    },
+    {
+      "path": "decompiled/client/captures/profont-pass03/000-pseudocode.c",
+      "sha256": "8e23ff539237af55d1cd351474bf1f66756bf1a2e7e3250bf6ad5ff81596620b"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "sha256": "d9d1cf6174f7c3e31581ad06ae02592bd97504131f1fdc2d7d2fe885b8d4b434"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-abi/001-pseudocode.c",
+      "sha256": "76f922e8c0199dd2d77ab82cdfb578b449b6ae7640b980d3cccffffae33f73d6"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-abi/002-pseudocode.c",
+      "sha256": "223e0e1272962ec6f894dfd1d17a5ce55e5429d1c75614e0541d4fb1ed646f58"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-music-wire/000-pseudocode.c",
+      "sha256": "a68928e108952169299093fe1284aa5cd354940c36396058081df8d1d70a0e2a"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-gl-cleanup-boundary/000-pseudocode.c",
+      "sha256": "5bf98dec37b6328f63b977b59915414979d69e386b6505711976299984fa5871"
+    }
+  ],
+  "ranges": [
+    {
+      "path": "analysis/client-profont/1006e930.asm",
+      "start": "0x1006e930",
+      "end_exclusive": "0x1006e94b",
+      "sha256": "8e82ef2e1032cb0b3350dc0a908e4189378e5ca7e8ed20405ee046e604290674",
+      "binary_range_sha256": "909789eca451611441fa57c12acd6023c6e3aa3b847079f3c7038f4593cae1ae"
+    },
+    {
+      "path": "analysis/client-profont/100712a0.asm",
+      "start": "0x100712a0",
+      "end_exclusive": "0x10071438",
+      "sha256": "0c6432ce942a6c1d02fa64fff3516c60ac3c19dbe958f686a87ad6df9301737e",
+      "binary_range_sha256": "8c9cf6909a30f228c0aef35d0a7cd2628488db3afd248ccfce72f150a0bf65be"
+    },
+    {
+      "path": "analysis/client-profont/100b42c0.asm",
+      "start": "0x100b42c0",
+      "end_exclusive": "0x100b42d1",
+      "sha256": "ce6fc09312049a24f991ab9deb7337a6eb847b793af31e738950ba21a90639c3",
+      "binary_range_sha256": "19cc9d803eb104d12424e73fbee77052fd4f0c5b41b570206f68742dd405f2f5"
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x1014ef4c",
+      "bytes_hex": "444541444e4f5449465900",
+      "file_offset": "0x14d94c",
+      "sha256": "f984740fca8353637bbeff3618677c3a6b2d0ed2d8e646fe7eb7b2c7d692532d",
+      "ascii": "DEADNOTIFY"
+    },
+    {
+      "address": "0x1014ef58",
+      "bytes_hex": "2b6a756d7000",
+      "file_offset": "0x14d958",
+      "sha256": "3d21fc82f34364a5092505f7523403e383f7282c4ade28dff66a7d87dedcb886",
+      "ascii": "+jump"
+    },
+    {
+      "address": "0x1014ef60",
+      "bytes_hex": "507265737320257320746f207265737061776e20286c6f736520776561706f6e7329206f72207761697420746f206265207265766976656400",
+      "file_offset": "0x14d960",
+      "sha256": "d24be7b47d89e71e6464bba88c4af3f08d59651c26c46ab88caa2031496b38d2",
+      "ascii": "Press %s to respawn (lose weapons) or wait to be revived"
+    },
+    {
+      "address": "0x1014ef9c",
+      "bytes_hex": "5072657373206a756d7020746f207265737061776e20286c6f736520776561706f6e7329206f72207761697420746f206265207265766976656400",
+      "file_offset": "0x14d99c",
+      "sha256": "1f5ead2375f080de75201f3e468dfc934b3e64bc164cd5d2cffe1cb142fd3871",
+      "ascii": "Press jump to respawn (lose weapons) or wait to be revived"
+    }
+  ]
+}

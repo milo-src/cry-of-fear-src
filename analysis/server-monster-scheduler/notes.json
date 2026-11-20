@@ -1,0 +1,311 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1000aa50",
+      "proposed_name": "CBaseMonster_ChangeSchedule",
+      "subsystem": "monsters",
+      "summary_ru": "Устанавливает расписание и сбрасывает состояние задач, проверяя согласованность sound-mask.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall(schedule*), RET4. Пишет this+230=schedule, +234(index)=0, +22c(status)=0, +180(conditions)=0, +320(failSchedule)=0. Входной NULL не проверяет: затем читает schedule+8/+c.",
+        "Если interruptMask&20000 и soundMask==0, AlertMessage(2,\"COND_HEAR_SOUND with no sound mask!\"); при обратном несовпадении диагностирует Sound mask without COND_HEAR_SOUND. Только сообщение, записанное расписание не откатывается и маски не исправляются.",
+        "Native descriptors10216e08 подтверждают имена всех сбрасываемых полей кроме transient pointer+230; layout расписания и task8-byte stride подтверждены consumers и raw records."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000aa50.c",
+        "analysis/server-monster-scheduler/1000aa50.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000aad0",
+      "proposed_name": "CBaseMonster_ClearSchedule",
+      "subsystem": "monsters",
+      "summary_ru": "Обнуляет текущее расписание, статус и индекс задачи.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall без аргументов: +22c=0,+230=NULL,+234=0. Conditions+180 и failSchedule+320 не сбрасываются, в отличие от ChangeSchedule; владение/освобождение памяти отсутствует."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000aad0.c",
+        "analysis/server-monster-scheduler/1000aad0.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000aaf0",
+      "proposed_name": "Entity_ClassnameEquals",
+      "subsystem": "monsters",
+      "summary_ru": "Сравнивает classname из entvars с переданной строкой.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(entvars*,const char*), полный EAX0/1. Сравнивает NUL-terminated bytes из globalvars.stringbase+DWORD(entvars+0) и аргумента; exact case-sensitive equality, не wildcard.",
+        "Не проверяет указатели/длины; развернутый цикл сравнивает до двух байт за итерацию и немедленно останавливается на NUL/различии. Не является методом monster; classname смещение подтверждено callers."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000aaf0.c",
+        "analysis/server-monster-scheduler/1000aaf0.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000ab50",
+      "proposed_name": "CBaseMonster_ScheduleDone",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет точное равенство индекса числу задач.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall, полный EAX= (this+234 == DWORD(schedule+4)). Нет NULL-check schedule, нет >=: индекс за концом не считается завершением."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000ab50.c",
+        "analysis/server-monster-scheduler/1000ab50.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000ab70",
+      "proposed_name": "CBaseMonster_IsScheduleValid",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет наличие расписания и отсутствие условий прерывания.",
+      "confidence": "high",
+      "details_ru": [
+        "Полный EAX1 iff schedule!=NULL && (conditions & (schedule.interruptMask | c0000000))==0, иначе0. Не проверяет index/count/task pointers. Биты40000000/80000000 принудительно делают расписание невалидным независимо от interruptMask."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000ab70.c",
+        "analysis/server-monster-scheduler/1000ab70.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000abf0",
+      "proposed_name": "CBaseMonster_GetSchedule",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает тип расписания по состоянию, условиям, маршруту и rush/script полям.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall без аргументов, EAX=schedule*. Virtual+18c получает numeric type; concrete CGenericMonster table101ce36c указывает1008ca70, но другие subclasses могут переопределять. State0/необработанные→diagnostic и raw Error schedule10213310.",
+        "States1 и3 сначала: rushName+358!=0, deadline+364<time и deadline!=-1 →FindTargetname; найденный entity передают1010b540 и результат сохраняют EHANDLE+18c, затем type2a. Не найден→deadline=-1 и продолжение. Helper1010b540 по ASM возвращает найденный pev.message target либо исходный rush entity; Ghidra void неверен.",
+        "State1 после rush: condition20000→type5; иначе RouteClear100bdf30 true→type1, false→type2. State3: condition100000 и LookupActivity(41)!=-1→typee; conditions300 отсутствуют→20000?5:8; иначе abs(yawDelta)<(1-FOV+208)*60→type14, иначе6.",
+        "State2 при100000 очищает enemy EHANDLE+184; virtual208 true очищает100000 и вызывает virtual190; false SetState(3), затем virtual190. Дальнейший приоритет:10000→3;100 и !(memory+2ec&40)→11; !10→(20?c:a);400→18;1000→19;800→16;2000→17. Остаточная ветка проверяет c00/100be5b0 и может диагностировать No suitable combat schedule.",
+        "State5→26;8→21;6 при pCine+34c!=NULL→28, иначе diagnostic,100fa530(this),type1. Возврат virtual selector не проверяется на NULL; выбор здесь не устанавливает расписание. Все numeric значения hex; raw native schedule names сохранены в evidence."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000abf0.c",
+        "analysis/server-monster-scheduler/1000abf0.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1008ca70.c",
+        "decompiled/server/partial-pass/functions/0x1010b540.c",
+        "decompiled/server/partial-pass/functions/0x100bdf30.c",
+        "decompiled/server/partial-pass/functions/0x100bed20.c",
+        "decompiled/server/partial-pass/functions/0x100c2a70.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000afe0",
+      "proposed_name": "CBaseMonster_GetTask",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает указатель на текущую 8-байтовую задачу.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall→EAX task*. Signed index>=0 && index<schedule.count →schedule.tasks+index*8, иначеNULL. Отрицательный index сразуNULL; при nonnegative index schedule разыменовывается без NULL-check. Нет проверки самого массива/overflow. Task DWORD id + float data."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000afe0.c",
+        "analysis/server-monster-scheduler/1000afe0.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000b000",
+      "proposed_name": "CBaseMonster_ScheduleInterruptConditions",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает пересечение условий с маской текущего расписания.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall→DWORD EAX. NULL schedule→0; иначе schedule.interruptMask & conditions. Дополнительные c0000000 из IsScheduleValid сюда не добавляет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000b000.c",
+        "analysis/server-monster-scheduler/1000b000.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000b020",
+      "proposed_name": "ScriptEntity_IsScriptedAction",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет exact classname scripted_action у объекта.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall→полный EAX0/1. Читает this.pev.classname через global stringbase, case-sensitive NUL equality со строкой scripted_action. Нет NULL/length guards. StartTask вызывает с ECX=pCine, не monster."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000b020.c",
+        "analysis/server-monster-scheduler/1000b020.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000b070",
+      "proposed_name": "CBaseMonster_MaintainSchedule",
+      "subsystem": "monsters",
+      "summary_ru": "Выполняет ограниченный цикл смены расписаний и запуска задач, затем один RunTask.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall без аргументов; до10 итераций. Если schedule!=NULL и status==4, TaskAdvance; затем при !IsScheduleValid либо currentState!=idealState запускает virtual194.",
+        "Virtual1ac вызывается только idealState!=8 и (idealState!=6 || currentState==6) и хотя бы: signed conditions>0 (signbit уже0; очистки бита нет); schedule!=NULL и signed interruptMask<0; currentState==2 и enemy EHANDLE+184 invalid. Это не простая проверка conditions!=0.",
+        "Если taskfail40000000 установлен и state==ideal, selector18c(failSchedule либо29), diagnostic с taskIndex. Иначе SetState(ideal); для состояний6/8 прямой GetSchedule1000abf0, для остальных virtual190. ChangeSchedule сбрасывает условия и failSchedule; schedule pointer не проверяется.",
+        "status0→GetTask, status=1, virtual184(task); различие activity/ideal→virtual1b0(ideal). Цикл повторяется только status4 либо0; лимит10. Затем TaskRunning100c26f0 (status не4 и не2)→GetTask→virtual188(task) ровно один раз; снова синхронизация activity.",
+        "В CGenericMonster vtable184=StartTask1000bc60,188=RunTask1000b2f0,190=GetSchedule1000abf0,194=noop10014b20. NULL task может дойти до virtual call; цикл не гарантирует прогресс для некорректного расписания."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000b070.c",
+        "analysis/server-monster-scheduler/1000b070.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100c26f0.c",
+        "decompiled/server/partial-pass/functions/0x100c2a70.c",
+        "decompiled/server/partial-pass/functions/0x10017780.c",
+        "decompiled/server/partial-pass/functions/0x10014b20.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000b230",
+      "proposed_name": "CBaseMonster_TaskAdvance",
+      "subsystem": "monsters",
+      "summary_ru": "Сдвигает индекс задачи и при точном конце ставит condition schedule-done.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall: ++index+234, status+22c=0; ScheduleDone1000ab50 true→conditions|80000000. Не очищает остальные условия, не выбирает новое расписание, не clamp index; предполагает schedule!=NULL."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000b230.c",
+        "analysis/server-monster-scheduler/1000b230.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000b260",
+      "proposed_name": "Vector2D_NormalizeTo",
+      "subsystem": "monsters",
+      "summary_ru": "Нормализует два float-компонента в отдельный возвращаемый буфер.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall с ECX=inputXY, stack outputXY*, RET4, EAX=output. Вычисляет float-rounded sqrt(float(x*x+y*y)); exact length0→два нуля, иначе out=(x,y)/length. Пишет только8байт, Z отсутствует.",
+        "Ноль обрабатывается до деления; NaN/Inf не нормализуются отдельно. Вычисление суммы SSE float, sqrt double с fallback __libm_sse2_sqrt_precise; final length округляется float. In-place output поддерживается для того же XY, произвольное частичное перекрытие не гарантировано."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000b260.c",
+        "analysis/server-monster-scheduler/1000b260.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000bbf0",
+      "proposed_name": "CBaseMonster_SetTurnActivity",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает доступную turn-анимацию по разнице yaw.",
+      "confidence": "high",
+      "details_ru": [
+        "thiscall. Получает float yawDelta через100bed20; при delta<=-45 и LookupActivity(10)!=-1 пишет idealActivity10 и return. Иначе при delta>45 и доступном activityf пишет idealActivityf; остальные случаи сохраняют прежнее значение.",
+        "Асимметрия границ: -45 включено, +45 исключено. Сам yaw не меняет, SetActivity не вызывает, task не завершает."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000bbf0.c",
+        "analysis/server-monster-scheduler/1000bbf0.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100bed20.c",
+        "decompiled/server/partial-pass/functions/0x1000e950.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000b2f0",
+      "proposed_name": "CBaseMonster_RunTask",
+      "subsystem": "monsters",
+      "summary_ru": "Продолжает текущую задачу: ожидание, поворот, преследование, rush, смерть или сценарную анимацию.",
+      "confidence": "medium",
+      "details_ru": [
+        "thiscall(Task*), RET4; task.id1..5c проходит byte-remap+16-target table, default no-op. Завершение ставит status4 только если !(conditions&40000000); failure OR40000000. Task/data/required handles/script pointers не валидируются универсально.",
+        "Tasks1/2/55 ждут time>=waitFinished;2 предварительно MakeIdealYaw(enemyLKP) и virtual130(trunc(pev.yaw_speed)), ST0 discarded. Повороты1e/1f/21/22/23/58/59 вызывают тот же virtual и завершаются при abs(yawDelta)<=0.006;20 сначала обновляет idealYaw по enemyLKP.",
+        "Task3 engine callbacks10222f8c(self.edict) и10223060(result), ожидает ненулевых результатов. Tasks1a/1d/3f ждут this+f8!=0. Tasks40/41 дополнительно поворачиваются к enemy+184 / target+18c (точный выбор по ASM); отсутствие entity не отменяет проверку f8.",
+        "Tasks24..28/2e/2f сначала ориентируются к enemyLKP, затем вместе29..2d ждут f8; когда готово, activity+214=0 и conditional completion. Callback130 принимает INT yaw_speed (CVTTSS2SI), а не float.",
+        "Task7: target EHANDLE+18c invalid→fail. Использует XY расстояние monster→cachedMoveGoal; если distance<data либо 3D drift cachedGoal→target>data/2, копирует target.origin и вызывает100bddb0. При новом distance<data complete+100c1a70; иначе distance<190 переключает movementActivity3, distance>=270 переключает4, в промежутке сохраняет. Task8 аналогичен с rushDistance+360, перед обновлением может перевыбрать rush target через1010b540; по достижении очищает rushName и target handle, вызывает1010f330(rushEntity,this) либо diagnostic.",
+        "Task4e ждёт f8 и pev.frame>=255: deadflag2, think10017aa0, schedule(float20.0), framerate0; меняет bounds (плоский hull если100bc3f0 true, иначе(-4,-4,0)..(4,4,1)); virtual12c true→1008ac50 fade, иначе helper10100820(type8,origin,decimal384=0x180,float30.0), назначение здесь не расширяется.",
+        "Task4f ждёт script+3a8<=0 и time>=script+3ac. Task50 при f8 и script+39c>0 уменьшает count, восстанавливает pev.frame изscript+3a0 и ResetSequenceInfo1000e9e0; иначеcomplete. Task5c ждёт movementGoal+2b8==0, complete и100c1a70.",
+        "Полные таблицы dispatch и finite-input границы сохранены; эффекты navigation/animation/sound helpers и конкретных virtual overrides требуют отдельных карточек. Не объявляется полностью восстановленным AI."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000b2f0.c",
+        "analysis/server-monster-scheduler/1000b2f0.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100be5b0.c",
+        "decompiled/server/partial-pass/functions/0x100bed20.c",
+        "decompiled/server/partial-pass/functions/0x100c1a70.c",
+        "decompiled/server/partial-pass/functions/0x1010b540.c",
+        "decompiled/server/partial-pass/functions/0x1010f330.c",
+        "decompiled/server/partial-pass/functions/0x10017790.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000bc60",
+      "proposed_name": "CBaseMonster_StartTask",
+      "subsystem": "monsters",
+      "summary_ru": "Запускает задачи расписания, задаёт movement/animation/script state и условия завершения или отказа.",
+      "confidence": "medium",
+      "details_ru": [
+        "thiscall(Task*), RET4; switch unsigned(id-1)<=5b; default diagnostic No StartTask entry, без taskfail/completion. Общий epilogue complete только если fail40000000 отсутствует; многие waiting cases возвращаются до него. Task.data float, integer states/masks/activities получают CVTTSS2SI, не reinterpret bits.",
+        "1/2 waitFinished=time+data;55 time+RandomFloat(.1,data);3/56 no-op.4 idealState=trunc(data);3d failSchedule=trunc(data);3e=0;3c selector18c(trunc(data))→ChangeSchedule, NULL→fail.5a memory|trunc(data),5b memory&~trunc(data).17 moveWaitFinished=time;18 lastPosition=origin;19 sharedVector10222f34.",
+        "5/6: moveTarget+0c exists, 3D distance>=1 и LookupActivity(3/4) succeeds→100c1080(activity,2.0,targetOrigin); failure диагностирует, ставитfail и100c1a70. Иные ветви complete.7 без предварительного valid-check разыменовывает target handle: distance<1→complete; иначе moveGoal=targetOrigin и100c1120(3,.5), успех остаётсяrunning, failure fail.",
+        "8 rush: XYdistance<rushDistance→complete, очиститьrushName/target, callback1010f330 либоerror. Иначе movement= rushMovetype?3:4; если activity недоступна diagnostic и противоположная3/4;100c1120(activity,.5) true→running, false→fail и rushDeadline+364=time+3. Resolver1010b540 возвращаетentity/self; все handle ECX offsets доказаны ASM.",
+        "9/a/b,d..13 формируют маршруты к enemy/LKP/corpse/player/target/script/hint/lastposition/bestsound/bestscent. Список helper args и failure boundaries дан в contract.14 выбирает4 если LookupActivity4 доступна, иначе3.15 сначала пишет5 при pev.movetype5, затем БЕЗУСЛОВНО перезаписывает3 если LookupActivity3 доступна, иначе4.16 выбирает movement11/12 по положительному dot двух normalizedXY.",
+        "1a idealActivity=signextended hint short+52;1b hint=100be8e0(),-1→fail;1c hint=-1.1d исключает monster_booksimon/monster_doctorboss, также bosschainsaw/sewerboss приpev.skin(+110)==1; иначе10089c80 вызывается дважды если первый результат!=3b, второй становитсяidealActivity.1e..23/58/59 готовят поворот, сохраняют running и вызывают1000bbf0; нет автоматического completion.",
+        "24/29→activity1c;25/2a→1d;26/2b→1e;27/2c→1f;28/2d→20;2e→3c;2f→3d.3b→trunc(data) иcomplete;3f/40/41→trunc(data) безcomplete.39 complete.3a/45 byte waitingToDie+1fc=1,virtual22c,complete;42 virtual234,43 virtual230;44 только если byte+1fc==0→virtual238,complete.",
+        "46/47/49/4a/4b/4c cover/path callbacks передают дваVector BY VALUE и min/max float; Ghidra ошибочно приписывает stack args EHANDLE helpers.49 max=virtual1d0,min0;4a max=data,min0;4b max=virtual1d0,min=data; при enemy invalid fail.46 bestsound origin + sharedVector viewOffset,min=float(sound+10),max=virtual1d0;47 выбираетenemy/self и сначала100bea60;4c self origin/viewoffset. Успех46/47/4c задаёт moveWaitFinished=time+data.",
+        "4e byte object+9=0,100c1a70,idealActivity=virtual20c(),pev.deadflag1,return.4f/50 используют pCine+34c: scripted_action classname и native sequenceID+36c/+370; virtual248(script,this,sequenceID,0 дляidle/1 дляplay) восстановлен поASM.4f не завершает пока script delay/count активны;50 action mapping0..7→1c,1d,1e,1f,3c,3d,20,7 плюсframerate1,movetype5,flags&~200,scriptState0; обычныйscript вызывает248 и при f8 ClearSchedule.",
+        "51 вызывает100fa990 наpCine сarg0;54 вызывает100fbb20 наpCine сargthis.52/53 script modes/view alignment описаны вcontract;57 stop при подстановке idle activity черезvirtual168;5c complete iff100bdf30 true. Индексы node/route, pCine и отдельные handles предполагаются корректными. Полные helpers/derived overrides остаются отдельными RE задачами."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000bc60.c",
+        "analysis/server-monster-scheduler/1000bc60.asm",
+        "analysis/server-monster-scheduler/contract.md",
+        "analysis/server-monster-scheduler/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000aba0.c",
+        "decompiled/server/partial-pass/functions/0x1008ca70.c",
+        "decompiled/server/partial-pass/functions/0x100132b0.c",
+        "decompiled/server/partial-pass/functions/0x100c1a70.c",
+        "decompiled/server/partial-pass/functions/0x100177a0.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}
