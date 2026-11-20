@@ -82,13 +82,16 @@
       "confidence": "high",
       "details_ru": [
         "Head10223190 является sentinel; обход начинается с head+3c. Вызывает100c4240(current), затем заново читает previous.next.",
-        "Если flags&0xa0==0, исключает current из списка и нулит его next+3c; иначе продвигает previous. Return100c4240 не используется. При NULL head только diagnostic; ограничения1000 проходов здесь нет."
+        "Если flags&0xa0==0, исключает current из списка и нулит его next+3c; иначе продвигает previous. Return100c4240 не используется. При NULL head только diagnostic; ограничения1000 проходов здесь нет.",
+        "Native StartFrame1001ece0 (EntityAPI slot25) выполняет tail JMP сюда после gamerules-подобного virtual+4, gate10222f04==0, записи globalvars+1c и увеличения10222ef0. Тело StartFrame сохранено как ASM-only support; внешний engine frame order ещё открыт."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x100c40c0.c",
         "analysis/server-queue-b/asm-parent/100c40c0.asm",
         "analysis/server-queue-b/contract-parent.md",
-        "analysis/server-queue-b/evidence-parent.json"
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
       ]
     },
     {
@@ -101,13 +104,16 @@
       "details_ru": [
         "Если doingDesired1022318c уже ненулевой, печатает diagnostic, но продолжает. Выставляет global=1 и проходит head.next+3c; next сохраняется до100c3e50(current).",
         "После каждого вызова уменьшает счётчик1000; на тысячном вызове diagnostic срабатывает даже если сохранённый next уже NULL. В обычном конце global=0.",
-        "Подтверждённый ранний путь при NULL head10223190 печатает ошибку и возвращается, оставляя doingDesired=1. Функция не удаляет записи из списка и не защищает сохранённый next от уничтожения callback."
+        "Подтверждённый ранний путь при NULL head10223190 печатает ошибку и возвращается, оставляя doingDesired=1. Функция не удаляет записи из списка и не защищает сохранённый next от уничтожения callback.",
+        "Native PlayerPostThink1001e770 (EntityAPI slot24) выполняет tail JMP сюда после optional player virtual+250 и восстановления globalvars.frametime из10222dfc. PreThink1001e7b0 slot23 сохраняет frametime после своего virtual+24c; engine pairing отдельно не доказан."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x100c4120.c",
         "analysis/server-queue-b/asm-parent/100c4120.asm",
         "analysis/server-queue-b/contract-parent.md",
-        "analysis/server-queue-b/evidence-parent.json"
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
       ]
     },
     {

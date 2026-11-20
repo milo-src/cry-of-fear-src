@@ -42,7 +42,7 @@ Name-first nearest101185c0 возвращает найденный named объ�
 
 | Объект | Данные | Владение / действие |
 |---|---|---|
-| CInfoAlias | pev+1d8 active message, pev+1ec pending noise3 | string_t, без собственной копии строки |
+| CInfoAlias | pev+1d8 active message, pev+1ec pending noise(+1ec) | string_t, без собственной копии строки |
 | CBaseAlias queue | world10223190+fc head; object+dc next; object+60 bit1000 | intrusive links; allocator/free отсутствует |
 | CInfoGroup | +dc count, +e0 names[16], +120 values[16], +160 defaultmember | AllocString для KV; member lookup возвращает string_t |
 | CMultiAlias | +e0 count,+e4 names[16],+124 total,+128 weights[16],+168 mode | AllocString names; atoi weights без clamp |
@@ -74,3 +74,5 @@ KV group/defaultmember и multi/m_iMode сравниваются case-sensitive.
 - PRNG1016d94c/1016d92b: global/thread ownership и алгоритм; для текущей карты вызовов достаточно зафиксированных вызовов/IDIV/сравнений.
 - Реальная достижимость raw-pointer trigger_changealias branch, циклических alias и malformed длинных map keys требует отдельной проверки; runtime разрешения в этой задаче нет.
 - Save/restore этих четырёх классов, loader field offsets и все inherited virtual callbacks не объявлены полностью разобранными. PE table prefix не равен полному C++ ABI класса.
+
+Уточнение native поля: ENTVARS table1021aae0 называет +1ec `noise` (type17), а +1f8 — `noise3`. Сохранение pending/active и alias links, factory/vtable/dispatch рассмотрены в [alias state](../server-alias-state/contract.md); семантика remapping — в [serializer](../server-serializer/contract.md).

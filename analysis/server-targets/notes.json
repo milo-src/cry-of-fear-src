@@ -261,13 +261,15 @@
       "summary_ru": "Сохраняет pending string_t и ставит alias в очередь.",
       "confidence": "high",
       "details_ru": [
-        "Записывает аргумент в pev+1ec (noise3 по SDK), затем101172e0(this). Активное имя pev+1d8 здесь не меняет; строка не копируется/не освобождается. ASM подтверждает PUSH ECX перед queue call."
+        "Записывает аргумент в pev+1ec (noise по native ENTVARS table1021aae0), затем101172e0(this). Активное имя pev+1d8 здесь не меняет; строка не копируется/не освобождается. ASM подтверждает PUSH ECX перед queue call."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x1000d550.c",
         "analysis/server-targets/contract.md",
         "analysis/server-targets/evidence.json",
-        "analysis/server-targets/1000d550.asm"
+        "analysis/server-targets/1000d550.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
       ]
     },
     {
@@ -295,13 +297,15 @@
       "summary_ru": "Продолжает поиск по активному имени alias.",
       "confidence": "high",
       "details_ru": [
-        "Передаёт start и poolbase+pev.message(+1d8) в10118590, возвращает EAX. Pending noise3 не читается, поэтому staged изменения невидимы до flush. Рекурсивный alias resolver не имеет локального cycle guard."
+        "Передаёт start и poolbase+pev.message(+1d8) в10118590, возвращает EAX. Pending noise(+1ec) не читается, поэтому staged изменения невидимы до flush. Рекурсивный alias resolver не имеет локального cycle guard."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x1000d6c0.c",
         "analysis/server-targets/contract.md",
         "analysis/server-targets/evidence.json",
-        "analysis/server-targets/1000d6c0.asm"
+        "analysis/server-targets/1000d6c0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
       ]
     },
     {
@@ -387,13 +391,15 @@
       "summary_ru": "Инициализирует активное имя alias согласно spawnflags bit0.",
       "confidence": "high",
       "details_ru": [
-        "При spawnflags&1 копирует pev.netname(+1d4) вmessage(+1d8); иначе pev.target(+1cc) вmessage. Не использует pending noise3, не добавляет очередь и не вызывает callback. Точная роль Spawn подтверждается ниже таблицей только если соответствующий slot прочитан; имя здесь ограничено действием."
+        "При spawnflags&1 копирует pev.netname(+1d4) вmessage(+1d8); иначе pev.target(+1cc) вmessage. Не использует pending noise(+1ec), не добавляет очередь и не вызывает callback. Точная роль Spawn подтверждается ниже таблицей только если соответствующий slot прочитан; имя здесь ограничено действием."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x1000e230.c",
         "analysis/server-targets/contract.md",
         "analysis/server-targets/evidence.json",
-        "analysis/server-targets/1000e230.asm"
+        "analysis/server-targets/1000e230.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
       ]
     },
     {
@@ -404,14 +410,16 @@
       "summary_ru": "Переключает bit0 и ставит соответствующее имя alias в очередь.",
       "confidence": "high",
       "details_ru": [
-        "Bit0 установлен: очищает, pending noise3=target; bit0 снят: устанавливает, pending=netname. Spawnflags&2 включает DEBUG on/off. В обоих случаях101172e0(this), активное message пока прежнее.",
+        "Bit0 установлен: очищает, pending noise(+1ec)=target; bit0 снят: устанавливает, pending=netname. Spawnflags&2 включает DEBUG on/off. В обоих случаях101172e0(this), активное message пока прежнее.",
         "ASM RET16: метод принимает стандартные четыре Use stack arguments, но тело их не читает; не применяет UseType on/off gating и всегда toggles."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x1000e310.c",
         "analysis/server-targets/contract.md",
         "analysis/server-targets/evidence.json",
-        "analysis/server-targets/1000e310.asm"
+        "analysis/server-targets/1000e310.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
       ]
     },
     {

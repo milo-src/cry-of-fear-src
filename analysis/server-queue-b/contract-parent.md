@@ -128,8 +128,7 @@ edict (при наличии), восстанавливает globals.frametime 
 tail-JMP в100c4120. ASM закрывает двусмысленный terminal-call комментарий
 Ghidra: здесь нормальный хвостовой переход, не доказательство no-return.
 Соседний1001e7b0 вызывает virtual+24c и сохраняет frametime в10222dfc.
-Их полная привязка к engine callback table и точка вызова100c40c0 остаются
-границей этого пакета; нельзя из этих двух тел обещать полный порядок кадра.
+Дополнительный [dispatch-разбор](../server-dispatch/contract.md) установил EntityAPI slots23/24: PreThink1001e7b0 и PostThink1001e770. StartFrame1001ece0 slot25 вызывает100c40c0 после gate; ServerDeactivate1001ea70 slot22 обнуляет sentinel. Полный порядок engine calls этим не установлен.
 
 ## Deadline внутри кадра: что именно масштабируется
 
@@ -228,8 +227,7 @@ world parent velocity/avelocity; это объясняет, почему DoneNow
 
 ## Точные оставшиеся вопросы
 
-- Engine registration и caller100c40c0: требуется восстановить место обоих
-  проходов в полном frame order, не только имеющийся tail wrapper1001e770.
+- Binding обоих проходов теперь описан в [dispatch contract](../server-dispatch/contract.md). Открыты полный engine frame order, player pairing и pusher/collision steps; локальные wrapper/caller уже найдены.
 - Построение и разрушение parent/child/sibling графа, проверки циклов и
   reparenting. UpdateOnRemove10102c50 принадлежит параллельному global-state
   разбору; этот пакет не обещает валидность всех входных деревьев.
@@ -242,3 +240,5 @@ world parent velocity/avelocity; это объясняет, почему DoneNow
 
 Эти границы не мешают использовать доказанные формулы и ABI для ориентации,
 но отделяют восстановленный код от ещё не подтверждённого поведения игры.
+
+Создание, смена и удаление parent links, BASE save fields, Attach/Use differences и bounds дополнены в [parent tree](../server-parent-tree/contract.md). Wire relocation BASE полей разобран в [serializer](../server-serializer/contract.md).

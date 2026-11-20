@@ -1,0 +1,597 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10116020",
+      "proposed_name": "SaveRestoreBuffer_BindData",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Привязывает reader/writer к внешнему save-data без выделения памяти.",
+      "details_ru": [
+        "ECX=this, stack data pointer; this[0]=data. ASM возвращает this в EAX и RET4, несмотря на void C.",
+        "Не обнуляет reader+4/+8 и поля самого data, не принимает владение. Настройка режима global/precache выполняется callers."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116020.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116020.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116140",
+      "proposed_name": "Save_BufferData",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Копирует bytes в текущий save cursor и обновляет позицию; overflow не возвращает boolean.",
+      "details_ru": [
+        "Thiscall(source,n), RET8. При data==NULL no-op. Signed проверка used+n<=capacity (data+8/+c); успех: copy10140130(cursor,source,n), cursor+=n, used+=n.",
+        "Overflow печатает Save/Restore overflow!, устанавливает used=capacity, но не изменяет cursor и не пишет payload. Возвращаемый EAX не является статусом; отрицательная длина/переполнение суммы отдельно не проверены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116140.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116140.asm",
+        "decompiled/server/partial-pass/functions/0x10140130.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101161a0",
+      "proposed_name": "Save_BufferField",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет заголовок именованного поля и затем его raw payload.",
+      "details_ru": [
+        "Thiscall(name,byteCount,data), RET0c. Сначала BufferHeader101161d0(name,count), затем BufferData10116140(data,count).",
+        "Нет rollback или остановки после ошибки заголовка. Частичная запись header/payload остаётся в общем буфере."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101161a0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/101161a0.asm",
+        "decompiled/server/partial-pass/functions/0x101161d0.c",
+        "decompiled/server/partial-pass/functions/0x10116140.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101161d0",
+      "proposed_name": "Save_BufferHeader",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет LE16 размер payload и LE16 токен имени поля.",
+      "details_ru": [
+        "Получает TokenHash10117220(name) в AX, расширяет до16бит; BufferData(&byteCount,2), затем BufferData(&token,2). Этот порядок подтверждён ASM.",
+        "Signed byteCount>65536 печатает diagnostic, но продолжает. Ровно65536 не предупреждает и пишет нулевые младшие16бит. Отрицательные/слишком большие длины не отвергаются; фактический payload верхний caller может писать исходной32битной длиной."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101161d0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/101161d0.asm",
+        "decompiled/server/partial-pass/functions/0x10117220.c",
+        "decompiled/server/partial-pass/functions/0x10116140.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116220",
+      "proposed_name": "Restore_CurrentPayloadPointer",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Возвращает текущий pointer save-data либоNULL при отсутствии контекста.",
+      "details_ru": [
+        "Читает this[0]; при ненулевом data возвращает DWORD data+4. Позицию не меняет, длину/валидность доступного payload не проверяет.",
+        "Указатель заимствован из save buffer и используется BufferReadHeader до продвижения cursor."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116220.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116220.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116230",
+      "proposed_name": "Restore_BufferReadBytes",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Читает или пропускает bytes с двумя проверками позиции и размера.",
+      "details_ru": [
+        "Thiscall(destination,n), RET8. data==NULL либо signed(cursor-base)>=capacity дают no-op. Если used+n>capacity: diagnostic Restore overflow!, used=capacity, cursor и destination остаются прежними.",
+        "Иначе при destination!=NULL копирует10140130(destination,cursor,n); при NULL только пропускает. В обоих случаях cursor+=n,used+=n. Нижних границ n/позиции и overflow арифметики здесь нет; явного success-return нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116230.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116230.asm",
+        "decompiled/server/partial-pass/functions/0x10140130.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101162a0",
+      "proposed_name": "Restore_BufferReadHeader",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Читает двухсловный header, сохраняет pointer payload и сразу пропускает payload.",
+      "details_ru": [
+        "Output struct: uint16 size+0, uint16 token+2, pointer+4. Два ReadU16, затем CurrentPayloadPointer, затем SkipBytes(zeroExtend(size)). ASM MOVZX подтверждает unsigned16 skip.",
+        "Размер не проверяется относительно ожидаемого типа. Возвращённый pointer может указывать на неполный payload при отказе skip; статус не передаётся."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101162a0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/101162a0.asm",
+        "decompiled/server/partial-pass/functions/0x10117160.c",
+        "decompiled/server/partial-pass/functions/0x10116220.c",
+        "decompiled/server/partial-pass/functions/0x10116310.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101162e0",
+      "proposed_name": "Restore_BufferRewind",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Сдвигает cursor и used назад на min(requested,used) по signed сравнению.",
+      "details_ru": [
+        "При data==NULL no-op; иначе n=min(requested,data.used) и вычитает n из data+4/+8. Нулевые/малые положительные запросы работают без обращения к payload.",
+        "Отрицательный requested не запрещён и математически сдвигает вперёд. ReadFields использует rewind4 при несовпавшем block token; функция не восстанавливает изменения token table."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101162e0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/101162e0.asm",
+        "decompiled/server/partial-pass/functions/0x10117010.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116310",
+      "proposed_name": "Restore_BufferSkipBytes",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пропускает указанное число байтов через общий BufferReadBytes.",
+      "details_ru": [
+        "Передаёт destination=NULL и исходный n в10116230, сохраняя его guards и отсутствие явного статуса; не читает содержимое поля.",
+        "Это не отдельная безопасная проверка целого record."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116310.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116310.asm",
+        "decompiled/server/partial-pass/functions/0x10116230.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116420",
+      "proposed_name": "SaveRestoreBuffer_IsAllZero",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Проверяет поле побайтно на нулевое представление для пропуска при сохранении.",
+      "details_ru": [
+        "Возвращает1 если n<=0 либо все n bytes равны0; первый ненулевой byte даёт0. Это raw-zero проверка, а не сравнение численного значения.",
+        "Writer вызывает перед записью count и повторно для каждого поля. Например float -0 имеет ненулевой знак и не эквивалентен all-zero на этом уровне."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116420.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116420.asm",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116490",
+      "proposed_name": "Restore_EntityFromSavedId",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Разрешает сохранённый ID через entity table и возвращает edict.",
+      "details_ru": [
+        "При data==NULL, id<0, count<=0 или отсутствии совпадения возвращаетNULL. Таблица data+28, count+20, шаг0x18; сравнивает record+0 с id, отдаёт record+4.",
+        "Это поиск по записанному ID, не прямой доступ table[id]. Первый duplicate ID выигрывает; указатель заимствован."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116490.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116490.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101164f0",
+      "proposed_name": "Save_EntityOrdinalFromEdict",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Находит порядковый индекс edict в save entity table.",
+      "details_ru": [
+        "При data==NULL либо edict==NULL возвращает-1. Ищет равенство record+4 с edict при count data+20, table+28, stride0x18, возвращает loop ordinal.",
+        "Возвращает ordinal, а не record+0; обратный reader10116490 ищет именно record+0. Согласованность этих двух значений зависит от producer таблицы, здесь не доказана."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101164f0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/101164f0.asm",
+        "decompiled/server/partial-pass/functions/0x10116490.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101164d0",
+      "proposed_name": "Save_EntityOrdinalFromEngineOffset",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Переводит engine entity offset в edict и затем save ordinal.",
+      "details_ru": [
+        "Callback1022305c (enginefuncs slot69 PEntityOfEntOffset) вызывается с исходным offset, затем101164f0(result). ASM сохраняет this и возвращает EAX, RET4.",
+        "Engine offset не равен IndexOfEdict или save ordinal. Нулевой/ошибочный результат callback получает-1 через общий lookup."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101164d0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/101164d0.asm",
+        "decompiled/server/partial-pass/functions/0x101164f0.c",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116530",
+      "proposed_name": "Save_EntityOrdinalFromEntvars",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Переводит entvars pointer через его edict+20c в save ordinal.",
+      "details_ru": [
+        "NULL entvars даёт-1; иначе извлекает DWORD entvars+20c и вызывает101164f0. Сам entvars не копируется.",
+        "Проверка принадлежности edict таблице выполняется callee; остальные указатели caller обязан предоставить корректными."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116530.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116530.asm",
+        "decompiled/server/partial-pass/functions/0x101164f0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116550",
+      "proposed_name": "Save_EntityOrdinalFromPrivateObject",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Переводит private entity object в save ordinal через entvars.",
+      "details_ru": [
+        "NULL object даёт-1. Иначе читает object+4 и вызывает10116530; это формат DLL object, не edict pointer.",
+        "Writer использует для type3 и разрешённого type4 handle."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116550.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116550.asm",
+        "decompiled/server/partial-pass/functions/0x10116530.c",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116910",
+      "proposed_name": "SaveRestoreBuffer_NameHash",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Считает32битный rotate/XOR hash NUL-имени.",
+      "details_ru": [
+        "Начинает h=0; для каждого ненулевого byte: h=ROR32(h,4) XOR signExtend(int8(byte)). ASM MOVSX, поэтому high-bit chars не эквивалентны unsigned byte.",
+        "Empty string даёт0; NULL не проверяется. Локального seed/state нет. Hash затем используется TokenHash, но не является самим16битным индексом."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116910.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116910.asm",
+        "decompiled/server/partial-pass/functions/0x10117220.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10117220",
+      "proposed_name": "SaveRestoreBuffer_TokenHashIntern",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Находит/добавляет имя в shared token table через linear probing.",
+      "details_ru": [
+        "This.data+14=tokenCount,+18=char** table. Hash10116910 unsigned modulo count, затем начальный индекс сужается до16бит; до count попыток linear probing с одним wrap и case-sensitive сравнением.",
+        "Пустой slot ИЛИ равная строка получают исходный pointer name; строка не копируется и равное имя может заменить pointer. Caller обязан обеспечить lifetime. Возврат надёжен в AX (MOV AX,BX); верх EAX на успешном пути не очищается.",
+        "При полной таблице diagnostic иAX0, совпадающий с допустимым slot0. DIV выполняется до signed count>0 guard: count0 не обрабатывается как штатная пустая таблица. data/table/name NULL и ограничениеcount<=65536 явно не проверены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10117220.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10117220.asm",
+        "decompiled/server/partial-pass/functions/0x10116910.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10117100",
+      "proposed_name": "Restore_ReadInt32",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Читает четыре байта из save buffer с нулевым default.",
+      "details_ru": [
+        "Локальный DWORD предварительно0, BufferReadBytes(&local,4), затемEAX=local. При no-op/overflow low-level reader результат0 без отдельного error flag.",
+        "Используется ReadFields для числа serialized records, которое не ограничивается верхним лимитом в этой обёртке."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10117100.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10117100.asm",
+        "decompiled/server/partial-pass/functions/0x10116230.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10117160",
+      "proposed_name": "Restore_ReadUInt16",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Читает два байта из save buffer и возвращает unsigned16.",
+      "details_ru": [
+        "Локальный DWORD=0; BufferReadBytes(&local,2); MOV AX,[local] возвращает только WORD в AX, не обнуляя старшие 16 бит EAX. При no-op/overflow нулевым гарантирован только AX. Caller должен сам выполнить zero-extension; BufferReadHeader/ReadFields это соблюдают. Little-endian следует из x86 raw copy.",
+        "При отсутствии/ошибке чтения получается0, не distinguishable от корректного нуля."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10117160.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10117160.asm",
+        "decompiled/server/partial-pass/functions/0x10116230.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116c30",
+      "proposed_name": "Restore_ReadEntvars",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Передаёт ENTVARS descriptor table из102 native полей общему reader.",
+      "details_ru": [
+        "Thiscall(blockName,entvars), table1021aae0,count0x66; RET8 и EAX ReadFields сохраняется. Никакой собственной фильтрации/реконструкции entvars нет.",
+        "Raw table хранит name/type/offset/count/flags для102 полей. В частности noise=1ec, noise3=1f8,vuser3=280; global-preserved flags1 у globalname/model/mins/maxs/size/target/targetname. Таблица не доказывает наличие save descriptors для всех байтов entvars."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116c30.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116c30.asm",
+        "decompiled/server/partial-pass/functions/0x10117010.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011ad70",
+      "proposed_name": "Save_WriteEntvars",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Выбирает диагностическое имя entity и сериализует102 ENTVARS descriptors.",
+      "details_ru": [
+        "Thiscall(blockName,entvars), RET8. Если entvars.targetname+1d0!=0, ownerLabel=stringBase+targetname, иначе stringBase+classname+0.",
+        "Вызывает WriteFields(ownerLabel,blockName,entvars,table1021aae0,0x66), возвращает EAX. OwnerLabel служит diagnostic function-pointer ошибки, не именем блока."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011ad70.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011ad70.asm",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c",
+        "decompiled/server/partial-pass/functions/0x1011b130.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10116c50",
+      "proposed_name": "Restore_DecodeNamedField",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Находит descriptor по имени и декодирует поле с entity/string/time преобразованиями.",
+      "details_ru": [
+        "Thiscall(base,descriptors,count,startIndex,payloadBytes,fieldName,payload), RET1c. Ищет descriptor с __stricmp от(start+i)%count; найденный index возвращается даже при global skip; отсутствие→-1. payloadBytes передаётся, но не читается в теле: локальной bounds-проверки payload нет.",
+        "Reader+4 и descriptor.flags&1 вместе запрещают запись; signed16 elementCount<=0 также не пишет. Table1021b140 задаёт generic stride4/12/2/1. Type4 destination отдельно исправляется на stride8 для(edict,serial) handle, payload остаётсяstride4.",
+        "Types0/9 rawDWORD;10/12 rawDWORD и global1023105c=это значение;13WORD;14BYTE;7vec3;8vec3+landmark только при data+52c;15float+data.time550. Integer/pointer ветви используют MOV, а Ghidra float casts не являются реальными conversions.",
+        "Types1/16/17 — последовательные NUL strings: пустая→string_t0, иначеAllocString; reader+8 разрешает precache model16/sound17. Type11: пустая→NULL, иначеFunctionFromName; array source дляtype11 использует genericstride4, отдельного packed-string array decoder нет.",
+        "Types2..6 разрешают savedID10116490:2→engine offset,3→private data(+7c),4→handle setter10017740,5→edict+80 entvars,6→edict. Missing3 диагностируется кромеID-1; остальные missing становятсяNULL/cleared handle.",
+        "Unknown type печатает diagnostic, но generic size table уже индексирована до range guard. Signed descriptor count, token strings и source lengths считаются согласованными на этом слое; полная валидация container не доказана."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10116c50.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10116c50.asm",
+        "decompiled/server/partial-pass/functions/0x10116490.c",
+        "decompiled/server/partial-pass/functions/0x10017740.c",
+        "decompiled/server/partial-pass/functions/0x10116990.c",
+        "decompiled/server/partial-pass/functions/0x10116a30.c",
+        "decompiled/server/partial-pass/functions/0x10117010.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011ad60",
+      "proposed_name": "Save_WriteRawField",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Tail-thunk записи named raw byte block.",
+      "details_ru": [
+        "ASM prologue/epilogue и JMP101161a0; наследует thiscall(name,byteCount,source), RET0c отcallee. Void/noargs Ghidra не является полнымABI.",
+        "Writer использует дляtype13 count*2 иtype14 count. Здесь нет преобразования байтов/terminator."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011ad60.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011ad60.asm",
+        "decompiled/server/partial-pass/functions/0x101161a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b110",
+      "proposed_name": "Save_WriteFloatArrayRaw",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет массив4байтовых значений без численных преобразований.",
+      "details_ru": [
+        "Thiscall(name,source,count), RET0c; BufferField(name,count<<2,source). Этот путь выбран дляtype0.",
+        "Никакой float formatting/endian swap/array clamp нет. Семантически это raw representation; arithmetic count*4 может переполниться, локальной проверки нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b110.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b110.asm",
+        "decompiled/server/partial-pass/functions/0x101161a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b190",
+      "proposed_name": "Save_WriteInt32ArrayRaw",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет named count*4 bytes, включая block record-count и entity IDs.",
+      "details_ru": [
+        "Thiscall(name,source,count), RET0c; BufferField(name,count<<2,source). Совпадает по byte behavior с1011b110, отдельный адрес сохранён.",
+        "Используется дляtypes9/10/12, преобразованного массиваentity refs и block count. Не проверяет content и не сообщает отдельноoverflow."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b190.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b190.asm",
+        "decompiled/server/partial-pass/functions/0x101161a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b130",
+      "proposed_name": "Save_WriteFunctionName",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Заменяет первый function pointer его engine name и пишет NUL-строку.",
+      "details_ru": [
+        "Thiscall(ownerLabel,fieldName,pointerAddress,count), RET10. ASM читает только *pointerAddress; четвёртый count игнорируется, несмотря на переданный descriptor count.",
+        "NameForFunction10223084(*ptr) ненулевой→BufferField(fieldName,strlen(name)+1,name); NULL→diagnostic с fieldName,ownerLabel,*ptr и никакой record не пишет. Верхний WriteFields уже посчитал поле непустым и не корректирует число records.",
+        "Это scalar implementation; нельзя обещать корректную поддержку массива function pointers. Engine symbol naming/lookup остаётся внешней границей."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b130.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b130.asm",
+        "decompiled/server/partial-pass/functions/0x101161a0.c",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b220",
+      "proposed_name": "Save_WritePositionVectorArray",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет vec3 относительно landmark offset при включённой корректировке.",
+      "details_ru": [
+        "Header(name,count*12), затем для каждого элемента копирует3float локально; если data!=NULL иdata+52c!=0, вычитает data+544/+548/+54c; пишет12bytes.",
+        "Источник не меняется. При count<=0 header всё ещё пишется с исходным count*12, а loop пропускается. ReadFieldtype8 делает обратное сложение; no finite/NaN normalization."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b220.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b220.asm",
+        "decompiled/server/partial-pass/functions/0x101161d0.c",
+        "decompiled/server/partial-pass/functions/0x10116140.c",
+        "decompiled/server/partial-pass/functions/0x10116c50.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b320",
+      "proposed_name": "Save_WriteStringIdArray",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Сериализует string_t array как подряд идущие NUL-строки.",
+      "details_ru": [
+        "Для count>0 два прохода: суммирует strlen(stringBase+ID)+1, пишетHeader(totalBytes), затем каждуюстроку включаяNUL. count<=0 пишетHeader0.",
+        "Типы1/16/17 используют одинаковыйwire. Не пишет сами ID, не выделяет память, не ограничивает каждую длину. Header16битный, суммарная32битная длина передаётсябезclamp; stringBase+0 читается как исходная строка, а не проверяетсякакNULL."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b320.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b320.asm",
+        "decompiled/server/partial-pass/functions/0x101161d0.c",
+        "decompiled/server/partial-pass/functions/0x10116140.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b3c0",
+      "proposed_name": "Save_WriteTimeArrayRelative",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет float-время относительно data.time.",
+      "details_ru": [
+        "ASM доказывает integer count в третьем stackarg, хотя Ghidra объявляетfloat: count*4 header; loop count>0, value=*source - data+550 еслиdata!=NULL.",
+        "Каждый localfloat пишется4bytes; источникне меняется. Reader type15 прибавляет своё data.time. Это exact arithmetic, не специальный sentinel-aware timer формат; all-zero field skip выполняется выше до преобразования."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b3c0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b3c0.asm",
+        "decompiled/server/partial-pass/functions/0x101161d0.c",
+        "decompiled/server/partial-pass/functions/0x10116140.c",
+        "decompiled/server/partial-pass/functions/0x10116c50.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011b440",
+      "proposed_name": "Save_WriteVectorArrayRaw",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет count vec3 без landmark поправки.",
+      "details_ru": [
+        "Header(name,count*12), BufferData(source,count*12). Thiscall/name-source-count,RET0c; тип7 вобщемwriter.",
+        "В отличие отPositionVector1011b220,это одинrawcopy без elementloop и безусловного пропуска count<=0. Negative/overflow count обработан только общими low-levelguards."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011b440.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011b440.asm",
+        "decompiled/server/partial-pass/functions/0x101161d0.c",
+        "decompiled/server/partial-pass/functions/0x10116140.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}

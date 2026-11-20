@@ -1,0 +1,52 @@
+{
+  "scope": "static original-server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1137,
+  "new_reviewed": 79,
+  "updated_existing": [
+    "server:0x1000d550",
+    "server:0x1000d6c0",
+    "server:0x1000e230",
+    "server:0x1000e310",
+    "server:0x100c40c0",
+    "server:0x100c4120",
+    "server:0x10117010",
+    "server:0x1011adc0",
+    "server:0x10121680"
+  ],
+  "after_reviewed": 1216,
+  "remaining_unreviewed": 7429,
+  "server_reviewed": 571,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 116,
+    "assembly_ranges": 105,
+    "verified_assembly_byte_rows": 3418,
+    "raw_records": 317,
+    "decoded_save_fields": 258,
+    "review_evidence_references": 446,
+    "synchronized_note_occurrences": 95
+  },
+  "checks": {
+    "prior_unrelated_reviews_preserved": true,
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "........\n----------------------------------------------------------------------\nRan 8 tests in 0.028s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_and_decompiled": true
+  },
+  "artifacts": [
+    "analysis/server-serializer/contract.md",
+    "analysis/server-parent-tree/contract.md",
+    "analysis/server-alias-state/contract.md",
+    "analysis/server-dispatch/contract.md"
+  ],
+  "catalog_sha256": "2f7b56dfb99bad697c07d7093a96f00cd097cf83e18475a8c502aff743278eab",
+  "progress_sha256": "984cc306054aa2193f6c00d3933041c0cf1e7547942278c6e676d318dd4da920"
+}

@@ -197,18 +197,22 @@
       "proposed_name": "CGlobalState_Save",
       "subsystem": "saving",
       "confidence": "high",
-      "summary_ru": "Сохраняет count и последовательность inline-полей глобальных записей.",
+      "summary_ru": "Сохраняет count и inline-поля global records; проверки writer не обнаруживают его низкоуровневые ошибки.",
       "details_ru": [
-        "ASM: thiscall ECX=global object, один stack CSave*, RET4, EAX0/1. WriteFields1011adc0(cGLOBAL,GLOBAL,this,1021b930,1), затем cGENT/GENT для узлов через table1021baa0 count3.",
-        "GLOBAL: type10 m_listCount offset4 count1. GENT: type14 name offset0 count64, type14 levelName offset40 count32, type10 state offset60 count1; все flags0. Head/next не сериализуются. Названия типов не выводятся из чужого SDK.",
-        "Любой WriteFields failure даёт0; обход ограничен count и NULL. Ранний конец списка возвращает1, не исправляя уже записанный count. Лишние узлы сверх count не записываются."
+        "ASM: thiscall ECX=global object, один stack CSave*, RET4, ветви EAX0/1. WriteFields1011adc0(cGLOBAL, GLOBAL, this, 1021b930,1), затем cGENT/GENT для узлов через table1021baa0 count3.",
+        "GLOBAL: type10 m_listCount offset4 count1. GENT: type14 name offset0 count64, type14 levelName offset40 count32, type10 state offset60 count1; все flags0. Head/next не сериализуются; native bytes и raw таблицы сохранены в исходном global пакете.",
+        "Код возвращает0, если WriteFields вернул0, но новый ASM core1011adc0 доказывает EAX1 на обычном возврате, включая BufferData overflow и Bad type. Поэтому такие проверки не обеспечивают обнаружение ошибки записи; их нельзя характеризовать как надёжную передачу статуса ошибки.",
+        "Обход ограничен count и NULL. Ранний конец списка всё равно возвращает1, не исправляя уже записанный count; лишние узлы сверх count не пишутся. При count<=0 только header. Остальные прежние детали ABI, таблиц и порядка сохранены."
       ],
       "evidence_paths": [
         "decompiled/server/partial-pass/functions/0x10121680.c",
         "analysis/server-queue-a/contract-global.md",
         "analysis/server-queue-a/evidence-global.json",
         "analysis/server-queue-a/global-10121680.asm",
-        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+        "decompiled/server/partial-pass/functions/0x1011adc0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011adc0.asm"
       ]
     },
     {

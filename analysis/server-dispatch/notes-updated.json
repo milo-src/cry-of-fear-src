@@ -1,0 +1,124 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1000d550",
+      "proposed_name": "InfoAlias_StageStringTarget",
+      "subsystem": "entities",
+      "summary_ru": "Сохраняет pending string_t и ставит alias в очередь.",
+      "confidence": "high",
+      "details_ru": [
+        "Записывает аргумент в pev+1ec (noise по native ENTVARS table1021aae0), затем101172e0(this). Активное имя pev+1d8 здесь не меняет; строка не копируется/не освобождается. ASM подтверждает PUSH ECX перед queue call."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d550.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d550.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d6c0",
+      "proposed_name": "InfoAlias_FollowCurrentTarget",
+      "subsystem": "entities",
+      "summary_ru": "Продолжает поиск по активному имени alias.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт start и poolbase+pev.message(+1d8) в10118590, возвращает EAX. Pending noise(+1ec) не читается, поэтому staged изменения невидимы до flush. Рекурсивный alias resolver не имеет локального cycle guard."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d6c0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d6c0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e230",
+      "proposed_name": "InfoAlias_InitializeCurrentTarget",
+      "subsystem": "entities",
+      "summary_ru": "Инициализирует активное имя alias согласно spawnflags bit0.",
+      "confidence": "high",
+      "details_ru": [
+        "При spawnflags&1 копирует pev.netname(+1d4) вmessage(+1d8); иначе pev.target(+1cc) вmessage. Не использует pending noise(+1ec), не добавляет очередь и не вызывает callback. Точная роль Spawn подтверждается ниже таблицей только если соответствующий slot прочитан; имя здесь ограничено действием."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e230.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000e230.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e310",
+      "proposed_name": "InfoAlias_UseToggleAndStage",
+      "subsystem": "entities",
+      "summary_ru": "Переключает bit0 и ставит соответствующее имя alias в очередь.",
+      "confidence": "high",
+      "details_ru": [
+        "Bit0 установлен: очищает, pending noise(+1ec)=target; bit0 снят: устанавливает, pending=netname. Spawnflags&2 включает DEBUG on/off. В обоих случаях101172e0(this), активное message пока прежнее.",
+        "ASM RET16: метод принимает стандартные четыре Use stack arguments, но тело их не читает; не применяет UseType on/off gating и всегда toggles."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e310.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000e310.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c40c0",
+      "proposed_name": "MoveWith_CheckAssistDeadlinesAndPrune",
+      "subsystem": "entity-core",
+      "summary_ru": "Проверяет сроки assist и удаляет из списка записи без pending работы.",
+      "confidence": "high",
+      "details_ru": [
+        "Head10223190 является sentinel; обход начинается с head+3c. Вызывает100c4240(current), затем заново читает previous.next.",
+        "Если flags&0xa0==0, исключает current из списка и нулит его next+3c; иначе продвигает previous. Return100c4240 не используется. При NULL head только diagnostic; ограничения1000 проходов здесь нет.",
+        "Native StartFrame1001ece0 (EntityAPI slot25) выполняет tail JMP сюда после gamerules-подобного virtual+4, gate10222f04==0, записи globalvars+1c и увеличения10222ef0. Тело StartFrame сохранено как ASM-only support; внешний engine frame order ещё открыт."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c40c0.c",
+        "analysis/server-queue-b/asm-parent/100c40c0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4120",
+      "proposed_name": "MoveWith_RunDesiredList",
+      "subsystem": "entity-core",
+      "summary_ru": "Исполняет pending операции assist в проходе с разрешённым немедленным dispatch.",
+      "confidence": "high",
+      "details_ru": [
+        "Если doingDesired1022318c уже ненулевой, печатает diagnostic, но продолжает. Выставляет global=1 и проходит head.next+3c; next сохраняется до100c3e50(current).",
+        "После каждого вызова уменьшает счётчик1000; на тысячном вызове diagnostic срабатывает даже если сохранённый next уже NULL. В обычном конце global=0.",
+        "Подтверждённый ранний путь при NULL head10223190 печатает ошибку и возвращается, оставляя doingDesired=1. Функция не удаляет записи из списка и не защищает сохранённый next от уничтожения callback.",
+        "Native PlayerPostThink1001e770 (EntityAPI slot24) выполняет tail JMP сюда после optional player virtual+250 и восстановления globalvars.frametime из10222dfc. PreThink1001e7b0 slot23 сохраняет frametime после своего virtual+24c; engine pairing отдельно не доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4120.c",
+        "analysis/server-queue-b/asm-parent/100c4120.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    }
+  ]
+}

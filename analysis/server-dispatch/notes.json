@@ -1,0 +1,192 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10016940",
+      "proposed_name": "DispatchKeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Сначала разбирает entvars key/value, затем передаёт необработанный ключ объекту.",
+      "confidence": "high",
+      "details_ru": [
+        "При NULL edict или KeyValueData возвращается; сначала вызывает 10116570(edict+80, kv).",
+        "Virtual+34(private, kv) вызывается только при kv.handled+0c==0, ненулевом kv.classname+0 и private edict+7c. Таблица 102119f8, slot6."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016940.c",
+        "analysis/server-dispatch/10016940.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10016980",
+      "proposed_name": "DispatchTouch",
+      "subsystem": "entity-core",
+      "summary_ru": "Передаёт касание private objects с глобальным и объектными запретами.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot4; global10222df0 должен быть нулём. Оба edict преобразуются через +7c; оба private обязательны.",
+        "OR flags pev+1a8 обоих объектов не должен содержать 40000000; затем ECX=first и virtual+e4(other). Другие значения flags не фильтруются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016980.c",
+        "analysis/server-dispatch/10016980.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100169e0",
+      "proposed_name": "DispatchUse",
+      "subsystem": "entity-core",
+      "summary_ru": "Адаптирует engine Use к virtual вызову с other в обоих контекстах.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot3; first private обязателен и не имеет flags40000000. Other private допускает NULL.",
+        "Virtual+e8(other, other, 3, 0.0f); это не эквивалент произвольного FireTargets payload. ECX=this; нулевой float подтверждён стековой DWORD записью."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100169e0.c",
+        "analysis/server-dispatch/100169e0.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10016a30",
+      "proposed_name": "DispatchThink",
+      "subsystem": "entity-core",
+      "summary_ru": "Вызывает Think объекта; dormant flag вызывает предупреждение, но не отменяет вызов.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot2; NULL edict/private возвращает. Signed-negative pev.flags+1a8 печатает diagnostic через 1022303c с level4.",
+        "После диагностики native tail JMP virtual+e0 с ECX=private; dormant early-return отсутствует."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016a30.c",
+        "analysis/server-dispatch/10016a30.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10016a80",
+      "proposed_name": "DispatchBlocked",
+      "subsystem": "entity-core",
+      "summary_ru": "Передаёт Blocked первому объекту с допускаемым NULL other.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot5; private первого обязателен. Other edict преобразуется в private или NULL.",
+        "Virtual+ec(other), ECX=first. Проверок global и flags из Touch здесь нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016a80.c",
+        "analysis/server-dispatch/10016a80.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017000",
+      "proposed_name": "DispatchSetAbsBox",
+      "subsystem": "entity-core",
+      "summary_ru": "Делегирует bounds объекту либо native fallback для entvars.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot9. Если private есть, tail JMP virtual+4c с ECX=this.",
+        "Fallback меняет stack arg на edict+80 и выполняет tail JMP10018140; потерянный Ghidra аргумент восстановлен ASM. NULL edict даёт адрес80, а не безопасный no-op.",
+        "Алгоритм 10018140 разобран в analysis/server-parent-tree/contract.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017000.c",
+        "analysis/server-dispatch/10017000.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10018400",
+      "proposed_name": "GetEntityAPI2",
+      "subsystem": "entity-core",
+      "summary_ru": "Выдаёт таблицу 50 серверных callbacks с версией140 по указателю.",
+      "confidence": "high",
+      "details_ru": [
+        "NULL output или *version!=140: *version=140, EAX0. Иначе REP MOVSD 50 DWORD из102119f8, EAX1.",
+        "Указатель version не проверяется на NULL. В отличие от GetEntityAPI100183d0, второй аргумент не version-by-value.",
+        "Native table200 байт сопоставлена 50 слотам DLL_FUNCTIONS заголовка eiface.h; raw байты, header hash и все slot targets в evidence."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10018400.c",
+        "analysis/server-dispatch/10018400.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001e770",
+      "proposed_name": "PlayerPostThink_RestoreFrameAndAssist",
+      "subsystem": "entity-core",
+      "summary_ru": "После player PostThink восстанавливает frametime и обслуживает desired Think.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot24; optional private virtual+250 выполняется первым.",
+        "Затем globalvars+4=global10222dfc и tail JMP100c4120; обе операции выполняются даже при NULL edict/private.",
+        "Порядок вызовов движком и pairing с PreThink отдельно не подтверждены; снимок frametime глобальный."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001e770.c",
+        "analysis/server-dispatch/1001e770.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001e7b0",
+      "proposed_name": "PlayerPreThink_SaveFrame",
+      "subsystem": "entity-core",
+      "summary_ru": "После player PreThink сохраняет глобальный frametime.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot23; optional private virtual+24c выполняется до чтения globalvars+4.",
+        "DWORD10222dfc сохраняется даже при NULL edict/private; это не персональное поле игрока.",
+        "StartFrame slot25 actual1001ece0 вызывает 100c40c0 хвостовым переходом после gate; отдельный ASM-only support, не добавлен как C identity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001e7b0.c",
+        "analysis/server-dispatch/1001e7b0.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1001e9e0",
+      "proposed_name": "ServerActivate_EntityDispatch",
+      "subsystem": "entity-core",
+      "summary_ru": "Устанавливает флаги активации и вызывает Activate подходящих edicts.",
+      "confidence": "high",
+      "details_ru": [
+        "Slot21; 10222e00=1, 10222df8=1; index0..count-1, stride32c.",
+        "Native допуск: free==0, index>=clientMax, private!=NULL. Negative signed pev.flags печатает diagnostic, иначе virtual+44.",
+        "После цикла или count<=0 всегда tail JMP100e5fc0 LinkUserMessages: ранее установленная guarded registration155 сообщений; см. analysis/network/usermessage-registry.md.",
+        "ASM-only ServerDeactivate1001ea70 slot22 всегда обнуляет AssistList sentinel10223190; флаги обнуляет только при10222e00==1, без обхода и освобождения элементов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1001e9e0.c",
+        "analysis/server-dispatch/1001e9e0.asm",
+        "analysis/server-dispatch/contract.md",
+        "analysis/server-dispatch/evidence.json",
+        "analysis/network/usermessage-registry.md",
+        "analysis/network/usermessage-registry.json"
+      ]
+    }
+  ]
+}

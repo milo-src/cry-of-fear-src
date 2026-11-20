@@ -1,0 +1,475 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1000d230",
+      "proposed_name": "CInfoAlias_GetOrCreatePrivateObject",
+      "subsystem": "entity-state",
+      "summary_ru": "Получает существующий private object либо выделяет CInfoAlias размером0xe0.",
+      "confidence": "high",
+      "details_ru": [
+        "Аргумент — entvars pointer. Если0, вызывает engine CreateEntity10222f9c и при ненулевом edict берёт edict+80. Затем entvars+20c→edict; существующий edict+7c возвращается в EAX без переустановки vtable или entvars.",
+        "При отсутствии private pointer вызывает PvAllocEntPrivateData10223044(edict,0xe0); успешный pointer получает vtable0x101a296c и +4=entvars. Остальные поля здесь не обнуляются, constructor chain не вызывается. Engine zero-fill/ownership не доказаны телом.",
+        "Native ASM не имеет безопасного отказа: CreateEntity0 оставляет entvars0 перед чтением+20c; allocator0 приводит к XOR EAX,EAX и записи [EAX+4]. Это не нормальный returnNULL. Runtime достижимость отказа не проверена.",
+        "Export0x1000e5a0 — проверенный 5-byte JMP на эту точку; actual C entry остаётся0x1000d230. За пределами базовых dc байт помещается next alias +dc; собственные сохранённые поля использует CBaseAlias block."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d230.c",
+        "analysis/server-alias-state/1000d230.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e5a0.c",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d290",
+      "proposed_name": "CInfoGroup_GetOrCreatePrivateObject",
+      "subsystem": "entity-state",
+      "summary_ru": "Получает существующий private object либо выделяет CInfoGroup размером0x164.",
+      "confidence": "high",
+      "details_ru": [
+        "Аргумент — entvars pointer. Если0, вызывает engine CreateEntity10222f9c и при ненулевом edict берёт edict+80. Затем entvars+20c→edict; существующий edict+7c возвращается в EAX без переустановки vtable или entvars.",
+        "При отсутствии private pointer вызывает PvAllocEntPrivateData10223044(edict,0x164); успешный pointer получает vtable0x101a2710 и +4=entvars. Остальные поля здесь не обнуляются, constructor chain не вызывается. Engine zero-fill/ownership не доказаны телом.",
+        "Native ASM не имеет безопасного отказа: CreateEntity0 оставляет entvars0 перед чтением+20c; allocator0 приводит к XOR EAX,EAX и записи [EAX+4]. Это не нормальный returnNULL. Runtime достижимость отказа не проверена.",
+        "Export0x1000e5b0 — проверенный 5-byte JMP на эту точку; actual C entry остаётся0x1000d290. Размер покрывает count+dc, names+e0[16], values+120[16], defaultmember+160; group не является alias по virtual+24."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d290.c",
+        "analysis/server-alias-state/1000d290.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e5b0.c",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d2f0",
+      "proposed_name": "CMultiAlias_GetOrCreatePrivateObject",
+      "subsystem": "entity-state",
+      "summary_ru": "Получает существующий private object либо выделяет CMultiAlias размером0x16c.",
+      "confidence": "high",
+      "details_ru": [
+        "Аргумент — entvars pointer. Если0, вызывает engine CreateEntity10222f9c и при ненулевом edict берёт edict+80. Затем entvars+20c→edict; существующий edict+7c возвращается в EAX без переустановки vtable или entvars.",
+        "При отсутствии private pointer вызывает PvAllocEntPrivateData10223044(edict,0x16c); успешный pointer получает vtable0x101a2830 и +4=entvars. Остальные поля здесь не обнуляются, constructor chain не вызывается. Engine zero-fill/ownership не доказаны телом.",
+        "Native ASM не имеет безопасного отказа: CreateEntity0 оставляет entvars0 перед чтением+20c; allocator0 приводит к XOR EAX,EAX и записи [EAX+4]. Это не нормальный returnNULL. Runtime достижимость отказа не проверена.",
+        "Export0x1000e5c0 — проверенный 5-byte JMP на эту точку; actual C entry остаётся0x1000d2f0. Размер включает BaseAlias next+dc и собственные count+e0, targets+e4[16], total+124, values+128[16], mode+168."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d2f0.c",
+        "analysis/server-alias-state/1000d2f0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e5c0.c",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d350",
+      "proposed_name": "CTriggerChangeAlias_GetOrCreatePrivateObject",
+      "subsystem": "entity-state",
+      "summary_ru": "Получает существующий private object либо выделяет CTriggerChangeAlias размером0xdc.",
+      "confidence": "high",
+      "details_ru": [
+        "Аргумент — entvars pointer. Если0, вызывает engine CreateEntity10222f9c и при ненулевом edict берёт edict+80. Затем entvars+20c→edict; существующий edict+7c возвращается в EAX без переустановки vtable или entvars.",
+        "При отсутствии private pointer вызывает PvAllocEntPrivateData10223044(edict,0xdc); успешный pointer получает vtable0x101a2c70 и +4=entvars. Остальные поля здесь не обнуляются, constructor chain не вызывается. Engine zero-fill/ownership не доказаны телом.",
+        "Native ASM не имеет безопасного отказа: CreateEntity0 оставляет entvars0 перед чтением+20c; allocator0 приводит к XOR EAX,EAX и записи [EAX+4]. Это не нормальный returnNULL. Runtime достижимость отказа не проверена.",
+        "Export0x1000e5d0 — проверенный 5-byte JMP на эту точку; actual C entry остаётся0x1000d350. Размер равен базовому объекту dc; таблица использует base Save10018000/Restore10017f30, без собственного поля next alias."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d350.c",
+        "analysis/server-alias-state/1000d350.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e5d0.c",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e000",
+      "proposed_name": "CBaseAlias_RestoreFieldsAfterBase",
+      "subsystem": "entity-state",
+      "summary_ru": "После восстановления базового блока читает 1 descriptor-записей блока CBaseAlias.",
+      "confidence": "high",
+      "details_ru": [
+        "Вход ECX=entity, stack arg=restore context; вызывает0x10017f30(context). Если EAX0 — возвращает0 без чтения собственного блока. Иначе устанавливает ECX=context, вызывает reader10117010(\"CBaseAlias\",entity,0x102110d8,1) и сохраняет его EAX; RET4. Ghidra void скрывает return/смену this.",
+        "Raw descriptor fields: m_pNextAlias +dc, type3 CLASSPTR, count1, flags0. Все flags0. Это описание массива полей, не sizeof объекта и не число фактически записанных ненулевых элементов.",
+        "Не выполняет повторную KV обработку, validation count/weights или alias flush. Статус reader проходит напрямую; подробности token mismatch, remapping и частичных ошибок принадлежат serializer core."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e000.c",
+        "analysis/server-alias-state/1000e000.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10017f30.c",
+        "decompiled/server/partial-pass/functions/0x10117010.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e040",
+      "proposed_name": "CInfoGroup_RestoreFieldsAfterBase",
+      "subsystem": "entity-state",
+      "summary_ru": "После восстановления базового блока читает 4 descriptor-записей блока CInfoGroup.",
+      "confidence": "high",
+      "details_ru": [
+        "Вход ECX=entity, stack arg=restore context; вызывает0x10017f30(context). Если EAX0 — возвращает0 без чтения собственного блока. Иначе устанавливает ECX=context, вызывает reader10117010(\"CInfoGroup\",entity,0x102110e8,4) и сохраняет его EAX; RET4. Ghidra void скрывает return/смену this.",
+        "Raw descriptor fields: m_cMembers+dc type10; m_iszMemberName+e0[16], m_iszMemberValue+120[16], m_iszDefaultMember+160 type1. Все flags0. Это описание массива полей, не sizeof объекта и не число фактически записанных ненулевых элементов.",
+        "Не выполняет повторную KV обработку, validation count/weights или alias flush. Статус reader проходит напрямую; подробности token mismatch, remapping и частичных ошибок принадлежат serializer core."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e040.c",
+        "analysis/server-alias-state/1000e040.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10017f30.c",
+        "decompiled/server/partial-pass/functions/0x10117010.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e080",
+      "proposed_name": "CMultiAlias_RestoreFieldsAfterBase",
+      "subsystem": "entity-state",
+      "summary_ru": "После восстановления базового блока читает 5 descriptor-записей блока CMultiAlias.",
+      "confidence": "high",
+      "details_ru": [
+        "Вход ECX=entity, stack arg=restore context; вызывает0x1000e000(context). Если EAX0 — возвращает0 без чтения собственного блока. Иначе устанавливает ECX=context, вызывает reader10117010(\"CMultiAlias\",entity,0x10211128,5) и сохраняет его EAX; RET4. Ghidra void скрывает return/смену this.",
+        "Raw descriptor fields: m_cTargets+e0, m_iTotalValue+124, m_iValues+128[16], m_iMode+168 type10; m_iszTargets+e4[16] type1. Все flags0. Это описание массива полей, не sizeof объекта и не число фактически записанных ненулевых элементов.",
+        "Не выполняет повторную KV обработку, validation count/weights или alias flush. Статус reader проходит напрямую; подробности token mismatch, remapping и частичных ошибок принадлежат serializer core."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e080.c",
+        "analysis/server-alias-state/1000e080.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e000.c",
+        "decompiled/server/partial-pass/functions/0x10117010.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e0c0",
+      "proposed_name": "CBaseAlias_SaveFieldsAfterBase",
+      "subsystem": "entity-state",
+      "summary_ru": "После базового Save передаёт 1 descriptor-записей CBaseAlias в writer.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=entity, один context stack arg. Вызывает0x10018000(context); EAX0 останавливает. Иначе owner label=pool+pev.targetname(+1d0), если string_t ненулевой, либо pool+pev.classname(+0).",
+        "Перед вызовом ECX=context; writer1011adc0(ownerLabel,\"CBaseAlias\",entity,0x102110d8,1). Возвращает EAX writer, RET4. Owner label не заменяет block name; core использует его для диагностики function-pointer поля.",
+        "Сам wrapper не очищает pending state, next links или dirty bit, не нормализует count. Возвращённый nonzero не является доказательством успешного сохранения каждого поля: writer core имеет отдельные ограничения статуса."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e0c0.c",
+        "analysis/server-alias-state/1000e0c0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10018000.c",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e120",
+      "proposed_name": "CInfoGroup_SaveFieldsAfterBase",
+      "subsystem": "entity-state",
+      "summary_ru": "После базового Save передаёт 4 descriptor-записей CInfoGroup в writer.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=entity, один context stack arg. Вызывает0x10018000(context); EAX0 останавливает. Иначе owner label=pool+pev.targetname(+1d0), если string_t ненулевой, либо pool+pev.classname(+0).",
+        "Перед вызовом ECX=context; writer1011adc0(ownerLabel,\"CInfoGroup\",entity,0x102110e8,4). Возвращает EAX writer, RET4. Owner label не заменяет block name; core использует его для диагностики function-pointer поля.",
+        "Сам wrapper не очищает pending state, next links или dirty bit, не нормализует count. Возвращённый nonzero не является доказательством успешного сохранения каждого поля: writer core имеет отдельные ограничения статуса."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e120.c",
+        "analysis/server-alias-state/1000e120.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10018000.c",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e180",
+      "proposed_name": "CMultiAlias_SaveFieldsAfterBase",
+      "subsystem": "entity-state",
+      "summary_ru": "После базового Save передаёт 5 descriptor-записей CMultiAlias в writer.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=entity, один context stack arg. Вызывает0x1000e0c0(context); EAX0 останавливает. Иначе owner label=pool+pev.targetname(+1d0), если string_t ненулевой, либо pool+pev.classname(+0).",
+        "Перед вызовом ECX=context; writer1011adc0(ownerLabel,\"CMultiAlias\",entity,0x10211128,5). Возвращает EAX writer, RET4. Owner label не заменяет block name; core использует его для диагностики function-pointer поля.",
+        "Сам wrapper не очищает pending state, next links или dirty bit, не нормализует count. Возвращённый nonzero не является доказательством успешного сохранения каждого поля: writer core имеет отдельные ограничения статуса."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e180.c",
+        "analysis/server-alias-state/1000e180.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e0c0.c",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d9d0",
+      "proposed_name": "Entity_GetStateIgnoringActivator",
+      "subsystem": "entity-state",
+      "summary_ru": "Делегирует master state в virtual+5c, игнорируя activator.",
+      "confidence": "high",
+      "details_ru": [
+        "Этот метод находится вvirtual+58 всех четырёх прочитанных vtables. ASM CALL [vtable+5c] оставляет ECX=this и не передаёт аргумент; RET4 удаляет входной activator. EAX state возвращается неизменным.",
+        "Следовательно master10119060 передаёт context, но эта реализация его не использует. У InfoAlias virtual+5c=1000d9f0; у Group/MultiAlias/TriggerChangeAlias=1000d9e0. Другие overrides virtual+58 этим не описаны."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d9d0.c",
+        "analysis/server-alias-state/1000d9d0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10119060.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d9e0",
+      "proposed_name": "Entity_GetStateZeroDefault",
+      "subsystem": "entity-state",
+      "summary_ru": "Возвращает state0 для group/multi_alias/changealias в исследованных vtables.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM XOR EAX,EAX; RET, без чтения полей. PE virtual+5c этих трёх классов указывает сюда; InfoAlias имеет другую реализацию.",
+        "Через generic+58 и master10119060 обычный master на такой entity даёт0 (state!=2), inverted~ даёт1. Это не alias discriminator+24, хотя оба возвращают0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d9e0.c",
+        "analysis/server-alias-state/1000d9e0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10119060.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d9f0",
+      "proposed_name": "InfoAlias_GetStateFromDisabledFlag",
+      "subsystem": "entity-state",
+      "summary_ru": "Возвращает2 при снятом spawnflags bit0 и0 при установленном.",
+      "confidence": "high",
+      "details_ru": [
+        "Читает native pev.spawnflags+1a4, удваиваетDWORD, NOT, AND2. Остальные биты не влияют на итог; это state code, не bool1.",
+        "InfoAlias virtual+5c связан с generic+58 и master equality2. Use1000e310 меняет bit0 сразу, а pending noise+1ec применяется вmessage+1d8 позже через flush: master state может уже измениться при ещё старой alias target."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d9f0.c",
+        "analysis/server-alias-state/1000d9f0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e310.c",
+        "decompiled/server/partial-pass/functions/0x10119060.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000df20",
+      "proposed_name": "Entity_InheritParentCapabilityBit2",
+      "subsystem": "entity-state",
+      "summary_ru": "Возвращает parent capability bit2, либо2 при отсутствии parent.",
+      "confidence": "high",
+      "details_ru": [
+        "Читает this+14 (native m_pMoveWith по descriptor table). При ненулевом pointer устанавливает ECX=parent, вызывает parent virtual+40, возвращает result&2. При null возвращает2.",
+        "Bit2 соответствует SDK FCAP_ACROSS_TRANSITION; точное downstream применение CoF не выведено из имени константы. В четырёх alias-family таблицах slot+40 имеет1000df40/1000df50, а не этот sibling helper. Не приписывать им его поведение."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000df20.c",
+        "analysis/server-alias-state/1000df20.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000df40",
+      "proposed_name": "AliasFamily_ZeroCapsAfterParentQuery",
+      "subsystem": "entity-state",
+      "summary_ru": "Вызывает parent capability query при наличии parent, но возвращает0.",
+      "confidence": "high",
+      "details_ru": [
+        "this+14→parent ECX; virtual+40 вызывается лишь приnonnull. Затем XOR EAX,EAX независимо от родительского результата. Нельзя сокращать до return(parentCaps&mask), так как видимый return всегда0, но callback side effects остаются.",
+        "PE slot+40 CInfoAlias/CInfoGroup/CMultiAlias указывает сюда. Нулевой результат относится к capabilities, не master state или alias predicate."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000df40.c",
+        "analysis/server-alias-state/1000df40.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000df50",
+      "proposed_name": "TriggerChangeAlias_ZeroCapsAfterParentQuery",
+      "subsystem": "entity-state",
+      "summary_ru": "Отдельный вход с тем же parent-query-and-zero поведением.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM повторяет1000df40: parent=this+14, optional virtual+40(parent), затем EAX0. Это другая фактическая функция, не duplicate capture.",
+        "PE CTriggerChangeAlias slot+40=1000df50. Тела недостаточно, чтобы предполагать иной ownership или отличную политику переходов относительно1000df40."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000df50.c",
+        "analysis/server-alias-state/1000df50.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d400",
+      "proposed_name": "Entity_DispatchBlockedCallback",
+      "subsystem": "entity-state",
+      "summary_ru": "Хвостовым переходом вызывает callback m_pfnBlocked, если он задан.",
+      "confidence": "high",
+      "details_ru": [
+        "Native CBaseEntity descriptor table связывает object+84 с m_pfnBlocked,type11. ASM читаетpointer, приnonnull восстанавливает frame и JMP EAX с исходными ECX=this и stack argument; приnull RET4.",
+        "Ghidra показывает нулевую арность, но stack ABI содержит один pointer-sized аргумент. Wrapper его не разыменовывает и не меняет. Callee обязан соблюдать этот thiscall cleanup; writer callback и lifetime остаются внешними."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d400.c",
+        "analysis/server-alias-state/1000d400.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e2a0",
+      "proposed_name": "Entity_DispatchThinkCallback",
+      "subsystem": "entity-state",
+      "summary_ru": "Передаёт управление m_pfnThink без аргументов, если callback ненулевой.",
+      "confidence": "high",
+      "details_ru": [
+        "Читает object+78, native descriptor name m_pfnThink,type11. Приnonnull JMP EAX с неизменным ECX; иначеRET. Callback не обнуляется, timestamps/nextthink тут не обновляются.",
+        "PE slot+e0 всех четырёх классов связан с этим generic dispatcher. Scheduler traversal находится в отдельном контракте; наличие callback не доказывает, что он вызван на данном кадре."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e2a0.c",
+        "analysis/server-alias-state/1000e2a0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e2b0",
+      "proposed_name": "Entity_DispatchTouchCallback",
+      "subsystem": "entity-state",
+      "summary_ru": "Передаёт исходный аргумент в m_pfnTouch хвостовым переходом.",
+      "confidence": "high",
+      "details_ru": [
+        "Читает object+7c (descriptor m_pfnTouch,type11), приnonnull JMP EAX послеPOP EBP; ECX=this и stack argument сохранены. Приnull RET4. Это поле внутри entity, не edict private pointer+7c.",
+        "Не проверяет caller entity/null, collision flags или состояние удаления. Показанный C без аргументов неполон; реальный one-argument stack ABI установлен ASM."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e2b0.c",
+        "analysis/server-alias-state/1000e2b0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e2e0",
+      "proposed_name": "Entity_DispatchUseCallback",
+      "subsystem": "entity-state",
+      "summary_ru": "Вызывает m_pfnUse с четырьмя исходными Use аргументами.",
+      "confidence": "high",
+      "details_ru": [
+        "Читает object+80 (native descriptor m_pfnUse,type11). Приnonnull копирует stack arg4 как float bits через MOVSS, затем pushes arg3,arg2,arg1 и CALL EAX при ECX=this. Возвращается RET16; приnull толькоRET16.",
+        "Четыре аргумента соответствуют локальной форме activator/caller/useType/value, wrapper их не изменяет и не проверяет. В examined family virtual+e8 этот generic путь использует CMultiAlias; остальные классы имеют собственные Use overrides."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e2e0.c",
+        "analysis/server-alias-state/1000e2e0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d500",
+      "proposed_name": "BaseAlias_RejectStringChange",
+      "subsystem": "entity-state",
+      "summary_ru": "Диагностирует запрещённое изменение значения alias без записи полей.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, один stack argument игнорируется (RET4). Берёт classname изpev+0 иstringpool, вызывает AlertMessage1022303c сseverity4 иformat \"%s entities cannot change value!\".",
+        "CMultiAlias virtual+124 указывает сюда, в отличие от изменяемого InfoAlias. Entity setter+120 сначала извлекает targetname и вызывает этот slot; ни values array, ни pending queue этот метод не меняет. Возвращаемое значение diagnostic не объявляется status."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d500.c",
+        "analysis/server-alias-state/1000d500.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d650",
+      "proposed_name": "MultiAlias_CommitNoOperation",
+      "subsystem": "entity-state",
+      "summary_ru": "Пустая реализация commit pending для CMultiAlias.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело — RET без чтения/записи памяти и без установленного return value. PE CMultiAlias virtual+128 указывает сюда.",
+        "Внешний FlushAliases10118700 после этого всё равно очищает dirty bit текущей головы и продвигает world.head; next+dc не обнуляется. Отсутствие действия commit не означает отсутствие действий внешнего обхода."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d650.c",
+        "analysis/server-alias-state/1000d650.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10118700.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000dab0",
+      "proposed_name": "Alias_IsAliasTrue",
+      "subsystem": "entity-state",
+      "summary_ru": "Возвращает1 для alias discriminator у InfoAlias и MultiAlias.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело MOV EAX,1;RET. PE обеих таблиц slot+24 указывает сюда; resolver10118780 и setters используют ненулевой результат для допуска alias.",
+        "Предикат не проверяет текущую цель, pending flag, существование target или валидность данных; его нельзя использовать как подтверждение successful resolution."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000dab0.c",
+        "analysis/server-alias-state/1000dab0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000dac0",
+      "proposed_name": "Entity_IsAliasFalse",
+      "subsystem": "entity-state",
+      "summary_ru": "Возвращает0 для discriminator у group и trigger_changealias.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело XOR EAX,EAX;RET. PE CInfoGroup иCTriggerChangeAlias slot+24 указывает сюда; у настоящихalias иной entry1000dab0.",
+        "InfoGroup может участвовать в group.member resolution по classname, но не проходит проверку alias в10118780. Это отдельная роль от state0 virtual+5c."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000dac0.c",
+        "analysis/server-alias-state/1000dac0.asm",
+        "analysis/server-alias-state/contract.md",
+        "analysis/server-alias-state/evidence.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10117010",
+      "proposed_name": "Restore_ReadFields",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Проверяет token блока, очищает разрешённые поля и декодирует именованные records; статус не охватывает все ошибки.",
+      "details_ru": [
+        "Thiscall(blockName, base, descriptors, descriptorCount), RET10. Читает LE16 payloadSize (игнорируется) и LE16 token; сравнивает с AX TokenHash10117220(blockName). Несовпадение: BufferRewind4 и EAX0. Совпадение: ReadInt32 числа records. TokenHash может менять token table; rewind этого не отменяет.",
+        "Descriptor stride16: type DWORD+0, name pointer+4, object offset+8, signed16 count+0c, flags+0e. Обнуляет genericSize[type]*count bytes, кроме reader+4!=0 && flags&1. Это сохранение global fields при overlay; raw type-size table и все18 типов разобраны в новом контракте.",
+        "Для каждого record BufferReadHeader101162a0 читает size/token/payloadPointer и продвигает cursor. Имя берётся из data.tokens[token] без bounds check. DecodeNamedField10116c50 получает declared bytes, но этот аргумент не использует. Поиск имени case-insensitive стартует с previousIndex+1; unknown field=-1 превращает следующий start в0.",
+        "После loop возвращает EAX1 независимо от unknown fields и void read errors. Low-level overflow не является0 этого API; ReadInt32/ReadUInt16 имеют нулевой default. Оба loop используют младшие16 бит счётчика при32битном bound, верхний limit не enforce-ится. Таблица типов индексируется до type guard.",
+        "Wire layout теперь доказан: LE16 byteSize, LE16 nameToken, payload; block payload — DWORD recordCount. Открыты engine container, producer/lifetime token table и upstream validation; полная безопасность формата сохранений не заявлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10117010.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/10117010.asm",
+        "decompiled/server/partial-pass/functions/0x10116c50.c",
+        "analysis/server-serializer/10116c50.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011adc0",
+      "proposed_name": "Save_WriteFields",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пишет count непустых полей и records по native type; обычный возврат всегда1, включая диагностические ошибки.",
+      "details_ru": [
+        "Thiscall(ownerLabel, blockName, base, descriptors, descriptorCount), RET14. Descriptor stride16: type+0, name+4, offset+8, signed16 count+0c, flags+0e. Дважды проверяет raw all-zero10116420 по genericSize[type]*count: сначала пишет named block record с DWORD числом непустых полей, затем records.",
+        "Формат каждого record: LE16 payloadBytes, LE16 token, payload. OwnerLabel используется только в diagnostic function-pointer helper1011b130, не как имя блока. Flags&1 writer не фильтрует. При count<=0 generic field считается пустым; type guard следует после size-table lookup.",
+        "Types0/9/10/12 пишут raw DWORD;13 WORD;14 BYTE;7 raw vec3;8 vec3 минус landmark при data+52c;15 float минус data.time550;1/16/17 packed NUL strings;11 engine function name. Все18 type branches и raw jump tables сохранены в contract/evidence.",
+        "Types2..6 преобразуют offset/object/handle/entvars/edict в save ordinal через helpers, затем пишут DWORD[64]. Count>64 лишь предупреждает, loop не ограничивается. Type4 читает handle с шагом8 при genericSize4; clear/empty-check тоже используют4*count.",
+        "ASM1011b097 устанавливает EAX=1 на всех обычных завершениях. Ошибки BufferData overflow, Bad type и invalid function pointer не преобразуются в0. Function-name helper читает только первый pointer, игнорируя count; если нет имени, record не пишется, а header recordCount уже не корректируется.",
+        "Открыты engine container, token/entity table producers и engine NameForFunction semantics. Прежний вопрос wire/type mapping закрыт для показанных ветвей; полный save/runtime parity не объявляется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011adc0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011adc0.asm",
+        "decompiled/server/partial-pass/functions/0x1011b130.c",
+        "analysis/server-serializer/1011b130.asm",
+        "decompiled/server/partial-pass/functions/0x10116140.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10121680",
+      "proposed_name": "CGlobalState_Save",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Сохраняет count и inline-поля global records; проверки writer не обнаруживают его низкоуровневые ошибки.",
+      "details_ru": [
+        "ASM: thiscall ECX=global object, один stack CSave*, RET4, ветви EAX0/1. WriteFields1011adc0(cGLOBAL, GLOBAL, this, 1021b930,1), затем cGENT/GENT для узлов через table1021baa0 count3.",
+        "GLOBAL: type10 m_listCount offset4 count1. GENT: type14 name offset0 count64, type14 levelName offset40 count32, type10 state offset60 count1; все flags0. Head/next не сериализуются; native bytes и raw таблицы сохранены в исходном global пакете.",
+        "Код возвращает0, если WriteFields вернул0, но новый ASM core1011adc0 доказывает EAX1 на обычном возврате, включая BufferData overflow и Bad type. Поэтому такие проверки не обеспечивают обнаружение ошибки записи; их нельзя характеризовать как надёжную передачу статуса ошибки.",
+        "Обход ограничен count и NULL. Ранний конец списка всё равно возвращает1, не исправляя уже записанный count; лишние узлы сверх count не пишутся. При count<=0 только header. Остальные прежние детали ABI, таблиц и порядка сохранены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10121680.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10121680.asm",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c",
+        "analysis/server-serializer/contract.md",
+        "analysis/server-serializer/evidence.json",
+        "analysis/server-serializer/1011adc0.asm"
+      ]
+    }
+  ],
+  "subsystems": []
+}

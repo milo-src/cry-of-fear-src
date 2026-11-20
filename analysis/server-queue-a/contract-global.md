@@ -56,11 +56,13 @@ Hex offsets; count десятичный. Здесь не присваивает�
 
 Save сначала вызывает WriteFields1011adc0(`cGLOBAL`,`GLOBAL`,this,table,1), затем `cGENT`/`GENT` для последовательных узлов. Любая ошибка writer даёт0. Обход ограничен count и NULL: если список кончился раньше count, функция всё равно возвращает1 и не исправляет записанный header. Узлы сверх count пропускаются. При count<=0 записывается только header.
 
+Уточнение core после отдельного разбора: WriteFields1011adc0 всегда возвращает1 на обычном пути, включая диагностические overflow/Bad type. Проверки0 в GlobalSave существуют, но не обнаруживают эти ошибки. ReadFields0 означает block-token mismatch, а не любую ошибку чтения. Подробности в [serializer contract](../server-serializer/contract.md).
+
 Restore сначала уничтожает старый список. Затем читает GLOBAL через10117010, сохраняет count локально и сбрасывает текущий count. Каждый GENT читается во временные массивы и копируется через Add. Аргументы Add здесь равны адресам временных строк минус stringBase; сохранения stack pointers в списке нет. Ошибка header оставляет старый список удалённым; ошибка GENT возвращает0 с уже добавленной частью. Rollback отсутствует. count<=0 даёт успех с пустым списком; верхний лимит count в этом слое не виден.
 
 Поскольку Save обходит от головы, а Restore вставляет каждый прочитанный узел в голову, успешная загрузка **разворачивает порядок**. Для дубликатов это может изменить первую запись, выбранную Find. Это вывод из последовательности операций, не runtime-тест.
 
-Raw EntityAPI102119f8 доказывает slot12=101216f0 и slot13=10121610. Эти wrappers создают локальный writer/reader из переданного save-data, работают с singleton10232278 и вызывают cleanup10116080. Boolean Save/Restore не проверяется. Reader получает дополнительные DWORD+4=0,+8=1; полная интерпретация reader flags здесь не заявлена.
+Raw EntityAPI102119f8 доказывает slot12=101216f0 и slot13=10121610. Эти wrappers создают локальный writer/reader из переданного save-data, работают с singleton10232278 и вызывают cleanup10116080. Boolean Save/Restore не проверяется. Reader получает дополнительные DWORD+4=0,+8=1; Новый serializer-разбор уточняет: reader+4 управляет сохранением flags1 полей при global overlay, +8 разрешает model/sound precache. Настройки самого wrapper подтверждены прежним ASM.
 
 Slot14=10121530 подтверждён отдельно коротким [global-reset-callback.asm](global-reset-callback.asm): ClearStates(singleton), затем global10217fe4=1. Для этого адреса нет сохранённой C-карточки, поэтому он **support-only**, не девятнадцатая REVIEW. Назначение флага10217fe4 за пределами этого тела не установлено.
 
@@ -96,6 +98,6 @@ UpdateOnRemove10102c50 при отсутствующем AssistList10223190 пе
 
 ## Границы и следующая очередь
 
-Закрыты локальные list/state операции, numeric storage tables, порядок сериализации, wrapper ABI, основные restore/overlay/removal ветви и условия MakeDormant. Не закрыты общий binary serializer10117010/1011adc0, engine save-container, allocator implementation, происхождение всех globalname/map strings, безопасность всех upstream длин, значение10217fe4, полный virtual+a0 и вызовы всех engine callbacks во время реальной смены карты. Лексические callers сохранённого partial-pass не равны полному графу DLL.
+Закрыты локальные list/state операции, numeric storage tables, порядок сериализации, wrapper ABI, основные restore/overlay/removal ветви и условия MakeDormant. Общий binary serializer10117010/1011adc0 разобран в [serializer contract](../server-serializer/contract.md): wire/type mapping, remapping и status boundaries. Не закрыты engine save-container, allocator implementation, происхождение всех globalname/map strings, безопасность всех upstream длин, значение10217fe4, полный virtual+a0 и вызовы всех engine callbacks во время реальной смены карты. Лексические callers сохранённого partial-pass не равны полному графу DLL.
 
 Для будущего targeted C capture полезен10121530 (ResetGlobalState); его короткая машинная логика уже сохранена как support. Новая REA-сессия для этого прохода не требовалась. Следующий разбор должен следовать reader/writer или map-transition callers, а не повторно маркировать уже раскрытые операции списка как неизвестные.

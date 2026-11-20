@@ -1,0 +1,278 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10017210",
+      "proposed_name": "CBaseEntity_ReconcileSavedThinkTime",
+      "subsystem": "entity-core",
+      "summary_ru": "Согласует desired think с внешним изменением pev.nextthink перед сохранением.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без аргументов; сравнивает pev.nextthink (+104) с object+5c. При неравенстве object+58 += pev.nextthink-object+5c, затем object+5c получает заново прочитанный nextthink.",
+        "Native BASE descriptors называют +58 m_fNextThink и +5c m_fPevNextThink. Save10018000 вызывает virtual+14; в info_movewith эта ячейка указывает сюда. Нет проверки положительного времени или parent."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017210.c",
+        "analysis/server-parent-tree/asm/10017210.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017250",
+      "proposed_name": "CBaseEntity_ActivateMoveWithAndQueues",
+      "subsystem": "entity-core",
+      "summary_ru": "Регистрирует сущность в assist/alias списках и однократно создаёт MoveWith связь.",
+      "confidence": "high",
+      "details_ru": [
+        "На каждом вызове flags+60 & a0h вызывает AddAssist100c44e0(this); повторно прочитанные flags &1000h вызывают AddAlias101172e0(this). Это происходит до проверки m_activated.",
+        "Если object+74==0, записывает 1, вызывает Attach10017bc0, затем tail-jump virtual+48 с ECX=this. Ошибка поиска родителя не отменяет m_activated и не предотвращает virtual+48; повторный Activate не повторяет Attach. У info_movewith virtual+48=1000df80, пустая функция."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017250.c",
+        "analysis/server-parent-tree/asm/10017250.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100172a0",
+      "proposed_name": "CBaseEntity_SetAbsBox",
+      "subsystem": "entity-core",
+      "summary_ru": "Передаёт собственный pev общему вычислителю абсолютных границ.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM PUSH [ECX+4]; CALL10018140; POP ECX; RET. Vtable info_movewith+4c указывает на этот метод. Здесь нет своей обработки parent или children."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100172a0.c",
+        "analysis/server-parent-tree/asm/100172a0.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017bc0",
+      "proposed_name": "CBaseEntity_AttachMoveWithParent",
+      "subsystem": "entity-core",
+      "summary_ru": "Находит родителя по m_MoveWith и добавляет сущность в начало списка его детей.",
+      "confidence": "high",
+      "details_ru": [
+        "При nameID+18==0 возврат. Иначе lookup10118590(0,stringBase+name), результат сначала записывается в parent+14. Lookup использует custom10118980, затем fallback targetname10118480. При отсутствии родителя пишет diagnostic и возвращается.",
+        "Обходит parent.child+1c и sibling+20: повторное присутствие this вызывает ранний возврат. Иначе prepend через this.sibling=parent.child; parent.child=this. Отсутствуют проверки self/ancestor cycle и предварительный detach старого parent.",
+        "Только при pev.movetype==0 выбирает 7 для solid4, иначе 8. Если parent.vector+68 совпадает с shared vector10222f34..3c, localOrigin=this.origin-parent.origin; иначе ASM передаёт 100c4550(this,this.origin+parent.vector68), затем прибавляет parent.vector68 к own.vector68.",
+        "В обычном конце localAngles+30=this.angles-parent.angles. Этот путь не эквивалентен Use10102dd0: там нет пересчёта localAngles, movetype или vector68. Назначение производителя vector68 пока не установлено."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017bc0.c",
+        "analysis/server-parent-tree/asm/10017bc0.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017f30",
+      "proposed_name": "CBaseEntity_RestoreBaseFields",
+      "subsystem": "entity-core",
+      "summary_ru": "Читает ENTVARS и 22 BASE поля, затем восстанавливает модель и границы.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM thiscall(reader), ret4. ReadEntvars10116c30(reader,\"ENTVARS\",pev), затем только при успехе ReadFields10117010(reader,\"BASE\",this,10211760,22). Возвращает сохранённый результат чтения.",
+        "Даже при неудаче чтения выполняет model fixup, если pev.modelindex+b4 и model+b8 ненулевые: кеширует mins/maxs, precache10116990, engine SetModel10222f50, восстанавливает кешированные границы1011a030.",
+        "BASE включает parent/child/sibling и m_activated, но эта функция сама не вызывает Attach и не добавляет assist. Тип3 entity references требует отдельного decoder-контракта; сырые указатели на диске здесь не доказаны."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017f30.c",
+        "analysis/server-parent-tree/asm/10017f30.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10018000",
+      "proposed_name": "CBaseEntity_SaveBaseFields",
+      "subsystem": "entity-core",
+      "summary_ru": "Согласует think и записывает ENTVARS и 22 BASE поля.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM thiscall(writer), ret4. Сначала virtual+14; для info_movewith это timer reconcile10017210. WriteEntvars1011ad70(writer,\"ENTVARS\",pev); нулевой результат немедленно возвращает 0.",
+        "Затем WriteFields1011adc0(writer,label,\"BASE\",this,10211760,22), где label берётся из targetname+1d0 при наличии, иначе classname+0. Возвращает результат writer.",
+        "Native descriptors сохраняют m_MoveWith, parent/child/sibling, local offsets, think times, callback fields и m_activated. Assist next+3c и vector68..70 в этой таблице отсутствуют; полный save protocol шире одной функции."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10018000.c",
+        "analysis/server-parent-tree/asm/10018000.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10018140",
+      "proposed_name": "SetObjectCollisionBox",
+      "subsystem": "entity-core",
+      "summary_ru": "Вычисляет absmin/absmax кубической оценкой либо смещением mins/maxs и расширяет границы на одну единицу.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(pev). При solid4 и хотя бы одном ненулевом угле: r=max(0,abs(minsXYZ),abs(maxsXYZ)); absmin=origin-r, absmax=origin+r для каждой оси. Эта запись формулы относится к обычным конечным значениям.",
+        "Иначе absmin=origin+mins; absmax=origin+maxs. В обоих случаях каждая минимальная координата уменьшается на1, максимальная увеличивается на1. Это куб для повернутого BSP, не точное вращение восьми углов и не collision trace; формула не гарантирует охват произвольного повернутого bbox."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10018140.c",
+        "analysis/server-parent-tree/asm/10018140.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017910",
+      "proposed_name": "CBaseEntity_CorpseFolllow",
+      "subsystem": "entity-core",
+      "summary_ru": "Копирует позицию из отдельного источника pev+298 и перепланирует think.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall. При нулевом source=*(pev+298) обнуляет callback object+78 и tail-jump CancelThink10017ad0. Иначе копирует source+88..90 непосредственно в pev.origin+8..10 и вызывает virtual+8 с float0.",
+        "Производитель и тип source не доказаны; по одному offset нельзя считать его EHANDLE или parent MoveWith. Нет SetOrigin, обновления local offset или parent/child links. Нулевой delay не доказывает ровно один кадр задержки."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017910.c",
+        "analysis/server-parent-tree/asm/10017910.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100176f0",
+      "proposed_name": "CBaseEntity_GetNextTargetByName",
+      "subsystem": "entity-core",
+      "summary_ru": "Ищет сущность по собственному pev.target через общий custom/fallback lookup.",
+      "confidence": "high",
+      "details_ru": [
+        "Если targetID pev+1cc==0 возвращает0. Иначе вызывает10118590(0,stringBase+target). Это поиск по имени, не чтение установленного MoveWith parent+14; объект не присоединяется и владение не передаётся."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100176f0.c",
+        "analysis/server-parent-tree/asm/100176f0.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101a90",
+      "proposed_name": "InfoMoveWith_FactoryBody",
+      "subsystem": "entity-core",
+      "summary_ru": "Создаёт private object info_movewith размером dch и устанавливает vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "Настоящее тело10101a90; экспорт10102f90 состоит из JMP сюда и не добавлен как новая самостоятельная карточка. Нулевой pev может быть получен через engine CreateEntity10222f9c и edict+80.",
+        "При существующем edict.private+7c возвращается без повторной инициализации. Иначе engine allocator10223044(edict,0xdc); успех устанавливает vtable101df4f0 и object+4=pev. Полного конструктора/обнуления полей здесь нет.",
+        "ASM при allocation failure устанавливает EAX=0 и затем всё равно пишет [EAX+4]=pev. Нельзя описывать этот путь как безопасный возврат nullptr."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101a90.c",
+        "analysis/server-parent-tree/asm/10101a90.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102300",
+      "proposed_name": "CInfoMoveWith_GetState",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает числовое состояние 2 или 0 по младшему spawnflag.",
+      "confidence": "high",
+      "details_ru": [
+        "Точная формула ~(pev.spawnflags*2)&2: flag1 clear =>2, set =>0. Это не булев результат. Vtable+5c; ShouldToggle10018350 использует этот state при допуске Use.",
+        "Для state2 запрос1 отклоняется, запрос0 допускается; для state0 запрос0 отклоняется, запрос1 допускается. Use2/3 допускаются helper без проверки текущего state."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102300.c",
+        "analysis/server-parent-tree/asm/10102300.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102840",
+      "proposed_name": "CInfoMoveWith_ObjectCaps",
+      "subsystem": "entity-core",
+      "summary_ru": "Вызывает ObjectCaps родителя при наличии, но всегда возвращает ноль.",
+      "confidence": "high",
+      "details_ru": [
+        "Если parent+14 ненулевой, virtual+40 вызывается с ECX=parent. После вызова ASM XOR EAX,EAX; RET. Возвращённые родителем capability bits не наследуются. Vtable собственной функции также+40."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102840.c",
+        "analysis/server-parent-tree/asm/10102840.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101028e0",
+      "proposed_name": "CBaseEntity_SUB_Remove",
+      "subsystem": "entity-core",
+      "summary_ru": "Разрывает служебные связи через UpdateOnRemove и передаёт удаление edict движку.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall: вызывает10102c50(this), затем при pev.health+164>0 обнуляет health и пишет diagnostic; engine RemoveEntity10222fa0 получает pev.containingedict+20c.",
+        "Не проверяет результат cleanup: даже его ранний возврат при пустом assist sentinel не отменяет engine removal. Здесь нет собственного освобождения private allocation. DeadRemoveThink10017aa0 — JMP thunk на это тело, не отдельная новая функция."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101028e0.c",
+        "analysis/server-parent-tree/asm/101028e0.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102be0",
+      "proposed_name": "CInfoMoveWith_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Выбирает имя начального родителя из target или netname.",
+      "confidence": "high",
+      "details_ru": [
+        "При spawnflags&1==0 object.m_MoveWith+18=pev.target+1cc, иначе pev.netname+1d4. При spawnflags&2 устанавливает solid3 и movetype5; без этого бита оставляет прежние значения.",
+        "Здесь нет поиска родителя, изменения child списка, model setup или velocity reset. Первичная привязка происходит через Activate10017250→Attach10017bc0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102be0.c",
+        "analysis/server-parent-tree/asm/10102be0.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102dd0",
+      "proposed_name": "CInfoMoveWith_UseSwitchParent",
+      "subsystem": "entity-core",
+      "summary_ru": "Отсоединяет от старого родителя и переключает target/netname для нового.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM thiscall(activator,caller,useType,value), ret10h; C потерял четвёртый аргумент. Допуск через10018350(useType). При старом parent удаляет this из его child/sibling цепи; ошибка поиска предшественника пишет diagnostic и возвращается до смены флага/имени.",
+        "Успешный detach обнуляет parent/sibling, затем инвертирует spawnflag1 и выбирает netname при установленном бите, target при снятом. Ненулевое имя ищется10118590; отсутствующий новый parent не откатывает уже выполненный detach и смену флага.",
+        "При найденном parent проверяет отсутствие this в его цепи, делает prepend и localOrigin=this.origin-parent.origin. Повторное присутствие вызывает ранний возврат. Нет защиты от self/ancestor cycle; повреждённый старый parent с пустой child цепью не имеет NULL guard.",
+        "В обычном конце, включая новое имя0, вызывает100c4ed0(this,sharedVector10222f34..3c), доказано ASM. Не обновляет localAngles, movetype или vector68 и не сбрасывает angular velocity. Shared vector нельзя без проверки runtime writer называть постоянным нулём."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102dd0.c",
+        "analysis/server-parent-tree/asm/10102dd0.asm",
+        "analysis/server-parent-tree/evidence.json",
+        "analysis/server-parent-tree/contract.md"
+      ]
+    }
+  ]
+}
