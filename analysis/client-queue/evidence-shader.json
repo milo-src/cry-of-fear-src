@@ -1,0 +1,216 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "source_listing": "analysis/local/music-state-client-text.asm",
+  "source_listing_sha256": "fdf5a6a09539335fc42892b84367c4b204716d8a3784e49e0ea7ca6661c75bf9",
+  "target_executed": false,
+  "new_rea_process": false,
+  "ranges": [
+    {
+      "path": "analysis/client-queue/fragment-upload.asm",
+      "start": "0x100621f0",
+      "end_exclusive": "0x1006227f",
+      "sha256": "f8f9140350b38aba0a0bc037265af90f37503f33f6bc8fd0e963b9f1573c4646",
+      "binary_range_sha256": "41fa8779cf0bad7cd390ad50aa6f0cb35bd109aa44cde4ea3eb0aa30a176932c",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/active-light-query.asm",
+      "start": "0x1005bff0",
+      "end_exclusive": "0x1005c03f",
+      "sha256": "7a4dcb24f0a8632488f4171937ee2daa32ce3cdcb0c2b914c9f42db09b266c4b",
+      "binary_range_sha256": "7ee458fd4f82582a6c73c499c1cdd4df8124508cba2c8b3fd2752b245f0e5b7a",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/texture-animation.asm",
+      "start": "0x10062650",
+      "end_exclusive": "0x100626dd",
+      "sha256": "23fad1e525363d2ed6c78397614513854f313f2a5f2e1b83f3ec0e9368e9bab7",
+      "binary_range_sha256": "8422f9e460996f7778acd0d3204fe967aedc0b97a1fbd6a0a1b35843d9c7cd2c",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/material-lookup.asm",
+      "start": "0x100621d0",
+      "end_exclusive": "0x100621e8",
+      "sha256": "8d9f9ea4267dfe90befbff5f297711e96bc674b08eabd35e9bcdbae09a5b0159",
+      "binary_range_sha256": "9854fa7bbc7f375f6dd942e95e1033009bb2d05e670c6be317e3c972cb1ae5cd",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/texture-binding-cache.asm",
+      "start": "0x10060e10",
+      "end_exclusive": "0x10060e42",
+      "sha256": "7804f00717fe5a03ef54938926925958edfcd2acb16c0a7141f6ac35ec9b08a1",
+      "binary_range_sha256": "6864479daf406e1799ecec74fcd253ad7660a3e8968f5f97fda3e3cde360a522",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/surface-polygon-draw.asm",
+      "start": "0x10061d50",
+      "end_exclusive": "0x10061d93",
+      "sha256": "caf85a702ac5ffc536ce58c0c7a53c130fb671447ae938e1f2f3b18e35827ba8",
+      "binary_range_sha256": "89033e9ed9f7f2917d92e1447063f8b25f6e2ba8ac27e7eeab2f3c0ef62be16b",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/inithud-wrapper.asm",
+      "start": "0x1006e740",
+      "end_exclusive": "0x1006e760",
+      "sha256": "bb0f9e59515beaa57a2575fd5329b9c73cf74e0d160664e2bf093a48a98acf2a",
+      "binary_range_sha256": "f51a2da42e6a1ea23a7febc6dbaa0a1c38414ca1d38695fd2e158ec850ebbbdb",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/resethud-wrapper.asm",
+      "start": "0x1006e9a0",
+      "end_exclusive": "0x1006e9bb",
+      "sha256": "7759ec55c368a41001327fd30df263608d8041a734c2c21089c4842925d9ab98",
+      "binary_range_sha256": "c8dbb3fdb3ef52b1bb72211e9a47a6d83d45298bc1be94ef148fabe581ba304b",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/renderer-aux-wrapper.asm",
+      "start": "0x1005fff0",
+      "end_exclusive": "0x1005fffa",
+      "sha256": "5df810c96829b0b7b499e8641c092404db0da67db4dcb0c4c5a6458e90080635",
+      "binary_range_sha256": "9e0341568d190db2c827c55b40c46935a6d7b22ba8b09458c2630ad2214a43aa",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/texture-stage-cache.asm",
+      "start": "0x10062f10",
+      "end_exclusive": "0x10062fe0",
+      "sha256": "053f64e2fb6438925292bf13e9996f37f4a23659b3d511594b5b7f3c6474c1b5",
+      "binary_range_sha256": "ac7e976babb1306d3befaed21ae0158ea7e9a579ac93a7ab6d9e1b0c4f70b9d0",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/cookiecheck-preserves-eax.asm",
+      "start": "0x100b42c0",
+      "end_exclusive": "0x100b42d1",
+      "sha256": "3a3408ac15393f0d8e952568a0ad24fdd073a394d53dfd79ad7f7aef43c85640",
+      "binary_range_sha256": "19cc9d803eb104d12424e73fbee77052fd4f0c5b41b570206f68742dd405f2f5",
+      "bytes_verified": true
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x1013ccec",
+      "bytes_hex": "00000000",
+      "float32": 0.0
+    },
+    {
+      "address": "0x1013ef28",
+      "bytes_hex": "00002041",
+      "float32": 10.0
+    }
+  ],
+  "source_c": [
+    {
+      "path": "decompiled/client/captures/graphics-blur-material-routing/004-pseudocode.c",
+      "sha256": "bec344a3e38b4dfb4c10c582aba6606e0019a57e75d35cfcc7f504bc3a8e8dcb"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-blur-material-routing/005-pseudocode.c",
+      "sha256": "9b1304588bc7967a6d53ac1a71401df31e0f56322ba20a2b4724b98b34ea5f20"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-blur-material-state/002-pseudocode.c",
+      "sha256": "6e48720f3a176735b21fa2d1aaf743bd72cb1ac4fb2ffcc62f0701a68eba0354"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-blur-material-state/003-pseudocode.c",
+      "sha256": "0eb1d26a3a1e70eadd72c1f44b46119f5705e2b21b9ad050cf0657c1237e961d"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "sha256": "d9d1cf6174f7c3e31581ad06ae02592bd97504131f1fdc2d7d2fe885b8d4b434"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/008-pseudocode.c",
+      "sha256": "5974ee8c67c26b30e830bd9f4d4321f1e6661af128d88c9a043004e753bb8ccc"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c",
+      "sha256": "a3e44a67415c479dc79b808f8f597dbdd839f5f245b44e68367893c913eae283"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-studio-flow-routing/000-pseudocode.c",
+      "sha256": "0af900958abb82154b76635c58d3528eab98eb74295352510c0adbbeeda12bee"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-bindings/002-pseudocode.c",
+      "sha256": "10a85a00e5da7d72763b48e2116cb56557e15609adddfea00c078b9a2e54fdd4"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-bindings/004-pseudocode.c",
+      "sha256": "d89e79bae9830909bed7910450f9e6bbefa87f632724ac3e50810f0a28cc015b"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-bindings/006-pseudocode.c",
+      "sha256": "fe8c57022672db0f96c136675f2312aaba8548f469c77a79632a6a2c7bd10d02"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-bindings/007-pseudocode.c",
+      "sha256": "3d99aa36c470e690e9e8e544a962ff32c83d7cca002deae3341bdae088e0c673"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-bump/001-pseudocode.c",
+      "sha256": "dbb78abb9654db92c1123d5da57b691c10607d8e7287acab1dfe32c5b43ca43f"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-bump/002-pseudocode.c",
+      "sha256": "450691bc89345e567b78e21658bacb1e6e00f8a19a8224c9824198acce0bd9b2"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-core/002-pseudocode.c",
+      "sha256": "1f72327bc4417beefd0e19a09b9ed20267f771b16b7ac674de725b4498c27247"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-core/003-pseudocode.c",
+      "sha256": "4a737a9c4b2056a552e2984e8f63a6a1116a7d29b371e20340193273ad81f047"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-inputs/000-pseudocode.c",
+      "sha256": "5cdfaec3f1919a02e7f54e91b5d88977e56586e32c7c78b71b2b2a4b1ee5c7cf"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-inputs/003-pseudocode.c",
+      "sha256": "0308d4b9f69734c7c36656400b1b609c94c80c577106815e4de1d324e418b24c"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-inputs/004-pseudocode.c",
+      "sha256": "3cefee9f2cd43f21744139fd6c964bd0b05543f9e56187965856cff65ab5735d"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-inputs/006-pseudocode.c",
+      "sha256": "985657c847a4e0cd6212fc6a63c0e0b1887931bcdc6d65113e3ddd29d8cbd75d"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-routing/001-pseudocode.c",
+      "sha256": "82773ca7f96d87aaa6296c2f20493f7db83a38504d2599e26fc2a796091e25a5"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-tangent-build/000-pseudocode.c",
+      "sha256": "32c278aeaf1c9ab2239415c89e200fd01fb922902ec2d3309206ccee3206a545"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-tangent-constructor/000-pseudocode.c",
+      "sha256": "b3d10e4f7f5078aa56eb5d15cb456fa5063ea3712914538aef9628093319dac9"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-tangents/000-pseudocode.c",
+      "sha256": "35c9c016ad9159c9250deb9953b2d24388cf6491722680e51295148bf1650c4f"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-vector-helpers/000-pseudocode.c",
+      "sha256": "e71fa294dbe06def5a86ca5f6d7af10b13f78ef046df600e2ed5a99970bf7fb4"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-vector-helpers/001-pseudocode.c",
+      "sha256": "22aa974cdc1081907ac598fd22328f39fc3a028413d3d56e963cd938feaa2dd4"
+    }
+  ]
+}

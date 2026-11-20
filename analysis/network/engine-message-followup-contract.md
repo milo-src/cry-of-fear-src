@@ -33,8 +33,9 @@ IAT01e8b24c=KERNEL32!ExitProcess; reentrant termination branch использу�
 GetCurrentProcess/TerminateProcess. PE import records сохранены. Видимый RET
 после call ExitProcess не делает этот путь возвращающимся при нормальном API.
 `01e731bc` восстанавливает ESP и регистры из jump buffer и делает косвенный JMP
-на сохранённый PC. Он не возвращается к вызывающему CALL; точный setjmp owner
-и дальнейший recovery loop остаются открытыми.
+на сохранённый PC. Он не возвращается к вызывающему CALL; setjmp owner01d7f2cc теперь установлен: при nonzero resume возвращает
+текущий hoststate без продолжения frame. Полный downstream recovery остаётся
+отдельным вопросом; см. [engine-dispatch-lifecycle.md](engine-dispatch-lifecycle.md).
 
 `01d7d873`: guard023c9dec!=0 → fatal recursive Host_Error; иначе guard1,
 cleanup01d724ac, формат1024, условные helpers01d38050/01d7e77b и console print.
@@ -98,8 +99,9 @@ DWORD по01da6395 подтверждает именно default для6/7. По
 5. Иначе выделяет0x20 через01d8cf91, записываетID+0, увеличивает nextID,
    затем пишет size+4 и копирует name+8, добавляет к **другому** списку024988a8 через next+18.
 
-Точное сравнение имён внутри01d4676f, allocator failure policy и переход между
-списками ещё не восстановлены. Формальная NULL-проверка нового node стоит
+Дополнение:01d4676f — case-sensitive byte equality0/-1; allocator01d8cf91
+вызывает malloc+memset0 безNULLguard. Promotion найден в01d816e0/01dde46f,
+serializer01dd80af пишет19bytes/node. Подробности в engine-dispatch-lifecycle.md. Формальная NULL-проверка нового node стоит
 после разыменования: не считать её защитой от NULL allocator result. Счётчик
 64..255 даёт192 возможных первоначальных ID при последовательных новых
 регистрациях и неизменённом начальном состоянии; это не155 runtimeID реестра.
@@ -116,9 +118,9 @@ ABI cdecl `(dst,src,signedLength)`, caller очищает12 bytes. При
 
 ## Следующие конкретные задачи
 
-- setjmp owner027fc1a0 и recovery/cleanup после Host_Error;
-- перенос pending registrations024988a8 в active024988ac, сравнение имён/allocator;
-- spatial helper01dd6a43, network flush, получатель и handshake регистрации;
+- полный frame/recovery cleanup после уже найденного setjmp owner01d7f2cc;
+- receiver registration39, освобождение nodes и reset nextID;
+- BSP visibility tables и network flush/acknowledgements (spatial helper уже разобран);
 - runtime writers sizebuf/callback tables/BSS02079bcc; x87 exceptional operands.
 
 Карточки: `engine-message-followup-notes.json`. Связанный цикл Begin/End:

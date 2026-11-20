@@ -153,9 +153,15 @@ texture matrix identity, MODELVIEW, blend off and depth writes on; the world
 caller later restores LEQUAL.
 
 The upload verifier `100621f0` checks GL_PROGRAM_ERROR_POSITION_ARB (`-1`) and
-GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB (`1`). Its decompiler reports a void return
-despite caller AL checks and a terminal error path; do not infer a C++ signature
-or error-buffer safety from that recovered prototype.
+GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB (`1`). The subsequent byte-verified ASM review
+establishes EAX/AL=1 on the ordinary success path; the valid-cookie helper preserves
+it. Failure copies 63 bytes from source+errorPos, then unconditionally calls
+`100b4bae`, followed by INT3; this body has no ordinary return0 fallback.
+In particular, errorPos=-1 with failed native limits starts the copy before source.
+The recovered void prototype loses this ABI behavior. See
+[client queue contract](../client-queue/contract-shader.md) for the bounded ASM,
+error-path limits, surface queues and geometry/cache cleanup. Driver execution
+and runtime consequences were not tested.
 
 ## Diffuse bump pass and separated directional atlas math
 

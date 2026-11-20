@@ -1,0 +1,625 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1000fb00",
+      "proposed_name": "CFuncConveyor_Factory",
+      "subsystem": "entity-core",
+      "summary_ru": "Фабрика CFuncConveyor: повторно использует private data edict либо выделяет объект и устанавливает численно подтверждённую vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "На ветке создания выделяет 0xe0 байт, записывает vtable 0x101a3a20 и entvars в object+4. Existing-private-data ветка возвращает существующий указатель; asm исправляет искажённый decompiler return.",
+        "Raw vtable prefix: Spawn(+2c)=0x100112b0, Use(+e8)=0x10012320; export E9 и factory C7 00 imm32 сохранены в evidence.json.",
+        "Префикс vtable ограничен 0xf4 байтами; полный класс, все inherited методы и безопасный исход invalid/OOM веток не утверждаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fb00.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100112b0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000fbc0",
+      "proposed_name": "CFuncIllusionary_Factory",
+      "subsystem": "entity-core",
+      "summary_ru": "Фабрика CFuncIllusionary: повторно использует private data edict либо выделяет объект и устанавливает численно подтверждённую vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "На ветке создания выделяет 0x180 байт, записывает vtable 0x101a3b40 и entvars в object+4. Existing-private-data ветка возвращает существующий указатель; asm исправляет искажённый decompiler return.",
+        "Raw vtable prefix: Spawn(+2c)=0x100113f0, Use(+e8)=0x1000e2e0; export E9 и factory C7 00 imm32 сохранены в evidence.json.",
+        "Префикс vtable ограничен 0xf4 байтами; полный класс, все inherited методы и безопасный исход invalid/OOM веток не утверждаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fbc0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100113f0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000fc20",
+      "proposed_name": "CFuncMonsterClip_Factory",
+      "subsystem": "entity-core",
+      "summary_ru": "Фабрика CFuncMonsterClip: повторно использует private data edict либо выделяет объект и устанавливает численно подтверждённую vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "На ветке создания выделяет 0xe0 байт, записывает vtable 0x101a3d8c и entvars в object+4. Existing-private-data ветка возвращает существующий указатель; asm исправляет искажённый decompiler return.",
+        "Raw vtable prefix: Spawn(+2c)=0x10011450, Use(+e8)=0x10012360; export E9 и factory C7 00 imm32 сохранены в evidence.json.",
+        "Префикс vtable ограничен 0xf4 байтами; полный класс, все inherited методы и безопасный исход invalid/OOM веток не утверждаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fc20.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10011450.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000fc80",
+      "proposed_name": "CFuncRotating_Factory",
+      "subsystem": "entity-core",
+      "summary_ru": "Фабрика CFuncRotating: повторно использует private data edict либо выделяет объект и устанавливает численно подтверждённую vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "На ветке создания выделяет 0xf8 байт, записывает vtable 0x101a3ebc и entvars в object+4. Existing-private-data ветка возвращает существующий указатель; asm исправляет искажённый decompiler return.",
+        "Raw vtable prefix: Spawn(+2c)=0x100114a0, Use(+e8)=0x1000e2e0; export E9 и factory C7 00 imm32 сохранены в evidence.json.",
+        "Префикс vtable ограничен 0xf4 байтами; полный класс, все inherited методы и безопасный исход invalid/OOM веток не утверждаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fc80.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100114a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000fda0",
+      "proposed_name": "CFuncWall_Factory",
+      "subsystem": "entity-core",
+      "summary_ru": "Фабрика CFuncWall: повторно использует private data edict либо выделяет объект и устанавливает численно подтверждённую vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "На ветке создания выделяет 0xe0 байт, записывает vtable 0x101a37e0 и entvars в object+4. Existing-private-data ветка возвращает существующий указатель; asm исправляет искажённый decompiler return.",
+        "Raw vtable prefix: Spawn(+2c)=0x10011810, Use(+e8)=0x100123a0; export E9 и factory C7 00 imm32 сохранены в evidence.json.",
+        "Префикс vtable ограничен 0xf4 байтами; полный класс, все inherited методы и безопасный исход invalid/OOM веток не утверждаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fda0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10011810.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000fe00",
+      "proposed_name": "CFuncWallToggle_Factory",
+      "subsystem": "entity-core",
+      "summary_ru": "Фабрика CFuncWallToggle: повторно использует private data edict либо выделяет объект и устанавливает численно подтверждённую vtable.",
+      "confidence": "high",
+      "details_ru": [
+        "На ветке создания выделяет 0xe0 байт, записывает vtable 0x101a3900 и entvars в object+4. Existing-private-data ветка возвращает существующий указатель; asm исправляет искажённый decompiler return.",
+        "Raw vtable prefix: Spawn(+2c)=0x10011880, Use(+e8)=0x100123e0; export E9 и factory C7 00 imm32 сохранены в evidence.json.",
+        "Префикс vtable ограничен 0xf4 байтами; полный класс, все inherited методы и безопасный исход invalid/OOM веток не утверждаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fe00.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10011880.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000fee0",
+      "proposed_name": "CFuncRotating_Blocked",
+      "subsystem": "entity-core",
+      "summary_ru": "Наносит блокирующей сущности damage из pev.dmg через её virtual+64.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт собственный pev одновременно как attacker и inflictor, текущий pev+1e4 и damage bits=1.",
+        "В этом теле нет проверки takedamage, cooldown или расчёта урона из скорости; HurtTouch отдельно перезаписывает pev.dmg."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000fee0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010230",
+      "proposed_name": "CFuncRotating_GetState",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает числовое состояние вращения из object+f4.",
+      "confidence": "high",
+      "details_ru": [
+        "Spawn ставит0, SpinUp использует1→2, SpinDown завершает0; RotatingUse выбирает3 для торможения с flag10, но0 до завершения торможения без него.",
+        "Это getter собственного state, не вывод из текущей angular velocity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010230.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10010f90.c",
+        "decompiled/server/partial-pass/functions/0x100114a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100102e0",
+      "proposed_name": "CFuncRotating_HurtTouch",
+      "subsystem": "entity-core",
+      "summary_ru": "При takedamage жертвы наносит currentSpeed/10 и заменяет её velocity направлением от центра brush, умноженным на этот урон.",
+      "confidence": "high",
+      "details_ru": [
+        "Проверяет victim.pev+170!=0; записывает own pev.dmg=current object+f0/10; damage virtual+64 получает own pev дважды и bits1.",
+        "Центр=(absmin+absmax)/2 через10012420; направление=victim.origin−центр. Bounded asm доказывает fallback(0,0,1) при нулевой длине, исправляя псевдо-uninitialized fStack_30.",
+        "Victim velocity+20..28 перезаписывается, не складывается с импульсом. Нет локального cooldown/current>0 guard; current0 даёт нулевую записанную velocity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100102e0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10012420.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100105e0",
+      "proposed_name": "CFuncRotating_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Разбирает fanfriction, Volume, sounds, axes и spawnorigin с различными правилами handled.",
+      "confidence": "high",
+      "details_ru": [
+        "fanfriction=atof/100→dc; Volume=clamp(atof/10,0,1)→e4; sounds=atoi→ec; axes vector→pev+44; эти ветки ставят handled1. Spawn затем заменяет volume0/friction<=0 своими defaults.",
+        "spawnorigin копируется в pev.origin только при отличии от общего vector10222f34; независимо от копирования ветка возвращает без handled1 и без base delegation. Это подтверждено полным bounded asm.",
+        "Неизвестные ключи делегирует1000dba0. Имя axes подтверждено raw101a4010; shared vector virtual-only, начальный zero-fill не доказывает runtime неизменность."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100105e0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000dba0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010b10",
+      "proposed_name": "CFuncRotating_Precache",
+      "subsystem": "entity-core",
+      "summary_ru": "Выбирает looping sound из pev.message или sounds1..5 и подготавливает продолжение вращения.",
+      "confidence": "high",
+      "details_ru": [
+        "Непустой message: PrecacheSound и AllocString→noise3; иначе fans/fan1.wav..fan5.wav для1..5, default common/null.wav без явного precache в этой ветке.",
+        "Если currentSpeed object+f0!=0, устанавливает SpinUp callback+78 и планирует1.5; текущее значение скорости не обнуляет. Это не мгновенное восстановление прежней громкости."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010b10.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10011bc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010df0",
+      "proposed_name": "CFuncRotating_RampPitchVol",
+      "subsystem": "entity-core",
+      "summary_ru": "Вычисляет громкость и pitch по отношению текущей скорости к целевой.",
+      "confidence": "high",
+      "details_ru": [
+        "ratio=object.f0/pev.speed; pitch=int(30+70*ratio); ровно100 заменяется99. Sound helper получает channel6, noise3, volume=e4*ratio, attenuation=e0, flags=c0.",
+        "Аргумент направления ramp, передаваемый callers как0/1, здесь не используется; ratio локально не ограничен и target0 не защищён."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010df0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010e80",
+      "proposed_name": "CFuncRotating_Restore",
+      "subsystem": "entity-core",
+      "summary_ru": "После успешного базового Restore читает шесть полей таблицы CFuncRotating.",
+      "confidence": "high",
+      "details_ru": [
+        "Base10017f30 должен вернуть ненулевой результат; затем10117010 получает label CFuncRotating, this, table10211430,count6.",
+        "Raw table перечисляет friction dc, attenuation e0, volume e4, float pitch e8, sounds ec(type10), currentSpeed f0; остальные type0,count1,flags0. State f4 отсутствует только в этой derived table; полный base restore вне scope."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010e80.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010f80",
+      "proposed_name": "CFuncRotating_Rotate",
+      "subsystem": "entity-core",
+      "summary_ru": "Планирует следующий think через10, не изменяя angles вручную.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственный вызов virtual+8(10.0); угловое движение уже задано avelocity. Wrapper1000e1f0 ведёт в scheduler10017110, который для обычного movetype7 использует ltime."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010f80.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x1000e1f0.c",
+        "decompiled/server/partial-pass/functions/0x10017110.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010f90",
+      "proposed_name": "CFuncRotating_RotatingUse",
+      "subsystem": "entity-core",
+      "summary_ru": "Переключает запуск и торможение вращения с отдельной ramp-веткой spawnflag10.",
+      "confidence": "high",
+      "details_ru": [
+        "ShouldToggleState10018350 фильтрует UseType по GetState. Без flag10 при current0 сразу state2,current=target,angular velocity=dir*target,sound pitch100,think Rotate; при ненулевом current ставит state0, но всё равно SpinDown через.1.",
+        "С flag10 при current0 state1,SpinUp через.1,начальный sound volume.01/pitch30; при ненулевом current state3,SpinDown через.1. Не переключает торможение обратно в разгон по знаку/состоянию.",
+        "Sound channel6; SetAvelocity100c4b90 может добавлять angular velocity родителя и обновлять детей."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010f90.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10018350.c",
+        "decompiled/server/partial-pass/functions/0x100c4b90.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10011120",
+      "proposed_name": "CFuncRotating_Save",
+      "subsystem": "entity-core",
+      "summary_ru": "После успешного базового Save записывает шесть полей CFuncRotating через native table10211430.",
+      "confidence": "high",
+      "details_ru": [
+        "Base10018000 должен вернуть ненулевой результат;1011adc0 получает targetname либо classname, label CFuncRotating,this,table,count6.",
+        "Таблица: m_flFanFriction dc,m_flAttenuation e0,m_flVolume e4,m_pitch e8,m_sounds ec,m_fCurSpeed f0. State f4 не в этой таблице; отсутствие любых иных механизмов сохранения не утверждается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10011120.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100114a0",
+      "proposed_name": "CFuncRotating_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Настраивает brush, ось, callbacks, sound defaults и отложенный автоматический старт вращения.",
+      "confidence": "high",
+      "details_ru": [
+        "state0/current0/pitch99; volume0→1; friction<=0→1; attenuation.8, flag80→2, иначе flag100→1.25. targetSpeed<=0→0.",
+        "При movedir, равном shared vector: flag4 осьZ, иначе flag8 осьX, иначеY; flag2 меняет знак. flag40:solid0/skin−1, иначеsolid4;movetype7;SetOrigin/SetModel.",
+        "Use callback+80=10010f90, flag20→HurtTouch+7c. flag1 или пустой targetname→WaitForStart+78 через1.5; затем virtual Precache. Shared vector10222f34 virtual-only initial zero-fill, runtime writers не закрыты."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100114a0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10012480.c",
+        "decompiled/server/partial-pass/functions/0x10010b10.c",
+        "decompiled/server/partial-pass/functions/0x1000e2e0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10011a90",
+      "proposed_name": "CFuncRotating_SpinDown",
+      "subsystem": "entity-core",
+      "summary_ru": "Каждые.1 уменьшает current на target*friction и завершает торможение при current<=0.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала current-=pev.speed*object.dc и SetAvelocity(dir*current); при <=0 state0/current0,SetAvelocity(shared vector),sound flags20,volume0,atten0,pitch=int(e8),think Rotate.",
+        "До достижения порога вызывает RampPitchVol(0). Шаг не умножается на frame time; общий vector и parent-aware velocity helper имеют отдельные границы."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10011a90.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10010df0.c",
+        "decompiled/server/partial-pass/functions/0x100c4b90.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10011bc0",
+      "proposed_name": "CFuncRotating_SpinUp",
+      "subsystem": "entity-core",
+      "summary_ru": "Каждые.1 увеличивает current на target*friction и ограничивает до target при достижении.",
+      "confidence": "high",
+      "details_ru": [
+        "После current+=target*friction задаёт velocity dir*current; при current>=target state2,current=target и повторный SetAvelocity, sound flags c0/pitch100,think Rotate.",
+        "Пока порог не достигнут вызывает RampPitchVol(1); delta speed не зависит от frame time."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10011bc0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10010df0.c",
+        "decompiled/server/partial-pass/functions/0x100c4b90.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012480",
+      "proposed_name": "CFuncRotating_WaitForStart",
+      "subsystem": "entity-core",
+      "summary_ru": "Ждёт global time>1 и вызывает собственный Use с TOGGLE3.",
+      "confidence": "high",
+      "details_ru": [
+        "При time>1 virtual+e8(this,this,3,0); иначе virtual+8(.1). Spawn первоначально назначает этот callback через1.5.",
+        "Порог сравнивается с global time, хотя scheduler movetype7 использует ltime; эти часы не следует смешивать."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012480.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10017110.c",
+        "decompiled/server/partial-pass/functions/0x1000e2e0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10011810",
+      "proposed_name": "CFuncWall_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Инициализирует brush как movetype7/solid4 и worldbrush при отсутствии parent.",
+      "confidence": "high",
+      "details_ru": [
+        "Angles50..58 копирует из shared vector10222f34;SetModel использует pev.model string-table offset.",
+        "Если object+14 parent==0,OR pev.flags02000000. Shared vector loader-initial zero-fill, полный runtime writer graph не доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10011810.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100123a0",
+      "proposed_name": "CFuncWall_Use",
+      "subsystem": "entity-core",
+      "summary_ru": "Переключает texture frame стены через1−frame после проверки команды.",
+      "confidence": "high",
+      "details_ru": [
+        "ShouldToggleBool100183a0 получает UseType и int(pev.frame); при разрешении frame=1−frame.",
+        "Здесь не меняются solid/effects: это не механизм скрытия WallToggle. Локального ограничения frame до0/1 нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100123a0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100183a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10011880",
+      "proposed_name": "CFuncWallToggle_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Выполняет базовый Wall Spawn и скрывает brush при spawnflag1.",
+      "confidence": "high",
+      "details_ru": [
+        "После10011810 проверяет pev.spawnflags&1; при ненуле вызывает10012210 Off, который одновременно выключает solid и ставит effects80."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10011880.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10011810.c",
+        "decompiled/server/partial-pass/functions/0x10012210.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100123e0",
+      "proposed_name": "CFuncWallToggle_Use",
+      "subsystem": "entity-core",
+      "summary_ru": "По текущему GetState переключает collision/visibility после ShouldToggleBool.",
+      "confidence": "high",
+      "details_ru": [
+        "Получает state черезvirtual5c;100183a0 фильтрует UseType с булевым state==2. При allow state2→Off10012210, иначеOn10012270.",
+        "В этой реализации GetState зависит от solid, не отдельно от effects80."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100123e0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100183a0.c",
+        "decompiled/server/partial-pass/functions/0x10010270.c",
+        "decompiled/server/partial-pass/functions/0x10012210.c",
+        "decompiled/server/partial-pass/functions/0x10012270.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012210",
+      "proposed_name": "CFuncWallToggle_ToggleOff",
+      "subsystem": "entity-core",
+      "summary_ru": "Выключает solid, ставит EF_NODRAW bit80 и перелинковывает brush.",
+      "confidence": "high",
+      "details_ru": [
+        "pev.solid=0;effects|=80. Bounded asm подтверждает вызов10119fe0(this,pev.origin), скрытые аргументы которого потеряны в C.",
+        "Другие effect bits сохраняет; модель не удаляет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012210.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10119fe0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012270",
+      "proposed_name": "CFuncWallToggle_ToggleOn",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает solid4, снимает только effects80 и перелинковывает brush.",
+      "confidence": "high",
+      "details_ru": [
+        "pev.solid=4;effects&=~80;10119fe0(this,pev.origin) подтверждено asm. Остальные effect bits остаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012270.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10119fe0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010270",
+      "proposed_name": "CFuncWallToggle_GetState",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает0 при solid0 и2 при любом другом solid.",
+      "confidence": "high",
+      "details_ru": [
+        "Getter не читает effects/nodraw; вызывающий Toggle Use использует результат==2 как булевое включённое состояние."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010270.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100112b0",
+      "proposed_name": "CFuncConveyor_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Задаёт направление, brush flags и исходную закодированную скорость конвейера.",
+      "confidence": "high",
+      "details_ru": [
+        "10102b80 переводит angles в movedir и очищает angles; затем Wall Spawn. Если spawnflag1 отсутствует,ставит flags4;flag2 задаётsolid0/skin0.",
+        "Speed==0 заменяет100, затем100122a0 пишет rendercolor. Реальные consumers flags/rendercolor в движке не раскрыты этим методом."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100112b0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10102b80.c",
+        "decompiled/server/partial-pass/functions/0x10011810.c",
+        "decompiled/server/partial-pass/functions/0x100122a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012320",
+      "proposed_name": "CFuncConveyor_Use",
+      "subsystem": "entity-core",
+      "summary_ru": "Меняет знак скорости конвейера и повторно кодирует rendercolor.",
+      "confidence": "high",
+      "details_ru": [
+        "XOR sign bit0x80000000 у pev.speed; затем100122a0(speed). UseType и его ON/OFF смысл здесь не фильтруются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012320.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x100122a0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100122a0",
+      "proposed_name": "CFuncConveyor_EncodeSpeed",
+      "subsystem": "entity-core",
+      "summary_ru": "Упаковывает знак и модуль скорости конвейера в три float-компоненты rendercolor.",
+      "confidence": "high",
+      "details_ru": [
+        "n=int(abs(speed)*16); R=(speed<0?1:0),G=n>>8,B=n&255. Для±100 результат(0/1,6,64). Bounded asm подтверждает вычисление.",
+        "Локального clamp G до255 нет. Это producer, не доказательство конкретного renderer/physics decoder."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100122a0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100113f0",
+      "proposed_name": "CFuncIllusionary_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "Создаёт nonsolid неподвижный brush с заданной model.",
+      "confidence": "high",
+      "details_ru": [
+        "Копирует shared vector в angles, movetype0/solid0,SetModel. Сам не выставляет EF_NODRAW; не следует отождествлять nonsolid и невидимость."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100113f0.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10010570",
+      "proposed_name": "CFuncIllusionary_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Разбирает skin через float-парсинг и делегирует остальные ключи.",
+      "confidence": "high",
+      "details_ru": [
+        "Raw string101a3c60=skin; atof(value)→1013df50 conversion→pev.skin110,handled1. Это не прямой atoi.",
+        "Неизвестный ключ передаёт10102480; полный inherited key set здесь не раскрывается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10010570.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10102480.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10011450",
+      "proposed_name": "CFuncMonsterClip_Spawn",
+      "subsystem": "entity-core",
+      "summary_ru": "После Wall Spawn устанавливает monsterclip flag и скрывает служебный brush при showtriggers0.",
+      "confidence": "high",
+      "details_ru": [
+        "При cvar showtriggers==0 присваивает effects=80, а не OR; всегда OR flags00800000. Wall Spawn предварительно задаётmovetype7/solid4 и model.",
+        "Engine collision consumer и runtime отображение не проверены; здесь доказаны setter и условие."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10011450.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json",
+        "decompiled/server/partial-pass/functions/0x10011810.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012360",
+      "proposed_name": "CFuncMonsterClip_Use",
+      "subsystem": "entity-core",
+      "summary_ru": "Пустой Use: сущность не переключается этим методом.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело только return;factory/vtable101a3d8c связывает его с monsterclip. Не утверждается отсутствие иных lifecycle воздействий."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012360.c",
+        "analysis/server-queue-a/contract.md",
+        "analysis/server-queue-a/evidence.json"
+      ]
+    }
+  ],
+  "subsystems": []
+}

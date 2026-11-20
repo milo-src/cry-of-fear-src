@@ -1,0 +1,303 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll",
+  "binary_sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875",
+  "target_executed": false,
+  "source_listing": "analysis/local/queue-engine-text.asm",
+  "source_listing_sha256": "21f6095669d1a2958bc63002f362f8cfd868596455c4b02561f15d8ba491b23e",
+  "ranges": [
+    {
+      "start": "0x01d4676f",
+      "end_exclusive": "0x01d467b7",
+      "file": "01d4676f.asm",
+      "sha256": "aaf4f1419485d7e46d9e5b4b9496babba8455752a5c58a9022dd1454c65ca7dd",
+      "byte_count_checked": 72,
+      "binary_range_sha256": "1b1ab01a93a0c7d5c7ab95b8bfe82246b98be20cef8fff9fc2a83906cd8b5910",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d46622",
+      "end_exclusive": "0x01d4666a",
+      "file": "01d46622.asm",
+      "sha256": "9f450e1157d989fe7c601ae85751f57222c958306c214672dd6710c85fde1965",
+      "byte_count_checked": 72,
+      "binary_range_sha256": "5e1a711dad607175d8124ccf4978c0aa7a18153ef0b6b433a7c42326b2377ccf",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d8cf91",
+      "end_exclusive": "0x01d8cfbd",
+      "file": "01d8cf91.asm",
+      "sha256": "80505c87f873fb0c8c6a53f399aa0e9248bee263c1deab7515bf2d6942689a10",
+      "byte_count_checked": 44,
+      "binary_range_sha256": "a408c6c51cc537c64cbed13a50432ce41ac4121abbce8cc0aac3c23d73a3320a",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01dd80af",
+      "end_exclusive": "0x01dd8163",
+      "file": "01dd80af.asm",
+      "sha256": "4858ccb5d2336b360d8bf993cd2a061f5904dcae65807ca089369e7af8a4b21f",
+      "byte_count_checked": 180,
+      "binary_range_sha256": "80d38b960950f28926dfc98b77b5d076a85e3afcaf55c32cc6588c570c46929f",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d816e0",
+      "end_exclusive": "0x01d818c8",
+      "file": "01d816e0.asm",
+      "sha256": "15407ea2d30a37e0c5ab7195d7e209025426bb29aa1dd53bde22c49d186fac49",
+      "byte_count_checked": 488,
+      "binary_range_sha256": "e29560597e348e54f1ba32dfd738b063df3fe5df34de286a9117c86a133de269",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01dde46f",
+      "end_exclusive": "0x01dde78a",
+      "file": "01dde46f.asm",
+      "sha256": "48bd496c24b72e6fa597ead8df278c4c68b087467aa43295d5f7962b6aa45f18",
+      "byte_count_checked": 795,
+      "binary_range_sha256": "660027b8eab1df8967252231d96dfafdd8894ba0099f0b128cccbe93e45a0133",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01de007a",
+      "end_exclusive": "0x01de04a3",
+      "file": "01de007a.asm",
+      "sha256": "194bd5b108ebc8b8114843f4e86281279b781c147dd9b0e639c895d31e2c3da6",
+      "byte_count_checked": 1065,
+      "binary_range_sha256": "8a0e97ea2a5741891e01bac17b714a1fa7860109a86ef5b9b6590081bfb960d9",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d7f2cc",
+      "end_exclusive": "0x01d7f45e",
+      "file": "01d7f2cc.asm",
+      "sha256": "0d04650ad6787ec62b0551956d94593584788059380bb008587bde871eb32ad4",
+      "byte_count_checked": 402,
+      "binary_range_sha256": "4892b1e56128dbd84a81a47409114f1adb69e79d296bb67b3d16027c312589ba",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01dd6a43",
+      "end_exclusive": "0x01dd6c35",
+      "file": "01dd6a43.asm",
+      "sha256": "11885c8d8a576568e1ff9e9a07c9b85afde6e0d8a4e09265a90593d6b0e21430",
+      "byte_count_checked": 498,
+      "binary_range_sha256": "517bd813a10e287773aa7de953ffb858fc5d3019d53667e064d981cd5db16394",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01e73274",
+      "end_exclusive": "0x01e732ef",
+      "file": "01e73274.asm",
+      "sha256": "f02a749a6d6416ea6a1d37142ba3c2178c909dfae2e18be12d5496fe9fd99662",
+      "byte_count_checked": 123,
+      "binary_range_sha256": "c24e8aaed4de58907df11c265260404d68e8b92e1a6373d11e2db8e73238e755",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01dd696a",
+      "end_exclusive": "0x01dd6a43",
+      "file": "01dd696a.asm",
+      "sha256": "1ffb97cedf0dcf5560956bb62df57fc09cc43475204a2f13ca5c7681178af27b",
+      "byte_count_checked": 217,
+      "binary_range_sha256": "2b8aa79f1972c6ade00fde486f5993636b8bb7991d2b6a13aee2c5d4d4553963",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01ddd3c7",
+      "end_exclusive": "0x01ddd405",
+      "file": "01ddd3c7.asm",
+      "sha256": "526bf0eef203f2ad73d8074ddca35dec7276c0d0235157572f7d2cb00e128293",
+      "byte_count_checked": 62,
+      "binary_range_sha256": "4599caaae3c703486e11b95e1725c0279b591085a2b23dee9b4080357ace21ec",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d470eb",
+      "end_exclusive": "0x01d47141",
+      "file": "01d470eb.asm",
+      "sha256": "8807e902eee45eec8a3aa4be9561d2baf4f85a4a5928f715ffc317f6a17eeb1e",
+      "byte_count_checked": 86,
+      "binary_range_sha256": "aa40f4f8ea7a070e704c1b880af4815f74b5ecb7fbcee267f31f616964e39469",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01dd8163",
+      "end_exclusive": "0x01dd84e4",
+      "file": "01dd8163.asm",
+      "sha256": "0392e1435e416fff5c70a7b9b0b1c2637a36385492fb2d1688674bc39b65f3a6",
+      "byte_count_checked": 897,
+      "binary_range_sha256": "415b1dd5d552ea7779a43217a9de0ac0189d03499da1505a81aff045f62eceff",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d45b16",
+      "end_exclusive": "0x01d45b3d",
+      "file": "01d45b16.asm",
+      "sha256": "fe5ac5d062d4c5f8bcc195eca19b208e259bd5a247d72f5d807e587c68afddee",
+      "byte_count_checked": 39,
+      "binary_range_sha256": "8ba723b9a84177c57ec337f97015e16cad31212e2b0580e3a526455a832a0cd8",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    },
+    {
+      "start": "0x01d45b3d",
+      "end_exclusive": "0x01d45b64",
+      "file": "01d45b3d.asm",
+      "sha256": "70042f035715fb2bf17fb947137b48485be5af74fff7f8588fe0c195dd5b3675",
+      "byte_count_checked": 39,
+      "binary_range_sha256": "a9c72627919b3209c8d2f4b98bb00348a65e5060c111378c72c46e3d35225c6e",
+      "coverage": "bounded interval; function boundaries established separately from C"
+    }
+  ],
+  "literal_global_operand_observations": [
+    {
+      "va": "0x01d7d865",
+      "line": " 1d7d865:\t68 a0 c1 7f 02       \tpush   0x27fc1a0"
+    },
+    {
+      "va": "0x01d7d95a",
+      "line": " 1d7d95a:\t68 a0 c1 7f 02       \tpush   0x27fc1a0"
+    },
+    {
+      "va": "0x01d7f2d4",
+      "line": " 1d7f2d4:\t68 a0 c1 7f 02       \tpush   0x27fc1a0"
+    },
+    {
+      "va": "0x01d8185a",
+      "line": " 1d8185a:\t83 3d a8 88 49 02 00 \tcmp    DWORD PTR ds:0x24988a8,0x0"
+    },
+    {
+      "va": "0x01d81863",
+      "line": " 1d81863:\t83 3d ac 88 49 02 00 \tcmp    DWORD PTR ds:0x24988ac,0x0"
+    },
+    {
+      "va": "0x01d8186c",
+      "line": " 1d8186c:\t8b 15 a8 88 49 02    \tmov    edx,DWORD PTR ds:0x24988a8"
+    },
+    {
+      "va": "0x01d81872",
+      "line": " 1d81872:\t89 15 ac 88 49 02    \tmov    DWORD PTR ds:0x24988ac,edx"
+    },
+    {
+      "va": "0x01d8187a",
+      "line": " 1d8187a:\ta1 ac 88 49 02       \tmov    eax,ds:0x24988ac"
+    },
+    {
+      "va": "0x01d81899",
+      "line": " 1d81899:\t8b 15 a8 88 49 02    \tmov    edx,DWORD PTR ds:0x24988a8"
+    },
+    {
+      "va": "0x01d818a2",
+      "line": " 1d818a2:\tc7 05 a8 88 49 02 00 \tmov    DWORD PTR ds:0x24988a8,0x0"
+    },
+    {
+      "va": "0x01da6529",
+      "line": " 1da6529:\ta1 ac 88 49 02       \tmov    eax,ds:0x24988ac"
+    },
+    {
+      "va": "0x01da6560",
+      "line": " 1da6560:\t8b 15 a8 88 49 02    \tmov    edx,DWORD PTR ds:0x24988a8"
+    },
+    {
+      "va": "0x01dd80b3",
+      "line": " 1dd80b3:\t83 3d a8 88 49 02 00 \tcmp    DWORD PTR ds:0x24988a8,0x0"
+    },
+    {
+      "va": "0x01dd80c0",
+      "line": " 1dd80c0:\ta1 a8 88 49 02       \tmov    eax,ds:0x24988a8"
+    },
+    {
+      "va": "0x01dd8270",
+      "line": " 1dd8270:\t83 3d ac 88 49 02 00 \tcmp    DWORD PTR ds:0x24988ac,0x0"
+    },
+    {
+      "va": "0x01dd8279",
+      "line": " 1dd8279:\t8b 0d a8 88 49 02    \tmov    ecx,DWORD PTR ds:0x24988a8"
+    },
+    {
+      "va": "0x01dd8285",
+      "line": " 1dd8285:\t8b 15 ac 88 49 02    \tmov    edx,DWORD PTR ds:0x24988ac"
+    },
+    {
+      "va": "0x01dd828b",
+      "line": " 1dd828b:\t89 15 a8 88 49 02    \tmov    DWORD PTR ds:0x24988a8,edx"
+    },
+    {
+      "va": "0x01dd82a6",
+      "line": " 1dd82a6:\t89 0d a8 88 49 02    \tmov    DWORD PTR ds:0x24988a8,ecx"
+    },
+    {
+      "va": "0x01dde563",
+      "line": " 1dde563:\t83 3d a8 88 49 02 00 \tcmp    DWORD PTR ds:0x24988a8,0x0"
+    },
+    {
+      "va": "0x01dde583",
+      "line": " 1dde583:\t83 3d a8 88 49 02 00 \tcmp    DWORD PTR ds:0x24988a8,0x0"
+    },
+    {
+      "va": "0x01dde58c",
+      "line": " 1dde58c:\t83 3d ac 88 49 02 00 \tcmp    DWORD PTR ds:0x24988ac,0x0"
+    },
+    {
+      "va": "0x01dde595",
+      "line": " 1dde595:\ta1 a8 88 49 02       \tmov    eax,ds:0x24988a8"
+    },
+    {
+      "va": "0x01dde59a",
+      "line": " 1dde59a:\ta3 ac 88 49 02       \tmov    ds:0x24988ac,eax"
+    },
+    {
+      "va": "0x01dde5a1",
+      "line": " 1dde5a1:\t8b 0d ac 88 49 02    \tmov    ecx,DWORD PTR ds:0x24988ac"
+    },
+    {
+      "va": "0x01dde5c1",
+      "line": " 1dde5c1:\ta1 a8 88 49 02       \tmov    eax,ds:0x24988a8"
+    },
+    {
+      "va": "0x01dde5c9",
+      "line": " 1dde5c9:\tc7 05 a8 88 49 02 00 \tmov    DWORD PTR ds:0x24988a8,0x0"
+    },
+    {
+      "va": "0x01de0380",
+      "line": " 1de0380:\t83 3d ac 88 49 02 00 \tcmp    DWORD PTR ds:0x24988ac,0x0"
+    },
+    {
+      "va": "0x01de0389",
+      "line": " 1de0389:\ta1 a8 88 49 02       \tmov    eax,ds:0x24988a8"
+    },
+    {
+      "va": "0x01de0394",
+      "line": " 1de0394:\t8b 0d ac 88 49 02    \tmov    ecx,DWORD PTR ds:0x24988ac"
+    },
+    {
+      "va": "0x01de039a",
+      "line": " 1de039a:\t89 0d a8 88 49 02    \tmov    DWORD PTR ds:0x24988a8,ecx"
+    },
+    {
+      "va": "0x01de03b5",
+      "line": " 1de03b5:\ta3 a8 88 49 02       \tmov    ds:0x24988a8,eax"
+    },
+    {
+      "va": "0x01de0ea0",
+      "line": " 1de0ea0:\t8b 0d ac 88 49 02    \tmov    ecx,DWORD PTR ds:0x24988ac"
+    },
+    {
+      "va": "0x01de0f39",
+      "line": " 1de0f39:\t8b 0d a8 88 49 02    \tmov    ecx,DWORD PTR ds:0x24988a8"
+    },
+    {
+      "va": "0x01de0f45",
+      "line": " 1de0f45:\t89 15 a8 88 49 02    \tmov    DWORD PTR ds:0x24988a8,edx"
+    },
+    {
+      "va": "0x01df26b5",
+      "line": " 1df26b5:\t68 a0 c1 7f 02       \tpush   0x27fc1a0"
+    }
+  ],
+  "limitations": [
+    "Literal operand matches in objdump listing are not a complete native xref graph; indirect aliases may be absent.",
+    "No original process execution or network delivery observation."
+  ]
+}

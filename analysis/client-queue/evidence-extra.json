@@ -1,0 +1,109 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "source_listing": "analysis/local/music-state-client-text.asm",
+  "source_listing_sha256": "fdf5a6a09539335fc42892b84367c4b204716d8a3784e49e0ea7ca6661c75bf9",
+  "target_executed": false,
+  "new_rea_process": false,
+  "ranges": [
+    {
+      "path": "analysis/client-queue/weapon-message-registration.asm",
+      "start": "0x1001a2f0",
+      "end_exclusive": "0x1001a3b1",
+      "sha256": "09f5c3086340d4161be5b7559aa9b415d45f6aa581371dd9e25d629d794e9051",
+      "binary_range_sha256": "f79a76f5d525e9d83c0010d09c6167c59204e9f14f00209f06d5bd572a957f95",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/weapon-message-wrappers.asm",
+      "start": "0x1001c090",
+      "end_exclusive": "0x1001c190",
+      "sha256": "dc297811b1cf596c327b7554e092a216cc71e6d91222249e880976718d95bb43",
+      "binary_range_sha256": "60b1024f92b3f5a4bca2f4163b45f23843c585515b7f6c8f7e2ae2ce20a7d9de",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/read-long.asm",
+      "start": "0x100809b0",
+      "end_exclusive": "0x10080a10",
+      "sha256": "f12cdc506c225310f7ae5d25a5ba83dc0f7f216f5525c1843b9e4709d21da446",
+      "binary_range_sha256": "541028fcb43b87ce89acd98befc99901939501f59b3076eac119f1af7966108c",
+      "bytes_verified": true
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x1013f058",
+      "text": "CurWeapon",
+      "bytes_hex": "437572576561706f6e00"
+    },
+    {
+      "address": "0x1013f064",
+      "text": "WeaponList",
+      "bytes_hex": "576561706f6e4c69737400"
+    },
+    {
+      "address": "0x1013f070",
+      "text": "AmmoPickup",
+      "bytes_hex": "416d6d6f5069636b757000"
+    },
+    {
+      "address": "0x1013f07c",
+      "text": "WeapPickup",
+      "bytes_hex": "576561705069636b757000"
+    },
+    {
+      "address": "0x1013f0a0",
+      "text": "AmmoX",
+      "bytes_hex": "416d6d6f5800"
+    },
+    {
+      "address": "0x1013f0bc",
+      "text": "DualAmmo",
+      "bytes_hex": "4475616c416d6d6f00"
+    },
+    {
+      "address": "0x1013f4d0",
+      "text": "!%s",
+      "bytes_hex": "21257300"
+    }
+  ],
+  "source_c": [
+    {
+      "path": "decompiled/client/captures/graphics-client-first/007-pseudocode.c",
+      "sha256": "1b0d2b3de022b4bc482d9ed6dbd939a4341665efc42531dd31a57be72643ddb8"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/000-pseudocode.c",
+      "sha256": "7c55e733cec49205bfe4624052052585d1923626ae4b5c176c8e9b17b651431e"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/001-pseudocode.c",
+      "sha256": "7357d60c58b8c44bb60c15c8397b16fe298f377564b11aa351e069e6f44ffd51"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/002-pseudocode.c",
+      "sha256": "c4f57ee4cb0e3101a6388f1ba83ae120f180852e97f2bda0985eea3d8c59fc1c"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/003-pseudocode.c",
+      "sha256": "d3a673b98346d5ef0202020183fd6a190f863b0f53b2b2ab3c32aa023411b8ec"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/004-pseudocode.c",
+      "sha256": "8dc68128ea67a855d7735feb6f6fe72cac159ab8f72c1f8bbb044fc6b73ad0f9"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/005-pseudocode.c",
+      "sha256": "991b27f45282695a3706a2ca7602c062b07768437f27e9fece17c860022754f3"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-core/006-pseudocode.c",
+      "sha256": "5a6f40087f3fe92ec3a92e8e1295a154b9fe0bf9c23283d1ca95dc5d234bf698"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-effects/001-pseudocode.c",
+      "sha256": "af7e24ee63f53773b5c10816a262a75f995cfea9d388c6540dc8cd5b8fefa891"
+    }
+  ]
+}

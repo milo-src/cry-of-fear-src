@@ -248,7 +248,7 @@ float приведены в `engine-wire-contract.md`. Нельзя перено
    а также возможная подмена таблиц/регистраций после исходного bootstrap.
 3. Необычные числовые состояния WRITE_COORD: NaN/Inf, выход за int64 и
    исключения x87; клиентский parser не решает поведение encoder.
-4. Setjmp owner/recovery после engine nonlocal error transfer и дальнейшая судьба overflow
+4. Полный frame/recovery после engine nonlocal error transfer (owner01d7f2cc установлен) и дальнейшая судьба overflow
    staging; подробнее ограниченная модель в engine-message-buffer-contract.md.
 5. Более узкие ограничения map strings/AllocString и внутренние destinations
    музыкального producer отдельно от сетевой границы.

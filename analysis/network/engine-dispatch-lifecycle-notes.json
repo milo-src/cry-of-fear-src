@@ -1,0 +1,263 @@
+{
+  "functions": [
+    {
+      "module": "engine",
+      "address": "0x01d4676f",
+      "proposed_name": "Q_strcmp_EqualityOnly",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Сравнивает две NUL-строки по байтам: 0 при полном совпадении, -1 при любом различии.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Сравнение чувствительно к регистру. Нет лексикографической разности, ограничения длины или NULL guards. RegUserMsg проверяет результат == 0.",
+        "ASM подтверждает возврат 0/-1; предупреждение Ghidra о недостижимом блоке не меняет этот контракт."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/000-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01d4676f.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d46622",
+      "proposed_name": "Q_strcpy_ForwardWithUnconditionalTerminator",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Копирует строку вперёд до NUL, затем безусловно пишет terminator в dst.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Цикл проверяет dst/src, но финальная запись *dst=0 не защищена: NULL dst недопустим. NULL src при nonnull dst даёт пустую строку.",
+        "Нет capacity/overlap guard; RegUserMsg ограничивает имя до 11 байт отдельно. Это не bounded strcpy."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/001-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01d46622.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d8cf91",
+      "proposed_name": "Mem_AllocZeroedUnchecked",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Вызывает malloc(n), затем memset(result,0,n), возвращает указатель без собственного NULL guard.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Один аргумент size_t; оба CRT calls подтверждены C/ASM. Умножения размеров, как в calloc, нет.",
+        "Успешно выделенный registration node размером32 обнулён, включая хвост name[16]. Политика CRT failure/exception остаётся внешней; явного Host_Error здесь нет."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/002-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01d8cf91.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01dd80af",
+      "proposed_name": "SV_WriteUserMessageRegistrations",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Пишет описания по 19 байт для каждого node из pending024988a8 в переданный sizebuf.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Wire: BYTE39, BYTE id, BYTE size, четыре LE DWORD name[16]. Size -1 становится FF. Получатель этого формата пока не разобран.",
+        "Проходит next+18; не переносит и не очищает список, не проверяет ID/name повторно. Копируются все16 байт имени без отдельного string length.",
+        "Signon/activation временно подставляют active head для сериализации известных регистраций."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/003-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01dd80af.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d816e0",
+      "proposed_name": "Host_PrepareMapAndPromoteUserMessages",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Готовит и активирует карту; на успешном пути переносит pending registrations в хвост active.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "После успешного01de04d1 normal branch вызывает01de0ddb и01de007a(1), затем возможен ранний return при025203a0==0. Restore branch вызывает01d8405b, условно01de0ddb, ставит flags025203a4/a8=1 и вызывает01de007a(0).",
+        "Pending024988a8 добавляется к хвосту active024988ac через next+18, затем pending=0. Deduplication нет. При state02dcf280!=0 ставится команда connect local.",
+        "Внутренние map preparation/restore helpers ещё не разобраны полностью; здесь установлены их вызовы и guards."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/004-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01d816e0.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01dde46f",
+      "proposed_name": "SV_DistributeRegistrationsAndSharedBuffers",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Сериализует pending для подходящих клиентов, продвигает регистрации, распределяет и сбрасывает общие буферы.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Шаг client record5018. В первом цикле entity+4b9c!=0, flag+2548==0 и (+0||+c) ведут к serializer(buffer+7c). После цикла pending добавляется к active и обнуляется.",
+        "Timed client info +4cc0/+4cc4 вызывает01ddeafb/01ddccec. Datagram/spectator overflow вызывает diagnostic и reset.",
+        "Второй цикл: active+0!=0, flag+2548==0;025734c4 идёт в client+7c либо01d90aad;02572510 в +25c0 либо warning;0257488c в +25c0 при +254c!=0. Проверка места строгая: cursize+len<max.",
+        "В конце сбрасываются три shared buffers. Наличие байтов в очереди не доказывает доставку или acknowledgement."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/005-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01dde46f.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01de007a",
+      "proposed_name": "SV_ActivateServerAndSendRegistrationSignon",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Вызывает activation callback, начальные шаги сервера и формирует signon с active registrations.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Проверяет game directories cstrike/beta/czero/czeror/terror. Game callback0250d914 получает entity base02572500, count025724f8, maxclients0251f328. Затем state025203a0=1,0257250c=2.",
+        "Mode0: один шаг с double0.001; mode!=0 и maxclients<2: два шага0.1; иначе16 шагов0.8 через01de8fda. Это startup intervals, не FPS.",
+        "Client gates: (+0||+c), !+2548. Временный buffer65536; save pending, подстановка active, serializer, restore pending. Затем flag+14=1, channel helpers01d90aad/01d90636 и reset буфера.",
+        "В конце map CRC diagnostic; непустой map-change config форматируется как exec%s и передаётся01d440eb. External helpers, formatter bounds и полный activation lifecycle остаются открытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/006-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01de007a.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d7f2cc",
+      "proposed_name": "Host_FrameWithErrorJumpBoundary",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Владеет setjmp027fc1a0: после nonlocal error возвращает текущий host state, пропуская остаток кадра.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "__setjmp3(buffer,0) возвращает0 на обычном пути. Host_Error longjmp1 или recursive fatal2 ведёт сразу к return0250d988. ASM сохраняет ESP/PC; это не C++ exception catch.",
+        "Обычный путь обновляет state с guard3/023c9f48, очищает *out, вызывает frame01d7f0f8(arg), переносит и сбрасывает02499f64; профилирует при01ebc994.",
+        "Nonzero resume не очищает *out заново и не откатывает globals. Full frame/downstream cleanup не раскрыт; формула x87 profile integer conversion отдельно не типизирована."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/007-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01d7f2cc.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01dd6a43",
+      "proposed_name": "SV_Multicast_FilterAndAppend",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Фильтрует клиентов, переносит multicast02574478 в их буферы, затем сбрасывает его.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Сохраняет current client027fc11c; origin преобразуется в leaf index01ddd3c7. Для nonnull source ищет entity+4b9c; при отсутствии совпадения current остаётся прежним.",
+        "Требуется client+0; mask80 исключает current. Для nonzero entity group bits+2c4 mode0242f310=0 требует пересечение,1 — отсутствие пересечения; прочие значения проходят этот фильтр.",
+        "Predicate01dd696a false увеличивает024988a0 на payload. True выбирает +25c0 при reliable0, иначе+7c; копирует только при payload<remaining. Недостаток места не считается predicate rejection.",
+        "Обычный выход сбрасывает multicast и восстанавливает current. Nonlocal error rollback и фактическая доставка не установлены."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine/008-pseudocode.c",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01dd6a43.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01dd696a",
+      "proposed_name": "SV_MulticastRecipientMaskTest",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Проверяет recipient по mode1/2/4 и битовой таблице, с обходом через специальные gates.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Удаляет только mask80. Helper01d7f691!=0 либо client+254c!=0 даёт1. Иначе mode1 без таблицы,2 вызывает01d45b16,4 вызывает01d45b3d; прочие — print и0.",
+        "Для nonnull table вычисляет leaf01ddd3c7(entity+4b9c +88) и проверяет byte[(leaf-1)>>3] & (1<<((leaf-1)&7)). Guard leaf<=0 отсутствует; NULL table даёт1.",
+        "ASM table helpers: bases0206baa0/0206ba9c + index*stride0206b698 либо fallback0206b69c. Названия PVS/PAS и создание таблиц ещё не установлены."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine-routing/000-pseudocode.c",
+        "decompiled/engine/captures/queue-engine-routing/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01dd696a.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01ddd3c7",
+      "proposed_name": "SV_PointToWorldLeafIndex",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Преобразует результат point-in-world helper в индекс массива элементов размером60 байт.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Вызывает01d623cb(point,world025204d0). NULL даёт0; иначе signed(result-world[+8c])/0x3c с IDIV.",
+        "Полный BSP traversal и layout leaf ещё не восстановлены. Потребители используют result-1 для bitmap."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine-routing/001-pseudocode.c",
+        "decompiled/engine/captures/queue-engine-routing/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01ddd3c7.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d470eb",
+      "proposed_name": "MSG_WriteLong_LittleEndian",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Резервирует4 байта и пишет все32 бита аргумента в little-endian.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "01d483e8(buf,4), затем байты value>>(0,8,16,24). ASM SAR с масками младших байтов даёт тот же побитовый LE result.",
+        "Это не active-message wrapper; overflow flag повторно не проверяется. Serializer использует функцию для name[16]."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine-routing/002-pseudocode.c",
+        "decompiled/engine/captures/queue-engine-routing/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01d470eb.asm"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01dd8163",
+      "proposed_name": "SV_NewConnectionSignonAndGameAdmission",
+      "subsystem": "network lifecycle",
+      "summary_ru": "Готовит signon и active registrations, затем вызывает game callback допуска клиента.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Gate02d7da1c!=1 && (client+4==0||+0!=0); stack sizebuf65536, reset+7c/+25c0, channel/server-info helpers.",
+        "Сохраняет pending, подставляет active для01dd80af, восстанавливает pending; client+14=1. Это восстановление обычного пути, не гарантия при longjmp.",
+        "Условный callback0250d900; callback0250d8fc(entity,name,address,reason) false ведёт к echo/reject01d7e2d6, true — к fullserverinfo, обходу client info и queue helpers01d90aad/01d90636.",
+        "Stack probe искажает C signatures; bounded ASM уточняет аргументы. Receiver acknowledgement, конечная доставка и точные имена всех callbacks остаются открытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/queue-engine-routing/003-pseudocode.c",
+        "decompiled/engine/captures/queue-engine-routing/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle-assembly/01dd8163.asm"
+      ]
+    }
+  ]
+}

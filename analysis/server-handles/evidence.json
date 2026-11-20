@@ -1,0 +1,118 @@
+{
+  "module": "server",
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll",
+  "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "target_executed": false,
+  "ranges": [
+    {
+      "path": "analysis/server-handles/10017740.asm",
+      "start": "0x10017740",
+      "end_exclusive": "0x100177b0",
+      "sha256": "01c4bf0a3d20dc5a23cc38be0bf53207320ce280e48823ccbbb8ee5d9c78c54a",
+      "binary_range_sha256": "04068e4e648717465f45cc7332277d0544d74c679d54d3f819296e11b68e3cce",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10017740",
+        "--stop-address=0x100177b0",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-handles/10017ba0.asm",
+      "start": "0x10017ba0",
+      "end_exclusive": "0x10017bb1",
+      "sha256": "0168bcea4adfb9887f928992f7655c73964a7f2a20cdd4f21313b1625c4e78ca",
+      "binary_range_sha256": "25fd2143abd24e7f244f564284cc71523e906ec8ee9dc5103330b67d07048fba",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10017ba0",
+        "--stop-address=0x10017bb1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-handles/1008f2f0.asm",
+      "start": "0x1008f2f0",
+      "end_exclusive": "0x1008f304",
+      "sha256": "e435260f7fa00260aaed46049e87919db4d69483934bacd41361ef8573729c93",
+      "binary_range_sha256": "4d15ce4b6c2902c523b1f34b259779202f6c7fb499a401ecd2c4cdb216289e5d",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1008f2f0",
+        "--stop-address=0x1008f304",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-handles/10101ee0.asm",
+      "start": "0x10101ee0",
+      "end_exclusive": "0x10101f10",
+      "sha256": "dd18290f3fb297a4391288cd9b4f3bca581304ae825fb4e159ec3b411fd11dee",
+      "binary_range_sha256": "966b46805b41ed1cdf54795bb44a43ee59bfde51f7d8a920196e256d6b2d9f55",
+      "bytes_verified": true,
+      "command": [
+        "objdump",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10101ee0",
+        "--stop-address=0x10101f10",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "source_c": [
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10017740.c",
+      "sha256": "0b5e69263bb3d1779a36686b535de1f820abc55945966a6f47444edd14f09c14"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10017780.c",
+      "sha256": "53dc0658096d3c94a5bfff7383a67baade6b23a55a37bd0bd8f75d6576637d6e"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10017790.c",
+      "sha256": "4dcab867b18249debc88b7e8bd5619c8dd5292be05d1f645be99c33723c09e31"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100177a0.c",
+      "sha256": "0d6e0e29145c88b5915644d8085d0cf51066e1da44e145ea494d434596e19abe"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10017ba0.c",
+      "sha256": "9c6cc0af56b443513d6e16352e0f757d3a4ab57fb0486d81c2ce182827acfe0c"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x1008f2f0.c",
+      "sha256": "3e48870582919609e2ff792934ba06199221d622a129bfe758b2bb05645fd366"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x10101ee0.c",
+      "sha256": "35aa0c891ca2105c40a12c1181feae84710c04f9ec44fe1374da00e24adb93fb"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100145b0.c",
+      "sha256": "5167da17881e5c26425e4de7ac520ffed045454d043d2be76913d352ff33201a"
+    },
+    {
+      "path": "decompiled/server/partial-pass/functions/0x100165a0.c",
+      "sha256": "a1868228caad1287c7140a2f9a0122bd861546e660ff03b83e21bd06b0d1fda1"
+    }
+  ],
+  "limitations": [
+    "Names describe static behavior; original C++ operator spelling is not proven.",
+    "Raw serial validation does not establish the engine lifetime/reuse policy."
+  ]
+}

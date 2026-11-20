@@ -1,0 +1,163 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1001b110",
+      "proposed_name": "AmmoX_ReadByteIndexAndAbsoluteSignedShort",
+      "subsystem": "weapons",
+      "summary_ru": "AmmoX обновляет reserve array по BYTE индексу и abs(signed SHORT), а не двум BYTE.",
+      "confidence": "high",
+      "details_ru": [
+        "InitReader; BYTE index; signed SHORT count10080a10; DAT101b2420[index]=abs(count),return1. Например-32768 превращается 32768; clip/weapon selection не меняется.",
+        "Нет bounds-check index или bad-read check. При ошибке reader может вернуть-1; нормальная wire длина 3 не означает, что body проверяет именно 3. Wrapper1001c0b0 связывает handler с AmmoX."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/000-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "analysis/client-queue/weapon-message-registration.asm",
+        "analysis/client-queue/weapon-message-wrappers.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001b150",
+      "proposed_name": "CurWeapon_SelectDescriptorAndUpdateSignedClip",
+      "subsystem": "weapons",
+      "summary_ru": "CurWeapon обновляет clip weapon record и при active state выбирает current HUD weapon.",
+      "confidence": "high",
+      "details_ru": [
+        "Wire BYTE state, signed CHAR weaponID, signed CHAR clip. ID<1 вызывает SetCrosshair(0,globalRect,0,0,0),очищает this+8c,return0. Для ID>=1 запись по 101af810+ID*15c; clip<-1→abs,иначе сохраняется включая-1.",
+        "При valid ID и 105593b8!=4 сбрасывает 1018f644. State!=0 сохраняет record pointer this+8c,сбрасывает enginecrosshair,ставит this+84 float200 и this+10 bit1. State0 обновляет clip без смены current. Normal positiveID return1.",
+        "WrapperECX=1018d4ec; therefore this+8c=1018d578. Проверка computed record pointer!=NULL не является диапазонной проверкой ID. Sign narrowing означает raw IDs128..255 попадают в отрицательную ветку."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/001-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "analysis/client-queue/weapon-message-registration.asm",
+        "analysis/client-queue/weapon-message-wrappers.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001b240",
+      "proposed_name": "DualAmmo_ReadTwoSignedLongCounters",
+      "subsystem": "weapons",
+      "summary_ru": "DualAmmo читает два 32-битных значения в HUD+48/+4c без нормализации.",
+      "confidence": "high",
+      "details_ru": [
+        "InitReader; twice100809b0→this+48,this+4c;return1. WrapperECX1018d4ec доказывает адреса 1018d534/538. ReaderASM собирает little-endian DWORD; inadequate buffer→badflag1,return-1 без cursor advance.",
+        "Пакет 8bytes, не два SHORT. Здесь нет различия sentinel-1/других отрицательных значений или проверки наличия dual; смысл orderedclip counters задаётся server sender, а не reader."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/002-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "analysis/client-queue/weapon-message-registration.asm",
+        "analysis/client-queue/weapon-message-wrappers.asm",
+        "analysis/client-queue/read-long.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001b3b0",
+      "proposed_name": "WeaponList_ReadAndPublishDescriptorRecord",
+      "subsystem": "weapons",
+      "summary_ru": "WeaponList разбирает имя и 8 числовых полей, публикует record stride15c и вызывает resource helper.",
+      "confidence": "high",
+      "details_ru": [
+        "Wire STRING name,CHAR ammo1,BYTE max1,CHAR ammo2,BYTE max2,CHAR slot,CHAR slotpos,CHAR id,BYTE flags. Max255→-1; clip initializes0. Copies0x57DWORD (0x15c bytes) into101af810+id*15c,then1001ab20(record).",
+        "Record offsets name0..7f,ammo1+80,ammo2+84,max1+88,max2+8c,slot+90,slotpos+94,flags+98,id+9c,clip+a0. ID signed; no range check.",
+        "Имя копирует до NUL в stack name[128] без локального length guard; reader scratch cap2047 не обеспечивает 128. Остальная structure tail не имеет видимой полной инициализации в этом body; loader1001ab20 точный контракт отдельно не раскрыт. Нельзя на основании имени утверждать весь sprite lifecycle."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/003-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "analysis/client-queue/weapon-message-registration.asm",
+        "analysis/client-queue/weapon-message-wrappers.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001b040",
+      "proposed_name": "AmmoPickup_FormatNamedTimedNotification",
+      "subsystem": "weapons",
+      "summary_ru": "AmmoPickup читает BYTE,BYTE,STRING; alias Hand Grenade и временный count сопровождают notification helper.",
+      "confidence": "high",
+      "details_ru": [
+        "Первый BYTE игнорируется, второй count сохраняется временно в 101b24d0. STRING Hand Grenade заменяется строго case-sensitive на handgrenade; format PE1013f4d0=!%s в stack256.",
+        "Вызывает 1007dea0(formattedName,GetClientTime),после обычного возврата 101b24d0=0. Reserve AmmoX не изменяет. Name/formatting bounds и визуальный смысл prefix! не доказаны одним wrapper; reader bad flag не проверяет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/004-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "analysis/client-queue/weapon-message-registration.asm",
+        "analysis/client-queue/weapon-message-wrappers.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001b330",
+      "proposed_name": "WeapPickup_FormatDescriptorNameNotification",
+      "subsystem": "weapons",
+      "summary_ru": "WeapPickup читает BYTE id и передаёт имя weapon record в общий timed notification helper.",
+      "confidence": "high",
+      "details_ru": [
+        "Индексирует 101af810+id*15c,format!%s в stack256 и 1007dea0(name,GetClientTime). Не обновляет ammo/current selection и не передаёт временный count как AmmoPickup.",
+        "Computed pointer!=NULL не проверяет диапазон или инициализацию record. Full notificationqueue/layout1007dea0 остаётся отдельным callee; wrapper registration1001c150 связывает WeapPickup."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/005-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "analysis/client-queue/weapon-message-registration.asm",
+        "analysis/client-queue/weapon-message-wrappers.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1004bb80",
+      "proposed_name": "WeaponFlash_CreateEngineAndCustomWarmLights",
+      "subsystem": "weapons",
+      "summary_ru": "В одной позиции создаёт engine dlight и собственный RGB-float light с radius128 и lifetime0.06.",
+      "confidence": "high",
+      "details_ru": [
+        "Engine effectsAPI+100 CL_AllocDlight(0): origin=input, radius128, RGB bytes225/170/105,die=GetClientTime+.06. Custom1005c0f0(0): sameorigin/radius,RGBfloat .7/.43/.14,die+1c=time+.06.",
+        "Оба результата используются без NULLguard. Customallocator/lifetime/renderer consumers раскрываются отдельно; эту вторуюструктуру нельзя подменять SDKdlight layout. Это lightcreation,не звук и не flash model."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-effects/001-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "external/hlsdk-portable/common/r_efx.h",
+        "external/hlsdk-portable/common/dlight.h"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1004bc30",
+      "proposed_name": "WeaponFlash_SubmitAttachmentModelSmokeAndPairedLights",
+      "subsystem": "weapons",
+      "summary_ru": "Создаёт flash model на attachment, optional smoke и пару lights; weaponID/CS/type меняют model/scale.",
+      "confidence": "high",
+      "details_ru": [
+        "GetLocalPlayer null→return. Defaultflash1 scale4; weaponIDs4/21 scale6;9/26 flash2scale6;11/23 flash2scale9;27 flash2scale2;14 flash1scale4. ID11 сначала 10 затем перезаписан 9. param3!=0 overridesmodel flash3;models/cs/ substring finallyforces scale2.",
+        "Scale=(base+RandomFloat(-1,1))*param4. Copy0x2eeDWORD localplayer into global entity101b3ae8,replace model/modelindex,playerflag0,origin=source attachment[param2],angles=source angles with randomroll1..359; param3 adds90yaw. Render mode5,amount100,renderfx161,frame0,animtime=clienttime;CreateVisibleEntity(0,global).",
+        "cl_cheapweaponsmoke105433cc!=0:EventAPI FindModelIndex gunsmoke.spr;R_TempSprite at attachment0 (regardless selected attachment),velocity(0,0,10),scale.05,mode5,fx6,alpha255,life1,flags0x300100.",
+        "Normaltype calls1004bb80(selectedattachment). Alternateparam3type useslocalplayerorigin,engineRGB225/96/0 andcustomRGB1/.37/0;radius128,die+.06. Source attachment index and light allocations lack local bounds/NULL guards. Current weapon descriptor comes from1018d578,not sourceentityweapon ID."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-core/006-pseudocode.c",
+        "analysis/client-queue/contract-extra.md",
+        "analysis/client-queue/evidence-extra.json",
+        "decompiled/client/captures/graphics-client-first/007-pseudocode.c",
+        "external/hlsdk-portable/common/r_efx.h",
+        "external/hlsdk-portable/common/dlight.h",
+        "external/hlsdk-portable/engine/cdll_int.h"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,620 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x1008ce10",
+      "proposed_name": "CBaseDoor_InstanceOrAllocate",
+      "subsystem": "doors",
+      "summary_ru": "Возвращает существующий CBaseDoor либо выделяет его private data.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM подтверждает EAX return, размер 0x1b8, vtable 101bf290, object+4=entvars. Существующий edict+7c возвращается без смены vtable; нулевой entvars вызывает engine slot 10222f9c.",
+        "Экспортные JMP func_door 1008f580 и func_water 1008f5a0 ведут сюда. Ветка нулевого allocator действительно пишет [eax+4] после обнуления EAX; безопасная обработка отказа не доказана."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ce10.c",
+        "analysis/server-queue-b/asm/1008ce10.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ce70",
+      "proposed_name": "CMomentaryDoor_InstanceOrAllocate",
+      "subsystem": "doors",
+      "summary_ru": "Получает или создаёт private object пропорциональной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Размер 0x18c, vtable 101bf6c0, object+4=entvars. Native EAX возвращает существующий edict+7c или результат allocator; void в C неполон.",
+        "CMomentaryDoor имеет собственные +184 m_iState и +188 m_fLastPos; нельзя трактовать эти offsets как блок lock sounds CBaseDoor. Инициализация остальных полей находится вне фабрики."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ce70.c",
+        "analysis/server-queue-b/asm/1008ce70.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ced0",
+      "proposed_name": "CRotDoor_InstanceOrAllocate",
+      "subsystem": "doors",
+      "summary_ru": "Получает или создаёт private object вращающейся двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Размер 0x1b8, vtable 101bf59c, object+4=entvars; экспорт func_door_rotating 1008f590 является JMP сюда.",
+        "Vtable разделяет Use/Blocked/Precache с CBaseDoor, но переопределяет Spawn, KeyValue, virtual+48 и SetToggleState. Существующий private object возвращается без повторной инициализации."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ced0.c",
+        "analysis/server-queue-b/asm/1008ced0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008cf30",
+      "proposed_name": "CBaseDoor_BlockedAndReverseLinkedDoors",
+      "subsystem": "doors",
+      "summary_ru": "Наносит crush-урон и разворачивает заблокированную дверь и связанные двери.",
+      "confidence": "high",
+      "details_ru": [
+        "При ненулевом entvars+1e4 вызывает blocker.virtual+64(entvars,entvars,damage,1). При wait>=0 state3 ведёт к GoUp, иной state к GoDown; sign bit spawnflags подавляет stop sound.",
+        "Связанные двери ищутся только при immediatemode=0 и targetname!=0. ASM: (не self && func_door) || func_door_rotating; self rotating не исключается. Кандидат требует wait>=0.",
+        "Синхронизация сравнивает candidate.velocity и candidate.avelocity с own.velocity, не own.avelocity. После условного копирования origin/angles кандидат разворачивается независимо от равенства скоростей."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008cf30.c",
+        "analysis/server-queue-b/asm/1008cf30.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008d250",
+      "proposed_name": "CMomentaryDoor_GetLastPosition",
+      "subsystem": "doors",
+      "summary_ru": "Возвращает сохранённую долю положения пропорциональной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Native vtable 101bf6c0+20 указывает на это тело; чтение float object+188, возврат через x87.",
+        "Save descriptor 10213af0 называет поле m_fLastPos. Значение записывает Use 1008f3b0; getter не вычисляет текущую геометрическую долю."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008d250.c",
+        "analysis/server-queue-b/asm/1008d250.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008d260",
+      "proposed_name": "CBaseDoor_Activate",
+      "subsystem": "doors",
+      "summary_ru": "Проверяет master и выбирает открытие либо toggle-закрытие двери.",
+      "confidence": "high",
+      "details_ru": [
+        "10119060(master+17c, activator handle) с нулевым результатом возвращает 0. Flag20 и state0 вызывают GoDown и return1.",
+        "Иначе валидный activator с ненулевым virtual+d0 получает virtual+68(float health byte+180,0); затем unlocked feedback 1008e010, GoUp и return1. Конкретные виртуальные методы получателя здесь не восстановлены полностью."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008d260.c",
+        "analysis/server-queue-b/asm/1008d260.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008d320",
+      "proposed_name": "CBaseDoor_DoorGoDown",
+      "subsystem": "doors",
+      "summary_ru": "Запускает движение двери к первому endpoint и назначает завершение Bottom.",
+      "confidence": "high",
+      "details_ru": [
+        "State+100=3, completion+154=1008d6f0; classname func_door_rotating выбирает AngularMove 10101b50(A1,speed), прочее LinearMove 101025c0(P1,speed). Sign bit spawnflags выключает moving sound.",
+        "При immediatemode!=0 rotating передаёт target-helper type3 без onoffmode, иначе 0; linear всегда type0. ASM отделяет activator handle ECX+e4 от аргументов следующего target-helper."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008d320.c",
+        "analysis/server-queue-b/asm/1008d320.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008d480",
+      "proposed_name": "CBaseDoor_DoorGoUp",
+      "subsystem": "doors",
+      "summary_ru": "Запускает открытие двери к второму endpoint с учётом направления вращения.",
+      "confidence": "high",
+      "details_ru": [
+        "State2, completion=1008d870; linear использует P2, rotating A2*sign. При immediatemode target-helper получает type3 без onoffmode или 1 с ним.",
+        "Sign может стать -1 только у rotating, при валидном activator, отсутствии flag10 и ненулевом movedir.y: используется XY cross-выражение и global direction после двух 10119320. Полная формула сохранена в C/ASM, внешняя функция направления отдельно не разобрана."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008d480.c",
+        "analysis/server-queue-b/asm/1008d480.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008d6f0",
+      "proposed_name": "CBaseDoor_DoorHitBottom",
+      "subsystem": "doors",
+      "summary_ru": "Завершает закрытие, восстанавливает touch и отправляет endpoint targets.",
+      "confidence": "high",
+      "details_ru": [
+        "Останавливает moving sound и проигрывает arrived sound, если sign bit spawnflags не установлен; state1; touch=DoorTouch кроме (flags&500)==100.",
+        "Endpoint target: entvars+1d4 без flag1, +1d8 с flag1; вызов 10101ff0(target,activator,this,3,0). При immediatemode=0 обычный target-helper получает type3 без onoffmode, иначе 1."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008d6f0.c",
+        "analysis/server-queue-b/asm/1008d6f0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008d870",
+      "proposed_name": "CBaseDoor_DoorHitTop",
+      "subsystem": "doors",
+      "summary_ru": "Завершает открытие и планирует автозакрытие либо разрешает toggle-touch.",
+      "confidence": "high",
+      "details_ru": [
+        "State0. Без flag20: virtual+8(wait), think=GoDown; wait==-1 дополнительно очищает scheduler через 10017ad0. С flag20 восстанавливает touch при (flags&500)!=100.",
+        "Звуки конца подавляет sign bit. Endpoint target выбирает +1d8 без flag1, +1d4 с flag1. При immediatemode=0 target-helper получает type3 без onoffmode, иначе 0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008d870.c",
+        "analysis/server-queue-b/asm/1008d870.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008da20",
+      "proposed_name": "CBaseDoor_DoorTouch",
+      "subsystem": "doors",
+      "summary_ru": "Обрабатывает касание двери игроком и отключает повторный touch после активации.",
+      "confidence": "high",
+      "details_ru": [
+        "Принимает только classname player. Master failure проигрывает locked feedback без немедленного return; окончательный запрет есть в Activate.",
+        "Ненулевой targetname без flag400 вызывает locked feedback и return. Иначе сохраняет activator handle, вызывает 1008d260; при успехе touch+7c=0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008da20.c",
+        "analysis/server-queue-b/asm/1008da20.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008daf0",
+      "proposed_name": "CMomentaryDoor_GetState",
+      "subsystem": "doors",
+      "summary_ru": "Читает внутреннее состояние пропорциональной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Возвращает DWORD object+184; owner доказан vtable101bf6c0+5c и native descriptor m_iState.",
+        "Use записывает 2 при запуске moving sound, Done и Spawn записывают 0. Это не общий m_toggle_state+100 и не locked sound обычной двери."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008daf0.c",
+        "analysis/server-queue-b/asm/1008daf0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008db00",
+      "proposed_name": "CBaseDoor_KeyValue",
+      "subsystem": "doors",
+      "summary_ru": "Разбирает door-specific ключи, включая режимы CoF и lock feedback.",
+      "confidence": "high",
+      "details_ru": [
+        "skin→entvars+110; movesnd/stopsnd/healthvalue→+181/+182/+180; locked/unlocked sound/sentence→+1a8..+1ab. Строка skin разрешена из PE101a3c60.",
+        "immediatemode/onoffmode/directuse через atoi→+1b0/+1ac/+1b4; WaveHeight→entvars+148 с коэффициентом 0.125. Обработанные ключи ставят handled+0c=1, остальные уходят 10102480."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008db00.c",
+        "analysis/server-queue-b/asm/1008db00.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008de10",
+      "proposed_name": "CMomentaryDoor_KeyValue",
+      "subsystem": "doors",
+      "summary_ru": "Разбирает movesnd пропорциональной двери и поглощает неиспользуемые ключи.",
+      "confidence": "high",
+      "details_ru": [
+        "movesnd конвертируется в byte+180; stopsnd и healthvalue помечаются обработанными без записи значения.",
+        "Другие ключи передаются 10102480. Не наследует расширенный parser1008db00 и не создаёт поля lock sounds."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008de10.c",
+        "analysis/server-queue-b/asm/1008de10.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008def0",
+      "proposed_name": "CRotDoor_KeyValue",
+      "subsystem": "doors",
+      "summary_ru": "Добавляет ключ axes для вращающейся двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Native строка 101a4010 равна axes. Её значение передаётся 1011a6c0 с выходом entvars+44, затем handled=1.",
+        "Все прочие ключи обрабатывает 1008db00. Точный числовой синтаксис vector parser1011a6c0 не разобран в этой семье."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008def0.c",
+        "analysis/server-queue-b/asm/1008def0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008df60",
+      "proposed_name": "CMomentaryDoor_MomentaryMoveDone",
+      "subsystem": "doors",
+      "summary_ru": "Сбрасывает состояние пропорциональной двери и останавливает moving sound.",
+      "confidence": "high",
+      "details_ru": [
+        "Записывает object+184=0; вызывает 100fc9f0(edict,6,noise1,0,0,20h,100).",
+        "Назначается в completion+154 из 1008f3b0. Дополнительный arrived/stopsnd здесь не проигрывается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008df60.c",
+        "analysis/server-queue-b/asm/1008df60.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008dfb0",
+      "proposed_name": "CBaseDoor_ObjectCaps",
+      "subsystem": "doors",
+      "summary_ru": "Возвращает capability flags двери с учётом use-only и directuse.",
+      "confidence": "high",
+      "details_ru": [
+        "При spawnflags&100 возвращает 8 либо 108h, если object+1b4 directuse ненулевой; без flag100 возвращает 0.",
+        "При наличии object+14 вызывается virtual+40 связанного объекта, но его return не участвует в итоговом значении. Owner подтверждён vtable двух классов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008dfb0.c",
+        "analysis/server-queue-b/asm/1008dfb0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008e000",
+      "proposed_name": "CMomentaryDoor_ObjectCaps",
+      "subsystem": "doors",
+      "summary_ru": "Возвращает нулевые capability flags пропорциональной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает parent.virtual+40, если object+14 существует, затем возвращает 0 независимо от его результата.",
+        "Вход связан с CMomentaryDoor через vtable101bf6c0+40; это не пустой деструктор."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008e000.c",
+        "analysis/server-queue-b/asm/1008e000.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008e010",
+      "proposed_name": "PlayDoorOrButtonLockFeedback",
+      "subsystem": "doors",
+      "summary_ru": "Проигрывает locked/unlocked wav и sentence с отдельными таймерами.",
+      "confidence": "high",
+      "details_ru": [
+        "lockBlock+18/+1c — float deadlines wav/sentence; строго now>deadline. Wav interval3 секунды для двери или 0.5 для button, sentence6 секунд; ASM отвергает ложные int casts C.",
+        "Одновременный wav+sentence даёт wav volume0.25, иначе 1; sentence0.85, attenuation0.8. Для locked/unlocked отдельные IDs, индексы и EOF bytes; sentence helper обновляет index, обнуляет противоположный index, EOF=(старый==новый)."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008e010.c",
+        "analysis/server-queue-b/asm/1008e010.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008e240",
+      "proposed_name": "CBaseDoor_PrepareParentRelativeEndpoints",
+      "subsystem": "doors",
+      "summary_ru": "Вычисляет позиции хода линейной двери с учётом parent и start-open.",
+      "confidence": "high",
+      "details_ru": [
+        "Vtable+48 CBaseDoor. P1=origin-parent.origin при parent; D=sum(abs((size_i-2)*movedir_i))-lip; P2=P1+movedir*D.",
+        "Flag1 переносит дверь к P2(+parent origin), корректирует object+68 и меняет P1/P2. ASM подтверждает полный swap XYZ вопреки повреждённой Y-записи C. Внешний caller/lifecycle virtual+48 остаётся отдельным вопросом."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008e240.c",
+        "analysis/server-queue-b/asm/1008e240.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008e4c0",
+      "proposed_name": "CRotDoor_EndpointPreparationNoop",
+      "subsystem": "doors",
+      "summary_ru": "Пустое переопределение hook подготовки endpoints у вращающейся двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Тело представляет только return; vtable101bf59c+48 указывает сюда вместо CBaseDoor1008e240.",
+        "Угловые endpoints формируются в CRotDoor Spawn1008f0e0, поэтому нельзя назначать этой функции вычисление геометрии по соседнему адресу."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008e4c0.c",
+        "analysis/server-queue-b/asm/1008e4c0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008e4d0",
+      "proposed_name": "CBaseDoor_PrecacheSoundsAndSentences",
+      "subsystem": "doors",
+      "summary_ru": "Выбирает и регистрирует звуки движения, остановки и lock feedback двери.",
+      "confidence": "high",
+      "details_ru": [
+        "movesnd1..10→doors/doormoveN.wav, stopsnd1..8→doors/doorstopN.wav; default common/null.wav. noise1/noise2 хранят string-base relative IDs. Locked/unlocked звуки проходят 10012df0 и allocator10223054.",
+        "Locked sentences1..9: NA,ND,NF,NFIRE,NCHEM,NRAD,NCON,NH,NG; unlocked1..8: EA,ED,EF,EFIRE,ECHEM,ERAD,ECON,EH; остальное 0. DAT-строки проверены по исходному PE."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008e4d0.c",
+        "analysis/server-queue-b/asm/1008e4d0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008e9f0",
+      "proposed_name": "CMomentaryDoor_PrecacheMoveSound",
+      "subsystem": "doors",
+      "summary_ru": "Выбирает moving sound пропорциональной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Читает byte+180: 1..8 регистрируют doors/doormoveN.wav; 0/прочие используют common/null.wav.",
+        "Результат записывается только в entvars+1f0 как string-base relative ID. Собственных stopsnd и lock sentence таблиц здесь нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008e9f0.c",
+        "analysis/server-queue-b/asm/1008e9f0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008eb10",
+      "proposed_name": "CBaseDoor_Restore",
+      "subsystem": "doors",
+      "summary_ru": "Восстанавливает 10 сохранённых door-specific полей после базового блока.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала 10102890; при нулевом результате return. Затем 10117010(\"CBaseDoor\",this,10213a30,10). Тело 10117010 читает/обнуляет поля: это Restore, не Save.",
+        "Native descriptors сохраняют три value/sound bytes, четыре lock selectors и три режима CoF. Runtime lock block+184 не входит в эти 10 descriptors."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008eb10.c",
+        "analysis/server-queue-b/asm/1008eb10.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008eb50",
+      "proposed_name": "CMomentaryDoor_Restore",
+      "subsystem": "doors",
+      "summary_ru": "Восстанавливает три поля пропорциональной двери после базового блока.",
+      "confidence": "high",
+      "details_ru": [
+        "10102890 gate →10117010(\"CMomentaryDoor\",this,10213ad0,3).",
+        "Native descriptor names: m_bMoveSnd+180, m_iState+184, m_fLastPos+188. Полный restore/Precache lifecycle не устанавливается этой обёрткой."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008eb50.c",
+        "analysis/server-queue-b/asm/1008eb50.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008eb90",
+      "proposed_name": "CBaseDoor_Save",
+      "subsystem": "doors",
+      "summary_ru": "Сохраняет расширенные поля CBaseDoor в именованный блок.",
+      "confidence": "high",
+      "details_ru": [
+        "После успешного 10102b20 вызывает writer1011adc0 с классом CBaseDoor, this, descriptors10213a30,count10.",
+        "Диагностическое имя берётся из targetname entvars+1d0, если оно ненулевое, иначе classname. В native descriptors явно присутствуют m_iOnOffMode/m_iImmediateMode/m_iDirectUse."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008eb90.c",
+        "analysis/server-queue-b/asm/1008eb90.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ebf0",
+      "proposed_name": "CMomentaryDoor_Save",
+      "subsystem": "doors",
+      "summary_ru": "Сохраняет sound selector, состояние и last position пропорциональной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "После 10102b20 writer1011adc0 получает CMomentaryDoor, this,10213ad0,3.",
+        "Имя — targetname либо classname. Три native descriptors определяют владельца getters1008d250/1008daf0 и не совпадают с layout CBaseDoor после+180."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ebf0.c",
+        "analysis/server-queue-b/asm/1008ebf0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ec50",
+      "proposed_name": "CBaseDoor_SetToggleStatePosition",
+      "subsystem": "doors",
+      "summary_ru": "Переносит линейную дверь в выбранный endpoint с учётом parent origin.",
+      "confidence": "high",
+      "details_ru": [
+        "C теряет векторные stack arguments. ASM доказывает state0→P2, иначе P1; parent.origin прибавляется, если object+14 ненулевой; затем 100c4550(this,x,y,z).",
+        "Поле m_toggle_state+100 этот метод не записывает. Роль virtual+a8 подтверждена vtable101bf290."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ec50.c",
+        "analysis/server-queue-b/asm/1008ec50.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ed30",
+      "proposed_name": "CRotDoor_SetToggleStateAngles",
+      "subsystem": "doors",
+      "summary_ru": "Устанавливает углы вращающейся двери в выбранный endpoint.",
+      "confidence": "high",
+      "details_ru": [
+        "state0 копирует A2+140 в entvars angles+50, любое иное значение копирует A1+134; затем 10119fe0.",
+        "Не меняет m_toggle_state+100 и не запускает AngularMove. Vtable101bf59c+a8 отделяет метод от линейного варианта."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ed30.c",
+        "analysis/server-queue-b/asm/1008ed30.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ed80",
+      "proposed_name": "CBaseDoor_Spawn",
+      "subsystem": "doors",
+      "summary_ru": "Настраивает физические свойства, модель, скорость и touch линейной двери.",
+      "confidence": "high",
+      "details_ru": [
+        "Virtual Precache, helper10102b80; movetype7, model setter10222f50, speed100 при нуле, state1. Skin!=0 даёт solid0 и spawnflags|80000000; иначе solid=(~(flags>>1))&4.",
+        "Touch=DoorTouch кроме(flags&500)==100. Расчёт P1/P2 находится в отдельном virtual+48=1008e240, не в этом Spawn."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ed80.c",
+        "analysis/server-queue-b/asm/1008ed80.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008ee60",
+      "proposed_name": "CMomentaryDoor_Spawn",
+      "subsystem": "doors",
+      "summary_ru": "Строит endpoints пропорциональной двери и запускает её precache.",
+      "confidence": "high",
+      "details_ru": [
+        "Solid4, movetype7, модель; damage2 при нуле; m_iState=0. P1=origin,P2=P1+movedir*(sum(abs((size_i-2)*movedir_i))-lip). Flag1 переносит к P2 и меняет endpoints.",
+        "После расчёта оба endpoint вычитают parent.origin при parent. Touch=0; затем virtual Precache. В отличие от обычной двери speed100 по умолчанию не устанавливается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008ee60.c",
+        "analysis/server-queue-b/asm/1008ee60.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008f0e0",
+      "proposed_name": "CRotDoor_Spawn",
+      "subsystem": "doors",
+      "summary_ru": "Настраивает вращающуюся дверь, угловые endpoints и touch.",
+      "confidence": "high",
+      "details_ru": [
+        "Helper10101e00 готовит movedir; flag2 инвертирует его. A1=angles,A2=angles+movedir*moveDistance; solid=(~(flags>>1))&4,movetype7,speed100 при нуле,state1.",
+        "Native start-open flag1: angles=A2, затем A2=A1, A1 остаётся прежним и movedir инвертируется. ASM1008f237..1008f27b подтверждает A1==A2 после этой ветки; не заменять молча на стандартный swap SDK."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008f0e0.c",
+        "analysis/server-queue-b/asm/1008f0e0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008f2f0",
+      "proposed_name": "CBaseDoor_Use",
+      "subsystem": "doors",
+      "summary_ru": "Обрабатывает Use двери с master gate и дополнительным onoffmode.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала 10017740 с ECX=this+e4 сохраняет activator, затем 10119060(master,activator). В onoffmode type1 открывает только state1, type0 закрывает только state0.",
+        "Остальные случаи Activate только из state1 либо state0 с flag20; moving state2/3 игнорируется. ASM ret10 показывает четыре аргумента, хотя C объявляет три."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008f2f0.c",
+        "analysis/server-queue-b/asm/1008f2f0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008f3b0",
+      "proposed_name": "CMomentaryDoor_UseSetFraction",
+      "subsystem": "doors",
+      "summary_ru": "Устанавливает целевую долю положения двери через USE_SET.",
+      "confidence": "high",
+      "details_ru": [
+        "Только type2, master-lock helper10102320 должен вернуть 0. Для finite value t=min(value,1), нижнего clamp нет; ASM MINSS не фильтрует NaN. Destination=P1+(P2-P1)*t.",
+        "При speed0 speed=10*length(destination-currentOrigin); при ненулевом speed запускает LinearMove, lastPos=t,completion=1008df60. Moving sound запускается только при state0, который становится 2.",
+        "Входной activator здесь не сохраняется, helper читает прежний handle. Parent-relative endpoints сравниваются с entvars world origin в формуле скорости; последующие MoveNow/parent helpers раскрыты в contract-extra.md и contract-parent.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008f3b0.c",
+        "analysis/server-queue-b/asm/1008f3b0.asm",
+        "analysis/server-queue-b/evidence.json",
+        "analysis/server-queue-b/contract.md",
+        "analysis/server-queue-b/contract-extra.md",
+        "analysis/server-queue-b/contract-parent.md"
+      ]
+    }
+  ]
+}

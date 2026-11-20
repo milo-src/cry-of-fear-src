@@ -1,0 +1,455 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10118460",
+      "proposed_name": "Entity_FindNextByClassname",
+      "subsystem": "entities",
+      "summary_ru": "Ищет следующий объект по classname через общий engine string search.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт (start,\"classname\",value) в 10118480. ASM сохраняет возвращаемый EAX; Ghidra void не означает отсутствие результата. Start — объект DLL, не edict. Правила сравнения value внутри engine здесь не раскрыты."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118460.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118460.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118480",
+      "proposed_name": "Entity_FindNextByFieldSkippingMissingPrivate",
+      "subsystem": "entities",
+      "summary_ru": "Преобразует стартовый объект в edict, пропускает совпадения без private data.",
+      "confidence": "high",
+      "details_ru": [
+        "start==0 задаёт нулевой edict; иначе берётся start+4→pev+20c. Callback10222f80=FindEntityByString возвращает очередной edict; 10223060=EntOffsetOfPEntity, не IndexOfEdict. Нулевой edict/offset завершает поиск.",
+        "Возвращает edict+7c, если private data ненулевая; иначе повторяет engine search от текущего edict. Своей проверки wildcard/case и владения найденным объектом нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118480.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118480.asm",
+        "decompiled/server/partial-pass/functions/0x100b4aa0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101184e0",
+      "proposed_name": "Entity_FindNextByTargetField",
+      "subsystem": "entities",
+      "summary_ru": "Обёртка поиска по полю target, а не targetname.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт (start,\"target\",value) в 10118480, возвращает его EAX без дополнительной фильтрации. Применима для поиска объектов, ссылающихся на цель; специальный синтаксис alias сама не разбирает."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101184e0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/101184e0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118500",
+      "proposed_name": "Entity_FindByTargetnameWithLocus",
+      "subsystem": "entities",
+      "summary_ru": "Добавляет точный токен *locus к поиску targetname и alias.",
+      "confidence": "high",
+      "details_ru": [
+        "Побайтовое case-sensitive сравнение с \"*locus\" выполняется до null guard имени. Для остальных имён вызывает 10118590.",
+        "Для *locus: null context→0; без start возвращает context; со start возвращает context только если EntOffsetOfPEntity(context)>EntOffsetOfPEntity(start). Это однократный элемент перечисления, без выделения объекта."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118500.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118500.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118590",
+      "proposed_name": "Entity_FindBySpecialNameOrLiteralTargetname",
+      "subsystem": "entities",
+      "summary_ru": "Сначала пробует специальный синтаксис, затем буквальный targetname.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает 10118980(start,name). Если результат0, вызывает 10118480(start,\"targetname\",name), включая неудачный special-token поиск. ASM подтверждает возвращаемый указатель в EAX. Поэтому отказ special resolver не всегда означает окончательное отсутствие цели."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118590.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118590.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101185c0",
+      "proposed_name": "Entity_FindNamedOrNearestClassWithinRadius",
+      "subsystem": "entities",
+      "summary_ru": "Предпочитает найденное имя; иначе выбирает ближайший classname в радиусе.",
+      "confidence": "high",
+      "details_ru": [
+        "Если 10118590(0,name) нашёл объект, сразу возвращает его, расстояние не проверяет. Иначе перечисляет classname через10118460 и сравнивает pev.origin+8/c/10 с переданным origin.",
+        "Порог radius*radius, обновление только при меньшем расстоянии; равенство сохраняет предыдущий результат. Код вычисляет sqrt(sumSquares), сужает до float и снова возводит в квадрат. Отрицательный radius отдельно не отвергается."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101185c0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/101185c0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101186b0",
+      "proposed_name": "Entity_FindNextInSphere",
+      "subsystem": "entities",
+      "summary_ru": "Возвращает private data единственного следующего результата engine sphere search.",
+      "confidence": "high",
+      "details_ru": [
+        "start переводится в edict как у10118480;10222f88=FindEntityInSphere получает origin/radius без локальной нормализации. Возвращает edict+7c при ненулевых edict и EntOffsetOfPEntity.",
+        "В отличие от string search, не повторяет запрос при private data==0: такой результат сразу становится0. Engine spatial критерий здесь не раскрыт."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101186b0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/101186b0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118700",
+      "proposed_name": "Alias_FlushPendingChanges",
+      "subsystem": "entities",
+      "summary_ru": "Обходит очередь alias и применяет отложенные изменения.",
+      "confidence": "high",
+      "details_ru": [
+        "Голова находится world10223190+fc, next каждого объекта+dc. При object+60&1000 вызывает vtable+128, затем очищает бит1000 у заново прочитанной головы; далее world.head=head.next.",
+        "Объекты и links не освобождает. При world==0 только diagnostic. Callback может менять очередь: код повторно читает глобальную голову после callback, поэтому нельзя заменять контракт независимым снимком списка. FireTargets10101ff0 вызывает flush после успешного завершения перебора целей."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118700.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118700.asm",
+        "decompiled/server/partial-pass/functions/0x10101ff0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118780",
+      "proposed_name": "Alias_FindLowestOffsetResolvedTarget",
+      "subsystem": "entities",
+      "summary_ru": "Разрешает одноимённые alias и выбирает цель с минимальным edict offset.",
+      "confidence": "high",
+      "details_ru": [
+        "Перебирает alias-объекты через10118590(0,name), допускает только virtual+24()!=0. Для каждого вызывает virtual+11c(start), сравнивает ненулевые результаты через EntOffsetOfPEntity10223060.",
+        "Минимальный offset выигрывает, равенство сохраняет прежнего. Продолжает поиск от alias-объекта, не его результата. ASM подтверждает возврат сохранённой лучшей цели; нулевой/non-alias кандидат её не сбрасывает. Нет защиты от рекурсивных alias циклов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118780.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118780.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118800",
+      "proposed_name": "InfoGroup_ResolveMemberPath",
+      "subsystem": "entities",
+      "summary_ru": "Разрешает group.member и вложенные member-пути через info_group.",
+      "confidence": "high",
+      "details_ru": [
+        "Перебирает объекты с именем group через10118590; принимает только classname==\"info_group\". Передаёт member в1000d890 с ECX=group, получает string_t. Без остатка пути вызывает10118590(start,mappedName); с остатком рекурсивно вызывает себя.",
+        "Из подходящих групп выбирает цель с наименьшим EntOffsetOfPEntity. При dot копирует prefix в80-байтовую область, после strncpy проверяет length<80; guard расположен после копирования. Явного ограничения глубины/защиты alias cycles нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118800.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118800.asm",
+        "decompiled/server/partial-pass/functions/0x1000d890.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10118980",
+      "proposed_name": "Entity_ResolveGroupOrStarAliasName",
+      "subsystem": "entities",
+      "summary_ru": "Разбирает точку, *player и *alias; обычное имя возвращает0.",
+      "confidence": "high",
+      "details_ru": [
+        "Null/empty→0. Первая точка имеет приоритет над начальным*: prefix проходит в10118800, suffix становится member path. Prefix допускается длиной<=80; проверка после strncpy.",
+        "Без точки точный *player ищет только первого classname player от0; если его edict offset<=start offset, возвращает0, не ищет следующего player. Другой *name вызывает10118780(start,name+1). Это alias-синтаксис, не доказанный glob wildcard. Обычные имена возвращают0 для fallback10118590."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10118980.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10118980.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10119060",
+      "proposed_name": "Master_IsTriggeredWithInversionAndContext",
+      "subsystem": "entities",
+      "summary_ru": "Проверяет state==2 у master, поддерживает ~ и альтернативный activator в скобках.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM: virtual+58(activator) сравнивается строго с2; обычное имя возвращает state==2, ~name возвращает state!=2. Нулевой string_t или отсутствующий master возвращает1; это permissive missing-master поведение.",
+        "Сначала ищет всё имя после ~. Лишь при неудаче разбирает первый (...): inner через10118590(0,inner) заменяет activator (может быть0), prefix становится master. Отсутствующая закрывающая скобка→diagnostic+0. Missing prefix→1. Текст после первой ) не используется.",
+        "Обе временные строки ограничиваются79 символами, но bounds check идёт после strncpy. Ghidra void скрывает boolean ABI; имя callback state не выводится из его truthiness."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10119060.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/10119060.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101172e0",
+      "proposed_name": "Alias_QueueForDeferredCommit",
+      "subsystem": "entities",
+      "summary_ru": "Помечает alias и добавляет его в world-owned intrusive очередь без дубликатов.",
+      "confidence": "high",
+      "details_ru": [
+        "Если world10223190==0: diagnostic и выход до изменения флага. Иначе object+60|=1000, проверяет head world+fc и next+dc на совпадение указателя.",
+        "Если уже в очереди — только dirty flag обновлён. Иначе добавляет в хвост и обнуляет новый next. Никаких allocator/free; очередь не владеет временем жизни entity. Прототип принимает объект на stack; callers1000d550/e310 явно push this."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101172e0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/101172e0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d530",
+      "proposed_name": "BaseAlias_StageReferencedEntityTargetname",
+      "subsystem": "entities",
+      "summary_ru": "Преобразует переданный entity в его targetname и передаёт string_t виртуальному setter.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this alias; аргумент трактуется как entity*: arg+4→pev+1d0. Значение уходит virtual+124. Нет null/type проверки аргумента. Для CInfoAlias setter=1000d550, для CMultiAlias=1000d500 (diagnostic cannot change value)."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d530.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d530.asm",
+        "decompiled/server/partial-pass/functions/0x1000d500.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d550",
+      "proposed_name": "InfoAlias_StageStringTarget",
+      "subsystem": "entities",
+      "summary_ru": "Сохраняет pending string_t и ставит alias в очередь.",
+      "confidence": "high",
+      "details_ru": [
+        "Записывает аргумент в pev+1ec (noise3 по SDK), затем101172e0(this). Активное имя pev+1d8 здесь не меняет; строка не копируется/не освобождается. ASM подтверждает PUSH ECX перед queue call."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d550.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d550.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d660",
+      "proposed_name": "InfoAlias_CommitPendingTarget",
+      "subsystem": "entities",
+      "summary_ru": "Применяет pending имя alias и необязательный diagnostic.",
+      "confidence": "high",
+      "details_ru": [
+        "Копирует pev+1ec→pev+1d8 (message). Если spawnflags&2, печатает targetname и новое имя через global string pool. Dirty flag очищает и голову очереди продвигает внешний10118700; next+dc у вынутого объекта не обнуляется. Vtable CInfoAlias+128 подтверждена PE."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d660.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d660.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d6c0",
+      "proposed_name": "InfoAlias_FollowCurrentTarget",
+      "subsystem": "entities",
+      "summary_ru": "Продолжает поиск по активному имени alias.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт start и poolbase+pev.message(+1d8) в10118590, возвращает EAX. Pending noise3 не читается, поэтому staged изменения невидимы до flush. Рекурсивный alias resolver не имеет локального cycle guard."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d6c0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d6c0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d6f0",
+      "proposed_name": "MultiAlias_FollowWeightedOrFilteredTargets",
+      "subsystem": "entities",
+      "summary_ru": "Выбирает разрешённые цели multi_alias по mode и минимальному edict offset.",
+      "confidence": "high",
+      "details_ru": [
+        "Count+e0, имена+e4[16], сумма весов+124, веса+128[16], mode+168. Mode0 перебирает все; mode1 выбирает один weighted slot через random%total+1, затем разрешает только его. Total==0 здесь не проверяется перед IDIV.",
+        "Любой ненулевой mode вызывает seed1016d94c(int(global.time*100)), затем отбрасывает один draw1016d92b. Для mode!=1 начальный поиск допускает random%100<=weight; только mode2 фильтрует дальнейшие элементы строго random%100<weight. Значения mode вне0/1/2 после первоначального фильтра проходят оставшиеся элементы без фильтра.",
+        "Каждое выбранное имя разрешается10118590(start,...); из ненулевых целей сохраняется минимальный EntOffsetOfPEntity. Область/алгоритм PRNG callees здесь не раскрыты; не обещается независимая случайность вызовов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d6f0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d6f0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000d890",
+      "proposed_name": "InfoGroup_GetMemberOrScratchDefault",
+      "subsystem": "entities",
+      "summary_ru": "Возвращает member string_t или строит defaultprefix+member в общей scratch строке.",
+      "confidence": "high",
+      "details_ru": [
+        "Точный case-sensitive поиск имени в+e0[16], count+dc; возвращает парное значение+120. Null member и отсутствие записи/defaultmember дают diagnostic+0.",
+        "Если defaultmember+160 ненулевой, копирует pool string prefix в10222d70, дописывает member сNUL и возвращает address10222d70-poolbase. Это не AllocString: временный synthetic string_t с общей перезаписываемой памятью. В циклах копирования не видно bounds checks; размер allocation scratch не установлен."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000d890.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000d890.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000dcb0",
+      "proposed_name": "InfoGroup_KeyValue",
+      "subsystem": "entities",
+      "summary_ru": "Загружает defaultmember и до16 пар member→target.",
+      "confidence": "high",
+      "details_ru": [
+        "Точный ключ defaultmember: AllocString(value)→+160, handled=1. Прочие ключи при count+dc<16:1011a760 обрезает ключ до первого#, AllocString(keyPrefix)→+e0[index], AllocString(value)→+120[index], count++,handled=1.",
+        "Временный key buffer128 байт; helper не имеет аргумента размера и копирует до# илиNUL. При count>=16 печатает warning и не выставляет handled. Повторный member не заменяет предыдущий; lookup возвращает первую совпавшую запись."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000dcb0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000dcb0.asm",
+        "decompiled/server/partial-pass/functions/0x1011a760.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000ddd0",
+      "proposed_name": "MultiAlias_KeyValue",
+      "subsystem": "entities",
+      "summary_ru": "Загружает mode и до16 имён целей с целочисленными весами.",
+      "confidence": "high",
+      "details_ru": [
+        "Ключ m_iMode→atoi(value) в+168,handled=1. Иначе count+e0<16: key до# через1011a760 и AllocString→+e4; atoi(value)→+128[index], прибавляет кtotal+124, count++,handled=1.",
+        "Веса и mode не clamp-ятся; отрицательные/нулевые значения сохраняются. При заполнении только diagnostic; handled не выставляется. Дубликаты не объединяются. Buffer128 и unbounded strip helper — отдельная граница входных данных."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000ddd0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000ddd0.asm",
+        "decompiled/server/partial-pass/functions/0x1011a760.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e230",
+      "proposed_name": "InfoAlias_InitializeCurrentTarget",
+      "subsystem": "entities",
+      "summary_ru": "Инициализирует активное имя alias согласно spawnflags bit0.",
+      "confidence": "high",
+      "details_ru": [
+        "При spawnflags&1 копирует pev.netname(+1d4) вmessage(+1d8); иначе pev.target(+1cc) вmessage. Не использует pending noise3, не добавляет очередь и не вызывает callback. Точная роль Spawn подтверждается ниже таблицей только если соответствующий slot прочитан; имя здесь ограничено действием."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e230.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000e230.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e310",
+      "proposed_name": "InfoAlias_UseToggleAndStage",
+      "subsystem": "entities",
+      "summary_ru": "Переключает bit0 и ставит соответствующее имя alias в очередь.",
+      "confidence": "high",
+      "details_ru": [
+        "Bit0 установлен: очищает, pending noise3=target; bit0 снят: устанавливает, pending=netname. Spawnflags&2 включает DEBUG on/off. В обоих случаях101172e0(this), активное message пока прежнее.",
+        "ASM RET16: метод принимает стандартные четыре Use stack arguments, но тело их не читает; не применяет UseType on/off gating и всегда toggles."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e310.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000e310.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e3c0",
+      "proposed_name": "InfoGroup_UseAssignGroupToAlias",
+      "subsystem": "entities",
+      "summary_ru": "На Use находит alias по своему target и передаёт ему себя как entity.",
+      "confidence": "high",
+      "details_ru": [
+        "Ищет10118590(0,pool+pev.target), требует virtual+24()!=0. Затем virtual+120(thisGroup), скрытый аргумент доказан ASM1000e43a PUSH EDI; Ghidra безаргументный вызов неполон.",
+        "Для CInfoAlias цепочка1000d530→1000d550 берёт targetname группы и staging queue. Bit2 включаетdiagnostic; ненулевое target без alias даёт warning. Use args не читаются; RET16."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e3c0.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000e3c0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1000e490",
+      "proposed_name": "TriggerChangeAlias_UseResolveAndDispatch",
+      "subsystem": "entities",
+      "summary_ru": "Меняет alias через выбор контекста и две виртуальные формы setter.",
+      "confidence": "medium",
+      "details_ru": [
+        "Находит alias10118500(0,pool+pev.target,activator), требует virtual+24. Значение pev.netname: точный *locus сохраняет исходный activator; иначе bit0 вызывает только специальный resolver10118980(0,text), а bit0==0 оставляет raw text pointer.",
+        "Если итоговый pointer ненулевой: virtual+120(pointer); если нулевой: virtual+124(original netname string_t). ASM подтверждает эти ветви, RET16 и отсутствие дополнительных проверок. Это НЕ исправлено до предполагаемого авторского замысла.",
+        "Для известного CInfoAlias+120=1000d530 аргумент ожидается entity*, поэтому raw-string ветка bit0==0 выглядит как несогласованный контракт. Доказаны инструкции и vtable; достижимость такого map-input и runtime последствия не проверялись. Не представлять эту ветку как безопасное присвоение строки."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1000e490.c",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json",
+        "analysis/server-targets/1000e490.asm"
+      ]
+    }
+  ]
+}

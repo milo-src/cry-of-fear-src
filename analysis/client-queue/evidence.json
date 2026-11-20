@@ -1,0 +1,189 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "source_listing": "analysis/local/music-state-client-text.asm",
+  "source_listing_sha256": "fdf5a6a09539335fc42892b84367c4b204716d8a3784e49e0ea7ca6661c75bf9",
+  "target_executed": false,
+  "new_rea_process": false,
+  "ranges": [
+    {
+      "path": "analysis/client-queue/spring-by-value.asm",
+      "start": "0x100ae850",
+      "end_exclusive": "0x100ae99a",
+      "sha256": "944ffe263d3d2197265a4a543bee58c83c20b006b037ff01a6352dc3f4993752",
+      "binary_range_sha256": "969495b0985e423f08fb93d18532a3790546412845d18ef0c7c2f64449d53d2e",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/sine-wrapper.asm",
+      "start": "0x100f8320",
+      "end_exclusive": "0x100f84e5",
+      "sha256": "5aa704b1e306b48c58233c2cbab83e5e8554bf3fb17eabdad9e8aa9f3944dfaf",
+      "binary_range_sha256": "8e774355d62a7820ef9457b041a69cb01386fff1c944e1d7c33cf63bba185249",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/sine-fallback.asm",
+      "start": "0x10119b5f",
+      "end_exclusive": "0x10119bf2",
+      "sha256": "600c6bd71e9a74a56ad496dfd6ed711892c30669ee53ab77b32a2326f593d7e0",
+      "binary_range_sha256": "08190c319d03c35ca0498a9aad947222b04e412be83c11d7f055e2de8af46575",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/vector-ma.asm",
+      "start": "0x10094770",
+      "end_exclusive": "0x100947b9",
+      "sha256": "4b150db432ad11e0f4a53af37d701d004ff99bd893fc7fd47da9e7935688355f",
+      "binary_range_sha256": "912157d54a0b122e65cea6b638aa298051d213c82a03fd47299e7efc9ab11b73",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/bob-registration.asm",
+      "start": "0x100b2fa6",
+      "end_exclusive": "0x100b2ff7",
+      "sha256": "d1400849954b1f955cf52067bf60eaeb9115ec84b0f86c008d8893fdfaaa92ae",
+      "binary_range_sha256": "6b353541ada8c18da7452fa35297ebbd13a2b0166cc0c0a4df9e397844479c77",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/camera-registration.asm",
+      "start": "0x1007c5db",
+      "end_exclusive": "0x1007c5f4",
+      "sha256": "cd7320537c1fc8a012bb157eb56eccdb3ab4fdd6c88944343dcf11a5a8936dc8",
+      "binary_range_sha256": "087a4efa82d4453d72c21f0413d6ef36712a896cf085cb5261ce09ecbc670ca2",
+      "bytes_verified": true
+    },
+    {
+      "path": "analysis/client-queue/sway-caller.asm",
+      "start": "0x100b17fa",
+      "end_exclusive": "0x100b1862",
+      "sha256": "26cdbe718d89b71b36c9c5905e20ddf01efd17d4530c4b480bb569817ed20aad",
+      "binary_range_sha256": "a5334fff991d0ce5ee09e51751b70e63f748846e1d71dd7e557bec5148668594",
+      "bytes_verified": true
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x10150300",
+      "text": "Telescope",
+      "bytes_hex": "54656c6573636f706500"
+    },
+    {
+      "address": "0x1015a57c",
+      "text": "cl_bobcycle",
+      "bytes_hex": "636c5f626f626379636c6500"
+    },
+    {
+      "address": "0x1014fc78",
+      "text": "0.8",
+      "bytes_hex": "302e3800"
+    },
+    {
+      "address": "0x1015a590",
+      "text": "cl_bob",
+      "bytes_hex": "636c5f626f6200"
+    },
+    {
+      "address": "0x1015a588",
+      "text": "0.01",
+      "bytes_hex": "302e303100"
+    },
+    {
+      "address": "0x1015a598",
+      "text": "cl_bobup",
+      "bytes_hex": "636c5f626f62757000"
+    },
+    {
+      "address": "0x1014cc24",
+      "text": "0.5",
+      "bytes_hex": "302e3500"
+    }
+  ],
+  "limits": [
+    "Static saved captures and bounded assembly only; no runtime/parity claim.",
+    "Assembly snippets are not new decompilation function cards."
+  ],
+  "source_c": [
+    {
+      "path": "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+      "sha256": "d9d1cf6174f7c3e31581ad06ae02592bd97504131f1fdc2d7d2fe885b8d4b434"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-first/007-pseudocode.c",
+      "sha256": "1b0d2b3de022b4bc482d9ed6dbd939a4341665efc42531dd31a57be72643ddb8"
+    },
+    {
+      "path": "decompiled/client/captures/graphics-client-fog-waterlevel/000-pseudocode.c",
+      "sha256": "1af04e5e0a1cb4d695fd5dfdd836eaec4bdcdabc7303e386ff66d229768d125d"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-fov-audit/001-pseudocode.c",
+      "sha256": "c69c4ba4d8769b495d60028d65d023dbed8eca9d77a9c010ec93b087616443ff"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-pass1/001-pseudocode.c",
+      "sha256": "3d8875610a39ad0c33c395af8adacb28177dfc7d358b459b7d14124e8dac3dc6"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-pass1/002-pseudocode.c",
+      "sha256": "08c211e8d551c5a2ab29b1931ca2a83be844e22c779e0152178c9c71883d0fa0"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-spring-audit/000-pseudocode.c",
+      "sha256": "0c92e71a5dcffe02dbe4382b2094fb8256ba5d6904ec65d1e0cd6ad308fc8c2f"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-spring-audit/001-pseudocode.c",
+      "sha256": "e21c25ef26bd740e64309073c53fe9685789045731d4b406a82eb7972bce6296"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-spring-audit/002-pseudocode.c",
+      "sha256": "9e09fffbd68fb3637a6232a005a6f246f605d903465745af2c5453e78f2fa50d"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-spring-core/000-pseudocode.c",
+      "sha256": "f13c626b2fc17f180eef5c249591a3ce0d5e1a1279143595528c0aa6f068da7d"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-spring-core/001-pseudocode.c",
+      "sha256": "adcd61a46fc85b820c76fb6199003629d31b12b813d8e5744a72429ae6db4ebf"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/000-pseudocode.c",
+      "sha256": "16a087a38bb8911e428295e77c81764333421809c4a3caa24074e3e61202408b"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/001-pseudocode.c",
+      "sha256": "ba387f7c9e994395c2ad1d9d2e664c773377ed5f260de1228a37942ada571bc9"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/002-pseudocode.c",
+      "sha256": "327bca5bb94e9f29ee94109dbbe1254a8f254352afb565ed6439f6709e86279b"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/003-pseudocode.c",
+      "sha256": "a92216b51662204df7b1221994e20cf95d5fb6d16df582cf52cd29970c831eee"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/004-pseudocode.c",
+      "sha256": "b1422eea9768165692c1299136367e0cf2f5feefe77283b77e7ae7fc998c29dc"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/005-pseudocode.c",
+      "sha256": "916f7f8338b860314cbf20fd21d579d93e1d79bf738fd43dcce8301927ca27fb"
+    },
+    {
+      "path": "decompiled/client/captures/movement-client-view-audit/006-pseudocode.c",
+      "sha256": "b9a75702011b2f8e412787a92971369fddf4bd87a6293dcf866564c09170c2f2"
+    },
+    {
+      "path": "decompiled/client/captures/shader-pass-vector-helpers/000-pseudocode.c",
+      "sha256": "e71fa294dbe06def5a86ca5f6d7af10b13f78ef046df600e2ed5a99970bf7fb4"
+    },
+    {
+      "path": "decompiled/client/captures/weapons-client-aim/000-pseudocode.c",
+      "sha256": "9e9c27287391d22e2ccb3ea2867735e0a9700b737f3d97e4a86de5da7d2548ab"
+    }
+  ]
+}

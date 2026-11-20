@@ -1,0 +1,387 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10017110",
+      "proposed_name": "CBaseEntity_ScheduleThinkAfter",
+      "subsystem": "entity-core",
+      "summary_ru": "Планирует think относительно выбранных часов и включает MoveWith assist при необходимости.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM: thiscall, два stack аргумента (float delay, int correctionMode), ret8; C потерял второй аргумент. Clock=pev.ltime(+100) при movetype7, иначе globals.time. Target=clock+delay.",
+        "Без parent+14, child+1c и pev.flags&20h записывает target в pev.nextthink+104, object+58 и +5c. Иначе пишет только desired+58, вызывает 10018090(this), затем 100c4880(this,correctionMode).",
+        "Нет проверки delay>0 и нет общей гарантии исполнения через один кадр. Отличается от absolute scheduler100171b0 наличием flags20h в выборе assist."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017110.c",
+        "analysis/server-queue-b/asm-parent/10017110.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100171b0",
+      "proposed_name": "CBaseEntity_ScheduleThinkAt",
+      "subsystem": "entity-core",
+      "summary_ru": "Назначает абсолютное время think, отдельно от относительного scheduler.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM: thiscall(time,correctionMode), ret8. Без parent/child пишет time в pev.nextthink, object+58/+5c; flags20h здесь не проверяется.",
+        "При parent или child пишет object+58=time; 10018090 откладывает native pusher think, затем100c4880 получает this и второй аргумент из stack. C показывает только один аргумент и неполный вызов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100171b0.c",
+        "analysis/server-queue-b/asm-parent/100171b0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10018090",
+      "proposed_name": "MoveWith_DeferNativePusherThinkRecursive",
+      "subsystem": "entity-core",
+      "summary_ru": "Отодвигает native nextthink у pushers в дереве MoveWith.",
+      "confidence": "high",
+      "details_ru": [
+        "Для movetype7: pev.nextthink=float(double(pev.ltime)+1000000.0), object+5c=nextthink. Desired deadline object+58 не меняет.",
+        "Рекурсивно проходит children+1c/siblings+20 с ECX=child. Нет лимита глубины, защиты от циклов или обнуления nextthink у иных movetypes. Native literal1000000 подтверждён PE."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10018090.c",
+        "analysis/server-queue-b/asm-parent/10018090.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c3fa0",
+      "proposed_name": "MoveWith_SubtractVelocityDeltasRecursive",
+      "subsystem": "entity-core",
+      "summary_ru": "Временно вычитает одинаковые линейную и угловую поправки у всех потомков.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entity, deltaVelocity XYZ, deltaAvelocity XYZ). Для каждого child впервые сохраняет world velocity в+40 при отсутствии flag8 и avelocity в+4c при отсутствии flag10h.",
+        "Затем child.pev.velocity-=deltaVelocity; child.pev.avelocity-=deltaAvelocity и рекурсия с теми же delta. Root entity не меняется; saved значения при повторном проходе не перезаписываются. Лимит100 из других MoveWith helpers здесь отсутствует."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c3fa0.c",
+        "analysis/server-queue-b/asm-parent/100c3fa0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c40c0",
+      "proposed_name": "MoveWith_CheckAssistDeadlinesAndPrune",
+      "subsystem": "entity-core",
+      "summary_ru": "Проверяет сроки assist и удаляет из списка записи без pending работы.",
+      "confidence": "high",
+      "details_ru": [
+        "Head10223190 является sentinel; обход начинается с head+3c. Вызывает100c4240(current), затем заново читает previous.next.",
+        "Если flags&0xa0==0, исключает current из списка и нулит его next+3c; иначе продвигает previous. Return100c4240 не используется. При NULL head только diagnostic; ограничения1000 проходов здесь нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c40c0.c",
+        "analysis/server-queue-b/asm-parent/100c40c0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4120",
+      "proposed_name": "MoveWith_RunDesiredList",
+      "subsystem": "entity-core",
+      "summary_ru": "Исполняет pending операции assist в проходе с разрешённым немедленным dispatch.",
+      "confidence": "high",
+      "details_ru": [
+        "Если doingDesired1022318c уже ненулевой, печатает diagnostic, но продолжает. Выставляет global=1 и проходит head.next+3c; next сохраняется до100c3e50(current).",
+        "После каждого вызова уменьшает счётчик1000; на тысячном вызове diagnostic срабатывает даже если сохранённый next уже NULL. В обычном конце global=0.",
+        "Подтверждённый ранний путь при NULL head10223190 печатает ошибку и возвращается, оставляя doingDesired=1. Функция не удаляет записи из списка и не защищает сохранённый next от уничтожения callback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4120.c",
+        "analysis/server-queue-b/asm-parent/100c4120.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c41b0",
+      "proposed_name": "MoveWith_RestoreSavedVelocitiesRecursive",
+      "subsystem": "entity-core",
+      "summary_ru": "Восстанавливает временно сохранённые скорости объекта и потомков.",
+      "confidence": "high",
+      "details_ru": [
+        "При flag8 копирует object+40..48 в pev.velocity+20..28, очищает flag8 и заполняет saved vector из globals10222f34..3c. Аналогично flag10h: object+4c..54→pev.avelocity+5c..64.",
+        "Рекурсивно проходит child+1c/sibling+20 независимо от наличия saved flags у root. Нет глубинного лимита, пересчёта local offsets или вызова SetVelocity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c41b0.c",
+        "analysis/server-queue-b/asm-parent/100c41b0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4240",
+      "proposed_name": "MoveWith_CheckThinkDeadlineAndScaleFrameVelocity",
+      "subsystem": "entity-core",
+      "summary_ru": "Подготавливает движение к deadline внутри текущего frame и запрашивает think.",
+      "confidence": "high",
+      "details_ru": [
+        "Для обычных конечных чисел: требуется frametime!=0, flag20h и desired+58>0. Clock=ltime для movetype7, иначе globals.time. Если deadline<=clock+dt, вычисляет fraction=(deadline-clock)/dt; при fraction==0 ничего не ставит и оставляет flag20h.",
+        "При ненулевой fraction и flag40h сохраняет скорости один раз, применяет vNew=parentV+(vOld-parentV)*fraction (без parent: vOld*fraction), так же avelocity. Вычитает old-new delta у потомков через100c3fa0; затем100c4830 запрашивает восстановление.",
+        "После correction либо сразу при отсутствии flag40h вызывает100c4850 (pending think и CancelThink), затем очищает flag20h. Return1 означает наличие положительного deadline, а не факт dispatch; будущий deadline тоже возвращает1. Deadline<=0 очищает20h и возвращает0. Fraction не ограничена[0,1], finite/NaN guards отсутствуют."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4240.c",
+        "analysis/server-queue-b/asm-parent/100c4240.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4550",
+      "proposed_name": "MoveWith_AssignOriginAndUpdateLocalOffset",
+      "subsystem": "entity-core",
+      "summary_ru": "Передаёт новый world origin с разрешением обновить parent-relative offset.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entity,XYZ) вызывает100c4590(entity,XYZ,1). Ни pointer-to-vector ABI, ни самостоятельной collision проверки в этом wrapper нет.",
+        "Дальнейшее присвоение идёт через10119fe0 и engine SetOrigin; потомки обрабатываются100c4590."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4550.c",
+        "analysis/server-queue-b/asm-parent/100c4550.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4590",
+      "proposed_name": "MoveWith_AssignOriginRecursive",
+      "subsystem": "entity-core",
+      "summary_ru": "Присваивает world origin и переносит потомков по правилам MoveWith.",
+      "confidence": "high",
+      "details_ru": [
+        "Сначала delta=newOrigin-oldOrigin;10119fe0(entity,&XYZ) передаёт origin движку. При updateLocal!=0 и parent обновляет object+24..2c=actualOrigin-parentOrigin.",
+        "ASM закрывает потерянный C блок: child movetype7 с любой отличающейся velocity component получает child.currentOrigin+delta; прочие получают newOrigin+child.localOffset(+24). Рекурсивный вызов всегда updateLocal=0.",
+        "Сравнение velocity точное, без epsilon; при unordered component ветка считается отличающейся. Нет вращения offset матрицей, цикла/глубины guard. Diagnostic при length(delta)>0.01 и cvar sohl_mwdebug!=0 не блокирует перемещение."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4590.c",
+        "analysis/server-queue-b/asm-parent/100c4590.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c47f0",
+      "proposed_name": "MoveWith_RequestVirtualSlot0",
+      "subsystem": "entity-core",
+      "summary_ru": "Ставит pending bit800h для вызова virtual slot0 в assist dispatch.",
+      "confidence": "high",
+      "details_ru": [
+        "Object.flags+60|=800h, затем100c48b0(entity), который добавляет80h и выбирает немедленный dispatch либо очередь.",
+        "Consumer100c3e50 очищает800h до virtual+0 с ECX=entity. Конкретная реализация slot0 зависит от vtable; общий смысл callback не выводится по одному offset."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c47f0.c",
+        "analysis/server-queue-b/asm-parent/100c47f0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4810",
+      "proposed_name": "MoveWith_RequestDesiredInfoDiagnostic",
+      "subsystem": "entity-core",
+      "summary_ru": "Запрашивает diagnostic позиции и скорости объекта и первого child.",
+      "confidence": "high",
+      "details_ru": [
+        "Object.flags+60|=400h, затем100c48b0(entity). Consumer100c3e50 очищает400h и печатает DesiredInfo.",
+        "Consumer разыменовывает entity.child+1c без NULL guard в этой ветке; wrapper также не проверяет child. Не считать это проверкой целостности дерева."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4810.c",
+        "analysis/server-queue-b/asm-parent/100c4810.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4830",
+      "proposed_name": "MoveWith_RequestVelocityRestore",
+      "subsystem": "entity-core",
+      "summary_ru": "Ставит восстановление временных скоростей в assist dispatch.",
+      "confidence": "high",
+      "details_ru": [
+        "Object.flags+60|=200h; tail dispatch через100c48b0(entity). Consumer100c3e50 очищает200h и вызывает100c41b0(entity).",
+        "При doingDesired!=0 восстановление может исполниться внутри этого вызова; при0 только ставится в очередь. Это не unconditional next-frame callback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4830.c",
+        "analysis/server-queue-b/asm-parent/100c4830.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4850",
+      "proposed_name": "MoveWith_RequestThinkAndCancelDeadline",
+      "subsystem": "entity-core",
+      "summary_ru": "Запрашивает виртуальный think и отменяет ранее назначенный deadline.",
+      "confidence": "high",
+      "details_ru": [
+        "Flags+60|=100h; ASM явно передаёт ECX=entity в10017ad0 CancelThink, затем cdecl entity в100c48b0.",
+        "Consumer100c3e50 очищает100h перед virtual+e0 с ECX=entity. CancelThink обнуляет desired+58; native nextthink и+5c очищаются только без parent/child."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4850.c",
+        "analysis/server-queue-b/asm-parent/100c4850.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4880",
+      "proposed_name": "MoveWith_ArmAssistDeadline",
+      "subsystem": "entity-core",
+      "summary_ru": "Включает проверку deadline и выбирает коррекцию скорости на части кадра.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entity,mode). Всегда выставляет20h; при mode!=0 также40h, при mode==0 очищает40h. Остальные flags сохраняет.",
+        "Вызывает100c44e0 AddToAssistList напрямую: здесь нет выставления80h и нет немедленного100c3e50 даже при doingDesired!=0. Mode40h использует100c4240."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4880.c",
+        "analysis/server-queue-b/asm-parent/100c4880.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c48e0",
+      "proposed_name": "MoveWith_SetAnglesAndUpdateLocalOffset",
+      "subsystem": "entity-core",
+      "summary_ru": "Передаёт новые world angles с обновлением parent-relative углов.",
+      "confidence": "high",
+      "details_ru": [
+        "Cdecl(entity,XYZ) вызывает100c4920(entity,XYZ,1). Вектор передаётся тремя float по значению.",
+        "Внутри100c4920 angles присваиваются напрямую, без engine SetOrigin и без wrap углов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c48e0.c",
+        "analysis/server-queue-b/asm-parent/100c48e0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4920",
+      "proposed_name": "MoveWith_SetAnglesRecursive",
+      "subsystem": "entity-core",
+      "summary_ru": "Присваивает углы объекта и переносит angular pose потомков.",
+      "confidence": "high",
+      "details_ru": [
+        "Delta=newAngles-oldAngles; записывает pev.angles+50..58. При updateLocal!=0 и parent сохраняет relative angles в object+30..38.",
+        "ASM закрывает потерянный C блок: если все child.avelocity равны parent.avelocity, цель=newAngles+child.localAngles; иначе child.currentAngles+delta. Unordered сравнения относятся к неравенству. Рекурсия с updateLocal=0, без movetype7 gate.",
+        "Нет angle wrap, матричного вращения позиции или depth/cycle guard. Diagnostic length(delta)>0.01 и sohl_mwdebug!=0 не ограничивает применение углов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4920.c",
+        "analysis/server-queue-b/asm-parent/100c4920.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4b90",
+      "proposed_name": "MoveWith_SetRelativeAngularVelocity",
+      "subsystem": "entity-core",
+      "summary_ru": "Преобразует relative avelocity в world и распространяет изменение на потомков.",
+      "confidence": "high",
+      "details_ru": [
+        "WorldNew=requested+parent.pev.avelocity, либо requested без parent. До записи root вызывает100c4c90 для child с budget100 и WorldNew.",
+        "Sibling обход root ограничен100 вызовами; на сотом диагностирует независимо от next=NULL, затем всё равно записывает root.pev.avelocity. Local angles и saved velocity flags не меняет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4b90.c",
+        "analysis/server-queue-b/asm-parent/100c4b90.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4c90",
+      "proposed_name": "MoveWith_PropagateAngularVelocity",
+      "subsystem": "entity-core",
+      "summary_ru": "Меняет world avelocity потомка, сохраняя его отличие от parent.",
+      "confidence": "high",
+      "details_ru": [
+        "При budget<1 либо parent=NULL diagnostic и return без изменений. Иначе childNew=newParent+(childOld-oldParent); рекурсивно передаёт childNew потомкам с budget-1.",
+        "В каждом sibling списке отдельный предел100; root запись выполняется после рекурсии, сохраняя oldParent для вычислений у descendants. Затем pev.avelocity=childNew. Диагностика sibling ошибочно называет SetMoveWithVelocity, но offsets5c..64 доказывают angular вариант."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4c90.c",
+        "analysis/server-queue-b/asm-parent/100c4c90.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4db0",
+      "proposed_name": "MoveWith_PropagateLinearVelocity",
+      "subsystem": "entity-core",
+      "summary_ru": "Меняет world velocity потомка, сохраняя его relative скорость.",
+      "confidence": "high",
+      "details_ru": [
+        "Тот же порядок что100c4c90, но pev.velocity+20..28: childNew=newParent+(childOld-oldParent). Требует parent и budget>=1.",
+        "Рекурсия budget-1; sibling предел100 на каждом уровне. Пишет текущую velocity после обхода детей. Не вычисляет angular tangential velocity и не меняет origin."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4db0.c",
+        "analysis/server-queue-b/asm-parent/100c4db0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c4ed0",
+      "proposed_name": "MoveWith_SetRelativeLinearVelocity",
+      "subsystem": "entity-core",
+      "summary_ru": "Добавляет parent velocity и распространяет world скорость по дереву.",
+      "confidence": "high",
+      "details_ru": [
+        "WorldNew=requested+parent.pev.velocity либо requested без parent. Вызывает100c4db0(child,WorldNew,100) для каждого child, затем пишет root.pev.velocity.",
+        "Sibling предел100 с diagnostic на сотой итерации даже при завершении списка. Relative stop(requested0) оставляет parent world velocity; не означает world zero."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c4ed0.c",
+        "analysis/server-queue-b/asm-parent/100c4ed0.asm",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    }
+  ]
+}

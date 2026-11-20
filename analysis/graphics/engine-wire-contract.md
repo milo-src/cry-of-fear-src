@@ -107,6 +107,7 @@ Staging capacity, overflow flags, MessageBegin/End и лимит перемен�
   и связанные ограниченные buffer/message contracts. Это не полный разбор
   engine network transport или всех значений message destination.
 - Nonreturn error callees и destination selector закрыты в followup-контракте.
-  Открыты setjmp owner/recovery, последующие изменения callback table и BSS
+  Owner setjmp и spatial routing описаны в engine-dispatch-lifecycle.md.
+  Открыты полный frame/recovery, последующие изменения callback table и BSS
   byte, сетевой приём повреждённых пакетов и полный downstream transport.
 - Runtime/визуальных/звуковых проверок и изменений игры в этом этапе нет.

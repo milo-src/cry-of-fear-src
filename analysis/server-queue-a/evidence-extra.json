@@ -1,0 +1,2063 @@
+{
+  "schema": 1,
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "binary_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "image_base": "0x10000000",
+  "method": "Saved Ghidra bodies + bounded read-only PE/objdump; no DLL execution, REA process, runtime or build.",
+  "range_convention": "VA start-inclusive/end-exclusive; original saved C range retained inclusive.",
+  "targets": [
+    {
+      "address": "0x100126a0",
+      "path": "decompiled/server/partial-pass/functions/0x100126a0.c",
+      "sha256": "d35383b57d032cec180aa83af8ad21c5434acfa55ee6ee19afe48fba039d8f43",
+      "saved_name": "FUN_100126a0",
+      "saved_range_inclusive": [
+        "0x100126a0",
+        "0x100126fb"
+      ]
+    },
+    {
+      "address": "0x10012700",
+      "path": "decompiled/server/partial-pass/functions/0x10012700.c",
+      "sha256": "2fd2ed043e8a274dd91c43734eb2df13e391ba006db5486d30a9ab65115462cb",
+      "saved_name": "FUN_10012700",
+      "saved_range_inclusive": [
+        "0x10012700",
+        "0x1001275b"
+      ]
+    },
+    {
+      "address": "0x10012760",
+      "path": "decompiled/server/partial-pass/functions/0x10012760.c",
+      "sha256": "eb97d8f32db0eab444575071a7743d59be978142e7523b8675ce8d48c674103a",
+      "saved_name": "FUN_10012760",
+      "saved_range_inclusive": [
+        "0x10012760",
+        "0x100127bb"
+      ]
+    },
+    {
+      "address": "0x10012820",
+      "path": "decompiled/server/partial-pass/functions/0x10012820.c",
+      "sha256": "5ee86af86e5a70edb97bac14a0be9d505bc7f9f8d997d15aa5b5a763eb83a315",
+      "saved_name": "FUN_10012820",
+      "saved_range_inclusive": [
+        "0x10012820",
+        "0x1001287b"
+      ]
+    },
+    {
+      "address": "0x10015080",
+      "path": "decompiled/server/partial-pass/functions/0x10015080.c",
+      "sha256": "3472a356bcb9c66996091f59f6ffe7996c25185fc04102c2017d5fc689581c19",
+      "saved_name": "FUN_10015080",
+      "saved_range_inclusive": [
+        "0x10015080",
+        "0x100150d8"
+      ]
+    },
+    {
+      "address": "0x100150e0",
+      "path": "decompiled/server/partial-pass/functions/0x100150e0.c",
+      "sha256": "79b05ead88c481a984dfd1bfe29ffd6137242c71cc299d4255e44888b9e60a46",
+      "saved_name": "FUN_100150e0",
+      "saved_range_inclusive": [
+        "0x100150e0",
+        "0x100151ae"
+      ]
+    },
+    {
+      "address": "0x100151b0",
+      "path": "decompiled/server/partial-pass/functions/0x100151b0.c",
+      "sha256": "9b930471118ad267731b8eb2bd7e527a7f84e121f4e647dad8706353518fc9b5",
+      "saved_name": "FUN_100151b0",
+      "saved_range_inclusive": [
+        "0x100151b0",
+        "0x100151c4"
+      ]
+    },
+    {
+      "address": "0x10015370",
+      "path": "decompiled/server/partial-pass/functions/0x10015370.c",
+      "sha256": "e7f84da776201dc55c10b4aec1465df9a4c72c9a7cd7acb11820c11f5f26656c",
+      "saved_name": "FUN_10015370",
+      "saved_range_inclusive": [
+        "0x10015370",
+        "0x100153ac"
+      ]
+    },
+    {
+      "address": "0x10013900",
+      "path": "decompiled/server/partial-pass/functions/0x10013900.c",
+      "sha256": "59ba5929da61999be96a9fccdc942e39c5a3bfedefaf1aba9902fc715a6c98c4",
+      "saved_name": "FUN_10013900",
+      "saved_range_inclusive": [
+        "0x10013900",
+        "0x10013a05"
+      ]
+    },
+    {
+      "address": "0x10013a10",
+      "path": "decompiled/server/partial-pass/functions/0x10013a10.c",
+      "sha256": "b4cc335ace241026ddb9906caea7e36e39312898adcb19a228885a9ec33cc805",
+      "saved_name": "FUN_10013a10",
+      "saved_range_inclusive": [
+        "0x10013a10",
+        "0x10013b2f"
+      ]
+    },
+    {
+      "address": "0x10013b30",
+      "path": "decompiled/server/partial-pass/functions/0x10013b30.c",
+      "sha256": "e97219628a2e04c2655690102186fe25d419a4fa03ea20b53e9cdc94bca331cf",
+      "saved_name": "FUN_10013b30",
+      "saved_range_inclusive": [
+        "0x10013b30",
+        "0x10013c30"
+      ]
+    },
+    {
+      "address": "0x10013d50",
+      "path": "decompiled/server/partial-pass/functions/0x10013d50.c",
+      "sha256": "b7cc782404a884c9d16d0d3bdfb1750ce43d1203be40e7fd27a800f9303b4d65",
+      "saved_name": "FUN_10013d50",
+      "saved_range_inclusive": [
+        "0x10013d50",
+        "0x10013e73"
+      ]
+    },
+    {
+      "address": "0x10014730",
+      "path": "decompiled/server/partial-pass/functions/0x10014730.c",
+      "sha256": "06e5933533fb8a85170e0833758ae44b7e9adad8c471975f560ede091682fa0a",
+      "saved_name": "FUN_10014730",
+      "saved_range_inclusive": [
+        "0x10014730",
+        "0x10014760"
+      ]
+    },
+    {
+      "address": "0x10014770",
+      "path": "decompiled/server/partial-pass/functions/0x10014770.c",
+      "sha256": "6384f1ddad932f818f426032b05d8f02eb9fb6bb4cbda477ecb1112c05ec540e",
+      "saved_name": "FUN_10014770",
+      "saved_range_inclusive": [
+        "0x10014770",
+        "0x100147a0"
+      ]
+    },
+    {
+      "address": "0x100147b0",
+      "path": "decompiled/server/partial-pass/functions/0x100147b0.c",
+      "sha256": "2d5719538950aabde999f15fe8d2ed5e840e725ba73ded8f8b8b22156a19a346",
+      "saved_name": "FUN_100147b0",
+      "saved_range_inclusive": [
+        "0x100147b0",
+        "0x100147e0"
+      ]
+    },
+    {
+      "address": "0x10014830",
+      "path": "decompiled/server/partial-pass/functions/0x10014830.c",
+      "sha256": "9b3da2da950cc2e8b3edd3913d161209f3589e61c51cca98c75bca35fc579eb8",
+      "saved_name": "FUN_10014830",
+      "saved_range_inclusive": [
+        "0x10014830",
+        "0x10014860"
+      ]
+    },
+    {
+      "address": "0x10014940",
+      "path": "decompiled/server/partial-pass/functions/0x10014940.c",
+      "sha256": "8bfecbc8f8c44e0c2929b49a528e536867520a22c2a02a5cfafdf733ad29854b",
+      "saved_name": "FUN_10014940",
+      "saved_range_inclusive": [
+        "0x10014940",
+        "0x1001499e"
+      ]
+    },
+    {
+      "address": "0x100149a0",
+      "path": "decompiled/server/partial-pass/functions/0x100149a0.c",
+      "sha256": "2e7717b86946d977d466578720df57d5bb0628c7e619b7026071652f606ac59d",
+      "saved_name": "FUN_100149a0",
+      "saved_range_inclusive": [
+        "0x100149a0",
+        "0x100149fe"
+      ]
+    },
+    {
+      "address": "0x10014a00",
+      "path": "decompiled/server/partial-pass/functions/0x10014a00.c",
+      "sha256": "fe4ea345fcc4b8d14d95cae330bf90ebdc2113839f053893f16b8d9de11e532c",
+      "saved_name": "FUN_10014a00",
+      "saved_range_inclusive": [
+        "0x10014a00",
+        "0x10014a5e"
+      ]
+    },
+    {
+      "address": "0x10014ac0",
+      "path": "decompiled/server/partial-pass/functions/0x10014ac0.c",
+      "sha256": "a5617f5ebbf9df55093dda80bdc9e472f5c5fc704eb791804c66e2b357f8560c",
+      "saved_name": "FUN_10014ac0",
+      "saved_range_inclusive": [
+        "0x10014ac0",
+        "0x10014b1e"
+      ]
+    },
+    {
+      "address": "0x10013490",
+      "path": "decompiled/server/partial-pass/functions/0x10013490.c",
+      "sha256": "a3a474b18db3aacb194bd1c7d0766cfc6a2f60563daf5f6cf30b4f5e71449568",
+      "saved_name": "FUN_10013490",
+      "saved_range_inclusive": [
+        "0x10013490",
+        "0x10013496"
+      ]
+    },
+    {
+      "address": "0x100134a0",
+      "path": "decompiled/server/partial-pass/functions/0x100134a0.c",
+      "sha256": "df91abebe2f5c0eb2acf45256e7b9e5830301aa848928241f62f8cbe0b96aa18",
+      "saved_name": "FUN_100134a0",
+      "saved_range_inclusive": [
+        "0x100134a0",
+        "0x100134a6"
+      ]
+    },
+    {
+      "address": "0x100134b0",
+      "path": "decompiled/server/partial-pass/functions/0x100134b0.c",
+      "sha256": "3ef0f58430ed2d1d9472a9655aab0e90033a053a1912d1282963f88501059cc2",
+      "saved_name": "FUN_100134b0",
+      "saved_range_inclusive": [
+        "0x100134b0",
+        "0x10013505"
+      ]
+    },
+    {
+      "address": "0x10015fe0",
+      "path": "decompiled/server/partial-pass/functions/0x10015fe0.c",
+      "sha256": "0a479f40afcf70af560cad3fa361e61d24d7c79e3cabf07de24def3ebcfb7078",
+      "saved_name": "FUN_10015fe0",
+      "saved_range_inclusive": [
+        "0x10015fe0",
+        "0x1001606d"
+      ]
+    },
+    {
+      "address": "0x10016070",
+      "path": "decompiled/server/partial-pass/functions/0x10016070.c",
+      "sha256": "9fe23d88d9642e2fbf47102933e69ceb437bdce2565097d788b711e6d27dc6db",
+      "saved_name": "FUN_10016070",
+      "saved_range_inclusive": [
+        "0x10016070",
+        "0x1001649e"
+      ]
+    },
+    {
+      "address": "0x100165a0",
+      "path": "decompiled/server/partial-pass/functions/0x100165a0.c",
+      "sha256": "a1868228caad1287c7140a2f9a0122bd861546e660ff03b83e21bd06b0d1fda1",
+      "saved_name": "FUN_100165a0",
+      "saved_range_inclusive": [
+        "0x100165a0",
+        "0x1001673c"
+      ]
+    },
+    {
+      "address": "0x10014b50",
+      "path": "decompiled/server/partial-pass/functions/0x10014b50.c",
+      "sha256": "bc49c777b03b601bf160c457c61cc507819829e0abb1b5a5031bd1d65b18172c",
+      "saved_name": "CEnvSpark::SparkCyclic",
+      "saved_range_inclusive": [
+        "0x10014b50",
+        "0x10014b92"
+      ]
+    },
+    {
+      "address": "0x10014ba0",
+      "path": "decompiled/server/partial-pass/functions/0x10014ba0.c",
+      "sha256": "e8ab681500a811dd38a40c5f892dd75c74110b814a02718dc5d82287ee83c25a",
+      "saved_name": "CEnvSpark::SparkStart",
+      "saved_range_inclusive": [
+        "0x10014ba0",
+        "0x10014c0d"
+      ]
+    },
+    {
+      "address": "0x10014c10",
+      "path": "decompiled/server/partial-pass/functions/0x10014c10.c",
+      "sha256": "8512bbe99f363d9ad96728636bd8ce673f777b3b4497bd57e901e5c847fb16a8",
+      "saved_name": "CEnvSpark::SparkStop",
+      "saved_range_inclusive": [
+        "0x10014c10",
+        "0x10014c2d"
+      ]
+    },
+    {
+      "address": "0x10014c30",
+      "path": "decompiled/server/partial-pass/functions/0x10014c30.c",
+      "sha256": "bf4fdca7992b2ea3b5c0f34dbee14308df80f3979fe61f4d2ec182e66f42c8e4",
+      "saved_name": "CEnvSpark::SparkThink",
+      "saved_range_inclusive": [
+        "0x10014c30",
+        "0x10014ca8"
+      ]
+    },
+    {
+      "address": "0x10014cb0",
+      "path": "decompiled/server/partial-pass/functions/0x10014cb0.c",
+      "sha256": "dd0bbb73004a40396d68e7d6f10a7c518635378a4484b8f1f6c8f94e6b50c820",
+      "saved_name": "CEnvSpark::SparkWait",
+      "saved_range_inclusive": [
+        "0x10014cb0",
+        "0x10014cb7"
+      ]
+    },
+    {
+      "address": "0x10014550",
+      "path": "decompiled/server/partial-pass/functions/0x10014550.c",
+      "sha256": "5921ca2656765b589c583edefd17a0212d55a33870d3231416b16b2827af0259",
+      "saved_name": "FUN_10014550",
+      "saved_range_inclusive": [
+        "0x10014550",
+        "0x10014599"
+      ]
+    },
+    {
+      "address": "0x100145b0",
+      "path": "decompiled/server/partial-pass/functions/0x100145b0.c",
+      "sha256": "5167da17881e5c26425e4de7ac520ffed045454d043d2be76913d352ff33201a",
+      "saved_name": "CMultiSource::Register",
+      "saved_range_inclusive": [
+        "0x100145b0",
+        "0x100146ee"
+      ]
+    },
+    {
+      "address": "0x10015750",
+      "path": "decompiled/server/partial-pass/functions/0x10015750.c",
+      "sha256": "d2dd24d7bc3bbbf14ac6818111bf2b53eae7f67ac87096264509b1d42b210e0f",
+      "saved_name": "FUN_10015750",
+      "saved_range_inclusive": [
+        "0x10015750",
+        "0x10015954"
+      ]
+    },
+    {
+      "address": "0x100132d0",
+      "path": "decompiled/server/partial-pass/functions/0x100132d0.c",
+      "sha256": "0c3954e33ae8980e09de4e528879707019893fba1f353f1bb8218edb749485de",
+      "saved_name": "FUN_100132d0",
+      "saved_range_inclusive": [
+        "0x100132d0",
+        "0x10013458"
+      ]
+    }
+  ],
+  "support": [
+    {
+      "address": "0x10120670",
+      "path": "decompiled/server/partial-pass/functions/0x10120670.c",
+      "sha256": "e9c4902c558ba566fe9d9f57bcc147769bf7249b3d05692da968ec94ad6f3d01",
+      "saved_name": "FUN_10120670",
+      "saved_range_inclusive": [
+        "0x10120670",
+        "0x101206dc"
+      ]
+    },
+    {
+      "address": "0x101206f0",
+      "path": "decompiled/server/partial-pass/functions/0x101206f0.c",
+      "sha256": "a8837ea6af0f7a261f73d7299fb3ef2e222ee0b5f2224442e6670e6c60fd3623",
+      "saved_name": "FUN_101206f0",
+      "saved_range_inclusive": [
+        "0x101206f0",
+        "0x1012070b"
+      ]
+    },
+    {
+      "address": "0x10120710",
+      "path": "decompiled/server/partial-pass/functions/0x10120710.c",
+      "sha256": "7cdf03ba6cbd4a761d0fbc65d7dea87a6493a8161709e6a838c1c632743379f2",
+      "saved_name": "FUN_10120710",
+      "saved_range_inclusive": [
+        "0x10120710",
+        "0x10120728"
+      ]
+    },
+    {
+      "address": "0x10120770",
+      "path": "decompiled/server/partial-pass/functions/0x10120770.c",
+      "sha256": "e989e8c3c0756f1beb0ee9efd12490a91d7bba5412000970a3c9f6483b4f7474",
+      "saved_name": "FUN_10120770",
+      "saved_range_inclusive": [
+        "0x10120770",
+        "0x101207d7"
+      ]
+    },
+    {
+      "address": "0x10017740",
+      "path": "decompiled/server/partial-pass/functions/0x10017740.c",
+      "sha256": "0b5e69263bb3d1779a36686b535de1f820abc55945966a6f47444edd14f09c14",
+      "saved_name": "FUN_10017740",
+      "saved_range_inclusive": [
+        "0x10017740",
+        "0x10017778"
+      ]
+    },
+    {
+      "address": "0x10017790",
+      "path": "decompiled/server/partial-pass/functions/0x10017790.c",
+      "sha256": "4dcab867b18249debc88b7e8bd5619c8dd5292be05d1f645be99c33723c09e31",
+      "saved_name": "FUN_10017790",
+      "saved_range_inclusive": [
+        "0x10017790",
+        "0x1001779f"
+      ]
+    },
+    {
+      "address": "0x10017ba0",
+      "path": "decompiled/server/partial-pass/functions/0x10017ba0.c",
+      "sha256": "9c6cc0af56b443513d6e16352e0f757d3a4ab57fb0486d81c2ce182827acfe0c",
+      "saved_name": "FUN_10017ba0",
+      "saved_range_inclusive": [
+        "0x10017ba0",
+        "0x10017bb0"
+      ]
+    },
+    {
+      "address": "0x1011a290",
+      "path": "decompiled/server/partial-pass/functions/0x1011a290.c",
+      "sha256": "21ce9b88379c2be4bc32fb7840862443dfdd391ca663e51ed7c3c9bc24ff2eed",
+      "saved_name": "FUN_1011a290",
+      "saved_range_inclusive": [
+        "0x1011a290",
+        "0x1011a2e8"
+      ]
+    },
+    {
+      "address": "0x10017ad0",
+      "path": "decompiled/server/partial-pass/functions/0x10017ad0.c",
+      "sha256": "7af0f29cc460c74d43590664f28ede85e675efb095adbc9675264096ea2b062f",
+      "saved_name": "FUN_10017ad0",
+      "saved_range_inclusive": [
+        "0x10017ad0",
+        "0x10017af7"
+      ]
+    },
+    {
+      "address": "0x101184e0",
+      "path": "decompiled/server/partial-pass/functions/0x101184e0.c",
+      "sha256": "3c375b68cf1179094f871e150ff69e20bcf36cd3472d30a0b8877853c7635605",
+      "saved_name": "FUN_101184e0",
+      "saved_range_inclusive": [
+        "0x101184e0",
+        "0x101184f7"
+      ]
+    },
+    {
+      "address": "0x10118460",
+      "path": "decompiled/server/partial-pass/functions/0x10118460.c",
+      "sha256": "5f7fd3fff02866b2fcd222345442a3ca5e9a848d6562fc753ab1a1d127491368",
+      "saved_name": "FUN_10118460",
+      "saved_range_inclusive": [
+        "0x10118460",
+        "0x10118477"
+      ]
+    },
+    {
+      "address": "0x10018350",
+      "path": "decompiled/server/partial-pass/functions/0x10018350.c",
+      "sha256": "eec309a6263d9cac78735a30eb830c1b16475060372b802ce0c2e146b9dd8cac",
+      "saved_name": "FUN_10018350",
+      "saved_range_inclusive": [
+        "0x10018350",
+        "0x10018388"
+      ]
+    },
+    {
+      "address": "0x10119060",
+      "path": "decompiled/server/partial-pass/functions/0x10119060.c",
+      "sha256": "9805c5cb1dd8c54a7462e6c9b437950c00307127b5678ce8dbb5ef696bc8b6f0",
+      "saved_name": "FUN_10119060",
+      "saved_range_inclusive": [
+        "0x10119060",
+        "0x101191cd"
+      ]
+    },
+    {
+      "address": "0x10101ff0",
+      "path": "decompiled/server/partial-pass/functions/0x10101ff0.c",
+      "sha256": "668232c07552aab9bb49c88b72d046203c948fd7799bb1d10505c8d84517c11a",
+      "saved_name": "FUN_10101ff0",
+      "saved_range_inclusive": [
+        "0x10101ff0",
+        "0x101021c4"
+      ]
+    },
+    {
+      "address": "0x10102a80",
+      "path": "decompiled/server/partial-pass/functions/0x10102a80.c",
+      "sha256": "b71d7ad5f80430b2e67e740ce98b43c8f83c98feac3a3a102f82ff924177ec47",
+      "saved_name": "FUN_10102a80",
+      "saved_range_inclusive": [
+        "0x10102a80",
+        "0x10102abb"
+      ]
+    },
+    {
+      "address": "0x1000e2e0",
+      "path": "decompiled/server/partial-pass/functions/0x1000e2e0.c",
+      "sha256": "34dbf883edad9a7c6eb6d1662fe96ed443719e1f319d88c77e5d529d08599f26",
+      "saved_name": "FUN_1000e2e0",
+      "saved_range_inclusive": [
+        "0x1000e2e0",
+        "0x1000e306"
+      ]
+    },
+    {
+      "address": "0x10017110",
+      "path": "decompiled/server/partial-pass/functions/0x10017110.c",
+      "sha256": "616bad5d18aeefb5feb3e3ead87e42064b279ec59283cfd2ff3f74f25cab050d",
+      "saved_name": "FUN_10017110",
+      "saved_range_inclusive": [
+        "0x10017110",
+        "0x100171ac"
+      ]
+    }
+  ],
+  "assembly": [
+    {
+      "va": "0x100126a0",
+      "end_exclusive": "0x100126fc",
+      "length": 92,
+      "file_offset": "0x11aa0",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c0752768e800000051ff154430221083c40889450885c0740cc7000c501a108970045e5dc333c08970045e5dc3",
+      "sha256": "375a8e2880ff6172fc66b057c96c3c1c0c0b9c5fbda18a9adac22121067c9ffb",
+      "path": "analysis/server-queue-a/extra-env-global-factory.asm",
+      "assembly_sha256": "012a4d84f3f40d2c933067d81f2c39e0225528be8a2f39a838cb2415d6c332f4",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100126a0",
+        "--stop-address=0x100126fc",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x10012700",
+      "end_exclusive": "0x1001275c",
+      "length": 92,
+      "file_offset": "0x11b00",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c0752768e400000051ff154430221083c40889450885c0740cc700c85b1a108970045e5dc333c08970045e5dc3",
+      "sha256": "05d4a7f8897c7a4fb2b47367b1aaa240024a8c5a5b03a5f23a490821e6172d68",
+      "path": "analysis/server-queue-a/extra-env-spark-factory.asm",
+      "assembly_sha256": "9e73aa8e0dc40791bf8970982a5855c0c373bebd889124292e29cd45011ae1a3",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10012700",
+        "--stop-address=0x1001275c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x10012760",
+      "end_exclusive": "0x100127bc",
+      "length": 92,
+      "file_offset": "0x11b60",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c0752768ec00000051ff154430221083c40889450885c0740cc70060511a108970045e5dc333c08970045e5dc3",
+      "sha256": "3f543aeb63daf9d9e6a78adc59fb1645a7fd4b2791b9d04c99c518ea3cb8816d",
+      "path": "analysis/server-queue-a/extra-env-state-factory.asm",
+      "assembly_sha256": "7db9748bbab2c337e97c68e2baa803af84b31031ed2fd2704c6e73a98a4ed28f",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10012760",
+        "--stop-address=0x100127bc",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x10012820",
+      "end_exclusive": "0x1001287c",
+      "length": 92,
+      "file_offset": "0x11c20",
+      "bytes_hex": "558bec568b750889750885f67513ff159c2f221085c074068db0800000008975088b8e0c02000085c974078b417c85c07527686402000051ff154430221083c40889450885c0740cc7001c491a108970045e5dc333c08970045e5dc3",
+      "sha256": "ec3ff6ee03bfcc4dfb95b4d2b44626b01207db36ad549c2bbfaf1470399961fc",
+      "path": "analysis/server-queue-a/extra-multisource-factory.asm",
+      "assembly_sha256": "0338c706548e2506a9170059216fa28851670c4dc5cb6672d314441ccb5536bc",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10012820",
+        "--stop-address=0x1001287c",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x10016070",
+      "end_exclusive": "0x1001649f",
+      "length": 1071,
+      "file_offset": "0x15470",
+      "bytes_hex": "558bec568b751057568bf9e8d022000085c00f84510300006a00ffb7e8000000e8cb2f100083c40885c00f84390300008b078bcfff505c83f8030f87e9030000ff2485a0640110f30f108fe40000000f57c08b4f040f2ec89ff6c4447b5bc787dc00000003000000f681a4010000027435a18831221083ec088b89d00100000f5ac1038898000000f20f110424516850531a106a01ff153c302210f30f108fe400000083c4148b07518bcff30f110c24ff50085f5e5dc21000c787dc00000000000000f681a4010000020f84a7000000a1883122108b89d0010000038898000000516890531a106a01ff153c3022108b4f0483c40c8b91cc01000085d27440a1883122108b809800000003c25068bc531a106a01ff153c3022108b470483c40c8b88f401000085c9743da1883122108b809800000003c15068cc531a10eb1d8b89f401000085c9741ea1883122108b809800000003c15068bc531a106a01ff153c30221083c40c68d8531a106a01ff153c30221083c4088b47048b750851c70424000000008b88cc010000a1883122106a00575603889800000051e8e0bd0e008b470483c4108b88f4010000a188312210c70424000000006a03570388980000005651e8b8bd0e0083c4148bcfe88e1800005f5e5dc21000f30f108fe00000000f57c08b4f040f2ec89ff6c4447b5bc787dc00000001000000f681a4010000027435a18831221083ec088b89d00100000f5ac1038898000000f20f1104245168dc531a106a01ff153c302210f30f108fe000000083c4148b07518bcff30f110c24ff50085f5e5dc21000c787dc00000002000000f681a4010000020f84a7000000a1883122108b89d001000003889800000051681c541a106a01ff153c3022108b4f0483c40c8b91cc01000085d27440a1883122108b809800000003c25068bc531a106a01ff153c3022108b470483c40c8b88f001000085c9743da1883122108b809800000003c15068cc531a10eb1d8b89f001000085c9741ea1883122108b809800000003c15068bc531a106a01ff153c30221083c40c68d8531a106a01ff153c30221083c4088b47048b750851c70424000000008b88cc010000a1883122106a01575603889800000051e84fbc0e008b470483c4108b88f0010000a188312210c70424000000006a03570388980000005651e827bc0e0083c4148bcfe8fd1600005f5e5dc210008b4f04f681a4010000020f84b0000000a1883122108b89d00100000388980000005168a8521a106a01ff153c3022106a00ffb7e8000000e84b2c100083c41485c07532a1883122108b80980000000387e80000005056e87c04100083c4045068c0521a106a01ff153c30221083c4105f5e5dc2100083fe01751568ec521a1056ff153c30221083c4085f5e5dc2100085f675166810531a106a01ff153c30221083c4085f5e5dc2100056e828041000506838531a106a01ff153c30221083c4105f5e5dc21000",
+      "sha256": "d5b7d9620e0f2759874017459084794e1d35987fccb37dddc62451f0d80e7f9b",
+      "path": "analysis/server-queue-a/extra-env-state-use.asm",
+      "assembly_sha256": "452d9829897cd35d08624727dec289af9aae0b33a26e2e4c5abc2f697de4ae13",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10016070",
+        "--stop-address=0x1001649f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x10015750",
+      "end_exclusive": "0x10015955",
+      "length": 517,
+      "file_offset": "0x14b50",
+      "bytes_hex": "568bf18b86dc00000083f8010f85f50000008b4e04c786dc00000002000000f681a4010000020f84a7000000a1883122108b89d0010000038898000000516848541a106a01ff153c3022108b4e0483c40c8b91cc01000085d27440a1883122108b809800000003c2506870541a106a01ff153c3022108b460483c40c8b88f001000085c9743da1883122108b809800000003c150687c541a10eb1d8b89f001000085c9741ea1883122108b809800000003c1506870541a106a01ff153c30221083c40c68d8531a106a01ff153c30221083c4088b460451c70424000000006a018b88cc010000a188312210565603889800000051e8a7c70e008b46048b88f0010000e9da00000083f8030f85f30000008b4e04c786dc00000000000000f681a4010000020f848b000000a1883122108b89d0010000038898000000516884541a106a01ff153c3022108b460483c40c8b88cc01000085c97421a1883122108b809800000003c1506870541a106a01ff153c3022108b460483c40c8b88f401000085c9741ea1883122108b809800000003c150687c541a106a01ff153c30221083c40c68d8531a106a01ff153c3022108b4e0483c408a188312210518b89cc010000c70424000000000388980000006a00565651e8c8c60e008b46048b88f4010000a18831221083c410038898000000c70424000000006a03565651e8a0c60e0083c4145ec3",
+      "sha256": "1252c6d53b834f391d6b93f8e81bffe6c01b31f3d303ca95103b829302d4b412",
+      "path": "analysis/server-queue-a/extra-env-state-think.asm",
+      "assembly_sha256": "4a8918810ab51cbea4695317afc4c203d7e3eaae078d2295fb9dc735e4e1599d",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x10015750",
+        "--stop-address=0x10015955",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x100165a0",
+      "end_exclusive": "0x1001673d",
+      "length": 413,
+      "file_offset": "0x159a0",
+      "bytes_hex": "558bec53568bf15733ff39be5c0200007e228d9edc0000008bcb4783c308e8cd1100008b4d0c3bc1740d3bbe5c0200007ce6eb038b4d0c3bbe5c0200007e6c8b5104a1883122108bbad00100008b889800000085ff742c8d040f508b0203c1508b46048b80d001000003c15068e8541a106a01ff153c30221083c4145f5e5b5dc210008b0203c1508b46048b80d001000003c1506818551a106a01ff153c30221083c4105f5e5b5dc210008b068bceff505c83b4bed8010000018bce8b168bd8ff525c3bd80f84cb00000083fb0275798b4e0483b9d4010000000f84b6000000a188312210ffb65c0200008b89d0010000038898000000516844551a1053ff153c302210a18831221083c4108b4e048b80980000000381d401000083be6002000000740433c9eb05b90300000051c704240000000051566a0050e811b90e0083c4145f5e5b5dc2100085db75498b4604ffb65c0200008b88d0010000a18831221003889800000051686c551a106a02ff153c30221083c40c33c03986600200008bce0f94c0891c248d0445010000005053e84ac30e005f5e5b5dc21000",
+      "sha256": "9bf0b8700dfa870428f409af6e74c694890797d3bfea2b16373a7b66f615fece",
+      "path": "analysis/server-queue-a/extra-multisource-use.asm",
+      "assembly_sha256": "bc7503f1c95a9a5f5839cb61f8a938443347b43ca049d5b17cf56f6ec7450a5f",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100165a0",
+        "--stop-address=0x1001673d",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x100145b0",
+      "end_exclusive": "0x100146ef",
+      "length": 319,
+      "file_offset": "0x139b0",
+      "bytes_hex": "568bf15768000100006a008d86dc000000c7865c0200000000000050e8bfae12008b4604c74678d02810108b88d0010000a188312210038898000000516a00e8ec3e10008bf883c41485ff744a0f1f008b8e5c02000083f9207d3c8d41018d0ccddc00000089865c0200005703cee81d3100008b46048b88d0010000a1883122100388980000005157e8a23e10008bf883c40885ff75b96890551a106a00e80d3e10008bf883c40885ff74560f1f400083be5c020000207d528b46048bcf8b17ffb0d0010000ff92c800000085c0741e8b8e5c020000578d41018d0ccddc00000089865c02000003cee8a23000006890551a1057e8b73d10008bf883c40885ff75ae83be5c020000207c278b46046a208b88d0010000a1883122100388980000005168a0551a106a01ff153c30221083c4108b46045f5e83a0a4010000fdc3",
+      "sha256": "790493d10a11cd92e98ad7e1cb58f827259f408eb3406fecacc1093acbca2f3d",
+      "path": "analysis/server-queue-a/extra-multisource-register.asm",
+      "assembly_sha256": "2b64db9adde9a6fd9fa46780768f39d8e71e4e371dd4519315f4b2256ab05d56",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100145b0",
+        "--stop-address=0x100146ef",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "va": "0x100150e0",
+      "end_exclusive": "0x100151af",
+      "length": 207,
+      "file_offset": "0x144e0",
+      "bytes_hex": "558bec83ec08578bf98b4704c7477800000000c78780000000000000008b80a4010000a81074148b07c78780000000504b0110ff50305f8be55dc3a820742aa8407413c74778304c0110b8104c0110b9304c0110eb07b8a04b011033c989878000000085c9745ceb07c74778304c0110568b3783ec08c74424040000c03fc7042400000000ff15b4302210dd5df8f20f1045f883c404f20f5805f81d1a108bcf660f5ac0f30f110424ff56080f57c00f2f87dc0000005e720ac787dc0000000000c03f8b078bcfff50305f8be55dc3",
+      "sha256": "a5086c3e1d8509745c1675bef3bc1328c036308763eea4a3e084102d6d53aa06",
+      "path": "analysis/server-queue-a/extra-env-spark-spawn.asm",
+      "assembly_sha256": "ff499f68ae3509ab7fb31e6b8d7c5d501ee0d1d52540acc4e1fe8006b18d67a0",
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100150e0",
+        "--stop-address=0x100151af",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "vtables": [
+    {
+      "va": "0x101a500c",
+      "end_exclusive": "0x101a5100",
+      "length": 244,
+      "file_offset": "0x1a440c",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d800108050011090df001000390110404901103047011040df00105072011080df0010a072011070d5001080d50010d0d90010e0d9001090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010e05f011000d40010f0df0010",
+      "sha256": "c1720167e16df98008296ab19a1c47c027421c500a979b2a9fb3c0be62c38e9b",
+      "class_name": "CEnvGlobal",
+      "factory": "0x100126a0",
+      "bounded_prefix_only": true,
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x10015080"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x10013900"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x10014940"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x10014730"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x1000d9e0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x10015fe0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        }
+      ]
+    },
+    {
+      "va": "0x101a5bc8",
+      "end_exclusive": "0x101a5cbc",
+      "length": 244,
+      "file_offset": "0x1a4fc8",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d80010e050011050450110103a0110a04901107047011020df00105072011080df0010a072011070d5001080d50010d0d900109034011090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010e0e2001000d40010f0df0010",
+      "sha256": "09acd6c9ac22fb9e28ac0d58ac0e90efc5ecee9f6515047db7df7dda97b0e903",
+      "class_name": "CEnvSpark",
+      "factory": "0x10012700",
+      "bounded_prefix_only": true,
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x100150e0"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x10014550"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x10013a10"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x100149a0"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x10014770"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df20"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x10013490"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x1000e2e0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        }
+      ]
+    },
+    {
+      "va": "0x101a5160",
+      "end_exclusive": "0x101a5254",
+      "length": 244,
+      "file_offset": "0x1a4560",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d80010b051011090df0010303b0110004a0110b047011040df00105072011080df0010a072011070d5001080d50010d0d90010a034011090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f076011050570110b0e200107060011000d40010f0df0010",
+      "sha256": "096a9172abfcc9ce72a25036eb563dd5fb9eeea03287cc0de89a147d9e5168e1",
+      "class_name": "CEnvState",
+      "factory": "0x10012760",
+      "bounded_prefix_only": true,
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x100151b0"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x10013b30"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x10014a00"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x100147b0"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x100134a0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x10015750"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x10016070"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        }
+      ]
+    },
+    {
+      "va": "0x101a491c",
+      "end_exclusive": "0x101a4a10",
+      "length": 244,
+      "file_offset": "0x1a3d1c",
+      "bytes_hex": "90d5001010710110f0e10010b0710110b0d300101072011050d4001080d4001070d40010c0da001070d800107053011090df0010503d0110c04a01103048011040df00105072011080df0010a072011070d5001080d50010d0d90010b034011090c30810b0720110907501100076011020d40010e0c7081000df001010df001010da0010e0d30010f0d30010d0d30010e0df001020da001080d8001020db001070df00103076011010e2001070e2001080e2001060df001090db0010d0da001000db0010a0df001030da00106076011080db001070db001090e20010f0760110a0e20010b0e20010a065011000d40010f0df0010",
+      "sha256": "153b449660a5147f7cc5fdcd8768743ed648039c4eb90b86e20c004c93389036",
+      "class_name": "CMultiSource",
+      "factory": "0x10012820",
+      "bounded_prefix_only": true,
+      "slots": [
+        {
+          "offset": "0x0",
+          "target": "0x1000d590"
+        },
+        {
+          "offset": "0x4",
+          "target": "0x10017110"
+        },
+        {
+          "offset": "0x8",
+          "target": "0x1000e1f0"
+        },
+        {
+          "offset": "0xc",
+          "target": "0x100171b0"
+        },
+        {
+          "offset": "0x10",
+          "target": "0x1000d3b0"
+        },
+        {
+          "offset": "0x14",
+          "target": "0x10017210"
+        },
+        {
+          "offset": "0x18",
+          "target": "0x1000d450"
+        },
+        {
+          "offset": "0x1c",
+          "target": "0x1000d480"
+        },
+        {
+          "offset": "0x20",
+          "target": "0x1000d470"
+        },
+        {
+          "offset": "0x24",
+          "target": "0x1000dac0"
+        },
+        {
+          "offset": "0x28",
+          "target": "0x1000d870"
+        },
+        {
+          "offset": "0x2c",
+          "target": "0x10015370"
+        },
+        {
+          "offset": "0x30",
+          "target": "0x1000df90"
+        },
+        {
+          "offset": "0x34",
+          "target": "0x10013d50"
+        },
+        {
+          "offset": "0x38",
+          "target": "0x10014ac0"
+        },
+        {
+          "offset": "0x3c",
+          "target": "0x10014830"
+        },
+        {
+          "offset": "0x40",
+          "target": "0x1000df40"
+        },
+        {
+          "offset": "0x44",
+          "target": "0x10017250"
+        },
+        {
+          "offset": "0x48",
+          "target": "0x1000df80"
+        },
+        {
+          "offset": "0x4c",
+          "target": "0x100172a0"
+        },
+        {
+          "offset": "0x50",
+          "target": "0x1000d570"
+        },
+        {
+          "offset": "0x54",
+          "target": "0x1000d580"
+        },
+        {
+          "offset": "0x58",
+          "target": "0x1000d9d0"
+        },
+        {
+          "offset": "0x5c",
+          "target": "0x100134b0"
+        },
+        {
+          "offset": "0x60",
+          "target": "0x1008c390"
+        },
+        {
+          "offset": "0x64",
+          "target": "0x100172b0"
+        },
+        {
+          "offset": "0x68",
+          "target": "0x10017590"
+        },
+        {
+          "offset": "0x6c",
+          "target": "0x10017600"
+        },
+        {
+          "offset": "0x70",
+          "target": "0x1000d420"
+        },
+        {
+          "offset": "0x74",
+          "target": "0x1008c7e0"
+        },
+        {
+          "offset": "0x78",
+          "target": "0x1000df00"
+        },
+        {
+          "offset": "0x7c",
+          "target": "0x1000df10"
+        },
+        {
+          "offset": "0x80",
+          "target": "0x1000da10"
+        },
+        {
+          "offset": "0x84",
+          "target": "0x1000d3e0"
+        },
+        {
+          "offset": "0x88",
+          "target": "0x1000d3f0"
+        },
+        {
+          "offset": "0x8c",
+          "target": "0x1000d3d0"
+        },
+        {
+          "offset": "0x90",
+          "target": "0x1000dfe0"
+        },
+        {
+          "offset": "0x94",
+          "target": "0x1000da20"
+        },
+        {
+          "offset": "0x98",
+          "target": "0x1000d880"
+        },
+        {
+          "offset": "0x9c",
+          "target": "0x1000db20"
+        },
+        {
+          "offset": "0xa0",
+          "target": "0x1000df70"
+        },
+        {
+          "offset": "0xa4",
+          "target": "0x10017630"
+        },
+        {
+          "offset": "0xa8",
+          "target": "0x1000e210"
+        },
+        {
+          "offset": "0xac",
+          "target": "0x1000e270"
+        },
+        {
+          "offset": "0xb0",
+          "target": "0x1000e280"
+        },
+        {
+          "offset": "0xb4",
+          "target": "0x1000df60"
+        },
+        {
+          "offset": "0xb8",
+          "target": "0x1000db90"
+        },
+        {
+          "offset": "0xbc",
+          "target": "0x1000dad0"
+        },
+        {
+          "offset": "0xc0",
+          "target": "0x1000db00"
+        },
+        {
+          "offset": "0xc4",
+          "target": "0x1000dfa0"
+        },
+        {
+          "offset": "0xc8",
+          "target": "0x1000da30"
+        },
+        {
+          "offset": "0xcc",
+          "target": "0x10017660"
+        },
+        {
+          "offset": "0xd0",
+          "target": "0x1000db80"
+        },
+        {
+          "offset": "0xd4",
+          "target": "0x1000db70"
+        },
+        {
+          "offset": "0xd8",
+          "target": "0x1000e290"
+        },
+        {
+          "offset": "0xdc",
+          "target": "0x100176f0"
+        },
+        {
+          "offset": "0xe0",
+          "target": "0x1000e2a0"
+        },
+        {
+          "offset": "0xe4",
+          "target": "0x1000e2b0"
+        },
+        {
+          "offset": "0xe8",
+          "target": "0x100165a0"
+        },
+        {
+          "offset": "0xec",
+          "target": "0x1000d400"
+        },
+        {
+          "offset": "0xf0",
+          "target": "0x1000dff0"
+        }
+      ]
+    }
+  ],
+  "save_tables": [
+    {
+      "va": "0x10211510",
+      "end_exclusive": "0x10211540",
+      "length": 48,
+      "file_offset": "0x210510",
+      "bytes_hex": "0100000020471a10dc000000010000000a00000030471a10e0000000010000000a00000040471a10e400000001000000",
+      "sha256": "ea9568fb744c87ebcb8c8cdada5a1e0d18f3d6f5ef654b04586b8e3179a1b181",
+      "class_name": "CEnvGlobal",
+      "count": 3,
+      "stride": 16,
+      "fields": [
+        {
+          "record_va": "0x10211510",
+          "type_id": 1,
+          "name": "m_globalstate",
+          "offset": "0xdc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211520",
+          "type_id": 10,
+          "name": "m_triggermode",
+          "offset": "0xe0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211530",
+          "type_id": 10,
+          "name": "m_initialstate",
+          "offset": "0xe4",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "va": "0x10211540",
+      "end_exclusive": "0x10211580",
+      "length": 64,
+      "file_offset": "0x210540",
+      "bytes_hex": "0a00000050471a10dc000000010000000a0000005c471a10e0000000010000000a0000006c471a10e400000001000000010000007c471a10e800000001000000",
+      "sha256": "27bcdb76fcbe4115e34fafe18f8dff92a9d0eab9906c615515f9982930b3dff3",
+      "class_name": "CEnvState",
+      "count": 4,
+      "stride": 16,
+      "fields": [
+        {
+          "record_va": "0x10211540",
+          "type_id": 10,
+          "name": "m_iState",
+          "offset": "0xdc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211550",
+          "type_id": 10,
+          "name": "m_fTurnOnTime",
+          "offset": "0xe0",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211560",
+          "type_id": 10,
+          "name": "m_fTurnOffTime",
+          "offset": "0xe4",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211570",
+          "type_id": 1,
+          "name": "m_sMaster",
+          "offset": "0xe8",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "va": "0x102115e0",
+      "end_exclusive": "0x10211600",
+      "length": 32,
+      "file_offset": "0x2105e0",
+      "bytes_hex": "000000000c491a10dc000000010000000a00000050471a10e000000001000000",
+      "sha256": "cea9af73e0e7d998061197ef99c0f0343cfbe7e36779dd30f5393e156a2938f6",
+      "class_name": "CEnvSpark",
+      "count": 2,
+      "stride": 16,
+      "fields": [
+        {
+          "record_va": "0x102115e0",
+          "type_id": 0,
+          "name": "m_flDelay",
+          "offset": "0xdc",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x102115f0",
+          "type_id": 10,
+          "name": "m_iState",
+          "offset": "0xe0",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "va": "0x10211600",
+      "end_exclusive": "0x10211640",
+      "length": 64,
+      "file_offset": "0x210600",
+      "bytes_hex": "0400000088471a10dc000000200000000a00000098471a10dc010000200000000a000000a8471a105c020000010000000100000020471a106002000001000000",
+      "sha256": "c490786ba7a0647da254438e4f413faa1628a161a62090751559795945e8756b",
+      "class_name": "CMultiSource",
+      "count": 4,
+      "stride": 16,
+      "fields": [
+        {
+          "record_va": "0x10211600",
+          "type_id": 4,
+          "name": "m_rgEntities",
+          "offset": "0xdc",
+          "count": 32,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211610",
+          "type_id": 10,
+          "name": "m_rgTriggered",
+          "offset": "0x1dc",
+          "count": 32,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211620",
+          "type_id": 10,
+          "name": "m_iTotal",
+          "offset": "0x25c",
+          "count": 1,
+          "flags": 0
+        },
+        {
+          "record_va": "0x10211630",
+          "type_id": 1,
+          "name": "m_globalstate",
+          "offset": "0x260",
+          "count": 1,
+          "flags": 0
+        }
+      ]
+    }
+  ],
+  "strings": [
+    {
+      "va": "0x101a4720",
+      "end_exclusive": "0x101a472e",
+      "length": 14,
+      "file_offset": "0x1a3b20",
+      "bytes_hex": "6d5f676c6f62616c737461746500",
+      "sha256": "6fd30f5485c3381a3a17faa12daa9f99e1d1ee18a2ecc5559242d7617099bfc9",
+      "ascii": "m_globalstate"
+    },
+    {
+      "va": "0x101a4730",
+      "end_exclusive": "0x101a473e",
+      "length": 14,
+      "file_offset": "0x1a3b30",
+      "bytes_hex": "6d5f747269676765726d6f646500",
+      "sha256": "ee9f9728b40d670fc28b9721c51657809884544ed0ad55410e0f2913ef61cfb6",
+      "ascii": "m_triggermode"
+    },
+    {
+      "va": "0x101a4740",
+      "end_exclusive": "0x101a474f",
+      "length": 15,
+      "file_offset": "0x1a3b40",
+      "bytes_hex": "6d5f696e697469616c737461746500",
+      "sha256": "94aa892d37d8048cee5abeaf9a3f999c20f2266f8bfcd1d7aa69be427e968aae",
+      "ascii": "m_initialstate"
+    },
+    {
+      "va": "0x101a4750",
+      "end_exclusive": "0x101a4759",
+      "length": 9,
+      "file_offset": "0x1a3b50",
+      "bytes_hex": "6d5f69537461746500",
+      "sha256": "58f7342f65539ecde69697b4ce8a966cdc8a3ae6ee7803cc91612aa8976f9669",
+      "ascii": "m_iState"
+    },
+    {
+      "va": "0x101a475c",
+      "end_exclusive": "0x101a476a",
+      "length": 14,
+      "file_offset": "0x1a3b5c",
+      "bytes_hex": "6d5f665475726e4f6e54696d6500",
+      "sha256": "51bbcffc652fa0a1dca28731a4a8c0690b9adedca6914c56d89688743ce2882d",
+      "ascii": "m_fTurnOnTime"
+    },
+    {
+      "va": "0x101a476c",
+      "end_exclusive": "0x101a477b",
+      "length": 15,
+      "file_offset": "0x1a3b6c",
+      "bytes_hex": "6d5f665475726e4f666654696d6500",
+      "sha256": "32ddffbc684e7dd58a760d4ae1c9e2062fa2fbd5d21e63c1e1c27e193e27e518",
+      "ascii": "m_fTurnOffTime"
+    },
+    {
+      "va": "0x101a477c",
+      "end_exclusive": "0x101a4786",
+      "length": 10,
+      "file_offset": "0x1a3b7c",
+      "bytes_hex": "6d5f734d617374657200",
+      "sha256": "e868c0f3d65ffbd232513c3769193c0bc272220ec25b795ace1a5c16af57bbaa",
+      "ascii": "m_sMaster"
+    },
+    {
+      "va": "0x101a490c",
+      "end_exclusive": "0x101a4916",
+      "length": 10,
+      "file_offset": "0x1a3d0c",
+      "bytes_hex": "6d5f666c44656c617900",
+      "sha256": "2885d5db60140cb1146fd8cb35dbc3e7a4bb906bf6324837e1b9774cd23e9e96",
+      "ascii": "m_flDelay"
+    },
+    {
+      "va": "0x101a4750",
+      "end_exclusive": "0x101a4759",
+      "length": 9,
+      "file_offset": "0x1a3b50",
+      "bytes_hex": "6d5f69537461746500",
+      "sha256": "58f7342f65539ecde69697b4ce8a966cdc8a3ae6ee7803cc91612aa8976f9669",
+      "ascii": "m_iState"
+    },
+    {
+      "va": "0x101a4788",
+      "end_exclusive": "0x101a4795",
+      "length": 13,
+      "file_offset": "0x1a3b88",
+      "bytes_hex": "6d5f7267456e74697469657300",
+      "sha256": "a1ac7b3a7ce3d48eb8bc6d04a8c0194963ee9cc484f8b3d3ee830dda6b718713",
+      "ascii": "m_rgEntities"
+    },
+    {
+      "va": "0x101a4798",
+      "end_exclusive": "0x101a47a6",
+      "length": 14,
+      "file_offset": "0x1a3b98",
+      "bytes_hex": "6d5f726754726967676572656400",
+      "sha256": "2e2e4d34eba8960dbb87815296b42a27788dbb7deeccee8f5559dfe103ca734a",
+      "ascii": "m_rgTriggered"
+    },
+    {
+      "va": "0x101a47a8",
+      "end_exclusive": "0x101a47b1",
+      "length": 9,
+      "file_offset": "0x1a3ba8",
+      "bytes_hex": "6d5f69546f74616c00",
+      "sha256": "f27be52db6d2d183bacdba5656ecc714ed9878b8bfbe23cd0846303bdf2c0d66",
+      "ascii": "m_iTotal"
+    },
+    {
+      "va": "0x101a4720",
+      "end_exclusive": "0x101a472e",
+      "length": 14,
+      "file_offset": "0x1a3b20",
+      "bytes_hex": "6d5f676c6f62616c737461746500",
+      "sha256": "6fd30f5485c3381a3a17faa12daa9f99e1d1ee18a2ecc5559242d7617099bfc9",
+      "ascii": "m_globalstate"
+    },
+    {
+      "va": "0x101a54d0",
+      "end_exclusive": "0x101a54d7",
+      "length": 7,
+      "file_offset": "0x1a48d0",
+      "bytes_hex": "76616c75653100",
+      "sha256": "b71e261dd96feed2475b559e56435db13c6c56c7b3f3d06feb9b95b09a7f2953",
+      "ascii": "value1"
+    }
+  ],
+  "export_thunks": [
+    {
+      "va": "0x10016760",
+      "end_exclusive": "0x10016765",
+      "length": 5,
+      "file_offset": "0x15b60",
+      "bytes_hex": "e93bbfffff",
+      "sha256": "6dbd6f546a06f903a1f804b5002e310a336e477f14ab99e4d35895ea40b3589e",
+      "class_name": "CEnvGlobal",
+      "target": "0x100126a0"
+    },
+    {
+      "va": "0x10016770",
+      "end_exclusive": "0x10016775",
+      "length": 5,
+      "file_offset": "0x15b70",
+      "bytes_hex": "e98bbfffff",
+      "sha256": "eab6c427194f179c975668a720cbe8fa82bb39e7e4d5369a305537ad9c551343",
+      "class_name": "CEnvSpark",
+      "target": "0x10012700"
+    },
+    {
+      "va": "0x10016780",
+      "end_exclusive": "0x10016785",
+      "length": 5,
+      "file_offset": "0x15b80",
+      "bytes_hex": "e9dbbfffff",
+      "sha256": "2b32852d99c2cb5107fd1d5058ee39505dc88414bafb3c71da5a355f25508474",
+      "class_name": "CEnvState",
+      "target": "0x10012760"
+    },
+    {
+      "va": "0x100167c0",
+      "end_exclusive": "0x100167c5",
+      "length": 5,
+      "file_offset": "0x15bc0",
+      "bytes_hex": "e95bc0ffff",
+      "sha256": "e745bd85a99ba71f7c8dabd9abc9bcfac0b36be2a7e891f71910955048d77213",
+      "class_name": "CMultiSource",
+      "target": "0x10012820"
+    }
+  ]
+}

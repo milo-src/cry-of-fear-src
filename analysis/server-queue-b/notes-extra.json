@@ -1,0 +1,374 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10101b50",
+      "proposed_name": "CBaseToggle_AngularMove",
+      "subsystem": "entity-core",
+      "summary_ru": "Сохраняет угловую цель и скорость, затем ставит AngularMoveNow.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this; stack vector XYZ и float speed, ret10h. Final angle+16c, angular speed+168, think+78=10101c60; вызывает 100c4850(this).",
+        "100c4850 выставляет flags100h/80h. При doingDesired!=0 callback исполняется сразу через100c3e50, иначе ставится в AssistList через100c44e0; см. contract-parent.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101b50.c",
+        "analysis/server-queue-b/asm-extra/10101b50.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101b90",
+      "proposed_name": "CBaseToggle_AngularMoveDone",
+      "subsystem": "entity-core",
+      "summary_ru": "Переносит окончание вращения в отдельный callback AngularMoveDoneNow.",
+      "confidence": "high",
+      "details_ru": [
+        "Пишет think+78=10101ba0 и вызывает 100c4850(this). Сам не меняет angles и не вызывает door completion.",
+        "Двухступенчатый контракт Done→DoneNow связан с100c4850/100c48b0: immediate dispatch при doingDesired, иначе AssistList. Точный порядок flags и callbacks раскрыт в contract-parent.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101b90.c",
+        "analysis/server-queue-b/asm-extra/10101b90.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101ba0",
+      "proposed_name": "CBaseToggle_AngularMoveDoneNow",
+      "subsystem": "entity-core",
+      "summary_ru": "Доводит углы до конечной точки и вызывает completion объекта.",
+      "confidence": "high",
+      "details_ru": [
+        "Передаёт globals10222f34..3c в 100c4b90; затем final angle плюс текущие parent angles при parent→100c48e0. Очищает scheduler через 10017ad0.",
+        "Ненулевой callback+154 вызывается tail-JMP с ECX=this; pointer не обнуляется. Velocity helper прибавляет parent avelocity, поэтому relative stop не обязательно даёт нулевую world avelocity."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101ba0.c",
+        "analysis/server-queue-b/asm-extra/10101ba0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101c60",
+      "proposed_name": "CBaseToggle_AngularMoveNow",
+      "subsystem": "entity-core",
+      "summary_ru": "Рассчитывает длительность вращения и относительную угловую скорость.",
+      "confidence": "high",
+      "details_ru": [
+        "World target=finalAngle+parentAngles; при точном равенстве currentAngles вызывает AngularMoveDone. Иначе delta=target-current, T=length(delta)/speed, virtual+04(T,1), think=Done,100c4b90(this,delta/T).",
+        "ASM восстанавливает потерянные stack values: делителя 1.4013e-45 и unaff_ESI в реальном алгоритме нет. Углы не нормализуются к кратчайшей дуге; clamp длительности и проверки speed>0 в этом теле нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101c60.c",
+        "analysis/server-queue-b/asm-extra/10101c60.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101dc0",
+      "proposed_name": "CBaseToggle_AxisDelta",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает разность двух угловых векторов по выбранной оси.",
+      "confidence": "high",
+      "details_ru": [
+        "При flags byte&40h берёт Z; иначе при byte&80h X; иначе Y. Приоритет Z выше X.",
+        "Результат float через x87, без angle wrapping. Проверяется младший byte, не sign bit всего DWORD spawnflags."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101dc0.c",
+        "analysis/server-queue-b/asm-extra/10101dc0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101e00",
+      "proposed_name": "CBaseToggle_AxisDirectionIfUnset",
+      "subsystem": "entity-core",
+      "summary_ru": "Выбирает единичную ось вращения, сохраняя явно заданный movedir.",
+      "confidence": "high",
+      "details_ru": [
+        "Меняет entvars+44 только при точном равенстве всех компонент globals10222f34..3c.",
+        "Flags40h→(0,0,1), иначе 80h→(1,0,0), иначе(0,1,0). Lifecycle эталонного globals-вектора отдельно не исследован."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101e00.c",
+        "analysis/server-queue-b/asm-extra/10101e00.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101eb0",
+      "proposed_name": "CBaseToggle_AxisValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает компоненту вектора согласно флагам оси.",
+      "confidence": "high",
+      "details_ru": [
+        "Byte flag40h выбирает Z, иначе 80h X, иначе Y; без вычисления разности и нормализации.",
+        "Прямое чтение float компоненты с x87 return; использует ту же precedence, что 10101dc0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101eb0.c",
+        "analysis/server-queue-b/asm-extra/10101eb0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101ee0",
+      "proposed_name": "CBaseDelay_DelayThink",
+      "subsystem": "entity-core",
+      "summary_ru": "Исполняет сохранённый отложенный Use и удаляет временный edict.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM разрешает handle temporary+e4 и вызывает 10102930(activator,temporary.entvars+184,0.0) с ECX=temporary.",
+        "После возврата вызывает engine slot10222fa0(temporary.edict). Исходный float value не воспроизводится; caller при дальнейшем FireTargets — temporary, не первоначальная дверь."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101ee0.c",
+        "analysis/server-queue-b/asm-extra/10101ee0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101f20",
+      "proposed_name": "UTIL_ViewOffsetTraceUnobstructed",
+      "subsystem": "entity-core",
+      "summary_ru": "Проверяет trace между origin+view offset двух entvars.",
+      "confidence": "high",
+      "details_ru": [
+        "1011a800(start,end,1,A.edict,trace), engine slot10222fc4. Return1: (trace+8==0 || trace+c==0) и fraction+10==1.0.",
+        "По SDK TraceResult это fInOpen/fInWater, не fAllSolid/fStartSolid. Origin+8, view offset+178; world tracing callee не восстановлен этим wrapper."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101f20.c",
+        "analysis/server-queue-b/asm-extra/10101f20.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10101ff0",
+      "proposed_name": "FireTargets_WithTypePrefixAndActivatorOverride",
+      "subsystem": "entity-core",
+      "summary_ru": "Ищет targets и отправляет Use либо удаление с дополнительным синтаксисом имени.",
+      "confidence": "high",
+      "details_ru": [
+        "NULL target или исходный type6 запрещают dispatch. Prefix+ меняет type на 1, prefix- на 0; сначала ищется полное имя через 10118500.",
+        "Только при неудаче поиска разбирается target(overrideActivator): новый effective activator, но lookup context остаётся original activator. Buffer80; strncpy происходит до range check, что не является безопасным ограничением длины.",
+        "Пропускает entvars.flags40000000h; type4→10119900, прочие→virtual+e8(effectiveActivator,caller,type,value). Next lookup сохраняет original context;10118700 вызывается только после обычного окончания цикла."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10101ff0.c",
+        "analysis/server-queue-b/asm-extra/10101ff0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101021d0",
+      "proposed_name": "UTIL_AnglesToMoveDirection",
+      "subsystem": "entity-core",
+      "summary_ru": "Преобразует angles в направление движения с вертикальными sentinel значениями.",
+      "confidence": "high",
+      "details_ru": [
+        "(0,-1,0)→(0,0,1);(0,-2,0)→(0,0,-1). Иначе 10119320(angles) и копирование globals+28/+2c/+30 в out.",
+        "Возвращает out. Полная математическая реализация внешнего engine direction callback здесь не разобрана."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101021d0.c",
+        "analysis/server-queue-b/asm-extra/101021d0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102320",
+      "proposed_name": "CBaseToggle_IsLockedByMaster",
+      "subsystem": "entity-core",
+      "summary_ru": "Инвертирует результат master-проверки с сохранённым activator handle.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM ECX=this+e4 перед 10017790; затем 10119060(this+17c,activator). Возвращает 1 только при результате master helper0.",
+        "Не сохраняет новый activator и не отправляет targets. Синтаксис10119060 и сравнение virtual state с2 раскрыты в analysis/server-targets/contract.md."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102320.c",
+        "analysis/server-queue-b/asm-extra/10102320.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md",
+        "analysis/server-targets/contract.md",
+        "analysis/server-targets/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102350",
+      "proposed_name": "CBaseDMStart_KeyValueMaster",
+      "subsystem": "entity-core",
+      "summary_ru": "Сохраняет ключ master у spawnpoint CBaseDMStart в entvars.",
+      "confidence": "high",
+      "details_ru": [
+        "Factory101019d0 устанавливает vtable101df30c; slot+34 указывает сюда. master через allocator10223054 пишет entvars+1d4, handled=1.",
+        "Остальные ключи идут 1000dba0. Это другой владелец/offset, не master object+17c из CBaseToggle."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102350.c",
+        "analysis/server-queue-b/asm-extra/10102350.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101023c0",
+      "proposed_name": "CBaseDelay_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Разбирает delay и killtarget для отложенного dispatch.",
+      "confidence": "high",
+      "details_ru": [
+        "delay через atof→float object+dc; killtarget через строковый allocator10223054→object+e0; handled+0c=1.",
+        "Иные ключи передаёт 1000dba0. Owner подтверждён CBaseDelay factory10101a30 и vtable101a3478+34; границы delay тут не проверяются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101023c0.c",
+        "analysis/server-queue-b/asm-extra/101023c0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102480",
+      "proposed_name": "CBaseToggle_KeyValue",
+      "subsystem": "entity-core",
+      "summary_ru": "Разбирает параметры endpoints, master и задержки базового toggle объекта.",
+      "confidence": "high",
+      "details_ru": [
+        "Native строки 101cb1e8=lip и 101d7e30=wait; float values пишутся+110/+10c. distance→+108, master string ID→+17c.",
+        "Обработанные ключи ставят handled=1; fallback101023c0 добавляет delay/killtarget. Не путать с DM start master parser10102350."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102480.c",
+        "analysis/server-queue-b/asm-extra/10102480.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101025c0",
+      "proposed_name": "CBaseToggle_LinearMove",
+      "subsystem": "entity-core",
+      "summary_ru": "Сохраняет линейную цель и скорость и передаёт выполнение LinearMoveNow.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM thiscall, stack XYZ+speed16 байт. Final destination+158, speed+164, think+78=101026e0; вызывает 100c4850(this).",
+        "Вектор передаётся по значению; undefined8 в C объединяет X/Y, не задаёт double ABI. Непосредственной установки origin здесь нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101025c0.c",
+        "analysis/server-queue-b/asm-extra/101025c0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102600",
+      "proposed_name": "CBaseToggle_LinearMoveDone",
+      "subsystem": "entity-core",
+      "summary_ru": "Назначает отдельную финальную обработку LinearMoveDoneNow.",
+      "confidence": "high",
+      "details_ru": [
+        "Think+78=10102610, затем 100c4850(this). Не вызывает door HitTop/HitBottom непосредственно.",
+        "Фактический completion+154 вызывается только из DoneNow после установки позиции и scheduler reset."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102600.c",
+        "analysis/server-queue-b/asm-extra/10102600.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102610",
+      "proposed_name": "CBaseToggle_LinearMoveDoneNow",
+      "subsystem": "entity-core",
+      "summary_ru": "Доводит позицию до final destination и вызывает completion.",
+      "confidence": "high",
+      "details_ru": [
+        "100c4ed0(this,globalsVector), затем 100c4550(this,finalDest+currentParentOrigin); без parent используется finalDest напрямую. После 10017ad0 callback+154 вызывается с ECX=this.",
+        "Pointer completion не сбрасывается. Parent origin перечитывается на завершении, а velocity helper добавляет parent velocity; нулевой relative stop не означает world stop."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102610.c",
+        "analysis/server-queue-b/asm-extra/10102610.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101026e0",
+      "proposed_name": "CBaseToggle_LinearMoveNow",
+      "subsystem": "entity-core",
+      "summary_ru": "Вычисляет длительность и постоянную относительную скорость линейного хода.",
+      "confidence": "high",
+      "details_ru": [
+        "World target=finalDest+parentOrigin; equality по XYZ→LinearMoveDone. Иначе delta=target-currentOrigin,T=length(delta)/speed,virtual+04(T,1),think=Done,100c4ed0(this,delta/T).",
+        "ASM101027d9..1010282e закрывает повреждённую формулу C с 1.4013e-45. Нет видимой проверки speed>0/clamp T; parent velocity добавляется отдельным helper."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101026e0.c",
+        "analysis/server-queue-b/asm-extra/101026e0.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102930",
+      "proposed_name": "CBaseDelay_UseTargets",
+      "subsystem": "entity-core",
+      "summary_ru": "Вызывает killtarget/target сразу либо создаёт временный объект DelayedUse.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM thiscall(activator,type,float value),ret0ch. Если target и killtarget отсутствуют — return. При delay!=0 создаёт CBaseDelay, копирует target/killtarget/type, сохраняет handle+e4, own delay=0, think=DelayThink.",
+        "Исходный value при delay не сохраняется; DelayThink передаёт 0, caller становится temporary. Проверки успешной allocation до deref нет.",
+        "Без delay: killtarget→10101ff0(name,activator,this,4,0), затем target→10101ff0(name,activator,this,type,value), перечитывая entvars после первого dispatch. Полное reentrancy/lifetime поведение удаления отдельно не доказано."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102930.c",
+        "analysis/server-queue-b/asm-extra/10102930.asm",
+        "analysis/server-queue-b/evidence-extra.json",
+        "analysis/server-queue-b/contract-extra.md"
+      ]
+    }
+  ]
+}

@@ -155,8 +155,9 @@ invalid recipient — Host_Error. RegUserMsg ограничивает signedsize
 диапазона0..192 дополнительный cap в End не нужен.
 
 Copy01d46517 — forward DWORD/BYTE, не memmove. Destination selector и
-недостижимость6/7 описаны в новом контракте. Остаются routing01dd6a43,
-network flush/receiver, registration-list promotion, setjmp owner/recovery,
+недостижимость6/7 описаны в новом контракте. Остаются network flush/receiver, visibility table construction и полный frame/recovery,
 возможные writers data/maxsize/02079bcc и exceptional x87 inputs.
+Spatial routing01dd6a43, registration-list promotion и setjmp owner теперь
+описаны в [engine-dispatch-lifecycle.md](../network/engine-dispatch-lifecycle.md).
 Настоящие C entries этого раннего capture:01d483e8,01d48557,01da63bd,01da64aa.
 Добавочные01d483c6/01d4705f/01d471b1 описаны по ASM без отдельных C-карточек.

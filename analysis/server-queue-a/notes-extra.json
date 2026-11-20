@@ -1,0 +1,637 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100126a0",
+      "proposed_name": "CEnvGlobal_Factory",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Создаёт или возвращает private data CEnvGlobal, численно связывая export, allocation и vtable.",
+      "details_ru": [
+        "Creation выделяет0xe8, записывает vtable0x101a500c и entvars вobject+4; existing-private-data путь возвращает существующий объект. Raw C7 00 и E9 export-thunk сохранены.",
+        "Vtable+2c Spawn0x10015080,+e8 Use0x10015fe0; captured prefix0xf4 не означает полный class audit. Безопасность OOM/невалидных входов не установлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100126a0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10015080.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012700",
+      "proposed_name": "CEnvSpark_Factory",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Создаёт или возвращает private data CEnvSpark, численно связывая export, allocation и vtable.",
+      "details_ru": [
+        "Creation выделяет0xe4, записывает vtable0x101a5bc8 и entvars вobject+4; existing-private-data путь возвращает существующий объект. Raw C7 00 и E9 export-thunk сохранены.",
+        "Vtable+2c Spawn0x100150e0,+e8 Use0x1000e2e0; captured prefix0xf4 не означает полный class audit. Безопасность OOM/невалидных входов не установлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012700.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x100150e0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012760",
+      "proposed_name": "CEnvState_Factory",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Создаёт или возвращает private data CEnvState, численно связывая export, allocation и vtable.",
+      "details_ru": [
+        "Creation выделяет0xec, записывает vtable0x101a5160 и entvars вobject+4; existing-private-data путь возвращает существующий объект. Raw C7 00 и E9 export-thunk сохранены.",
+        "Vtable+2c Spawn0x100151b0,+e8 Use0x10016070; captured prefix0xf4 не означает полный class audit. Безопасность OOM/невалидных входов не установлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012760.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x100151b0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10012820",
+      "proposed_name": "CMultiSource_Factory",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Создаёт или возвращает private data CMultiSource, численно связывая export, allocation и vtable.",
+      "details_ru": [
+        "Creation выделяет0x264, записывает vtable0x101a491c и entvars вobject+4; existing-private-data путь возвращает существующий объект. Raw C7 00 и E9 export-thunk сохранены.",
+        "Vtable+2c Spawn0x10015370,+e8 Use0x100165a0; captured prefix0xf4 не означает полный class audit. Безопасность OOM/невалидных входов не установлена."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10012820.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10015370.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10015080",
+      "proposed_name": "CEnvGlobal_Spawn",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Удаляет env_global без имени globalstate; при flag1 создаёт отсутствующую глобальную запись.",
+      "details_ru": [
+        "Если object.dc string-id==0, вызывает engine RemoveEntity. Иначе только при spawnflag1 ищет запись10120770; если её нет,10120670(name,current mapname,initialstate e4).",
+        "Существующая глобальная запись не перезаписывается при Spawn. Lookup/Create/Get/Set helpers прочитаны; persistence всей global-state list вне scope."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10015080.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10120770.c",
+        "decompiled/server/partial-pass/functions/0x10120670.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013900",
+      "proposed_name": "CEnvGlobal_KeyValue",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Разбирает globalstate, triggermode и initialstate.",
+      "details_ru": [
+        "globalstate→AllocString→object.dc; triggermode/initialstate→atoi→e0/e4. handled=1 устанавливается в начале тела, в том числе перед delegation неизвестного ключа1000dba0.",
+        "Значения mode/state не ограничиваются локально; семантику реализует Use10015fe0."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013900.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10015fe0",
+      "proposed_name": "CEnvGlobal_Use",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Изменяет глобальное состояние согласно сохранённому triggermode, не аргументу USE_TYPE.",
+      "details_ru": [
+        "Сначала получает current через101206f0 (missing→0). Mode0→0,1→1,2→2; прочие modes переключают0↔1, сохраняя другие current значения, включая2.",
+        "Отсутствующую запись создаёт10120670(name,current mapname,newstate), существующую обновляет10120710. Это отдельный global enum0/1/2, не four-state enum env_state."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10015fe0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x101206f0.c",
+        "decompiled/server/partial-pass/functions/0x10120670.c",
+        "decompiled/server/partial-pass/functions/0x10120710.c",
+        "decompiled/server/partial-pass/functions/0x10120770.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100150e0",
+      "proposed_name": "CEnvSpark_Spawn",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Выбирает cyclic, автоматический или включаемый Use режим искр по flags10/20/40.",
+      "details_ru": [
+        "Обнуляет think+78/use+80. Flag10 имеет приоритет: только SparkCyclic+Precache, без initial think и без нормализации MaxDelay.",
+        "Без flag20 ставит SparkThink; с20 и40 ставит SparkThink+SparkStop, с20 без40 толькоSparkStart. Только активные think-ветки планируют.1+RandomFloat(0,1.5) и заменяют delay<=0 на1.5.",
+        "Все ветки вызывают Precache; state+e0 здесь не синхронизируется с автоматическим стартом. Это видно и в bounded asm."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100150e0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013a10",
+      "proposed_name": "CEnvSpark_KeyValue",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Читает MaxDelay и явно поглощает набор legacy editor keys.",
+      "details_ru": [
+        "MaxDelay→atof→object.dc; style,height,killtarget,value1,value2,value3 ставят handled без записи значений; value1 подтверждено raw101a54d0.",
+        "Неизвестные ключи передаёт1000dba0; регистр MaxDelay существенен. Общего clamp/default в KeyValue нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013a10.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014550",
+      "proposed_name": "CEnvSpark_Precache",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Precache шести spark WAV и glow04 sprite.",
+      "details_ru": [
+        "10116a30 для buttons/spark1.wav..spark6.wav;10116990 для sprites/glow04.spr. Само тело ничего не излучает и не сохраняет sprite index."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014550.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013490",
+      "proposed_name": "CEnvSpark_GetState",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Возвращает object+e0, независимо от текущего think callback.",
+      "details_ru": [
+        "SparkStart пишет2, SparkStop0; Spawn автоматических/cyclic веток и SparkWait/SparkThink не поддерживают этот getter в синхронизации с реальным callback. Не следует выводить активность исключительно из state."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013490.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014b50",
+      "proposed_name": "CEnvSpark_SparkCyclic",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Обрабатывает циклический Use как немедленную искру и возможность одной отложенной повторной.",
+      "details_ru": [
+        "При think==null вызывает100132d0(pev,origin), ставитSparkWait и планирует delay object.dc. При ненулевом think заменяет его SparkThink, не меняя уже назначенный deadline.",
+        "С flag10 SparkThink после одной искры обнулит callback. USE_TYPE/value не фильтруются, state e0 здесь не меняется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014b50.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x100132d0.c",
+        "decompiled/server/partial-pass/functions/0x10014c30.c",
+        "decompiled/server/partial-pass/functions/0x10014cb0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014ba0",
+      "proposed_name": "CEnvSpark_SparkStart",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Включает повторяющиеся искры, переключая следующий Use на Stop.",
+      "details_ru": [
+        "Use callback=SparkStop,think=SparkThink,state e0=2; scheduler delay=.1+RandomFloat(0,MaxDelay). Сам не создаёт искру немедленно и не нормализует MaxDelay."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014ba0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014c10",
+      "proposed_name": "CEnvSpark_SparkStop",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Останавливает искры обнулением think callback и меняет следующий Use на Start.",
+      "details_ru": [
+        "Use=SparkStart,think=null,state e0=0. В теле нет явного reset nextthink; дальнейшее отсутствие эффекта опирается на callback dispatcher."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014c10.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014c30",
+      "proposed_name": "CEnvSpark_SparkThink",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Излучает одну искру и либо завершает cyclic режим, либо планирует следующую.",
+      "details_ru": [
+        "100132d0(pev,origin); при spawnflag10 обнуляет think. Иначе delay=.1+RandomFloat(0,object.dc). State e0 не изменяет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014c30.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x100132d0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014cb0",
+      "proposed_name": "CEnvSpark_SparkWait",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Завершает cooldown циклической искры без создания нового эффекта.",
+      "details_ru": [
+        "Только object+78=0; не меняет state/use callback и не вызывает sound/TE helper."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014cb0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100132d0",
+      "proposed_name": "EmitBrushSparkAndRandomSound",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Создаёт temp-entity искру в origin+size/2 и выбирает случайный spark WAV.",
+      "details_ru": [
+        "Позиция=param2+pev.size*.5; helper1011a290 посылает MSG4/SVC23, BYTE9 и3COORD в этой позиции. Это producer wire, не client renderer proof.",
+        "RandomFloat(.25,.75)*.4 даёт volume .1.. .3; int(RandomFloat(0,1)*6) выбирает spark1..6, switch default звук не вызывает. Sound helper:channel2,atten.8,flags0,pitch100.",
+        "Верхняя включительность engine RNG не установлена; нельзя гарантировать отсутствие switch default из одного caller."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100132d0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x1011a290.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100151b0",
+      "proposed_name": "CEnvState_Spawn",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Инициализирует локальное состояние env_state из spawnflag1.",
+      "details_ru": [
+        "object.dc=(pev.spawnflags&1)*2, то есть0 либо2. Здесь нет master-check, scheduling или target dispatch."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100151b0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013b30",
+      "proposed_name": "CEnvState_KeyValue",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Разбирает времена включения/выключения и master.",
+      "details_ru": [
+        "turnontime/turnofftime→atof→float object.e0/e4;master→AllocString→e8. handled1 ставится до сравнения ключей; неизвестное делегирует1000dba0.",
+        "Ненулевые отрицательные задержки локально не отвергаются. Save table сохраняет эти float-read поля с native type10; этот факт не исправлялся под ожидаемые SDK типы."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013b30.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100134a0",
+      "proposed_name": "CEnvState_GetState",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Возвращает four-state env_state из object.dc.",
+      "details_ru": [
+        "0 off,1 turning-on,2 on,3 turning-off установлены consumers Spawn/Use/Think; не смешивать с global enum0/1/2."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100134a0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10016070.c",
+        "decompiled/server/partial-pass/functions/0x10015750.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10016070",
+      "proposed_name": "CEnvState_Use",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Фильтрует команду и master, затем немедленно или с задержкой меняет состояние и вызывает два набора targets.",
+      "details_ru": [
+        "ShouldToggleState(UseType), затем10119060(master e8,null activator). States0/3 идут кON,1/2 кOFF. При nonzero on/off time пишет1/3 и schedules соответствующий float; bounded asm восстанавливает потерянный C аргумент scheduler.",
+        "При immediateON state2: FireTargets(pev.target,original activator,this,1,0), затем FireTargets(pev.noise1,activator,this,3,0). ImmediateOFF state0: target получает0,noise2 получает3. Затем10017ad0 всегда очищает object+58; pev.nextthink+104 и object+5c только при parent+14==0 и children+1c==0.",
+        "Flag2 включает diagnostics. Delayed ветка не сохраняет original activator; отдельный vtableThink использует self/self. Target prefixes в dispatcher могут переопределить переданный use; здесь указаны исходные call arguments."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016070.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10018350.c",
+        "decompiled/server/partial-pass/functions/0x10119060.c",
+        "decompiled/server/partial-pass/functions/0x10101ff0.c",
+        "decompiled/server/partial-pass/functions/0x10017ad0.c",
+        "decompiled/server/partial-pass/functions/0x10015750.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10015750",
+      "proposed_name": "CEnvState_Think",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Завершает отложенное изменение состояния и отправляет targets с self как activator и caller.",
+      "details_ru": [
+        "Vtable101a5160+e0=10015750 доказывает override Think. State1→2:target Use1,noise1 Use3;state3→0:target Use0,noise2 Use3;прочие состояния возвращают без действий.",
+        "Bounded asm: оба FireTargets(name,this,this,use,0), в отличие от immediateUse сохраняющего входного activator. Flag2 только diagnostics; master заново не проверяется и nextthink здесь явно не обнуляется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10015750.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10101ff0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10015370",
+      "proposed_name": "CMultiSource_Spawn",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Откладывает регистрацию входов multisource и временно блокирует состояние флагом2.",
+      "details_ru": [
+        "pev.solid0/movetype0; scheduler.1; spawnflags|2;think callback=Register100145b0. Entity/trigger arrays здесь явно не очищаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10015370.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x100145b0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013d50",
+      "proposed_name": "CMultiSource_KeyValue",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Сохраняет globalstate и поглощает legacy editor keys без их использования.",
+      "details_ru": [
+        "globalstate→AllocString→object260;style,height,killtarget,value1,value2,value3 только handled1. Неизвестные ключи передаёт1000dba0.",
+        "Raw101a54d0=value1. Globalstate участвует в GetState и выборе outgoing UseType, не является локальным trigger bit."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013d50.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100145b0",
+      "proposed_name": "CMultiSource_Register",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Собирает до32 входных EHANDLE по target и membership multi_manager.",
+      "details_ru": [
+        "Сбрасывает count25c и memset толькоdc..1db (32 handles по8байт), не trigger array1dc..25b;think=SUB_DoNothing.",
+        "Сначала101184e0 ищет entities с target==own targetname; затем все multi_manager, чьи virtual+c8 принимают own targetname. Запись handle сохраняет edict+serial через10017740; bounded asm подтверждает индексы.",
+        "Лимит32, warning уже при count>=32; снимает spawnflag2. Dedup между двумя проходами и очистки trigger bits в этом теле нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100145b0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x101184e0.c",
+        "decompiled/server/partial-pass/functions/0x10118460.c",
+        "decompiled/server/partial-pass/functions/0x10017740.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100134b0",
+      "proposed_name": "CMultiSource_GetState",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Вычисляет AND всех trigger bits и необязательного globalstate==1.",
+      "details_ru": [
+        "При spawnflag2 возвращает0. Иначе требует все count25c DWORD начиная1dc ненулевыми;еслиglobalstate260!=0,101206f0 должен вернуть1. Успех→2,иначе0.",
+        "При count0 пустой AND даёт2, если global gate разрешает. Отрицательный count не попадает в успешное i==count."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100134b0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x101206f0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100165a0",
+      "proposed_name": "CMultiSource_Use",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Переключает trigger вызывающего входа и отправляет targets лишь при изменении агрегированного состояния.",
+      "details_ru": [
+        "Bounded asm доказывает проблемный membership guard: index растёт1..count до comparison; после полного miss index==count проходит JLE и XOR последнего trigger. При count0 XOR адресobject1d8, перед triggerarray. Это статически доказанная ветка, runtime достижимость на картах не проверена.",
+        "После XOR сравнивает GetState до/после. Старое2→deactivation:при ненулевом pev.netname FireTargets(netname,null,this,globalstate?0:3,0). Старое0→activation:SUB_UseTargets(null,globalstate?1:3,0). UseType входа сам не проверяется.",
+        "EHANDLE разрешается через serial-checked10017790/10017ba0. Нельзя документировать diagnostic non-member ветку как надёжную защиту: при нормальном nonnegative count она не выбирается полным miss."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100165a0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json",
+        "decompiled/server/partial-pass/functions/0x10017790.c",
+        "decompiled/server/partial-pass/functions/0x10017ba0.c",
+        "decompiled/server/partial-pass/functions/0x100134b0.c",
+        "decompiled/server/partial-pass/functions/0x10101ff0.c",
+        "decompiled/server/partial-pass/functions/0x10102a80.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014940",
+      "proposed_name": "CEnvGlobal_Save",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Save производных полей CEnvGlobal после успешного базового этапа.",
+      "details_ru": [
+        "Table0x10211510, records3,stride16; m_globalstate@0xdc type1 count1; m_triggermode@0xe0 type10 count1; m_initialstate@0xe4 type10 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014940.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014730",
+      "proposed_name": "CEnvGlobal_Restore",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Restore производных полей CEnvGlobal после успешного базового этапа.",
+      "details_ru": [
+        "Table0x10211510, records3,stride16; m_globalstate@0xdc type1 count1; m_triggermode@0xe0 type10 count1; m_initialstate@0xe4 type10 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014730.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100149a0",
+      "proposed_name": "CEnvSpark_Save",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Save производных полей CEnvSpark после успешного базового этапа.",
+      "details_ru": [
+        "Table0x102115e0, records2,stride16; m_flDelay@0xdc type0 count1; m_iState@0xe0 type10 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100149a0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014770",
+      "proposed_name": "CEnvSpark_Restore",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Restore производных полей CEnvSpark после успешного базового этапа.",
+      "details_ru": [
+        "Table0x102115e0, records2,stride16; m_flDelay@0xdc type0 count1; m_iState@0xe0 type10 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014770.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014a00",
+      "proposed_name": "CEnvState_Save",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Save производных полей CEnvState после успешного базового этапа.",
+      "details_ru": [
+        "Table0x10211540, records4,stride16; m_iState@0xdc type10 count1; m_fTurnOnTime@0xe0 type10 count1; m_fTurnOffTime@0xe4 type10 count1; m_sMaster@0xe8 type1 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014a00.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100147b0",
+      "proposed_name": "CEnvState_Restore",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Restore производных полей CEnvState после успешного базового этапа.",
+      "details_ru": [
+        "Table0x10211540, records4,stride16; m_iState@0xdc type10 count1; m_fTurnOnTime@0xe0 type10 count1; m_fTurnOffTime@0xe4 type10 count1; m_sMaster@0xe8 type1 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100147b0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014ac0",
+      "proposed_name": "CMultiSource_Save",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Save производных полей CMultiSource после успешного базового этапа.",
+      "details_ru": [
+        "Table0x10211600, records4,stride16; m_rgEntities@0xdc type4 count32; m_rgTriggered@0x1dc type10 count32; m_iTotal@0x25c type10 count1; m_globalstate@0x260 type1 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014ac0.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10014830",
+      "proposed_name": "CMultiSource_Restore",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Restore производных полей CMultiSource после успешного базового этапа.",
+      "details_ru": [
+        "Table0x10211600, records4,stride16; m_rgEntities@0xdc type4 count32; m_rgTriggered@0x1dc type10 count32; m_iTotal@0x25c type10 count1; m_globalstate@0x260 type1 count1; flags всех записей0. Raw bytes и строки сохранены.",
+        "Save вызывает1011adc0 с targetname либо classname как label;Restore10117010 с class label. Base10018000/10017f30 failure прерывает производной этап.",
+        "Полный base/callback serializer вне scope. Native type IDs сохранены буквально; в CEnvState времена читаются как float, хотя таблица содержит type10."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10014830.c",
+        "analysis/server-queue-a/contract-extra.md",
+        "analysis/server-queue-a/evidence-extra.json"
+      ]
+    }
+  ],
+  "subsystems": []
+}

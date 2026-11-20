@@ -1,0 +1,74 @@
+{
+  "functions": [
+    {
+      "module": "engine",
+      "address": "0x01df2656",
+      "proposed_name": "Sys_Error_FatalOrRecursiveLongjmp",
+      "subsystem": "network",
+      "summary_ru": "Фатальная диагностика: обычные пути завершают процесс, повторный вход выполняет longjmp.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Форматирование в buffer 1024; guard 02499f94. Повторный вход вызывает 01e731bc(027fc1a0,2). Первый вход ставит guard=1, выполняет условный callback 0250d944 и fatal log.",
+        "При dedicated gate 0250de38: MessageBoxA и 01e712a6(-1). Другая ветка: GetForegroundWindow/DestroyWindow/MessageBoxA/01df7711, затем тот же exit. Это статическое описание; функции не выполнялись.",
+        "CRT wrapper(status,1,0) вызывает IAT 01e8b24c ExitProcess; повторный вход использует TerminateProcess. PE imports и ASM подтверждены. Нормального возврата к caller нет. Установленный setjmp owner 01d7f2cc при nonzero resume возвращает host state; полный rollback не подтверждён."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/000-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "decompiled/engine/captures/queue-engine-routing/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01d7d873",
+      "proposed_name": "Host_Error_AbortToHostJumpBuffer",
+      "subsystem": "network",
+      "summary_ru": "Прерывает текущую обработку через longjmp(027fc1a0,1), а при recursion/state0 вызывает fatal helper.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Guard 023c9dec!=0 вызывает fatal 01df2656. Иначе: guard=1, 01d724ac, форматирование в buffer 1024, console 01d4aa99 и условные helpers 01d38050/01d7e77b.",
+        "При state 02dcf280==0 вызывается fatal; иначе 01d31007, 02dd31ec=-1, guard=0 и longjmp(buffer,1). Необычный RET после CALL в ASM недостижим при штатном longjmp.",
+        "Вызывается при variable payload>192 и недопустимых recipient/destination. Это прерывание обработки, а не простой packet drop. Owner setjmp 01d7f2cc при nonzero resume возвращает 0250d988, пропуская остаток frame; смысл всех cleanup globals остаётся открытым."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/001-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "decompiled/engine/captures/queue-engine-routing/capture.json"
+      ]
+    },
+    {
+      "module": "engine",
+      "address": "0x01de0e44",
+      "proposed_name": "RegUserMsg_ValidateAndQueueRegistration",
+      "subsystem": "network",
+      "summary_ru": "Проверяет имя/размер/счётчик, возвращает существующий ID либо добавляет регистрацию в pending list.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Порядок guards: signed next ID 01ec9dd0<=255, name!=NULL, strlen<=11, signed size<=192. Исходный raw next ID=64. Пустое имя и size<-1 отдельно не запрещены; только -1 означает variable payload в MessageEnd.",
+        "Поиск по active list 024988ac (next+18), сравнение 01d4676f(name,node+8). При совпадении возвращает прежний ID без изменения size. Guard исчерпанного счётчика предшествует lookup. Helper 01d4676f доказан как регистрозависимое сравнение байтов на равенство (0/-1).",
+        "Выделяет 32 байта через 01d8cf91; пишет node ID+0, увеличивает counter, затем size+4, name+8, next+18 и связывает с pending list 024988a8. NULL check после dereference не обеспечивает безопасный отказ allocator. Helper 01d8cf91 вызывает malloc и memset(0) без NULL guard; после успешного выделения неиспользованные байты name остаются нулевыми.",
+        "Runtime ID зависит от порядка регистрации. Перенос pending в active найден в 01d816e0/01dde46f; serializer 01dd80af пишет 19 байт на node. При activation/new connection active list временно сериализуется через pending pointer с последующим восстановлением. Receiver, освобождение списка и reset counter остаются открытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/engine/captures/engine-message-followup/006-pseudocode.c",
+        "decompiled/engine/captures/engine-message-followup/capture.json",
+        "analysis/network/engine-message-followup-contract.md",
+        "analysis/network/engine-message-followup-assembly/capture.json",
+        "analysis/network/engine-dispatch-lifecycle.md",
+        "analysis/network/engine-dispatch-lifecycle-assembly/capture.json",
+        "decompiled/engine/captures/queue-engine/capture.json",
+        "decompiled/engine/captures/queue-engine-routing/capture.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "provenance": {
+      "untrusted_content": true,
+      "source": "analysis_target"
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"evidence_id\":\"ev_1ef3a1a21e46e883517e65bb39afead365804722b7069eb577b750d436da49cc\",\"subject\":{\"name\":\"hw.dll\",\"digest\":{\"sha256\":\"9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875\"},\"local_path\":\"D:\\\\Steam\\\\steamapps\\\\common\\\\Cry of Fear\\\\hw.dll\",\"format\":\"pe\",\"architecture\":\"x86\"},\"provider\":{\"id\":\"ghidra\",\"name\":\"Ghidra\",\"version\":\"12.1.4\"},\"analysis_profile\":{\"provider\":{\"id\":\"ghidra\",\"name\":\"Ghidra\",\"version\":\"12.1.4\"},\"parameters\":{\"target_kind\":\"executable\",\"target_format\":\"pe\",\"executable_role\":\"shared-library\",\"managed\":false,\"native_aot_metadata\":{\"contract_revision\":\"rtr-9.1-x64-pe-read-only-v10\",\"source_bytes\":134217728,\"work_units\":67108864,\"working_memory_bytes\":67108864,\"report_bytes\":4194304},\"architecture\":\"x86\",\"available_architectures\":[\"x86\"],\"import_mode\":\"ephemeral-source-immutable\",\"pdb_observations\":\"program-info-v5\",\"annotation_policy\":\"atomic-function-entry-metadata-v1\",\"byte_search_boundary\":\"contiguous-eligible-initialized-blocks-v1\",\"load_image_observations\":\"source-mappings-entry-context-relocation-symbol-v3\",\"function_body_evidence\":\"complete-inclusive-ranges-v1\",\"function_references\":\"complete-body-and-entry-reference-manager-v3\",\"call_relationship_coverage\":\"observed-call-inventory-and-discovery-v7\",\"function_dossier_coverage\":\"observed-facets-and-call-relationships-v1\",\"native_value_flow_projection\":\"accepted-runtime-budgets-v1\",\"value_flow_effect_scope\":\"pcode-load-store-explicit-v1\",\"string_inventory_evidence\":\"defined-data-coverage-v1\",\"inventory_search_projection\":\"provider-inventory-facts-v1\",\"data_type_observations\":\"bit-field-base-and-lookup-v1\",\"location_resolution\":\"explicit-address-exact-entry-symbol-first-v3\",\"procedure_search\":\"primary-and-exact-entry-symbol-names-v1\",\"procedure_file_offset_resolution\":\"address-first-unique-target-source-mapping-v2\",\"instruction_flow_evidence\":\"decoded-return-pcode-v1\",\"instruction_status\":\"unlisted-and-containing-code-data-v3\",\"instruction_references\":\"exact-address-incoming-without-synthetic-entry-v3\",\"byte_search_coverage\":\"separate-loaded-overlays-v1\",\"function_boundary_observations\":\"ghidra-function-boundary-limitations-v4\",\"no_return_repair\":\"disabled-windows-p0\",\"process_launch\":\"official-headless-script-v1\",\"jump_table_evidence\":\"typed-case-default-blocks-v1\",\"decompiler_jump_loads\":true,\"loader\":\"auto-from-header\",\"language_id\":\"auto-from-header\",\"compiler_spec_id\":\"auto-default\",\"analyzer_preset\":\"ghidra-default\",\"function_coordinate_context\":{\"kind\":\"native-function-coordinate-context-v1\",\"selected_image\":null,\"mapping_sha256\":\"55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198\"}},\"digest\":\"5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6\"},\"predicate_type\":\"rea.analysis\",\"operation\":\"procedure_pseudo_code\",\"parameters\":{\"procedure\":\"ram:0x01dd8163\"},\"raw_result\":null,\"normalized_result\":\"\\r\\nvoid FUN_01dd8163(void)\\r\\n\\r\\n{\\r\\n  undefined4 uVar1;\\r\\n  int iVar2;\\r\\n  int *piVar3;\\r\\n  int *piVar4;\\r\\n  char *apcStack_101e4 [2];\\r\\n  undefined1 *puStack_101dc;\\r\\n  undefined4 uStack_101d8;\\r\\n  undefined4 uStack_101d4;\\r\\n  undefined1 auStack_101d0 [128];\\r\\n  int *piStack_10150;\\r\\n  int iStack_1014c;\\r\\n  int iStack_10148;\\r\\n  undefined1 auStack_10144 [65536];\\r\\n  undefined1 local_144 [64];\\r\\n  undefined1 local_104 [224];\\r\\n  undefined4 uStack_24;\\r\\n  int iStack_20;\\r\\n  int *piStack_1c;\\r\\n  char **ppcStack_18;\\r\\n  char **ppcStack_14;\\r\\n  char **ppcStack_10;\\r\\n  \\r\\n  FUN_01e71670();\\r\\n  ppcStack_10 = (char **)0x14;\\r\\n  ppcStack_14 = (char **)0x0;\\r\\n  ppcStack_18 = apcStack_101e4;\\r\\n  piStack_1c = (int *)0x1dd8182;\\r\\n  FUN_01d4648a();\\r\\n  apcStack_101e4[0] = s_New_Connection_01ecad34;\\r\\n  puStack_101dc = auStack_10144;\\r\\n  uStack_101d4 = 0;\\r\\n  uStack_101d8 = 0x10000;\\r\\n  if ((DAT_02d7da1c != 1) && ((DAT_027fc11c[1] == 0 || (*DAT_027fc11c != 0)))) {\\r\\n    iStack_10148 = DAT_027fc11c[0x12e7];\\r\\n    DAT_027fc11c[3] = 1;\\r\\n    piVar3 = DAT_027fc11c;\\r\\n    DAT_027fc11c[0xd5e] = DAT_027fc1e0;\\r\\n    piVar3[0xd5f] = DAT_027fc1e4;\\r\\n    DAT_027fc11c[0x1404] = 0;\\r\\n    ppcStack_10 = (char **)(DAT_027fc11c + 0x1f);\\r\\n    ppcStack_14 = (char **)0x1dd8232;\\r\\n    FUN_01d483c6();\\r\\n    ppcStack_10 = (char **)(DAT_027fc11c + 0x970);\\r\\n    ppcStack_14 = (char **)0x1dd8245;\\r\\n    FUN_01d483c6();\\r\\n    ppcStack_10 = (char **)(DAT_027fc11c + 8);\\r\\n    ppcStack_14 = (char **)0x1dd8257;\\r\\n    FUN_01d8eece();\\r\\n    ppcStack_10 = (char **)DAT_027fc11c;\\r\\n    ppcStack_14 = apcStack_101e4;\\r\\n    ppcStack_18 = (char **)0x1dd826d;\\r\\n    FUN_01dd7308();\\r\\n    uVar1 = DAT_024988a8;\\r\\n    if (DAT_024988ac != 0) {\\r\\n      DAT_024988a8 = DAT_024988ac;\\r\\n      ppcStack_10 = apcStack_101e4;\\r\\n      ppcStack_14 = (char **)0x1dd829d;\\r\\n      FUN_01dd80af();\\r\\n    }\\r\\n    DAT_024988a8 = uVar1;\\r\\n    DAT_027fc11c[5] = 1;\\r\\n    if (((*DAT_027fc11c != 0) || (DAT_027fc11c[1] != 0)) && (DAT_027fc11c[0x12e7] != 0)) {\\r\\n      ppcStack_10 = (char **)DAT_027fc11c[0x12e7];\\r\\n      ppcStack_14 = (char **)0x1dd82f0;\\r\\n      (*DAT_0250d900)();\\r\\n    }\\r\\n    ppcStack_10 = (char **)(DAT_027fc11c + 0x1342);\\r\\n    ppcStack_14 = (char **)&DAT_01ecad44;\\r\\n    ppcStack_18 = (char **)0x40;\\r\\n    piStack_1c = (int *)local_144;\\r\\n    iStack_20 = 0x1dd8313;\\r\\n    FUN_01e6ff86();\\r\\n    piVar3 = DAT_027fc11c + 9;\\r\\n    piVar4 = &iStack_20;\\r\\n    for (iVar2 = 5; iVar2 != 0; iVar2 = iVar2 + -1) {\\r\\n      *piVar4 = *piVar3;\\r\\n      piVar3 = piVar3 + 1;\\r\\n      piVar4 = piVar4 + 1;\\r\\n    }\\r\\n    uStack_24 = 0x1dd8330;\\r\\n    ppcStack_10 = (char **)FUN_01d921ad();\\r\\n    ppcStack_14 = (char **)&DAT_01ecad48;\\r\\n    ppcStack_18 = (char **)0x100;\\r\\n    piStack_1c = (int *)local_104;\\r\\n    iStack_20 = 0x1dd834a;\\r\\n    FUN_01e6ff86();\\r\\n    ppcStack_10 = (char **)s_Connection_rejected_by_game_01ecad4c;\\r\\n    ppcStack_14 = (char **)0x80;\\r\\n    ppcStack_18 = (char **)auStack_101d0;\\r\\n    piStack_1c = (int *)0x1dd8363;\\r\\n    FUN_01e6ff86();\\r\\n    ppcStack_10 = (char **)auStack_101d0;\\r\\n    ppcStack_14 = (char **)local_104;\\r\\n    ppcStack_18 = (char **)local_144;\\r\\n    piStack_1c = (int *)iStack_10148;\\r\\n    iStack_20 = 0x1dd8388;\\r\\n    iVar2 = (*DAT_0250d8fc)();\\r\\n    if (iVar2 == 0) {\\r\\n      ppcStack_10 = (char **)0x9;\\r\\n      ppcStack_14 = (char **)(DAT_027fc11c + 0x1f);\\r\\n      ppcStack_18 = (char **)0x1dd83a0;\\r\\n      FUN_01d4705f();\\r\\n      ppcStack_10 = (char **)auStack_101d0;\\r\\n      ppcStack_14 = (char **)s_echo__s_01ecad6c;\\r\\n      ppcStack_18 = (char **)0x1dd83b4;\\r\\n      ppcStack_10 = (char **)FUN_01d48f0d();\\r\\n      ppcStack_14 = (char **)(DAT_027fc11c + 0x1f);\\r\\n      ppcStack_18 = (char **)0x1dd83c6;\\r\\n      FUN_01d47171();\\r\\n      ppcStack_10 = (char **)auStack_101d0;\\r\\n      ppcStack_14 = (char **)s_Server_refused_connection_becaus_01ecad78;\\r\\n      ppcStack_18 = (char **)0x0;\\r\\n      piStack_1c = DAT_027fc11c;\\r\\n      iStack_20 = 0x1dd83e3;\\r\\n      FUN_01d7e2d6();\\r\\n    }\\r\\n    else {\\r\\n      ppcStack_10 = (char **)0x9;\\r\\n      ppcStack_14 = apcStack_101e4;\\r\\n      ppcStack_18 = (char **)0x1dd83f9;\\r\\n      FUN_01d4705f();\\r\\n      ppcStack_10 = (char **)0x1dd8401;\\r\\n      ppcStack_10 = (char **)FUN_01d46480();\\r\\n      ppcStack_14 = (char **)s_fullserverinfo___s__01ecada0;\\r\\n      ppcStack_18 = (char **)0x1dd840c;\\r\\n      ppcStack_10 = (char **)FUN_01d48f0d();\\r\\n      ppcStack_14 = apcStack_101e4;\\r\\n      ppcStack_18 = (char **)0x1dd841c;\\r\\n      FUN_01d47171();\\r\\n      piStack_10150 = DAT_0251f324;\\r\\n      for (iStack_1014c = 0; iStack_1014c < DAT_0251f328; iStack_1014c = iStack_1014c + 1) {\\r\\n        if (((piStack_10150 == DAT_027fc11c) || (*piStack_10150 != 0)) ||\\r\\n           ((piStack_10150[3] != 0 || (piStack_10150[1] != 0)))) {\\r\\n          ppcStack_10 = apcStack_101e4;\\r\\n          ppcStack_14 = (char **)piStack_10150;\\r\\n          ppcStack_18 = (char **)0x1dd84ac;\\r\\n          FUN_01ddccec();\\r\\n        }\\r\\n        piStack_10150 = piStack_10150 + 0x1406;\\r\\n      }\\r\\n      ppcStack_10 = apcStack_101e4;\\r\\n      ppcStack_14 = (char **)(DAT_027fc11c + 8);\\r\\n      ppcStack_18 = (char **)0x1;\\r\\n      piStack_1c = (int *)0x1dd84c9;\\r\\n      FUN_01d90aad();\\r\\n      ppcStack_10 = (char **)(DAT_027fc11c + 8);\\r\\n      ppcStack_14 = (char **)0x1dd84db;\\r\\n      FUN_01d90636();\\r\\n    }\\r\\n  }\\r\\n  return;\\r\\n}\\r\\n\\r\\n\",\"confidence\":\"observed\",\"authority\":\"shipped-artifact\",\"environment\":null,\"limitations\":[\"The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.\",\"Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).\",\"Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.\",\"Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.\",\"Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.\",\"External functions and functions without an analyzable body return null; other decompiler failures remain explicit.\",\"Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.\",\"The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.\",\"Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.\",\"The Ghidra Program references PDB hw.pdb (GUID unknown, age (hex) 8c, signature 5101829b, version NB10); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.\"],\"relationship_coverage\":null,\"locations\":[],\"evidence_links\":[]}"
+    }
+  ],
+  "structuredContent": {
+    "evidence_id": "ev_1ef3a1a21e46e883517e65bb39afead365804722b7069eb577b750d436da49cc",
+    "subject": {
+      "name": "hw.dll",
+      "digest": {
+        "sha256": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+      },
+      "local_path": "D:\\Steam\\steamapps\\common\\Cry of Fear\\hw.dll",
+      "format": "pe",
+      "architecture": "x86"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "pe",
+        "executable_role": "shared-library",
+        "managed": false,
+        "native_aot_metadata": {
+          "contract_revision": "rtr-9.1-x64-pe-read-only-v10",
+          "source_bytes": 134217728,
+          "work_units": 67108864,
+          "working_memory_bytes": 67108864,
+          "report_bytes": 4194304
+        },
+        "architecture": "x86",
+        "available_architectures": [
+          "x86"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "pdb_observations": "program-info-v5",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "byte_search_boundary": "contiguous-eligible-initialized-blocks-v1",
+        "load_image_observations": "source-mappings-entry-context-relocation-symbol-v3",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v3",
+        "call_relationship_coverage": "observed-call-inventory-and-discovery-v7",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "native_value_flow_projection": "accepted-runtime-budgets-v1",
+        "value_flow_effect_scope": "pcode-load-store-explicit-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "inventory_search_projection": "provider-inventory-facts-v1",
+        "data_type_observations": "bit-field-base-and-lookup-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_search": "primary-and-exact-entry-symbol-names-v1",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_status": "unlisted-and-containing-code-data-v3",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v3",
+        "byte_search_coverage": "separate-loaded-overlays-v1",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "disabled-windows-p0",
+        "process_launch": "official-headless-script-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "auto-from-header",
+        "compiler_spec_id": "auto-default",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "55a7964dc0bcdf067484a281c658e6ca8457a49405e0ea9dbd080366ee4c3198"
+        }
+      },
+      "digest": "5f15b8f948658c87fb431d4755fcdee71b03f57e6b43970f1a340052e84a3cf6"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "ram:0x01dd8163"
+    },
+    "raw_result": null,
+    "normalized_result": "\r\nvoid FUN_01dd8163(void)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  int iVar2;\r\n  int *piVar3;\r\n  int *piVar4;\r\n  char *apcStack_101e4 [2];\r\n  undefined1 *puStack_101dc;\r\n  undefined4 uStack_101d8;\r\n  undefined4 uStack_101d4;\r\n  undefined1 auStack_101d0 [128];\r\n  int *piStack_10150;\r\n  int iStack_1014c;\r\n  int iStack_10148;\r\n  undefined1 auStack_10144 [65536];\r\n  undefined1 local_144 [64];\r\n  undefined1 local_104 [224];\r\n  undefined4 uStack_24;\r\n  int iStack_20;\r\n  int *piStack_1c;\r\n  char **ppcStack_18;\r\n  char **ppcStack_14;\r\n  char **ppcStack_10;\r\n  \r\n  FUN_01e71670();\r\n  ppcStack_10 = (char **)0x14;\r\n  ppcStack_14 = (char **)0x0;\r\n  ppcStack_18 = apcStack_101e4;\r\n  piStack_1c = (int *)0x1dd8182;\r\n  FUN_01d4648a();\r\n  apcStack_101e4[0] = s_New_Connection_01ecad34;\r\n  puStack_101dc = auStack_10144;\r\n  uStack_101d4 = 0;\r\n  uStack_101d8 = 0x10000;\r\n  if ((DAT_02d7da1c != 1) && ((DAT_027fc11c[1] == 0 || (*DAT_027fc11c != 0)))) {\r\n    iStack_10148 = DAT_027fc11c[0x12e7];\r\n    DAT_027fc11c[3] = 1;\r\n    piVar3 = DAT_027fc11c;\r\n    DAT_027fc11c[0xd5e] = DAT_027fc1e0;\r\n    piVar3[0xd5f] = DAT_027fc1e4;\r\n    DAT_027fc11c[0x1404] = 0;\r\n    ppcStack_10 = (char **)(DAT_027fc11c + 0x1f);\r\n    ppcStack_14 = (char **)0x1dd8232;\r\n    FUN_01d483c6();\r\n    ppcStack_10 = (char **)(DAT_027fc11c + 0x970);\r\n    ppcStack_14 = (char **)0x1dd8245;\r\n    FUN_01d483c6();\r\n    ppcStack_10 = (char **)(DAT_027fc11c + 8);\r\n    ppcStack_14 = (char **)0x1dd8257;\r\n    FUN_01d8eece();\r\n    ppcStack_10 = (char **)DAT_027fc11c;\r\n    ppcStack_14 = apcStack_101e4;\r\n    ppcStack_18 = (char **)0x1dd826d;\r\n    FUN_01dd7308();\r\n    uVar1 = DAT_024988a8;\r\n    if (DAT_024988ac != 0) {\r\n      DAT_024988a8 = DAT_024988ac;\r\n      ppcStack_10 = apcStack_101e4;\r\n      ppcStack_14 = (char **)0x1dd829d;\r\n      FUN_01dd80af();\r\n    }\r\n    DAT_024988a8 = uVar1;\r\n    DAT_027fc11c[5] = 1;\r\n    if (((*DAT_027fc11c != 0) || (DAT_027fc11c[1] != 0)) && (DAT_027fc11c[0x12e7] != 0)) {\r\n      ppcStack_10 = (char **)DAT_027fc11c[0x12e7];\r\n      ppcStack_14 = (char **)0x1dd82f0;\r\n      (*DAT_0250d900)();\r\n    }\r\n    ppcStack_10 = (char **)(DAT_027fc11c + 0x1342);\r\n    ppcStack_14 = (char **)&DAT_01ecad44;\r\n    ppcStack_18 = (char **)0x40;\r\n    piStack_1c = (int *)local_144;\r\n    iStack_20 = 0x1dd8313;\r\n    FUN_01e6ff86();\r\n    piVar3 = DAT_027fc11c + 9;\r\n    piVar4 = &iStack_20;\r\n    for (iVar2 = 5; iVar2 != 0; iVar2 = iVar2 + -1) {\r\n      *piVar4 = *piVar3;\r\n      piVar3 = piVar3 + 1;\r\n      piVar4 = piVar4 + 1;\r\n    }\r\n    uStack_24 = 0x1dd8330;\r\n    ppcStack_10 = (char **)FUN_01d921ad();\r\n    ppcStack_14 = (char **)&DAT_01ecad48;\r\n    ppcStack_18 = (char **)0x100;\r\n    piStack_1c = (int *)local_104;\r\n    iStack_20 = 0x1dd834a;\r\n    FUN_01e6ff86();\r\n    ppcStack_10 = (char **)s_Connection_rejected_by_game_01ecad4c;\r\n    ppcStack_14 = (char **)0x80;\r\n    ppcStack_18 = (char **)auStack_101d0;\r\n    piStack_1c = (int *)0x1dd8363;\r\n    FUN_01e6ff86();\r\n    ppcStack_10 = (char **)auStack_101d0;\r\n    ppcStack_14 = (char **)local_104;\r\n    ppcStack_18 = (char **)local_144;\r\n    piStack_1c = (int *)iStack_10148;\r\n    iStack_20 = 0x1dd8388;\r\n    iVar2 = (*DAT_0250d8fc)();\r\n    if (iVar2 == 0) {\r\n      ppcStack_10 = (char **)0x9;\r\n      ppcStack_14 = (char **)(DAT_027fc11c + 0x1f);\r\n      ppcStack_18 = (char **)0x1dd83a0;\r\n      FUN_01d4705f();\r\n      ppcStack_10 = (char **)auStack_101d0;\r\n      ppcStack_14 = (char **)s_echo__s_01ecad6c;\r\n      ppcStack_18 = (char **)0x1dd83b4;\r\n      ppcStack_10 = (char **)FUN_01d48f0d();\r\n      ppcStack_14 = (char **)(DAT_027fc11c + 0x1f);\r\n      ppcStack_18 = (char **)0x1dd83c6;\r\n      FUN_01d47171();\r\n      ppcStack_10 = (char **)auStack_101d0;\r\n      ppcStack_14 = (char **)s_Server_refused_connection_becaus_01ecad78;\r\n      ppcStack_18 = (char **)0x0;\r\n      piStack_1c = DAT_027fc11c;\r\n      iStack_20 = 0x1dd83e3;\r\n      FUN_01d7e2d6();\r\n    }\r\n    else {\r\n      ppcStack_10 = (char **)0x9;\r\n      ppcStack_14 = apcStack_101e4;\r\n      ppcStack_18 = (char **)0x1dd83f9;\r\n      FUN_01d4705f();\r\n      ppcStack_10 = (char **)0x1dd8401;\r\n      ppcStack_10 = (char **)FUN_01d46480();\r\n      ppcStack_14 = (char **)s_fullserverinfo___s__01ecada0;\r\n      ppcStack_18 = (char **)0x1dd840c;\r\n      ppcStack_10 = (char **)FUN_01d48f0d();\r\n      ppcStack_14 = apcStack_101e4;\r\n      ppcStack_18 = (char **)0x1dd841c;\r\n      FUN_01d47171();\r\n      piStack_10150 = DAT_0251f324;\r\n      for (iStack_1014c = 0; iStack_1014c < DAT_0251f328; iStack_1014c = iStack_1014c + 1) {\r\n        if (((piStack_10150 == DAT_027fc11c) || (*piStack_10150 != 0)) ||\r\n           ((piStack_10150[3] != 0 || (piStack_10150[1] != 0)))) {\r\n          ppcStack_10 = apcStack_101e4;\r\n          ppcStack_14 = (char **)piStack_10150;\r\n          ppcStack_18 = (char **)0x1dd84ac;\r\n          FUN_01ddccec();\r\n        }\r\n        piStack_10150 = piStack_10150 + 0x1406;\r\n      }\r\n      ppcStack_10 = apcStack_101e4;\r\n      ppcStack_14 = (char **)(DAT_027fc11c + 8);\r\n      ppcStack_18 = (char **)0x1;\r\n      piStack_1c = (int *)0x1dd84c9;\r\n      FUN_01d90aad();\r\n      ppcStack_10 = (char **)(DAT_027fc11c + 8);\r\n      ppcStack_14 = (char **)0x1dd84db;\r\n      FUN_01d90636();\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n",
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "Ghidra Program checkpoint mode is disabled: closing discards metadata edits; original executable bytes are unchanged. For stock ELF/PE/Mach-O on Linux/macOS, set REA_GHIDRA_CHECKPOINT_DIR to a private absolute directory before starting REA (restart MCP after changing its startup environment).",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+      "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+      "Windows Ghidra P0 accepts native x86, x86-64, ARMNT (Thumb-2) and ARM64 PE applications and DLLs, DOS MZ images, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+      "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+      "Windows sessions require the matching packaged Windows x64 native addon, local NTFS/ReFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically.",
+      "The Ghidra Program references PDB hw.pdb (GUID unknown, age (hex) 8c, signature 5101829b, version NB10); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+}

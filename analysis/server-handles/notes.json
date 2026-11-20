@@ -1,0 +1,90 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10017740",
+      "proposed_name": "EntityHandle_AssignPrivateObject",
+      "subsystem": "entity-core",
+      "summary_ru": "Записывает edict и serial из entity либо очищает handle при NULL entity.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "ECX указывает на двухсловный handle; один stack entity argument, ret4. entvars=entity+4, edict=entvars+20c. При nonnull edict копирует edict+4 в handle+4.",
+        "NULL entity обнуляет оба DWORD. Nonnull entity с NULL edict обнуляет pointer, но сохраняет прежний serial. В обычном выходе EAX остаётся исходным entity pointer, не handle; void в C теряет это наблюдение.",
+        "Нет локальной проверки handle/entvars pointer. Door Use передаёт ECX=door+e4; lifetime/reuse engine остаётся внешним."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017740.c",
+        "analysis/server-handles/contract.md",
+        "analysis/server-handles/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017ba0",
+      "proposed_name": "EntityHandle_ResolveEdictBySerial",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает edict только при ненулевом pointer и совпадении serial.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "ECX=handle. Читает pointer+0 и сравнивает edict+4 с сохранённым serial+4. При NULL/mismatch возвращает EAX0, иначе исходный edict.",
+        "Не очищает невалидный handle; не проверяет edict free flag/private pointer, диапазон или lifetime памяти. Для чтения serial edict уже должен указывать на доступную память."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017ba0.c",
+        "analysis/server-handles/contract.md",
+        "analysis/server-handles/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017780",
+      "proposed_name": "EntityHandle_HasMatchingEdict",
+      "subsystem": "entity-core",
+      "summary_ru": "Возвращает строго 0/1 по наличию edict с совпавшим serial.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "CALL10017ba0 сохраняет тот же ECX; NEG/SBB/NEG превращает EAX в bool. Собственной записи или очистки нет.",
+        "Bool1 не доказывает ненулевой private pointer. Отличается от10017790/100177a0, которые читают edict+7c."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017780.c",
+        "analysis/server-handles/contract.md",
+        "analysis/server-handles/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017790",
+      "proposed_name": "EntityHandle_ResolvePrivateObject",
+      "subsystem": "entity-core",
+      "summary_ru": "Разрешает serial-checked edict и читает его private pointer.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "CALL10017ba0; при нулевом результате EAX0, иначе DWORD[edict+7c]. Нулевой private pointer допускается; bool helper может при этом вернуть1.",
+        "Другая точка входа100177a0 имеет ту же семантику. Точное исходное имя C++ operator и engine lifetime этим не доказаны. DelayThink использует handle temporary+e4."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017790.c",
+        "analysis/server-handles/contract.md",
+        "analysis/server-handles/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100177a0",
+      "proposed_name": "EntityHandle_ResolvePrivateObjectAlternate",
+      "subsystem": "entity-core",
+      "summary_ru": "Отдельный вход с тем же serial-checked private-pointer resolver.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Те же CALL10017ba0 и read edict+7c либо EAX0, что в10017790; отличен адрес тела и relative CALL displacement.",
+        "Не объединять адреса как duplicate capture и не приписывать разные ownership rules. Функция не увеличивает refcount и не очищает handle."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100177a0.c",
+        "analysis/server-handles/contract.md",
+        "analysis/server-handles/evidence.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,321 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1001d4c0",
+      "proposed_name": "HUD_PlayerMove_DispatchAndRefreshGroundFlags",
+      "subsystem": "movement",
+      "summary_ru": "Экспорт передаёт PM context общему dispatcher и после него обновляет FL_ONGROUND/friction.",
+      "confidence": "high",
+      "details_ru": [
+        "Сохраняет param1 в DAT101ad6e8, вызывает 10015650(param2!=0). После dispatcher onground+e0==-1 очищает flags+b8 bit0x200, иначе устанавливает.",
+        "При multiplayer+8==0 и movetype+dc==3 устанавливает friction+c4=1.0. Функция не реализует отдельную физику: основное движение находится в 10015650. Идентичность всей PM ABI с современным SDK здесь не утверждается."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-pass1/001-pseudocode.c",
+        "external/hlsdk-portable/pm_shared/pm_defs.h",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1001d4d0",
+      "proposed_name": "HUD_PlayerMoveInit_SetContextAndInitializeHelpers",
+      "subsystem": "movement",
+      "summary_ru": "Сохраняет PM context, вызывает два init helper и устанавливает флаг завершения.",
+      "confidence": "high",
+      "details_ru": [
+        "DAT101ad6e8=param1; последовательные 10011bf0(),10012e40(); DAT101ad6f0=1. Экспорт HUD_PlayerMoveInit подтверждён capture.",
+        "Точные обязанности обоих helper не раскрыты данным телом; имена texture/particle initialization не присваиваются без чтения. Повторный вызов не защищён собственным ready guard."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-pass1/002-pseudocode.c",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10078520",
+      "proposed_name": "Input_AdjustKeyboardPitchAndClampAngles",
+      "subsystem": "movement",
+      "summary_ru": "Обрабатывает klook pitch и ограничения углов; lookup/lookdown здесь только останавливают drift.",
+      "confidence": "high",
+      "details_ru": [
+        "При state1054347c bit1 масштабирует dt на cl_anglespeedkey. При klook10543410 bit1 вызывает 100b31b0 и меняет pitch на разность KeyState1054342c/10543420 *dt*cl_pitchspeed.",
+        "Читает KeyState lookup10543438 и lookdown10543444; любой ненулевой вызывает 100b31b0. В этой функции их значения не добавляются к pitch и отсутствует yaw update.",
+        "Pitch ограничивает cvar10543368 и отрицательным 10543364, roll[-50,50]. KeyState consumes transition bits по отдельному контракту; это не просто чтение held flag."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/004-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/007-pseudocode.c",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007c9f0",
+      "proposed_name": "Telescope_ReadEntityAndIntegerAngleCenter",
+      "subsystem": "graphics",
+      "summary_ru": "Сообщение Telescope читает четыре signed SHORT и выбирает entity camera либо выключает её.",
+      "confidence": "high",
+      "details_ru": [
+        "Регистрация 1007c5db..1007c5ea связывает callback с PE строкой 10150300 Telescope. Не CameraZoom. Читает entity index и три signed SHORT через 10080a10, переводит последние в float без /8.",
+        "Центр 105436dc/e0/e4; границы X±20→105436e8/f0, Y±20→105436ec/f4. При index==-1 очищает 105436d8; иначе 105436f8=0 и 105436d8=GetEntityByIndex(index). Затем 1018d210=1018d1b0,return1.",
+        "Не проверяет read bad flag и не валидирует ненулевой результат lookup. Mouse consumer1007b580 применяет отдельные offsets/clamps; эти ±20 не следует подменять его ±60."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-fov-audit/001-pseudocode.c",
+        "analysis/client-queue/camera-registration.asm",
+        "analysis/network/playsfx-client-assembly/readshort.asm",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100709a0",
+      "proposed_name": "IronSights_ReadModelOffsetsAndActiveFlag",
+      "subsystem": "weapons",
+      "summary_ru": "Читает три COORD и два BYTE; сохраняет offset либо сбрасывает его, не меняя FOV.",
+      "confidence": "high",
+      "details_ru": [
+        "InitReader(buffer,size); COORD×3→HUD+291c/2920/2924; первый BYTE читает и игнорирует; второй ненулевой устанавливает HUD+2934=1.",
+        "Второй BYTE0 очищает все три float и active byte. Для HUD1018a0c0 это offsets1018c9dc/e0/e4 и active1018c9f4; последний подавляет sway/lazyweapon в 100ad9d0/100adec0.",
+        "Нет явной проверки bad flag или изменения FOV в этом body. Прочитанный первый BYTE не следует называть применённым zoom."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/weapons-client-aim/000-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007b0e0",
+      "proposed_name": "Input_ApplyJoystickAxesToCommandAndView",
+      "subsystem": "movement",
+      "summary_ru": "Преобразует шесть осей joystick в forward/side movement и pitch/yaw с mapping, deadzone и sensitivity.",
+      "confidence": "medium",
+      "details_ru": [
+        "Получает viewangles; state101b2f10 от 1 до 4 исключает обработку. Однократно вызывает 1007be70; требует 10543620!=0, enabled cvar105435d4 и успешный 1007bb20.",
+        "Raw axis нормализует (raw-32768)/32768. Mapping1=forward или jlook pitch,2=pitch при jlook,3=strafe,4=yaw либо отрицательный strafe при strafe/lookstrafe+jlook. Deadzones105435f8/fc/3600/3604 и sensitivities10543608/0c/10/14 раздельные.",
+        "Absolute angular axis умножает на dt*cl_pitchspeed/cl_yawspeed; relative axis на 180. Movement использует cl_forward/cl_sidespeed. Pitch ограничивает 10543368/364; SetViewAngles подавлен при 1018d27c!=0.",
+        "Опциональная mapping4 nonlinear correction использует 100ff550, sign и cap14000; точная степень не выведена. Значение state101b2f10 и backend1007bb20 не переименованы по догадке."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/006-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/007-pseudocode.c",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007b580",
+      "proposed_name": "Input_MouseCommandAndScriptedCameraOffsets",
+      "subsystem": "movement",
+      "summary_ru": "Обрабатывает cursor delta, sensitivity/filter, mouse look/strafe и отдельные Telescope/attached-camera offsets.",
+      "confidence": "medium",
+      "details_ru": [
+        "Ранние guards: обе 101905e0/e4!=-1 или 101b2f10 в 1..4. Cursor branch требует 105436c0==0,10543554==0,1018f648==0. Delta=(accum+cursor)-window center; accum сбрасывается.",
+        "Filter10543558 усредняет current/previous delta. Sensitivity берёт 1006cdc0 либо 1054355c; масштабирование и optional half при 1018d1e0<1018fec0 усечены до int.10078830!=0 обнуляет delta.",
+        "Обычный yaw -=dx*m_yaw; при strafe или lookstrafe+mlook пишет cmd.side. Mlook без strafe меняет/clamp pitch; иначе dy меняет cmd.forward, либо cmd.up при strafe+IsNoClipping. SetViewAngles обычного пути требует 1018d27c==0 и 105436d8==0.",
+        "Telescope pointer105436d8!=0 интегрирует 10559504 pitch[-60,30],10559508 yaw[-60,60], затем передаёт pitch и отрицательный yaw. Attached state10542bb8!=0 &&10542bb2==0 интегрирует отдельные 105594fc/10559500 с теми же clamps.",
+        "Ветка GUI и 1007bbb0 остаётся bounded call без доказанного здесь recenter контракта; third angle Telescope не интерпретируется из неполной stack reconstruction. Не доказаны семантические имена всех early guards."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/005-pseudocode.c",
+        "decompiled/client/captures/graphics-client-first/007-pseudocode.c",
+        "external/hlsdk-portable/engine/cdll_int.h",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100af250",
+      "proposed_name": "View_CalculateCachedGroundVelocityBob",
+      "subsystem": "graphics",
+      "summary_ru": "Вычисляет асимметричный sine bob горизонтальной скорости; в воздухе/тот же time возвращает cache.",
+      "confidence": "high",
+      "details_ru": [
+        "Если onground==-1 или time==1055968c возвращает 10559688 без advance. Иначе double phase10559680+=frametime; period=cl_bobcycle, up=cl_bobup; phase remainder делится на period.",
+        "Theta=pi*cycle/up до up, иначе pi+pi*(cycle-up)/(1-up). A=sqrt(simvel.x²+simvel.y²)*cl_bob; result=clamp(A*(0.3+0.7*sin(theta)),-7,4). Сохраняет time и result.",
+        "Регистрация/PE подтверждают defaults cl_bobcycle0.8,cl_bob0.01,cl_bobup0.5.100f8320 есть scalar sine через XMM0, несмотря на void pseudo; fallback содержит FSIN. Нулевые period/up divisors здесь не проверяются."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/000-pseudocode.c",
+        "analysis/client-queue/bob-registration.asm",
+        "analysis/client-queue/sine-wrapper.asm",
+        "analysis/client-queue/sine-fallback.asm",
+        "external/hlsdk-portable/common/ref_params.h",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100af160",
+      "proposed_name": "View_AddThreeAxisIdleSine",
+      "subsystem": "graphics",
+      "summary_ru": "Добавляет независимые time-based sine колебания к pitch/yaw/roll ref_params.",
+      "confidence": "high",
+      "details_ru": [
+        "Roll +=sin(time*10190588)*1055958c*101905c4; pitch +=sin(time*1019059c)*1055958c*101905d8; yaw +=sin(time*10190574)*1055958c*101905b0.",
+        "Это additive viewangles, не view origin. Все три вызова 100f8320 используют XMM0 double input/output; имена и lifecycle коэффициентов не выводятся только из адресов."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/001-pseudocode.c",
+        "analysis/client-queue/sine-wrapper.asm",
+        "analysis/client-queue/sine-fallback.asm",
+        "external/hlsdk-portable/common/ref_params.h",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100b1f60",
+      "proposed_name": "View_AddEntityVelocityRollFromHelper",
+      "subsystem": "graphics",
+      "summary_ru": "По viewentity получает entity angles и добавляет результат velocity-roll helper к roll камеры.",
+      "confidence": "high",
+      "details_ru": [
+        "GetEntityByIndex(ref.viewentity); null→без изменений.100b1870 получает entity angles+b54..b5c,simvel+58..60 и movevars+64/+68. Результат добавляется ref.viewangles.roll+14.",
+        "Сам projection/clamp algorithm100b1870 не раскрыт данной C выборкой; wrapper не доказывает все детали стандартного V_CalcRoll. Названия ref_params подтверждаются SDK layout."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/002-pseudocode.c",
+        "external/hlsdk-portable/common/ref_params.h",
+        "external/hlsdk-portable/engine/cdll_int.h",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100af400",
+      "proposed_name": "ViewModel_ComposeAimIdleAndHalfPunchAngles",
+      "subsystem": "graphics",
+      "summary_ru": "Собирает углы viewmodel из camera/crosshair, idle и половины punch; копирует в три набора angle fields.",
+      "confidence": "high",
+      "details_ru": [
+        "GetViewModel null→return. Pitch=crosshair.x*.25-view.pitch; yaw=crosshair.y+view.yaw; roll сохраняет начальный model roll. Вычитает idle sine: pitch с множителем.5, yaw/roll полностью.",
+        "Добавляет punch: pitch-=.5*punch.x,yaw+=.5*punch.y,roll+=.5*punch.z; pitch+=1018cb68. При model+b94!=0,weapon1018d578!=0 и weapon+9c==1 дополнительно pitch-=1018d254,yaw-=1018d250.",
+        "Результат пишет model+b54/b58/b5c, +2cc/2d0/2d4 и+b28/b2c/b30. Эти повторные записи не являются тремя разными recoil источниками. Имена guard полей и смысл последней коррекции не установлены данным body."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-spring-audit/002-pseudocode.c",
+        "analysis/client-queue/sine-wrapper.asm",
+        "external/hlsdk-portable/common/ref_params.h",
+        "external/hlsdk-portable/common/cl_entity.h",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100ae9a0",
+      "proposed_name": "View_AddSignedScaledLocalSpringImpulse",
+      "subsystem": "graphics",
+      "summary_ru": "Добавляет импульс (-pitch,+yaw,+roll)*20 в локальную spring velocity при state guard.",
+      "confidence": "high",
+      "details_ru": [
+        "Если 10542bc0==0 либо 10542bc4>0:10559620-=20*arg1;10559624+=20*arg2;10559628+=20*arg3. Иначе no-op.",
+        "Это velocity accumulator, не прямое изменение viewangles/ref.punchangle.10542bc0/10542bc4 сохраняют адресные имена: dead/spectator смысл этим body не доказан."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-view-audit/003-pseudocode.c",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100b2140",
+      "proposed_name": "View_DecayLocalPunchBySingleOrMultiplayerRule",
+      "subsystem": "graphics",
+      "summary_ru": "In-place затухание punch: MP пружина с velocity10559620, SP нормализованный вектор с линейно-зависимым decay.",
+      "confidence": "high",
+      "details_ru": [
+        "GetMaxClients()>1: если length(punch)>.001 либо length(velocity)>.001, punch+=dt*velocity; velocity*=max(0,1-9dt); velocity-=clamp(65dt,0,2)*updatedPunch. Clamp pitch/roll±89,yaw±179. Ниже порога ничего не обнуляет.",
+        "При GetMaxClients()<=1: oldLength=NormalizeInPlace100947c0(punch); punch*=max(0,oldLength-(.5*oldLength+10)*dt). Этот путь не изменяет spring velocity.",
+        "Main view100af790 вызывает эту функцию для 105595b4..bc. Это дополнительный local vector, не доказательство тождества server PM spring или ref_params.punchangle."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-spring-core/001-pseudocode.c",
+        "decompiled/client/captures/shader-pass-vector-helpers/000-pseudocode.c",
+        "decompiled/client/captures/graphics-client-fog-waterlevel/000-pseudocode.c",
+        "analysis/client-queue/vector-ma.asm",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100ae850",
+      "proposed_name": "View_IntegrateStackVectorSpringAndClampSeparateGlobal",
+      "subsystem": "graphics",
+      "summary_ru": "Необычный helper интегрирует переданный по значению stack vector, меняет общую velocity, но clamp выполняет над другим global vector.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM: LEA[EBP+8] есть три float stack values; [EBP+14] содержит ref_params pointer. Это не обычный float* input; Ghidra void(void) теряет ABI.",
+        "При length(stackVector)>.001 либо length(10559620)>.001: stackVector+=ref.dt*velocity; velocity*=max(0,1-9dt); velocity-=clamp(65dt,0,2)*updatedStackVector.",
+        "Затем clamp105595b4/b8/bc до±89/±179/±89; copyback интегрированного stack vector в эти globals отсутствует в полном body. Поэтому нельзя приравнивать 100ae850 к in-place100b2140. Live caller и назначение этой странной разницы остаются открыты."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-spring-core/000-pseudocode.c",
+        "analysis/client-queue/spring-by-value.asm",
+        "analysis/client-queue/vector-ma.asm",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100adec0",
+      "proposed_name": "ViewModel_ApplyLazyWeaponDirectionalLag",
+      "subsystem": "graphics",
+      "summary_ru": "Сдвигает model origin по разности current forward и history direction, если ironsights выключен.",
+      "confidence": "high",
+      "details_ru": [
+        "При 1018c9f4!=0 не выполняет body. Сохраняет origin/angles; AngleVectors текущих angles→forward. При dt!=0 delta=forward-history10559614..1c; force=clamp(GetCvarFloat(cl_lazyweapon_force),0,10).",
+        "History speed=5, либо 5*length(delta)/threshold101905e8 при length>threshold>0; history+=dt*speed*delta, NormalizeInPlace(history). Origin-=force*исходный delta. Это не изменение углов.",
+        "При threshold==0 восстанавливает saved origin/angles, но history ранее мог измениться. Body читает четыре основных аргумента; callsite передаёт ещё model/hand, которые здесь не используются. Точный lifetime/reset history не выведен."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-spring-audit/001-pseudocode.c",
+        "analysis/client-queue/sway-caller.asm",
+        "decompiled/client/captures/shader-pass-vector-helpers/000-pseudocode.c",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100ad9d0",
+      "proposed_name": "ViewModel_ComposeMotionSwayAndHandDependentOffsets",
+      "subsystem": "graphics",
+      "summary_ru": "Комбинирует motion globals, camera basis, hand-dependent углы и time sine/cosine в viewmodel transform.",
+      "confidence": "medium",
+      "details_ru": [
+        "Вычисляет basis от входных angles и ref.cl_viewangles; вызывает 100ae110(ref,arg4,arg5). При ironsights1018c9f4!=0 обнуляет 10559590/594. Origin+=.1*10559590*forward и z+=.1*10559590; angles.roll+=.5*10559590,pitch-=.4*10559590,yaw-=.3*10559594; origin+=.8*10559594*right.",
+        "При model!=null копирует origin/angles в+b48/+b54 и отводит origin назад по camera forward*1055959c. При 1018cb54==0&&1018cb58==0&&10542bc4==0 curstate pitch-=10559598, yaw/roll меняет на hand-signed половину 10559598. Иначе pitch-=2*10559598,yaw hand-signed, без такой roll записи.",
+        "Time/GetClientTime делится на 10542a7c, sine и cosine делятся на 10542a80; ironsights подавляет обе величины. Эти значения сдвигают origin по right,half forward,half up.100ae110 и lifecycle коэффициентов требуют отдельного чтения.",
+        "Caller ASM подтверждает семь stack arguments, включая model и hand byte: неполная C сигнатура внешнего caller не отменяет их. Функция не доказывает физически отдельную геометрию рук и не реализует весь aim/FOV pipeline."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/movement-client-spring-audit/000-pseudocode.c",
+        "analysis/client-queue/sway-caller.asm",
+        "analysis/client-queue/sine-wrapper.asm",
+        "analysis/graphics/studio-chrome-contract.md",
+        "analysis/client-queue/contract.md",
+        "analysis/client-queue/evidence.json"
+      ]
+    }
+  ]
+}

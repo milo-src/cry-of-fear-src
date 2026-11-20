@@ -1,0 +1,341 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1005ff50",
+      "proposed_name": "Renderer_ConsumePendingWorldDrawAndRestoreGuard",
+      "subsystem": "graphics",
+      "summary_ru": "При pending frame flag выполняет world renderer, auxiliary pass и optional sky, затем сбрасывает флаг.",
+      "confidence": "medium",
+      "details_ru": [
+        "104cdd64==0→не вызывает renderer body. Иначе stack object guard1005e740, затем 1005eeb0,1005c180; если query10053c70()!=0 (manager state==2) и 101be7f8!=0,10060b60 затем sky10063780.",
+        "В обычном конце 104ce078=0,104cdd64=0,1005e920; C содержит SEH registration. Это consume-once gate среди нескольких draw callers, не инициализация материалов. Полный контракт guard ctor/dtor1005e740/1005e920 и auxiliary1005c180 не раскрыт здесь."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-core/002-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "decompiled/client/captures/graphics-studio-flow-routing/000-pseudocode.c",
+        "decompiled/client/captures/shader-pass-bindings/004-pseudocode.c",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1005fff0",
+      "proposed_name": "Renderer_CallAuxUpdateThenTailDispatch",
+      "subsystem": "graphics",
+      "summary_ru": "Короткий frame helper вызывает 10056740 и передаёт управление 10084040 хвостовым переходом.",
+      "confidence": "medium",
+      "details_ru": [
+        "В C два последовательных вызова; cached ASM точнее: CALL10056740, JMP10084040. Нет собственных аргументов, flags/reset или GL calls в wrapper.",
+        "Caller context HUD redraw описан в client-renderer.md; семантика обеих целей пока не доказана этой выборкой. Не присваивать этому wrapper имя полного renderer shutdown/clear."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-core/003-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/client-queue/renderer-aux-wrapper.asm",
+        "analysis/graphics/client-renderer.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10060b60",
+      "proposed_name": "Renderer_RestoreBasicTextureBlendDepthState",
+      "subsystem": "graphics",
+      "summary_ru": "Сбрасывает RGB scale всех texture units, оставляет unit0 TEXTURE_2D enabled, blend off и depth writes on.",
+      "confidence": "high",
+      "details_ru": [
+        "Для unit0..101be760-1: ActiveTexture(TEXTURE0+i),TexEnvi(TEXTURE_ENV,RGB_SCALE,1),Disable(TEXTURE_2D). Затем ActiveTexture0,Enable(TEXTURE_2D),Disable(BLEND),DepthMask(1).",
+        "Не сбрасывает texture bindings, depth function, cube/3D target, client arrays или texture matrices. Это частичная базовая state restoration, не полный GL reset."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/002-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10060de0",
+      "proposed_name": "Surface_PrependToBaseTextureDrawChain",
+      "subsystem": "graphics",
+      "summary_ru": "Помечает pending base pass и ставит surface в начало chain исходной texture.",
+      "confidence": "high",
+      "details_ru": [
+        "104cdf84=1; texture=surface+2c(texinfo)+24; surface.next+28=texture.head+1c;texture.head=surface. Не вызывает texture animation selector и не рисует.",
+        "Перезаписывает surface+28, поэтому callers, которые обходят предыдущий chain, обязаны сохранить next до enqueue.100626e0 именно так и делает. Нет проверки NULL/дубликата/цикла."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bump/001-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061b40",
+      "proposed_name": "Surface_DrawFlatLightmapBaseDetailOrDefer",
+      "subsystem": "graphics",
+      "summary_ru": "Рисует flat/base/detail surface либо отделяет lighting от последующего material pass в зависимости от active lights/capabilities.",
+      "confidence": "high",
+      "details_ru": [
+        "10062650 выбирает текущую animated texture; increments104cdfa4;unit0 bind ambientatlas101cbf70+surface+38. Если 104cdf98!=0,рисует lighting-only и enqueue10060de0. При entity104cddc8+2f8!=0 делает depth-only masked pass и EQUAL RGB pass, затем возвращает LEQUAL.",
+        "Без active-light flag: material100621d0(texture), detail exists+14 и gl_detailtex!=0 допускают texture2 detail с UVscale+20/+24. Ровно 2textureunits→lighting-only/deferred material; иначе stages(1,5,5,0), unit1 base texture+18,unit2detail. Без detail stages(1,5,0,0).",
+        "После direct draw10061d80, при surface flag0x400→10060d80 specular queue. В ранних deferred ветках до этого теста не доходит.10062650 ASM: alternate/animation chain,материал lookup требует tag-666;texture+18 здесь GL base ID,не gloss field material+18."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-routing/001-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "analysis/client-queue/texture-animation.asm",
+        "analysis/client-queue/material-lookup.asm",
+        "analysis/client-queue/active-light-query.asm",
+        "decompiled/client/captures/graphics-client-first/008-pseudocode.c",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061cf0",
+      "proposed_name": "Surface_DispatchSkipSpecialBumpOrFlat",
+      "subsystem": "graphics",
+      "summary_ru": "Surface flags выбирают skip, special helper, bump или flat renderer и определяют счётчик обработанных поверхностей.",
+      "confidence": "high",
+      "details_ru": [
+        "Flag0x10→return. Иначе flag4→10060d60 и return без increment. Иначе flag0x200 &&gl_bump.value!=0→10061080,в остальных случаях 10061b40.",
+        "Обе ordinary/bump ветки увеличивают 104cdf9c на 1 после вызова. Сам dispatcher не проверяет материал/драйвер capabilities и не приписывает surface flags заново; producer отдельно в surface-flag-producers.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-inputs/003-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "decompiled/client/captures/graphics-client-first/008-pseudocode.c",
+        "analysis/graphics/surface-flag-producers.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061da0",
+      "proposed_name": "Geometry_EnableVertexArrayUsingVboOrCpu",
+      "subsystem": "graphics",
+      "summary_ru": "Подключает position float3 array со stride28 из VBO или CPU array; allocation не выполняет.",
+      "confidence": "high",
+      "details_ru": [
+        "Если 104cdf8c==0 ничего не делает, даже при ненулевом VBO104cdf88. Если оба nonnull:BindBuffer(ARRAY_BUFFER,VBO),VertexPointer(3,FLOAT,28,0),backend104cdf94=2,EnableClientState(VERTEX_ARRAY).",
+        "Если CPU pointer nonzero,VBO0:VertexPointer(3,FLOAT,28,CPU),backend=1,EnableClientState. CPU branch не делает явный BindBuffer(0),а null branch не очищает прежний backend/state; корректность окружающего binding lifecycle важна."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-tangents/000-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10061e10",
+      "proposed_name": "Geometry_DeleteVboVertexArrayAndFaceExtras",
+      "subsystem": "graphics",
+      "summary_ru": "Удаляет VBO и освобождает две CPU allocation, обнуляя владельцев; это teardown, не constructor.",
+      "confidence": "high",
+      "details_ru": [
+        "VBO104cdf88!=0: печатает ClearingVBO,DeleteBuffers(1,&id),затем id=0. CPU vertexarray104cdf8c!=0 и faceextras104cdf90!=0: diagnostic,free thunk100f7be4(pointer),pointer=0.",
+        "Не сбрасывает 104cdf94 и не отключает client arrays в этом body; повторный вызов с уже нулевыми владельцами no-op. Папка tangent-constructor не задаёт роль entry; настоящий builder10061eb0 отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-tangent-constructor/000-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "decompiled/client/captures/graphics-hud-lifetime-producers/001-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100621f0",
+      "proposed_name": "FragmentProgram_UploadValidateOrRangecheckFailure",
+      "subsystem": "graphics",
+      "summary_ru": "Загружает ARB program и принимает только errorPos=-1/isNative=1; failure не является обычным false return.",
+      "confidence": "high",
+      "details_ru": [
+        "ProgramStringARB(arg1,arg2,arg3,arg4);GetIntegerv(PROGRAM_ERROR_POSITION_ARB=864b);GetProgramivARB(FRAGMENT_PROGRAM_ARB=8804,PROGRAM_UNDER_NATIVE_LIMITS_ARB=88b6). Query targetfragment фиксирован независимо arg1.",
+        "Success ASM сохраняет EAX1 и возвращает после cookie check; decompiler void не описывает ABI. Failure prints errorPos/isNative,копирует 63bytes из source+errorPos в stack,затембезусловно CALL100b4bae (__report_rangecheckfailure),далее INT3. В данной функции нет normal failure return0.",
+        "Нет проверки negative/out-of-range errorPos перед copy или длиныоставшегося source. Нативный драйвер error path не запускался; runtime crash/survival не проверялся. Не превращать этот путь в доказанный graceful fallback."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/006-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "analysis/client-queue/fragment-upload.asm",
+        "analysis/client-queue/cookiecheck-preserves-eax.asm"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10062280",
+      "proposed_name": "Surface_AppendLinkedChainAtTail",
+      "subsystem": "graphics",
+      "summary_ru": "Приклеивает surface/chain к хвосту списка по next+28, не очищая new.next.",
+      "confidence": "high",
+      "details_ru": [
+        "Если*head==0 устанавливает*head=arg2;иначе проходит next+28 до NULL иставит tail.next=arg2. Arg2 может представлять wholechain.",
+        "Нет allocation,сортировки,дедупликации,cycle detection илиобнуления arg2+28. Вызывать для already-linked элементабезучёта ownership опасно; собственный helper не проверяет такие условия."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bindings/007-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100622c0",
+      "proposed_name": "SurfacePass_ResetQueuesCachesAndTextureChains",
+      "subsystem": "graphics",
+      "summary_ru": "Начинает surface pass: очищает queues/cache и world texture chains, выбирает UV arrays и snapshot active-light presence.",
+      "confidence": "high",
+      "details_ru": [
+        "DisableBLEND,DepthMask1,DepthFuncLEQUAL;zero heads104cde70/74/78/7c,flags104cdf80/84;104cdf98=1005bff0();zero64bucketheads104cde80..104cdf7c.",
+        "10062b60 resets software caches;10062fe0(0,2),(1,1),(3,2) задаёт lightmap/base/lightmapUV. World=GetEntityByIndex(0)->model+b94;loopmodel texturecount+170/table+174 обнуляет каждой texture head+1c.",
+        "1005bff0 ASM scans32customlights stride7c,проверяя expiration>=time и radius!=0,returnsboolean. Поэтому 104cdf98 snapshot наличия activecustomlights,не hardwarecapability. World/texture pointers не NULL-checked данным body."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-inputs/006-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "analysis/client-queue/active-light-query.asm",
+        "decompiled/client/captures/shader-pass-inputs/000-pseudocode.c",
+        "analysis/graphics/studio-lighting-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100626e0",
+      "proposed_name": "SurfacePass_CompleteDeferredDiffuseAndAmbient",
+      "subsystem": "graphics",
+      "summary_ru": "Обходит 64deferred lightmap buckets: при 2units умножает diffuse,потом additiveambient и перекладывает surfaces в base chains.",
+      "confidence": "high",
+      "details_ru": [
+        "Всегда 100630e0(2,0,0).Если 104cdf80==0 дальше return. Иначе EnableBLEND,DepthMask0,DepthFuncEQUAL,stages(1,0,0,0),unit0coords lightmap.",
+        "Ровно 2units:BlendFunc(ZERO,SRC_COLOR),unit0diffuse101cbf74+bucket,drawall via10061d80. Затемдлявсех units BlendFunc(ONE,ONE),unit0ambient101cbf70+bucket,draw;сохраняет next+28 перед 10060de0,котораяперепривязывает next.",
+        "Функция неочищает bucketheads или flag104cdf80 и не восстанавливает blend/depth state вконце;эточасть passpipeline,не самодостаточный draw/reset."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-inputs/004-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/graphics/native-gl-dispatch-map.json",
+        "analysis/graphics/gl-optional-dispatch-map.json",
+        "analysis/graphics/shader-pass-contracts.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10062b60",
+      "proposed_name": "TextureState_InvalidateFourUnitSoftwareCaches",
+      "subsystem": "graphics",
+      "summary_ru": "Обнуляет 16DWORD software state и ставит sentinel10 stage modes /4 coordinate modes длячетырёх units.",
+      "confidence": "high",
+      "details_ru": [
+        "104cdfb0..104cdfec=0 (16DWORD),104cdff0..fffc=10 (4stage mode),104ce000..000c=4 (4coord mode). Не вызывает GL и не обнуляет gpu textures.",
+        "10060e10 использует 104cdfb0..bc как bindingcache для TEXTURE0..3;10062f10 сравнивает stagecache сновым mode;10062fe0 сравнивает coordcache. Sentinel10/4 лежат внеиспользуемых switch modes ифорсируютследующую setup;рольоставшихся 12zeroDWORD полностьюневыведена."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-bump/002-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/client-queue/texture-binding-cache.asm",
+        "analysis/client-queue/texture-stage-cache.asm",
+        "decompiled/client/captures/shader-pass-inputs/000-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006e740",
+      "proposed_name": "InitHUD_CallbackAdapterWithExplicitSuccess",
+      "subsystem": "graphics",
+      "summary_ru": "Wrapper InitHUD передаёт HUD1018a0c0 и engine callbackargs в 1006fe00,послевозвратаставит EAX1.",
+      "confidence": "high",
+      "details_ru": [
+        "Регистрация 1006cf00 связывает InitHUD. ASM pushesbuffer,size,name,HUDpointer;CALL1006fe00;cleanup16;EAX=1. Это stackHUDargument,не ECXthis.",
+        "Callee сбрасывает HUDstates,dispatches registeredHUD Initcallbacks(vtable+18),условноинициализирует Cg/water по APImode1. Wrapper сам payload нечитает и не гарантируетуспех driver initialization. Прямогосброса blurfields+328/+31b0 в caller/callee body нет;indirectcallbacks отдельны."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-routing/005-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/client-queue/inithud-wrapper.asm",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-material-state/003-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006e9a0",
+      "proposed_name": "ResetHUD_CallbackAdapterPreservingHandlerResult",
+      "subsystem": "graphics",
+      "summary_ru": "Wrapper ResetHUD передаёт HUDpointer и callbackargs в 100714b0,сохраняя EAX результат.",
+      "confidence": "high",
+      "details_ru": [
+        "Регистрация 1006cf00 связывает ResetHUD. ASM pushesbuffer,size,name,HUD1018a0c0;CALL100714b0;cleanup16;return безперезаписи EAX. Callee normalreturn1;voidwrapperpseudo неполон.",
+        "Callee dispatches Resetcallbacks(vtable+14),clears HUD/gameviewfields,resetinventory иособый stress-test режим. Имя ResetHUD неявляетсядоказательствомсбросавсех graphics globals;непрямыевызовыостаютсявотдельномконтракте."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-blur-material-routing/004-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "analysis/client-queue/resethud-wrapper.asm",
+        "decompiled/client/captures/graphics-client-first/005-pseudocode.c",
+        "decompiled/client/captures/graphics-blur-material-state/002-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10094730",
+      "proposed_name": "Vector3_ToggleAllFloatSignBitsInPlace",
+      "subsystem": "graphics",
+      "summary_ru": "Побитно меняет sign у трёх 32-битных компонентов vector на месте.",
+      "confidence": "high",
+      "details_ru": [
+        "Каждый DWORD ^=0x80000000. Не умножение integer и не перестановкаосей;для IEEEfloat меняетзнаквключая±0/NaNsign,сохраняяостальные bits.",
+        "Builder10061eb0 вызываетдля plane normal при PLANEBACK. Собственный helper непроверяет pointer/length иневыполняет normalize."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-vector-helpers/001-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "decompiled/client/captures/shader-pass-tangent-build/000-pseudocode.c"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100947c0",
+      "proposed_name": "Vector3_NormalizeInPlaceReturnOriginalLength",
+      "subsystem": "graphics",
+      "summary_ru": "Нормализует три float только при ненулевой длине и возвращает исходную float длину через x87.",
+      "confidence": "high",
+      "details_ru": [
+        "Вычисляет float sum(x*x+y*y+z*z),sqrt с doubleintermediate,сужает length до float. Если length!=0:component*=1/length;иначе vectorunchanged. Returnfloat10 представляетисходнуюсуженнуюдлину.",
+        "Нет epsilon fallback,finitecheck или обработки NULL. Используется tangentbuilder и localviewdecay;непредполагает orthogonalization или crossproduct. Не утверждатьвсегда unitlength для NaN/overflow inputs."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/shader-pass-vector-helpers/000-pseudocode.c",
+        "analysis/client-queue/contract-shader.md",
+        "analysis/client-queue/evidence-shader.json",
+        "decompiled/client/captures/shader-pass-tangent-build/000-pseudocode.c"
+      ]
+    }
+  ]
+}

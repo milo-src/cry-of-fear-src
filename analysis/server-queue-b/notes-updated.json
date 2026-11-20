@@ -1,0 +1,85 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x10017ad0",
+      "proposed_name": "CBaseEntity_CancelThink",
+      "subsystem": "entity-core",
+      "summary_ru": "Сбрасывает планирование think с учётом привязок.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Всегда обнуляет desired deadline this+58; при parent+14==0 и child+1c==0 также сбрасывает pev.nextthink+104 и cached deadline+5c. Callback pointer+78 не очищается.",
+        "Scheduler/AssistList, correction mode и движение дочерних объектов теперь разобраны в contract-parent.md; порядок внешних engine callbacks и полная pusher physics остаются открытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/graphics-server-lights/007-pseudocode.c",
+        "decompiled/server/partial-pass/functions/0x10017ad0.c",
+        "analysis/graphics/server-effects.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-queue-b/asm-parent/10017ad0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c3e50",
+      "proposed_name": "CBaseEntity_RunPendingAssist",
+      "subsystem": "entity-core",
+      "summary_ru": "Обслуживает отложенные действия вспомогательной системы сущностей.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "При отсутствии flag80 возвращает0. Иначе снимает80 и последовательно обрабатывает800 (virtual0),400 (DesiredInfo),200 (100c41b0, восстановление снимков скоростей),100 (virtual+e0 think), возвращая1.",
+        "Каждый action flag очищается до действия; flags перечитываются между стадиями. Diagnostic400 разыменовывает первого child без NULL guard. При doingDesired callback может рекурсивно запросить новую работу; это не неизменяемый снимок flags.",
+        "Смысл virtual0 зависит от vtable конкретной сущности; весь virtual method этим dispatcher не восстановлен."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/graphics-server-light-protocol/003-pseudocode.c",
+        "decompiled/server/partial-pass/functions/0x100c3e50.c",
+        "analysis/graphics/server-effects.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-queue-b/asm-parent/100c3e50.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c44e0",
+      "proposed_name": "CBaseEntity_AddToAssistList",
+      "subsystem": "entity-core",
+      "summary_ru": "Добавляет сущность в связный список отложенной обработки.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Если entity.next+3c!=0, ничего не делает. Иначе проверяет sentinel10223190: при NULL диагностирует и возвращается. Обходит список начиная с sentinel+3c до tail; если tail!=entity, пишет tail.next=entity.",
+        "Sentinel — объект, а не сам первый элемент. Entity.next в этом теле не обнуляется, он уже обязан быть0 для входа. Нулевой next сам по себе не исключает повторное добавление tail: отдельное сравнение tail==entity сохраняется. Нет защиты от циклического списка или лимита обхода."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/graphics-server-light-protocol/004-pseudocode.c",
+        "decompiled/server/partial-pass/functions/0x100c44e0.c",
+        "analysis/graphics/server-effects.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-queue-b/asm-parent/100c44e0.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c48b0",
+      "proposed_name": "CBaseEntity_RequestAssist",
+      "subsystem": "entity-core",
+      "summary_ru": "Помечает сущность для вспомогательной обработки.",
+      "confidence": "высокая для описанного статического поведения",
+      "details_ru": [
+        "Ставит pending flag80 в entity+60. При doingDesired1022318c!=0 сразу вызывает100c3e50(entity), иначе100c44e0(entity). Аргумент, потерянный Ghidra, подтверждён ASM.",
+        "Здесь нет frame wait, обновления deadline или snapshot flags. Немедленный путь допускает рекурсивный dispatch; планирование времени и correction flags принадлежат10017110/100171b0/100c4880."
+      ],
+      "evidence_paths": [
+        "decompiled/server/captures/graphics-server-lights/008-pseudocode.c",
+        "decompiled/server/partial-pass/functions/0x100c48b0.c",
+        "analysis/graphics/server-effects.md",
+        "analysis/server-queue-b/contract-parent.md",
+        "analysis/server-queue-b/evidence-parent.json",
+        "analysis/server-queue-b/asm-parent/100c48b0.asm"
+      ]
+    }
+  ]
+}

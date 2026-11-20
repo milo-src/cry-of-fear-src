@@ -485,6 +485,8 @@ def organize_catalog(old_lines, blocks, progress):
               "  python tools/catalog_decompiled.py --show server:0x100e4410",
               "  python tools/catalog_decompiled.py --mechanic doors",
               "  python tools/catalog_decompiled.py --section workboard",
+              "  python tools/catalog_decompiled.py --pending client --limit 20 --offset 0",
+              "  --pending выдаёт только записи без REVIEW, включая шаблоны и символы; offset — позиция в текущей очереди.",
               "  PowerShell: Get-Content decompiled/FUNCTION_CATALOG.txt -Encoding utf8 | Select-Object -Skip (СТРОКА-1) -First 100",
               "  Без параметров генератор обновляет опись и номера строк; REVIEW и WORKBOARD сохраняются.",
               "  Поиск: полный ID включает DLL, например server:0x100183d0. Один адрес без модуля неоднозначен.", "",
@@ -602,8 +604,33 @@ def organize_catalog(old_lines, blocks, progress):
     return result
 
 
-def read_catalog(find=None, show=None, mechanic=None, section=None, limit=20):
+def pending_records(text, module="all"):
+    """Queue saved address records without REVIEW, including structural labels."""
+    rows = []
+    for match in FUNCTION.finditer(text):
+        key, body = match[1], match[0]
+        if module != "all" and key.split(":", 1)[0] != module:
+            continue
+        if REVIEW.search(body):
+            continue
+        rows.append((key, review_field(body, "Символ тела"),
+                     review_field(body, "Статус"), review_field(body, "Файл")))
+    return sorted(rows)
+
+
+def read_catalog(find=None, show=None, mechanic=None, section=None, limit=20,
+                 pending=None, offset=0):
     text = CATALOG.read_text(encoding="utf-8")
+    if pending is not None:
+        if limit < 1 or offset < 0:
+            raise SystemExit("--limit must be positive and --offset nonnegative")
+        rows = pending_records(text, pending)
+        for key, name, status, path in rows[offset:offset + limit]:
+            print(f"{key} | {name} | {status}\n  {path}\n"
+                  f"  python tools/catalog_decompiled.py --show {key}")
+        print(f"Without REVIEW: {len(rows)}; shown {len(rows[offset:offset + limit])}; "
+              f"offset {offset}. Saved corpus only; not a whole-game completeness estimate.")
+        return
     if show is not None:
         for m in FUNCTION.finditer(text):
             if m[1] == show.lower():
@@ -832,11 +859,16 @@ if __name__ == "__main__":
     reading.add_argument("--show", help="Read one function by module:0xaddress")
     reading.add_argument("--mechanic", help="Read a mechanic guide and its short function index")
     reading.add_argument("--section", help="Read a section by its stable ID")
+    reading.add_argument("--pending", nargs="?", const="all", choices=["all", *MODULE_NAMES],
+                         help="List saved addresses without REVIEW, optionally by module; no regeneration")
     parser.add_argument("--limit", type=int, default=20, help="Maximum search matches (default 20)")
+    parser.add_argument("--offset", type=int, default=0, help="Skip this many --pending entries (default 0)")
     args = parser.parse_args()
-    if any(value is not None for value in (args.find, args.show, args.mechanic, args.section)):
+    if args.offset and args.pending is None:
+        parser.error("--offset requires --pending")
+    if any(value is not None for value in (args.find, args.show, args.mechanic, args.section, args.pending)):
         if args.notes:
             parser.error("--notes cannot be combined with a read-only operation")
-        read_catalog(args.find, args.show, args.mechanic, args.section, args.limit)
+        read_catalog(args.find, args.show, args.mechanic, args.section, args.limit, args.pending, args.offset)
     else:
         build(args.notes)

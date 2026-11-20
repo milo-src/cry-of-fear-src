@@ -1,0 +1,375 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x101204c0",
+      "proposed_name": "CGlobalState_Constructor",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Инициализирует объект списка глобальных состояний и возвращает this.",
+      "details_ru": [
+        "ASM сохраняет ECX, вызывает Init10121520 и возвращает исходный this в EAX; void в C не передаёт возвращаемый указатель.",
+        "Init обнуляет только head+0/count+4; освобождения прежних узлов здесь нет. Это не эквивалент ClearStates."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101204c0.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-101204c0.asm",
+        "decompiled/server/partial-pass/functions/0x10121520.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10121520",
+      "proposed_name": "CGlobalState_Init",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Обнуляет голову и число записей глобального списка.",
+      "details_ru": [
+        "Записывает DWORD0 в this+0 и this+4. Не проходит узлы и не вызывает освобождение.",
+        "Используется конструктором и в конце ClearStates. Адрес singleton10232278 подтверждён непосредственными ECX в wrappers, а не предположением о runtime-памяти."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10121520.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10121520.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101204d0",
+      "proposed_name": "CGlobalState_ClearStates",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Освобождает связанный список глобальных записей и сбрасывает head/count.",
+      "details_ru": [
+        "Для каждого head кэширует next+64 до вызова release101714d1(node); после обхода tail-jump в Init10121520.",
+        "Узел содержит inline name[64], levelName[32], state+60, next+64; отдельного освобождения строк нет. Семантика allocator helper за границей данного прохода."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101204d0.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-101204d0.asm",
+        "decompiled/server/partial-pass/functions/0x10121520.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10120670",
+      "proposed_name": "CGlobalState_EntityAdd",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Выделяет узел 0x68 и добавляет имя, карту и состояние в начало глобального списка.",
+      "details_ru": [
+        "Thiscall, три stack arguments (name string-id, map string-id, state), RET0c. Allocate10171536(0x68,1), next=old head, head=new; строки копируются из globals.stringBase+ID, затем state+60 и count++.",
+        "Две NUL-копии в name+0 и levelName+40 не ограничены размерами массивов. В этом теле нет проверки allocation failure, дубликата, длины или диапазона state.",
+        "Восстановление передаёт адреса временных строк минус stringBase; Add немедленно копирует содержимое, поэтому не сохраняет указатели на stack. Новая запись затеняет старую одноимённую при Find."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10120670.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10120670.asm",
+        "decompiled/server/partial-pass/functions/0x10120770.c",
+        "decompiled/server/partial-pass/functions/0x10121550.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10120770",
+      "proposed_name": "CGlobalState_Find",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Ищет первую запись по точному имени в односвязном глобальном списке.",
+      "details_ru": [
+        "Нулевой name string-id немедленно возвращает NULL. Иначе сравнивает имя из stringBase+ID с inline node.name побайтно и с учётом регистра; переход к next+64.",
+        "Возвращает заимствованный указатель на узел, NULL при отсутствии; не копирует, не удаляет и не проверяет циклы. Из-за вставки в голову дубликаты выбираются от нового к старому."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10120770.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10120770.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101206e0",
+      "proposed_name": "CGlobalState_EntityFromTable",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Возвращает найденный узел через тонкую обёртку Find.",
+      "details_ru": [
+        "ASM после prologue/epilogue выполняет tail-jump10120770; сохраняется thiscall аргумент имени и возвращаемый EAX. Обеднённая void-декларация C не доказывает отсутствие аргумента или результата.",
+        "Указатель принадлежит списку и становится недействительным после ClearStates/Restore; отдельного владения эта обёртка не создаёт."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101206e0.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-101206e0.asm",
+        "decompiled/server/partial-pass/functions/0x10120770.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101206f0",
+      "proposed_name": "CGlobalState_EntityGetState",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Возвращает state найденной записи, либо Off/0 при отсутствии.",
+      "details_ru": [
+        "Вызывает Find10120770; найденная запись читается по +60, NULL преобразуется в0. Поэтому отсутствующая запись и существующая Off неразличимы этим API.",
+        "Raw diagnostic table1021bad0 связывает 0/1/2 с Off/On/Dead. Getter не ограничивает записанное значение этим диапазоном."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101206f0.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-101206f0.asm",
+        "decompiled/server/partial-pass/functions/0x10120770.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10120710",
+      "proposed_name": "CGlobalState_EntitySetState",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Обновляет state первой найденной записи без добавления отсутствующего имени.",
+      "details_ru": [
+        "Find(name), затем node+60=state только при ненулевом результате. Не меняет карту, порядок списка или count; нет clamp/проверки0..2.",
+        "UpdateOnRemove10102c50 передаёт Dead2. Отсутствующее имя при удалении остаётся отсутствующим, а не автоматически создаётся как Dead."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10120710.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10120710.asm",
+        "decompiled/server/partial-pass/functions/0x10120770.c",
+        "decompiled/server/partial-pass/functions/0x10102c50.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10120730",
+      "proposed_name": "CGlobalState_EntityUpdateLevel",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Переписывает имя карты существующей глобальной записи.",
+      "details_ru": [
+        "Find(name); при успехе NUL-копия stringBase+mapID в node+40, без явного лимита32. При отсутствии запись не создаётся.",
+        "DispatchRestore вызывает это до entity Restore для выбранной глобальной сущности; локального rollback имени карты при последующей ошибке нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10120730.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10120730.asm",
+        "decompiled/server/partial-pass/functions/0x10120770.c",
+        "decompiled/server/partial-pass/functions/0x10016c80.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10120620",
+      "proposed_name": "CGlobalState_DumpGlobals",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Печатает имя, карту и текстовое состояние каждого узла глобального списка.",
+      "details_ru": [
+        "Alert1 печатает -- Globals -- и затем %s: %s (%s) для node.name, node.levelName, label[state]; обход next+64, без изменения списка.",
+        "Три raw указателя1021bad0 содержат Off/On/Dead. Индекс state в этом теле не проверяется, хотя Add/Set не ограничивают его. Это статическое свойство, не доказательство достижимого сбоя."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10120620.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10120620.asm"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10121680",
+      "proposed_name": "CGlobalState_Save",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Сохраняет count и последовательность inline-полей глобальных записей.",
+      "details_ru": [
+        "ASM: thiscall ECX=global object, один stack CSave*, RET4, EAX0/1. WriteFields1011adc0(cGLOBAL,GLOBAL,this,1021b930,1), затем cGENT/GENT для узлов через table1021baa0 count3.",
+        "GLOBAL: type10 m_listCount offset4 count1. GENT: type14 name offset0 count64, type14 levelName offset40 count32, type10 state offset60 count1; все flags0. Head/next не сериализуются. Названия типов не выводятся из чужого SDK.",
+        "Любой WriteFields failure даёт0; обход ограничен count и NULL. Ранний конец списка возвращает1, не исправляя уже записанный count. Лишние узлы сверх count не записываются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10121680.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10121680.asm",
+        "decompiled/server/partial-pass/functions/0x1011adc0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10121550",
+      "proposed_name": "CGlobalState_Restore",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Пересоздаёт глобальный список из GLOBAL/GENT; загрузка не атомарна и меняет порядок узлов.",
+      "details_ru": [
+        "ASM: thiscall ECX=global object, один stack CRestore*, RET4, EAX0/1. Сначала ClearStates, затем ReadFields10117010 GLOBAL; старый список уже удалён при ошибке заголовка.",
+        "Сохраняет прочитанный count локально, обнуляет текущий count и читает столько GENT. Каждый успешный GENT добавляет через EntityAdd; ошибка возвращает0 с уже добавленной частью. count<=0 даёт пустой список и успех.",
+        "Поскольку Add вставляет в голову, успешная загрузка разворачивает порядок сериализованных узлов. При допустимых на уровне Add дубликатах это может менять первый результат Find; это вывод из кода, не runtime-проверка.",
+        "В этом слое нет верхней границы count. Временные name/map передаются как address-stringBase и сразу копируются. Общий формат/валидация ReadFields остаются отдельной границей."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10121550.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10121550.asm",
+        "decompiled/server/partial-pass/functions/0x101204d0.c",
+        "decompiled/server/partial-pass/functions/0x10117010.c",
+        "decompiled/server/partial-pass/functions/0x10120670.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101216f0",
+      "proposed_name": "SaveGlobalState_Callback",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Адаптирует EntityAPI SaveGlobalState к singleton CGlobalState_Save.",
+      "details_ru": [
+        "Raw EntityAPI102119f8 slot12=101216f0. Cdecl callback создаёт локальный writer через10116020(data), ECX=10232278, вызывает10121680(&writer), затем10116080.",
+        "Возвращённый boolean метода не проверяется и не становится явно обрабатываемой ошибкой callback. SEH cleanup не означает rollback сериализации."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101216f0.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-101216f0.asm",
+        "decompiled/server/partial-pass/functions/0x10116020.c",
+        "decompiled/server/partial-pass/functions/0x10116080.c",
+        "decompiled/server/partial-pass/functions/0x10121680.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10121610",
+      "proposed_name": "RestoreGlobalState_Callback",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Адаптирует EntityAPI RestoreGlobalState к восстановлению глобального singleton.",
+      "details_ru": [
+        "Raw EntityAPI102119f8 slot13=10121610. Локальный reader получает data в первом DWORD, поля+4=0,+8=1; ECX=10232278, вызов10121550(&reader), затем10116080.",
+        "Boolean Restore здесь не проверяется. Конкретные значения служебных полей reader доказаны, но их полная семантика и общий decoder не объявляются раскрытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10121610.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10121610.asm",
+        "decompiled/server/partial-pass/functions/0x10116020.c",
+        "decompiled/server/partial-pass/functions/0x10116080.c",
+        "decompiled/server/partial-pass/functions/0x10121550.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017b00",
+      "proposed_name": "FindGlobalEntity_ByClassAndGlobalName",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Возвращает первую сущность с globalname только при совпадении classname.",
+      "details_ru": [
+        "Вызов10118480(NULL,globalname,stringBase+globalnameID). Если сущность найдена, сравнивает её classname с переданным classnameID побайтно и с учётом регистра.",
+        "Несовпадение первого найденного класса печатает диагностическое сообщение и возвращаетNULL; поиск следующих одноимённых сущностей не продолжается. Результат заимствован; allocation здесь нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017b00.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10017b00.asm",
+        "decompiled/server/partial-pass/functions/0x10118480.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017e20",
+      "proposed_name": "CBaseEntity_MakeDormant",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Делает сущность dormant и перелинковывает origin без удаления глобальной записи.",
+      "details_ru": [
+        "pev.flags|=80000000, solid=0, movetype=0, effects|=80. Вызывает scheduler10017ad0 и SetOrigin10119fe0(this,pev.origin). Здесь нет явного обнуления velocity или удаления объекта.",
+        "Scheduler всегда обнуляет object+58; pev.nextthink+104 и object+5c очищаются только при object.parent+14==0 и object.children+1c==0. Нельзя описывать отмену всех think как безусловную.",
+        "Сам MakeDormant не меняет глобальный state. В DispatchRestore вызывается при несовпадении текущей карты и сохранённого levelName для не-Dead записи."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017e20.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10017e20.asm",
+        "decompiled/server/partial-pass/functions/0x10017ad0.c",
+        "decompiled/server/partial-pass/functions/0x10119fe0.c",
+        "decompiled/server/partial-pass/functions/0x10016c80.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10016c80",
+      "proposed_name": "DispatchRestore_GlobalEntityLifecycle",
+      "subsystem": "saving",
+      "confidence": "high",
+      "summary_ru": "Восстанавливает сущность, учитывает глобальный Dead/другую карту и накладывает global entity на существующую.",
+      "details_ru": [
+        "Raw EntityAPI slot8=10016c80. ASM исправляет void C: cdecl(edict,data,globalFlag), EAX=-1 только для найденной Dead2 в обычной ветке; остальные завершения0. NULL edict/private/data дают0.",
+        "Общая ветка получает ObjectCaps virtual+40, вызывает Restore+3c(reader), затем Spawn+2c при caps&4, иначе Precache+30; результат Restore не проверяет. Private data перечитывается после вызовов.",
+        "globalFlag==0: непустой pev.globalname ищется в singleton. Отсутствующее имя добавляется On1 с текущей картой; Dead2 возвращает-1; иной state при несовпадении текущей карты с node.levelName вызывает MakeDormant. Compare1000aba0 возвращает true при равенстве.",
+        "globalFlag!=0: читает ENTVARS во временный буфер, перематывает data+4/+8 по entry текущего индекса (table+28, index+1c, stride18, entry+8). Сравнивает data+554 с levelName найденного узла; перед node+40 нет NULL guard.",
+        "При равенстве ищет существующий globalname с тем же classname (10017b00); если нет —0. Кэширует data vector+544..54c и ставит reader+4=1; vector=original+saved mins-existing entity mins. UpdateLevel на текущую карту происходит до entity Restore.",
+        "После общего Restore перечитывает private data из edict, возвращает исходный data vector, затем при наличии entity делает relink через SetOrigin и virtual+a0. Назначение этого последнего callback и общий decoder/ошибки остаются отдельными границами; полный класс не объявляется восстановленным."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10016c80.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10016c80.asm",
+        "decompiled/server/partial-pass/functions/0x101206e0.c",
+        "decompiled/server/partial-pass/functions/0x10120670.c",
+        "decompiled/server/partial-pass/functions/0x10120730.c",
+        "decompiled/server/partial-pass/functions/0x10017b00.c",
+        "decompiled/server/partial-pass/functions/0x10017e20.c",
+        "decompiled/server/partial-pass/functions/0x1000aba0.c",
+        "decompiled/server/partial-pass/functions/0x10116c30.c",
+        "decompiled/server/partial-pass/functions/0x10119fe0.c"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10102c50",
+      "proposed_name": "CBaseEntity_UpdateOnRemove",
+      "subsystem": "entity-core",
+      "confidence": "high",
+      "summary_ru": "Отсоединяет сущность от служебных списков и помечает существующий globalname как Dead.",
+      "details_ru": [
+        "Если AssistList10223190==0, diagnostic и немедленный return: пропускается весь cleanup, включая Dead. Иначе удаляет this из цепи через+3c и обнуляет собственный link+3c при нахождении.",
+        "Удаляет this из parent.children(+14/+1c/+20). Для собственных детей кэширует sibling, вызывает100c4db0/100c4c90 со shared vector10222f34..3c и аргументом100, затем child.parent+14=0, child.sibling+20=0. Полная семантика этих helpers относится к parent/scheduler контракту.",
+        "При pev.flags&10000 проходит массив102238c0 из102238cc записей stride18, обнуляет record+8 при равенстве own pev. Назначение остальных полей массива здесь не установлено.",
+        "Непустой pev.globalname в конце передаёт EntitySetState(name,Dead2), без создания отсутствующей записи. Функция сама не освобождает entity/private data; название подтверждается её собственной диагностикой и связями."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10102c50.c",
+        "analysis/server-queue-a/contract-global.md",
+        "analysis/server-queue-a/evidence-global.json",
+        "analysis/server-queue-a/global-10102c50.asm",
+        "decompiled/server/partial-pass/functions/0x10120710.c",
+        "decompiled/server/partial-pass/functions/0x100c4db0.c",
+        "decompiled/server/partial-pass/functions/0x100c4c90.c"
+      ]
+    }
+  ],
+  "subsystems": []
+}
