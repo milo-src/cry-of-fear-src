@@ -1,0 +1,38 @@
+{
+  "source_capture": "analysis/local/graphics-music-routing",
+  "binary": "client.dll",
+  "binary_sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "functions": [],
+  "analyses": [
+    {
+      "file": "000-inspect_native_instruction.json",
+      "sha256": "58694d4492eacacdc7b3c6045d4d4360a23fb04042b9583ee52b397b4719d62b",
+      "evidence_id": "ev_0683f8417486de095189abfa737dc555e1f77bfeb8e832366d851e1933e92e73",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "ram:0x105440b0"
+      }
+    },
+    {
+      "file": "001-inspect_native_instruction.json",
+      "sha256": "a760d2132aa144e7268d7ab5626ea6de297dfefe07ac90b90e4c53239b25413d",
+      "evidence_id": "ev_f9d51119c6192b5caeef72b769751b4376e00254c6c1837bdab0bf56c69badb9",
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "operation": "inspect_native_instruction",
+      "parameters": {
+        "address": "ram:0x1007fa90"
+      }
+    }
+  ],
+  "failed_queries": []
+}

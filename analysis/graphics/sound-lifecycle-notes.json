@@ -49,12 +49,15 @@
       "confidence": "high",
       "details_ru": [
         "If a4==0 returns. If a4.byte0==0 calls1007f940, then1007f740 regardless of activation return. Assembly loads ESI=a4 and ECX=ESI before both call/tail-jump; both helpers act on local context. Activation sets byte0=1 even when backend is null.",
-        "Exact caller timing remains separate from this resolved dispatch body."
+        "Прямой caller установлен: HUD_Frame1001d440 вызывает updater после10074b80 и до1000b540. Частота callback и полный engine/frame ordering не установлены."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-hud-lifetime-owners/001-pseudocode.c",
         "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
-        "analysis/graphics/sound-lifecycle-contract.md"
+        "analysis/graphics/sound-lifecycle-contract.md",
+        "decompiled/client/captures/graphics-music-client/000-pseudocode.c",
+        "analysis/graphics/music-client-assembly/hud-update-call.asm",
+        "analysis/graphics/music-message-contract.md"
       ]
     },
     {
@@ -127,12 +130,16 @@
         "Requires engine a8 and context.byte0. Lazily stores GetLocalPlayer101b26d4 in context+4. Retained ac virtual20 receives clamp(volume,0,1); separate b0 virtual20 first receives clamp(MP3Volume,0,1).",
         "If GetClientTime()<cc+d0, reads time again; f=(time-cc)/d0. f>=.95 calls b0 virtual18 and returns. Otherwise q=int(MP3Volume*255-int(f*255)), v=clamp(q,0,255)/255; v<=.05 invokes virtual18, else virtual20(v). First stop returns; second does not.",
         "After fade, c4!=0 and b0!=null applies virtual20(clamp(int(c0)/255.0,0,1)), overriding earlier volume. No clear/drop of ac/b0 and no fade-field reset. Fade only runs strictly before cc+d0, with no positive-duration guard in body.",
-        "Producer of b0, nonzero fade/override field writers and update caller scheduling remain unresolved; exact x87/exceptional float-to-int semantics not claimed."
+        "Производители b0 раскрыты в1007fd50/10080300; fade-out start/duration задаёт10080780, общий setter1007fb50 также пишет эти поля. Updater вызывается через HUD_Frame. Ненулевые writers+c0/+c4, полный handle lifetime и точные x87/exceptional преобразования остаются открытыми."
       ],
       "evidence_paths": [
         "decompiled/client/captures/graphics-audio-activation/001-pseudocode.c",
         "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
-        "analysis/graphics/sound-lifecycle-contract.md"
+        "analysis/graphics/sound-lifecycle-contract.md",
+        "decompiled/client/captures/graphics-music-client/010-pseudocode.c",
+        "decompiled/client/captures/graphics-music-client/011-pseudocode.c",
+        "decompiled/client/captures/graphics-music-client/012-pseudocode.c",
+        "analysis/graphics/music-message-contract.md"
       ]
     }
   ]

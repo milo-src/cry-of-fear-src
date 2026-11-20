@@ -1,0 +1,44 @@
+{
+  "binary": "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\client.dll",
+  "sha256": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+  "target_executed": false,
+  "tool": "GNU objdump -d -Mintel",
+  "ranges": [
+    {
+      "start": "0x1007fad0",
+      "end_exclusive": "0x1007fc30",
+      "file": "wrappers.asm",
+      "sha256": "a0a8e2f401d6a9a498f7a3af251a5edcccf936da78bffd4991c6edfa84b1ee0f"
+    },
+    {
+      "start": "0x1001d440",
+      "end_exclusive": "0x1001d472",
+      "file": "hud-update-call.asm",
+      "sha256": "ae14af41efa42c00580f661550c0a1f7c6c8b30aba66577887a461dfc2e51b4e"
+    },
+    {
+      "start": "0x1006e350",
+      "end_exclusive": "0x1006e35f",
+      "file": "stopmp3-command.asm",
+      "sha256": "a7452fb1ca09612e657d859522f4dbef72455b2a817af4f06e747b88d4d7f64b"
+    },
+    {
+      "start": "0x1007fc30",
+      "end_exclusive": "0x10080850",
+      "file": "music-methods.asm",
+      "sha256": "1e2d45825eeef8f92e017593629cc22d9dd33605346bad68780367f39db7951a"
+    },
+    {
+      "start": "0x10070ee0",
+      "end_exclusive": "0x10071016",
+      "file": "playmp3-handler.asm",
+      "sha256": "eadcbe7dcd44a24eefa122cee75fafca7b599737cc1fd02f18205f6a5da3e9c2"
+    },
+    {
+      "start": "0x1006e8f0",
+      "end_exclusive": "0x1006e910",
+      "file": "playmp3-hook.asm",
+      "sha256": "c7ea629674a65e19e188530a7fd42271ab08c1f2eea04f73bc069795d067b027"
+    }
+  ]
+}

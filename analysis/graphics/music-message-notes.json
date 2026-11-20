@@ -1,0 +1,159 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x10070ee0",
+      "proposed_name": "HUD_HandlePlayMP3",
+      "subsystem": "audio",
+      "summary_ru": "Читает loop/play/duration/имя из PlayMP3 и передаёт запрос музыкальным wrappers.",
+      "confidence": "high",
+      "details_ru": [
+        "Begin(buffer,size), unsigned BYTE loop, unsigned BYTE play, signed-short COORD duration, STRING; strncpy в local256 без явного завершающего NUL после копирования. Общий bad-read flag явно не проверяет. При cl_downwiththesickness==1.0 заменяет имя на downwiththesickness.mp3.",
+        "play==0: flag1007fbf0(1), stop1007fc10(duration). Иначе при duration!=0 setter1007fb50(-1,-1,GetClientTime(),duration), затем loop1007fbb0(loop!=0), flag1007fbf0(0), play1007faf0(local256).",
+        "ASM доказывает четвёртый аргумент setter: duration сохранён до GetClientTime, затем три остальных аргумента и cleanup16. C ошибочно относит duration к callback и теряет его в setter. EAX=1 в хвосте; C void не отражает результат.",
+        "Play пишет +d4/+d8, но producer1007fd50 при замене трека очищает +cc/+d0/+d4/+d8. Это не доказанный fade-in. Если c4!=0, producer сохраняет raw pointer на local256 в+c8; достижимость и срок жизни требуют ненулевого writer+c4."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-message/000-pseudocode.c",
+        "analysis/graphics/music-client-assembly/playmp3-handler.asm",
+        "analysis/graphics/music-client-assembly/playmp3-hook.asm",
+        "decompiled/client/captures/graphics-music-wire/000-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/001-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/002-pseudocode.c",
+        "decompiled/client/captures/graphics-music-client/010-pseudocode.c",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080710",
+      "proposed_name": "Audio_SetBackendPause",
+      "subsystem": "audio",
+      "summary_ru": "При активном контексте и наличии backend синхронизирует поле паузы +bc и backend virtual+18.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=a4 доказан wrapper1007fbd0. Если byte0==0 либо a8==0, return0 без записи. Иначе +bc=bool(lowbyte argument), backend.virtual18(0/1), return1.",
+        "Backend virtual+18 с аргументом — отдельная операция от handle virtual+18 без аргумента. Семантика pause подкреплена caller V_CalcRefdef с ref_params.paused и getter1007fad0; конкретное имя внешнего virtual target не восстановлено."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-message/001-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/003-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "external/hlsdk-portable/common/ref_params.h",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100808b0",
+      "proposed_name": "MessageReader_ReadUnsignedByte",
+      "subsystem": "abi",
+      "summary_ru": "Читает unsigned byte с продвижением cursor; при недостатке данных выставляет bad-read и возвращает 0xffffffff.",
+      "confidence": "high",
+      "details_ru": [
+        "Если length105440b8 < cursor105440bc+1, bad105440c0=1, return0xffffffff без продвижения. Иначе cursor+=1 и zero-extend buffer105440b4[старый cursor].",
+        "Соседние105440b4/b8/bc/c0 — отдельные globals message reader; не путать с audio context полями по тем же числовым смещениям. Поведение при целочисленном переполнении cursor не проверялось."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-wire/000-pseudocode.c",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080910",
+      "proposed_name": "MessageReader_ReadCoordEighthUnits",
+      "subsystem": "abi",
+      "summary_ru": "Возвращает результат signed-short reader, умноженный на 0.125.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает10080a10, преобразует signed int во float и умножает на1/8. Диапазон корректного16-bit wire значения: -4096..4095.875 с шагом0.125.",
+        "Ошибка short reader(-1) превращается в -0.125; wrapper отдельно не проверяет bad-read. Значение само по себе не позволяет отличить ошибку от корректного wire short=-1. Это decoder, не доказательство округления/переполнения серверного WRITE_COORD."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-wire/001-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/002-pseudocode.c",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080a10",
+      "proposed_name": "MessageReader_ReadSignedShortLE",
+      "subsystem": "abi",
+      "summary_ru": "Читает два байта little-endian как signed16 и расширяет знак до int; при нехватке возвращает -1.",
+      "confidence": "high",
+      "details_ru": [
+        "Если length < cursor+2: bad-read=1 и return-1 без продвижения. Иначе cursor+=2; результат (short)(byte0 + byte1*256), затем signed int.",
+        "Использует общий buffer105440b4/length105440b8/cursor105440bc/bad105440c0; отдельного восстановления состояния при ошибке нет."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-wire/002-pseudocode.c",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x100b3340",
+      "proposed_name": "V_CalcRefdef_SyncAudioPauseAndView",
+      "subsystem": "camera",
+      "summary_ru": "Перед расчётом вида синхронизирует backend pause с ref_params.paused, затем сохраняет view globals и вызывает renderer helper.",
+      "confidence": "high",
+      "details_ru": [
+        "param DWORD[0x12] (offset0x48) соответствует paused в ref_params_t. При нуле DAT10559510=0 и unpause только если getter1007fad0 вернул ненулевой AL. При ненуле global=1 и pause только если getter вернул0.",
+        "Далее100af790(param), копирование vieworg изparam[0..2] в105595cc/d0/d4 и viewangles из[3..5] в105595f0/f4/f8; callback101b2668 с angles и тремя output vectors; затем1005fe90(param). Тела этих двух больших helpers этим разбором не закрываются.",
+        "Wrapper1007fbd0→10080710 управляет всем backend a8, а не только music handle b0. Export entry100b3340, query selector100b3383 находится внутри тела."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-wire/003-pseudocode.c",
+        "decompiled/client/captures/graphics-music-message/001-pseudocode.c",
+        "external/hlsdk-portable/common/ref_params.h",
+        "analysis/exports/client.csv",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fa90",
+      "proposed_name": "Audio_ActivateIfDisabledThenUpdate",
+      "subsystem": "audio",
+      "summary_ru": "При наличии контекста активирует его, если byte0 равен нулю, затем вызывает обновление независимо от результата активации.",
+      "confidence": "high",
+      "details_ru": [
+        "If a4==0 returns. If a4.byte0==0 calls1007f940, then1007f740 regardless of activation return. Assembly loads ESI=a4 and ECX=ESI before both call/tail-jump; both helpers act on local context. Activation sets byte0=1 even when backend is null.",
+        "Прямой caller установлен: HUD_Frame1001d440 вызывает updater после10074b80 и до1000b540. Частота callback и полный engine/frame ordering не установлены."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-hud-lifetime-owners/001-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
+        "analysis/graphics/sound-lifecycle-contract.md",
+        "decompiled/client/captures/graphics-music-client/000-pseudocode.c",
+        "analysis/graphics/music-client-assembly/hud-update-call.asm",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007f740",
+      "proposed_name": "Audio_UpdateRetainedSoundAndMusicVolume",
+      "subsystem": "audio",
+      "summary_ru": "Обновляет громкость сохранённого звука и музыки, вычисляет квантованное затухание и применяет локальное переопределение громкости.",
+      "confidence": "high",
+      "details_ru": [
+        "Requires engine a8 and context.byte0. Lazily stores GetLocalPlayer101b26d4 in context+4. Retained ac virtual20 receives clamp(volume,0,1); separate b0 virtual20 first receives clamp(MP3Volume,0,1).",
+        "If GetClientTime()<cc+d0, reads time again; f=(time-cc)/d0. f>=.95 calls b0 virtual18 and returns. Otherwise q=int(MP3Volume*255-int(f*255)), v=clamp(q,0,255)/255; v<=.05 invokes virtual18, else virtual20(v). First stop returns; second does not.",
+        "After fade, c4!=0 and b0!=null applies virtual20(clamp(int(c0)/255.0,0,1)), overriding earlier volume. No clear/drop of ac/b0 and no fade-field reset. Fade only runs strictly before cc+d0, with no positive-duration guard in body.",
+        "Производители b0 раскрыты в1007fd50/10080300; fade-out start/duration задаёт10080780, общий setter1007fb50 также пишет эти поля. Updater вызывается через HUD_Frame. Ненулевые writers+c0/+c4, полный handle lifetime и точные x87/exceptional преобразования остаются открытыми."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-audio-activation/001-pseudocode.c",
+        "analysis/graphics/hud-lifetime-assembly/1007fa90.asm",
+        "analysis/graphics/sound-lifecycle-contract.md",
+        "decompiled/client/captures/graphics-music-client/010-pseudocode.c",
+        "decompiled/client/captures/graphics-music-client/011-pseudocode.c",
+        "decompiled/client/captures/graphics-music-client/012-pseudocode.c",
+        "analysis/graphics/music-message-contract.md"
+      ]
+    }
+  ]
+}

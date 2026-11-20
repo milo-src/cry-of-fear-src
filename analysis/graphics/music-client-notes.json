@@ -1,0 +1,228 @@
+{
+  "functions": [
+    {
+      "module": "client",
+      "address": "0x1001d440",
+      "proposed_name": "HUD_Frame_UpdateAudioContext",
+      "subsystem": "audio",
+      "summary_ru": "Покадровый экспорт клиента вызывает обновление звукового контекста.",
+      "confidence": "high",
+      "details_ru": [
+        "Вход HUD_Frame — 1001d440, а селектор 1001d455 указывает на внутренний CALL 1007fa90. Порядок: 10074b80, звуковой update, 1000b540, 1000b370.",
+        "Прямой caller звукового обновления доказан. Частота callback и весь порядок внешнего движка этим телом не устанавливаются."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/000-pseudocode.c",
+        "analysis/graphics/music-client-assembly/hud-update-call.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1006e8f0",
+      "proposed_name": "HUD_ForwardMusicMessageToObject",
+      "subsystem": "audio",
+      "summary_ru": "Адаптер передаёт сообщение обработчику HUD с объектом 1018a0c0.",
+      "confidence": "high",
+      "details_ru": [
+        "Вызывает 10070ee0(&DAT_1018a0c0, arg1, arg2, arg3). Сам не разбирает пакет и не создаёт звуковой handle.",
+        "Формат сообщения и изменения музыкального контекста требуют тела 10070ee0, которое разбирается отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/001-pseudocode.c",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fad0",
+      "proposed_name": "Audio_QueryLocalPauseField",
+      "subsystem": "audio",
+      "summary_ru": "Возвращает в AL наличие контекста и ненулевого поля +bc.",
+      "confidence": "high",
+      "details_ru": [
+        "Проверяет a4 != null и dword(a4+bc) != 0. Не проверяет b0 или фактическое воспроизведение.",
+        "ASM меняет только AL: верхние байты EAX остаются от адреса a4. Декомпилированный int не означает полный числовой результат 0/1.",
+        "V_CalcRefdef100b3340 сравнивает этот байт с ref_params.paused по +0x48 и вызывает обёртку1007fbd0 только при несовпадении. Поле +bc хранит bool паузы, установленный10080710. Подробнее music-message-contract.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/003-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/003-pseudocode.c",
+        "decompiled/client/captures/graphics-music-message/001-pseudocode.c",
+        "external/hlsdk-portable/common/ref_params.h",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007faf0",
+      "proposed_name": "Music_RequestNamedTrackIfContextExists",
+      "subsystem": "audio",
+      "summary_ru": "Передаёт имя трека основному producer при наличии локального контекста.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM загружает ECX из 105440a4, проверяет null и вызывает 1007fd50 с одним stack-аргументом.",
+        "Таким образом in_ECX основного producer — локальный звуковой контекст; активация и backend проверяются внутри метода."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/004-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fb50",
+      "proposed_name": "Music_SetNonnegativeFadeParameters",
+      "subsystem": "audio",
+      "summary_ru": "Независимо записывает неотрицательные параметры в +cc, +d0, +d4 и +d8.",
+      "confidence": "high",
+      "details_ru": [
+        "При a4=null ничего не делает. Каждый argument >=0 записывается в соответствующее float-поле; отрицательный оставляет прежнее значение.",
+        "COMISS/JB также пропускает NaN. Первые два поля — начало и длительность fade по consumer 1007f740; потребление +d4/+d8 здесь не установлено."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/005-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fbb0",
+      "proposed_name": "Music_SetLoopRequestByte",
+      "subsystem": "audio",
+      "summary_ru": "Записывает младший байт аргумента в запрос зацикливания +dc.",
+      "confidence": "high",
+      "details_ru": [
+        "Требуется только наличие a4. Нормализации к 0/1 и проверки backend нет.",
+        "1007fd50 трактует нулевой/ненулевой +dc как loop=0/1, но для точного списка имён принудительно сбрасывает его."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/006-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fbd0",
+      "proposed_name": "Audio_ForwardPauseStateIfContextExists",
+      "subsystem": "audio",
+      "summary_ru": "Передаёт состояние в метод паузы 10080710 с локальным контекстом.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM доказывает ECX=105440a4; вызов выполняется только при ненулевом контексте.",
+        "10080710 требует byte0 != 0 и a8 != null, записывает bool аргумента в dword +bc и вызывает engine virtual+18(bool); return1 при выполнении, иначе0. Это отличается от stop sound-handle с тем же смещением.",
+        "V_CalcRefdef100b3340 вызывает эту обёртку только при несовпадении ref_params.paused и результата1007fad0. Полный маршрут описан в music-message-contract.md."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/007-pseudocode.c",
+        "decompiled/client/captures/graphics-music-wire/003-pseudocode.c",
+        "decompiled/client/captures/graphics-music-message/001-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fbf0",
+      "proposed_name": "Music_SetStateByteDD",
+      "subsystem": "audio",
+      "summary_ru": "Записывает младший байт аргумента в поле состояния +dd.",
+      "confidence": "high",
+      "details_ru": [
+        "Требуется только a4 != null; нормализации значения и проверки движка нет.",
+        "Stop 10080780 также пишет это поле: 1 перед остановкой, 0 после немедленной остановки. Полная семантика иных потребителей не установлена."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/008-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fc10",
+      "proposed_name": "Music_RequestStopIfContextExists",
+      "subsystem": "audio",
+      "summary_ru": "Передаёт float-длительность остановки в 10080780.",
+      "confidence": "high",
+      "details_ru": [
+        "ASM загружает ECX=105440a4 и передаёт float на стеке; при null не вызывает метод.",
+        "Команда LAB 1006e350 передаёт сюда 0.0, что доказано отдельным stopmp3-command.asm. Неудачный C-query LAB не создаёт новую карточку функции."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/009-pseudocode.c",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-assembly/stopmp3-command.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x1007fd50",
+      "proposed_name": "Music_StartNamedTrackOrRememberRequest",
+      "subsystem": "audio",
+      "summary_ru": "Проверяет повторы и отложенный режим, формирует путь mp3 и заменяет музыкальный handle.",
+      "confidence": "high",
+      "details_ru": [
+        "Guards: byte0 != 0, a8 != null, CheckParm(-nomusic,0)==0. Затем 16 регистрозависимых имён принудительно сбрасывают +dc ещё до dedup и pending.",
+        "При +c4 != 0 сохраняет исходный указатель argument в +c8 без копирования и возвращает EAX=0. Иначе сравнивает строки argument с ненулевым +c8 и с копией +36; совпадение возвращает 0. Общего отказа на null argument нет.",
+        "Обнуляет +cc/+d0/+d4/+d8. ASM восстанавливает потерянный variadic аргумент: формат <GetGameDirectory()>/mp3/<track>. API101b2724 — slot71 без параметров; C ошибочно приписывает ему track.",
+        "Останавливает прежний b0 через handle virtual+18; a8.virtual+8(path, loop,1,1,0,0) записывает новый b0. Loop определяется ненулевым +dc. При успехе virtual+20 получает clamp(MP3Volume,0,1), virtual+10 получает 0.",
+        "Даже при b0=null записывает +b8=1, копирует имя с NUL в +36 без видимого ограничения длины и возвращает EAX=1. Повтор после неудачи может блокироваться копией имени. +c8 не обновляется и не очищается; время жизни исходной строки не доказано."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/010-pseudocode.c",
+        "analysis/graphics/music-client-assembly/music-methods.asm",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md",
+        "analysis/graphics/music-literals.json",
+        "external/hlsdk-portable/engine/cdll_int.h",
+        "analysis/graphics/studio-existing-audit.md"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080300",
+      "proposed_name": "Music_StartOriginalPathWithoutNameDedup",
+      "subsystem": "audio",
+      "summary_ru": "Создаёт музыкальный handle по исходному пути без преобразования и проверки дублей.",
+      "confidence": "high",
+      "details_ru": [
+        "Guards: byte0 != 0, a8 != null и отсутствие -nomusic. Caller и связь его ECX с a4 ещё не установлены.",
+        "При +b8 != 0 вызывает stop прежнего b0; затем форматирует локальную строку по %s и снова вызывает stop существующего b0. При этом внешний create получает исходный argument, не локальный буфер.",
+        "a8.virtual+8(argument,0,1,1,0,0) записывает b0. Ненулевому handle передаёт MP3Volume без локального clamp и virtual+10(0).",
+        "+b8=1 и EAX=1 записываются даже при провале create; guards возвращают 0. Не сбрасывает fade, не меняет +36, не проверяет +dc/+c4. Полное владение старым handle не установлено."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/011-pseudocode.c",
+        "analysis/graphics/music-client-assembly/music-methods.asm",
+        "analysis/graphics/music-client-contract.md",
+        "analysis/graphics/music-literals.json"
+      ]
+    },
+    {
+      "module": "client",
+      "address": "0x10080780",
+      "proposed_name": "Music_StopImmediatelyOrScheduleFade",
+      "subsystem": "audio",
+      "summary_ru": "Останавливает музыкальный handle сразу либо записывает параметры затухания.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=a4 доказан обёрткой 1007fc10. byte0==0 возвращает 0; null backend или -nomusic возвращают 1 без остановки.",
+        "Рабочая ветка пишет +dd=1, сбрасывает +c4 и первый байт +36. При duration==0 вызывает b0.virtual+18, если handle есть, затем сбрасывает +b8/+cc/+d0/+dd.",
+        "При ненулевой duration сохраняет GetClientTime() в +cc и argument в +d0; fade выполняет update1007f740. Проверки положительности нет. ASM направляет NaN в fade-ветку, а +0/-0 в немедленную остановку.",
+        "Не обнуляет b0/+c8 и не освобождает handle; +d4/+d8 сохраняются. Возврат 1 не подтверждает фактическое прекращение звука."
+      ],
+      "evidence_paths": [
+        "decompiled/client/captures/graphics-music-client/012-pseudocode.c",
+        "analysis/graphics/music-client-assembly/music-methods.asm",
+        "analysis/graphics/music-client-assembly/wrappers.asm",
+        "analysis/graphics/music-client-contract.md"
+      ]
+    }
+  ]
+}

@@ -13,7 +13,7 @@ tracks owners/data/call relationships rather than proposing implementation.
 |105440a4|client-local allocated context; byte0 gates sound dispatch|1007f9e0 alloc/initialize,1007fb10 receiver,1007fa40 frees/nulls|
 |105440a8|pointer returned by imported irrklang::createIrrKlangDevice; ISoundEngine interface identity supported by decorated import|1007f9e0 assign,10080410 virtual sound creation,1007fa40 reference release|
 |105440ac|retained handle returned from engine virtual+8 in mode1|10080410 stores/uses;1007f740 applies current volume|
-|105440b0|separate music-like handle; producer not recovered in this bounded pass|1007f740 applies MP3Volume, fade and optional local override|
+|105440b0|separate retained music handle; assigned by1007fd50/10080300|1007f740 applies MP3Volume/fade/override;10080780 stops or schedules fade|
 
 The context a4, engine a8 and returned sound handle ac are separate objects.
 None is a GL manager or texture ID. Factory import supports the interface name
@@ -79,8 +79,9 @@ hash metadata are in analysis/graphics/hud-lifetime-assembly.
 if a4 is null it returns; if a4.byte0==0 it calls1007f940; it then calls1007f740
 regardless of the byte's value. Bounded1007fa90 assembly loads ESI=a4 and
 passes ECX=ESI to both1007f940 and1007f740 (the latter is a tail jump).
-The wrapper ignores activation's return value. Its caller/time scheduling is
-not yet contained in the saved C corpus.
+The wrapper ignores activation's return value. Its direct caller is now captured: HUD_Frame1001d440 invokes it after10074b80
+and before1000b540. Engine callback frequency remains unmeasured; see
+[music-client-contract.md](music-client-contract.md).
 
 ### Activation1007f940
 
@@ -145,10 +146,11 @@ f>=.95 returns early. No branch clears b0 or the fade fields.
 
 Virtual+18 is the same stop-like operation used in the existing mode2 sound
 path, and+20 is its volume operation. Concrete external ABI names beyond that
-observed behavior remain separate from the native slot contract. The producer
-of b0 and nonzero writers of+c0/+c4/+cc/+d0 are **not recovered in this pass**;
-initialization and consumption are now known, but this does not invent when a
-music track starts, how long its fade should last or who owns its final release.
+observed behavior remain separate from the native slot contract. The producers of b0 are now captured as1007fd50 and10080300. Stop10080780
+writes client time and duration into+cc/+d0; setter1007fb50 also writes them.
+PlayMP3 supplies stop duration through the signed-short COORD decoder. Nonzero
+writers of+c0/+c4 and final handle release remain unresolved. The connected
+contract is [music-message-contract.md](music-message-contract.md).
 
 ## Dispatch receiver and returned sound handles
 
@@ -218,9 +220,10 @@ argument. No GL cleanup is established by this forwarding wrapper.
 
 ## Exact next questions, kept bounded
 
-1. Caller scheduling of1007fa90, producer of105440b0 and nonzero writers of
-   context+c0/+c4/+cc/+d0. Activation, receiver ABI and update formulas are closed
-   for the saved bodies; these are the remaining input/owner edges.
+1. Nonzero writers of context+c0/+c4; lifetime/replay of raw pending pointer+c8;
+   consumers of+d4/+d8; caller/ECX of alternate producer10080300. Direct
+   HUD_Frame scheduling, b0 creation and stop/fade writers are now closed in
+   the music contracts. Full engine callback cadence remains unmeasured.
 2. External virtual target at adjusted a8 subobject vtable[0] and CRT heap
    internals beyond the resolved100f7be4→FID_conflict__free wrapper. The wrapper
    itself is closed in [hud-shutdown-followup.md](hud-shutdown-followup.md).
