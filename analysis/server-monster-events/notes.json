@@ -1,0 +1,172 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100b0670",
+      "proposed_name": "CGenericMonster_HandleAnimEventForward",
+      "subsystem": "monsters",
+      "summary_ru": "Передаёт animation event общему обработчику монстра через tail jump.",
+      "confidence": "high",
+      "details_ru": [
+        "Native PUSH EBP; MOV EBP,ESP; POP EBP; JMP100bf310, а не вызов noreturn. Сохраняет ECX=this и единственный stack event pointer; конечный RET4 принадлежит callee. RTTI/factory100b05e0 и raw vtable101ce36c+11c подтверждают CGenericMonster. Сама обёртка не фильтрует события и не сохраняет pointer."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100b0670.c",
+        "analysis/server-monster-events/100b0670-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bf310",
+      "proposed_name": "CBaseMonster_HandleAnimationEvent",
+      "subsystem": "monsters",
+      "summary_ru": "Обрабатывает общие animation event ID: scripted death/interrupt, targets, sounds, attachments, body и skin.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(this,event8), RET4; event+0 signed ID, +4 borrowed options pointer. Полная native jump table100bf794 фиксирует1000..1021; дополнительно2001/2002/2010. Неизвестный ID вызывает Alert2 Unhandled animation event %d for %s. Event/options NULL и длины не проверяются, владение не принимается.",
+        "1000 только при m_MonsterState+224==6 пишет pev.deadflag1 и health0;1010 при том же guard пишет deadflag0 и health=max_health.1001/1002 при pCine+34c!=NULL вызывают100fa450(0/1) с ECX=pCine.1003 FireTargets(options,this,this,3,0.0).",
+        "1004/1008 пропускаются только при spawnflags&2 и state1; иначе EmitSound100fc9f0(edict,4/2,options,1.0,2.0,0,100).1005 вызывает sentence-group helper100fe450(edict,options,1.0,2.0,0,100,-1),1009 делает то же только при RandomLong(0,2)!=0. Полный sentence selection helper здесь support, не новая REVIEW.",
+        "1018 EmitSound(edict,4,faster/faster_step.wav,1.0,0.8,0,RandomLong(0,10)+95).2010 аналогично zombie/claw_miss2.wav с pitch100.2001/2002 требуют pev.flags&200h; RandomLong(0,1) выбирает bodydrop3/4.wav, channel4 volume1 attenuation0.8 flags0 pitch100/90. Если waterlevel!=0, дополнительно water_splash.wav channel0 pitch100 и helper1011a2f0(this,0).",
+        "1016 atoi(options) выбирает GetAttachment; helper1011f900 получает origin by value,247,60.0,pev.velocity by value, затем ВТОРОЙ atoi(options) пишет pev.body.1019 аналогично attachment0 и45.0 без записи body.1011f900 передаёт lower helper10117770 origin*,global10222f28,247,CVTTSS2SI(size),velocity; полный эффект не объявляется восстановленным.",
+        "1020 classname exact monster_sewmo → pev.body=atoi(options); остальные SetBodygroup1000eb40(this,1,atoi(options)).1021 пишет pev.skin=atoi(options). Native ENTVARS descriptors подтверждают body114/skin110; диапазон atoi и индексы attachment/bodygroup здесь не проверяются. Default IDs1006/1007/1011..1015/1017 идут в diagnostic."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bf310.c",
+        "analysis/server-monster-events/100bf310-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c2010",
+      "proposed_name": "CBaseMonster_CopyEyeDiagnosticScratchToViewOffset",
+      "subsystem": "monsters",
+      "summary_ru": "Копирует незаполненный локальный вектор в view_ofs после helper, который координаты не возвращает.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=this, RET. GetModelPtr(pev.edict)→1000f230(model,&stackVector12). Native1000f230 при nonNULL лишь RET, при NULL tail-jump Alert; ни одна ветвь не пишет второй аргумент. Caller не инициализирует stackVector и безусловно копирует его12 bytes в pev.view_ofs178..180. Это реальное отличие от ожидаемого GetEyePosition, не восстановление координат из model.",
+        "После копирования сравнивает три float с global10222f34/38/3c через ordered equality (NaN не равен). При полном совпадении Alert2 classname has no view_ofs. Нет fallback/замены значений, проверки model результата или определённого return value. Содержимое stack и видимый runtime результат не установлены."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c2010.c",
+        "analysis/server-monster-events/100c2010-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa450",
+      "proposed_name": "Cine_SetInterruptPermissionUnlessLocked",
+      "subsystem": "monsters",
+      "summary_ru": "Записывает script permission DWORD, если spawnflag20h не запрещает изменение.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(cine,value), RET4. При cine.pev.spawnflags&20h ничего не меняет; иначе cine+3bc=value без bool normalization. Events1001/1002 передают0/1. Supporting Spawn100fbb90 инициализирует +3bc=!(spawnflags&20h); consumer100fa480 требует +3bc!=0, валидный target EHANDLE+18c и target.deadflag0. Полные условия прерывания сцены выше этой локальной ветви не покрыты."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa450.c",
+        "analysis/server-monster-events/100fa450-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa1a0",
+      "proposed_name": "CCineMonster_ResolveOrAllocatePrivateData",
+      "subsystem": "monsters",
+      "summary_ru": "Получает существующие private data edict или выделяет CCineMonster размером3c0h.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(entvars*), RET/EAX pointer. При NULL entvars вызывает CreateEntity slot21 и при успехе использует edict+80. Затем читает entvars+20c edict; если edict!=NULL и edict+7c private!=NULL, возвращает существующий pointer БЕЗ смены vtable, pev или проверки класса.",
+        "Иначе PvAllocEntPrivateData(edict,3c0h), при nonNULL пишет vtable101ddb68 (RTTI CCineMonster) и object+4=entvars, возвращает pointer. Собственного zero-fill/полного constructor нет. CreateEntity failure ведёт к dereference NULL+20c; private allocation failure делает XOR EAX,EAX; MOV [EAX+4],ESI. Это не безопасная ветвь returnNULL; Ghidra iRam00000004 скрывает её форму."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa1a0.c",
+        "analysis/server-monster-events/100fa1a0-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa4b0",
+      "proposed_name": "Cine_CancelSelfOrTargetnameGroup",
+      "subsystem": "monsters",
+      "summary_ru": "Отменяет собственную scripted entity либо найденную группу по targetname.",
+      "confidence": "high",
+      "details_ru": [
+        "ECX=cine, RET. При pev.targetname+1d0==0 передаёт собственный edict в100fba10. Иначе перебирает10118590(previous,stringbase+собственный targetname) начиная с NULL; каждому результату передаёт result.pev.edict в100fba10.",
+        "Для следующего поиска перечитывает targetname/stringbase после callback. Нет fallback на self при пустом результате, lifetime guard итератора или локальной проверки класса; фильтр scripted_sequence/action находится в100fba10. Это targetname, не pev.target."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa4b0.c",
+        "analysis/server-monster-events/100fa4b0-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa530",
+      "proposed_name": "CBaseMonster_CleanupScriptedState",
+      "subsystem": "monsters",
+      "summary_ru": "Отвязывает монстра от cinematic и выполняет death либо root-bone reposition/final-state ветвь.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(monster), RET/EAX0/1. Сохраняет oldCine=monster+34c. При nonNULL очищает oldCine.targetEHANDLE+18c и восстанавливает ТОЛЬКО movetype из oldCine+3b0; spawnflags100h сцены пишет monster.deadflag1. Saved solid+3b4/effects+3b8 не восстанавливаются, хотя producer100fb6b0 их сохраняет. Без oldCine пишет movetype4,solid3. Всегда pCine=0, own targetEHANDLE+18c=NULL, own pointer+c=0.",
+        "При deadflag==1: health0,framerate0,solid0,SetState100c2a70(8),deadflag2. SetSize оставляет mins, задаёт maxs=(прежние maxs.x,maxs.y,mins.z+2). Если oldCine существует и spawnflags&8, обнуляет Use80/Think78/Touch7c; иначе SUB_StartFadeOut1008ac50. Затем framerate0,movetype0,effects|20h,return0.",
+        "В прочей ветви только при oldCine и oldCine+370 (KeyValue m_iszPlay) nonzero: если !(spawnflags&80h), GetBonePosition0 выдаёт position/angles. XY distance sqrt(float(dy*dy+dx*dx)) конвертируется double→float; ordered distance<8 заменяет полученный bone vector прежним origin. Ставит origin.x/y=выбранные XY, но z=прежний z+1, flags|200h; вызывает DropToFloor.",
+        "DropToFloor<0 восстанавливает прежний xyz, но локально не снимает200h; ==0 ставит z=выбранный scratch.z (bone z либо прежний origin.z после distance<8) и снимает200h; >0 оставляет engine результат. Затем10119fe0(monster,&pev.origin) и effects|20h. Независимо от spawnflag80h сбрасывает m_Activity+214=0 при oldCine+370!=0. При отсутствии play эта группа действий пропускается.",
+        "После living ветви pev.enemy194=0. Ordered health>0 → idealState228=1; иначе (COMISS/JBE включает NaN при продолжающемся исполнении) conditions180|=100h,idealState8,deadflag1,вызов AI-trigger checker100bda70,deadflag0. В обоих случаяхreturn1. Return1 не означает живого здорового монстра; current state224 в этой ветви прямо не меняется. Полная trigger/fade/engine floor семантика остаётся в callees."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa530.c",
+        "analysis/server-monster-events/100fa530-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fba10",
+      "proposed_name": "Cine_CancelScriptedEntityByEdict",
+      "subsystem": "monsters",
+      "summary_ru": "Фильтрует scripted classname и завершает cinematic состояние связанного монстра.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(edict*), RET либо tail-jump1000aad0. Exact classname через edict+80 и stringbase должен быть scripted_sequence или scripted_action; иначе return. NULL edict не защищён: CMOV оставляет0 перед чтением classname, поэтому поздняя NULL ветвь factory не является надёжным guard.",
+        "Дважды вызывает100fa1a0(edict+80): первый result+368=0, второй targetEHANDLE+18c→10017790 private pointer. Если pointer и результат virtual+78 ненулевые, а monster.state224==6: scriptState348=2;100fa530 с ECX=monster; tail-jump1000aad0 с тем же ECX сбрасывает taskStatus22c/schedulePointer230/scheduleIndex234. Cleanup return игнорируется. GenericMonster virtual78=10013ef0 identity, но другие реализации остаются динамическими."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fba10.c",
+        "analysis/server-monster-events/100fba10-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fbb20",
+      "proposed_name": "Cine_SequenceDone",
+      "subsystem": "monsters",
+      "summary_ru": "Сбрасывает повторения сцены, завершает состояние переданного монстра и запускает finish callback/targets.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(cine,monster*), RET4. Cine+39c получает +398 (KeyValue m_iRepeats), +368=0. Если !(cine.spawnflags&4), Think78=SUB_Remove101028e0 и virtual+8(0.1f). Полная очередность scheduler относительно следующих вызовов не установлена.",
+        "Native MOV ECX,[EBP+8] перед100fa530: cleanup применяется к monster аргументу, НЕ cine this. Независимо от return затем cine.virtual+24c(monster), после него10102930(cine,NULL,3,0.0). Для concrete CCineMonster raw slot24c=100fafb0, выбирающий schedule/reset по cine+390; derived overrides не подменяются этим адресом.",
+        "Не очищает EHANDLE или pCine самостоятельно — это callee cleanup. Не проверяет monsterNULL, не отменяет finish/targets при cleanup0. Target helper10102930 уже разобран отдельно; сам метод не владеет указателями monster/cine."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fbb20.c",
+        "analysis/server-monster-events/100fbb20-0.asm",
+        "analysis/server-monster-events/evidence.json",
+        "analysis/server-monster-events/contract.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+# Решения монстра: hint nodes, укрытие, цели и награды
+
+Десять локальных entry оригинального server hl.dll разобраны статически по полному C и bounded native ASM. Адреса и offsets — hex; количества, расстояния и награды — decimal. DLL и игра не запускались. Имена функций аналитические, native RTTI/save descriptors используются только там, где сохранены доказательства.
+
+## Маршрут чтения
+
+- [Scheduler](../server-monster-scheduler/contract.md) → hint selection100be8e0 и lateral cover100bea60 → [pathfinding](../server-monster-pathfinding/contract.md).
+- GetEnemy100bed80 → current EHANDLE, RememberOldEnemy100c1670/RestoreOldEnemy100c15e0 → relationship100bf7f0.
+- Gun position100beef0 → MakeVectors с локальным m_HackedGunPos, без модели attachment.
+- Kill callers → reward100befc0 → random named item, counters и [TimerPlus MP protocol](../server-multiplayer-flow/contract.md).
+
+## Подтверждённые поля
+
+| Объект | Offset | Роль |
+|---|---|---|
+| Monster |180| conditions |
+| Monster |184/188| current enemy EHANDLE (edict, serial) |
+| Monster |194..1b3| четыре old-enemy EHANDLE |
+| Monster |1b4..1e3| четыре сохранённые Vector позиции |
+| Monster |230| schedule pointer; interrupt mask в schedule+8 |
+| Monster |2ec| m_afMemory |
+| Monster |2f4| m_vecEnemyLKP |
+| Monster |338| m_HackedGunPos, Vector |
+| Monster |354| m_iPlayerReact |
+| Node |50/52| unsigned hint type / signed activity |
+| Global |10225974| общий cursor hint search |
+| Recipient |638| увеличиваемый reward accumulator; readers отдельно |
+
+CGenericMonster vtable101ce36c: +138=relationship100bf7f0, +1e0=reject hint100be5a0, +208=GetEnemy100bed80,+228=gun position100beef0. Таблица и RTTI сохранены; это не утверждение об одинаковых overrides всех NPC. Save descriptors подтверждают monster fields. Engine TraceLine/MakeVectors остаются внешними вызовами, не наблюдавшимися в runtime.
+
+## Границы следующего разбора
+
+Derived best-enemy/hint/cover/localmove/classification callbacks; global hint cursor и graph mutations со стороны других функций; полный kill lifecycle, survival manager state и player reward readers; writers relationship matrix и полный диапазон class IDs; client TimerPlus. Полные body helpers current-handle/route описаны отдельно, новый пакет не обещает потокобезопасность общего graph/basis или безопасное поведение повреждённых объектов. Статические malformed paths сохранены буквально.

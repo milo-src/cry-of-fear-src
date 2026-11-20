@@ -1,0 +1,37 @@
+# Слух и запахи монстров: consumers и producers звукового пула
+
+Статический разбор12 original server actual C entries. Native SHA, bounded ASM, RTTI трёх классов, ENTVARS/MONSTER/четыре PLAYER descriptors и literal bytes сохранены в evidence.json. DLL/игра не запускались; код игры и ресурсы не менялись. Все offsets/адреса hex; величины8192/1000/400/384/512 — десятичные.
+
+## Навигация и модель данных
+
+Основа — [CSoundEnt pool](../server-sound-entity/contract.md):64 записи, index-1 sentinel; record+0 origin,+c type,+10 signed integer volume,+14 absolute expiry,+18 active/free next,+1c audible next. В данном пакете есть три consumers, обновление reserved player record, три danger producers гранаты, scent producer gib и необходимые mask/sensitivity/bounds helpers. Новых allocation/освобождения pool здесь нет.
+
+```text
+player100f86e0 → reserved slot(IndexOfEdict-1): origin,type,volume
+CGib WaitTillLand1008c9c0 → InsertSound(type10h,384,25s)
+CGrenade DangerSoundThink100b1360 → InsertSound(type20h,speed,0.2s)
+CGrenade PreDetonate100b1b70 → InsertSound(type20h,400,0.3s)
+CGrenade TumbleThink100b21a0 → InsertSound(type20h,400,0.1s)
+InsertSound10100820 → active pool → Listen100bfae0
+Listen → monster+2d4 head /+2d8 type union /+180 conditions
+       → record+1c общая временная chain
+BestSound100c1400 или BestScent100c1310 → nearest slot pointer
+```
+
+Native CGenericMonster vtable101ce36c: +1041000d5a0 (origin+view_ofs через output-pointer и EAX), +1e8 mask0, +1ec BestSound,+1f0 BestScent,+1f4 ST0 sensitivity1. CGrenade101ce8e0 имеет те же consumers и multiplier, но mask7. CGib101ac480 и обе эти таблицы используют IsInWorld10017660 в+cc и scheduler1000e1f0 в+8. Полученные slots не означают, что каждый callback вызывается для каждого класса в runtime.
+
+MONSTER native descriptors подтверждают conditions+180, state+224; ранее проверенный scheduler contract связывает schedulePointer+230. Поля+2d4 и+2d8 здесь названы по прямым read/write consumer, а не по внешнему SDK. Schedule+0c — mask, который Listen пересекает с virtual mask. Default mask0 generic monster не допускает запись, но cycle/NULL ошибки обхода остаются возможны: mask0 не означает ранний выход из active traversal.
+
+## Порядок и числовые контракты
+
+В Listen accepted records помещаются в голову audible chain, перезаписывая ИХ общий+1c. Для стабильной корректной active chain audible order получается обратным; другой monster может перезаписать эти links. Best выбирает первый строго ближайший элемент (ties не заменяют), а не самый громкий/новый. BestSound измеряет от virtual104, BestScent — от origin. Дополнительный строгий предел8192 существует даже при большем радиусе Listen.
+
+Сравнения с NaN приведены по ASM при продолжающемся исполнении: Listen отбрасывает unordered radius/distance, Best не выбирает unordered distance, IsInWorld не отбрасывает отдельный unordered component. Исключения FP/MXCSR и CRT sqrt error fallback1016be90 не моделировались в runtime. Расчёт norms не заменён обещанием double precision: квадраты/суммы native float32, затем sqrt double, затем float32. Danger speed конвертируется в int после этого округления.
+
+## Оставшиеся границы
+
+- Полные Grenade BounceTouch100b0fd0, Explode100b1540, Detonate100b1490, Smoke и spawn/setup ownership callback; здесь только конкретные writers Think+78 и их sequencing.
+- Полный lifecycle player field24e8, deadline22a0, внешние writers дополнительного type и flash; caller100ead70 уже REVIEW в другом пакете, но полный player noise feedback не подменён слухом монстра.
+- Все derived virtual sound masks/sensitivity/eye positions; native таблицы трёх классов не исчерпывают иерархию.
+- Конкретные AI schedule реакции после выбора best, ширина повреждённых цепей, управление lifetime между разными Listen, фактический engine frame/order и occlusion за пределами этих функций. Здесь нет wall trace; это не утверждение, что любой внешний AI код никогда не проверяет видимость.
+- Звуки для игрока/EmitSound/irrKlang не входят в данные CSoundEnt. Размер pool, время expiry и воспроизводимая громкость не смешиваются.

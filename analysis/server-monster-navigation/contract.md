@@ -221,7 +221,7 @@ Predicate1cc в CGenericMonster —10013480 EAX1 RET4, то есть в данн
 
 Продолжение graph helpers, producer сжатых маршрутов, graph load/save/reset/hash/cache теперь разобрано в [graph helpers](../server-graph-helpers/contract.md), [graph lifecycle](../server-graph-lifecycle/contract.md) и [route precompute](../server-graph-precompute/contract.md). Эти адреса исключены из pending. Подтверждены cached-pivot/start255, сохранение cache при Load и producer identity128→tag80; реальные данные карт не проверялись.
 
-Остаются полный builder100ca860, reorder100cf310, entity/viewer lifecycle, ёмкость route output у всех callers, внешние CRT/engine гарантии и derived overrides. Подробные открытые вопросы — в концах трёх пакетов; support не равен REVIEW.
+Builder, reorder и node/viewer lifecycle разобраны в [graph builder](../server-graph-builder/contract.md), [ordering](../server-graph-ordering/contract.md), [entities](../server-graph-entities/contract.md). Остаются ёмкость route output у всех callers, внешние CRT/engine гарантии и derived overrides. Подробные открытые вопросы — в концах трёх пакетов; support не равен REVIEW.
 
 Смежная анимация разобрана отдельно: [состояние и wrappers](../server-animation-state/contract.md)
 и [studio dispatch/controls](../server-studio-controls/contract.md). Эти пакеты не

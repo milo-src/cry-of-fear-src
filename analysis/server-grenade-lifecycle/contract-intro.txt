@@ -1,0 +1,44 @@
+# Оригинальная CGrenade: создание, контакт, взрыв и удаление
+
+Статический разбор оригинального server `hl.dll`, SHA-256 `751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641`. Только сохранённые C, ограниченные ASM, PE bytes/exports/RTTI/native descriptors. Бинарник не исполнялся; порт и RTX не изменялись. 15 новых primary entries, support не получает автоматический REVIEW. Смещения hexadecimal; обычные значения времени/counts decimal, если нет `h`/`0x`. Float/NaN свойства предполагают продолжающееся исполнение с masked exceptions; процессорные exception handlers не исследованы.
+
+## Маршруты
+
+```text
+factory 100b0f50 ← grenade export100b2390 (JMP)
+  ├ contact100b1bb0 → Spawn100b20f0 → DangerSoundThink100b1360
+  │                                → ExplodeTouch100b1950 → Explode100b1540
+  └ remote100b1c80 → SlideTouch100b1f30 / Use100b1520
+                    owner dispatch100b22e0 → Use → schedule Detonate100b1490
+Killed slot6c100b1b60 → Detonate → trace → Explode
+TumbleThink100b21a0 / PreDetonate100b1b70 → schedule Detonate
+Explode → messages + radiusDamage wrapper + debris → schedule Smoke100b1fb0
+Smoke → smoke/bubbles → lifecycle mark10119900 → engine removal later
+```
+
+[Bounce/danger sound и pool](../server-monster-senses/contract.md), [scheduler](../server-queue-b/contract-parent.md), [effects/removal](../server-event-effects/contract.md). Это локальный жизненный цикл CGrenade; полный damage core `1008a690`, engine collision/physics и все weapon callers ещё не закрыты. BounceTouch действует при назначении callback внешним producer: прочитанные contact/remote constructors назначают другие Touch. Полный timed-grenade producer и все производные классы не следует считать восстановленными из одного BounceTouch.
+
+## Native layout и ABI
+
+`this+4` — entvars pointer; `+78/+7c/+80` — Think/Touch/Use pointers. Vtable `101ce8e0`: `+2c=100b20f0` Spawn, `+6c=100b1b60` Killed, `+e0=1000e2a0` Think bridge, `+e4=1000e2b0` Touch bridge, `+e8=1000e2e0` Use bridge, `+244=100b0fc0` BounceSound. Native MONSTER save table называет `+308 m_flNextAttack`; `+368` — доказанный одноразовый sound latch без восстановленного исходного имени. Не смешивать эти offsets с entvars.
+
+ENTVARS descriptors: `+8 origin`, `+20 velocity`, `+50 angles`, `+5c avelocity`, `+b8 model`, `+108 movetype`, `+10c solid`, `+118 effects`, `+11c gravity`, `+120 friction`, `+12c sequence`, `+13c framerate`, `+170 takedamage`, `+194 enemy`, `+19c owner`, `+1a4 spawnflags`, `+1a8 flags`, `+1e4 dmg`, `+20c edict`. Factory size `36ch`; engine allocation zeroing остаётся внешним контрактом.
+
+TraceResult — 56 байт: int flags0/4/8/c, fraction+10, endPos+14, planeDist+20, normal+24, hitEdict+30, hitgroup+34. Native global trace helper10118b00 преобразует global float flags в int и возвращает output pointer в EAX. Для TraceAttack `Vector globals.v_forward` передаётся **по значению**12bytes; для tracing — указатели; constructors принимают origin/velocity **по значению**. Эти формы нельзя выводить только из неполных Ghidra declarations.
+
+Engine API base10222f48 и copy144DWORD подтверждены100b4aa0; header parser учитывает whitespace перед закрывающей скобкой. Native export ordinals/targets, RTTI hierarchy и все таблицы/константы сохранены в evidence.json. Support **1011fd90** связывает runtime model-index globals10231f10/18/14 со sprites/zerogxplode.spr, WXplo1.spr и steam1.spr;10231f1c — bubbles. Их runtime числовые значения зависят от engine precache, чтение WORD в messages доказано отдельно.
+
+## Wire граница
+
+| Ветка | Destination/type | Payload после Begin |
+|---|---|---|
+| Explosion | MSG_PAS5 / SVC_TEMPENTITY23 | BYTE3, COORDxyz, SHORT sprite, BYTEscale, BYTE15, BYTE0 |
+| Additional light | MSG_PAS5 / registered mydlight | COORDxyz, BYTE35, BYTE15, BYTE30 |
+| Smoke | MSG_PVS4 / SVC_TEMPENTITY23 | BYTE5, COORDxyz, SHORTsprite, BYTEscale, BYTE12 |
+| Underwater bubbles support | MSG_PAS5 / SVC_TEMPENTITY23 | BYTE113, COORDminsXYZ,maxsXYZ,height, SHORTsprite, BYTE100, COORD8 |
+
+Message id global1022655c зарегистрирован как `mydlight` size−1, не фиксированный numeric ID. Никаких изменений ресурсов или новых эффектов аудит не создаёт. Byte truncation/coordinate packing относятся к [original engine writer](../graphics/engine-wire-contract.md); клиентское отображение, значения mydlight и фильтрация recipients остаются отдельными контрактами.
+
+## Точные оставшиеся вопросы
+
+Полный radius damage `1008a690`, все virtual60/64 target overrides; geometry/trace callbacks engine; caller/signature игнорируемых24bytes100b18e0; producer, назначающий BounceTouch/timed grenade; полный набор100b1bb0/100b1c80/100b22e0 weapon callers; precache scheduling до Spawn; derived BounceSound overrides и save/restore специфичного latch+368. Сохранённые helper C/ASM позволяют проверить call/argument границы, но не означают автоматически закрытые подсистемы. В частности factory failure не является нормальным NULL return, `DetonateUse` лишь планирует, Smoke лишь маркирует удаление.

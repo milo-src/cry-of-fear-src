@@ -1,0 +1,150 @@
+{
+  "scope": "Independent static peer review of pass08; no target execution and no full-subsystem completeness claim",
+  "target_executed": false,
+  "packages": [
+    {
+      "package": "analysis/server-resource-precache",
+      "primary_count": 5,
+      "author": "root",
+      "reviewer": "client_catalog",
+      "result": "PASS",
+      "checked": "All5 primary C/ASM/contracts and notes; independent12C/13ASM/1777 byte rows/356raw,18 tables/127names/132 native calls. Noncontiguous range, three distinct rules NULL defaults, tokenizer signed bytes/late length check, model-count sprite loop, material uninitialized cursor/trailing delimiter and AL-only lookup checked.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "590ef82da30235df150878251bc36c5a95f21457ff4fb06b5dc974fb1cdabb1f",
+        "notes.json": "20ff4b74c247a864e8732563095c234b03e24b99ff53b0ce3bb90a6f40fd07de",
+        "evidence.json": "509b1993f241c395dec092575f5a093ba1b5ad6f797c1b522c4a9807bc0fe2b8",
+        "capture.py": "7e64b5e97d664305d35f8d900ba443e31bbe6dcbd70c4c076db5c34f7b900a86",
+        "verify.py": "3849570130733ffac06bbe1ad1cd4558e85e8079797864fff81962e7549098fb"
+      }
+    },
+    {
+      "package": "analysis/server-rules-bootstrap",
+      "primary_count": 11,
+      "author": "server_catalog",
+      "reviewer": "shader_inventory",
+      "result": "PASS",
+      "checked": "All11 primary C/ASM/contracts and notes; independent26C/27ASM/3783 byte rows/399raw; constructors/vtables/refresh/intermission/SP spawn-target-equipment; bounded large MP Think reader not marked fully reviewed. Old100013a0 AL-only return independently confirmed.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "e638985f938449c8b4d7eae7bb5b6cbfb8d305355567237fb9c2515f5d98a0d4",
+        "notes.json": "b49e7feee3973b1c03866dd85c901bb6d318124231a83fc848575fe9baea5ad7",
+        "evidence.json": "535a8a3e069957a0f28cde0e73a26fffba43bf0e98e82416584ba6e0a4cae9e3",
+        "capture.py": "021650fbcccd759d752aa1463e81441a306d99f7c1db46db986ec92a0bdb0ea6",
+        "verify.py": "ab392ba59425fdb349221af926c866756a4c674ffb1fff91fe1ab119797dd424"
+      }
+    },
+    {
+      "package": "analysis/server-sound-entity",
+      "primary_count": 18,
+      "author": "shader_inventory",
+      "reviewer": "server_catalog",
+      "result": "PASS",
+      "checked": "All18 primary C/ASM/contracts and notes; independent29C/29ASM/1531 byte rows/133raw;64-slot active/free lists, player reservation, invalid selector behavior, NaN expiry, stale/reset fields and virtual Think dispatch checked.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "335c310f3d1d19ff35c9ebec8e3594663029602144e13f05dc5834797306ed0a",
+        "notes.json": "c401b4d3f31f5e2bdf92760b4805e00354e1ce354ee25f2283f10dc7ec0e9f7e",
+        "evidence.json": "596613905115c0c6b8448cf35d94a9878414aa84a1ebd387bb6f195534c2091e",
+        "capture.py": "bedbe979ab4a82a616ccb1393e628a326a93be0d315daea4b6f2bdb699943cbf",
+        "verify.py": "c55cb9bc0626b3e6b124def67622b50129aec613d73193035c0bd424e3038198"
+      }
+    },
+    {
+      "package": "analysis/server-sentence-lifecycle",
+      "primary_count": 9,
+      "author": "client_catalog",
+      "reviewer": "root",
+      "result": "PASS",
+      "checked": "All9 primary C/ASM/contracts and notes; independent generic PE verification plus standalone18C/21ASM/904 byte rows/143raw/102save fields. RNG before guard, RadioIcon health COORD/RET10, repeated MSG_PAS with NULL recipient, pointer-identity exception, comparator3ASM branches, bounded direct-operand scan and mode order checked.",
+      "corrections": [
+        {
+          "finding": "Ambiguous comparator cleanup bit2 wording under ANDfffffffd.",
+          "resolution": "Clarified mask0x2 (bit1); no semantic code changes."
+        },
+        {
+          "finding": "Ignored full-disassembly cache was an undeclared required prerequisite for capture/verify.",
+          "resolution": "Cache is optional; capture can recreate it via static objdump, verifier recreates in memory. Explicit command/encoding/newline metadata saved. Both missing-cache paths tested independently by author; same16 refs and listing SHA, no target execution."
+        }
+      ],
+      "final_hashes": {
+        "contract.md": "c724cf8c224214b184fb3b7f47b30536771086ddfc51289cd987450c6b0f37e7",
+        "notes.json": "495af11ae911836ebaa87f9c20cd9e23afa0ac76b927645be6fca81e82c98ccf",
+        "evidence.json": "9fce7d1003c1b229539a75b413653f1cca178d4474367f0dd6b6e8dea65d6d50",
+        "capture.py": "6c6ffc350f8377f5526e0b5f2479650c064fb77b986cdde6b2fafcbc207062a5",
+        "verify.py": "a8c0b713934cdcd3709c8367be623a26308c5e8a60924d7d92c0f0d619fce3f5",
+        "notes-updated.json": "39f3842ea39e8e32747cb7dc2b8ed50b88ef51048d7817f7e8a1ee35a438f448"
+      }
+    }
+  ],
+  "prior_review_corrections": [
+    {
+      "function": "server:0x100013a0",
+      "change": "MOV AL,1;RET8 guarantees AL only, not EAX==1; prior facts/evidence retained.",
+      "reviewer": "shader_inventory"
+    },
+    {
+      "function": "server:0x100fe300",
+      "change": "Replaced obsolete comparator uncertainty with evidence-backed default ASCII/mapped/NULL branches; locale table/error helpers explicitly still open. Prior other facts/evidence retained.",
+      "reviewer": "root"
+    }
+  ],
+  "navigation_cleanup": "Updated workboard/topics and old world/sentence dependency lists. Historical pass06/pass07 reports remain snapshots, not silently refreshed to claim newer work.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-resource-precache/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "14ba90ad14c97af1892d31a2e6035cd008b3aecdf510365d4ce044e7f6c34d4b",
+          "new": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-rules-bootstrap/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "14ba90ad14c97af1892d31a2e6035cd008b3aecdf510365d4ce044e7f6c34d4b",
+          "new": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sentence-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sentence-groups/contract.md",
+          "old": "07aae4c004cb9496b761b8571ffa60298c9b8d14e94dcbe009b7be7ba16a6fba",
+          "new": "d31643dbada8e9c4081c8cc3a7ed92935b423f08ad55d7c3cff4d150b6f78917"
+        },
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "14ba90ad14c97af1892d31a2e6035cd008b3aecdf510365d4ce044e7f6c34d4b",
+          "new": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sound-entity/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "14ba90ad14c97af1892d31a2e6035cd008b3aecdf510365d4ce044e7f6c34d4b",
+          "new": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sentence-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sentence-groups/contract.md",
+          "old": "d31643dbada8e9c4081c8cc3a7ed92935b423f08ad55d7c3cff4d150b6f78917",
+          "new": "9c6dac3f1830b00c3ed92703f70323c8e8776e704d27cebf095f4eef94eddec6"
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@
 
 ## Быстрая карта связей
 
-World initializer `10120eb0` → Clear → freshness → Load или AllocateInitialNodes; NodeEntity `100cf550` собирает nodes для build. Builder `100ca860` и reorder `100cf310` пока только support. Player initializer `100f0520` → Rebind, если graph есть, bindings ещё нет. Save требует graph+bindings ready. Producers hash и spatial index дополняют consumers из `analysis/server-monster-pathfinding/contract.md`; candidate/hull/heap/dynamic gate раскрыты в `analysis/server-graph-helpers/contract.md`; route producer — `analysis/server-graph-precompute/contract.md`.
+World initializer `10120eb0` → Clear → freshness → Load или AllocateInitialNodes; NodeEntity `100cf550` собирает nodes для build. Builder `100ca860` и reorder `100cf310` теперь имеют самостоятельные контракты в [graph builder](../server-graph-builder/contract.md) и [graph ordering](../server-graph-ordering/contract.md). Player initializer `100f0520` → Rebind, если graph есть, bindings ещё нет. Save требует graph+bindings ready. Producers hash и spatial index дополняют consumers из `analysis/server-monster-pathfinding/contract.md`; candidate/hull/heap/dynamic gate раскрыты в `analysis/server-graph-helpers/contract.md`; route producer — `analysis/server-graph-precompute/contract.md`.
 
 ## Layout, все offsets и размеры hex
 
@@ -145,4 +145,4 @@ ECX=node object, RET, void. Всегда пишет pev.movetype+108=0 и solid+
 
 Signed nodeCount>=1024: severity2 cNodes > MAX_NODES и return ДО RemoveEntity, entity остаётся с обнулёнными movement/solid. Иначе node=nodes+58h*count: origin→position0/4/8 и visibility position c/10/14, pev.angles.y+54→node+54, object WORD+dc/+de→node+50/+52. Case-sensitive classname info_node_air даёт category+1c=2, прочие0; count++. Затем RemoveEntity.
 
-Нет guards negative count/NULL nodes и сброса прочих node fields. Изначальное zero storage связано с allocator, но частичный loader state этой функции не проверяется. Producers object hints100ce080, полная CTestHull initialization/build chain и graph builder100ca860 остаются pending/support, а не автоматически восстановленными.
+Нет guards negative count/NULL nodes и сброса прочих node fields. Изначальное zero storage связано с allocator, но частичный loader state этой функции не проверяется. Producers object hints100ce080, CTestHull initialization/build chain и graph builder100ca860 разобраны в [graph entities](../server-graph-entities/contract.md) и [graph builder](../server-graph-builder/contract.md). Engine dispatch/allocation и фактические данные карт остаются отдельными границами.

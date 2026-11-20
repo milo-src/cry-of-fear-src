@@ -288,7 +288,7 @@ next-hop/hash/cost, activity/reset/persistence wrappers и верхний studio
 уже не являются неразобранной очередью. Исторические карточки и evidence этого пакета
 сохранены без расширения их исходного объёма.
 
-Graph helpers/lifecycle/precompute теперь имеют самостоятельные контракты в server-graph-helpers, server-graph-lifecycle и server-graph-precompute. Нижние studio helpers перечислены в server-studio-events, их очередь закрыта локальными REVIEW. Остаются полный graph builder100ca860/reorder100cf310, event handlers virtual11c, script virtual248, cleanup100fa530/100fa4b0, helper100bea60 и derived AI overrides. Engine model/trace/RNG lifetime и runtime
+Graph helpers/lifecycle/precompute теперь имеют самостоятельные контракты в server-graph-helpers, server-graph-lifecycle и server-graph-precompute. Нижние studio helpers перечислены в server-studio-events, их очередь закрыта локальными REVIEW. Graph builder/reorder/entity lifecycle теперь разобраны в server-graph-builder, server-graph-ordering и server-graph-entities. Generic/base event handler virtual11c, setter virtual248, cleanup100fa530/100fa4b0 и SequenceDone имеют локальные контракты в server-monster-events. Остаются monster-specific overrides, helper100bea60, engine dispatch и внешние CRT гарантии. Engine model/trace/RNG lifetime и runtime
 поведение этими статическими пакетами не проверялись.
 
 ## Разобранное продолжение адресной очереди

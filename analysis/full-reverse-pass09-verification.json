@@ -1,0 +1,135 @@
+{
+  "scope": "static original server RE; saved corpus, not full game reconstruction",
+  "target_executed": false,
+  "before_reviewed": 1623,
+  "new_reviewed": 34,
+  "updated_existing": [],
+  "after_reviewed": 1657,
+  "remaining_unreviewed": 6998,
+  "server_reviewed": 1002,
+  "original_server_sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "other_originals_unchanged": {
+    "client": "e0d0ef0eac981bda321c834e7d73ad7a905cc66bcbed13706bc8e24eac284360",
+    "engine": "9dd34e536c4bb7cda3bc1bc4f0f5f6163687566a16f35c0ea0be59f93da62875"
+  },
+  "evidence": {
+    "source_files": 94,
+    "assembly_ranges": 90,
+    "verified_assembly_byte_rows": 7126,
+    "raw_records": 1022,
+    "decoded_save_fields": 464,
+    "review_evidence_references": 136,
+    "synchronized_note_occurrences": 34
+  },
+  "checks": {
+    "prior_unrelated_reviews_preserved": true,
+    "evidence_paths_exist": true,
+    "original_pe_bytes_equal": true,
+    "catalog_regeneration_idempotent": true,
+    "unittest_output": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.004s\n\nOK",
+    "git_diff_check": true,
+    "branch": "main",
+    "scope_only_analysis_decompiled_and_catalog_navigation": true,
+    "standalone": {
+      "server-spread-settings": "PASS 9 cards, 15 C, 15 ASM, 2064 byte rows, 162 raw; cone table/default stores/descriptor decoded",
+      "server-mapcycle": "PASS 6 cards, 13 C, 17 ASM, 981 byte rows, 21 raw, 1 vtable, no cache dependency",
+      "server-multiplayer-flow": "PASS 29 C, 29 ASM, 2820 byte rows, 580 raw, 7 cards",
+      "server-monster-senses": "PASS 29 C, 29 ASM, 1261 byte rows, 245 raw, 12 cards"
+    },
+    "independent_raw_pe_section_mapper": true,
+    "api_header_parser_accepts_pointer_whitespace": true,
+    "prior_pass08_packet_verifiers_after_navigation_refresh": "PASS: resource-precache, rules-bootstrap, sound-entity, sentence-lifecycle",
+    "all_four_independent_semantic_peers_passed": true
+  },
+  "artifacts": [
+    "analysis/server-spread-settings/contract.md",
+    "analysis/server-mapcycle/contract.md",
+    "analysis/server-multiplayer-flow/contract.md",
+    "analysis/server-monster-senses/contract.md"
+  ],
+  "catalog_sha256": "ba91ce2f35d1806182bcc7ffd407e3a49e9d596390df133078f510e1eb662f4e",
+  "progress_sha256": "4cc45b92e793aded62b31f10925bca08613dc23d3e39958900b752a6424a72ef",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-mapcycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-rules-bootstrap/contract.md",
+          "old": "e638985f938449c8b4d7eae7bb5b6cbfb8d305355567237fb9c2515f5d98a0d4",
+          "new": "2559192e2bba00db441f16eb89b06b6af6295bdd62d0c0f12083f92bc2b06762"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-senses/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sound-entity/contract.md",
+          "old": "335c310f3d1d19ff35c9ebec8e3594663029602144e13f05dc5834797306ed0a",
+          "new": "23dbe94446e86ccbd05264854d365ccafdf36eebb21ce205c9af9fae335550e2"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-multiplayer-flow/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-rules-bootstrap/contract.md",
+          "old": "e638985f938449c8b4d7eae7bb5b6cbfb8d305355567237fb9c2515f5d98a0d4",
+          "new": "2559192e2bba00db441f16eb89b06b6af6295bdd62d0c0f12083f92bc2b06762"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-resource-precache/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-rules-bootstrap/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sentence-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sound-entity/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-spread-settings/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    }
+  ],
+  "peer_review_report": "analysis/full-reverse-pass09-peer-review.json"
+}

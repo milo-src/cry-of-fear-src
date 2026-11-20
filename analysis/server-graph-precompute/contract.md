@@ -209,8 +209,7 @@ Pinned SDK называет byte102 `TE_SHOWLINE`, destination0
 
 ## Что остаётся открытым
 
-* Полное создание/сортировка узлов и обеспечиваемое им расстояние
-  индексов для signed-byte delta, включая условия всех вызовов producer.
+* Создание и перестановка узлов теперь разобраны в [graph builder](../server-graph-builder/contract.md), [ordering](../server-graph-ordering/contract.md) и [entities](../server-graph-entities/contract.md). Перестановка не BFS и не доказывает representability всех signed-byte delta; остальные callers и фактические индексы карт требуют проверки.
 * Реальное распределение строк в оригинальных картовых графах:
   наличие identity128, невыразимых delta, лимитов и повреждений.
 * Полные контракты CRT helpers10171536/101714d1/10140130 при исключениях,

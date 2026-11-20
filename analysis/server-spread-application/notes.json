@@ -1,0 +1,184 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100cff10",
+      "proposed_name": "SpreadVector_MultiplyAddSequential",
+      "subsystem": "weapons",
+      "summary_ru": "Вычисляет три компоненты base + delta × scalar последовательно и возвращает output pointer.",
+      "details_ru": [
+        "cdecl(out*,base*,delta*,float scalar), plain RET; EAX=out несмотря на void в C. Scalar прочитан один раз. Для x затем y затем z выполняет отдельные MULSS и ADDSS с последующим store; это не FMA и не double. Никакого clamp/normalization/finite/null guard. Точное совпадение out с base или delta допускается этим порядком, но сдвинутое перекрытие может менять ещё не прочитанные компоненты: массивы не snapshot. Все три компоненты записываются, длина caller buffer не проверяется."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100cff10.c",
+        "analysis/server-spread-application/100cff10.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d0230",
+      "proposed_name": "SpreadWeapon_ApplyPrimaryPunchRanges",
+      "subsystem": "weapons",
+      "summary_ru": "Получает три значения primary punch и передаёт импульс владельцу оружия.",
+      "details_ru": [
+        "Thiscall ECX=weapon, без stack args, plain RET; status не оформлен. Table=weapon+1f8 фиксируется до RNG calls, lazy Bind и NULL guard отсутствуют. Для z использует low+48/high+54, y+44/+50, x+40/+4c. Перед каждым вызовом1011a050 заново читает weapon+160 и owner+2288, но table pointer не перечитывает. Каждый ST0 округляется FSTP доfloat32. Порядок RNG z→y→x; одинаковый seed, не seed+axis. Приготовленные z/y на стеке остаются будущими аргументами100f91b0, а не дополнительными аргументами RNG. После третьего вызова owner снова прочитан вECX, stack становится x,y,z, вызван100f91b0 (RET0c). Не читает mode/recovery/expand и самостоятельно не увеличивает recoil amplitude; поведение external callbacks/seed writers отдельно."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d0230.c",
+        "analysis/server-spread-application/100d0230.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d02e0",
+      "proposed_name": "SpreadWeapon_ApplySecondaryPunchRanges",
+      "subsystem": "weapons",
+      "summary_ru": "Получает три значения secondary punch и передаёт импульс владельцу оружия.",
+      "details_ru": [
+        "Thiscall ECX=weapon, plain RET, без собственного status. Сохраняет table+1f8, без lazy initialization. Последовательность z(low+80,high+8c), y(+7c,+88), x(+78,+84); seed owner+2288 читается заново для каждой оси. Три cdecl RNG calls возвращают ST0, каждый результат округлён float32. Stack reuse оставляет z/y для конечного thiscall100f91b0(owner,x,y,z), не увеличивает число параметров1011a050. Table остаётся прежним, owner перед отправкой перечитан. Не проверяет существование owner/table, ordered bounds, mode или конечность результата. На первичную таблицу/primary-mode не переключается."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d02e0.c",
+        "analysis/server-spread-application/100d02e0.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d0390",
+      "proposed_name": "SpreadFactor_ApplyEqualization",
+      "subsystem": "weapons",
+      "summary_ru": "Изменяет коэффициент по linear, square, cube либо square-root режиму.",
+      "details_ru": [
+        "cdecl(float* value,int kind), plain RET, EAX не является result pointer/status. Исходный float читается до выбора. Kind1: MULSS(q,q). Kind2: два последовательных MULSS, (q*q)*q, с float32 rounding каждого шага. Kind3: float→double, UCOMISD(0,q)/JA ведёт к1016be90 только для ordered отрицательного q; иначе SQRTSD, включая NaN и signed zero при masked exceptions. Обе ветви завершаются CVTSD2SS и store. Helper1016be90 получает/возвращает XMM0, а не ST0; его полное error/errno поведение не восстановлено. Kind0 и любой другой int сохраняют исходное значение через MOVSS store. Нет abs/clamp на[0,1], NULL guard или локальной установки FP environment."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d0390.c",
+        "analysis/server-spread-application/100d0390.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d0410",
+      "proposed_name": "SpreadWeapon_AccumulateRecoveryAmplitude",
+      "subsystem": "weapons",
+      "summary_ru": "Добавляет величину к текущему остатку, обновляет anchor и ограничивает новую amplitude сверху единицей.",
+      "details_ru": [
+        "Thiscall ECX=weapon,float argument, RET4, ST0=предыдущий остаток100cff60, округлённый доfloat32. До recovery читает owner=weapon+160, owner.pev+1a8 mask4000 (FL_DUCKING в поддерживающем header). Если установлен, float argument расширяется double, умножается на raw double0.7, округляется float. Затем100cff60 может lazy Bind/Reset; его ST0 сохраняется в исходный slot аргумента. ADDSS(oldResidual,adjustedArgument), anchor+200=DWORDglobal.time, +204 сначала получает сумму. COMISS(sum,1)/JBE оставляет sum<=1 и unordered; только ordered sum>1 заменяется exactfloat1. Нет нижнего clamp, проверки отрицательной добавки/NaN или измененияreturntime. Возврат загружен из сохранённого oldResidual, не из +204. При немаскированном FP exception выполнение может прерваться на арифметике/сравнении; guaranteed NaN completion не заявлено. Expand поля таблицы прямо не читаются."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d0410.c",
+        "analysis/server-spread-application/100d0410.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d06a0",
+      "proposed_name": "SpreadWeapon_GetPrimaryConeAndFactor",
+      "subsystem": "weapons",
+      "summary_ru": "Вычисляет primary cone x/y и возвращает equalized factor в z.",
+      "details_ru": [
+        "Thiscall ECX=weapon,outVector* на стеке, RET4, EAX=out. Сначала100cff60 с возможным lazy Bind/Reset, затем читает актуальныйtable+1f8. ST0→float32local. Equalize100d0390(local,table+38), потом100cff10(out,table+20,table+2c,local). После записи всех трёх cone components безусловно перезаписывает out+8 значением local; z не остаётся cone.z. Не нормализует и не ограничивает коэффициент. Mode и expand не читаются; вызов не наращивает amplitude, кроме возможного initial reset внутри recovery. Output alias с table может менять данные при последовательных stores; отдельной копии vectors нет."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d06a0.c",
+        "analysis/server-spread-application/100d06a0.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d0700",
+      "proposed_name": "SpreadWeapon_GetSecondaryConeAndFactor",
+      "subsystem": "weapons",
+      "summary_ru": "Вычисляет secondary cone x/y и возвращает equalized factor в z.",
+      "details_ru": [
+        "Thiscall ECX=weapon,outVector*, RET4, EAX=out. Recovery100cff60 вызывается до чтенияtable. Его ST0 округляется float32; equalize code читаетсяtable+70, base vector+58, delta vector+64. Через100cff10 записываются x/y/z, затем out+8 перезаписывается equalized float. Нет автоматической проверки mode==1, увеличения amplitude или чтенияexpand+74. Нет NULL/buffer/finite guard; alias-sensitive последовательные stores наследуются от MA helper. Отличие отprimary — только соответствующие offsets; factor z здесь также не геометрическая компонента."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d0700.c",
+        "analysis/server-spread-application/100d0700.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d0760",
+      "proposed_name": "SpreadWeapon_GetPrimaryConeAndFactorDuplicate",
+      "subsystem": "weapons",
+      "summary_ru": "Повторяет primary расчёт cone x/y и factor z в отдельном native entry.",
+      "details_ru": [
+        "Thiscall ECX=weapon,outVector*, RET4, EAX=out. Полный порядок: recovery100cff60, float32 local, table+38 equalize, MA сtable+20/+2c, overwriteout.z=local. После нормализации только относительных displacement трёх CALL это тело побайтно совпадает с100d06a0; отдельный адрес сохранён, но роль разных virtual slots/классов не выдумана. Mode/expand не читаются, коэффициент не clamp. Lazy initialization приходит только через100cff60. Все NULL/output/alias/FP ограничения primary helper сохраняются."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d0760.c",
+        "analysis/server-spread-application/100d0760.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d07c0",
+      "proposed_name": "ToggleWeapon_DispatchConeOutput",
+      "subsystem": "weapons",
+      "summary_ru": "Передаёт output pointer одному из двух virtual slots по mode и возвращает тот же pointer.",
+      "details_ru": [
+        "Thiscall ECX=weapon,out*, RET4. Читает mode+208 и vtable, сохраняетout вESI, **в обоих путях** PUSH out: mode==1 вызываетvtable+1fc, любой другой int — vtable+1f8. Ghidra скрывает аргумент вprimary ветви, ASMего доказывает. Callee return не используется, EAX безусловно заменяется исходнымout после вызова. Caller ожидает callee cleanup одногоstackDWORD, собственногоADD ESP нет. Не проверяетготовностьtable, out или mode domain; нет своего fallback/записиvector. Фактические overrides не доказаны raw table и остаются открытыми."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d07c0.c",
+        "analysis/server-spread-application/100d07c0.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100d1940",
+      "proposed_name": "ToggleWeapon_DispatchActionAndCopyTimer",
+      "subsystem": "weapons",
+      "summary_ru": "Вызывает mode-specific virtual action и затем копирует поле1cc в1d0.",
+      "details_ru": [
+        "Thiscall ECX=weapon, no stack args, plain RET. Mode208==0 вызываетvtable+1d8; mode==1 вызывает+1dc; другое значение не вызываетaction. В каждом нормально возвращающемся пути затем читаетактуальный DWORDweapon+1cc и пишет+1d0, EAX остаётся скопированнымDWORD. Это не boolуспех и не обязательноfloatreturnST0. Callback может изменить поля; копия делается после него. Mode/table/recovery здесьнепереписываются. Timer-имя аналитическое изweaponконтекста; точные names/descriptors и real overridecallers не установлены этим пакетом, отсутствующие vtables не восполняются SDKдогадкой."
+      ],
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100d1940.c",
+        "analysis/server-spread-application/100d1940.asm",
+        "analysis/server-spread-application/contract.md",
+        "analysis/server-spread-application/evidence.json",
+        "analysis/server-spread-settings/contract.md"
+      ]
+    }
+  ]
+}

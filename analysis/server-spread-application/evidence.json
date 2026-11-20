@@ -1,0 +1,759 @@
+{
+  "module": "server",
+  "binary": "D:/Steam/steamapps/common/Cry of Fear/cryoffear/cl_dlls/hl.dll",
+  "sha256": "751a68831e4fe3541bbbb24da3c785fb9f6cd3d7e6dcd92125fe1e18f0fce641",
+  "target_executed": false,
+  "method": "Saved original C, bounded static objdump, raw PE reads. No target execution or listing-cache dependency.",
+  "source_c": [
+    {
+      "address": "0x100cff10",
+      "path": "decompiled/server/partial-pass/functions/0x100cff10.c",
+      "sha256": "6af4affb6041edb50b2e2e434315c0c4efd0ebfb534ae926c271e28363278129",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d0230",
+      "path": "decompiled/server/partial-pass/functions/0x100d0230.c",
+      "sha256": "5980b2070be0b2733f1e21dc03b3d8f1152c12c9d6710a54aa1f45924f51a463",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d02e0",
+      "path": "decompiled/server/partial-pass/functions/0x100d02e0.c",
+      "sha256": "9c40e6cde061b48aaaf1287612497f12c87f11b76cae58849c653ba361ee5916",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d0390",
+      "path": "decompiled/server/partial-pass/functions/0x100d0390.c",
+      "sha256": "e98a51efecc23f4654f802df4290121b5f95b4715c72f369db81fac4c47a3645",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d0410",
+      "path": "decompiled/server/partial-pass/functions/0x100d0410.c",
+      "sha256": "eac19a8b6620b9446d52a3c3d405fea5b3c968da6926c18d76ea0517e6053af9",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d06a0",
+      "path": "decompiled/server/partial-pass/functions/0x100d06a0.c",
+      "sha256": "97a79a63ae8280cbd4cfa6a49a54bbebc0b7887627b05c97988fb53cf6552171",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d0700",
+      "path": "decompiled/server/partial-pass/functions/0x100d0700.c",
+      "sha256": "5ee9fcb3692e916d21420f427c4ce4aace07cb7e513db11524d0d59ba348011e",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d0760",
+      "path": "decompiled/server/partial-pass/functions/0x100d0760.c",
+      "sha256": "45e75f34c11f6f5c1884d367171816497e92266c28b56120e5ddb4b218b03127",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d07c0",
+      "path": "decompiled/server/partial-pass/functions/0x100d07c0.c",
+      "sha256": "c31e3d8e1f78cda4e4c4e2b0377772dfd0695e8b9e02a51947168c9ecc49f10e",
+      "role": "primary"
+    },
+    {
+      "address": "0x100d1940",
+      "path": "decompiled/server/partial-pass/functions/0x100d1940.c",
+      "sha256": "9fab5a3311e191d7c460627620c72763714532301502369f8493e49c36d65d27",
+      "role": "primary"
+    },
+    {
+      "address": "0x100cff60",
+      "path": "decompiled/server/partial-pass/functions/0x100cff60.c",
+      "sha256": "c3668130c82f910278066c31c3d4e53cbdebb13a333c52f570a25ad1d3a411b9",
+      "role": "support"
+    },
+    {
+      "address": "0x100d0830",
+      "path": "decompiled/server/partial-pass/functions/0x100d0830.c",
+      "sha256": "0892beb973ad92329cd71d1b2f82e15f3a339fa961d666b43adbe9720ef07c56",
+      "role": "support"
+    },
+    {
+      "address": "0x100d1c10",
+      "path": "decompiled/server/partial-pass/functions/0x100d1c10.c",
+      "sha256": "c207f3873508d34c442fec00a0bd32efd4c6533b2160675c0ca881c5bb38e478",
+      "role": "support"
+    },
+    {
+      "address": "0x1011a050",
+      "path": "decompiled/server/partial-pass/functions/0x1011a050.c",
+      "sha256": "ee49edcdea092add46a4a1026fe160ae18db1b309b658f9773af2d32cd182426",
+      "role": "support"
+    },
+    {
+      "address": "0x1011abb0",
+      "path": "decompiled/server/partial-pass/functions/0x1011abb0.c",
+      "sha256": "16c7ca9b718dd7d9344d38397c461e763182a000e1e588e04179a0c7c474bb35",
+      "role": "support"
+    },
+    {
+      "address": "0x1011abe0",
+      "path": "decompiled/server/partial-pass/functions/0x1011abe0.c",
+      "sha256": "cd80dbbd5ef0174dd196555bb42beb5d2a1b31ba47d63fc66a9280cca48f26c1",
+      "role": "support"
+    },
+    {
+      "address": "0x1013e5c0",
+      "path": "decompiled/server/partial-pass/functions/0x1013e5c0.c",
+      "sha256": "bc39c9436506c323ccad59176900549446df505c2ae23db7ffd0fa1e85a2724b",
+      "role": "support"
+    },
+    {
+      "address": "0x100f91b0",
+      "path": "decompiled/server/partial-pass/functions/0x100f91b0.c",
+      "sha256": "e2fa2a5a207cf4d12b28dc14ea475a458a31860003e2f82d4b6998d1b157c649",
+      "role": "support"
+    },
+    {
+      "address": "0x100b4aa0",
+      "path": "decompiled/server/partial-pass/functions/0x100b4aa0.c",
+      "sha256": "e2bf7a43a37bf66561f8a88da81d14cf0b31098d5914c5c082328ae55d78381a",
+      "role": "support"
+    }
+  ],
+  "ranges": [
+    {
+      "path": "analysis/server-spread-application/100cff10.asm",
+      "start": "0x100cff10",
+      "end_exclusive": "0x100cff59",
+      "sha256": "bf9ee54dc41ab97f4a94cf77ab9888834988affdc7ed083396a0c1ddf6445a9b",
+      "binary_range_sha256": "58b555e8bdf9e5a5143640a87a6de3fe35cf0f21a9591116fe5004ee9a1512b6",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100cff10",
+        "--stop-address=0x100cff59",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d0230.asm",
+      "start": "0x100d0230",
+      "end_exclusive": "0x100d02d1",
+      "sha256": "38f6e8f0a791efa304343cef5d29b01d16a1865eeb35828f36553f872c9fcf95",
+      "binary_range_sha256": "f1b50181048da293e1898df87089b99d06d5c37e5f67e0ff6133a7bcd485f027",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d0230",
+        "--stop-address=0x100d02d1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d02e0.asm",
+      "start": "0x100d02e0",
+      "end_exclusive": "0x100d038d",
+      "sha256": "05e13fb853ba53c237f3448b5a53b900c1683ac3992a84beff854057abb68451",
+      "binary_range_sha256": "e06918ccbb9ecbe659a25fd6d4d74b2e93eef12c48d37b6c5622398710874d21",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d02e0",
+        "--stop-address=0x100d038d",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d0390.asm",
+      "start": "0x100d0390",
+      "end_exclusive": "0x100d0401",
+      "sha256": "33bf3b73b4ecaeb7c5befb6751d335f76b5a8e9e26f902dcc570708f1cf30346",
+      "binary_range_sha256": "ec4cdbdffb3fdfedfc98c64e72a85ceeb0dba5a9681178861d85e177bcc55b3f",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d0390",
+        "--stop-address=0x100d0401",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d0410.asm",
+      "start": "0x100d0410",
+      "end_exclusive": "0x100d0489",
+      "sha256": "06b789d47d64af64a23aa065f60bb7bb0c6eb351315e3ffab1cf73f36d4e0821",
+      "binary_range_sha256": "4f9b39ea034ba6d25d3b97c21249c944b48c42169781dae3affef0ffd6cbbc69",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d0410",
+        "--stop-address=0x100d0489",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d06a0.asm",
+      "start": "0x100d06a0",
+      "end_exclusive": "0x100d06f5",
+      "sha256": "99808afcccbfe55f12dedc968a72208cc5b0d4e360143b067d0ac142fba03b57",
+      "binary_range_sha256": "5b426a46c948034af652b1727a25b22cc5063ff1f49307f9c11fe66a69ec1d5b",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d06a0",
+        "--stop-address=0x100d06f5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d0700.asm",
+      "start": "0x100d0700",
+      "end_exclusive": "0x100d0755",
+      "sha256": "f8e2ac4d4e518427187dd089a7e63166cdb4265d5551ac184125bda9c0436c8b",
+      "binary_range_sha256": "f07442586d9e3f42968cacbbd9f40ba4e7b5fcae70d2448c85f496b213075e91",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d0700",
+        "--stop-address=0x100d0755",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d0760.asm",
+      "start": "0x100d0760",
+      "end_exclusive": "0x100d07b5",
+      "sha256": "40dcd695d88937b43ae3a27940bbfbf4c1a3b5379c5022ceafa9fbf5ce42ab5c",
+      "binary_range_sha256": "d85e5495d1c45382bb14171b46306939c49c357c2857ae80cc137ffda629e17e",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d0760",
+        "--stop-address=0x100d07b5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d07c0.asm",
+      "start": "0x100d07c0",
+      "end_exclusive": "0x100d07ef",
+      "sha256": "4276f2ab81d0fafc95385ea34d3c9b80af4ffe9f6179a277225fc9eefe1bc078",
+      "binary_range_sha256": "35351da7f659c0fcd9ee94c9189f8ad0fe8414f7d4ba17a30a6a6f2e0960af6a",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d07c0",
+        "--stop-address=0x100d07ef",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d1940.asm",
+      "start": "0x100d1940",
+      "end_exclusive": "0x100d197f",
+      "sha256": "aecd87b0e6856a9e9a14f523e3ff0f8265ccc5da83858109d17f4db6ab52ceb9",
+      "binary_range_sha256": "7ca306d30374cbce71871fae7cd67d3e81d05d4a3daf6ed39aef30f2426ddf8d",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d1940",
+        "--stop-address=0x100d197f",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100cff60.asm",
+      "start": "0x100cff60",
+      "end_exclusive": "0x100cffe1",
+      "sha256": "350c33acd1b896ba4b5d5438862791dbd140900b9fb628880d6cf7af5724f2e1",
+      "binary_range_sha256": "2042ca72fe6c8326be289af0b4c556bc3368611d9cd02f29fc850a193227d4d0",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100cff60",
+        "--stop-address=0x100cffe1",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d0830.asm",
+      "start": "0x100d0830",
+      "end_exclusive": "0x100d0858",
+      "sha256": "1b9cf0b4d3195ef39bc16e08c059df0eaa3049fd6d32e5711087f959ffcc5df3",
+      "binary_range_sha256": "76af0162dae8474fe6933332c8d67384cf6227ea7130a5aaeceaaa21cf3dee6d",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d0830",
+        "--stop-address=0x100d0858",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100d1c10.asm",
+      "start": "0x100d1c10",
+      "end_exclusive": "0x100d1cde",
+      "sha256": "298462ef9af164a1ded40da41f4c0ddde647d4fad7019ac8d3e7703b442b8075",
+      "binary_range_sha256": "cd13c2832655cdb9bb7bbb1641c44a1b10573f120d996afe7c1592eb2847287f",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100d1c10",
+        "--stop-address=0x100d1cde",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/1011a050.asm",
+      "start": "0x1011a050",
+      "end_exclusive": "0x1011a0d4",
+      "sha256": "d4c1294efafc89dbf17642703e26a812cc714fe25de74d03ea15817fe7a762b3",
+      "binary_range_sha256": "792399f1e8e14cd3656c18b4de4bb1f3d27d9dbfaff08ccec5bfe72672f31307",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011a050",
+        "--stop-address=0x1011a0d4",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/1011abb0.asm",
+      "start": "0x1011abb0",
+      "end_exclusive": "0x1011abd2",
+      "sha256": "85de8c4da6aa4eccc61ca1e7e8866c29d1ba0d45ac6f5be671899ddd3f5b4140",
+      "binary_range_sha256": "98a3d03e6ae60a1b05b8c11f117351f1c89e6479195c1aac7006aa99e165fa2c",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011abb0",
+        "--stop-address=0x1011abd2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/1011abe0.asm",
+      "start": "0x1011abe0",
+      "end_exclusive": "0x1011abf5",
+      "sha256": "cf59fa9fcad487119f2dd888e86f82d932051dee2c1e792b02d2b7e0a3b985c0",
+      "binary_range_sha256": "2ebf9ea95a04fe7c59b02827a9fb72bd8ef182ba632bf5107bae5ae43195b00c",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1011abe0",
+        "--stop-address=0x1011abf5",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/1013e5c0.asm",
+      "start": "0x1013e5c0",
+      "end_exclusive": "0x1013e606",
+      "sha256": "2ee2d52e052864af413f42b5ab0bfb74bdb1e6fb6b308da4fe02073bafb9336f",
+      "binary_range_sha256": "1f1d8b9576122875c377a8f73bbe428f39a6725dcb52523330ef0cd6358b0234",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x1013e5c0",
+        "--stop-address=0x1013e606",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100f91b0.asm",
+      "start": "0x100f91b0",
+      "end_exclusive": "0x100f9295",
+      "sha256": "3ec1259be979d2875833aab86b856ef375a39775be37d93d86a624b5c6f302c2",
+      "binary_range_sha256": "de018f63c351eb83c0d8574549b8cd9400dd372be65cf9a4d37917cca0620140",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100f91b0",
+        "--stop-address=0x100f9295",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100b4aa0.asm",
+      "start": "0x100b4aa0",
+      "end_exclusive": "0x100b4ac2",
+      "sha256": "18657330e2408616d1895ed34953a7595720fb7cf7df79c0df9eb45a4e005c93",
+      "binary_range_sha256": "00dcba5c35371689824d0501163044c51b9696901a81b165141b5141d0a418bf",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100b4aa0",
+        "--stop-address=0x100b4ac2",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    },
+    {
+      "path": "analysis/server-spread-application/100cfff0-diagnostic-support.asm",
+      "start": "0x100cfff0",
+      "end_exclusive": "0x100d022d",
+      "sha256": "66d64feaa20d224ce8074e647eea8e3b41700bcf90fdc3c20033621226c4cfdb",
+      "binary_range_sha256": "9e08cdc5aa7a9cc95c65c987be15f890eb808ff65b3501ebe2d854ae08ddedb0",
+      "bytes_verified": true,
+      "command": [
+        "C:\\Users\\xModea\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin\\objdump.EXE",
+        "-d",
+        "-M",
+        "intel",
+        "--start-address=0x100cfff0",
+        "--stop-address=0x100d022d",
+        "D:\\Steam\\steamapps\\common\\Cry of Fear\\cryoffear\\cl_dlls\\hl.dll"
+      ]
+    }
+  ],
+  "literals": [
+    {
+      "address": "0x1021a6e0",
+      "end_exclusive": "0x1021aae0",
+      "file_offset": "0x2196e0",
+      "bytes_hex": "39710000026a000059670000eb240000644500009d2a0000767000000c220000d9180000f512000086450000d9550000bb4c0000b6500000522a0000874e0000bb690000da6f0000bf480000f9640000802100007a6600004f5d0000344700004b7f0000e4120000ea0c000013070000db0b0000ef5f0000df4700003b0100008e6800008b030000265e000052300000ca2500009c0b0000e82800006c4000009b580000092d0000406d0000c67600009d3300000f090000445c0000b74100001d270000dc5c00003f540000e30400007b4c0000594f000041470000b2750000d220000047510000da6a0000011c0000db5200008d43000022150000174b00000f280000d0570000fc6a0000da2600000c3d0000455f00009c430000420900003a250000c37b0000476500000f5c0000ae2d00001d6700005a7f0000b73a00004f470000ae4400008e050000a3700000375c0000353100007a5000009a2700005c140000e40400005a2700007e5a00006f4d0000b37b00000e17000036600000044a0000fa370000663a0000eb220000f45b00003f5300009c57000077570000ff0d00004c710000227700001a490000b6100000850900009e5700006f0d0000996e0000795a0000346300009f3400007c4b0000b73b0000030a0000d54900002f330000e3410000f2250000f23700005d3b000009690000ac4b000081660000b57c000030390000e92c0000ed2200004827000033190000f06f0000f129000032360000cc43000059200000516500007d060000f2120000181d0000c83100004255000065150000b7270000414100001169000087220000e37800004a6d0000936a00006d6000002a7e0000c50d00006e3000003670000003250000e0270000690200009b3400000f57000048090000d1170000c86600009e0b00009a2300001b5500006a6d0000751200001b3c0000ca0c00000a2a0000cf7b0000a84300009447000099300000a1410000f06a0000c05700004c1d000022160000e0460000d23b0000aa7c00008b7b00005f1900006a140000e37900001b0900003c1200006a310000634700005f010000641c0000577a0000a7750000b01d0000590b0000023600004f2c0000fd320000df3c00006775000075790000cb130000f9020000d52500003e2b000079530000136a00004f0e0000ae670000c94e0000812f0000333c0000c17600009c1d0000287c000019230000b7720000fd5100007b370000fe730000af52000061280000aa060000a26f0000770300002d0d0000154c00002e380000a3020000791b0000073b00001a660000dc2f000014790000a15300004e6400007b480000c8330000145b00008757000057410000df03000014240000fd140000da720000e5170000893b0000436c00005b4b0000b04d0000874d0000",
+      "sha256": "b83bb6df061acf7c9663634eea54e8c32301a9b73ccda9fa9f0e4cc19446de89"
+    },
+    {
+      "address": "0x101e5a60",
+      "end_exclusive": "0x101e5a70",
+      "file_offset": "0x1e4e60",
+      "bytes_hex": "0000000000000000000000000000f041",
+      "sha256": "7b8d1a6d4433104f72eac25961772761e58ce663d392e3164660b3e8fb2b47f4"
+    },
+    {
+      "address": "0x101a1e58",
+      "end_exclusive": "0x101a1e60",
+      "file_offset": "0x1a1258",
+      "bytes_hex": "666666666666e63f",
+      "sha256": "633938f09cacdbde4f646abc325ccf65e800705d587f09b4b5531321820893f8"
+    },
+    {
+      "address": "0x101a1390",
+      "end_exclusive": "0x101a1394",
+      "file_offset": "0x1a0790",
+      "bytes_hex": "0000803f",
+      "sha256": "e00e5eb9444182f352323374ef4e08ebcb784725fdd4fd612d7730540b3e0c8c"
+    },
+    {
+      "address": "0x101b1774",
+      "end_exclusive": "0x101b1778",
+      "file_offset": "0x1b0b74",
+      "bytes_hex": "202a0a00",
+      "sha256": "dc8203857d1b9f0f8906a1e12ca277973895faf19258e7e0fa295dc599620daf",
+      "ascii": " *\n"
+    },
+    {
+      "address": "0x101d7b20",
+      "end_exclusive": "0x101d7b62",
+      "file_offset": "0x1d6f20",
+      "bytes_hex": "202a205365745461626c65506f696e746572206572726f723a2063616e742066696e64207265636f726420666f722025732c207573696e672064656661756c740a00",
+      "sha256": "70c3ba65cbd3997c33eef0f2785e0c0af6581cf52af76d2392eb29dec03dbcc4",
+      "ascii": " * SetTablePointer error: cant find record for %s, using default\n"
+    },
+    {
+      "address": "0x101e5a38",
+      "end_exclusive": "0x101e5a40",
+      "file_offset": "0x1e4e38",
+      "bytes_hex": "000000000000f03e",
+      "sha256": "0d74047c56871c3fa5fc799e64a6b584a892a0a57488747bd6504f1deab45a05"
+    },
+    {
+      "address": "0x101eb560",
+      "end_exclusive": "0x101eb564",
+      "file_offset": "0x1ea960",
+      "bytes_hex": "ffffffff",
+      "sha256": "ad95131bc0b799c0b1af477fb14fcf26a6a9f76079e48bf090acb7e8367bfd0e"
+    },
+    {
+      "address": "0x101a1eec",
+      "end_exclusive": "0x101a1ef0",
+      "file_offset": "0x1a12ec",
+      "bytes_hex": "0000a041",
+      "sha256": "8502957747a29907927566be940a9b39fee0a15dd471ba428eb9eedd15aa80e7"
+    },
+    {
+      "address": "0x101d76c8",
+      "end_exclusive": "0x101d76e5",
+      "file_offset": "0x1d6ac8",
+      "bytes_hex": "7c3d3d204c697374696e6720737072656164207461626c65203d3d0a00",
+      "sha256": "a522eb63ff257eb91252cd9f32156cfcb870b5e807ccdc643a88d324c53f9b26",
+      "ascii": "|== Listing spread table ==\n"
+    },
+    {
+      "address": "0x101d76e8",
+      "end_exclusive": "0x101d76fc",
+      "file_offset": "0x1d6ae8",
+      "bytes_hex": "7c20256420776561706f6e7320746f74616c0a00",
+      "sha256": "d8b847a586ab8d4dc7ffbf94a4c613c4642cc2b2c181ccb79481ce9c7afa73c6",
+      "ascii": "| %d weapons total\n"
+    },
+    {
+      "address": "0x101d76fc",
+      "end_exclusive": "0x101d76ff",
+      "file_offset": "0x1d6afc",
+      "bytes_hex": "7c0a00",
+      "sha256": "eb694495abf5b75364411fd870bed0fd4dd75c1cf9a2854bf7694462f51729bd",
+      "ascii": "|\n"
+    },
+    {
+      "address": "0x101d7700",
+      "end_exclusive": "0x101d7706",
+      "file_offset": "0x1d6b00",
+      "bytes_hex": "7c2025730a00",
+      "sha256": "3515eac5b6ac7d923403054601cd425592177a975eb70c497db4787845c8ccf4",
+      "ascii": "| %s\n"
+    },
+    {
+      "address": "0x101d7708",
+      "end_exclusive": "0x101d7720",
+      "file_offset": "0x1d6b08",
+      "bytes_hex": "7c202020207072696d206d696e20636f6e653a2025660a00",
+      "sha256": "bf5cb7e478c6d997c7260c606ce841a9376357bc991e8ae6b257afc225475e21",
+      "ascii": "|    prim min cone: %f\n"
+    },
+    {
+      "address": "0x101d7720",
+      "end_exclusive": "0x101d7738",
+      "file_offset": "0x1d6b20",
+      "bytes_hex": "7c202020207072696d2061646420636f6e653a2025660a00",
+      "sha256": "427c5be7f2d64b5d18f2cd0645a6d6f215e4a9006e2e82efba847d9fb307abfc",
+      "ascii": "|    prim add cone: %f\n"
+    },
+    {
+      "address": "0x101d7738",
+      "end_exclusive": "0x101d7750",
+      "file_offset": "0x1d6b38",
+      "bytes_hex": "7c202020207072696d20657175616c697a653a2025640a00",
+      "sha256": "a9864b9248d8ea22dabbcd87f494d516cbcf9d1891ab80d4c4146bf0043aa22b",
+      "ascii": "|    prim equalize: %d\n"
+    },
+    {
+      "address": "0x101d7750",
+      "end_exclusive": "0x101d7766",
+      "file_offset": "0x1d6b50",
+      "bytes_hex": "7c202020207072696d20657870616e643a2025660a00",
+      "sha256": "7809a45777a793a2d564ab073f2ba4acce97051fe430796cf3733af9e3784124",
+      "ascii": "|    prim expand: %f\n"
+    },
+    {
+      "address": "0x101d7768",
+      "end_exclusive": "0x101d7794",
+      "file_offset": "0x1d6b68",
+      "bytes_hex": "7c202020207072696d2070756e6368202825662c20256629202825662c20256629202825662c202566290a00",
+      "sha256": "6e414a1265f8dc6bf75e7cacfa69d5a62ace5ab3c4734dc737f256c22c2a0677",
+      "ascii": "|    prim punch (%f, %f) (%f, %f) (%f, %f)\n"
+    },
+    {
+      "address": "0x101d7794",
+      "end_exclusive": "0x101d77ab",
+      "file_offset": "0x1d6b94",
+      "bytes_hex": "7c20202020736563206d696e20636f6e653a2025660a00",
+      "sha256": "5d80842356a3ac8a0e4e7d5e5f3c08774d6e103ea45b20844961aeafd78088fd",
+      "ascii": "|    sec min cone: %f\n"
+    },
+    {
+      "address": "0x101d77ac",
+      "end_exclusive": "0x101d77c3",
+      "file_offset": "0x1d6bac",
+      "bytes_hex": "7c202020207365632061646420636f6e653a2025660a00",
+      "sha256": "d5c86a12576667b98201678b5bff0a74131e7ac8f486870084ebdf4be8303a6b",
+      "ascii": "|    sec add cone: %f\n"
+    },
+    {
+      "address": "0x101d77c4",
+      "end_exclusive": "0x101d77db",
+      "file_offset": "0x1d6bc4",
+      "bytes_hex": "7c2020202073656320657175616c697a653a2025640a00",
+      "sha256": "3691bb1e392fb6f2fe0866966f8115ad977988e3630c19faeebffc002f431c57",
+      "ascii": "|    sec equalize: %d\n"
+    },
+    {
+      "address": "0x101d77dc",
+      "end_exclusive": "0x101d77f1",
+      "file_offset": "0x1d6bdc",
+      "bytes_hex": "7c2020202073656320657870616e643a2025660a00",
+      "sha256": "5c1f463b2aeadbcb9853c07f3d7d5ae8d84a5cf8df1573fe42a0d633d44fdeaa",
+      "ascii": "|    sec expand: %f\n"
+    },
+    {
+      "address": "0x101d77f4",
+      "end_exclusive": "0x101d781f",
+      "file_offset": "0x1d6bf4",
+      "bytes_hex": "7c202020207365632070756e6368202825662c20256629202825662c20256629202825662c202566290a00",
+      "sha256": "00e32cba9766567f698ad9415e930c23f6cbb6d0ff1f90f5f0839e71288f4386",
+      "ascii": "|    sec punch (%f, %f) (%f, %f) (%f, %f)\n"
+    },
+    {
+      "address": "0x101d7820",
+      "end_exclusive": "0x101d7836",
+      "file_offset": "0x1d6c20",
+      "bytes_hex": "7c2020202072657475726e2074696d653a2025660a00",
+      "sha256": "56b72133e262699c78d9d2f230219e321881881ca47596ea793b714e9f19c845",
+      "ascii": "|    return time: %f\n"
+    },
+    {
+      "address": "0x101d7838",
+      "end_exclusive": "0x101d7851",
+      "file_offset": "0x1d6c38",
+      "bytes_hex": "7c3d3d20737072656164207461626c6520656e64203d3d0a00",
+      "sha256": "607bb4b9be7f469e34e9e257734ffc94f68de2644313742a7fad98a8a52b18e8",
+      "ascii": "|== spread table end ==\n"
+    }
+  ],
+  "vtables": [],
+  "save_tables": [],
+  "export_thunks": [],
+  "supporting_sources": [
+    {
+      "path": "analysis/server-spread-settings/contract.md",
+      "sha256": "6826eeade142a91533ccd19ad5567093298eb2a1c83c004b25094965dcb75184"
+    },
+    {
+      "path": "analysis/movement/health-stamina.md",
+      "sha256": "0c690e401d402d3e15111bb7b8bcc1cd1d68f69a273303cb7745e916bb53642b"
+    },
+    {
+      "path": "external/hlsdk-portable/common/const.h",
+      "sha256": "a2e3bcd0b233f975616110febe6dcf231fda619cff6843f833aa1aeda5c88fbc"
+    }
+  ],
+  "exact_pointer_scan": {
+    "method": "All raw PE bytes, exact LE32 function-address search; excludes relative calls, computed pointers and runtime initialization.",
+    "results": [
+      {
+        "address": "0x100cff10",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d0230",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d02e0",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d0390",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d0410",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d06a0",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d0700",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d0760",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d07c0",
+        "file_offsets": []
+      },
+      {
+        "address": "0x100d1940",
+        "file_offsets": []
+      }
+    ]
+  },
+  "api_binding": {
+    "initializer": "0x100b4aa0",
+    "base": "0x10222f48",
+    "copied_dwords": 144,
+    "slots": [
+      {
+        "slot": 123,
+        "name": "pfnPlaybackEvent",
+        "address": "0x10223134"
+      }
+    ],
+    "header": "external/hlsdk-portable/engine/eiface.h",
+    "header_sha256": "5a2b1a37d25364b173d312cdb26cf11e8b6dae3e0a3d495cde735fc025e910a5"
+  },
+  "pending_check": {
+    "checked_before_authoring": true,
+    "command": [
+      "python",
+      "tools/catalog_decompiled.py",
+      "--pending",
+      "server",
+      "--limit",
+      "10000"
+    ],
+    "addresses": [
+      "0x100cff10",
+      "0x100d0230",
+      "0x100d02e0",
+      "0x100d0390",
+      "0x100d0410",
+      "0x100d06a0",
+      "0x100d0700",
+      "0x100d0760",
+      "0x100d07c0",
+      "0x100d1940"
+    ]
+  }
+}

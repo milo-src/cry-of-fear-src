@@ -1,0 +1,328 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x101004f0",
+      "proposed_name": "CSoundEnt_ResolveOrAllocatePrivateData",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает существующий private object либо выделяет CSoundEnt размером 8ECh.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(entvars*), normal result EAX despite void Ghidra. NULL pev вызывает engine CreateEntity; success даёт pev=edict+80h. Если pev.containingedict+20ch!=NULL и edict.private+7ch!=NULL, возвращается existing pointer без проверки класса и повторной инициализации.",
+        "Иначе engine PvAllocEntPrivateData(edict,8ECh). Success записывает vtable101ded8c и object+4=pev; RTTI подтверждает CSoundEnt. Zero-fill и Spawn не выполняются. CreateEntity failure приводит к чтению NULL+20ch; allocation failure — к записи [NULL+4], не безопасному return0.",
+        "World10120eb0 сохраняет EAX в singleton10230d70 и сразу вызывает virtual2c до позднего NULL warning. Сам factory singleton не присваивает; экспорт soundent10100a60 является JMP сюда. Ручное создание дополнительной soundent не гарантирует this==singleton, хотя Initialize использует оба объекта."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101004f0.c",
+        "analysis/server-sound-entity/101004f0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100560",
+      "proposed_name": "CSoundEnt_ActiveListHead",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает индекс начала active chain либо -1 при отсутствии singleton.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(), RET, EAX32: global10230d70==NULL → FFFFFFFFh, иначе DWORD singleton+e0. Никаких проверок диапазона/принадлежности цепочке. Monster Listen100bfae0 использует результат как integer index; представление -NAN в его Ghidra C — ошибочный float тип, не плавающий sentinel."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100560.c",
+        "analysis/server-sound-entity/10100560-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100580",
+      "proposed_name": "CSound_ClearAllFields",
+      "subsystem": "monsters",
+      "summary_ru": "Инициализирует все восемь DWORD записи звука, включая оба link-поля.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(record*), RET. Origin+0/+4/+8 копируется из globals10222f34..3c, type+0c=0, volume+10=0, expire+14=0.0, listNext+18=-1, audibleNext+1c=0. Это не memset32: origin берётся из изменяемого общего вектора.",
+        "Initialize10100730 вызывает с ECX=this+ec+index*20h. Копирование native globals не доказывает, что они нулевые во всех runtime состояниях. На момент очистки audibleNext равен0, а не -1."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100580.c",
+        "analysis/server-sound-entity/10100580-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101005c0",
+      "proposed_name": "CSoundEnt_ClientReservedIndex",
+      "subsystem": "monsters",
+      "summary_ru": "Преобразует edict в индекс зарезервированного client sound: IndexOfEdict-1.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(edict*), RET; engine IndexOfEdict slot71 и DEC EAX. Нет проверки NULL, client range, singleton или факта резервирования. Индекс0 world превращается в -1; фактическая проверка0..63 выполняется только при последующем10100910.",
+        "Support100f86e0 обновляет запись игрока по этой паре helpers;1001cc90 очищает её при disconnect через101008e0. Engine return semantics вне этого wrapper не переопределяются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101005c0.c",
+        "analysis/server-sound-entity/101005c0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101005e0",
+      "proposed_name": "CSound_IsScentMask",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет наличие scent bits58h в младшем байте type.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(record*), RET. TEST BYTE[ECX+0c],58h; MOV EAX,0; SETNE AL — результат весь EAX точно0/1. NULL guard отсутствует. Другие биты DWORD не читаются.",
+        "Support100c1310 PBestScent вызывает helper и идёт по record+1c. Маски58h и27h не пересекаются, но запись с несколькими битами может удовлетворять обоим predicates. Названия отдельных bits по одному helper не устанавливаются."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101005e0.c",
+        "analysis/server-sound-entity/101005e0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101005f0",
+      "proposed_name": "CSound_IsAudibleMask",
+      "subsystem": "monsters",
+      "summary_ru": "Проверяет наличие audible bits27h в младшем байте type.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(record*), RET. TEST BYTE[ECX+0c],27h; MOV EAX,0; SETNE AL, весь EAX0/1. NULL/range guard отсутствует; upper24 type bits игнорируются.",
+        "Monster Listen100bfae0 использует predicate для condition20000h; PBestSound100c1400 фильтрует им audible chain. Это классификация записи для AI, не вызов playback или проверка слышимости пользователем."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101005f0.c",
+        "analysis/server-sound-entity/101005f0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100620",
+      "proposed_name": "CSoundEnt_UnlinkActiveAndPushFree",
+      "subsystem": "monsters",
+      "summary_ru": "Удаляет индекс из active chain и помещает его в голову free chain singleton.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(index,previousIndex), RET. NULL singleton → ничего. Сначала next=slot[index].listNext. previous==-1 заменяет activeHead; иначе previous.listNext=next. Затем slot[index].listNext=freeHead и freeHead=index.",
+        "Не проверяет index/previous диапазон, принадлежность active chain, совпадение previous, повторное освобождение или reserved status. Не очищает origin/type/volume/expire/audibleNext и не освобождает память. Caller Think сохраняет следующий индекс до вызова; this данного caller должен совпадать с singleton для согласованности."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100620.c",
+        "analysis/server-sound-entity/10100620-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100680",
+      "proposed_name": "CSoundEnt_AllocSoundSlot",
+      "subsystem": "monsters",
+      "summary_ru": "Снимает первый свободный индекс и вставляет его в голову active chain.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(pool*), RET, EAX signed index. Если freeHead+dc==-1, Alert(type1,\"Free Sound List is full!\\n\") и EAX=-1. Иначе freeHead=slot[index].listNext, slot[index].listNext=activeHead, activeHead=index, result=index.",
+        "Не ищет oldest sound, не расширяет pool, не проверяет stale/corrupt links, не обнуляет payload или audibleNext. После нормального Initialize раздаёт0,1,2...; при освобождении используется LIFO. Ошибка не возвращает slot pointer."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100680.c",
+        "analysis/server-sound-entity/10100680-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101006d0",
+      "proposed_name": "CSoundEnt_CountList",
+      "subsystem": "monsters",
+      "summary_ru": "Считает free(type1) или active(type2) chain до sentinel-1.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(pool*,listType), RET4, EAX count. Для1 старт=this+dc; для2=this+e0. Начальный -1 даёт0, иначе цикл count++ и next по pool+104+index*20h.",
+        "Неизвестный listType вызывает Alert, но НЕ прекращает функцию: исходный аргумент используется как стартовый индекс. Таким образом -1 после warning возвращает0; другие invalid values способны читать вне pool или зациклиться. Нет bounds/cycle guard и cap64 на число обходов."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101006d0.c",
+        "analysis/server-sound-entity/101006d0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100730",
+      "proposed_name": "CSoundEnt_InitializePoolAndReserveClients",
+      "subsystem": "monsters",
+      "summary_ru": "Создаёт цепочку64 свободных slots и резервирует первые maxClients записей.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(pool*), RET. this.freeHead=0, activeHead=-1;64 вызова ClearAllFields с ECX=this+ec+i*20h. Каждому listNext=i+1, затем последнему slot63.listNext=-1 записью this+8e4. Полный pool: offsetec, stride20h, размер800h; объект заканчивается на8ec.",
+        "Далее signed i<gpGlobals.maxClients(+90h): AllocSound вызывается с ECX=GLOBAL singleton, а не this. Каждый выделенный global slot получает expire=-1.0f. При singleton==this и стабильном N в0..64 active chain становится N-1→...→0→-1, freeHead=N либо-1 при64. Отрицательное/нулевое maxClients не резервирует; значение>64 вызывает failure после64 и ранний выход.",
+        "На failure Alert Client Reserve и return: rollback отсутствует, debug flag+e8 не обновляется. После успеха CVarGetFloat(displaysoundlist) ST0 округляется float32; flag=1 ТОЛЬКО при ordered equality1.0, NaN/остальные значения→0. Предыдущий diagnostic count+e4 не сбрасывается. Повторный Initialize разрушает существующие payload/chains."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100730.c",
+        "analysis/server-sound-entity/10100730-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100820",
+      "proposed_name": "CSoundEnt_InsertSound",
+      "subsystem": "monsters",
+      "summary_ru": "Выделяет AI sound record и сохраняет type, origin, volume и абсолютное время истечения.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(typeDWORD,originPointer,volumeDWORD,durationFloat), RET, гарантированного result нет. NULL singleton → ничего. AllocSound использует global singleton. При -1 печатает второе warning InsertSound и выходит; другой slot не вытесняет.",
+        "Success копирует12 bytes origin без NULL guard, type в+0c, volume в+10. Expire+14=float32(gpGlobals.time+duration) через ADDSS. Никаких clamp, category validation, duration>=0, координат/volume finite check нет. listNext уже установлен allocator; audibleNext остаётся прежним.",
+        "Duration=-1 не означает бессрочность: sentinel зависит от итогового expire==-1.0. NaN expire сохраняется Think при продолжающемся исполнении. Здесь нет EmitSound, имени WAV, network message либо direct monster callback. Support CGib::WaitTillLand1008c9c0 передаёт type10h, origin pointer, volume384, duration25.0f после своего landing/color gate."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100820.c",
+        "analysis/server-sound-entity/10100820-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101008c0",
+      "proposed_name": "CSoundEnt_ObjectCapsNoSave",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает фиксированную маску80000000h из virtual40 CSoundEnt.",
+      "confidence": "high",
+      "details_ru": [
+        "MOV EAX,80000000h; RET, this не читается. Native vtable101ded8c+40. Совместимая семантика FCAP_DONT_SAVE; фактический save-dispatch и судьба singleton после загрузки здесь не устанавливаются. Не означает вызов cleanup."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101008c0.c",
+        "analysis/server-sound-entity/101008c0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101008d0",
+      "proposed_name": "CSoundEnt_PrecacheNoOp",
+      "subsystem": "monsters",
+      "summary_ru": "Пустой Precache slot30 у CSoundEnt.",
+      "confidence": "high",
+      "details_ru": [
+        "Единственная инструкция RET0. Нет записи полей, загрузки ресурсов, вызова engine, определённого результата EAX. Spawn10100960 этот slot самостоятельно не вызывает."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101008d0.c",
+        "analysis/server-sound-entity/101008d0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101008e0",
+      "proposed_name": "CSound_ResetClientPayloadAndTerminateLink",
+      "subsystem": "monsters",
+      "summary_ru": "Очищает origin/type/volume и завершает listNext, сохраняя expire и audibleNext.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall(record*), RET. Origin копируется из shared vector10222f34..3c; type+0c=0, volume+10=0, listNext+18=-1. Поля expire+14 и audibleNext+1c НЕ записываются. Это отличается от ClearAllFields10100580.",
+        "Не меняет pool freeHead/activeHead и не выполняет unlink. В support ClientDisconnect1001cc90 ECX=SoundPointerForIndex(IndexOfEdict-1). Для reserved record expire=-1 сохраняется; при нахождении внутри active chain запись listNext=-1 может отсечь достижимость её прежнего хвоста. Последующие helper вызовы здесь этот хвост не восстанавливают; общий lifetime игры не объявляется доказанной утечкой."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101008e0.c",
+        "analysis/server-sound-entity/101008e0-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100910",
+      "proposed_name": "CSoundEnt_SoundPointerForIndex",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает адрес slot только для signed index0..63 и существующего singleton.",
+      "confidence": "high",
+      "details_ru": [
+        "cdecl(index), RET, EAX pointer/0. NULL singleton→0 без warning. Signed index>63→Alert too large и0; index<0→Alert Index<0 и0; иначе singleton+ec+index*20h.",
+        "Не проверяет active/free membership, expired flag, reserved range или validity singleton. Даже свободный slot возвращается. После pointer0 не все AI consumers безопасны: Listen100bfae0 всё равно читает next; PBestScent100c1310 вызывает predicate без NULL guard."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100910.c",
+        "analysis/server-sound-entity/10100910-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100960",
+      "proposed_name": "CSoundEnt_Spawn",
+      "subsystem": "monsters",
+      "summary_ru": "Делает entity несолидной, инициализирует pool и планирует первый Think через1.0f.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET; native vtable+2c. Пишет pev.solid+10c=0, вызывает10100730(this), затем virtual8(1.0f) без проверки результата Initialize. Отдельного Precache, модели, movetype, classname, global assignment и Think field+78 нет.",
+        "Concrete virtual8=1000e1f0→virtual4=10017110(delay,0), уже REVIEW scheduler. Callback приходит через DispatchThink10016a30→virtuale0=10100990; CSoundEnt не обязан устанавливать member Think+78 для этого override. Срок1.0 — запрос scheduler, не гарантия точного engine frame."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100960.c",
+        "analysis/server-sound-entity/10100960-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100990",
+      "proposed_name": "CSoundEnt_ThinkExpireAndReport",
+      "subsystem": "monsters",
+      "summary_ru": "Перепланирует Think на0.3f, освобождает истёкшие active records и опционально печатает счётчики.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET, native virtuale0. Сначала virtual8(0.3f bits3e99999a), потом проход this.activeHead с previous=-1. Native COMISS(now,expire)/JB сохраняет slot при now<expire ИЛИ unordered; если сравнение не ушло, ordered expire==-1.0 также сохраняет. Поэтому NaN времени/expire не удаляет запись при продолжающемся исполнении, в отличие от буквального Ghidra C. Равенство now==expire удаляет, кроме sentinel-1.",
+        "В ветви удаления заранее сохраняет current.listNext, затем10100620(current,previous), использующий GLOBAL singleton. Previous обновляется лишь для сохранённого current. Не очищает payload и не удаляет сам sound entity. Указатели/циклы не валидируются.",
+        "Если this+e8!=0: delta=CountActive()-this.previousCount(offset e4); Alert(type2,Soundlist-format,activeCount,freeCount,delta), затем previousCount=новыйCountActive(). Учитываются и reserved slots; это не количество проигрываемых WAV. Первый delta зависит от прежнего+e4, Initialize его не сбрасывает. Displaysoundlist читается только Initialize, а не каждый Think."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100990.c",
+        "analysis/server-sound-entity/10100990-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10100a60",
+      "proposed_name": "Export_soundent_FactoryThunk",
+      "subsystem": "monsters",
+      "summary_ru": "Экспорт soundent является пятибайтовым tail JMP в CSoundEnt factory101004f0.",
+      "confidence": "high",
+      "details_ru": [
+        "Native E9 rel32 без frame/собственных записей. Сохраняет cdecl argument и результат EAX target. Ghidra C разворачивает тело factory, но literal export-body не делает allocation сам и не устанавливает singleton. Bound range10100a60..10100a64 inclusive."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10100a60.c",
+        "analysis/server-sound-entity/10100a60-0.asm",
+        "analysis/server-sound-entity/evidence.json",
+        "analysis/server-sound-entity/contract.md"
+      ]
+    }
+  ]
+}

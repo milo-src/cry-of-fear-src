@@ -148,4 +148,4 @@ Thiscall graph(int source,int destination,int hull,uint capabilities), RET16, fl
 
 Уточнены producer boundaries: fresh allocation и NodeEntity ограничивают normal construction 1024 узлами, но disk loader не проверяет этот предел; encoder допускает identity128→tag80, несовместимый с decoder; Clear не очищает coordinate cache, bucket producer очищает, Load копирует cache из файла. Это не доказательство runtime проявления на оригинальных картах.
 
-Открыто: полный builder100ca860 и reorder100cf310, остальные map-node/viewer lifecycle, engine matching/trace, CRT ownership/exception contracts, допустимость route output capacity у всех callers, actual map data и derived overrides. Новую очередь брать из этих владельцев и актуального --pending.
+Builder, reorder и node/viewer lifecycle разобраны в [graph builder](../server-graph-builder/contract.md), [ordering](../server-graph-ordering/contract.md), [entities](../server-graph-entities/contract.md). Остаются engine matching/trace, CRT ownership/exception contracts, допустимость route output capacity у всех callers, actual map data и derived overrides. Новую очередь брать из этих владельцев и актуального --pending.

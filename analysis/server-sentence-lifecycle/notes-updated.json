@@ -1,0 +1,24 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100fe300",
+      "proposed_name": "Sentences_ResolveNameToEngineIndex",
+      "subsystem": "audio",
+      "summary_ru": "Находит полное имя sentence без первого символа входной строки и при необходимости формирует числовую engine-строку `!<index>`.",
+      "confidence": "high",
+      "details_ru": "ABI `int ResolveNameToEngineIndex(const char *prefixed,char *optionalOut)`. Начинает с index0; если signed global count<=0, возвращает -1. Передаёт каждую 16-байтную запись и **prefixed+1** в comparator `1017bcbb`; EAX==0 принимает за совпадение, иначе продолжает до count. В сохранённом C callee обозначен Ghidra как `__stricmp`. Последующий [sentence-lifecycle](../server-sentence-lifecycle/contract.md) доказывает непосредственно по ASM default ASCII A..Z fold, отдельную mapped-byte ветвь и NULL error path. Содержимое runtime locale table и эффекты error helpers остаются открыты; один library label не заменяет эти границы. Не проверяет ready, NULL input или что первый символ именно `!`; это обязанность caller `100fc9f0`, который проверяет `sample && sample[0]=='!'`. Успех возвращает EAX=index; optionalOut==NULL разрешён. Иначе пишет WORD `0x21`, форматирует index через точный `%d` в scratch[8] и добавляет его без capacity. При miss возвращает -1, out не очищается. Не парсит уже числовое `!12`: передаёт строку `12` comparator вместе с сохранёнными names. Не исправляет повреждение name pool/count.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fe300.c",
+        "analysis/server-sentence-groups/100fe300.asm",
+        "analysis/server-sentence-groups/contract.md",
+        "analysis/server-sentence-groups/evidence.json",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json",
+        "analysis/server-sentence-lifecycle/1017bcbb-dispatch.asm",
+        "analysis/server-sentence-lifecycle/1017bc82-ascii.asm",
+        "analysis/server-sentence-lifecycle/1017bd04-mapped.asm"
+      ]
+    }
+  ]
+}

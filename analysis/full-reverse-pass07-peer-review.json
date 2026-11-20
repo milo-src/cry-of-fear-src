@@ -1,0 +1,119 @@
+{
+  "scope": "Independent static peer review of pass07; no execution and no claim of complete subsystem reconstruction",
+  "target_executed": false,
+  "packages": [
+    {
+      "package": "analysis/server-world-bootstrap",
+      "primary_count": 12,
+      "author": "root",
+      "reviewer": "client_catalog",
+      "result": "PASS after correction",
+      "checked": "All 12 primary C/ASM and contracts; independent40C/40ASM/5141 byte rows/533 raw/2vtables/2save tables/4support hashes and engine header. Resource registry, delayed mode assignment, float rules timer, native failure paths, WORD indices and lightstyle table checked.",
+      "corrections": [
+        {
+          "function": "server:0x101203a0 and server:0x10120460",
+          "finding": "Private-data owner wording must identify *(edict+0x7c), not private+0x7c.",
+          "resolution": "Corrected write_notes.py and regenerated notes/contract before merge."
+        }
+      ],
+      "final_hashes": {
+        "contract.md": "14ba90ad14c97af1892d31a2e6035cd008b3aecdf510365d4ce044e7f6c34d4b",
+        "notes.json": "7af65d7694f45c5e7f1f8f7c15372b10ce590e2f87834bb6a11c89d4542bb2ef",
+        "evidence.json": "0149a31517e6d0d4732d30866b60b2a51668bfa125c936fdf9bcc89297405ec8"
+      }
+    },
+    {
+      "package": "analysis/server-sentence-groups",
+      "primary_count": 11,
+      "author": "client_catalog",
+      "reviewer": "root",
+      "result": "PASS after correction",
+      "checked": "All 11 primary native bodies and full contract; all note details equal reviewed contract text. Independent PE provenance19C/17ASM/1531 rows/18raw/3support hashes and API header. Parser, sentinel/bounds, pool refill, zero-index wrapper asymmetry and sequential clamp checked.",
+      "corrections": [
+        {
+          "function": "server:0x100fe300",
+          "finding": "Case-insensitive _stricmp identity was only a Ghidra library label, not independently established native comparator semantics.",
+          "resolution": "Contract/notes now distinguish confirmed target1017bcbb/arguments/EAX==0 from unverified case/locale behavior."
+        }
+      ],
+      "final_hashes": {
+        "contract.md": "07aae4c004cb9496b761b8571ffa60298c9b8d14e94dcbe009b7be7ba16a6fba",
+        "notes.json": "9b19f32c8f5cbc00c090de40b1e5c2dc96f8f11a86220b914c46b56594b62a31",
+        "evidence.json": "ec05d2c439448daebfd231e5b124ae71408833d95c5db9efd178adcc6f556b98"
+      }
+    },
+    {
+      "package": "analysis/server-cinematic-lifecycle",
+      "primary_count": 15,
+      "author": "server_catalog",
+      "reviewer": "shader_inventory",
+      "result": "PASS",
+      "checked": "All15 C/ASM and notes/contract; independent46C/46ASM/2341 byte rows/270raw/2vtables. Activate+44 tail JMP, priority bypass, origin/recipient group arguments, Use RET16, MoveTo dispatch, completion/fallback checked.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "b54481f29c3142aacec0e9beeef55dd9ae45995c2c8bb749db850d003240b729",
+        "notes.json": "43d996d0d62bcc74c055b5bfc0277fe99b9739c6147052600b151227c3d4a3e2",
+        "evidence.json": "802ee8198ec8886b5e76e24e6a17c84395263a3b0e14ead3893b47a175102717"
+      }
+    },
+    {
+      "package": "analysis/server-event-effects",
+      "primary_count": 12,
+      "author": "shader_inventory",
+      "reviewer": "server_catalog",
+      "result": "PASS",
+      "checked": "All12 C/ASM and notes/contract; independent26C/26ASM/1824 byte rows/147raw, plus14 bounded engine support byte rows. Particle payload/velocity overwritten by Spawn, Ripple SHORT40, double trace, unbounded water search and delayed removal checked.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "a72344436ec0f8ea9631777440ac0411df006f8a7c5a02be199bf2f958cbf8f5",
+        "notes.json": "2123b6281524d310f191e4a7f117b961b53fa5ab96440eb6e137f5682b949a7f",
+        "evidence.json": "f92b3d9bdf45aab650b1e0bb64e26d88b1d8463f6d09a85300974bedd9c843d8"
+      }
+    }
+  ],
+  "prior_review_correction": {
+    "function": "server:0x100fba10",
+    "finding": "Three cleared scheduler fields had their names permuted in the previous note.",
+    "resolution": "Native MONSTER descriptors and1000aad0 confirm taskStatus+22c, schedulePointer+230, scheduleIndex+234. Corrected monster-events writer/notes/contract and synchronized catalog; earlier selected scratch.z cleanup correction retained.",
+    "new_review": false
+  },
+  "documentation_pin_refresh": [
+    {
+      "evidence": "analysis\\server-sentence-groups\\evidence.json",
+      "path": "analysis/server-monster-events/contract.md",
+      "previous": "92275cb8679b7f076bcf2012e138e54830dd03ee255cbf87aba793ff696a3e98",
+      "current": "f39003b337334ba460c3382d6e8b94a11d91c598936593a9dda978e6d31ddd04"
+    },
+    {
+      "evidence": "analysis\\server-cinematic-lifecycle\\evidence.json",
+      "path": "analysis/server-studio-events/contract.md",
+      "previous": "c94fbe98fbd800810c41ae25a987d40b58c0530f80d1e40b36bbc05d17d38489",
+      "current": "01b54f978396d264d3b0fa94456eacd68952bf6d0a97d872b008014ef11936bf"
+    },
+    {
+      "evidence": "analysis\\server-cinematic-lifecycle\\evidence.json",
+      "path": "analysis/server-monster-events/contract.md",
+      "previous": "92275cb8679b7f076bcf2012e138e54830dd03ee255cbf87aba793ff696a3e98",
+      "current": "f39003b337334ba460c3382d6e8b94a11d91c598936593a9dda978e6d31ddd04"
+    },
+    {
+      "evidence": "analysis\\server-event-effects\\evidence.json",
+      "path": "analysis/server-monster-events/contract.md",
+      "previous": "92275cb8679b7f076bcf2012e138e54830dd03ee255cbf87aba793ff696a3e98",
+      "current": "f39003b337334ba460c3382d6e8b94a11d91c598936593a9dda978e6d31ddd04"
+    },
+    {
+      "evidence": "analysis\\server-monster-events\\evidence.json",
+      "path": "analysis/server-studio-events/contract.md",
+      "previous": "c94fbe98fbd800810c41ae25a987d40b58c0530f80d1e40b36bbc05d17d38489",
+      "current": "01b54f978396d264d3b0fa94456eacd68952bf6d0a97d872b008014ef11936bf"
+    }
+  ],
+  "aggregate_report": "analysis/full-reverse-pass07-verification.json",
+  "reproducible_packet_checks": [
+    "python analysis/server-world-bootstrap/verify.py",
+    "python analysis/server-world-bootstrap/verify.py analysis/server-sentence-groups/evidence.json",
+    "python analysis/server-cinematic-lifecycle/verify.py",
+    "python analysis/server-event-effects/verify.py"
+  ]
+}

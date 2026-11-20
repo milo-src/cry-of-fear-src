@@ -1,0 +1,147 @@
+{
+  "functions": [
+    {
+      "module": "server", "address": "0x100ce080", "proposed_name": "CNodeEnt_KeyValue", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Записывает hints и базовые ключи узла; hinttype сохраняет WORD, но затем сбрасывает handled из-за fallthrough.",
+      "details_ru": [
+        "Thiscall(node,KeyValueData*), RET4. Native RTTI CNodeEnt и vtable101d6620+34→100ce080 подтверждены. Key+4/value+8 читаются без NULL guards; сравнения case-sensitive. hinttype: parser1016b55e(value)→WORD object+dc, handled+0c=1, затем без return перечитывает key и продолжает сравнения. При неизменном ключе hinttype финальный100ce215 ставит handled=0, сохраняя WORD. Нельзя превращать этот путь в обычный successful early-return.",
+        "activity→WORD+de; movewith→AllocString10223054(value)→DWORD+18; skill→parser EAX→DWORD+60; style→parser EAX→DWORD+64. Эти четыре пути ставят handled=1 и возвращаются. Неизвестный key ставит handled=0, inherited KeyValue не вызывается. Native BASE descriptors называют +18 m_MoveWith,+60 m_iLFlags,+64 m_iStyle; skill здесь не запись глобальной сложности.",
+        "16-битные hints сужаются по AX без clamp. Parser назван atoi в сохранённом C, но полные CRT/locale/overflow правила не раскрыты. Reviewed node Spawn100cf550 переносит +dc/+de в node+50/+52. Owner/key/value validation и последующая engine-реакция на handled=0 остаются вне тела; EAX не отдельный bool API."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100ce080.c", "analysis/server-graph-entities/100ce080.asm", "analysis/server-graph-entities/100cf550.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100ca590", "proposed_name": "CNodeEnt_GetOrCreatePrivateData", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Возвращает существующий private object или выделяет e0 bytes и устанавливает CNodeEnt vtable/pev.",
+      "details_ru": [
+        "cdecl(entvars*), RET, EAX=object на обычном успешном выходе, несмотря C void. NULL pev вызывает engine CreateEntity10222f9c; nonNULL edict преобразуется в edict+80. Далее pev+20c→edict; при edict!=NULL и private+7c!=NULL возвращает существующий pointer без проверки типа и без записей в него.",
+        "Иначе PvAllocEntPrivateData10223044(edict,e0). При успехе только [object]=101d6620 и object+4=pev; native RTTI подтверждает CNodeEnt. Полное обнуление полей в теле отсутствует. При CreateEntity==NULL далее разыменовывается NULL+20c; allocation==NULL приводит к записи [NULL+4], а не безопасному NULL-return. Failure occurrence не проверялось.",
+        "Exports info_node100cfe60/info_node_air100cfe70 — отдельные JMP thunks сюда. Factory не задаёт classname и не вызывает Spawn. Vtable+2c=reviewed100cf550,+34=100ce080,+8=1000e1f0. Lifetime private storage управляется engine; локального free нет."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100ca590.c", "analysis/server-graph-entities/100ca590.asm", "analysis/server-graph-entities/100cfe60.asm", "analysis/server-graph-entities/100cfe70.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100ca5f0", "proposed_name": "CNodeViewer_GetOrCreatePrivateData", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Создаёт или возвращает private object просмотрщика графа; все четыре viewer exports используют одну фабрику.",
+      "details_ru": [
+        "cdecl(entvars*), RET, EAX=private object. NULL pev→CreateEntity→edict+80; затем pev+20c и edict.private+7c. Существующий private pointer возвращается без type guard/смены vtable/pev. Иначе PvAllocEntPrivateData(edict,4fc), [object]=101d74c8,object+4=pev. Native RTTI CNodeViewer; vtable+2c=100cf6c0,+8=1000e1f0.",
+        "CreateEntity NULL не отсечён перед чтением pev+20c; allocation NULL ветка пишет [NULL+4]. Безопасный failure-return не доказан. Инициализация viewer count/cursor/edge arrays не выполняется фабрикой; zero-fill принадлежит внешнему allocator. Не запускает Spawn или rendering.",
+        "node_viewer100cfe80, node_viewer_fly100cfe90, node_viewer_human100cfea0, node_viewer_large100cfeb0 — точные tail JMP сюда. Различия hull/color выбирает Spawn по сохранённому classname, не thunk."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100ca5f0.c", "analysis/server-graph-entities/100ca5f0.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100ca650", "proposed_name": "CTestHull_GetOrCreatePrivateData", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Создаёт private CTestHull размером374h или возвращает уже связанный object; setup выполняется отдельно.",
+      "details_ru": [
+        "cdecl(entvars*), RET, EAX=object. NULL pev вызывает CreateEntity; результат edict+80. При edict.private!=NULL возвращает pointer без проверок и без переинициализации. Иначе PvAllocEntPrivateData(edict,374h), vtable101d6b7c и object+4=pev. Native RTTI прямо содержит CTestHull.",
+        "NULL CreateEntity ведёт к разыменованию NULL+20c; NULL allocator — к записи [NULL+4]. Constructor/zeroing остальных полей и безопасный failure-return здесь отсутствуют. testhull export100cfef0 — JMP сюда. Factory не вызывает model/bounds setup.",
+        "Hull virtual Spawn+2c=1000e220 (пустой RET), virtual8=1000e1f0, virtual4=10017110. Reviewed node Spawn100cf550 при nodeCount==0 вызывает эту фабрику(NULL), переносит EAX в ECX и отдельно зовёт setup100cf940(node.pev); нулевой результат не проверяется. Это конкретная цепь, не доказательство setup для любого map-spawn testhull."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100ca650.c", "analysis/server-graph-entities/100ca650.asm", "analysis/server-graph-entities/100cf550.asm", "analysis/server-graph-entities/1000e220.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cf940", "proposed_name": "CTestHull_SetupForGraphBuild", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Настраивает невидимый тестовый hull и назначает отложенное построение либо удаление по graph+0.",
+      "details_ru": [
+        "ECX=hull, RET4, единственный stack argument не читается. Не virtual Spawn: native hull slot+2c=1000e220 noop. Сначала engine SetModel(hull.edict,models/player.mdl), затем1011a030 SetSize с mins(-12,-12,0),maxs(12,12,72). Не копирует origin/angles из переданного node.pev, не выполняет локальный precache.",
+        "Последовательно pev.solid+10c=3,movetype+108=4,effects+118=0,health+164=50.0,yaw_speed+b0=8.0. При globalgraph102238b0==0 object.think+78=100cc7d0 и virtual8(1.0); иначе think=101028e0 SUB_Remove и virtual8(0.0). Graph+4 и число узлов не проверяются. После virtual call пишет rendermode+14c=2,renderamt+150=0.0.",
+        "Native BASE descriptor доказывает m_pfnThink+78. Vtable8→1000e1f0 передаёт delay,0 в vtable4→10017110; это scheduling, не непосредственный вызов think. Direct deadline или assist branch зависит от parent/child/flags20; base time зависит от movetype7. Нулевой delay не гарантирует синхронное удаление. Нет локальных NULL guards/model errors."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cf940.c", "analysis/server-graph-entities/100cf940.asm", "analysis/server-graph-entities/1000e1f0.asm", "analysis/server-graph-entities/10017110.asm", "analysis/server-graph-entities/1011a030.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cc7d0", "proposed_name": "CTestHull_DropDelayScheduleBuild", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Перемещает hull к первому узлу и назначает CallBuildNodeGraph с задержкой1.0; DropToFloor не вызывает.",
+      "details_ru": [
+        "Экспортированный thiscall no-arg, RET. Alert1 Node Graph out of Date. Rebuilding..., затем10119fe0(this,globalgraph.nodes102238bc). Pointer указывает на xyz первого node, не visibility+0c; nodeCount/readiness/NULL nodes не проверяются.",
+        "SetOrigin helper сначала virtual+d0; штатная CTestHull table даёт1000db80→0, поэтому player copy+618 не выполняется. Затем engine SetOrigin(hull.edict,vector). После этого object+78=100cbbd0 CallBuildNodeGraph, virtual8(1.0). Название DropDelay не доказывает DropToFloor: такого вызова в теле нет. Callback фактически исполнит engine scheduler вне этого метода."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cc7d0.c", "analysis/server-graph-entities/100cc7d0.asm", "analysis/server-graph-entities/10119fe0.asm", "analysis/server-graph-entities/1000db80.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cbbd0", "proposed_name": "CTestHull_CallBuildNodeGraphWithFlag", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Обрамляет вызов builder записью global10222df0=1, затем0 на нормальном возврате.",
+      "details_ru": [
+        "Экспортированный thiscall no-arg, обычный RET. MOV DWORD10222df0,1; CALL100ca860 с неизменённым ECX=this; MOV global,0; RET. EAX не отдельный success API, результат builder не проверяется.",
+        "Старое значение флага не сохраняется; reentrancy counter/guard и exception cleanup отсутствуют. После ненормального выхода builder сброс не гарантирован. Callback устанавливается DropDelay100cc7d0. Внутренности builder и все readers флага — отдельные контракты; wrapper сам не создаёт nodes/links и не владеет выделениями графа."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cbbd0.c", "analysis/server-graph-entities/100cbbd0.asm", "analysis/server-graph-precompute/100ca860-0.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cf6c0", "proposed_name": "CNodeViewer_SpawnCollectRoutes", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Выбирает hull/цвет viewer, находит destination, собирает рёбра и назначает порционную отправку.",
+      "details_ru": [
+        "ECX=viewer, RET; vtable101d74c8+2c подтверждена factory+RTTI. Graph+0==0 или+4==0: Alert1 Graph not ready!,10119900(viewer),return. Это deferred removal helper (cleanup,flags40000000,targetname0), не engine RemoveEntity прямо из Spawn.",
+        "Case-sensitive node_viewer_fly: hull+4e8=3,category+4ec=2,RGB float(160,100,255). node_viewer_large: hull2,category5,RGB(100,255,160). Любой иной classname, включая node_viewer_human: hull1,category5,RGB(255,160,100). Затем100ccea0 с ECX=globalgraph и (&pev.origin,category), результат→destination+dc.",
+        "Signed nearest<0 печатает No nearby node и возвращается без удаления/нового think/очистки count; поля цвета,hull,category,destination уже изменены. При nearest>=0 count+e4=0 и diagnostic basenode. Signed N<128: все i=0..N-1 декодируются100ce830(i,destination,hull,mode0), затем100ca700 unique edge; N<=0 ноль итераций.",
+        "N>=128:100cd550(destination), затем пачки [processed,oldCount) обоих концов сохранённых рёбер; после пачки перечитать count и повторять, пока он меняется. Локальный processed не сбрасывается между пачками. Append normal-state cap128; повреждённые counts/IDs/pool не исправляются.",
+        "Alert2 %d nodes выводит число рёбер; cursor+e0=0,think+78=100cc5f0 DrawThink,virtual8(0.0). Массивы концов+e8/+2e8 не обнуляет, graph не перестраивает. Readiness+0/+4 не доказывает наличие cached pool, decoder bounds/lifetime остаются его собственным ограничением."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cf6c0.c", "analysis/server-graph-entities/100cf6c0.asm", "analysis/server-graph-entities/100cd550.asm", "analysis/server-graph-entities/100ca700.asm", "analysis/server-graph-entities/10119900.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cc5f0", "proposed_name": "CNodeViewer_DrawThinkEmitBeams", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Отправляет до10 beam tempentities за callback и помечает viewer для удаления по равенству cursor/count.",
+      "details_ru": [
+        "Экспортированный thiscall no-arg RET. Сначала virtual8(0.0), затем до10 итераций. Перед каждым ребром только cursor+e0==count+e4 вызывает10119900(this) и return; нет >=/negative guard. Если последнее ребро ровно десятое, removal проверяется в следующем callback. Входные node IDs и graph pointers не валидируются.",
+        "Wire: MessageBegin(0,23,NULL,NULL),WriteByte0; шесть WriteCoord A.xyz+(0,0,8),B.xyz+(0,0,8), где endpoints viewer+e8/+2e8, nodes stride58, node position+0. Затем WriteShort(signExtend WORD10231f08); WriteByte 0,0,250,40,0,trunc32(R),trunc32(G),trunc32(B),128,0; MessageEnd. SDK names TE_BEAMPOINTS/MSG_BROADCAST — совместимая интерпретация, не визуальный runtime test.",
+        "RGB reads+4f0/+4f4/+4f8 CVTTSS2SI без clamp; masked invalid NaN/overflow→INT_MIN до writer. Sprite index WORD10231f08 producer1011fd90 получает из10116990(PTR1021b4e8=sprites/laserbeam.spr), сохраняет AX; lookup failure0 не проверяется viewer. Runtime global state не выводится из BSS.",
+        "Координаты/cursor/pointers перечитываются между engine calls, не единый snapshot. После MessageEnd cursor++ и локальный counter++; graph и endpoint arrays не изменяет. Deferred removal10119900 имеет собственные cleanup side effects; network consumers, width/lifetime scaling и scheduler cadence вне этого тела."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cc5f0.c", "analysis/server-graph-entities/100cc5f0.asm", "analysis/server-graph-entities/1011fd90.asm", "analysis/server-graph-entities/10116990.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cef90", "proposed_name": "CTestHull_ShowBadNodeParticles", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Поворачивает тестовый hull и отправляет пять particle effects вокруг его origin, затем назначает следующий think через0.1.",
+      "details_ru": [
+        "Экспортированный thiscall no-arg RET. pev.movetype+108=5, yaw+54=float32(yaw+4.0), MakeVectors(&pev.angles+50) через10119320 tail-jump engine slot19. Нормализации yaw и guards health/readiness/node ID нет.",
+        "Последовательно10119620(origin,dir10222f34,255,25); origin+64*globalVector28; origin-64*globalVector28; origin+64*globalVector40; origin-64*globalVector40 с теми же последними аргументами. Совместимый globalvars header называет vectors+28 v_forward,+40 v_right; это не v_up. Каждое умножение/сложение/вычитание SSE float32, поля перечитываются между calls.",
+        "10119620 преобразует uint arguments color/count в float32 и вызывает ParticleEffect slot42:255.0,25.0. Pointer direction10222f34 общий; текущее содержимое не объявлено нулевым без runtime-state proof. Затем virtual8(float32 0.1); callback field+78 сам не меняет. Выбор плохого узла и установка этого think принадлежат builder/callers, не этому display helper."
+      ],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cef90.c", "analysis/server-graph-entities/100cef90.asm", "analysis/server-graph-entities/10119320.asm", "analysis/server-graph-entities/10119620.asm", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfe60", "proposed_name": "info_node_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт info_node: единственный JMP в общую фабрику CNodeEnt.",
+      "details_ru": ["Пять native bytes E9 2B A7 FF FF дают tail-JMP100ca590. cdecl entvars* и EAX factory сохраняются без wrapper frame. Сам не пишет classname, hints или graph, не вызывает Spawn. Owner CNodeEnt подтверждён target vtable101d6620+RTTI; allocation/lifecycle и ошибки NULL находятся в100ca590/100cf550, а не дублируются здесь."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfe60.c", "analysis/server-graph-entities/100cfe60.asm", "analysis/server-graph-entities/100ca590.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfe70", "proposed_name": "info_node_air_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт info_node_air ведёт в ту же CNodeEnt factory; category выбирается позднее по classname.",
+      "details_ru": ["Единственный JMP100ca590 (E9 1B A7 FF FF), cdecl entvars* и EAX target без изменений. Отдельной air vtable/аллокации или установки категории здесь нет. Reviewed Spawn100cf550 позднее сравнивает pev.classname с info_node_air; thunk это поле не устанавливает. Factory failures и existing-private reuse определяются100ca590."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfe70.c", "analysis/server-graph-entities/100cfe70.asm", "analysis/server-graph-entities/100cf550.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfe80", "proposed_name": "node_viewer_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт node_viewer — tail-переход в общую фабрику просмотрщика.",
+      "details_ru": ["Единственный JMP100ca5f0 (E9 6B A7 FF FF), cdecl entvars* и EAX target. Не вызывает Spawn/DrawThink, не устанавливает classname, destination, RGB или hull. При последующем classname node_viewer Spawn100cf6c0 использует default hull1/category5/RGB(255,160,100); это эффект Spawn, не thunka. Native factory vtable101d74c8/RTTI CNodeViewer."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfe80.c", "analysis/server-graph-entities/100cfe80.asm", "analysis/server-graph-entities/100ca5f0.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfe90", "proposed_name": "node_viewer_fly_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт node_viewer_fly использует общую CNodeViewer factory без собственной инициализации.",
+      "details_ru": ["JMP100ca5f0, точные bytes E9 5B A7 FF FF. Вход entvars* остаётся на stack, EAX возврат target сохраняется. Название fly само не меняет owner class: native RTTI CNodeViewer. При сохранённом classname node_viewer_fly поздний Spawn выбирает hull3/category2/RGB(160,100,255); экспорт этих записей не делает."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfe90.c", "analysis/server-graph-entities/100cfe90.asm", "analysis/server-graph-entities/100cf6c0.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfea0", "proposed_name": "node_viewer_human_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт node_viewer_human переходит в общую factory и использует default ветвь viewer Spawn.",
+      "details_ru": ["JMP100ca5f0, bytes E9 4B A7 FF FF; cdecl entvars*, EAX target, без локальных guards/writes. Нет отдельной human factory/vtable. Spawn100cf6c0 распознаёт специально только fly и large, поэтому classname node_viewer_human попадает в default hull1/category5/RGB(255,160,100). Thunk classname не задаёт и Spawn не вызывает."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfea0.c", "analysis/server-graph-entities/100cfea0.asm", "analysis/server-graph-entities/100cf6c0.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfeb0", "proposed_name": "node_viewer_large_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт node_viewer_large делегирует создание CNodeViewer; large-настройки задаёт Spawn.",
+      "details_ru": ["Единственный JMP100ca5f0, bytes E9 3B A7 FF FF. Передача entvars*/возврат EAX не изменяются. Без вызовов Spawn, resource/model setup и graph mutations. При classname node_viewer_large Spawn100cf6c0 выбирает hull2/category5/RGB(100,255,160), но export не записывает classname и не гарантирует execution Spawn."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfeb0.c", "analysis/server-graph-entities/100cfeb0.asm", "analysis/server-graph-entities/100cf6c0.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    },
+    {
+      "module": "server", "address": "0x100cfef0", "proposed_name": "testhull_FactoryExport", "subsystem": "monsters", "confidence": "high",
+      "summary_ru": "Экспорт testhull — JMP в CTestHull factory; отдельный graph setup здесь отсутствует.",
+      "details_ru": ["Единственный JMP100ca650 (E9 5B A7 FF FF), cdecl entvars*, EAX target без изменения. Owner CTestHull доказан target vtable101d6b7c и native RTTI. Native virtual Spawn+2c=1000e220 noop; exporter не вызывает100cf940. Поэтому одно наличие map entity testhull не доказывает запуск node graph build chain; доказанный отдельный caller setup — node Spawn100cf550."],
+      "evidence_paths": ["decompiled/server/partial-pass/functions/0x100cfef0.c", "analysis/server-graph-entities/100cfef0.asm", "analysis/server-graph-entities/100ca650.asm", "analysis/server-graph-entities/1000e220.asm", "analysis/exports/hl.csv", "analysis/server-graph-entities/evidence.json", "analysis/server-graph-entities/contract.md"]
+    }
+  ]
+}

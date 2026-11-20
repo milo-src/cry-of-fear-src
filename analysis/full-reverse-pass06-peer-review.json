@@ -1,0 +1,70 @@
+{
+  "scope": "Independent static peer checks of pass06 local contracts; no target execution; not proof of complete subsystem reconstruction",
+  "target_executed": false,
+  "packages": [
+    {
+      "package": "analysis/server-graph-builder",
+      "primary_count": 7,
+      "author": "root",
+      "reviewer": "client_catalog",
+      "result": "PASS",
+      "checked": "All seven primary C/ASM, full builder100ca860, notes/contract, caller/wrapper/bodyqueue links, original PE provenance: 30C/30ASM/3817 byte rows/275 raw including tables/2 supporting source hashes",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "eff17e92bbb8799f5e9ac73f459bc31e65f8a69e2daa35bb549e949ee9a66d7a",
+        "notes.json": "e72363a92c3990ccde0bc46d6ef5ee08836f3b030ea2a5f9cd4aa2c06f48fa74",
+        "evidence.json": "61fcaad0432735389f2c23fc73293e1ce471b70c142cdcecd7373730c35152c7"
+      }
+    },
+    {
+      "package": "analysis/server-graph-ordering",
+      "primary_count": 3,
+      "author": "client_catalog",
+      "reviewer": "server_catalog",
+      "result": "PASS",
+      "checked": "All three primary C/ASM, notes/contract, caller/TraceLine bridge, count failure/NaN/remap/uninitialized padding: 6C/6ASM/1764 byte rows/161 literals/1save table/4support hashes",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "4a433d2236e6645e39f416999b87c578ceee027c991195c8b9f928015025a248",
+        "notes.json": "403e0d6a42b49c5b889aaf2efb888f7ddb86ffee9f5d10ff537bca5d916f8864",
+        "evidence.json": "1af4f3f11329898d9866a78e50940792253c3b0b0177bbf7363b079efb638776"
+      }
+    },
+    {
+      "package": "analysis/server-graph-entities",
+      "primary_count": 17,
+      "author": "server_catalog",
+      "reviewer": "root",
+      "result": "PASS",
+      "checked": "All17 primary ASM and contract, associated note statements; classname/ParticleEffect/deferred remove support. Independent aggregate verifier checks source hashes/native bytes/tables/paths. Null-failure paths, hinttype fallthrough, unused setup argument, scheduling chain, viewer readiness/no-nearby branches and count10/equality guard confirmed.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "8560b2b9bc3e0edf030671d89b5761d352b4d03fa1bab5ee0dd8ebb360b85e95",
+        "notes.json": "c06b4325b870ab3305863afd4f8584bbe8894c1b4373081f17ea889ee938f626",
+        "evidence.json": "e79d3044d22a8034e1372460552c1986829c104532bd9756a1df62b3ca44e075"
+      }
+    },
+    {
+      "package": "analysis/server-monster-events",
+      "primary_count": 9,
+      "author": "shader_inventory",
+      "reviewer": "client_catalog",
+      "result": "PASS after correction",
+      "checked": "All9 primary C/ASM and notes/contract;14critical support ASM; provenance33C/33ASM/2098byte rows/207raw/2vtables/2save tables/22jump entries/support hashes. Corrected author packet reverified.",
+      "corrections": [
+        {
+          "function": "server:0x100fa530",
+          "finding": "DropToFloor==0 uses selected scratch.z; after ordered XY distance<8 this scratch has been overwritten with old origin. It is not unconditionally bone.z.",
+          "resolution": "Corrected contract.md, write_notes.py and notes.json. Author reran verifier successfully."
+        }
+      ],
+      "final_hashes": {
+        "contract.md": "c5efb3571d01776b740eebd57ee91a481d11c800fd792f0e281973f41a0cc03d",
+        "notes.json": "f4d1a9893d6582cd3cf0d4e799f21d5e28ed534950d278dab7eedeeb57f3c240",
+        "evidence.json": "4f4bd6392df358357e4f935394f7f2c08612819b69d9347be32447a3ba527619"
+      }
+    }
+  ],
+  "documentation_refresh": "Old pending-navigation paragraphs updated. Pinned support MD hashes in graph-ordering and monster-events were explicitly refreshed; native evidence bytes unchanged. Aggregate verification rerun afterward.",
+  "aggregate_report": "analysis/full-reverse-pass06-verification.json"
+}

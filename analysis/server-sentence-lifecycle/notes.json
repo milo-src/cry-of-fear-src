@@ -1,0 +1,139 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100fc8f0",
+      "proposed_name": "Suit_PlayRandomGroupIndex",
+      "subsystem": "audio",
+      "summary_ru": "Вызывает проигрывание случайной sentence из группы по индексу, применяя suitvolume и случайную вариацию pitch.",
+      "confidence": "high",
+      "details_ru": "ABI cdecl `(edict*, int groupIndex)`, plain RET; явный стабильный return-status не формируется. CVarGetFloat `suitvolume` возвращает ST0, который немедленно сохраняется как float. До проверки громкости выполняет RandomLong(0,1); нулевой результат оставляет pitch100, ненулевой вызывает RandomLong(0,6)+98. Смысл включительности API range отделён от буквальных аргументов. Float volume расширяется в double и COMISD сравнивается с double0.05; JBE подавляет вызов при <= и unordered/NaN при обычном продолжении после FP compare. При разрешении вызывает `100fe3c0(edict,groupIndex,volume,float0.8,0,pitch)`. Никакого clamp volume или локальной проверки ready/index нет. RNG расходуется даже для выключенной/NaN громкости. Важная граница caller: нижний `100fe3c0` подавляет выбранный index0, но эта функция не исправляет его семантику.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fc8f0.c",
+        "analysis/server-sentence-lifecycle/100fc8f0.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fc970",
+      "proposed_name": "Suit_PlayRandomGroupName",
+      "subsystem": "audio",
+      "summary_ru": "Вызывает проигрывание случайной sentence по имени группы с suitvolume, вариацией pitch и нижним channel selector -1.",
+      "confidence": "high",
+      "details_ru": "ABI cdecl `(edict*,const char *groupName)`, plain RET без собственного bool. Тот же порядок ST0→float, RandomLong(0,1), условный RandomLong(0,6)+98, затем float→double COMISD/JBE с0.05. В разрешённой ветке вызывает `100fe450(edict,groupName,volume,float0.8,0,pitch,-1)`. Именно нижний helper преобразует channel -1 в2 и выполняет group lookup; здесь имя не копируется, не проверяется на NULL и не преобразуется. Отличие от index wrapper сохраняется: нижний named player допускает выбранный index0. Никакой гарантии успешного звука из остаточного EAX нет.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fc970.c",
+        "analysis/server-sentence-lifecycle/100fc970.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fcaf0",
+      "proposed_name": "Suit_PlaySample",
+      "subsystem": "audio",
+      "summary_ru": "Передаёт raw sample или sentence name в общий EmitSound wrapper на канале6 с suitvolume и вариацией pitch.",
+      "confidence": "high",
+      "details_ru": "ABI cdecl `(edict*,const char *sample)`. Сохраняет CVarGetFloat в float и расходует RNG до double0.05 проверки, ровно как два соседних wrappers. Разрешённая ветка: `100fc9f0(edict,6,sample,volume,float0.8,0,pitch)`. Канал6 соответствует CHAN_STATIC в pinned const.h. Здесь нет признака, что sample обязательно sentence, нет локального precache, проверки player, clamp volume или копирования string. `!` resolution, глобальное уменьшение громкости и HudText принадлежат callee. Plain RET не обещает результат проигрывания.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fcaf0.c",
+        "analysis/server-sentence-lifecycle/100fcaf0.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fc7d0",
+      "proposed_name": "CRadio_GetOrCreatePrivateData",
+      "subsystem": "audio",
+      "summary_ru": "Возвращает существующий private object либо выделяет минимальный CRadio объект для переданных entvars.",
+      "confidence": "high",
+      "details_ru": "ABI cdecl `(entvars *pev)`, реальный результат EAX=private pointer несмотря на Ghidra void. Если pev==NULL, вызывает engine CreateEntity и при ненулевом edict использует edict+80. Затем читает pev+20c; если edict!=NULL и `[edict+7c]!=NULL`, возвращает старый pointer без class/vtable проверки. Иначе engine PvAllocEntPrivateData(edict,0xdc); ненулевой результат получает vtable101dec68 и object+4=pev. Других own stores/конструктора/Spawn здесь нет; начальное содержимое остальной allocation зависит от allocator. Failure CreateEntity оставляет pevNULL и следующий read[20c] не защищён; failure allocation делает write[4]=pev, а не безопасный возвратNULL. Не следует имитировать этот дефект как желаемый API-контракт.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fc7d0.c",
+        "analysis/server-sentence-lifecycle/100fc7d0.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101004c0",
+      "proposed_name": "radio_sentence_ExportThunk",
+      "subsystem": "audio",
+      "summary_ru": "Экспорт radio_sentence без изменения stack передаёт управление фабрике CRadio.",
+      "confidence": "high",
+      "details_ru": "Пять машинных bytes `E9 0B C3 FF FF` — tail JMP100fc7d0. Реального второго inline allocation body, который показывает Ghidra, нет. ABI/результат/failure semantics наследуются от фабрики; exportCSV и native thunk связывают имя radio_sentence с vtable-backed owner. Никакого собственного Spawn либо precache thunk не выполняет.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101004c0.c",
+        "analysis/server-sentence-lifecycle/101004c0.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fe990",
+      "proposed_name": "CRadio_Spawn",
+      "subsystem": "audio",
+      "summary_ru": "Инициализирует radio entity как невидимый неподвижный несолидный источник после виртуального Precache.",
+      "confidence": "high",
+      "details_ru": "ABI thiscall ECX=CRadio, аргументов нет, plain RET. Сначала вызывает virtual+30; по captured CRadio vtable это100fd7f0. Потом последовательно заново читает this+4 и пишет pev.solid+10c=0, pev.movetype+108=0, OR pev.effects+118 с80. Остальные flags сохраняются. Не устанавливает use callback, не выбирает получателя и не запускает звук. Последний EAX — промежуточный pev, а не оформленный статус spawn.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fe990.c",
+        "analysis/server-sentence-lifecycle/100fe990.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fd7f0",
+      "proposed_name": "CRadio_Precache",
+      "subsystem": "audio",
+      "summary_ru": "Передаёт непустой raw sample из pev.message в engine PrecacheSound, пропуская sentence names с префиксом '!'.",
+      "confidence": "high",
+      "details_ru": "ABI thiscall ECX=CRadio, plain RET. Сначала строит pointer gpGlobals.stringbase+pev.message(+1d8), затем проверяет сам string_t!=0. Полный NUL scan без capacity; unsigned length должен быть >1, затем первый byte!='!'. Тогда вызывает10116a30(pointer); этот native tiny helper tail-jump engine slot1 PrecacheSound, сохраняя caller stack. Не загружает sentence-группы, не проверяет расширение/префикс sound/, не копирует строку. Пропускает даже односимвольный ненулевой filename. Повреждённые string_t/unterminated strings не защищены локально.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fd7f0.c",
+        "analysis/server-sentence-lifecycle/100fd7f0.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x101002c0",
+      "proposed_name": "CRadio_Use",
+      "subsystem": "audio",
+      "summary_ru": "Использует pev.message как suit sound для игрока с индексом1 и независимо отправляет ему RadioIcon из pev.netname и render/health полей.",
+      "confidence": "high",
+      "details_ru": "ABI ECX=this, RET0x10: четыре stack arguments стандартного Use очищаются, но не читаются. Native C void(void) скрывает ABI. Получатель выбирается engine PEntityOfEntIndex(1), приNULL PEntityOfEntOffset(0), затем `[edict+7c]`. Ни free flag, ни player subclass, ни NULL private pointer для активных ветвей не проверяются; supplied activator/caller/useType/value игнорируются. Если message string_t!=0 и unsigned strlen>1, вызывает100fcaf0(recipient.pev.pContainingEntity,message). Параллельно netname string_t!=0 и strlen>1 разрешают MessageBegin(1,RadioIcon,0,recipientEdict), WriteString(netname), WriteCoord(pev.health+164), четыре WriteByte после CVTTSS2SI из rendercolor.x/y/z (+154/+158/+15c) и renderamt+150, MessageEnd. Health здесь поле-носитель COORD, его UI-смысл не доказан. Собственного clamp нет; CVTTSS2SI даёт truncation toward zero для представимых значений, при masked invalid NaN/overflow — integer-indefinite0x80000000 до engine WriteByte. Конечное wire narrowing задаёт engine. Регистрация100e5fc0: global10226550=RegUserMsg(\"RadioIcon\", -1). Вызов сообщения не зависит от того, слышен ли suit sound и была ли message-ветка вообще выполнена; pev перезагружается после неё и между write callbacks.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x101002c0.c",
+        "analysis/server-sentence-lifecycle/101002c0.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1011a220",
+      "proposed_name": "Sentence_SendHudTextForEligibleClients",
+      "subsystem": "audio",
+      "summary_ru": "Перебирает client slots и для каждого подходящего объекта повторяет один и тот же HudText с destination5 и NULL recipient.",
+      "confidence": "high",
+      "details_ru": "ABI cdecl `(const char *text, const float *origin)`, plain RET. signed loop index1..gpGlobals.maxClients(+90), верхняя граница перечитывается после каждой итерации.10119680(index) отвергает index<=0, index>maxClients, NULL/free edict, затем возвращает private data. Ненулевой object проходит virtual+d4; только ненулевой результат допускает MessageBegin(5,global1022648c,origin,0), WriteString(text), MessageEnd. const.h называет numeric5 MSG_PAS, не MSG_PVS и не MSG_ONE. Ни index, ни найденный edict не становятся recipient аргументом, поэтому это повторные PAS sends по числу подходящих объектов, не адресная отправка каждому. Размер/действительная клиентская доставка/PAS selection остаются engine boundary; здесь нет dedup, проверки text/origin, копирования string или retention pointer. Регистрация100e5fc0 связывает global1022648c с HudText размер-1. Predicate+d4 оставлен виртуальной границей конкретного runtime receiver; смысл не угадывается по названию SDK.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1011a220.c",
+        "analysis/server-sentence-lifecycle/1011a220.asm",
+        "analysis/server-sentence-lifecycle/contract.md",
+        "analysis/server-sentence-lifecycle/evidence.json"
+      ]
+    }
+  ]
+}

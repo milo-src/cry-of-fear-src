@@ -1,0 +1,38 @@
+# CSoundEnt: серверный пул звуков и запахов для AI
+
+Статический разбор оригинального server hl.dll. 18 новых primary entries; остальные C/ASM — ограниченная поддержка связей. Ни игра, ни DLL не исполнялись. Здесь описаны данные восприятия AI, а не playback WAV/irrKlang. Все offsets/адреса записаны в hex,64 slots и размеры аргументов — явно десятичные. `evidence.json` содержит SHA оригинала, raw RTTI/vtable/ENTVARS, полный список сохранённых C и bounded ASM; `verify.py` сверяет байты с исходным PE.
+
+## Владение и поля
+
+| Объект | Offset | Подтверждённая роль |
+|---|---:|---|
+| global |10230d70| CSoundEnt singleton; world10120eb0 присваивает результат factory до Spawn |
+| CSoundEnt |0| vtable101ded8c, RTTI CSoundEnt→CBaseEntity |
+| CSoundEnt |4| pev; native allocation8ech |
+| CSoundEnt |dc| freeHead, signed integer slot index; sentinel-1 |
+| CSoundEnt |e0| activeHead, тот же формат |
+| CSoundEnt |e4| предыдущий диагностический active count, Initialize не сбрасывает |
+| CSoundEnt |e8| флаг displaysoundlist, кешируется при Initialize |
+| CSoundEnt |ec..8eb| 64 записи, stride20h |
+| CSound |0/4/8| origin xyz,12 bytes |
+| CSound |c| type DWORD; predicates читают low byte |
+| CSound |10| volume/radius signed int, AI consumer конвертирует в float |
+| CSound |14| absolute expire float; -1.0 sentinel, не duration |
+| CSound |18| next index free/active chain |
+| CSound |1c| next index временной audible chain конкретного обхода monster |
+
+Raw vtable: +2c=Spawn10100960, +30=Precache101008d0, +40=Caps101008c0, +e0=Think10100990; +8=1000e1f0 и +4=10017110 связывают планирование с ранее описанным scheduler. Engine DispatchThink10016a30 выполняет virtuale0 с ECX=private object; он не читает member callback+78 для override CSoundEnt. Время вызова со стороны engine не определяется только этим пакетом.
+
+## Связи producers и consumers
+
+World10120eb0→factory101004f0→global10230d70→virtual2c→Initialize10100730. Free slots выдаются с головы, active slots добавляются в голову; освобождение возвращает в голову free. Для нормальной инициализации singleton==this первые maxClients slots становятся бессрочными reserved records, адресуемыми через IndexOfEdict-1. Map export soundent10100a60 сам singleton не обновляет.
+
+InsertSound10100820 принимает адрес origin, тип, integer volume и duration; сохраняет expire=time+duration. В support CGib::WaitTillLand1008c9c0 type10h/volume384/duration25 после landing gate. Сохранённый caller100f86e0 обновляет reserved запись игрока, записывает origin/type/volume, не меняет expire. Эта поддержка не объявляет весь player noise algorithm закрытым новой карточкой.
+
+Monster Listen100bfae0 получает activeHead, проходит slot+18, проверяет type mask и расстояние относительно volume с множителем слуха. Для принятых записей он пишет slot+1c=старый monster+2d4 и monster+2d4=current index, накапливает type в monster+2d8. Это объясняет два разных link-поля: глобальный active/free +18 и временный audible +1c. PBestScent100c1310/PBestSound100c1400 идут по +1c и вызывают masks58h/27h. Эти support тела не получают новых REVIEW здесь; float/-NAN индексы в их C сверены с integer CMP -1/shift ASM. Параллельные/реентерабельные обходы и стабильность общего audibleNext не гарантированы.
+
+ClientDisconnect1001cc90 использует ClientReservedIndex→SoundPointerForIndex→Reset101008e0. Reset НЕ равен FreeSound: он оставляет expire и audibleNext, но записывает active/free next=-1. Поэтому для внутреннего элемента цепочки его прежний хвост перестаёт быть достижим от этой записи; native поведение сохранено без исправления или вывода о полной runtime утечке.
+
+## Граница полноты
+
+Полностью описаны локальные18 тел и их native ABI, пул/проверки/порядок записей. Не установлены все writer/reset sites global10230d70, engine private-data zero-fill/free timing, все настройки type bits и точный мировой порядок engine callbacks. Factory не проверяет failure безопасно; alloc/free/count предполагают корректные indices/chains. Радиус в AI, срок существования записи и слышимая пользователю громкость — разные данные. Все источники звука, все реакции monsters и playback backend этим пакетом не объявляются восстановленными. Продолжение: [monster-senses](../server-monster-senses/contract.md) разбирает полные локальные100f86e0/100bfae0/100c1310/100c1400, gib1008c9c0 и grenade Think100b1360/100b1b70/100b21a0. Ранние support-описания выше относятся к границе именно pool-пакета. Следующие направления: global10230d70 lifecycle refs, полные Grenade BounceTouch100b0fd0/Explode100b1540/Detonate100b1490, оставшиеся InsertSound callers и derived AI masks/reactions (сначала сверить REVIEW).

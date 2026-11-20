@@ -1,0 +1,230 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100bfae0",
+      "proposed_name": "CBaseMonster_ListenBuildAudibleChain",
+      "subsystem": "monsters",
+      "summary_ru": "Фильтрует active sound pool по mask и радиусу, строит audible chain и conditions монстра.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall без stack args, RET. Сначала conditions+180 &= FFF9FFBFh (сбрасывает40h/20000h/40000h), audibleHead+2d4=-1, audibleTypes+2d8=0. Получает mask через virtual1e8; при schedulePointer+230!=NULL AND с schedule+0c. Затем10100560(activeHead), повторный сброс тех же conditions и virtual1f4 hearing multiplier в ST0 с округлением FSTP float32. Multiplier вычисляется один раз, даже при пустом pool.",
+        "Индексы — signed integer sentinel-1, не float/-NAN псевдокода. Для каждого slot10100910(index): при slot!=NULL и (slot.typeDWORD & mask)!=0 вызывает virtual104(this,outVector), использует возвращённый EAX pointer. В конкретных сохранённых таблицах104=1000d5a0 (origin+view_ofs). d вычисляется из float32 delta/squares/(dy²+dx²)+dz², затем double sqrt и float32 result. Radius=float32(float32(signed volume)*multiplier). COMISS(radius,d)/JB отвергает radius<d и unordered; equality принимается. При +Inf radius и +Inf d equality также принимается, если выполнение продолжается.",
+        "На acceptance slot.audibleNext+1c=старый monster.audibleHead; predicate101005f0(type&27h) даёт condition20000h. Если predicate0, ставит40000h и дополнительно40h при type&18h. Затем audibleTypes OR ВЕСЬ typeDWORD, audibleHead=current. Смешанный sound+scent type идёт в sound ветвь; неизвестный bit тоже может дать scent condition, если virtual mask его допустил. Явного IsScent58h в этой функции нет.",
+        "На каждом шаге next=slot+18; guard NULL не спасает: native null branch прыгает к чтению [NULL+18]. Нет cycle/bounds guard сверх10100910, проверки expire/type0 отдельно, wall trace, PVS или playback. Общий record.audibleNext изменяется, поэтому последующий Listen другого monster способен переписать цепочку предыдущего. При валидной неизменной active chain порядок accepted индексов в audible chain обратный.",
+        "Support100c2970 вызывает Listen напрямую после virtual124 только когда state+224 не0,5,8, затем маскирует conditions результатом virtual1dc. Эти последующие правила и все overrides не объявляются полностью восстановленными."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bfae0.c",
+        "analysis/server-monster-senses/100bfae0-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1310",
+      "proposed_name": "CBaseMonster_BestScentWithin8192",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает ближайшую scent-запись из audible chain по расстоянию от pev.origin.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET, EAX slotPointer либо0. Начальный bestIndex=-1, bestDistance=8192.0f. Пустой audibleHead+2d4==-1 печатает Alert2 и возвращает0. Каждый integer index разрешает10100910 и БЕЗ NULL guard вызывает101005e0 с ECX=slot; scent predicate читает low byte type&58h.",
+        "Distance считается от pev.origin, не от virtual104/EyePosition. Native float32 delta/squares/sum→double sqrt→float32; только COMISS(bestDistance,d)/JBE-not-taken (ordered d<bestDistance) обновляет выбор. Ровно8192, NaN и +Inf не выбираются. При равных расстояниях сохраняется первый элемент audible traversal; по обратному active порядку это не обещание newest sound.",
+        "Идёт по slot+1c до integer-1; в конце bestIndex>=0 повторно разрешает pointer через10100910. Нет проверки expire, текущего volume/hearing multiplier, нового schedule mask, occlusion или cycle cap. Существующая audible chain предполагается корректной и не переписанной другим consumer. Нижний sqrt error helper1016be90 оставлен внешней зависимостью."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c1310.c",
+        "analysis/server-monster-senses/100c1310-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100c1400",
+      "proposed_name": "CBaseMonster_BestSoundWithin8192",
+      "subsystem": "monsters",
+      "summary_ru": "Выбирает ближайшую audible-запись по расстоянию от virtual104 позиции глаз.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET, EAX slotPointer либо0. BestDistance8192.0f, bestIndex=-1. При пустой audibleHead печатает Alert2 с classname из pev+stringbase и возвращает0. Для slot!=NULL проверяет101005f0(type&27h); только затем вызывает virtual104(out) с ECX=monster и использует возвращённый EAX pointer.",
+        "Distance float32 delta/squares/sum→double sqrt→float32; обновление только при ordered d<bestDistance. Equal/NaN/Inf не заменяют выбор; расстояние8192 исключено. Потом next=slot+1c. Видимый NULL guard пропускает фильтр/расчёт, но НЕ чтение next: null вызывает dereference[0+1c]. В конце повторно10100910(bestIndex), либо0.",
+        "Повторно не применяет volume, expiry или virtual mask: фильтр основан на уже построенном audible list. Радиус8192 — дополнительный предел выбора, отличающийся от Listen. Никакого WAV playback, trace или автоматической реакции на выбранный звук в этом теле нет."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100c1400.c",
+        "analysis/server-monster-senses/100c1400-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100b06a0",
+      "proposed_name": "CGenericMonster_SoundMaskZero",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает DWORD0 как sound mask конкретного CGenericMonster.",
+      "confidence": "high",
+      "details_ru": [
+        "XOR EAX,EAX; RET. ECX не читается, состояние не меняет. Native CGenericMonster vtable101ce36c+1e8 указывает сюда, поэтому Listen этой таблицы не принимает ни один type при обычном выполнении. Это не универсальная маска всех monster classes и не отключение playback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100b06a0.c",
+        "analysis/server-monster-senses/100b06a0-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bf850",
+      "proposed_name": "Monster_DefaultSoundMaskSeven",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает DWORD7 для virtual sound mask в подтверждённой таблице CGrenade.",
+      "confidence": "high",
+      "details_ru": [
+        "MOV EAX,7; RET. Три младших type bits допускаются, других проверок нет. Native CGrenade vtable101ce8e0+1e8 подтверждает binding; inherited owner name из одного этого тела не устанавливается. Это маска AND в Listen, не радиус и не condition flags."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bf850.c",
+        "analysis/server-monster-senses/100bf850-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10013530",
+      "proposed_name": "Monster_DefaultHearingSensitivityOne",
+      "subsystem": "monsters",
+      "summary_ru": "Возвращает коэффициент слуха1.0 через x87 ST0.",
+      "confidence": "high",
+      "details_ru": [
+        "Ровно FLD1; RET. Не записывает EAX и не возвращает bool1 в integer ABI. Native CGenericMonster/CGrenade vtable+1f4 указывают сюда; Listen после indirect call делает FSTP DWORD и умножает signed integer volume на float32 multiplier. Для других vtables возможны overrides."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10013530.c",
+        "analysis/server-monster-senses/10013530-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x10017660",
+      "proposed_name": "CBaseEntity_IsWithinPositionVelocityLimits",
+      "subsystem": "entity-core",
+      "summary_ru": "Проверяет строгие finite bounds origin±4096 и velocity±2000; NaN сравнения обходят reject.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET, EAX0/1. Сначала origin x,y,z против верхнего4096, затем нижнего-4096; потом velocity x,y,z против2000 и-2000. Любое ordered значение>=верхней границы либо<=нижней возвращает0, равенство исключено. Проверка по компонентам, не длине вектора и не BSP contents.",
+        "Каждый reject использует COMISS/JAE. Unordered ставит CF=1 и JAE НЕ выполняется: NaN component сам по себе проходит обе проверки при masked exceptions/продолжающемся исполнении. Остальные finite components всё равно проверяются; ±Inf отвергаются. Буквальный Ghidra C с конъюнкцией строгих сравнений не передаёт этот NaN контракт.",
+        "Native slotcc в CGenericMonster, CGrenade и CGib. Нет NULL guard, clamp, engine trace или записи координат. Grenade/Gib callers при0 вызывают10119900(this), который выполняет lifecycle cleanup/mark-for-remove, не немедленный free в самом predicate."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x10017660.c",
+        "analysis/server-monster-senses/10017660-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100f86e0",
+      "proposed_name": "CBasePlayer_UpdateReservedAISound",
+      "subsystem": "player-lifecycle",
+      "summary_ru": "Обновляет зарезервированный AI sound игрока, задаёт target volume и уменьшает weapon flash.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET. Slot=10100910(101005c0(pev.edict)), то есть IndexOfEdict-1. NULL→Alert1 Client lost reserved sound и return. Иначе type=0. Если pev.flags&200h, speed=CVTTSS2SI(float32(sqrt(float32((vx²+vy²)+vz²)))); signed clamp сверху512, без lower clamp. Иначе speed=0. При button lowBYTE&2 добавляет100 (32-bit arithmetic).",
+        "Безусловно this.weaponVolume+2294=1000. Если speedPlusJump<1000: targetVolume+2290=1000 и slot.type|=1; иначе targetVolume=speedPlusJump. Для обычного finite velocity cap512 плюс100 всегда меньше1000, включая airborne speed0: target1000 и combat bit1 выставляются независимо от прежнего weaponVolume. Это native поведение, не SDK ожидание.",
+        "WeaponVolume затем=CVTTSS2SI(float32(float32(1000)-float32(frametime*250))). При следующем вызове опять присваивается1000, прежний weaponVolume здесь не используется. Slot volume V: если target>V→target; если equal→V; если target<V→trunc(float32(float32(V)-float32(frametime*250))), и если этот результат signed<target, выбирает0 (НЕ target). Далее DWORD this+24e8!=0 принудительно даёт итоговый slot volume0, но не очищает type.",
+        "При ordered now>this.float22a0 очищает extraSoundTypes+2298; equality/NaN оставляют. Копирует pev.origin, пишет итоговый volume, OR type с extraSoundTypes и4. Expire+14 и links+18/+1c записи не меняет. WeaponFlash+229c=trunc(float32(float32(oldFlash)-float32(frametime*256))), negative result→0. Нет WAV/MessageBegin, изменения locomotion или гарантии кадровой частоты.",
+        "Native PLAYER descriptors102181d8..10218208 подтверждают имена m_iTargetVolume, m_iWeaponVolume, m_iExtraSoundTypes, m_iWeaponFlash и offsets2290/2294/2298/229c. Роль DWORD24e8 и источник deadline22a0 вне этого тела не названы произвольно. CVTTSS2SI NaN/Inf/out-of-range при masked invalid даёт INT_MIN, сравнения signed; общая безопасность произвольных данных не заявляется."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100f86e0.c",
+        "analysis/server-monster-senses/100f86e0-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x1008c9c0",
+      "proposed_name": "CGib_WaitTillLandAndInsertScent",
+      "subsystem": "monsters",
+      "summary_ru": "При остановке gib планирует отложенное удаление и добавляет scent type10h на25 секунд.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET; native exported method и CGib factory/RTTI. Сначала virtualcc; при0 вызывает10119900(this) и выходит. Затем velocity xyz сравнивается с shared vector10222f34..3c, каждый компонент ordered equality; NaN любого operand не равен и ведёт в движущуюся ветку.",
+        "Все три равны: Think+78=1008ac50 SUB_StartFadeOut, virtual8(this.float+e8). Потом если DWORD this+dc!=-1: InsertSound(10h,&pev.origin,384,25.0f). Поле+dc используется как sentinel gate; полный producer его значения не разобран здесь. При неравенстве только virtual8(0.5f), callback+78 сохраняется.",
+        "Нет проверки FL_ONGROUND или фактического касания: имя WaitTillLand не меняет критерий точного velocity comparison. Shared vector не доказан runtime нулевым. SUB_StartFadeOut уже REVIEW: после выполнения только schedule SUB_Remove через0.2f, без renderamt fade. Срок scent25 независим от gib lifetime+e8; запись pool не удаляется самим gib callback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x1008c9c0.c",
+        "analysis/server-monster-senses/1008c9c0-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100b1360",
+      "proposed_name": "CGrenade_DangerSoundThink",
+      "subsystem": "monsters",
+      "summary_ru": "Добавляет краткий danger sound впереди гранаты, перепланирует Think и замедляет её в воде.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET. Virtualcc0→10119900(this) и return. Иначе originLead=origin+velocity*0.5f покомпонентно float32. Speed берётся от исходной velocity: float32 squared sum→double sqrt→float32→CVTTSS2SI. InsertSound(20h,&originLead,speedInt,0.2f). Четвёртый аргумент duration заранее PUSHed в100b1391..1398; Ghidra C ошибочно теряет его у InsertSound и приписывает sqrt fallback.",
+        "После вызова virtual8(0.2f) с тем же float bits3e4ccccd. Затем если pev.waterlevel+1c4!=0 и signed watertype+1c8>-17, умножает все velocity components на0.5. Запись звука использовала скорость и позицию ДО этого замедления. Не задаёт Think+78, не проверяет detonation time, не обновляет старый slot: каждая успешная InsertSound выделяет новую запись.",
+        "Никакого clamp speed/finite проверки здесь нет, кроме virtual IsInWorld, который NaN не отвергает; invalid conversion при masked invalid может дать отрицательный INT_MIN radius. Воспроизведение аудио и последующая реакция monsters не входят в этот callback."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100b1360.c",
+        "analysis/server-monster-senses/100b1360-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100b1b70",
+      "proposed_name": "CGrenade_PreDetonateInsertDanger",
+      "subsystem": "monsters",
+      "summary_ru": "Добавляет danger sound и назначает Detonate через1.0f.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET. InsertSound(20h,&pev.origin,400,0.3f); затем Think+78=100b1490 и virtual8(1.0f). Native значения длительности3e99999a и задержки3f800000 различны: запись живёт0.3, scheduler запрошен на1.0. Нет IsInWorld, проверки результата InsertSound или продления звука до Detonate.",
+        "100b1490 — callback target по native immediate и экспортному имени Detonate; полное тело детонации этим пакетом не закрывается. При полном pool warning внутри InsertSound не отменяет назначение Think. Точный момент engine callback остаётся зависимостью scheduler."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100b1b70.c",
+        "analysis/server-monster-senses/100b1b70-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100b21a0",
+      "proposed_name": "CGrenade_TumbleThinkAndPredictDanger",
+      "subsystem": "monsters",
+      "summary_ru": "Обновляет анимацию гранаты, прогнозирует danger position перед detonation и назначает callback.",
+      "confidence": "high",
+      "details_ru": [
+        "Thiscall, RET. Virtualcc0→10119900(this) и выход. Иначе1000eda0(this,0.0f), возвращённый ST0 снимается FSTP ST0; затем virtual8(0.1f). Support animation helper обновляет frame/animtime и completion, не перемещает гранату.",
+        "При ordered now>float32(pev.dmgtime+1e8-1.0f) вычисляет remain=float32(dmgtime-now) и predicted=origin+velocity*remain, каждый шаг float32. InsertSound(20h,&predicted,400,0.1f). При equality/NaN первый gate не срабатывает. Нет clamp remain: уже после deadline он может быть отрицательным, предсказывая точку позади velocity.",
+        "Затем свежий now сравнивается с dmgtime: COMISS/JB пропускает при now<deadline или unordered; иначе Think+78=100b1490. При equality назначает Detonate, но НЕ вызывает сразу и не заменяет ранее запрошенную задержку0.1f. Ни sound insertion failure, ни callback assignment не прерывают water damping.",
+        "Если waterlevel!=0 и signed watertype>-17, velocity*=0.5f и pev.framerate+13c=0.2f. Остальные типы/нулевой level не меняют эти поля; выход из воды сам framerate обратно не восстанавливает. OriginLead/sound рассчитаны до damping. Все full explosion/BounceTouch/Smoke эффекты остаются отдельно."
+      ],
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100b21a0.c",
+        "analysis/server-monster-senses/100b21a0-0.asm",
+        "analysis/server-monster-senses/evidence.json",
+        "analysis/server-monster-senses/contract.md"
+      ]
+    }
+  ]
+}

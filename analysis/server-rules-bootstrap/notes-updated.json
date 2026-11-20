@@ -1,0 +1,22 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100013a0",
+      "proposed_name": "VoiceGameMgr_InitMessagesAndCvars",
+      "subsystem": "Голосовая связь / регистрация протокола",
+      "summary_ru": "Настраивает helper и предел клиентов, регистрирует VoiceMask/ReqState и cvar голосовой подсистемы.",
+      "confidence": "high",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100013a0.c",
+        "analysis/server-rules-bootstrap/100013a0-0.asm",
+        "analysis/server-rules-bootstrap/evidence.json"
+      ],
+      "details_ru": [
+        "Сохраняет helper в this+0x10, ограничивает число клиентов сверху 32 и пишет в +0x14. Запрашивает ресурс sprites/radioicon.spr.",
+        "Регистрация VoiceMask с длиной 8 сохраняется в +8, ReqState с длиной 0 — в +0xc. Если cvar отсутствуют, регистрирует voice_serverdebug и sv_alltalk. Native ASM10001428 возвращает bool только в AL=1 (MOV AL,1; RET8); старшие 24 бита EAX не нормализуются. Нижняя граница param_2 здесь не проверяется."
+      ]
+    }
+  ],
+  "subsystems": []
+}

@@ -1,0 +1,244 @@
+{
+  "functions": [
+    {
+      "module": "server",
+      "address": "0x100fb120",
+      "proposed_name": "CCineMonster_KeyValue",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Обрабатывает 14 cinematic keys, записывая строки, параметры поиска, движения и повторов; неизвестные ключи передаёт базе.",
+      "details_ru": "Thiscall `(KeyValueData*)`, RET4. Key+4/value+8 не защищены NULL/length\nпроверками. Первые три сравнения inline, остальные через1000aba0; все\ncase-sensitive и требуют полного совпадения. Все совпавшие ключи после\nзаписи ставят handled+0c=1 и возвращаются.\n\n| Ключ | Запись |\n|---|---|\n| m_iszIdle, m_iszPlay, m_iszEntity | AllocString(value) → +36c/+370/+374 |\n| m_iszAttack, m_iszMoveTarget, m_iszFireOnBegin | AllocString → +378/+37c/+380 |\n| m_fMoveTo, m_fTurnType, m_fAction | atoi1016b55e EAX → +384/+388/+38c |\n| m_flRadius | parser1016f5ec ST0 → FSTP float32 +394 |\n| m_iRepeats | atoi EAX → обе +398/+39c |\n| m_fRepeatFrame | parser ST0 → FSTP float32 +3a0 |\n| m_iFinishSchedule, m_iPriority | atoi EAX → +390/+3a4 |\n\nНеизвестный ключ передаётся inherited100bf970 с тем же this/keyvalue;\nлокальный handled перед этим не обнуляется. Не проверяются отрицательные\nrepeat/radius, перечисления, валидность sequence, пустая строка или\nпереполнение. Float conversion и отсутствие clamp доказаны ASM; полная\nCRT/locale семантика парсеров остаётся внешней. Ghidra `wchar_t*` у atof\nне является доказательством wide input: сюда передаётся тот же value pointer.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fb120.c",
+        "analysis/server-cinematic-lifecycle/100fb120-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fbb90",
+      "proposed_name": "CCineMonster_Spawn",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Выбирает первый think по idle/targetname, сбрасывает state, задаёт permission и расширяет priority для AI-scripted класса.",
+      "details_ru": "Thiscall, без stack args, RET. Сначала pev.solid+10c=0 и cine+368=0.\nПри idle string_t+36c!=0 назначает think+78=100fb050 InitIdleThink,\nнезависимо от наличия targetname. Иначе при pev.targetname+1d0==0\nназначает100fa8c0 CineThink. Только эти два пути вызывают virtual+8(1.0).\nЕсли idle==0 и targetname!=0, старый think/deadline не очищается этим телом.\n\nПосле scheduling +3bc=`~(spawnflags>>5)&1` (разрешение при отсутствии\nмаски20). При точном classname `aiscripted_sequence` либо spawnflags&40\nв priority+3a4 добавляется2. Другие priority bits сохраняются. Spawn не\nсбрасывает +3a8/+3ac, не выбирает actor, не вызывает Activate или Possess\nи не задаёт repeat/radius defaults; их нулевые значения нельзя выводить\nиз этого метода без allocator/keyvalue evidence.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fbb90.c",
+        "analysis/server-cinematic-lifecycle/100fbb90-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa340",
+      "proposed_name": "CCineMonster_ActivatePrecacheSequences",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "На Activate выбирает модель named/classname monster для sequence sound precache, затем tail-переходит в base activation.",
+      "details_ru": "Thiscall, без stack args. Сначала перебор10118590(NULL,entityName):\nэтот resolver включает custom alias перед engine targetname fallback.\nТолько candidate с pev.flags&20 вызывает virtual+78 для получения monster.\nПервый ненулевой monster сохраняется, но **следующий resolver вызывается\nещё один раз до выхода из цикла**. При исчерпании named candidates —\nперебор10118460 по classname; здесь flag20 уже не проверяется, требуется\nлишь ненулевой virtual+78. И здесь query следующего candidate предшествует\nпроверке сохранённого результата. Radius, priority, живость и CanPlaySequence\nне проверяются: выбор для resource preparation отличается от actor acquisition.\n\nЕсли actor найден, engine GetModelPtr10223070(actor.pev.edict) даёт model\npointer. При NULL пропускаются оба helper calls. Иначе1000f590(model,idleName),\nзатем1000f590(model,playName), даже если string_t равен0. Helper уже разобран\nв [studio-events](../server-studio-events/contract.md): sequence event sounds,\nне загрузка новой monster модели. Actor handle сюда не записывается.\n\nВсе нормальные пути заканчиваются восстановлением registers и **tail JMP\n10017250 с ECX=cinematic**. Native100fa43f — E9, не CALL. Saved range до\n100fa443 полный; Ghidra terminal-call limitation не доказывает noreturn.\nBase activation проверяет m_iLFlags&a0 для AddAssist и &1000 для AddAlias;\nпри +74==0 сначала пишет1, вызывает Attach10017bc0, затем virtual+48.\nЭта база выполняется и при отсутствии actor/model. Для CCineMonster +48\nуказывает на inherited1000df80. Повторные Activate всё равно повторяют\nлокальный поиск/sequence preparation; собственный once flag здесь отсутствует.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa340.c",
+        "analysis/server-cinematic-lifecycle/100fa340-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fabc0",
+      "proposed_name": "CCineMonster_FindEligibleMonster",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Ищет подходящего actor сначала через named/activator resolver, затем по classname в радиусе; два пути различаются priority bit1.",
+      "details_ru": "Thiscall `(namePointer, activatorObject)`, RET8, EAX=выбранный monster либо0.\nНет NULL name guard. Первая фаза10118500(start,name,activator) поддерживает\nспециальное `*locus` и обычный alias/targetname resolver, описанные в\n[targets](../server-targets/contract.md). Candidates без flags20 пропускаются.\nДля остальных virtual+78 обязан вернуть ненулевой monster; затем его\nvirtual+198(priority|1) должен вернуть nonzero. В этом случае возвращается\nименно monster result, не обязательно исходный candidate. При отказе на\nэтих двух gates печатает Alert1 `Found ..., but can't play!`, продолжает.\n\nПосле исчерпания первой фазы101186b0 перебирает engine FindEntityInSphere\nвокруг cinematic.pev.origin с radius+394. Полное classname equality,\nflags20, nonNULL virtual+78 и virtual+198(priority) обязательны. Здесь\n**не добавляется bit1**, activator больше не участвует, сообщений об\nотказе нет. Первый подходящий object возвращается без nearest sorting.\nSphere helper переводит start object→edict, отдаёт engine origin/radius и\nвозвращает private data только для ненулевого edict с ненулевым\nEntOffsetOfPEntity. Геометрическое определение radius принадлежит engine.\nНа исчерпании EAX0. Функция не записывает handles/pCine и не отменяет старый\nscript; эти мутации выполняет possession после отбора.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fabc0.c",
+        "analysis/server-cinematic-lifecycle/100fabc0-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100bcd00",
+      "proposed_name": "CBaseMonster_CanPlaySequence",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Проверяет существующий cinematic, deadflag через virtual и состояния; раскрывает разные правила priority bits1/2/4.",
+      "details_ru": "Thiscall monster `(priorityBits)`, RET4, EAX точно0/1. Native CGenericMonster\nи CCineMonster vtable+198 указывают сюда; остальные derived overrides не\nисключены. При уже ненулевом monster.pCine+34c bit4 разрешает сразу, без\nпроверок состояния/жизни. Без bit4 печатаются classname/targetname прежнего\ncinematic и возвращается0. Наличие pCine не проверяется через EHANDLE.\n\nПри pCine==NULL требуется nonzero virtual+bc и currentState+224!=5;\nиначе Alert1 `Dead/Barnacled!`, return0. Нельзя заменить этот virtual call\nпроверкой health>0: у указанных native vtables +bc=10013550, который делает\n**deadflag!=2**, включая допустимый deadflag1. Далее достаточно любого:\npriority&2; currentState0 или1; idealState+228==1; currentState3 вместе с\npriority&1. Иначе Alert1 `non-interruptable state`, return0.\n\nТаким образом bit1 расширяет допуск currentState3 только в named phase;\nbit2 не обходит initial virtual+bc/state5, а bit4 при существующем pCine\nобходит их целиком. Семантика всех derived virtual+bc/+198 остаётся\nдинамической. Метод не изменяет monster state или pCine и не выполняет\npossess; успешная проверка не гарантирует последующую пригодность объекта\nпосле внешних callback side effects.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100bcd00.c",
+        "analysis/server-cinematic-lifecycle/100bcd00-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa8c0",
+      "proposed_name": "CCineMonster_CineThink",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Присваивает найденного actor в target EHANDLE, вызывает possession или отменяет группу и планирует повтор через секунду.",
+      "details_ru": "Thiscall, RET. Resolve cine.m_hActivator+e4 → второй аргумент\nFindEligibleMonster(entityName,activator). Результат присваивается\ncine.m_hTargetEnt+18c через10017740; условие успеха — EAX assignment,\nне дополнительная проверка serial/private data. На nonzero вызывает\ncine.virtual+244 без stack arguments, затем Alert2 `using monster` и return.\nВозврат Possess не проверяется; даже его ранний выход не отменяет success log.\nСобственный think/deadline после успеха не сбрасывается.\n\nНа нуле assignment очищает target handle; вызывается CancelScript100fa4b0,\nзатем Alert2 `can't find monster` и virtual+8(1.0). Это retry plan без\nлокального лимита попыток. Отмена может затронуть одноимённую группу,\nне только current cinematic. После callbacks pointers перечитываются,\nно destruction/reentrancy safety локально не обеспечена.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa8c0.c",
+        "analysis/server-cinematic-lifecycle/100fa8c0-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fb050",
+      "proposed_name": "CCineMonster_InitIdleThink",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Ищет actor без activator, вызывает possession и задаёт далёкий start deadline; при отказе отменяет и планирует retry.",
+      "details_ru": "Thiscall, RET. Та же assignment/virtual+244 цепь, но Find получает\nactivator=NULL, даже если m_hActivator ранее заполнен. После успешного\nvirtual+244 записывает +3ac=`float32(double(globalTime)+1000000.0)`, затем\nтакой же Alert2. Именно mixed single→double add→single, не float-only add.\nDeadline записывается и если Possess вернулся без результата. На failure\nочищенный target handle, CancelScript, диагностика и virtual+8(1.0), как\nв CineThink. В отличие от Spawn, сам callback не переназначает think+78.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fb050.c",
+        "analysis/server-cinematic-lifecycle/100fb050-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fb6b0",
+      "proposed_name": "CCineMonster_PossessMonster",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Устанавливает двустороннюю cinematic связь, turn/move targets и backup полей; задаёт ideal/script state по move mode.",
+      "details_ru": "Thiscall, без stack args, RET; смысловой success EAX не формируется.\nResolve cine.target+18c и его virtual+78: при любом NULL ранний выход без\nмутаций. При monster.pCine!=NULL вызывает CancelScript100fa4b0 с ECX=oldCine,\nдаже если oldCine==this; затем без повторного выбора пишет monster.pCine=this.\nУ cancellation возможны групповые побочные эффекты, captured monster pointer\nпосле неё не проверяется. Запись нового pCine предшествует всем target searches.\n\nTurn target: если cine+378==0, monster.m_hTargetEnt получает сам cinematic.\nИначе10118500(NULL,attackName,resolve(cine.activator)) присваивается в этот\nhandle. Если булева edict/serial проверка10017780 ложна, начинается sphere\nenumeration вокруг cinematic origin/radius; текущее resolve(handle) является\nstart, каждое найденное private object сразу присваивается handle. Первый\nточно совпавший classname останавливает поиск. **Ни flags20, ни virtual+78,\nни CanPlaySequence здесь нет.** При окончательно невалидном handle Alert1\n`missing turn target`, fallback cinematic. Nonzero edict с NULL private data\nможет пройти bool, хотя последующий resolve равенNULL; это различие helpers,\nне доказанный runtime сценарий.\n\nMove target: при cine+37c!=0 только10118500 с activator, без sphere fallback.\nResult записывается raw monster+c, не EHANDLE. NULL вызывает Alert1\n`missing move target` и fallback this. При пустом ключе сразу monster+c=this.\nTurn/move targets независимы; старые значения handles/raw pointers не\nсохраняются отдельно для восстановления.\n\nДалее последовательно сохраняет monster.pev.movetype/solid/effects в\ncine+3b0/+3b4/+3b8, затем OR cine.pev.effects в monster.effects. Cine+368=2.\nRaw dispatch для move mode+384 (unsigned guard>6 включает отрицательные):\n\n| Mode | Действие |\n|---|---|\n| 1,2 | DelayStart(1) на cine; cine+368=1; затем monster.scriptState+348=1 |\n| 0,4,5,6 | только monster.scriptState=1 |\n| 3 и остальные значения | scriptState сохраняется |\n\nВо всех прошедших начальные guards случаях monster.idealState+228=6;\ncurrentState+224 не пишется. Здесь нет teleport/SetOrigin/переустановки\nsolid или movetype. Cleanup100fa530 восстанавливает из этих backup fields\nтолько movetype; нельзя обещать симметричное восстановление solid/effects.\nSwitch proven byte map100fb964 `[0,1,1,2,0,0,0]` и targets100fb958.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fb6b0.c",
+        "analysis/server-cinematic-lifecycle/100fb6b0-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa990",
+      "proposed_name": "CCineMonster_DelayStartGroup",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Изменяет waiting counters у одноимённых scripted_sequence/action и на release запускает source fire-on-begin с deadline.",
+      "details_ru": "Thiscall `(incrementFlag)`, RET4. Перебирает10118590 по **собственному\npev.targetname**; даже нулевой string_t передаёт poolbase, отдельного self\nfallback нет. Только точные `scripted_sequence` и `scripted_action`\nдопускаются; `aiscripted_sequence` не включён. Для совпавшего entity\nfactory100fa1a0(pev) даёт cine pointer, без local NULL/type guard.\n\nЛюбой nonzero argument делает matched.cine+3a8++ (32-битное wrap).\nПри0 counter уменьшается; если новый signed counter<=0, matched.+368=2,\nзатем FireTargets(**исходный this.+380**,this,this,3,0.0), затем\nmatched.+3ac=`float32(double(globalTime)+0.05)`. Строка, activator и caller\nберутся от исходного this, не текущего matched cinematic. Время считывается\nпосле FireTargets, который может менять состояние. Каждый совпавший объект\nс counter<=0 получает отдельное событие; clamp0 и once latch отсутствуют.\nPointer matched после FireTargets не перепроверяется. На >0 только counter.\n\nTask0x51 в ранее разобранном StartTask1000bc60 вызывает этот helper с0;\npossession modes1/2 — с1. Task0x4f читает counter и deadline при ожидании.\nНе добавляется предположение о числе участников или завершении группы при\nошибке поиска/удалении; это локальная counted protocol, не транзакция.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa990.c",
+        "analysis/server-cinematic-lifecycle/100fa990-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fbff0",
+      "proposed_name": "CCineMonster_Use",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "При занятом actor сдвигает start deadline; иначе сохраняет activator и немедленно выполняет CineThink; RET16 и useType/value игнорируются.",
+      "details_ru": "Thiscall `(activator,caller,useType,value)`, **RET16**, хотя сохранённый C\nпоказывает один аргумент. Только activator читается со стека. Остальные\nтри, включая OFF/ON/TOGGLE и value, игнорируются локально.\n\nЕсли resolve(cine.target) и его virtual+78 дают monster: при scriptState==0\nнемедленный return без записей; иначе cine+3ac становится\n`float32(double(globalTime)+0.05)` и return. Не изменяет activator, counter,\nthink callback, ownership или permission в этих ветвях.\nЕсли target/monster отсутствует, присваивает activator в cine.+e4,\nthink+78=100fa8c0 и **сразу** вызывает CineThink(this), не schedule delay0.\nИменно эта ветвь предоставляет activator для `*locus` поиска actor/targets.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fbff0.c",
+        "analysis/server-cinematic-lifecycle/100fbff0-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fbf30",
+      "proposed_name": "CCineMonster_StartSequence",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Пустая completion-sequence вызывает SequenceDone; иначе lookup/reset на monster, с fallback sequence0 и результатом1 даже после неизвестного имени.",
+      "details_ru": "Thiscall cine `(monster,sequenceStringId,completeOnEmpty)`, RET12, EAX0/1.\nЕсли string_t==0 и completeOnEmpty!=0: вызывает100fbb20(this,monster), затем\nEAX0. Это completion branch, не ошибка lookup. Иначе ECX переключается на\nmonster, LookupSequence1000e9b0(poolbase+id) → monster.pev.sequence+12c.\nТолько результат -1 вызывает Alert4 и fallback sequence0; другие negative\nvalues здесь не отсекаются. Затем frame+134=0, ResetSequenceInfo1000e9e0\nна monster и EAX1, в том числе после fallback. Нет NULL monster guard,\nпроверки total model sequences или восстановления прежней sequence.\n\nОбычные callers StartTask1000bc60: idle `(monster,cine.idle,0)` и play\n`(monster,cine.play,1)` через native virtual+248. Метод сам не ставит\nstart deadline и не обслуживает повторы; wait/repeat consumption находится\nв scheduler. SequenceDone100fbb20 затем вызывает cleanup на monster,\ncine.virtual+24c(monster) и targets; cleanup return не gate для callback.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fbf30.c",
+        "analysis/server-cinematic-lifecycle/100fbf30-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fafb0",
+      "proposed_name": "CCineMonster_FinishSchedule",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "После cleanup выбирает clear либо virtual schedule32 для monster, сохраняя idealState8 и не подавляя scheduling для него.",
+      "details_ru": "Thiscall cine `(monster)`, RET4, без отдельного boolean result. Сначала,\nесли monster.idealState+228!=8, пишет1; currentState не меняется. При\ncine.finishSchedule+390==0 вызывает ClearSchedule1000aad0 с ECX=monster.\nПри1 вызывает monster.virtual+18c(0x20), результат без NULL guard передаёт\nChangeSchedule1000aa50 с ECX=monster. Любое другое значение Alert2\n`no case!`, затем ClearSchedule. IdealState8 **не подавляет** выбор schedule.\n\nClearSchedule зануляет +22c taskStatus, +230 schedule pointer, +234 index.\nChangeSchedule пишет pointer+230, обнуляет taskStatus/index/conditions/fail\nschedule и разыменовывает schedule без NULL guard. Отдельная семантика\nderived virtual+18c динамическая; нельзя обещать определённый task list для\nвсех монстров. Удаление cinematic, повторы и firing targets принадлежат\ncaller SequenceDone, не этому методу.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fafb0.c",
+        "analysis/server-cinematic-lifecycle/100fafb0-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fa480",
+      "proposed_name": "CCineMonster_CanInterruptCurrentTarget",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Возвращает1 только при permission, resolved target и его deadflag0; здоровье и обратная ownership связь не проверяются.",
+      "details_ru": "Thiscall, RET, EAX0/1. Разрешает только если cine+3bc!=0, resolve её target\nhandle ненулевой и target.pev.deadflag+174==0. Не вызывает virtual+78,\nне проверяет health, current state, pCine обратную связь, flags или distance.\nНеэквивалентен MonsterCanPlaySequence: тот при native virtual+bc допускает\ndeadflag1. Все fail paths возвращают0 и ничего не очищают. Permission+3bc\nзадаётся Spawn и event helper100fa450; последний не пишет при spawnflags20.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fa480.c",
+        "analysis/server-cinematic-lifecycle/100fa480-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fb030",
+      "proposed_name": "CCineMonster_IgnoreConditionsMask",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Преобразует interrupt predicate в DWORD mask0 либо0x300, без изменения состояния.",
+      "details_ru": "Thiscall, RET, вызывает100fa480 на том же ECX. При ненулевом результате\nEAX0; иначе EAX0x300. Native NEG/SBB/AND/ADD формируют ровно эти маски,\nне boolean. Метод расположен в cinematic vtable+1dc; названия condition\nbits не выводятся из самой арифметики. Не меняет permission или monster.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fb030.c",
+        "analysis/server-cinematic-lifecycle/100fb030-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    },
+    {
+      "module": "server",
+      "address": "0x100fb010",
+      "proposed_name": "CCineMonster_GetCinematicState",
+      "subsystem": "monsters",
+      "confidence": "high",
+      "summary_ru": "Возвращает raw DWORD state+368 без normalization и побочных эффектов.",
+      "details_ru": "Thiscall, RET: единственная загрузка DWORD cine+368→EAX. Возвращает\nraw значение без normalization/clamp или side effects. Native slot+5c.\nНаблюдаемые producers: Spawn0, possession2/1, group release2, SequenceDone0.\nПолный список потенциальных writers этим локальным обзором не объявляется.",
+      "evidence_paths": [
+        "decompiled/server/partial-pass/functions/0x100fb010.c",
+        "analysis/server-cinematic-lifecycle/100fb010-0.asm",
+        "analysis/server-cinematic-lifecycle/evidence.json",
+        "analysis/server-cinematic-lifecycle/contract.md",
+        "analysis/server-monster-events/contract.md"
+      ]
+    }
+  ]
+}

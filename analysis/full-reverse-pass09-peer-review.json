@@ -1,0 +1,161 @@
+{
+  "scope": "Static RE pass09; no target execution or game implementation",
+  "result": "PASS",
+  "new_reviewed": 34,
+  "updated_existing": [],
+  "packages": [
+    {
+      "package": "analysis/server-spread-settings",
+      "primary_count": 9,
+      "author": "root",
+      "reviewer": "client_catalog",
+      "result": "PASS",
+      "checked": "All9 primary C and full native ASM including loader; malformed braces/EOF/count/fallback subset, Cone(max-min), stale bind pointer, EAX/ST0/RET4/RET8, NaN speed/recovery/time gates, pre-callback selected movement branch; independent15C/15ASM/2064byte rows/162raw; cone21 dispatch/default stores/classname descriptor.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "6826eeade142a91533ccd19ad5567093298eb2a1c83c004b25094965dcb75184",
+        "notes.json": "febaeaeac542659c35ef089fd2ac6b0f253162def63791dd25e689ed7c43fb0e",
+        "evidence.json": "172ba4297b8242e1d3b0e4f7060e0f5827477173799c48585b539ea3e10a863e",
+        "capture.py": "41f1dadb500b763d4ca7de0d1874cee31359371e927bfa1a8cc6a1c37de397b1",
+        "verify.py": "8d339939d3330515ced6ded2dcc9349aed86bd4c807a1f0bed70661e2085a408"
+      }
+    },
+    {
+      "package": "analysis/server-mapcycle",
+      "primary_count": 6,
+      "author": "client_catalog",
+      "reviewer": "server_catalog",
+      "result": "PASS",
+      "checked": "All6 primary C/native ASM/contracts and tokenizer/comparator/allocation support; terminal-node skip, partial-bound latch, uninitialized nextMap, EAX0/1 loader, ring reversal/ownership, ChangeLevel before ServerCommand; independent13C/17ASM/981byte rows/21raw.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "6fa561b9db713e1dc7b97bc4e480bacef0c9cbada4f53f918708d39aa59e6b2c",
+        "notes.json": "df94a773db25f76493cbb26acee44d998613335edb828bf1c0cc4d883c938b1e",
+        "evidence.json": "941bc802fdd828fb262c855ca51c1a25d5b5e0edba0babf491c4eb9ea36af27c",
+        "capture.py": "f42cdd06531ab49c723b3addc89a6448c466c733d32c0b063fec3befe650ca3c",
+        "verify.py": "04f63e616d8be7949a2f3cbacb7027998978b78d456b6c3e8c178521993d0a53"
+      }
+    },
+    {
+      "package": "analysis/server-multiplayer-flow",
+      "primary_count": 7,
+      "author": "server_catalog",
+      "reviewer": "shader_inventory",
+      "result": "PASS",
+      "checked": "All7 primary C/native ASM/notes/contract; status/lobby/countdown/forcedstart/vote/voice/BookSimon/intermission and PlayerSpawn order; independent PE/RTTI/save/import verification29C/29ASM/2820byte rows/580raw. Downstream/external calls remain explicit boundaries.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "3507f6c7aed7460cfe4cae36a506893cace7938b58db95d00cd9327618536d56",
+        "notes.json": "15e7b97ce4230c17cf551467d62d032696fa85ef8bead8ce60fa009aeec4a73e",
+        "evidence.json": "2011477bbdd411a79b89a22513d153ce89dcb4ea39afa56c11459a82afe81cc7",
+        "capture.py": "f4809b81b86af915b04a113c965cc1aa8dd60c8f8424dc9f6d6f386a13def0ea",
+        "verify.py": "699bebef954cb932a8c7d7051c3e1d8f5542d6ae470ab9cb6fff51dbf2d0b3d8"
+      }
+    },
+    {
+      "package": "analysis/server-monster-senses",
+      "primary_count": 12,
+      "author": "shader_inventory",
+      "reviewer": "root",
+      "result": "PASS",
+      "checked": "All12 primary native ASM/C/contracts/notes; shared audible links, nullable traversal dereference, strict8192 nearest selection, ST0 sensitivity, NaN IsInWorld, native unconditional player volume1000 and decay-to-zero, grenade duration stack argument0.2, scheduling/water damping; independent aggregate raw PE mapper plus standalone29C/29ASM/1261byte rows/245raw.",
+      "corrections": [],
+      "final_hashes": {
+        "contract.md": "44a1c46961d8cff13158680e3ee3604e48d22d3e593e59a5ecbcb5d7365267c9",
+        "notes.json": "c5220e62aaae6b54f8a2eba0d47a999eb15b7d5a378250960d7552a30d5925f5",
+        "evidence.json": "7e97b380b0986d13c16abc8994878700e7a40d00b4f9b1fb8579c8b4ff4f97c0",
+        "capture.py": "45a5be25361a212071f4fb53c953f087c74511b4134cc429659f53569628a3b2",
+        "verify.py": "20ca130d51ff2ee298a4404761c02e22262eec3238bf33ae010eae9b6b98ad4c"
+      }
+    }
+  ],
+  "cross_packet_corrections": [
+    {
+      "finding": "Engine API header parser skipped a function-pointer name followed by whitespace before closing parenthesis.",
+      "resolution": "All four pass09 capture/verifiers use whitespace-tolerant pointer regex; native143 GetPlayerAuthId identified correctly. Mapcycle slots including118 unchanged. Prior packet claims using low slots unaffected; broader ABI inventory is not silently renamed."
+    }
+  ],
+  "navigation_cleanup": "Removed completed Think/mapcycle/spread/senses items from workboard next queue; linked new local contracts from old world/rules/sound contracts and topic routes. Updated corresponding authoring inputs. Prior REVIEW text preserved; historical pass06/07/08 reports remain snapshots.",
+  "document_pin_refresh": [
+    {
+      "manifest": "analysis/server-mapcycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-rules-bootstrap/contract.md",
+          "old": "e638985f938449c8b4d7eae7bb5b6cbfb8d305355567237fb9c2515f5d98a0d4",
+          "new": "2559192e2bba00db441f16eb89b06b6af6295bdd62d0c0f12083f92bc2b06762"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-monster-senses/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-sound-entity/contract.md",
+          "old": "335c310f3d1d19ff35c9ebec8e3594663029602144e13f05dc5834797306ed0a",
+          "new": "23dbe94446e86ccbd05264854d365ccafdf36eebb21ce205c9af9fae335550e2"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-multiplayer-flow/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-rules-bootstrap/contract.md",
+          "old": "e638985f938449c8b4d7eae7bb5b6cbfb8d305355567237fb9c2515f5d98a0d4",
+          "new": "2559192e2bba00db441f16eb89b06b6af6295bdd62d0c0f12083f92bc2b06762"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-resource-precache/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-rules-bootstrap/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sentence-lifecycle/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-sound-entity/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    },
+    {
+      "manifest": "analysis/server-spread-settings/evidence.json",
+      "changes": [
+        {
+          "path": "analysis/server-world-bootstrap/contract.md",
+          "old": "7701bf392dc791f2f04fd02b006e2ae10e4bc5970ccd53193d7f3926f97f6672",
+          "new": "d5b8803d9b8f3327f9a33984476e14843099669f537cda3940da75b6cdea1527"
+        }
+      ]
+    }
+  ]
+}
